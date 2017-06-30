@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/appbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/img_material_bg"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_app_logo"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_app_logo"
+            android:gravity="center"
+            android:padding="40dp"
+            android:text="@string/app_name"
+            android:textColor="#fff"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:text="@string/about_text"
+            android:textColor="#fff"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/btnAppVersion"
+            style="@style/AboutTextButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_android"
+            tools:text="Версия: 1.0"/>
+
+        <TextView
+            android:id="@+id/btnGitlab"
+            style="@style/AboutTextButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_git"
+            android:text="@string/gitlab"/>
+
+        <TextView
+            android:id="@+id/btnChallenge"
+            style="@style/AboutTextButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_code"
+            android:text="@string/challenge_web"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/btnFeedback"
+            style="@style/AboutTextButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_feedback"
+            android:text="@string/feedback"/>
+
+        <TextView
+            android:id="@+id/btnLibs"
+            style="@style/AboutTextButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_info"
+            android:text="@string/libs"/>
+
+        <TextView
+            android:id="@+id/btnGooglePlus"
+            style="@style/AboutTextButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_google_plus"
+            android:text="@string/google_plus"/>
+    </LinearLayout>
+</LinearLayout>

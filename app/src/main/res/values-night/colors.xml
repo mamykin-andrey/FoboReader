@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="textColor">#EEEEEE</color>
+    <color name="colorBackground">#333333</color>
+    <color name="readTextColor">#999999</color>
+    <color name="negativeTextColor">#AAAAAA</color>
+    <color name="negativeColorBackgroundDark">#555555</color>
+    <color name="aboutTextColor">#999</color>
+</resources>

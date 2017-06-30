@@ -1,0 +1,106 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.21.6'
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+ext {
+    compatLibVersion = "25.3.1"
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        multiDexEnabled true
+        applicationId "ru.mamykin.foreignbooksreader"
+        minSdkVersion 9
+        targetSdkVersion 21
+        versionCode 2
+        versionName "1.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            keyAlias 'reader'
+            keyPassword '654321'
+            storeFile file('reader.keystore')
+            storePassword '654321'
+        }
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix '.dev'
+            versionNameSuffix 'd'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    compile('com.google.apis:google-api-services-translate:v2-rev48-1.22.0') {
+        exclude module: 'httpclient'
+        exclude group: 'org.apache.httpcomponents'
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'com.google.code.findbugs'
+    }
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
+        transitive = true;
+    }
+    compile 'com.arello-mobile:moxy:1.5.1'
+    compile 'com.arello-mobile:moxy-app-compat:1.5.1'
+    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.1'
+
+    compile 'com.google.dagger:dagger:2.5'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.5'
+
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+
+    compile "com.squareup.retrofit2:retrofit:2.1.0"
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    compile "com.android.support:cardview-v7:$compatLibVersion"
+    compile "com.android.support:design:$compatLibVersion"
+    compile "com.android.support:appcompat-v7:$compatLibVersion"
+
+    compile 'com.j256.ormlite:ormlite-android:4.48'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile "com.dropbox.core:dropbox-core-sdk:2.1.1"
+
+    testCompile "junit:junit:4.12"
+}

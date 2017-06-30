@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        tools:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/llBookContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ru.mamykin.foreignbooksreader.ui.controls.SwipeableTextView
+            android:id="@+id/tvText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:textColor="@color/readTextColor"
+            android:textColorHighlight="@color/textColor"
+            android:textSize="17sp"
+            tools:text="Let me tell you a story about Joe Somebody an android developer at MyLittleZoo Inc. and how he walked through the hell while trying to create reusable RecyclerView Adapters with different view types and how he finally managed to implement reusable Adapters painlessly."/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/negativeColorBackgroundDark"
+            android:orientation="horizontal"
+            android:padding="7dp">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:textColor="@color/negativeTextColor"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="Молодой великан"/>
+            <TextView
+                android:id="@+id/tvRead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/negativeTextColor"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="1/17"/>
+            <TextView
+                android:id="@+id/tvReadPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="7dp"
+                android:layout_marginStart="7dp"
+                android:textColor="@color/negativeTextColor"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="0.0%"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
