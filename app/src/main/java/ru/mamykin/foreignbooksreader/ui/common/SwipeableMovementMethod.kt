@@ -1,7 +1,6 @@
 package ru.mamykin.foreignbooksreader.ui.common
 
 import android.os.Handler
-import android.text.Layout
 import android.text.Selection
 import android.text.Spannable
 import android.text.method.LinkMovementMethod
@@ -88,13 +87,13 @@ class SwipeableMovementMethod : LinkMovementMethod() {
     companion object {
         private var instance: SwipeableMovementMethod? = null
 
-        override fun getInstance(): MovementMethod {
+        fun getInstance(): MovementMethod {
             if (instance == null) {
                 instance = SwipeableMovementMethod()
                 instance!!.longClickHandler = Handler()
             }
 
-            return instance
+            return instance as SwipeableMovementMethod
         }
     }
 }
