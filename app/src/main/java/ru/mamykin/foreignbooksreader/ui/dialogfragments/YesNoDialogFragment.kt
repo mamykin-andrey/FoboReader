@@ -56,9 +56,9 @@ class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickLi
 
     override fun onClick(dialog: DialogInterface, which: Int) {
         if (which == Dialog.BUTTON_POSITIVE && positiveListenerRef != null && positiveListenerRef!!.get() != null) {
-            positiveListenerRef!!.get().onPositiveClick()
+            positiveListenerRef!!.get()!!.onPositiveClick()
         } else if (which == Dialog.BUTTON_NEGATIVE && negativeListenerRef != null && negativeListenerRef!!.get() != null) {
-            negativeListenerRef!!.get().onNegativeClick()
+            negativeListenerRef!!.get()!!.onNegativeClick()
         }
         dismiss()
     }
