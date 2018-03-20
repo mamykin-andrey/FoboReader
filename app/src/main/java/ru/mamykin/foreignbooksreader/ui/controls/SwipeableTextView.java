@@ -54,7 +54,7 @@ public class SwipeableTextView extends android.support.v7.widget.AppCompatTextVi
     }
 
     private void initSwipeableTextView() {
-        setMovementMethod(SwipeableMovementMethod.getInstance());
+        setMovementMethod(SwipeableMovementMethod.Companion.getInstance());
         setHighlightColor(Color.TRANSPARENT);
     }
 
