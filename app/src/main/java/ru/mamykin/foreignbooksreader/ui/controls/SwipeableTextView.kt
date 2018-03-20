@@ -4,25 +4,16 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.RectF
-import android.text.Layout
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.StaticLayout
-import android.text.TextPaint
-import android.text.TextUtils
-import android.text.style.ClickableSpan
+import android.text.*
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.util.SparseIntArray
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
-
-import java.util.ArrayList
-
 import ru.mamykin.foreignbooksreader.ui.common.SwipeableMovementMethod
 import ru.mamykin.foreignbooksreader.ui.common.SwipeableSpan
+import java.util.*
 
 /**
  * Элемент отображаюший текст книги, перевод и т д, поддерживает клики по абзацам,
@@ -30,7 +21,6 @@ import ru.mamykin.foreignbooksreader.ui.common.SwipeableSpan
  */
 class SwipeableTextView : android.support.v7.widget.AppCompatTextView {
     private val textCachedSizes = SparseIntArray()
-    private val paint = TextPaint(getPaint())
     private val availableSpaceRect = RectF()
     private var maxTextSize = textSize
     private val textRect = RectF()
@@ -79,7 +69,7 @@ class SwipeableTextView : android.support.v7.widget.AppCompatTextView {
     }
 
     private fun initSwipeableTextView() {
-        movementMethod = SwipeableMovementMethod.instance
+        movementMethod = SwipeableMovementMethod.getInstance()
         highlightColor = Color.TRANSPARENT
     }
 
@@ -230,17 +220,17 @@ class SwipeableTextView : android.support.v7.widget.AppCompatTextView {
     fun setTranslation(text: CharSequence) {
         val spTrans = SpannableString(text)
         spTrans.setSpan(ForegroundColorSpan(
-                Color.RED), 0, spTrans.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                Color.RED), 0, spTrans.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         setText(TextUtils.concat(getText(), "\n\n", spTrans))
         updateWordLinks()
     }
 
     private fun getIndices(s: String, c: Char): Array<Int> {
-        var pos = s.indexOf(c.toInt(), 0)
+        var pos = s.indexOf(c, 0)
         val indices = ArrayList<Int>()
         while (pos != -1) {
             indices.add(pos)
-            pos = s.indexOf(c.toInt(), pos + 1)
+            pos = s.indexOf(c, pos + 1)
         }
         return indices.toTypedArray<Int>()
     }
