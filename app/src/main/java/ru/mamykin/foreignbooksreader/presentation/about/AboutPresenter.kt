@@ -10,8 +10,8 @@ import javax.inject.Inject
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.extension.applySchedulers
-import ru.mamykin.foreignbooksreader.models.UpdateInfo
-import ru.mamykin.foreignbooksreader.retrofit.UpdateService
+import ru.mamykin.foreignbooksreader.data.model.UpdateInfo
+import ru.mamykin.foreignbooksreader.data.network.UpdateService
 import ru.mamykin.foreignbooksreader.presentation.global.BasePresenter
 import rx.Subscriber
 

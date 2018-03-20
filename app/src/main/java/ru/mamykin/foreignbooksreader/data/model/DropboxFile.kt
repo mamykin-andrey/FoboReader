@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.models
+package ru.mamykin.foreignbooksreader.data.model
 
 import com.dropbox.core.v2.files.FileMetadata
 import com.dropbox.core.v2.files.FolderMetadata

@@ -1,8 +1,8 @@
-package ru.mamykin.foreignbooksreader.database
+package ru.mamykin.foreignbooksreader.data.database
 
 import com.j256.ormlite.dao.BaseDaoImpl
 import com.j256.ormlite.support.ConnectionSource
-import ru.mamykin.foreignbooksreader.models.FictionBook
+import ru.mamykin.foreignbooksreader.data.model.FictionBook
 import java.sql.SQLException
 import java.util.*
 

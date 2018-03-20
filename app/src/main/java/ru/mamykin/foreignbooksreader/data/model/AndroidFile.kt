@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.models
+package ru.mamykin.foreignbooksreader.data.model
 
 import ru.mamykin.foreignbooksreader.common.Utils
 

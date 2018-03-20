@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.preferences
+package ru.mamykin.foreignbooksreader.data.storage
 
 import android.content.Context
 import android.content.SharedPreferences

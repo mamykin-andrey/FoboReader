@@ -4,7 +4,7 @@ import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
-import ru.mamykin.foreignbooksreader.models.FictionBook
+import ru.mamykin.foreignbooksreader.data.model.FictionBook
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface MyBooksView : MvpView {

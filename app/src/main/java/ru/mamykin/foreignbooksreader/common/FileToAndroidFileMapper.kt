@@ -3,7 +3,7 @@ package ru.mamykin.foreignbooksreader.common
 import java.io.File
 import java.util.ArrayList
 
-import ru.mamykin.foreignbooksreader.models.AndroidFile
+import ru.mamykin.foreignbooksreader.data.model.AndroidFile
 
 class FileToAndroidFileMapper {
 

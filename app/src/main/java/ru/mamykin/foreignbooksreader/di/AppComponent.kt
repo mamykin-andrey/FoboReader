@@ -3,7 +3,7 @@ package ru.mamykin.foreignbooksreader.di
 import dagger.Component
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.di.modules.*
-import ru.mamykin.foreignbooksreader.preferences.PreferencesManager
+import ru.mamykin.foreignbooksreader.data.storage.PreferencesManager
 import ru.mamykin.foreignbooksreader.presentation.about.AboutPresenter
 import ru.mamykin.foreignbooksreader.presentation.bookdetails.BookDetailsPresenter
 import ru.mamykin.foreignbooksreader.presentation.device.DeviceBooksPresenter

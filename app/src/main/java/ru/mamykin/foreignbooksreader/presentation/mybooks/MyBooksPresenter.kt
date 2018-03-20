@@ -10,9 +10,9 @@ import org.greenrobot.eventbus.Subscribe
 import javax.inject.Inject
 
 import ru.mamykin.foreignbooksreader.ReaderApp
-import ru.mamykin.foreignbooksreader.database.BookDao
+import ru.mamykin.foreignbooksreader.data.database.BookDao
 import ru.mamykin.foreignbooksreader.events.UpdateEvent
-import ru.mamykin.foreignbooksreader.models.FictionBook
+import ru.mamykin.foreignbooksreader.data.model.FictionBook
 import ru.mamykin.foreignbooksreader.presentation.global.BasePresenter
 
 /**

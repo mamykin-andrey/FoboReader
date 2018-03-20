@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.preferences
+package ru.mamykin.foreignbooksreader.data.storage
 
 /**
  * Creation date: 5/30/2017

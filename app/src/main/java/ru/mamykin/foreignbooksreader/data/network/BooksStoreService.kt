@@ -1,7 +1,7 @@
-package ru.mamykin.foreignbooksreader.retrofit
+package ru.mamykin.foreignbooksreader.data.network
 
 import retrofit2.http.GET
-import ru.mamykin.foreignbooksreader.models.StoreBook
+import ru.mamykin.foreignbooksreader.data.model.StoreBook
 import rx.Observable
 
 /**

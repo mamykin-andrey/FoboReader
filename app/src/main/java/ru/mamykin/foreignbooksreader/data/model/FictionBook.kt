@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.models
+package ru.mamykin.foreignbooksreader.data.model
 
 import android.text.Html
 import android.text.Layout
@@ -16,7 +16,7 @@ import java.util.Date
 
 import ru.mamykin.foreignbooksreader.common.TextHashMap
 import ru.mamykin.foreignbooksreader.common.Utils
-import ru.mamykin.foreignbooksreader.database.BookContract
+import ru.mamykin.foreignbooksreader.data.database.BookContract
 
 /**
  * Creation date: 5/29/2017

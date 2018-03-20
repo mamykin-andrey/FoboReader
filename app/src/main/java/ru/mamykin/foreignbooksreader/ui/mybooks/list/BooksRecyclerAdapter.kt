@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.common.UiUtils
-import ru.mamykin.foreignbooksreader.models.FictionBook
+import ru.mamykin.foreignbooksreader.data.model.FictionBook
 import java.util.*
 import javax.inject.Inject
 

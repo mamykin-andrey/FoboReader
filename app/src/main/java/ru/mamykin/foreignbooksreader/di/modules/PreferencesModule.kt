@@ -4,7 +4,7 @@ import javax.inject.Singleton
 
 import dagger.Module
 import dagger.Provides
-import ru.mamykin.foreignbooksreader.preferences.PreferencesManager
+import ru.mamykin.foreignbooksreader.data.storage.PreferencesManager
 
 /**
  * Creation date: 5/29/2017

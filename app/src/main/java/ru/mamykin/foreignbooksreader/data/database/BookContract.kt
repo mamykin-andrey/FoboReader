@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.database
+package ru.mamykin.foreignbooksreader.data.database
 
 object BookContract {
     const val DB_NAME = "books_db"

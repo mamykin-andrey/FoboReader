@@ -20,7 +20,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.common.UiUtils
-import ru.mamykin.foreignbooksreader.models.DropboxFile
+import ru.mamykin.foreignbooksreader.data.model.DropboxFile
 import ru.mamykin.foreignbooksreader.presentation.dropbox.DropboxBooksPresenter
 import ru.mamykin.foreignbooksreader.ui.readbook.ReadBookActivity
 import ru.mamykin.foreignbooksreader.ui.global.FileViewHolder

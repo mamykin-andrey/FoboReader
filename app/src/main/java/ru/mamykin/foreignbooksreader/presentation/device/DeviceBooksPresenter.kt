@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.common.FileToAndroidFileMapper
-import ru.mamykin.foreignbooksreader.models.AndroidFile
+import ru.mamykin.foreignbooksreader.data.model.AndroidFile
 import ru.mamykin.foreignbooksreader.presentation.global.BasePresenter
 
 /**

@@ -1,11 +1,11 @@
-package ru.mamykin.foreignbooksreader.database
+package ru.mamykin.foreignbooksreader.data.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
 import com.j256.ormlite.support.ConnectionSource
 import com.j256.ormlite.table.TableUtils
-import ru.mamykin.foreignbooksreader.models.FictionBook
+import ru.mamykin.foreignbooksreader.data.model.FictionBook
 import java.sql.SQLException
 
 class BookDatabaseHelper(context: Context) : OrmLiteSqliteOpenHelper(

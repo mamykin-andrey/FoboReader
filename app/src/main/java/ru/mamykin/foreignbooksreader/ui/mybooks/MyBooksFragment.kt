@@ -19,7 +19,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.common.UiUtils
-import ru.mamykin.foreignbooksreader.models.FictionBook
+import ru.mamykin.foreignbooksreader.data.model.FictionBook
 import ru.mamykin.foreignbooksreader.presentation.mybooks.MyBooksPresenter
 import ru.mamykin.foreignbooksreader.ui.bookdetails.BookDetailsActivity
 import ru.mamykin.foreignbooksreader.ui.readbook.ReadBookActivity

@@ -6,8 +6,8 @@ import javax.inject.Singleton
 
 import dagger.Module
 import dagger.Provides
-import ru.mamykin.foreignbooksreader.database.BookDao
-import ru.mamykin.foreignbooksreader.database.BookDatabaseHelper
+import ru.mamykin.foreignbooksreader.data.database.BookDao
+import ru.mamykin.foreignbooksreader.data.database.BookDatabaseHelper
 
 /**
  * Creation date: 5/29/2017

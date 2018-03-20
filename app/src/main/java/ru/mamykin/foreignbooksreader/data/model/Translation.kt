@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.models
+package ru.mamykin.foreignbooksreader.data.model
 
 /**
  * Creation date: 5/29/2017

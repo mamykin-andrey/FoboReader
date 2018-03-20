@@ -15,7 +15,7 @@ import javax.inject.Inject
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.common.UiUtils
-import ru.mamykin.foreignbooksreader.models.StoreBook
+import ru.mamykin.foreignbooksreader.data.model.StoreBook
 
 /**
  * Адаптер с книгами на странице "Магазин"

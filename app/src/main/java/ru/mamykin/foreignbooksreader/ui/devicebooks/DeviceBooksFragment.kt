@@ -15,7 +15,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.common.UiUtils
-import ru.mamykin.foreignbooksreader.models.AndroidFile
+import ru.mamykin.foreignbooksreader.data.model.AndroidFile
 import ru.mamykin.foreignbooksreader.presentation.device.DeviceBooksPresenter
 import ru.mamykin.foreignbooksreader.ui.readbook.ReadBookActivity
 import ru.mamykin.foreignbooksreader.ui.global.FileViewHolder

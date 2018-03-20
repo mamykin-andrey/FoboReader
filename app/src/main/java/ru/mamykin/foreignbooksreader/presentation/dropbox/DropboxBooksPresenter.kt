@@ -15,9 +15,9 @@ import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.common.DropboxClientFactory
 import ru.mamykin.foreignbooksreader.common.FolderToFilesListMapper
 import ru.mamykin.foreignbooksreader.extension.applySchedulers
-import ru.mamykin.foreignbooksreader.models.DropboxFile
-import ru.mamykin.foreignbooksreader.preferences.PreferenceNames
-import ru.mamykin.foreignbooksreader.preferences.PreferencesManager
+import ru.mamykin.foreignbooksreader.data.model.DropboxFile
+import ru.mamykin.foreignbooksreader.data.storage.PreferenceNames
+import ru.mamykin.foreignbooksreader.data.storage.PreferencesManager
 import ru.mamykin.foreignbooksreader.presentation.global.BasePresenter
 import rx.Observable
 import rx.Subscriber

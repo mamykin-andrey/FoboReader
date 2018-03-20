@@ -11,8 +11,8 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.common.UiUtils
-import ru.mamykin.foreignbooksreader.preferences.PreferenceNames
-import ru.mamykin.foreignbooksreader.preferences.PreferencesManager
+import ru.mamykin.foreignbooksreader.data.storage.PreferenceNames
+import ru.mamykin.foreignbooksreader.data.storage.PreferencesManager
 import javax.inject.Inject
 
 abstract class BaseActivity : MvpAppCompatActivity(), PreferenceNames {

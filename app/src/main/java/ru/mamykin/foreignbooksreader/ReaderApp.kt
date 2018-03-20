@@ -7,7 +7,7 @@ import ru.mamykin.foreignbooksreader.di.AppComponent
 import ru.mamykin.foreignbooksreader.di.modules.AppModule
 import ru.mamykin.foreignbooksreader.di.DaggerAppComponent
 import ru.mamykin.foreignbooksreader.di.modules.PreferencesModule
-import ru.mamykin.foreignbooksreader.preferences.PreferencesManager
+import ru.mamykin.foreignbooksreader.data.storage.PreferencesManager
 
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
@@ -15,7 +15,7 @@ import com.crashlytics.android.core.CrashlyticsCore
 import javax.inject.Inject
 
 import io.fabric.sdk.android.Fabric
-import ru.mamykin.foreignbooksreader.preferences.PreferenceNames
+import ru.mamykin.foreignbooksreader.data.storage.PreferenceNames
 
 class ReaderApp : MultiDexApplication(), PreferenceNames {
     @Inject

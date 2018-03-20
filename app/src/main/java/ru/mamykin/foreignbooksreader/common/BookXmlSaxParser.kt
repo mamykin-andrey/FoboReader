@@ -3,7 +3,7 @@ package ru.mamykin.foreignbooksreader.common
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
-import ru.mamykin.foreignbooksreader.models.FictionBook
+import ru.mamykin.foreignbooksreader.data.model.FictionBook
 import java.io.File
 import java.io.IOException
 import javax.xml.parsers.ParserConfigurationException

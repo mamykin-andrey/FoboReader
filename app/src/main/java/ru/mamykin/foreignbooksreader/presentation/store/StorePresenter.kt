@@ -3,10 +3,9 @@ package ru.mamykin.foreignbooksreader.presentation.store
 import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.extension.applySchedulers
-import ru.mamykin.foreignbooksreader.models.StoreBook
+import ru.mamykin.foreignbooksreader.data.model.StoreBook
 import ru.mamykin.foreignbooksreader.presentation.global.BasePresenter
-import ru.mamykin.foreignbooksreader.retrofit.BooksStoreService
-import ru.mamykin.foreignbooksreader.presentation.store.BooksStoreView
+import ru.mamykin.foreignbooksreader.data.network.BooksStoreService
 import rx.Subscriber
 import javax.inject.Inject
 

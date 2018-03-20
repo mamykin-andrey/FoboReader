@@ -20,7 +20,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.common.UiUtils
-import ru.mamykin.foreignbooksreader.models.StoreBook
+import ru.mamykin.foreignbooksreader.data.model.StoreBook
 import ru.mamykin.foreignbooksreader.presentation.store.StorePresenter
 import ru.mamykin.foreignbooksreader.ui.store.list.BooksStoreRecyclerAdapter
 import ru.mamykin.foreignbooksreader.presentation.store.BooksStoreView

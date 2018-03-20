@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
-import ru.mamykin.foreignbooksreader.models.DropboxFile
+import ru.mamykin.foreignbooksreader.data.model.DropboxFile
 import ru.mamykin.foreignbooksreader.ui.global.FileViewHolder
 
 /**

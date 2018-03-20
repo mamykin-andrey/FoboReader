@@ -3,8 +3,8 @@ package ru.mamykin.foreignbooksreader.presentation.bookdetails
 import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.common.Utils
-import ru.mamykin.foreignbooksreader.database.BookDatabaseHelper
-import ru.mamykin.foreignbooksreader.models.FictionBook
+import ru.mamykin.foreignbooksreader.data.database.BookDatabaseHelper
+import ru.mamykin.foreignbooksreader.data.model.FictionBook
 import ru.mamykin.foreignbooksreader.presentation.global.BasePresenter
 import javax.inject.Inject
 

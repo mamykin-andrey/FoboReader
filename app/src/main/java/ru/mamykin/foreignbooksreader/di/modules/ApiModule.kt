@@ -5,9 +5,9 @@ import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.mamykin.foreignbooksreader.retrofit.BooksStoreService
-import ru.mamykin.foreignbooksreader.retrofit.UpdateService
-import ru.mamykin.foreignbooksreader.retrofit.YandexTranslateService
+import ru.mamykin.foreignbooksreader.data.network.BooksStoreService
+import ru.mamykin.foreignbooksreader.data.network.UpdateService
+import ru.mamykin.foreignbooksreader.data.network.YandexTranslateService
 
 /**
  * Creation date: 5/29/2017
