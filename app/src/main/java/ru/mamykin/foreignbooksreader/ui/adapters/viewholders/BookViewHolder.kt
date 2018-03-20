@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-
 import butterknife.BindView
 import butterknife.ButterKnife
 import ru.mamykin.foreignbooksreader.R
@@ -30,8 +29,8 @@ class BookViewHolder(itemView: View, private val listener: BooksRecyclerAdapter.
     @BindView(R.id.tvFormat)
     var vFormat: View? = null
 
-    private val menuListener = { item ->
-        when (item.getItemId()) {
+    private val menuListener = PopupMenu.OnMenuItemClickListener{ p0 ->
+        when (p0!!.itemId) {
             R.id.menu_about_book -> listener.onBookAboutClicked(adapterPosition)
             R.id.menu_share_book -> listener.onBookShareClicked(adapterPosition)
             R.id.menu_remove_book -> listener.onBookRemoveClicked(adapterPosition)
