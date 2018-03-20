@@ -24,6 +24,7 @@ import ru.mamykin.foreignbooksreader.models.DropboxFile
 import ru.mamykin.foreignbooksreader.presenters.DropboxBooksPresenter
 import ru.mamykin.foreignbooksreader.ui.activities.ReadBookActivity
 import ru.mamykin.foreignbooksreader.ui.adapters.DropboxRecyclerAdapter
+import ru.mamykin.foreignbooksreader.ui.adapters.viewholders.FileViewHolder
 import ru.mamykin.foreignbooksreader.views.DropboxView
 
 /**
@@ -66,7 +67,11 @@ class DropboxBooksFragment : MvpAppCompatFragment(), DropboxView, SearchView.OnQ
         val contentView = inflater!!.inflate(R.layout.fragment_dropbox_books, container, false)
         ButterKnife.bind(this, contentView)
 
-        adapter = DropboxRecyclerAdapter({ position -> presenter!!.onItemClicked(position, adapter!!.getItem(position)) })
+        adapter = DropboxRecyclerAdapter(object : FileViewHolder.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                presenter!!.onItemClicked(position, adapter!!.getItem(position))
+            }
+        })
         UiUtils.setupRecyclerView(context, rvBooks!!, adapter!!, LinearLayoutManager(context), true)
 
         return contentView

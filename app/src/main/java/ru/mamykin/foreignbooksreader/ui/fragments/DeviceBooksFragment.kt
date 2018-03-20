@@ -2,31 +2,24 @@ package ru.mamykin.foreignbooksreader.ui.fragments
 
 import android.os.Bundle
 import android.os.Environment
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
-import android.widget.Toast
-
-import com.arellomobile.mvp.MvpAppCompatFragment
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.arellomobile.mvp.MvpAppCompatFragment
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.common.UiUtils
 import ru.mamykin.foreignbooksreader.models.AndroidFile
 import ru.mamykin.foreignbooksreader.presenters.DeviceBooksPresenter
 import ru.mamykin.foreignbooksreader.ui.activities.ReadBookActivity
 import ru.mamykin.foreignbooksreader.ui.adapters.FilesRecyclerAdapter
+import ru.mamykin.foreignbooksreader.ui.adapters.viewholders.FileViewHolder
 import ru.mamykin.foreignbooksreader.views.DeviceBooksView
 
 /**
@@ -60,7 +53,11 @@ class DeviceBooksFragment : MvpAppCompatFragment(), DeviceBooksView, SearchView.
         val contentView = inflater!!.inflate(R.layout.fragment_device_books, container, false)
         ButterKnife.bind(this, contentView)
 
-        adapter = FilesRecyclerAdapter({ position -> presenter!!.onFileClicked(adapter!!.getItem(position)) })
+        adapter = FilesRecyclerAdapter(object : FileViewHolder.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                presenter!!.onFileClicked(adapter!!.getItem(position))
+            }
+        })
         UiUtils.setupRecyclerView(context, rvFiles!!, adapter!!, LinearLayoutManager(context), true)
 
         return contentView
