@@ -9,9 +9,9 @@ import com.arellomobile.mvp.InjectViewState
 import org.greenrobot.eventbus.EventBus
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
-import ru.mamykin.foreignbooksreader.common.Paginator
+import ru.mamykin.foreignbooksreader.domain.readbook.Paginator
 import ru.mamykin.foreignbooksreader.data.database.BookDao
-import ru.mamykin.foreignbooksreader.events.UpdateEvent
+import ru.mamykin.foreignbooksreader.common.events.UpdateEvent
 import ru.mamykin.foreignbooksreader.extension.applySchedulers
 import ru.mamykin.foreignbooksreader.data.model.FictionBook
 import ru.mamykin.foreignbooksreader.data.model.Translation

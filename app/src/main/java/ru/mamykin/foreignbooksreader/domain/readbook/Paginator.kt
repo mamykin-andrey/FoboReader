@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.common
+package ru.mamykin.foreignbooksreader.domain.readbook
 
 import android.text.Layout
 import android.text.StaticLayout

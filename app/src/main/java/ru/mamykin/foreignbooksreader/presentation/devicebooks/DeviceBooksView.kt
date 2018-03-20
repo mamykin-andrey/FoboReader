@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.presentation.device
+package ru.mamykin.foreignbooksreader.presentation.devicebooks
 
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy

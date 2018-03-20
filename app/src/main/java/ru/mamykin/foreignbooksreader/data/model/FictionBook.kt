@@ -14,7 +14,7 @@ import com.j256.ormlite.table.DatabaseTable
 
 import java.util.Date
 
-import ru.mamykin.foreignbooksreader.common.TextHashMap
+import ru.mamykin.foreignbooksreader.domain.readbook.TextHashMap
 import ru.mamykin.foreignbooksreader.common.Utils
 import ru.mamykin.foreignbooksreader.data.database.BookContract
 

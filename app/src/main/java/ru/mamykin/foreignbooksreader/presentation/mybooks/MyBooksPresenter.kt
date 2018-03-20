@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.data.database.BookDao
-import ru.mamykin.foreignbooksreader.events.UpdateEvent
+import ru.mamykin.foreignbooksreader.common.events.UpdateEvent
 import ru.mamykin.foreignbooksreader.data.model.FictionBook
 import ru.mamykin.foreignbooksreader.presentation.global.BasePresenter
 

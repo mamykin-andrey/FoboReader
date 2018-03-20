@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.common.UiUtils
-import ru.mamykin.foreignbooksreader.events.RestartEvent
+import ru.mamykin.foreignbooksreader.common.events.RestartEvent
 import ru.mamykin.foreignbooksreader.data.storage.PreferencesManager
 import ru.mamykin.foreignbooksreader.data.storage.PreferenceNames
 import ru.mamykin.foreignbooksreader.presentation.global.BasePresenter

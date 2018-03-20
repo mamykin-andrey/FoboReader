@@ -4,6 +4,7 @@ import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
 import ru.mamykin.foreignbooksreader.data.model.FictionBook
+import ru.mamykin.foreignbooksreader.domain.readbook.TextHashMap
 import java.io.File
 import java.io.IOException
 import javax.xml.parsers.ParserConfigurationException

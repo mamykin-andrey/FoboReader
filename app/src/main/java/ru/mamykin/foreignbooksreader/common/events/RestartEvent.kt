@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.events
+package ru.mamykin.foreignbooksreader.common.events
 
 /**
  * Event, для перезапуска активити, в случае изменения темы
