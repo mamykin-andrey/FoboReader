@@ -7,13 +7,13 @@ package ru.mamykin.foreignbooksreader.preferences
  */
 interface PreferenceNames {
     companion object {
-        val PREFERENCES_FILE = "foboreader"
-        val NIGHT_THEME_PREF = "night_theme"
-        val BRIGHTNESS_PREF = "brightness"
-        val BRIGHTNESS_AUTO_PREF = "brightness_enabled"
-        val DROPBOX_TOKEN_PREF = "access_token"
-        val DROPBOX_LOGOUT_PREF = "dropbox_logout"
-        val DROPBOX_EMAIL_PREF = "dropbox_email"
-        val CONTENT_TEXT_SIZE_PREF = "content_text_size"
+        const val PREFERENCES_FILE = "foboreader"
+        const val NIGHT_THEME_PREF = "night_theme"
+        const val BRIGHTNESS_PREF = "brightness"
+        const val BRIGHTNESS_AUTO_PREF = "brightness_enabled"
+        const val DROPBOX_TOKEN_PREF = "access_token"
+        const val DROPBOX_LOGOUT_PREF = "dropbox_logout"
+        const val DROPBOX_EMAIL_PREF = "dropbox_email"
+        const val CONTENT_TEXT_SIZE_PREF = "content_text_size"
     }
 }

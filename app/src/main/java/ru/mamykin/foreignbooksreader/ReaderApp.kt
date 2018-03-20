@@ -47,11 +47,11 @@ class ReaderApp : MultiDexApplication(), PreferenceNames {
                 .appModule(AppModule(this))
                 .preferencesModule(PreferencesModule())
                 .build()
-        component!!.inject(this)
+        component.inject(this)
     }
 
     companion object {
-        var component: AppComponent? = null
+        lateinit var component: AppComponent
             private set
     }
 }

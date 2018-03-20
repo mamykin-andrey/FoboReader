@@ -2,11 +2,8 @@ package ru.mamykin.foreignbooksreader.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
-
-import javax.inject.Inject
-
 import ru.mamykin.foreignbooksreader.ReaderApp
-import ru.mamykin.foreignbooksreader.preferences.PreferenceNames
+import javax.inject.Inject
 
 /**
  * Creation date: 5/29/2017
