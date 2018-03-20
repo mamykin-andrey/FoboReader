@@ -18,7 +18,7 @@ class BookDatabaseHelper(context: Context) : OrmLiteSqliteOpenHelper(
 
     override fun onCreate(database: SQLiteDatabase, connectionSource: ConnectionSource) {
         try {
-            TableUtils.createTable<FictionBook>(connectionSource, FictionBook::class)
+            TableUtils.createTable(connectionSource, FictionBook::class.java)
         } catch (e: SQLException) {
             e.printStackTrace()
         }
@@ -31,7 +31,7 @@ class BookDatabaseHelper(context: Context) : OrmLiteSqliteOpenHelper(
                            newVersion: Int
     ) {
         try {
-            TableUtils.dropTable<FictionBook, Any>(connectionSource, FictionBook::class, true)
+            TableUtils.dropTable<FictionBook, Any>(connectionSource, FictionBook::class.java, true)
         } catch (e: SQLException) {
             e.printStackTrace()
         }
@@ -40,7 +40,7 @@ class BookDatabaseHelper(context: Context) : OrmLiteSqliteOpenHelper(
     fun getBookDao(): BookDao? {
         if (bookDao == null) {
             try {
-                bookDao = BookDao(connectionSource, FictionBook::class)
+                bookDao = BookDao(connectionSource, FictionBook::class.java)
             } catch (e: SQLException) {
                 e.printStackTrace()
             }

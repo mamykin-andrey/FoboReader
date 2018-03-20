@@ -6,10 +6,8 @@ import ru.mamykin.foreignbooksreader.models.FictionBook
 import java.sql.SQLException
 import java.util.*
 
-open class BookDao
-
-protected constructor(connectionSource: ConnectionSource,
-                      dataClass: Class<FictionBook>
+class BookDao constructor(connectionSource: ConnectionSource,
+                          dataClass: Class<FictionBook>
 ) : BaseDaoImpl<FictionBook, Int>(connectionSource, dataClass) {
 
     /**
