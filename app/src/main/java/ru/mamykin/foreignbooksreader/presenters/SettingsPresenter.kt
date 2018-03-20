@@ -43,8 +43,8 @@ class SettingsPresenter : BasePresenter<SettingsView>(), PreferenceNames {
         viewState.setAutoBrightnessChecked(pm!!.getBoolean(PreferenceNames.Companion.BRIGHTNESS_AUTO_PREF, true))
         viewState.setBrightnessControlEnabled(!pm!!.getBoolean(PreferenceNames.Companion.BRIGHTNESS_AUTO_PREF))
         viewState.setBrightnessPos((pm!!.getFloat(PreferenceNames.Companion.BRIGHTNESS_PREF, 1f) * 100).toInt())
-        viewState.setContentSizeText(pm!!.getString(PreferenceNames.CONTENT_TEXT_SIZE_PREF, "16"))
-        viewState.setDropboxAccount(pm!!.getString(PreferenceNames.Companion.DROPBOX_EMAIL_PREF))
+        viewState.setContentSizeText(pm!!.getString(PreferenceNames.CONTENT_TEXT_SIZE_PREF, "16")!!)
+        viewState.setDropboxAccount(pm!!.getString(PreferenceNames.Companion.DROPBOX_EMAIL_PREF)!!)
     }
 
     /**
@@ -106,6 +106,6 @@ class SettingsPresenter : BasePresenter<SettingsView>(), PreferenceNames {
         pm!!.putBoolean(PreferenceNames.Companion.DROPBOX_LOGOUT_PREF, true)
         pm!!.removeValue(PreferenceNames.Companion.DROPBOX_TOKEN_PREF)
         pm!!.removeValue(PreferenceNames.Companion.DROPBOX_EMAIL_PREF)
-        viewState.setDropboxAccount(null)
+        viewState.setDropboxAccount(null!!)
     }
 }

@@ -25,6 +25,7 @@ import ru.mamykin.foreignbooksreader.common.FolderToFilesListMapper
 import ru.mamykin.foreignbooksreader.common.Utils
 import ru.mamykin.foreignbooksreader.models.DropboxFile
 import ru.mamykin.foreignbooksreader.common.DropboxClientFactory
+import ru.mamykin.foreignbooksreader.extension.applySchedulers
 import ru.mamykin.foreignbooksreader.preferences.PreferencesManager
 import ru.mamykin.foreignbooksreader.preferences.PreferenceNames
 import ru.mamykin.foreignbooksreader.views.DropboxView
@@ -57,7 +58,8 @@ class DropboxBooksPresenter// TODO: изменить фрагмент DROPBOX н
         var token = pm!!.getString(PreferenceNames.Companion.DROPBOX_TOKEN_PREF, null!!)
         if (token != null) {
             setupDropbox(token)
-        } else if (!pm!!.getBoolean(PreferenceNames.Companion.DROPBOX_LOGOUT_PREF) && (token = Auth.getOAuth2Token()) != null) {
+        } else if (!pm!!.getBoolean(PreferenceNames.Companion.DROPBOX_LOGOUT_PREF)
+                && Auth.getOAuth2Token() != null) {
             pm!!.putString(PreferenceNames.Companion.DROPBOX_TOKEN_PREF, token!!)
             setupDropbox(token)
         } else {
@@ -107,9 +109,8 @@ class DropboxBooksPresenter// TODO: изменить фрагмент DROPBOX н
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-            }
-                    .compose(Utils.applySchedulers())
-                    .subscribe { aVoid ->
+            }.applySchedulers()
+                    .subscribe {
                         viewState.hideLoadingItem()
                         viewState.openBook(dropboxFile.absolutePath)
                     }
@@ -132,8 +133,7 @@ class DropboxBooksPresenter// TODO: изменить фрагмент DROPBOX н
             } catch (e: DbxException) {
                 e.printStackTrace()
             }
-        }
-                .compose(Utils.applySchedulers())
+        }.applySchedulers()
                 .map(folderToListMapper)
                 .subscribe(object : Subscriber<List<DropboxFile>>() {
                     override fun onCompleted() {}
@@ -150,7 +150,7 @@ class DropboxBooksPresenter// TODO: изменить фрагмент DROPBOX н
                         viewState.hideLoading()
                         viewState.hideAuth()
                         viewState.showFiles(filesList)
-                        viewState.showCurrentDir(if (currentDir!!.length == 0) "/" else currentDir)
+                        viewState.showCurrentDir(if (currentDir!!.length == 0) "/" else currentDir!!)
                     }
                 })
         unsubscribeOnDestroy(subscription)
@@ -164,8 +164,7 @@ class DropboxBooksPresenter// TODO: изменить фрагмент DROPBOX н
             } catch (e: DbxException) {
                 e.printStackTrace()
             }
-        }
-                .compose(Utils.applySchedulers())
+        }.applySchedulers()
                 .subscribe(object : Subscriber<String>() {
                     override fun onCompleted() {
 

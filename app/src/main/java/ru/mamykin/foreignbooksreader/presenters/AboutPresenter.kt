@@ -11,9 +11,11 @@ import javax.inject.Inject
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.common.Utils
+import ru.mamykin.foreignbooksreader.extension.applySchedulers
 import ru.mamykin.foreignbooksreader.models.UpdateInfo
 import ru.mamykin.foreignbooksreader.retrofit.UpdateService
 import ru.mamykin.foreignbooksreader.views.AboutView
+import rx.Observable
 import rx.Subscriber
 import rx.Subscription
 
@@ -52,12 +54,12 @@ class AboutPresenter : BasePresenter<AboutView>() {
     }
 
     private fun loadAppInfo() {
-        viewState.showAppVersion(appVersion)
+        viewState.showAppVersion(appVersion!!)
     }
 
     fun onAppVersionClicked() {
         val subscription = updateService!!.changelog
-                .compose(Utils.applySchedulers())
+                .applySchedulers()
                 .subscribe(object : Subscriber<UpdateInfo>() {
                     override fun onCompleted() {
 
@@ -69,7 +71,7 @@ class AboutPresenter : BasePresenter<AboutView>() {
                     }
 
                     override fun onNext(updateInfo: UpdateInfo) {
-                        viewState.showChangelogDialog(updateInfo.changelog)
+                        viewState.showChangelogDialog(updateInfo.changelog!!)
                     }
                 })
         unsubscribeOnDestroy(subscription)
@@ -81,7 +83,7 @@ class AboutPresenter : BasePresenter<AboutView>() {
 
     fun onFeedbackClicked() {
         viewState.showFeedbackDialog(
-                context!!.getString(R.string.mail), context!!.getString(R.string.feedback_hint), null)
+                context!!.getString(R.string.mail), context!!.getString(R.string.feedback_hint), "")
     }
 
     fun onLibrariesClicked() {

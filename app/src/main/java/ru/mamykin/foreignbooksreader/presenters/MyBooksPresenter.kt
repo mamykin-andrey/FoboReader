@@ -44,7 +44,7 @@ class MyBooksPresenter : BasePresenter<MyBooksView>() {
     @Subscribe
     fun onMessageEvent(e: UpdateEvent?) {
         if (e != null) {
-            EventBus.getDefault().removeStickyEvent<out UpdateEvent>(e.javaClass)
+            EventBus.getDefault().removeStickyEvent(UpdateEvent::class.java)
             loadBooksList()
         }
     }
@@ -81,9 +81,9 @@ class MyBooksPresenter : BasePresenter<MyBooksView>() {
     fun onBookShareClicked(position: Int) {
         val book = booksList!![position]
         if (TextUtils.isEmpty(book.docUrl)) {
-            viewState.showBookShareDialog(book.bookTitle)
+            viewState.showBookShareDialog(book.bookTitle!!)
         } else {
-            viewState.showBookShareDialog(book.bookTitle, book.docUrl)
+            viewState.showBookShareDialog(book.bookTitle!!, book.docUrl!!)
         }
     }
 
@@ -102,7 +102,7 @@ class MyBooksPresenter : BasePresenter<MyBooksView>() {
         if (booksList!!.size == 0) {
             viewState.showEmptyStateView()
         } else {
-            viewState.showBooksList(booksList)
+            viewState.showBooksList(booksList!!)
         }
     }
 }

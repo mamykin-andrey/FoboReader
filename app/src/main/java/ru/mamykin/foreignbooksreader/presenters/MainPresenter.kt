@@ -44,7 +44,7 @@ class MainPresenter : BasePresenter<MainView>(), PreferenceNames {
     @Subscribe
     fun onEvent(e: RestartEvent?) {
         if (e != null) {
-            EventBus.getDefault().removeStickyEvent<out RestartEvent>(e.javaClass)
+            EventBus.getDefault().removeStickyEvent(RestartEvent::class.java)
             viewState.restartActivity()
         }
     }

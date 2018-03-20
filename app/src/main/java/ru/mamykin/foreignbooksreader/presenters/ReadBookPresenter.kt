@@ -5,28 +5,21 @@ import android.os.Build
 import android.speech.tts.TextToSpeech
 import android.text.TextPaint
 import android.text.TextUtils
-
 import com.arellomobile.mvp.InjectViewState
-
 import org.greenrobot.eventbus.EventBus
-
-import java.util.Locale
-
-import javax.inject.Inject
-
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
-import ru.mamykin.foreignbooksreader.common.BookXmlSaxParser
 import ru.mamykin.foreignbooksreader.common.Paginator
-import ru.mamykin.foreignbooksreader.common.Utils
 import ru.mamykin.foreignbooksreader.database.BookDao
 import ru.mamykin.foreignbooksreader.events.UpdateEvent
+import ru.mamykin.foreignbooksreader.extension.applySchedulers
 import ru.mamykin.foreignbooksreader.models.FictionBook
 import ru.mamykin.foreignbooksreader.models.Translation
 import ru.mamykin.foreignbooksreader.retrofit.YandexTranslateService
 import ru.mamykin.foreignbooksreader.views.ReadBookView
 import rx.Subscriber
-import rx.Subscription
+import java.util.*
+import javax.inject.Inject
 
 /**
  * Creation date: 5/29/2017
@@ -44,8 +37,8 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
     private var paginator: Paginator? = null
     private var book: FictionBook? = null
     private var prevText: CharSequence? = null
-    private val bookPath: String?
-    private val bookId: Int?
+    private var bookPath: String? = null
+    private var bookId: Int? = null
     private var tts: TextToSpeech? = null
     private var ttsInit: Boolean = false
 
@@ -53,11 +46,11 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
         // Загрузили книгу
         viewState.showLoading(false)
         viewState.showBookContent(true)
-        viewState.setBookName(book!!.bookTitle)
+        viewState.setBookName(book!!.bookTitle!!)
         book!!.lastOpen = System.currentTimeMillis()
         bookDao!!.update(book)
         // Запускаем подготовку SwipeableTextView
-        viewState.initBookView(book!!.bookTitle, book!!.bookText)
+        viewState.initBookView(book!!.bookTitle!!, book!!.bookText!!)
     }
 
     constructor(bookPath: String) {
@@ -76,7 +69,7 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
         setupTextToSpeech()
 
         if (bookPath != null) {
-            loadBook(bookPath)
+            loadBook(bookPath!!)
         } else {
             loadBook(bookId!!)
         }
@@ -94,7 +87,7 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
         book = bookDao!!.getBook(path)
         book!!.filePath = bookPath
         bookDao!!.update(book)
-        BookXmlSaxParser.parseBook(book!!, parseListener)
+        //BookXmlSaxParser.parseBook(book!!, parseListener)
     }
 
     /**
@@ -102,7 +95,7 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
      */
     private fun loadBook(id: Int) {
         book = bookDao!!.getBook(id)
-        BookXmlSaxParser.parseBook(book!!, parseListener)
+        //BookXmlSaxParser.parseBook(book!!, parseListener)
     }
 
     /**
@@ -123,7 +116,7 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
      * Скрываем предыдущий параграф
      */
     private fun hideParagraph() {
-        viewState.setSourceText(prevText)
+        viewState.setSourceText(prevText!!)
         prevText = null
     }
 
@@ -135,8 +128,8 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
         prevText = paginator!!.currentPage
         viewState.setSourceText(s)
         val subscription = translateService!!.translate(
-                context!!.getString(R.string.yandex_api_key), s, "ru", null, null)
-                .compose(Utils.applySchedulers())
+                context!!.getString(R.string.yandex_api_key), s, "ru", "", "")
+                .applySchedulers()
                 .subscribe(object : Subscriber<Translation>() {
                     override fun onCompleted() {
 
@@ -162,11 +155,11 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
         val translation = book!!.transMap!![s]
         if (translation != null) {
             prevText = paginator!!.currentPage
-            viewState.setSourceText(s)
+            viewState.setSourceText(s!!)
             viewState.setTranslationText(translation)
         } else {
             // Пробуем загрузить частично
-            showOfflineTranslation(book!!.transMap!!.getKey(s))
+            showOfflineTranslation(book!!.transMap!!.getKey(s!!))
         }
     }
 
@@ -176,8 +169,8 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
      */
     fun onWordClicked(s: String) {
         val subscription = translateService!!.translate(
-                context!!.getString(R.string.yandex_api_key), s, "ru", null, null)
-                .compose(Utils.applySchedulers())
+                context!!.getString(R.string.yandex_api_key), s, "ru", "", "")
+                .applySchedulers()
                 .subscribe(object : Subscriber<Translation>() {
                     override fun onCompleted() {
 
@@ -217,7 +210,7 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
             book!!.currentPage = page
             book!!.pagesCount = paginator!!.pagesCount
             bookDao!!.update(book)
-            viewState.setSourceText(paginator!!.currentPage)
+            viewState.setSourceText(paginator!!.currentPage!!)
             viewState.setReadPages(paginator!!.readPages)
             viewState.setReadPercent(context!!.getString(R.string.read_percent_string, paginator!!.readPercent))
         }

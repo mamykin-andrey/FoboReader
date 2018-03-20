@@ -6,6 +6,7 @@ import javax.inject.Inject
 
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.common.Utils
+import ru.mamykin.foreignbooksreader.extension.applySchedulers
 import ru.mamykin.foreignbooksreader.models.StoreBook
 import ru.mamykin.foreignbooksreader.retrofit.BooksStoreService
 import ru.mamykin.foreignbooksreader.views.BooksStoreView
@@ -36,11 +37,11 @@ class StorePresenter : BasePresenter<BooksStoreView>() {
     fun loadStoreCategories() {
         viewState.showLoading(true)
         val subscription = booksService!!.books
-                .compose(Utils.applySchedulers())
+                .applySchedulers()
                 .subscribe(object : Subscriber<List<StoreBook>>() {
                     override fun onCompleted() {
                         viewState.showLoading(false)
-                        viewState.showBooks(booksList)
+                        viewState.showBooks(booksList!!)
                     }
 
                     override fun onError(e: Throwable) {
