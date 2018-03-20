@@ -24,41 +24,41 @@ import ru.mamykin.foreignbooksreader.database.BookContract;
  * @author Andrey Mamykin(mamykin_av)
  * @see <a href="http://www.fictionbook.org/index.php/%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5_%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82%D0%B0_FB2_%D0%BE%D1%82_Sclex">Описание формата Fiction Book</a>
  */
-@DatabaseTable(tableName = BookContract.TABLE_NAME)
+@DatabaseTable(tableName = BookContract.INSTANCE.getTABLE_NAME())
 public class FictionBook {
-    @DatabaseField(generatedId = true, columnName = BookContract.ID)
+    @DatabaseField(generatedId = true, columnName = BookContract.INSTANCE.getID())
     private int id;
-    @DatabaseField(columnName = BookContract.FILE_PATH, canBeNull = false)
+    @DatabaseField(columnName = BookContract.INSTANCE.getFILE_PATH(), canBeNull = false)
     private String filePath;
-    @DatabaseField(columnName = BookContract.BOOK_GENRE)
+    @DatabaseField(columnName = BookContract.INSTANCE.getBOOK_GENRE())
     private String bookGenre;
-    @DatabaseField(columnName = BookContract.COVER_FILE)
+    @DatabaseField(columnName = BookContract.INSTANCE.getCOVER_FILE())
     private String coverFile;
-    @DatabaseField(columnName = BookContract.BOOK_AUTHOR)
+    @DatabaseField(columnName = BookContract.INSTANCE.getBOOK_AUTHOR())
     private String bookAuthor;
-    @DatabaseField(columnName = BookContract.BOOK_TITLE)
+    @DatabaseField(columnName = BookContract.INSTANCE.getBOOK_TITLE())
     private String bookTitle;
-    @DatabaseField(columnName = BookContract.BOOK_LANG)
+    @DatabaseField(columnName = BookContract.INSTANCE.getBOOK_LANG())
     private String bookLang;
-    @DatabaseField(columnName = BookContract.BOOK_SRC_LANG)
+    @DatabaseField(columnName = BookContract.INSTANCE.getBOOK_SRC_LANG())
     private String bookSrcLang;
-    @DatabaseField(columnName = BookContract.DOC_LIBRARY)
+    @DatabaseField(columnName = BookContract.INSTANCE.getDOC_LIBRARY())
     private String docLibrary;
-    @DatabaseField(columnName = BookContract.DOC_AUTHOR)
+    @DatabaseField(columnName = BookContract.INSTANCE.getDOC_AUTHOR())
     private String docAuthor;
-    @DatabaseField(columnName = BookContract.DOC_URL)
+    @DatabaseField(columnName = BookContract.INSTANCE.getDOC_URL())
     private String docUrl;
-    @DatabaseField(columnName = BookContract.DOC_DATE)
+    @DatabaseField(columnName = BookContract.INSTANCE.getDOC_DATE())
     private Date docDate;
-    @DatabaseField(columnName = BookContract.DOC_VERSION)
+    @DatabaseField(columnName = BookContract.INSTANCE.getDOC_VERSION())
     private double docVersion;
-    @DatabaseField(columnName = BookContract.SECTION_TITLE)
+    @DatabaseField(columnName = BookContract.INSTANCE.getSECTION_TITLE())
     private String sectionTitle;
-    @DatabaseField(columnName = BookContract.CURRENT_PAGE)
+    @DatabaseField(columnName = BookContract.INSTANCE.getCURRENT_PAGE())
     private int currentPage;
-    @DatabaseField(columnName = BookContract.PAGES_COUNT)
+    @DatabaseField(columnName = BookContract.INSTANCE.getPAGES_COUNT())
     private int pagesCount;
-    @DatabaseField(columnName = BookContract.LAST_OPEN)
+    @DatabaseField(columnName = BookContract.INSTANCE.getLAST_OPEN())
     private long lastOpen;
     private String bookText;
     private TextHashMap transMap; // Todo: sortableHashmap, и bookText не нужен
