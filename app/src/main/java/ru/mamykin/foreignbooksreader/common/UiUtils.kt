@@ -15,7 +15,7 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import ru.mamykin.foreignbooksreader.R
-import ru.mamykin.foreignbooksreader.ui.dialogfragments.YesNoDialogFragment
+import ru.mamykin.foreignbooksreader.ui.global.YesNoDialogFragment
 
 object UiUtils {
 

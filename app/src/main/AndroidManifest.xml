@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activities.SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Splash">
             <intent-filter>
@@ -25,19 +25,19 @@
         </activity>
 
         <activity
-            android:name=".ui.activities.AboutActivity"
+            android:name=".ui.about.AboutActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.activities.BookDetailsActivity"
+            android:name=".ui.bookdetails.BookDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.activities.ReadBookActivity"
+            android:name=".ui.readbook.ReadBookActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.activities.SettingsActivity"
+            android:name=".ui.settings.SettingsActivity"
             android:screenOrientation="portrait"/>
 
         <activity
