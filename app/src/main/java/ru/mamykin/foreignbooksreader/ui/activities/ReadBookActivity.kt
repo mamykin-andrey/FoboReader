@@ -21,7 +21,7 @@ import ru.mamykin.foreignbooksreader.views.ReadBookView
 /**
  * Страница чтения книги
  */
-class ReadBookActivity : BaseActivity(), SwipeableTextView.SwipeableListener, ReadBookView, ViewTreeObserver.OnGlobalLayoutListener {
+class ReadBookActivity(override val layout: Int = R.layout.activity_read_book) : BaseActivity(), SwipeableTextView.SwipeableListener, ReadBookView, ViewTreeObserver.OnGlobalLayoutListener {
 
     @InjectPresenter
     internal var presenter: ReadBookPresenter? = null
@@ -50,10 +50,6 @@ class ReadBookActivity : BaseActivity(), SwipeableTextView.SwipeableListener, Re
         super.onCreate(savedInstanceState)
 
         tvText!!.setSwipeableListener(this)
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.activity_read_book
     }
 
     override fun showToast(text: String) {
@@ -101,8 +97,12 @@ class ReadBookActivity : BaseActivity(), SwipeableTextView.SwipeableListener, Re
         tvText!!.setTranslation(text)
     }
 
-    override fun showTranslationPopup(source: String, translation: String) {
-        UiUtils.showWordPopup(this, source, translation) { word -> presenter!!.onSpeakWordClicked(word) }
+    override fun showTranslationPopup(original: String, translation: String) {
+        UiUtils.showWordPopup(this, original, translation, object : UiUtils.OnSpeakWordClickListener {
+            override fun onSpeakWordClicked(word: String) {
+                presenter!!.onSpeakWordClicked(word)
+            }
+        })
     }
 
     override fun initBookView(title: String, text: String) {

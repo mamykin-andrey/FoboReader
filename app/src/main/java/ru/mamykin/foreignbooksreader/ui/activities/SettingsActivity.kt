@@ -18,12 +18,13 @@ import butterknife.OnClick
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.common.UiUtils
 import ru.mamykin.foreignbooksreader.presenters.SettingsPresenter
+import ru.mamykin.foreignbooksreader.ui.dialogfragments.YesNoDialogFragment
 import ru.mamykin.foreignbooksreader.views.SettingsView
 
 /**
  * Страница настроек
  */
-class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, SettingsView {
+class SettingsActivity(override val layout: Int = R.layout.activity_settings) : BaseActivity(), SeekBar.OnSeekBarChangeListener, SettingsView {
 
     @BindView(R.id.switchBrightAuto)
     protected var switchBrightAuto: SwitchCompat? = null
@@ -56,10 +57,6 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
         seekbarBright!!.setOnSeekBarChangeListener(this)
     }
 
-    override fun getLayout(): Int {
-        return R.layout.activity_settings
-    }
-
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
         presenter!!.onBrightnessProgressChanged(progress)
     }
@@ -78,7 +75,11 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
 
     override fun showDropboxLogoutDialog() {
         UiUtils.showDialog(this, R.string.dropbox_logout_title, R.string.dropbox_logout_message,
-                DROPBOX_DIALOG_TAG, { presenter!!.onDropboxLogoutPositive() }, null)
+                DROPBOX_DIALOG_TAG, object : YesNoDialogFragment.PositiveClickListener{
+            override fun onPositiveClick() {
+                presenter!!.onDropboxLogoutPositive()
+            }
+        }, null)
     }
 
     override fun setContentSizeText(text: String) {
