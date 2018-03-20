@@ -144,12 +144,12 @@ public class MyBooksFragment extends MvpAppCompatFragment implements SearchView.
 
     @Override
     public void openBook(int bookId) {
-        startActivity(ReadBookActivity.getStartIntent(getContext(), bookId));
+        startActivity(ReadBookActivity.Companion.getStartIntent(getContext(), bookId));
     }
 
     @Override
     public void openBookDetails(int bookId) {
-        startActivity(BookDetailsActivity.getStartIntent(getContext(), bookId));
+        startActivity(BookDetailsActivity.Companion.getStartIntent(getContext(), bookId));
     }
 
     @Override

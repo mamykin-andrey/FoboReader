@@ -111,7 +111,7 @@ public class DeviceBooksFragment extends MvpAppCompatFragment implements DeviceB
 
     @Override
     public void openBook(String path) {
-        startActivity(ReadBookActivity.getStartIntent(getContext(), path));
+        startActivity(ReadBookActivity.Companion.getStartIntent(getContext(), path));
     }
 
     @Override

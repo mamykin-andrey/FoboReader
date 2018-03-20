@@ -117,7 +117,7 @@ public class DropboxBooksFragment extends MvpAppCompatFragment implements Dropbo
 
     @Override
     public void openBook(String path) {
-        startActivity(ReadBookActivity.getStartIntent(getContext(), path));
+        startActivity(ReadBookActivity.Companion.getStartIntent(getContext(), path));
     }
 
     @Override
