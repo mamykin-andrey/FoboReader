@@ -5,12 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.widget.TextView
-
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-
 import butterknife.BindView
 import butterknife.OnClick
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.common.UiUtils
 import ru.mamykin.foreignbooksreader.presenters.BookDetailsPresenter
@@ -19,7 +17,7 @@ import ru.mamykin.foreignbooksreader.views.BookDetailsView
 /**
  * Страница с информацией о книге
  */
-class BookDetailsActivity : BaseActivity(), BookDetailsView {
+class BookDetailsActivity(override val layout: Int = R.layout.activity_book_detail) : BaseActivity(), BookDetailsView {
 
     @BindView(R.id.tvName)
     protected var tvBookName: TextView? = null
@@ -50,10 +48,6 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
         super.onCreate(savedInstanceState)
 
         initToolbar(getString(R.string.about_book), true)
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.activity_book_detail
     }
 
     override fun showTitle(title: String) {

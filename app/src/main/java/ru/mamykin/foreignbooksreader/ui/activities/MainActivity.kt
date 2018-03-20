@@ -27,7 +27,7 @@ import ru.mamykin.foreignbooksreader.views.MainView
 /**
  * Основная страница, включает в себя страницу с книгами, файлами на устройстве, файлами Dropbox, магазином
  */
-class MainActivity : BaseActivity(), MainView {
+class MainActivity(override val layout: Int = R.layout.activity_main) : BaseActivity(), MainView {
 
     @BindView(R.id.drawerLayout)
     protected var drawerLayout: DrawerLayout? = null
@@ -47,13 +47,9 @@ class MainActivity : BaseActivity(), MainView {
         super.onCreate(savedInstanceState)
 
         initToolbar(getString(R.string.main_tab), true)
-        setupViewPager(viewPager, savedInstanceState)
+        setupViewPager(viewPager!!, savedInstanceState)
         tabLayout!!.setupWithViewPager(viewPager)
         setupDrawerLayout()
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.activity_main
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -134,7 +130,7 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     protected fun setupDrawerLayout() {
-        navigationView!!.setNavigationItemSelectedListener(OnNavigationItemSelectedListener { this.onNavigationItemSelected(it) })
+        navigationView!!.setNavigationItemSelectedListener({ this.onNavigationItemSelected(it) })
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name)
         toggle!!.isDrawerIndicatorEnabled = true
         drawerLayout!!.addDrawerListener(toggle!!)

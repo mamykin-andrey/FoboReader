@@ -5,19 +5,15 @@ import android.provider.Settings
 import android.support.annotation.LayoutRes
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import android.view.WindowManager
-
-import com.arellomobile.mvp.MvpAppCompatActivity
-
-import javax.inject.Inject
-
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.arellomobile.mvp.MvpAppCompatActivity
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
-import ru.mamykin.foreignbooksreader.preferences.PreferencesManager
 import ru.mamykin.foreignbooksreader.common.UiUtils
 import ru.mamykin.foreignbooksreader.preferences.PreferenceNames
+import ru.mamykin.foreignbooksreader.preferences.PreferencesManager
+import javax.inject.Inject
 
 abstract class BaseActivity : MvpAppCompatActivity(), PreferenceNames {
     @BindView(R.id.toolbar)
