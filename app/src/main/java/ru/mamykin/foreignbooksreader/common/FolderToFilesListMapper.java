@@ -9,11 +9,6 @@ import java.util.List;
 import ru.mamykin.foreignbooksreader.models.DropboxFile;
 import rx.functions.Func1;
 
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
 public class FolderToFilesListMapper implements Func1<ListFolderResult, List<DropboxFile>> {
     @Override
     public List<DropboxFile> call(ListFolderResult result) {

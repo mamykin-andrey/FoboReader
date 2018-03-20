@@ -71,7 +71,7 @@ public class DropboxBooksPresenter extends BasePresenter<DropboxView> implements
     }
 
     private void setupDropbox(String token) {
-        DropboxClientFactory.init(token);
+        DropboxClientFactory.INSTANCE.init(token);
         displayFiles();
         loadAccountInfo();
     }
@@ -101,7 +101,7 @@ public class DropboxBooksPresenter extends BasePresenter<DropboxView> implements
             Subscription subscription = Observable.<Void>create(subscriber -> {
                 try {
                     OutputStream outputStream = new FileOutputStream(dropboxFile);
-                    DropboxClientFactory.getClient()
+                    DropboxClientFactory.INSTANCE.getClient()
                             .files()
                             .download(file.getPathLower(), file.getRev())
                             .download(outputStream);
@@ -130,7 +130,7 @@ public class DropboxBooksPresenter extends BasePresenter<DropboxView> implements
                 subscriber -> {
                     try {
                         subscriber.onNext(
-                                DropboxClientFactory.getClient().files().listFolder(currentDir));
+                                DropboxClientFactory.INSTANCE.getClient().files().listFolder(currentDir));
                         subscriber.onCompleted();
                     } catch (DbxException e) {
                         e.printStackTrace();
@@ -167,7 +167,7 @@ public class DropboxBooksPresenter extends BasePresenter<DropboxView> implements
         Subscription subscription = Observable.<String>create(
                 subscriber -> {
                     try {
-                        subscriber.onNext(DropboxClientFactory.getClient().users().getCurrentAccount().getEmail());
+                        subscriber.onNext(DropboxClientFactory.INSTANCE.getClient().users().getCurrentAccount().getEmail());
                         subscriber.onCompleted();
                     } catch (DbxException e) {
                         e.printStackTrace();

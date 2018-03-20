@@ -84,7 +84,7 @@ public class ReadBookPresenter extends BasePresenter<ReadBookView> implements Te
         book = bookDao.getBook(path);
         book.setFilePath(bookPath);
         bookDao.update(book);
-        BookXmlSaxParser.parseBook(book, parseListener);
+        BookXmlSaxParser.Companion.parseBook(book, parseListener);
     }
 
     /**
@@ -92,7 +92,7 @@ public class ReadBookPresenter extends BasePresenter<ReadBookView> implements Te
      */
     private void loadBook(int id) {
         book = bookDao.getBook(id);
-        BookXmlSaxParser.parseBook(book, parseListener);
+        BookXmlSaxParser.Companion.parseBook(book, parseListener);
     }
 
     /**
