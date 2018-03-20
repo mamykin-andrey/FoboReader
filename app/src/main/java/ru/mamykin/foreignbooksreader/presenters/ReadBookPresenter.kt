@@ -62,12 +62,12 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
 
     constructor(bookPath: String) {
         this.bookPath = bookPath
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     constructor(bookId: Int) {
         this.bookId = bookId
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onFirstViewAttach() {

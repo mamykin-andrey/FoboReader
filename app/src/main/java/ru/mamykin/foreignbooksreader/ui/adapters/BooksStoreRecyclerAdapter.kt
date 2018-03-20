@@ -29,7 +29,7 @@ class BooksStoreRecyclerAdapter : RecyclerView.Adapter<StoreBookViewHolder>() {
 
     init {
         booksList = ArrayList()
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoreBookViewHolder {

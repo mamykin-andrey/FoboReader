@@ -3,21 +3,16 @@ package ru.mamykin.foreignbooksreader.common
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
-
+import ru.mamykin.foreignbooksreader.models.FictionBook
 import java.io.File
 import java.io.IOException
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
 import javax.xml.parsers.ParserConfigurationException
-import javax.xml.parsers.SAXParser
 import javax.xml.parsers.SAXParserFactory
 
-import ru.mamykin.foreignbooksreader.models.FictionBook
+class BookXmlSaxParser(private val listener: SaxParserListener,
+                       private val book: FictionBook
+) : DefaultHandler2() {
 
-class BookXmlSaxParser(private val listener: SaxParserListener, private val book: FictionBook) : DefaultHandler2() {
     private val titleSb = StringBuilder()
     private val textSb = StringBuilder()
     private val transMap = TextHashMap()
@@ -53,7 +48,7 @@ class BookXmlSaxParser(private val listener: SaxParserListener, private val book
                 textSb.append("<p>").append(lastSentence).append("</p>")
             } else if (element == "t") {
                 // Собираем перевод
-                transMap[lastSentence!!.trim { it <= ' ' }] = String(ch, start, length).trim { it <= ' ' }
+                transMap[lastSentence!!.trim()] = String(ch, start, length).trim { it <= ' ' }
             }
         } else
             when (element) {

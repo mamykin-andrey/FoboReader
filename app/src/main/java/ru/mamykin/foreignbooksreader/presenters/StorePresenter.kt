@@ -24,7 +24,7 @@ class StorePresenter : BasePresenter<BooksStoreView>() {
     protected var booksService: BooksStoreService? = null
 
     init {
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onFirstViewAttach() {

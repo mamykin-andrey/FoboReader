@@ -1,17 +1,12 @@
 package ru.mamykin.foreignbooksreader.common
 
 import java.text.DecimalFormat
-import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import java.util.*
 
 object Utils {
+
     /**
      * Получаем строку с подходящей еденицей измерения
      * @param size размер файла
@@ -68,18 +63,6 @@ object Utils {
             return " $thirdFormat"
         }
         return " $firstFormat"
-    }
-
-    /**
-     * Применяем Schedulers к Observable
-     * @param <T> тип Observable
-     * @return Observable с ioThread и mainThread
-    </T> */
-    fun <T> applySchedulers(): Observable.Transformer<T, T> {
-        return { observable ->
-            observable.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-        }
     }
 
     /**

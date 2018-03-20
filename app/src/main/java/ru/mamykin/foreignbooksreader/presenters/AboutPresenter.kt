@@ -42,7 +42,7 @@ class AboutPresenter : BasePresenter<AboutView>() {
         }
 
     init {
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onFirstViewAttach() {

@@ -24,7 +24,7 @@ class MainPresenter : BasePresenter<MainView>(), PreferenceNames {
     protected var pm: PreferencesManager? = null
 
     init {
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun attachView(view: MainView) {

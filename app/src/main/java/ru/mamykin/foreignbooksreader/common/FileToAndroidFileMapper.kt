@@ -6,6 +6,7 @@ import java.util.ArrayList
 import ru.mamykin.foreignbooksreader.models.AndroidFile
 
 class FileToAndroidFileMapper {
+
     fun map(files: List<File>): List<AndroidFile> {
         val androidFiles = ArrayList<AndroidFile>(files.size)
         for (file in files) {

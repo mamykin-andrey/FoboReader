@@ -8,11 +8,13 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    mavenCentral()
 }
 
 ext {
@@ -103,4 +105,5 @@ dependencies {
     compile "com.dropbox.core:dropbox-core-sdk:2.1.1"
 
     testCompile "junit:junit:4.12"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -29,7 +29,7 @@ class SettingsPresenter : BasePresenter<SettingsView>(), PreferenceNames {
     protected var pm: PreferencesManager? = null
 
     init {
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onFirstViewAttach() {
@@ -52,7 +52,7 @@ class SettingsPresenter : BasePresenter<SettingsView>(), PreferenceNames {
      * @param isChecked true, если выбрана ночная тема
      */
     fun onNightThemeCheckedChanged(isChecked: Boolean) {
-        if (isChecked != UiUtils.getNightMode()) {
+        if (isChecked != UiUtils.nightMode) {
             EventBus.getDefault().postSticky(RestartEvent())
 
             pm!!.putBoolean(PreferenceNames.Companion.NIGHT_THEME_PREF, isChecked)

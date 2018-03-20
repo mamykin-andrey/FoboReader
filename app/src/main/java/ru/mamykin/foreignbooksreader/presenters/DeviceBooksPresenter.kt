@@ -25,7 +25,7 @@ class DeviceBooksPresenter(private var currentDir: String?) : BasePresenter<Devi
     protected var mapper: FileToAndroidFileMapper? = null
 
     init {
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onFirstViewAttach() {

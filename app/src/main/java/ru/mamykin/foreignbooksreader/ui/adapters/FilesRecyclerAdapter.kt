@@ -25,7 +25,7 @@ class FilesRecyclerAdapter(private val listener: FileViewHolder.OnItemClickListe
 
     init {
         filesList = ArrayList()
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {

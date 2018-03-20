@@ -27,7 +27,7 @@ class BooksRecyclerAdapter(private val listener: OnBookClickListener) : Recycler
 
     init {
         this.booksList = ArrayList()
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {

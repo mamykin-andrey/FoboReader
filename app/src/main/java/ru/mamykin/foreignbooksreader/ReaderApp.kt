@@ -39,7 +39,7 @@ class ReaderApp : MultiDexApplication(), PreferenceNames {
     }
 
     private fun setupTheme() {
-        UiUtils.setNightMode(pm!!.getBoolean(PreferenceNames.Companion.NIGHT_THEME_PREF))
+        UiUtils.nightMode = pm!!.getBoolean(PreferenceNames.Companion.NIGHT_THEME_PREF)
     }
 
     private fun setupAppComponent() {

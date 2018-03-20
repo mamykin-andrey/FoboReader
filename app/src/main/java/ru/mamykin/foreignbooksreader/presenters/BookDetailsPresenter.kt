@@ -28,7 +28,7 @@ class BookDetailsPresenter(private val bookId: Int) : BasePresenter<BookDetailsV
     protected var dbHelper: BookDatabaseHelper? = null
 
     init {
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onFirstViewAttach() {

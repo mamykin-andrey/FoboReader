@@ -26,7 +26,7 @@ class DropboxRecyclerAdapter(private val listener: FileViewHolder.OnItemClickLis
 
     init {
         filesList = ArrayList()
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {

@@ -29,7 +29,7 @@ class MyBooksPresenter : BasePresenter<MyBooksView>() {
     protected var bookDao: BookDao? = null
 
     init {
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun attachView(view: MyBooksView) {

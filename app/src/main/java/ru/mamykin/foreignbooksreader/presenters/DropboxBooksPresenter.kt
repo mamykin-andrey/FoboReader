@@ -48,7 +48,7 @@ class DropboxBooksPresenter// TODO: изменить фрагмент DROPBOX н
     protected var context: Context? = null
 
     init {
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun attachView(view: DropboxView) {

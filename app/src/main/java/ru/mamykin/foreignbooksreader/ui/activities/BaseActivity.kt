@@ -46,7 +46,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), PreferenceNames {
 
         setContentView(layout)
         ButterKnife.bind(this)
-        ReaderApp.getComponent().inject(this)
+        ReaderApp.component.inject(this)
     }
 
     override fun onResume() {
