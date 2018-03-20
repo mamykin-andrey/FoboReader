@@ -49,7 +49,7 @@ public class UiUtils {
                                   @StringRes int text, @NonNull String tag,
                                   @Nullable YesNoDialogFragment.PositiveClickListener positiveListener,
                                   @Nullable YesNoDialogFragment.NegativeClickListener negativeListener) {
-        YesNoDialogFragment.newInstance(activity.getString(title), activity.getString(text))
+        YesNoDialogFragment.Companion.newInstance(activity.getString(title), activity.getString(text))
                 .setPositiveClickListener(positiveListener)
                 .setNegativeClickListener(negativeListener)
                 .show(activity.getSupportFragmentManager(), tag);
@@ -58,7 +58,7 @@ public class UiUtils {
     public static void showDialog(@NonNull AppCompatActivity activity, @Nullable String title,
                                   @NonNull String text, @NonNull String tag,
                                   @Nullable YesNoDialogFragment.PositiveClickListener listener) {
-        YesNoDialogFragment.newInstance(title, text)
+        YesNoDialogFragment.Companion.newInstance(title, text)
                 .setPositiveClickListener(listener)
                 .show(activity.getSupportFragmentManager(), tag);
     }
