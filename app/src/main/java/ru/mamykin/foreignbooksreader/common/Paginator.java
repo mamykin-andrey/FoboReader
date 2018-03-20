@@ -8,11 +8,6 @@ import android.text.TextPaint;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
 public class Paginator {
     private final List<CharSequence> pagesList = new ArrayList<>();
     private int currentPageIndex = 0;

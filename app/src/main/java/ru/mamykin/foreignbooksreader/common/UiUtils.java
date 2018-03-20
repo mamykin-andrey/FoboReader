@@ -26,11 +26,6 @@ import android.widget.Toast;
 import ru.mamykin.foreignbooksreader.R;
 import ru.mamykin.foreignbooksreader.ui.dialogfragments.YesNoDialogFragment;
 
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
 public class UiUtils {
     public static void setTitle(AppCompatActivity activity, String title) {
         if (activity.getSupportActionBar() != null) {

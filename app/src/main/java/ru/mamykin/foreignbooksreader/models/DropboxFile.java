@@ -54,8 +54,8 @@ public class DropboxFile {
      */
     public String getAttributes() {
         FileMetadata fileData = (FileMetadata) file;
-        return Utils.getSizeString(fileData.getSize()) + ", "
-                + Utils.getLastModifiedString(fileData.getServerModified().getTime());
+        return Utils.INSTANCE.getSizeString(fileData.getSize()) + ", "
+                + Utils.INSTANCE.getLastModifiedString(fileData.getServerModified().getTime());
     }
 
     /**

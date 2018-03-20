@@ -50,7 +50,7 @@ public class AndroidFile {
      * @return строка с атрибутами
      */
     public String getAttributes() {
-        return Utils.getSizeString(file.length()) + ", " + Utils.getLastModifiedString(file.lastModified());
+        return Utils.INSTANCE.getSizeString(file.length()) + ", " + Utils.INSTANCE.getLastModifiedString(file.lastModified());
     }
 
     /**

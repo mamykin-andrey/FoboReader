@@ -49,7 +49,7 @@ public class BookDetailsPresenter extends BasePresenter<BookDetailsView> {
         getViewState().showBookCurrentPage(String.valueOf(book.getCurrentPage()));
         getViewState().showBookGenre(book.getBookGenre());
         getViewState().showBookOriginalLang(book.getBookSrcLang());
-        getViewState().showBookCreatedDate(Utils.getFormattedDate(book.getDocDate()));
+        getViewState().showBookCreatedDate(Utils.INSTANCE.getFormattedDate(book.getDocDate()));
     }
 
     private String getFileFromPath(String filePath) {

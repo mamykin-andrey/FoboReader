@@ -260,7 +260,7 @@ public class FictionBook {
     }
 
     public String getPagesCountString() {
-        return currentPage + Utils.getRightEnding(currentPage, "страниц", "страница", "страницы") + " из " + pagesCount;
+        return currentPage + Utils.INSTANCE.getRightEnding(currentPage, "страниц", "страница", "страницы") + " из " + pagesCount;
     }
 
     public String getLastOpenString() {
@@ -269,13 +269,13 @@ public class FictionBook {
             return "Открывалась сегодня";
         } else if (diffInDays < 7) {
             // Прошло меньше одной недели
-            return "Открывалась " + diffInDays + Utils.getRightEnding(diffInDays, "дней", "день", "дня") + " назад";
+            return "Открывалась " + diffInDays + Utils.INSTANCE.getRightEnding(diffInDays, "дней", "день", "дня") + " назад";
         } else if (diffInDays < 30) {
-            return "Открывалась " + diffInDays / 7 + Utils.getRightEnding(diffInDays / 7, "недель", "неделю", "недели") + " назад";
+            return "Открывалась " + diffInDays / 7 + Utils.INSTANCE.getRightEnding(diffInDays / 7, "недель", "неделю", "недели") + " назад";
         } else if (diffInDays < 365) {
-            return "Открывалась " + diffInDays / 30 + Utils.getRightEnding(diffInDays / 30, "месяцев", "месяц", "месяца") + " назад";
+            return "Открывалась " + diffInDays / 30 + Utils.INSTANCE.getRightEnding(diffInDays / 30, "месяцев", "месяц", "месяца") + " назад";
         } else {
-            return "Открывалась " + diffInDays / 365 + Utils.getRightEnding(diffInDays / 365, "лет", "год", "года") + " назад";
+            return "Открывалась " + diffInDays / 365 + Utils.INSTANCE.getRightEnding(diffInDays / 365, "лет", "год", "года") + " назад";
         }
     }
 

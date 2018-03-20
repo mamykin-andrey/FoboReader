@@ -126,7 +126,7 @@ public class ReadBookPresenter extends BasePresenter<ReadBookView> implements Te
         getViewState().setSourceText(s);
         Subscription subscription = translateService.translate(
                 context.getString(R.string.yandex_api_key), s, "ru", null, null)
-                .compose(Utils.applySchedulers())
+                .compose(Utils.INSTANCE.applySchedulers())
                 .subscribe(new Subscriber<Translation>() {
                     @Override
                     public void onCompleted() {
@@ -170,7 +170,7 @@ public class ReadBookPresenter extends BasePresenter<ReadBookView> implements Te
     public void onWordClicked(String s) {
         Subscription subscription = translateService.translate(
                 context.getString(R.string.yandex_api_key), s, "ru", null, null)
-                .compose(Utils.applySchedulers())
+                .compose(Utils.INSTANCE.applySchedulers())
                 .subscribe(new Subscriber<Translation>() {
                     @Override
                     public void onCompleted() {

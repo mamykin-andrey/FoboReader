@@ -56,7 +56,7 @@ public class AboutPresenter extends BasePresenter<AboutView> {
 
     public void onAppVersionClicked() {
         Subscription subscription = updateService.getChangelog()
-                .compose(Utils.applySchedulers())
+                .compose(Utils.INSTANCE.applySchedulers())
                 .subscribe(new Subscriber<UpdateInfo>() {
                     @Override
                     public void onCompleted() {

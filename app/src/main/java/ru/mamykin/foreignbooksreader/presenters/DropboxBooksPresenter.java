@@ -110,7 +110,7 @@ public class DropboxBooksPresenter extends BasePresenter<DropboxView> implements
                     e.printStackTrace();
                 }
             })
-                    .compose(Utils.applySchedulers())
+                    .compose(Utils.INSTANCE.applySchedulers())
                     .subscribe(aVoid -> {
                         getViewState().hideLoadingItem();
                         getViewState().openBook(dropboxFile.getAbsolutePath());
@@ -136,7 +136,7 @@ public class DropboxBooksPresenter extends BasePresenter<DropboxView> implements
                         e.printStackTrace();
                     }
                 })
-                .compose(Utils.applySchedulers())
+                .compose(Utils.INSTANCE.applySchedulers())
                 .map(folderToListMapper)
                 .subscribe(new Subscriber<List<DropboxFile>>() {
                     @Override
@@ -173,7 +173,7 @@ public class DropboxBooksPresenter extends BasePresenter<DropboxView> implements
                         e.printStackTrace();
                     }
                 })
-                .compose(Utils.applySchedulers())
+                .compose(Utils.INSTANCE.applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {

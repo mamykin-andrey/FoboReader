@@ -39,7 +39,7 @@ public class StorePresenter extends BasePresenter<BooksStoreView> {
     public void loadStoreCategories() {
         getViewState().showLoading(true);
         Subscription subscription = booksService.getBooks()
-                .compose(Utils.applySchedulers())
+                .compose(Utils.INSTANCE.applySchedulers())
                 .subscribe(new Subscriber<List<StoreBook>>() {
                     @Override
                     public void onCompleted() {
