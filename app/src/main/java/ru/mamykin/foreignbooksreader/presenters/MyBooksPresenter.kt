@@ -26,7 +26,7 @@ class MyBooksPresenter : BasePresenter<MyBooksView>() {
     private var searchQuery: String? = null
     private var sortOrder: BookDao.SortOrder? = null
     @Inject
-    protected var bookDao: BookDao? = null
+    lateinit var bookDao: BookDao
 
     init {
         ReaderApp.component.inject(this)

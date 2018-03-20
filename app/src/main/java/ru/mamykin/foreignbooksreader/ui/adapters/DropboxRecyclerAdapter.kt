@@ -21,7 +21,7 @@ import ru.mamykin.foreignbooksreader.ui.adapters.viewholders.FileViewHolder
 class DropboxRecyclerAdapter(private val listener: FileViewHolder.OnItemClickListener) : RecyclerView.Adapter<FileViewHolder>() {
     private var filesList: List<DropboxFile> = ArrayList(0)
     @Inject
-    protected var context: Context? = null
+    lateinit var context: Context
     private var loadingItem = -1
 
     init {

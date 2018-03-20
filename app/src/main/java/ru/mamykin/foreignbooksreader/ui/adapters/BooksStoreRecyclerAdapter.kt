@@ -25,7 +25,7 @@ import ru.mamykin.foreignbooksreader.ui.adapters.viewholders.StoreBookViewHolder
 class BooksStoreRecyclerAdapter : RecyclerView.Adapter<StoreBookViewHolder>() {
     private var booksList: List<StoreBook>? = null
     @Inject
-    protected var context: Context? = null
+    lateinit var context: Context
 
     init {
         booksList = ArrayList()

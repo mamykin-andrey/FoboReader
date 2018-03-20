@@ -27,9 +27,9 @@ import rx.Subscription
 @InjectViewState
 class AboutPresenter : BasePresenter<AboutView>() {
     @Inject
-    protected var context: Context? = null
+    lateinit var context: Context
     @Inject
-    protected var updateService: UpdateService? = null
+    lateinit var updateService: UpdateService
 
     private val appVersion: String?
         get() {

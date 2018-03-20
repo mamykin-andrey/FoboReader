@@ -21,7 +21,7 @@ import ru.mamykin.foreignbooksreader.ui.adapters.viewholders.FileViewHolder
 class FilesRecyclerAdapter(private val listener: FileViewHolder.OnItemClickListener) : RecyclerView.Adapter<FileViewHolder>() {
     private var filesList: List<AndroidFile>? = null
     @Inject
-    protected var context: Context? = null
+    lateinit var context: Context
 
     init {
         filesList = ArrayList()

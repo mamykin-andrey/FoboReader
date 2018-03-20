@@ -12,7 +12,7 @@ import javax.inject.Inject
  */
 class PreferencesManager : PreferenceNames {
     @Inject
-    protected var context: Context? = null
+    lateinit var context: Context
 
     private val sharedPreferences: SharedPreferences
         get() = context!!.getSharedPreferences(PreferenceNames.PREFERENCES_FILE, Context.MODE_PRIVATE)

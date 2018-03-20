@@ -29,11 +29,11 @@ import javax.inject.Inject
 @InjectViewState
 class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListener {
     @Inject
-    protected var bookDao: BookDao? = null
+    lateinit var bookDao: BookDao
     @Inject
-    protected var translateService: YandexTranslateService? = null
+    lateinit var translateService: YandexTranslateService
     @Inject
-    protected var context: Context? = null
+    lateinit var context: Context
     private var paginator: Paginator? = null
     private var book: FictionBook? = null
     private var prevText: CharSequence? = null

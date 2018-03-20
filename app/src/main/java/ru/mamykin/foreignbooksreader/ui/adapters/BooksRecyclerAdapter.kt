@@ -4,18 +4,14 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-
-import java.util.ArrayList
-
-import javax.inject.Inject
-
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
 import ru.mamykin.foreignbooksreader.common.UiUtils
 import ru.mamykin.foreignbooksreader.models.FictionBook
 import ru.mamykin.foreignbooksreader.ui.adapters.viewholders.BookViewHolder
+import java.util.*
+import javax.inject.Inject
 
 /**
  * Адаптер с книгами на странице "Мои книги"
@@ -23,7 +19,7 @@ import ru.mamykin.foreignbooksreader.ui.adapters.viewholders.BookViewHolder
 class BooksRecyclerAdapter(private val listener: OnBookClickListener) : RecyclerView.Adapter<BookViewHolder>() {
     private var booksList: List<FictionBook>? = null
     @Inject
-    protected var context: Context? = null
+    lateinit var context: Context
 
     init {
         this.booksList = ArrayList()

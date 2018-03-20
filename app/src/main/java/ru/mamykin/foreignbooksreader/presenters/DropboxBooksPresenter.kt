@@ -4,34 +4,27 @@ import android.content.Context
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
-
 import com.arellomobile.mvp.InjectViewState
 import com.dropbox.core.DbxException
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.files.FileMetadata
 import com.dropbox.core.v2.files.FolderMetadata
 import com.dropbox.core.v2.files.ListFolderResult
-
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
-
-import javax.inject.Inject
-
 import ru.mamykin.foreignbooksreader.R
 import ru.mamykin.foreignbooksreader.ReaderApp
-import ru.mamykin.foreignbooksreader.common.FolderToFilesListMapper
-import ru.mamykin.foreignbooksreader.common.Utils
-import ru.mamykin.foreignbooksreader.models.DropboxFile
 import ru.mamykin.foreignbooksreader.common.DropboxClientFactory
+import ru.mamykin.foreignbooksreader.common.FolderToFilesListMapper
 import ru.mamykin.foreignbooksreader.extension.applySchedulers
-import ru.mamykin.foreignbooksreader.preferences.PreferencesManager
+import ru.mamykin.foreignbooksreader.models.DropboxFile
 import ru.mamykin.foreignbooksreader.preferences.PreferenceNames
+import ru.mamykin.foreignbooksreader.preferences.PreferencesManager
 import ru.mamykin.foreignbooksreader.views.DropboxView
 import rx.Observable
 import rx.Subscriber
-import rx.Subscription
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import javax.inject.Inject
 
 /**
  * Creation date: 5/29/2017
@@ -42,11 +35,11 @@ import rx.Subscription
 class DropboxBooksPresenter// TODO: изменить фрагмент DROPBOX на 2 фрагмента - авторизация, файлы
 (private var currentDir: String?) : BasePresenter<DropboxView>(), PreferenceNames {
     @Inject
-    protected var pm: PreferencesManager? = null
+    lateinit var pm: PreferencesManager
     @Inject
-    protected var folderToListMapper: FolderToFilesListMapper? = null
+    lateinit var folderToListMapper: FolderToFilesListMapper
     @Inject
-    protected var context: Context? = null
+    lateinit var context: Context
 
     init {
         ReaderApp.component.inject(this)

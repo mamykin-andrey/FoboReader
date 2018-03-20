@@ -24,7 +24,7 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    internal fun provideBookDao(dbHelper: BookDatabaseHelper): BookDao? {
-        return dbHelper.getBookDao()
+    internal fun provideBookDao(dbHelper: BookDatabaseHelper): BookDao {
+        return dbHelper.getBookDao()!!
     }
 }

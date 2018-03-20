@@ -18,7 +18,7 @@ class BookDetailsPresenter(private val bookId: Int) : BasePresenter<BookDetailsV
     private var book: FictionBook? = null
 
     @Inject
-    protected var dbHelper: BookDatabaseHelper? = null
+    lateinit var dbHelper: BookDatabaseHelper
 
     init {
         ReaderApp.component.inject(this)

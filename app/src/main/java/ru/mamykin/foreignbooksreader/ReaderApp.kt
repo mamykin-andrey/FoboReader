@@ -19,7 +19,7 @@ import ru.mamykin.foreignbooksreader.preferences.PreferenceNames
 
 class ReaderApp : MultiDexApplication(), PreferenceNames {
     @Inject
-    protected var pm: PreferencesManager? = null
+    lateinit var pm: PreferencesManager
 
     override fun onCreate() {
         super.onCreate()

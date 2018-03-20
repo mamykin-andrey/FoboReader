@@ -17,10 +17,10 @@ import javax.inject.Inject
 
 abstract class BaseActivity : MvpAppCompatActivity(), PreferenceNames {
     @BindView(R.id.toolbar)
-    protected var toolbar: Toolbar? = null
+    lateinit var toolbar: Toolbar
 
     @Inject
-    internal var pm: PreferencesManager? = null
+    lateinit var pm: PreferencesManager
 
     private val systemBrightness: Float
         get() {

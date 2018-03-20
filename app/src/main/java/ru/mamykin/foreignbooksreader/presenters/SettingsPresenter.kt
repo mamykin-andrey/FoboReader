@@ -24,9 +24,9 @@ import ru.mamykin.foreignbooksreader.views.SettingsView
 @InjectViewState
 class SettingsPresenter : BasePresenter<SettingsView>(), PreferenceNames {
     @Inject
-    protected var context: Context? = null
+    lateinit var context: Context
     @Inject
-    protected var pm: PreferencesManager? = null
+    lateinit var pm: PreferencesManager
 
     init {
         ReaderApp.component.inject(this)

@@ -1,17 +1,13 @@
 package ru.mamykin.foreignbooksreader.presenters
 
 import com.arellomobile.mvp.InjectViewState
-
-import javax.inject.Inject
-
 import ru.mamykin.foreignbooksreader.ReaderApp
-import ru.mamykin.foreignbooksreader.common.Utils
 import ru.mamykin.foreignbooksreader.extension.applySchedulers
 import ru.mamykin.foreignbooksreader.models.StoreBook
 import ru.mamykin.foreignbooksreader.retrofit.BooksStoreService
 import ru.mamykin.foreignbooksreader.views.BooksStoreView
 import rx.Subscriber
-import rx.Subscription
+import javax.inject.Inject
 
 /**
  * Creation date: 5/29/2017
@@ -22,7 +18,7 @@ import rx.Subscription
 class StorePresenter : BasePresenter<BooksStoreView>() {
     private var booksList: List<StoreBook>? = null
     @Inject
-    protected var booksService: BooksStoreService? = null
+    lateinit var booksService: BooksStoreService
 
     init {
         ReaderApp.component.inject(this)

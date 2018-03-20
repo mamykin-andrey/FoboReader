@@ -22,7 +22,7 @@ import ru.mamykin.foreignbooksreader.views.DeviceBooksView
 @InjectViewState
 class DeviceBooksPresenter(private var currentDir: String?) : BasePresenter<DeviceBooksView>() {
     @Inject
-    protected var mapper: FileToAndroidFileMapper? = null
+    lateinit var mapper: FileToAndroidFileMapper
 
     init {
         ReaderApp.component.inject(this)

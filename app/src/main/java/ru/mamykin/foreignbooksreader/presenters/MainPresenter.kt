@@ -20,8 +20,9 @@ import ru.mamykin.foreignbooksreader.views.MainView
  */
 @InjectViewState
 class MainPresenter : BasePresenter<MainView>(), PreferenceNames {
+
     @Inject
-    protected var pm: PreferencesManager? = null
+    lateinit var pm: PreferencesManager
 
     init {
         ReaderApp.component.inject(this)
