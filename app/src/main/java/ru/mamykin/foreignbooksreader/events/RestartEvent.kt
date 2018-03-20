@@ -1,4 +1,4 @@
-package ru.mamykin.foreignbooksreader.events;
+package ru.mamykin.foreignbooksreader.events
 
 /**
  * Event, для перезапуска активити, в случае изменения темы
@@ -6,5 +6,4 @@ package ru.mamykin.foreignbooksreader.events;
  * Creation time: 11:39 AM
  * @author Andrey Mamykin(mamykin_av)
  */
-public class RestartEvent {
-}
+class RestartEvent
