@@ -1,7 +1,5 @@
 package ru.mamykin.foreignbooksreader.models
 
-import java.io.File
-
 import ru.mamykin.foreignbooksreader.common.Utils
 
 /**
