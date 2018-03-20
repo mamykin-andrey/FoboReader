@@ -45,7 +45,7 @@ public class ReaderApp extends MultiDexApplication implements PreferenceNames {
     }
 
     private void setupTheme() {
-        UiUtils.setNightMode(pm.getBoolean(NIGHT_THEME_PREF));
+        UiUtils.setNightMode(pm.getBoolean(Companion.getNIGHT_THEME_PREF()));
     }
 
     private void setupAppComponent() {

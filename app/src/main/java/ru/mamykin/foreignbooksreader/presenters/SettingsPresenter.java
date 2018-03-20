@@ -40,12 +40,12 @@ public class SettingsPresenter extends BasePresenter<SettingsView> implements Pr
     }
 
     public void loadSettings() {
-        getViewState().setNightThemeEnabled(pm.getBoolean(NIGHT_THEME_PREF));
-        getViewState().setAutoBrightnessChecked(pm.getBoolean(BRIGHTNESS_AUTO_PREF, true));
-        getViewState().setBrightnessControlEnabled(!pm.getBoolean(BRIGHTNESS_AUTO_PREF));
-        getViewState().setBrightnessPos((int) (pm.getFloat(BRIGHTNESS_PREF, 1f) * 100));
-        getViewState().setContentSizeText(pm.getString(PreferenceNames.CONTENT_TEXT_SIZE_PREF, "16"));
-        getViewState().setDropboxAccount(pm.getString(DROPBOX_EMAIL_PREF));
+        getViewState().setNightThemeEnabled(pm.getBoolean(Companion.getNIGHT_THEME_PREF()));
+        getViewState().setAutoBrightnessChecked(pm.getBoolean(Companion.getBRIGHTNESS_AUTO_PREF(), true));
+        getViewState().setBrightnessControlEnabled(!pm.getBoolean(Companion.getBRIGHTNESS_AUTO_PREF()));
+        getViewState().setBrightnessPos((int) (pm.getFloat(Companion.getBRIGHTNESS_PREF(), 1f) * 100));
+        getViewState().setContentSizeText(pm.getString(PreferenceNames.Companion.getCONTENT_TEXT_SIZE_PREF(), "16"));
+        getViewState().setDropboxAccount(pm.getString(Companion.getDROPBOX_EMAIL_PREF()));
     }
 
     /**
@@ -56,7 +56,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> implements Pr
         if (isChecked != UiUtils.getNightMode()) {
             EventBus.getDefault().postSticky(new RestartEvent());
 
-            pm.putBoolean(NIGHT_THEME_PREF, isChecked);
+            pm.putBoolean(Companion.getNIGHT_THEME_PREF(), isChecked);
             AppCompatDelegate.setDefaultNightMode(isChecked
                     ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
             getViewState().restartActivity();
@@ -68,8 +68,8 @@ public class SettingsPresenter extends BasePresenter<SettingsView> implements Pr
      * @param isChecked true, если выбрана ручная регулировка
      */
     public void onBrightnessAutoCheckedChanged(boolean isChecked) {
-        if (isChecked != pm.getBoolean(PreferenceNames.BRIGHTNESS_AUTO_PREF)) {
-            pm.putBoolean(BRIGHTNESS_AUTO_PREF, isChecked);
+        if (isChecked != pm.getBoolean(PreferenceNames.Companion.getBRIGHTNESS_AUTO_PREF())) {
+            pm.putBoolean(Companion.getBRIGHTNESS_AUTO_PREF(), isChecked);
             getViewState().setAutoBrightnessChecked(isChecked);
             getViewState().setBrightnessControlEnabled(!isChecked);
             getViewState().setupBrightness();
@@ -81,9 +81,9 @@ public class SettingsPresenter extends BasePresenter<SettingsView> implements Pr
      * @param progress значение прогресса, от 0 до 100
      */
     public void onBrightnessProgressChanged(int progress) {
-        if (!pm.getBoolean(PreferenceNames.BRIGHTNESS_AUTO_PREF)) {
+        if (!pm.getBoolean(PreferenceNames.Companion.getBRIGHTNESS_AUTO_PREF())) {
             final float progressF = progress / 100f;
-            pm.putFloat(BRIGHTNESS_PREF, progressF);
+            pm.putFloat(Companion.getBRIGHTNESS_PREF(), progressF);
             getViewState().setupBrightness();
         }
     }
@@ -92,7 +92,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> implements Pr
      * Отображаем диалог выхода из аккаунта Dropbox
      */
     public void onDropboxLogoutClick() {
-        if (pm.contains(DROPBOX_TOKEN_PREF)) {
+        if (pm.contains(Companion.getDROPBOX_TOKEN_PREF())) {
             getViewState().showDropboxLogoutDialog();
         }
     }
@@ -102,9 +102,9 @@ public class SettingsPresenter extends BasePresenter<SettingsView> implements Pr
      */
     public void onDropboxLogoutPositive() {
         // Т.к. в Dropbox нет нормального метода для выхода из аккаунта
-        pm.putBoolean(DROPBOX_LOGOUT_PREF, true);
-        pm.removeValue(DROPBOX_TOKEN_PREF);
-        pm.removeValue(DROPBOX_EMAIL_PREF);
+        pm.putBoolean(Companion.getDROPBOX_LOGOUT_PREF(), true);
+        pm.removeValue(Companion.getDROPBOX_TOKEN_PREF());
+        pm.removeValue(Companion.getDROPBOX_EMAIL_PREF());
         getViewState().setDropboxAccount(null);
     }
 }

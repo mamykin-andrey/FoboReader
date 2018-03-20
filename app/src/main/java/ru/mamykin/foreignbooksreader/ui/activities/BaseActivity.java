@@ -54,8 +54,8 @@ public abstract class BaseActivity extends MvpAppCompatActivity implements Prefe
     }
 
     public void setupBrightness() {
-        float brightness = pm.getBoolean(BRIGHTNESS_AUTO_PREF, true)
-                ? getSystemBrightness() : pm.getFloat(BRIGHTNESS_PREF, 1f);
+        float brightness = pm.getBoolean(Companion.getBRIGHTNESS_AUTO_PREF(), true)
+                ? getSystemBrightness() : pm.getFloat(Companion.getBRIGHTNESS_PREF(), 1f);
         WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
         layoutParams.screenBrightness = brightness;
         getWindow().setAttributes(layoutParams);

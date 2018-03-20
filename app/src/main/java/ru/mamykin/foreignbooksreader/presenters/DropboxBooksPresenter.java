@@ -58,11 +58,11 @@ public class DropboxBooksPresenter extends BasePresenter<DropboxView> implements
     public void attachView(DropboxView view) {
         super.attachView(view);
 
-        String token = pm.getString(DROPBOX_TOKEN_PREF, null);
+        String token = pm.getString(Companion.getDROPBOX_TOKEN_PREF(), null);
         if (token != null) {
             setupDropbox(token);
-        } else if (!pm.getBoolean(DROPBOX_LOGOUT_PREF) && (token = Auth.getOAuth2Token()) != null) {
-            pm.putString(DROPBOX_TOKEN_PREF, token);
+        } else if (!pm.getBoolean(Companion.getDROPBOX_LOGOUT_PREF()) && (token = Auth.getOAuth2Token()) != null) {
+            pm.putString(Companion.getDROPBOX_TOKEN_PREF(), token);
             setupDropbox(token);
         } else {
             getViewState().hideFiles();
@@ -77,7 +77,7 @@ public class DropboxBooksPresenter extends BasePresenter<DropboxView> implements
     }
 
     public void onLoginClicked() {
-        pm.removeValue(PreferenceNames.DROPBOX_LOGOUT_PREF);
+        pm.removeValue(PreferenceNames.Companion.getDROPBOX_LOGOUT_PREF());
         Auth.startOAuth2Authentication(context, context.getString(R.string.dropbox_api_key));
     }
 
@@ -187,7 +187,7 @@ public class DropboxBooksPresenter extends BasePresenter<DropboxView> implements
 
                     @Override
                     public void onNext(String s) {
-                        pm.putString(DROPBOX_EMAIL_PREF, s);
+                        pm.putString(Companion.getDROPBOX_EMAIL_PREF(), s);
                     }
                 });
         unsubscribeOnDestroy(subscription);
