@@ -26,7 +26,7 @@ android {
     buildToolsVersion '26.0.2'
     defaultConfig {
         multiDexEnabled true
-        applicationId "ru.mamykin.foreignbooksreader"
+        applicationId "ru.mamykin.foboreader"
         minSdkVersion 9
         targetSdkVersion 21
         versionCode 2

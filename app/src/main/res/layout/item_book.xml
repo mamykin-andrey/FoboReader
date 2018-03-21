@@ -82,7 +82,7 @@
                     android:layout_marginTop="5dp"
                     tools:text="16 страниц из 27"/>
 
-                <ru.mamykin.foreignbooksreader.ui.global.control.PercentProgressView
+                <ru.mamykin.foboreader.ui.global.control.PercentProgressView
                     android:id="@+id/pvProgress"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"

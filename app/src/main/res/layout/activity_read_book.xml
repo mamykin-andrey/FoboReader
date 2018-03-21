@@ -22,7 +22,7 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-        <ru.mamykin.foreignbooksreader.ui.global.control.SwipeableTextView
+        <ru.mamykin.foboreader.ui.global.control.SwipeableTextView
             android:id="@+id/tvText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
