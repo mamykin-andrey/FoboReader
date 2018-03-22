@@ -3,73 +3,61 @@ package ru.mamykin.foboreader.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.design.widget.TabLayout
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import butterknife.BindView
+import kotlinx.android.synthetic.main.activity_main.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.presentation.main.MainPresenter
-import ru.mamykin.foboreader.ui.store.BooksStoreFragment
-import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksFragment
-import ru.mamykin.foboreader.ui.dropbox.DropboxBooksFragment
-import ru.mamykin.foboreader.ui.mybooks.MyBooksFragment
 import ru.mamykin.foboreader.presentation.main.MainView
 import ru.mamykin.foboreader.ui.about.AboutActivity
+import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksFragment
+import ru.mamykin.foboreader.ui.dropbox.DropboxBooksFragment
 import ru.mamykin.foboreader.ui.global.BaseActivity
+import ru.mamykin.foboreader.ui.mybooks.MyBooksFragment
 import ru.mamykin.foboreader.ui.settings.SettingsActivity
+import ru.mamykin.foboreader.ui.store.BooksStoreFragment
 
 /**
  * Основная страница, включает в себя страницу с книгами, файлами на устройстве, файлами Dropbox, магазином
  */
-class MainActivity(override val layout: Int = R.layout.activity_main) : BaseActivity(), MainView {
-
-    @BindView(R.id.drawerLayout)
-    protected var drawerLayout: DrawerLayout? = null
-    @BindView(R.id.viewpager)
-    protected var viewPager: ViewPager? = null
-    @BindView(R.id.tabLayout)
-    protected var tabLayout: TabLayout? = null
-    @BindView(R.id.navigationDrawer)
-    protected var navigationView: NavigationView? = null
+class MainActivity : BaseActivity(), MainView {
 
     @InjectPresenter
-    internal var presenter: MainPresenter? = null
+    lateinit var presenter: MainPresenter
 
-    private var toggle: ActionBarDrawerToggle? = null
+    private lateinit var toggle: ActionBarDrawerToggle
+
+    override val layout: Int = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initToolbar(getString(R.string.main_tab), true)
-        setupViewPager(viewPager!!, savedInstanceState)
-        tabLayout!!.setupWithViewPager(viewPager)
+        setupViewPager(viewpager, savedInstanceState)
+        tabLayout.setupWithViewPager(viewpager)
         setupDrawerLayout()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        toggle!!.syncState()
+        toggle.syncState()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            drawerLayout!!.openDrawer(GravityCompat.START)
+            drawerLayout.openDrawer(GravityCompat.START)
             return true
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
-        if (drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout!!.closeDrawer(GravityCompat.START)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
             return
         }
         super.onBackPressed()
@@ -96,19 +84,19 @@ class MainActivity(override val layout: Int = R.layout.activity_main) : BaseActi
         viewPager.adapter = adapter
     }
 
-    fun onNavigationItemSelected(item: MenuItem): Boolean {
-        drawerLayout!!.closeDrawer(GravityCompat.START)
+    private fun onNavigationItemSelected(item: MenuItem): Boolean {
+        drawerLayout.closeDrawer(GravityCompat.START)
         when (item.itemId) {
             R.id.menu_my_books -> {
-                viewPager!!.currentItem = MY_BOOKS_FRAGMENT_POS
+                viewpager.currentItem = MY_BOOKS_FRAGMENT_POS
                 return true
             }
             R.id.menu_device -> {
-                viewPager!!.currentItem = DEVICE_BOOKS_FRAGMENT_POS
+                viewpager.currentItem = DEVICE_BOOKS_FRAGMENT_POS
                 return true
             }
             R.id.menu_dropbox -> {
-                viewPager!!.currentItem = DROPBOX_BOOKS_FRAGMENT_POS
+                viewpager.currentItem = DROPBOX_BOOKS_FRAGMENT_POS
                 return true
             }
             R.id.menu_settings -> {
@@ -120,7 +108,7 @@ class MainActivity(override val layout: Int = R.layout.activity_main) : BaseActi
                 return true
             }
             R.id.menu_exit -> {
-                startActivity(homeIntent)
+                startActivity(MainActivity.getHomeIntent())
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -131,30 +119,29 @@ class MainActivity(override val layout: Int = R.layout.activity_main) : BaseActi
         UiUtils.restartActivity(this)
     }
 
-    protected fun setupDrawerLayout() {
-        navigationView!!.setNavigationItemSelectedListener({ this.onNavigationItemSelected(it) })
+    private fun setupDrawerLayout() {
+        navigationDrawer.setNavigationItemSelectedListener({ this.onNavigationItemSelected(it) })
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name)
-        toggle!!.isDrawerIndicatorEnabled = true
-        drawerLayout!!.addDrawerListener(toggle!!)
+        toggle.isDrawerIndicatorEnabled = true
+        drawerLayout.addDrawerListener(toggle)
     }
 
     companion object {
-        private val TAG_MY_BOOKS_FRAGMENT = "tag_my_books_fragment"
-        private val TAG_STORE_FRAGMENT = "tag_store_fragment"
-        private val TAG_DEVICE_BOOKS_FRAGMENT = "tag_device_books_fragment"
-        private val TAG_DROPBOX_BOOKS_FRAGMENT = "tag_dropbox_books_fragment"
-        private val MY_BOOKS_FRAGMENT_POS = 0
-        private val DEVICE_BOOKS_FRAGMENT_POS = 1
-        private val DROPBOX_BOOKS_FRAGMENT_POS = 2
-        private val TABS_COUNT = 4
+        private const val TAG_MY_BOOKS_FRAGMENT = "tag_my_books_fragment"
+        private const val TAG_STORE_FRAGMENT = "tag_store_fragment"
+        private const val TAG_DEVICE_BOOKS_FRAGMENT = "tag_device_books_fragment"
+        private const val TAG_DROPBOX_BOOKS_FRAGMENT = "tag_dropbox_books_fragment"
+        private const val MY_BOOKS_FRAGMENT_POS = 0
+        private const val DEVICE_BOOKS_FRAGMENT_POS = 1
+        private const val DROPBOX_BOOKS_FRAGMENT_POS = 2
+        private const val TABS_COUNT = 4
 
-        val homeIntent: Intent
-            get() {
-                val homeIntent = Intent(Intent.ACTION_MAIN)
-                homeIntent.addCategory(Intent.CATEGORY_HOME)
-                homeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                return homeIntent
-            }
+        fun getHomeIntent(): Intent {
+            val homeIntent = Intent(Intent.ACTION_MAIN)
+            homeIntent.addCategory(Intent.CATEGORY_HOME)
+            homeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            return homeIntent
+        }
 
         fun getStartIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)
