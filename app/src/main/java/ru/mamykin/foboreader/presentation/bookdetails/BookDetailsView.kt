@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.presentation.bookdetails
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import java.util.*
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface BookDetailsView : MvpView {
@@ -24,5 +25,5 @@ interface BookDetailsView : MvpView {
 
     fun showBookOriginalLang(lang: String)
 
-    fun showBookCreatedDate(date: String)
+    fun showBookCreatedDate(date: Date)
 }

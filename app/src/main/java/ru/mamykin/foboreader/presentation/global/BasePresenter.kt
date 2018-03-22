@@ -6,20 +6,20 @@ import com.arellomobile.mvp.MvpView
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
 abstract class BasePresenter<V : MvpView> : MvpPresenter<V>() {
-    private val subscription = CompositeSubscription()
+
+    private val compositeSubscription = CompositeSubscription()
 
     protected fun unsubscribeOnDestroy(subscription: Subscription) {
-        this.subscription.add(subscription)
+        this.compositeSubscription.add(subscription)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        subscription.clear()
+        compositeSubscription.clear()
+    }
+
+    fun Subscription.unsubscrubeOnDestory() {
+        compositeSubscription.add(this)
     }
 }

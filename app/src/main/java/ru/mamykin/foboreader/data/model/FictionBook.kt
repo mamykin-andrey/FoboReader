@@ -31,6 +31,7 @@ class FictionBook {
     @DatabaseField(columnName = BookContract.FILE_PATH, canBeNull = false)
     var filePath: String? = null
     @DatabaseField(columnName = BookContract.BOOK_GENRE)
+    var fileName: String = ""
     var bookGenre: String? = null
     @DatabaseField(columnName = BookContract.COVER_FILE)
     var coverFile: String? = null
