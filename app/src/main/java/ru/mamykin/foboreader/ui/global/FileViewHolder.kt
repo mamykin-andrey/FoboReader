@@ -2,30 +2,31 @@ package ru.mamykin.foboreader.ui.global
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.item_file.view.*
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.data.model.AndroidFile
 
-class FileViewHolder(itemView: View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.tvFileName)
-    var tvFileName: TextView? = null
-    @BindView(R.id.tvFileAttributes)
-    var tvFileAttributes: TextView? = null
-    @BindView(R.id.ivFileType)
-    var ivFileType: ImageView? = null
-    @BindView(R.id.pbLoading)
-    var pbLoading: View? = null
+class FileViewHolder(itemView: View,
+                     onItemClickFunc: (Int) -> Unit
+) : RecyclerView.ViewHolder(itemView) {
 
     init {
-
-        ButterKnife.bind(this, itemView)
-        itemView.setOnClickListener { v -> listener.onItemClick(adapterPosition) }
+        itemView.setOnClickListener { onItemClickFunc(adapterPosition) }
     }
 
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
+    fun bind(file: AndroidFile) {
+        itemView.tvFileName.text = file.name
+        if (file.isDirectory) {
+            itemView.ivFileType.setImageResource(R.drawable.ic_folder)
+            itemView.tvFileAttributes.visibility = View.GONE
+        } else if (file.isFictionBook) {
+            itemView.ivFileType.setImageResource(R.drawable.ic_book)
+            itemView.tvFileAttributes.visibility = View.VISIBLE
+            itemView.tvFileAttributes.text = file.attributes
+        } else {
+            itemView.ivFileType.setImageResource(R.drawable.ic_file)
+            itemView.tvFileAttributes.visibility = View.VISIBLE
+            itemView.tvFileAttributes.text = file.attributes
+        }
     }
 }

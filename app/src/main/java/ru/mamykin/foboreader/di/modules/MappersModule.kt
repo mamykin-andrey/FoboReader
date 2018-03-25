@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.di.modules
 
 import dagger.Module
 import dagger.Provides
-import ru.mamykin.foboreader.common.FileToAndroidFileMapper
 import ru.mamykin.foboreader.common.FolderToFilesListMapper
 
 /**
@@ -15,10 +14,5 @@ class MappersModule {
     @Provides
     internal fun provideFolderToFilesListMapper(): FolderToFilesListMapper {
         return FolderToFilesListMapper()
-    }
-
-    @Provides
-    internal fun provideFileToAndroidFileMapper(): FileToAndroidFileMapper {
-        return FileToAndroidFileMapper()
     }
 }

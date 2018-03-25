@@ -3,41 +3,44 @@ package ru.mamykin.foboreader.ui.devicebooks
 import android.os.Bundle
 import android.os.Environment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.view.*
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import kotlinx.android.synthetic.main.fragment_device_books.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.data.model.AndroidFile
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksPresenter
-import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
-import ru.mamykin.foboreader.ui.global.FileViewHolder
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksView
 import ru.mamykin.foboreader.ui.devicebooks.list.FilesRecyclerAdapter
+import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
+import javax.inject.Inject
 
 /**
  * Страница с файлами на устройстве
  */
 class DeviceBooksFragment : MvpAppCompatFragment(), DeviceBooksView, SearchView.OnQueryTextListener {
 
-    @BindView(R.id.rvFiles)
-    protected var rvFiles: RecyclerView? = null
-    @BindView(R.id.tvCurrentDir)
-    protected var tvCurrentDir: TextView? = null
-    @BindView(R.id.ibUp)
-    protected var btnUpDir: View? = null
+    companion object {
+        private const val CURRENT_DIR_EXTRA = "current_dir_extra"
 
+        fun newInstance(currentDir: String?): DeviceBooksFragment {
+            val args = Bundle()
+            args.putString(CURRENT_DIR_EXTRA, currentDir
+                    ?: Environment.getExternalStorageDirectory().toString())
+            val fragment = DeviceBooksFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    @Inject
     @InjectPresenter
-    internal var presenter: DeviceBooksPresenter? = null
+    lateinit var presenter: DeviceBooksPresenter
 
-    private var adapter: FilesRecyclerAdapter? = null
+    private lateinit var adapter: FilesRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,16 +52,15 @@ class DeviceBooksFragment : MvpAppCompatFragment(), DeviceBooksView, SearchView.
         return DeviceBooksPresenter(arguments.getString(CURRENT_DIR_EXTRA))
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val contentView = inflater!!.inflate(R.layout.fragment_device_books, container, false)
-        ButterKnife.bind(this, contentView)
+    override fun onCreateView(inflater: LayoutInflater?,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
 
-        adapter = FilesRecyclerAdapter(object : FileViewHolder.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                presenter!!.onFileClicked(adapter!!.getItem(position))
-            }
-        })
-        UiUtils.setupRecyclerView(context, rvFiles!!, adapter!!, LinearLayoutManager(context), true)
+        val contentView = inflater!!.inflate(R.layout.fragment_device_books, container, false)
+
+        adapter = FilesRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
+        UiUtils.setupRecyclerView(context, rvFiles!!, adapter, LinearLayoutManager(context), true)
+        btnUpDir.setOnClickListener { presenter.onUpDirClicked() }
 
         return contentView
     }
@@ -74,11 +76,11 @@ class DeviceBooksFragment : MvpAppCompatFragment(), DeviceBooksView, SearchView.
     }
 
     override fun showFiles(files: List<AndroidFile>) {
-        adapter!!.changeData(files)
+        adapter.changeData(files)
     }
 
-    override fun setCurrentDir(currentDir: String) {
-        tvCurrentDir!!.text = currentDir
+    override fun showCurrentDir(currentDir: String) {
+        tvCurrentDir.text = currentDir
     }
 
     override fun showPermissionMessage() {
@@ -90,12 +92,7 @@ class DeviceBooksFragment : MvpAppCompatFragment(), DeviceBooksView, SearchView.
     }
 
     override fun showUpDir(show: Boolean) {
-        UiUtils.setVisibility(btnUpDir!!, show)
-    }
-
-    @OnClick(R.id.ibUp)
-    fun onUpClicked() {
-        presenter!!.onUpClicked()
+        UiUtils.setVisibility(btnUpDir, show)
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {
@@ -104,18 +101,5 @@ class DeviceBooksFragment : MvpAppCompatFragment(), DeviceBooksView, SearchView.
 
     override fun onQueryTextChange(newText: String): Boolean {
         return false
-    }
-
-    companion object {
-        private val CURRENT_DIR_EXTRA = "current_dir_extra"
-
-        fun newInstance(currentDir: String?): DeviceBooksFragment {
-            val args = Bundle()
-            args.putString(CURRENT_DIR_EXTRA, currentDir
-                    ?: Environment.getExternalStorageDirectory().toString())
-            val fragment = DeviceBooksFragment()
-            fragment.arguments = args
-            return fragment
-        }
     }
 }

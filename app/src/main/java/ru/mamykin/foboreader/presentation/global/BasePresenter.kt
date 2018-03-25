@@ -19,7 +19,7 @@ abstract class BasePresenter<V : MvpView> : MvpPresenter<V>() {
         compositeSubscription.clear()
     }
 
-    fun Subscription.unsubscrubeOnDestory() {
+    fun Subscription.unsubscribeOnDestory() {
         compositeSubscription.add(this)
     }
 }

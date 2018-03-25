@@ -20,7 +20,7 @@ class BookDetailsPresenter @Inject constructor(
     private fun loadBook() {
         interactor.loadBookInfo()
                 .subscribe(this::showBookInfo)
-                .unsubscrubeOnDestory()
+                .unsubscribeOnDestory()
     }
 
     private fun showBookInfo(book: FictionBook) {

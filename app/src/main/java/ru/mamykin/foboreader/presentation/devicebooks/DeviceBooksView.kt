@@ -10,7 +10,7 @@ import ru.mamykin.foboreader.data.model.AndroidFile
 interface DeviceBooksView : MvpView {
     fun showFiles(files: List<AndroidFile>)
 
-    fun setCurrentDir(currentDir: String)
+    fun showCurrentDir(currentDir: String)
 
     fun showPermissionMessage()
 
