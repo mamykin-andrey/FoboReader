@@ -3,22 +3,11 @@ package ru.mamykin.foboreader.presentation.main
 import com.arellomobile.mvp.InjectViewState
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import ru.mamykin.foboreader.ReaderApp
 import ru.mamykin.foboreader.common.events.RestartEvent
-import ru.mamykin.foboreader.data.storage.PreferenceNames
-import ru.mamykin.foboreader.data.storage.PreferencesManager
 import ru.mamykin.foboreader.presentation.global.BasePresenter
-import javax.inject.Inject
 
 @InjectViewState
-class MainPresenter : BasePresenter<MainView>(), PreferenceNames {
-
-    @Inject
-    lateinit var pm: PreferencesManager
-
-    init {
-        ReaderApp.component.inject(this)
-    }
+class MainPresenter : BasePresenter<MainView>() {
 
     override fun attachView(view: MainView) {
         super.attachView(view)
