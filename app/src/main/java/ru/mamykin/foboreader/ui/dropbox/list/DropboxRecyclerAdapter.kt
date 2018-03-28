@@ -1,86 +1,61 @@
 package ru.mamykin.foboreader.ui.dropbox.list
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-
-import java.util.ArrayList
-
-import javax.inject.Inject
-
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.ReaderApp
 import ru.mamykin.foboreader.data.model.DropboxFile
-import ru.mamykin.foboreader.ui.global.FileViewHolder
 
-/**
- * Адаптер с файлами на странице "Dropbox"
- */
-class DropboxRecyclerAdapter(private val listener: FileViewHolder.OnItemClickListener) : RecyclerView.Adapter<FileViewHolder>() {
-    private var filesList: List<DropboxFile> = ArrayList(0)
-    @Inject
-    lateinit var context: Context
-    private var loadingItem = -1
+class DropboxRecyclerAdapter(
+        private val onFileClickFunc: (DropboxFile) -> Unit,
+        private val onDirClickFunc: (DropboxFile) -> Unit
+) : RecyclerView.Adapter<DropboxFileViewHolder>() {
 
-    init {
-        filesList = ArrayList()
-        ReaderApp.component.inject(this)
+    private var files: List<DropboxFile> = listOf()
+    private var loadingItemPos = -1
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DropboxFileViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_file, parent, false)
+        return DropboxFileViewHolder(view, this::onItemClicked)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
-        val view = LayoutInflater.from(
-                parent.context).inflate(R.layout.item_file, parent, false)
-        return FileViewHolder(view, listener)
-    }
-
-    override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DropboxFileViewHolder, position: Int) {
         val item = getItem(position)
-        if (position == loadingItem) {
-            // Загружаемый элемент
-            holder.pbLoading!!.visibility = View.VISIBLE
-        } else {
-            holder.tvFileName!!.text = item.name
-            holder.pbLoading!!.visibility = View.GONE
-            if (item.isDirectory) {
-                // Папка
-                holder.ivFileType!!.setImageResource(R.drawable.ic_folder)
-                holder.tvFileAttributes!!.visibility = View.GONE
-            } else if (item.isFictionBook) {
-                // Fiction Book
-                holder.ivFileType!!.setImageResource(R.drawable.ic_book)
-                holder.tvFileAttributes!!.visibility = View.VISIBLE
-                holder.tvFileAttributes!!.text = item.attributes
-            } else {
-                // Обычный файл
-                holder.ivFileType!!.setImageResource(R.drawable.ic_file)
-                holder.tvFileAttributes!!.visibility = View.VISIBLE
-                holder.tvFileAttributes!!.text = item.attributes
-            }
-        }
-    }
-
-    fun getItem(position: Int): DropboxFile {
-        return filesList[position]
+        holder.bind(item, position, loadingItemPos)
     }
 
     override fun getItemCount(): Int {
-        return filesList.size
+        return files.size
     }
 
     fun changeData(files: List<DropboxFile>) {
-        filesList = files
+        this.files = files
         notifyDataSetChanged()
     }
 
     fun showLoadingItem(position: Int) {
-        this.loadingItem = position
-        notifyDataSetChanged()
+        val prevLoadingItemPos = this.loadingItemPos
+        loadingItemPos = position
+        notifyItemChanged(prevLoadingItemPos)
+        notifyItemChanged(loadingItemPos)
     }
 
     fun hideLoadingItem() {
-        this.loadingItem = -1
-        notifyDataSetChanged()
+        val prevLoadingItemPos = loadingItemPos
+        loadingItemPos = -1
+        notifyItemChanged(prevLoadingItemPos)
+    }
+
+    private fun onItemClicked(position: Int) {
+        val item = getItem(position)
+        if (item.isDirectory) {
+            onDirClickFunc(item)
+        } else {
+            onFileClickFunc(item)
+        }
+    }
+
+    private fun getItem(position: Int): DropboxFile {
+        return files[position]
     }
 }

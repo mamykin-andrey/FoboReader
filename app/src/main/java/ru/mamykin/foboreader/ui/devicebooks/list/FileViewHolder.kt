@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.ui.global
+package ru.mamykin.foboreader.ui.devicebooks.list
 
 import android.support.v7.widget.RecyclerView
 import android.view.View

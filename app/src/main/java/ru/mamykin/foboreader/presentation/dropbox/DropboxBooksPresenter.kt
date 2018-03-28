@@ -72,7 +72,7 @@ class DropboxBooksPresenter// TODO: изменить фрагмент DROPBOX н
         Auth.startOAuth2Authentication(context!!, context!!.getString(R.string.dropbox_api_key))
     }
 
-    fun onItemClicked(position: Int, item: DropboxFile) {
+    fun onItemClicked(item: DropboxFile) {
         if (item.isDirectory) {
             val folder = item.file as FolderMetadata?
 
@@ -109,6 +109,10 @@ class DropboxBooksPresenter// TODO: изменить фрагмент DROPBOX н
                     }
             unsubscribeOnDestroy(subscription)
         }
+    }
+
+    fun onDirClicked(dir: DropboxFile) {
+
     }
 
     fun onUpClicked() {

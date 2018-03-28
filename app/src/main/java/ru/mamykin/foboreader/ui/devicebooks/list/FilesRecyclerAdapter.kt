@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.data.model.AndroidFile
-import ru.mamykin.foboreader.ui.global.FileViewHolder
 import java.util.*
 
 class FilesRecyclerAdapter(
