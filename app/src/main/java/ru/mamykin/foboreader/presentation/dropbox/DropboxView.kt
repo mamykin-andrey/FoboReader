@@ -29,4 +29,6 @@ interface DropboxView : MvpView {
     fun hideAuth()
 
     fun showUpButton(show: Boolean)
+
+    fun startOAuth2Authentication()
 }

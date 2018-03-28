@@ -1,15 +1,12 @@
 package ru.mamykin.foboreader.common
 
 import com.dropbox.core.v2.files.ListFolderResult
-
-import java.util.ArrayList
-
 import ru.mamykin.foboreader.data.model.DropboxFile
-import rx.functions.Func1
+import java.util.*
 
-class FolderToFilesListMapper : Func1<ListFolderResult, List<DropboxFile>> {
+class FolderToFilesListMapper {
 
-    override fun call(result: ListFolderResult): List<DropboxFile> {
+    fun transform(result: ListFolderResult): List<DropboxFile> {
         val metaDataList = result.entries
         val filesList = ArrayList<DropboxFile>(metaDataList.size)
         for (metadata in metaDataList) {

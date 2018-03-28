@@ -7,6 +7,7 @@ import android.view.*
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.dropbox.core.android.Auth
 import kotlinx.android.synthetic.main.fragment_dropbox_books.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
@@ -53,11 +54,11 @@ class DropboxBooksFragment : MvpAppCompatFragment(), DropboxView, SearchView.OnQ
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val contentView = inflater!!.inflate(R.layout.fragment_dropbox_books, container, false)
 
-        adapter = DropboxRecyclerAdapter(presenter::onItemClicked, presenter::onDirClicked)
+        adapter = DropboxRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
         UiUtils.setupRecyclerView(context, rvBooks, adapter, LinearLayoutManager(context), true)
 
         btnLogin.setOnClickListener { presenter.onLoginClicked() }
-        ibUp.setOnClickListener { presenter.onUpClicked() }
+        ibUp.setOnClickListener { presenter.onParentDirectoryClicked() }
 
         return contentView
     }
@@ -115,6 +116,10 @@ class DropboxBooksFragment : MvpAppCompatFragment(), DropboxView, SearchView.OnQ
 
     override fun showUpButton(show: Boolean) {
         UiUtils.setVisibility(ibUp, show)
+    }
+
+    override fun startOAuth2Authentication() {
+        Auth.startOAuth2Authentication(context, context.getString(R.string.dropbox_api_key))
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {

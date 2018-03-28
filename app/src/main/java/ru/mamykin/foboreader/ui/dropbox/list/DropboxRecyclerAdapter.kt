@@ -7,7 +7,7 @@ import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.data.model.DropboxFile
 
 class DropboxRecyclerAdapter(
-        private val onFileClickFunc: (DropboxFile) -> Unit,
+        private val onFileClickFunc: (Int, DropboxFile) -> Unit,
         private val onDirClickFunc: (DropboxFile) -> Unit
 ) : RecyclerView.Adapter<DropboxFileViewHolder>() {
 
@@ -51,7 +51,7 @@ class DropboxRecyclerAdapter(
         if (item.isDirectory) {
             onDirClickFunc(item)
         } else {
-            onFileClickFunc(item)
+            onFileClickFunc(position, item)
         }
     }
 
