@@ -66,15 +66,15 @@ class MyBooksFragment : MvpAppCompatFragment(), SearchView.OnQueryTextListener,
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.actionSortName -> {
-                presenter.onActionSortNameSelected()
+                presenter.onSortByNameSelected()
                 return true
             }
             R.id.actionSortReaded -> {
-                presenter.onActionSortReadedSelected()
+                presenter.onSortByReadedSelected()
                 return true
             }
             R.id.actionSortDate -> {
-                presenter.onActionSortDateSelected()
+                presenter.onSortByDateSelected()
                 return true
             }
         }

@@ -1,108 +1,87 @@
 package ru.mamykin.foboreader.presentation.mybooks
 
-import android.text.TextUtils
-
 import com.arellomobile.mvp.InjectViewState
-
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-
+import ru.mamykin.foboreader.data.database.BookDao
+import ru.mamykin.foboreader.data.model.FictionBook
+import ru.mamykin.foboreader.domain.mybooks.MyBooksInteractor
+import ru.mamykin.foboreader.presentation.global.BasePresenter
 import javax.inject.Inject
 
-import ru.mamykin.foboreader.ReaderApp
-import ru.mamykin.foboreader.data.database.BookDao
-import ru.mamykin.foboreader.common.events.UpdateEvent
-import ru.mamykin.foboreader.data.model.FictionBook
-import ru.mamykin.foboreader.presentation.global.BasePresenter
-
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
 @InjectViewState
-class MyBooksPresenter : BasePresenter<MyBooksView>() {
-    private var booksList: List<FictionBook>? = null
-    private var searchQuery: String? = null
-    private var sortOrder: BookDao.SortOrder? = null
-    @Inject
-    lateinit var bookDao: BookDao
+class MyBooksPresenter @Inject constructor(
+        private val interactor: MyBooksInteractor
+) : BasePresenter<MyBooksView>() {
 
-    init {
-        ReaderApp.component.inject(this)
-    }
+    private var searchQuery: String = ""
+    private var sortOrder: BookDao.SortOrder = BookDao.SortOrder.BY_NAME
 
     override fun attachView(view: MyBooksView) {
         super.attachView(view)
 
         loadBooksList()
-
-        EventBus.getDefault().register(this)
-        onMessageEvent(EventBus.getDefault().getStickyEvent<UpdateEvent>(UpdateEvent::class.java!!))
     }
 
-    @Subscribe
-    fun onMessageEvent(e: UpdateEvent?) {
-        if (e != null) {
-            EventBus.getDefault().removeStickyEvent(UpdateEvent::class.java)
-            loadBooksList()
-        }
-    }
-
-    override fun detachView(view: MyBooksView) {
-        super.detachView(view)
-
-        EventBus.getDefault().unregister(this)
-    }
-
-    fun onActionSortNameSelected() {
+    fun onSortByNameSelected() {
         sortOrder = BookDao.SortOrder.BY_NAME
         loadBooksList()
     }
 
-    fun onActionSortReadedSelected() {
+    fun onSortByReadedSelected() {
         sortOrder = BookDao.SortOrder.BY_READED
         loadBooksList()
     }
 
-    fun onActionSortDateSelected() {
+    fun onSortByDateSelected() {
         sortOrder = BookDao.SortOrder.BY_DATE
         loadBooksList()
     }
 
-    fun onBookClicked(position: Int) {
-        viewState.openBook(booksList!![position].id)
+    fun onBookClicked(bookId: Int) {
+        interactor.getBook(bookId)
+                .map { it.id }
+                .subscribe(viewState::openBook, Throwable::printStackTrace)
+                .unsubscribeOnDestory()
     }
 
-    fun onBookAboutClicked(position: Int) {
-        viewState.openBookDetails(booksList!![position].id)
+    fun onBookAboutClicked(bookId: Int) {
+        interactor.getBook(bookId)
+                .map { it.id }
+                .subscribe(viewState::openBookDetails, Throwable::printStackTrace)
+                .unsubscribeOnDestory()
     }
 
-    fun onBookShareClicked(position: Int) {
-        val book = booksList!![position]
-        if (TextUtils.isEmpty(book.docUrl)) {
-            viewState.showBookShareDialog(book.bookTitle!!)
-        } else {
-            viewState.showBookShareDialog(book.bookTitle!!, book.docUrl!!)
-        }
+    fun onBookShareClicked(bookId: Int) {
+        interactor.getBook(bookId)
+                .subscribe({
+                    viewState.showBookShareDialog(it.bookTitle!!, it.docUrl!!)
+                }, {
+                    it.printStackTrace()
+                })
+                .unsubscribeOnDestory()
     }
 
-    fun onBookRemoveClicked(position: Int) {
-        bookDao!!.delete(booksList!![position])
-        loadBooksList()
+    fun onBookRemoveClicked(bookId: Int) {
+        interactor.removeBook(bookId)
+                .subscribe(Throwable::printStackTrace, this::loadBooksList)
+                .unsubscribeOnDestory()
     }
 
     fun onQueryTextChange(text: String) {
-        searchQuery = text
+        this.searchQuery = text
         loadBooksList()
     }
 
-    fun loadBooksList() {
-        booksList = bookDao!!.getBooksList(searchQuery, sortOrder)
-        if (booksList!!.size == 0) {
-            viewState.showEmptyStateView()
+    private fun loadBooksList() {
+        interactor.getBooks(searchQuery, sortOrder)
+                .subscribe(this::showBooks, Throwable::printStackTrace)
+                .unsubscribeOnDestory()
+    }
+
+    private fun showBooks(books: List<FictionBook>) {
+        if (books.isEmpty()) {
+            viewState.showEmptyStateView(true)
         } else {
-            viewState.showBooksList(booksList!!)
+            viewState.showBooksList(books)
         }
     }
 }
