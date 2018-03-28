@@ -8,7 +8,8 @@ import ru.mamykin.foboreader.data.model.FictionBook
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface MyBooksView : MvpView {
-    fun showEmptyStateView()
+
+    fun showEmptyStateView(show: Boolean)
 
     fun showBooksList(booksList: List<FictionBook>)
 

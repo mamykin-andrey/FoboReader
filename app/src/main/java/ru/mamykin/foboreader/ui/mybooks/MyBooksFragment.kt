@@ -3,42 +3,41 @@ package ru.mamykin.foboreader.ui.mybooks
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-
+import android.view.*
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.fragment_my_books.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.data.model.FictionBook
+import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksPresenter
-import ru.mamykin.foboreader.ui.bookdetails.BookDetailsActivity
-import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksView
+import ru.mamykin.foboreader.ui.bookdetails.BookDetailsActivity
 import ru.mamykin.foboreader.ui.mybooks.list.BooksRecyclerAdapter
+import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
 
 /**
  * Страница с книгами пользователя
  */
-class MyBooksFragment : MvpAppCompatFragment(), SearchView.OnQueryTextListener, MyBooksView, BooksRecyclerAdapter.OnBookClickListener {
-    @BindView(R.id.rvBooks)
-    protected var rvBooks: RecyclerView? = null
-    @BindView(R.id.vNoBooks)
-    protected var vNoBooks: View? = null
+class MyBooksFragment : MvpAppCompatFragment(), SearchView.OnQueryTextListener,
+        MyBooksView, BooksRecyclerAdapter.OnBookClickListener {
 
-    private var adapter: BooksRecyclerAdapter? = null
+    companion object {
+
+        fun newInstance(): MyBooksFragment {
+            val args = Bundle()
+            val fragment = MyBooksFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     @InjectPresenter
-    internal var presenter: MyBooksPresenter? = null
+    lateinit var presenter: MyBooksPresenter
+
+    private lateinit var adapter: BooksRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +46,9 @@ class MyBooksFragment : MvpAppCompatFragment(), SearchView.OnQueryTextListener, 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val contentView = inflater!!.inflate(R.layout.fragment_my_books, container, false)
-        ButterKnife.bind(this, contentView)
 
         adapter = BooksRecyclerAdapter(this)
-        UiUtils.setupRecyclerView(context, rvBooks!!,
-                adapter!!, LinearLayoutManager(context), false)
+        UiUtils.setupRecyclerView(context, rvBooks, adapter, LinearLayoutManager(context), false)
 
         return contentView
     }
@@ -69,15 +66,15 @@ class MyBooksFragment : MvpAppCompatFragment(), SearchView.OnQueryTextListener, 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.actionSortName -> {
-                presenter!!.onActionSortNameSelected()
+                presenter.onActionSortNameSelected()
                 return true
             }
             R.id.actionSortReaded -> {
-                presenter!!.onActionSortReadedSelected()
+                presenter.onActionSortReadedSelected()
                 return true
             }
             R.id.actionSortDate -> {
-                presenter!!.onActionSortDateSelected()
+                presenter.onActionSortDateSelected()
                 return true
             }
         }
@@ -85,39 +82,29 @@ class MyBooksFragment : MvpAppCompatFragment(), SearchView.OnQueryTextListener, 
     }
 
     override fun onBookClicked(position: Int) {
-        presenter!!.onBookClicked(position)
+        presenter.onBookClicked(position)
     }
 
     override fun onBookAboutClicked(position: Int) {
-        presenter!!.onBookAboutClicked(position)
+        presenter.onBookAboutClicked(position)
     }
 
     override fun onBookShareClicked(position: Int) {
-        presenter!!.onBookShareClicked(position)
+        presenter.onBookShareClicked(position)
     }
 
     override fun onBookRemoveClicked(position: Int) {
-        presenter!!.onBookRemoveClicked(position)
+        presenter.onBookRemoveClicked(position)
     }
 
-    override fun onQueryTextSubmit(query: String): Boolean {
-        return false
-    }
-
-    override fun onQueryTextChange(newText: String): Boolean {
-        presenter!!.onQueryTextChange(newText)
-        return true
-    }
-
-    override fun showEmptyStateView() {
-        vNoBooks!!.visibility = View.VISIBLE
-        rvBooks!!.visibility = View.GONE
+    override fun showEmptyStateView(show: Boolean) {
+        vNoBooks.isVisible = show
+        rvBooks.isVisible = !show
     }
 
     override fun showBooksList(booksList: List<FictionBook>) {
-        vNoBooks!!.visibility = View.GONE
-        rvBooks!!.visibility = View.VISIBLE
-        adapter!!.changeData(booksList)
+        showEmptyStateView(false)
+        adapter.changeData(booksList)
     }
 
     override fun openBook(bookId: Int) {
@@ -128,25 +115,24 @@ class MyBooksFragment : MvpAppCompatFragment(), SearchView.OnQueryTextListener, 
         startActivity(BookDetailsActivity.getStartIntent(context, bookId))
     }
 
-    override fun showBookShareDialog(title: String, url: String) {
-        showBookShareDialog(getString(R.string.download_on, title, url))
+    override fun showBookShareDialog(bookName: String, url: String) {
+        showBookShareDialog(getString(R.string.download_on, bookName, url))
     }
 
-    override fun showBookShareDialog(title: String) {
+    override fun showBookShareDialog(bookName: String) {
         val shareIntent = Intent()
         shareIntent.action = Intent.ACTION_SEND
-        shareIntent.putExtra(Intent.EXTRA_TEXT, title)
+        shareIntent.putExtra(Intent.EXTRA_TEXT, bookName)
         shareIntent.type = "text/plain"
         startActivity(shareIntent)
     }
 
-    companion object {
+    override fun onQueryTextSubmit(query: String): Boolean {
+        return false
+    }
 
-        fun newInstance(): MyBooksFragment {
-            val args = Bundle()
-            val fragment = MyBooksFragment()
-            fragment.arguments = args
-            return fragment
-        }
+    override fun onQueryTextChange(newText: String): Boolean {
+        presenter.onQueryTextChange(newText)
+        return true
     }
 }
