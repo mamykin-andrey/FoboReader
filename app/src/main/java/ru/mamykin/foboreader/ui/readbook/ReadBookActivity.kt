@@ -48,7 +48,7 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
         if (intent.extras.containsKey(BOOK_PATH_EXTRA)) {
             return ReadBookPresenter(intent.extras.getString(BOOK_PATH_EXTRA))
         } else {
-            return ReadBookPresenter(intent.extras.getString(BOOK_ID_EXTRA))
+            return ReadBookPresenter(intent.extras.getInt(BOOK_ID_EXTRA))
         }
     }
 
@@ -65,12 +65,12 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
         pbLoading.isVisible = show
     }
 
-    override fun setBookName(name: String) {
+    override fun displayBookName(name: String) {
         tvName.text = name
     }
 
     override fun onClick(paragraph: String) {
-        presenter.onParagraphClicked(paragraph)
+        presenter.onTranslateParagraphClicked(paragraph)
     }
 
     override fun onLongClick(word: String) {
@@ -85,29 +85,29 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
         presenter.onSwipeRight()
     }
 
-    override fun setReadPages(text: String) {
+    override fun displayReadPages(text: String) {
         tvRead.text = text
     }
 
-    override fun setReadPercent(text: String) {
+    override fun displayReadPercent(text: String) {
         tvReadPercent.text = text
     }
 
-    override fun setSourceText(text: CharSequence) {
+    override fun displaySourceParagraph(text: CharSequence) {
         tvText.text = text
         tvText.updateWordLinks()
     }
 
-    override fun setTranslationText(text: String) {
+    override fun displayParagraphTranslation(text: String) {
         tvText.setTranslation(text)
     }
 
-    override fun showTranslationPopup(original: String, translation: String) {
+    override fun displayWordTranslation(original: String, translation: String) {
         UiUtils.showWordPopup(this, original, translation, presenter::onSpeakWordClicked)
     }
 
     override fun initBookView(title: String, text: String) {
-        tvText.addGlobalLayoutListener(presenter::onGlobalLayout)
+        tvText.addGlobalLayoutListener(presenter::onViewInitCompleted)
     }
 
     override fun showBookContent(show: Boolean) {

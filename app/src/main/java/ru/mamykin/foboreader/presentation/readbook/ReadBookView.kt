@@ -7,23 +7,29 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface ReadBookView : MvpView {
 
-    fun showToast(text: String)
-
     fun showLoading(show: Boolean)
 
-    fun setBookName(name: String)
+    fun showParagraphLoading(show: Boolean)
 
-    fun setReadPages(text: String)
+    fun showWordLoading(show: Boolean)
 
-    fun setReadPercent(text: String)
+    fun displayBookName(name: String)
 
-    fun setSourceText(text: CharSequence)
+    fun displayCurrentPage(page: Int)
 
-    fun setTranslationText(text: String)
+    fun displayReadPages(text: Int)
 
-    fun showTranslationPopup(original: String, translation: String)
+    fun displayReadPercent(percent: Float)
+
+    fun displaySourceParagraph()
+
+    fun displayParagraphTranslation(text: String)
+
+    fun displayWordTranslation(originalAndTranslation: Pair<String, String>)
 
     fun initBookView(title: String, text: String)
+
+    fun showPageText(text: String)
 
     fun showBookContent(show: Boolean)
 }
