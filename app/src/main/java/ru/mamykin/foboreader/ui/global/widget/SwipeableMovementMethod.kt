@@ -9,7 +9,7 @@ import android.view.MotionEvent
 import android.widget.TextView
 
 /**
- * Класс для [ru.mamykin.foboreader.ui.controls.SwipeableTextView], для определения
+ * Класс для {@link ru.mamykin.foboreader.ui.controls.SwipeableTextView}, для определения
  * клика, лонг тапа, и горизонталных свайпов
  */
 class SwipeableMovementMethod : LinkMovementMethod() {

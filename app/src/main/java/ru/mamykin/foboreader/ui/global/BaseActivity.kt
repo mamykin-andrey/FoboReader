@@ -2,11 +2,8 @@ package ru.mamykin.foboreader.ui.global
 
 import android.os.Bundle
 import android.provider.Settings
-import android.support.annotation.LayoutRes
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.arellomobile.mvp.MvpAppCompatActivity
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.ReaderApp
@@ -15,39 +12,22 @@ import ru.mamykin.foboreader.data.storage.PreferenceNames
 import ru.mamykin.foboreader.data.storage.PreferencesManager
 import javax.inject.Inject
 
-abstract class BaseActivity : MvpAppCompatActivity(), PreferenceNames {
-    @BindView(R.id.toolbar)
-    lateinit var toolbar: Toolbar
+abstract class BaseActivity : MvpAppCompatActivity() {
 
     @Inject
     lateinit var pm: PreferencesManager
 
-    private val systemBrightness: Float
-        get() {
-            try {
-                return Settings.System.getInt(
-                        contentResolver, Settings.System.SCREEN_BRIGHTNESS).toFloat()
-            } catch (e: Settings.SettingNotFoundException) {
-                e.printStackTrace()
-            }
-
-            return 1f
-        }
-
-    @get:LayoutRes
     abstract val layout: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(layout)
-        ButterKnife.bind(this)
         ReaderApp.component.inject(this)
     }
 
     override fun onResume() {
         super.onResume()
-
         setupBrightness()
     }
 
@@ -59,19 +39,29 @@ abstract class BaseActivity : MvpAppCompatActivity(), PreferenceNames {
         return super.onOptionsItemSelected(item)
     }
 
-    fun setupBrightness() {
-        val brightness = if (pm!!.getBoolean(PreferenceNames.Companion.BRIGHTNESS_AUTO_PREF, true))
-            systemBrightness
-        else
-            pm!!.getFloat(PreferenceNames.Companion.BRIGHTNESS_PREF, 1f)
+    protected fun initToolbar(title: String, homeEnabled: Boolean) {
+        setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
+        UiUtils.setTitle(this, title)
+        UiUtils.setHomeEnabled(this, homeEnabled)
+    }
+
+    private fun setupBrightness() {
+        val autoBrightnessEnabled = pm.getBoolean(PreferenceNames.BRIGHTNESS_AUTO_PREF)
+        if (autoBrightnessEnabled) {
+            setScreenBrightness(getSystemBrightness())
+        } else {
+            val userBrightness = pm.getFloat(PreferenceNames.BRIGHTNESS_PREF, 1f)
+            setScreenBrightness(userBrightness)
+        }
+    }
+
+    private fun setScreenBrightness(brightness: Float) {
         val layoutParams = window.attributes
         layoutParams.screenBrightness = brightness
         window.attributes = layoutParams
     }
 
-    protected fun initToolbar(title: String, homeEnabled: Boolean) {
-        setSupportActionBar(toolbar)
-        UiUtils.setTitle(this, title)
-        UiUtils.setHomeEnabled(this, homeEnabled)
+    private fun getSystemBrightness(): Float {
+        return Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS).toFloat()
     }
 }

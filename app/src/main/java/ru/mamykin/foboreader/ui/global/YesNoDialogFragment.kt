@@ -6,22 +6,43 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.app.AppCompatDialogFragment
 
-import java.lang.ref.WeakReference
-
 /**
  * Диалог с текстом и заголовком, в каждом диалоге отображаются поля "Ок" и "Отмена"
  */
 class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickListener {
 
-    private var title: String? = null
-    private var message: String? = null
-    private var positiveListenerRef: WeakReference<PositiveClickListener>? = null
-    private var negativeListenerRef: WeakReference<NegativeClickListener>? = null
+    companion object {
+
+        private const val TITLE_EXTRA = "title_extra"
+        private const val MESSAGE_EXTRA = "message_extra"
+
+        fun newInstance(title: String,
+                        message: String,
+                        positiveClickFunc: () -> Unit,
+                        negativeClickFunc: () -> Unit): YesNoDialogFragment {
+
+            val dialogFragment = YesNoDialogFragment()
+
+            val args = Bundle()
+            args.putString(TITLE_EXTRA, title)
+            args.putString(MESSAGE_EXTRA, message)
+            dialogFragment.arguments = args
+
+            dialogFragment.positiveClickFunc = positiveClickFunc
+            dialogFragment.negativeClickFunc = negativeClickFunc
+
+            return dialogFragment
+        }
+    }
+
+    private lateinit var positiveClickFunc: () -> Unit
+    private lateinit var negativeClickFunc: () -> Unit
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val args = savedInstanceState ?: arguments
-        title = args.getString(TITLE_EXTRA)
-        message = args.getString(MESSAGE_EXTRA)
+        val title = args.getString(TITLE_EXTRA)
+        val message = args.getString(MESSAGE_EXTRA)
+
         val builder = AlertDialog.Builder(context)
                 .setTitle(title)
                 .setPositiveButton(android.R.string.yes, this)
@@ -30,40 +51,12 @@ class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickLi
         return builder.create()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState!!.putString(TITLE_EXTRA, title)
-        outState.putString(MESSAGE_EXTRA, message)
-    }
-
-    fun setPositiveClickListener(positiveFun: () -> Unit): YesNoDialogFragment {
-        return this
-    }
-
-    fun setNegativeClickListener(negativeFun: () -> Unit): YesNoDialogFragment {
-        return this
-    }
-
     override fun onClick(dialog: DialogInterface, which: Int) {
-        if (which == Dialog.BUTTON_POSITIVE && positiveListenerRef != null && positiveListenerRef!!.get() != null) {
-            positiveListenerRef!!.get()!!.onPositiveClick()
-        } else if (which == Dialog.BUTTON_NEGATIVE && negativeListenerRef != null && negativeListenerRef!!.get() != null) {
-            negativeListenerRef!!.get()!!.onNegativeClick()
+        if (which == Dialog.BUTTON_POSITIVE) {
+            positiveClickFunc()
+        } else if (which == Dialog.BUTTON_NEGATIVE) {
+            negativeClickFunc()
         }
         dismiss()
-    }
-
-    companion object {
-        private val TITLE_EXTRA = "title_extra"
-        private val MESSAGE_EXTRA = "message_extra"
-
-        fun newInstance(title: String, message: String): YesNoDialogFragment {
-            val dialogFragment = YesNoDialogFragment()
-            val args = Bundle()
-            args.putString(TITLE_EXTRA, title)
-            args.putString(MESSAGE_EXTRA, message)
-            dialogFragment.arguments = args
-            return dialogFragment
-        }
     }
 }
