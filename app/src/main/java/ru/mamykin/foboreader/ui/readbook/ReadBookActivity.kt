@@ -2,133 +2,28 @@ package ru.mamykin.foboreader.ui.readbook
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.ViewTreeObserver
-import android.widget.TextView
-
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-
-import butterknife.BindView
+import kotlinx.android.synthetic.main.activity_read_book.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
+import ru.mamykin.foboreader.extension.addGlobalLayoutListener
+import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.readbook.ReadBookPresenter
-import ru.mamykin.foboreader.ui.global.control.SwipeableTextView
 import ru.mamykin.foboreader.presentation.readbook.ReadBookView
 import ru.mamykin.foboreader.ui.global.BaseActivity
+import ru.mamykin.foboreader.ui.global.control.SwipeableTextView
 
 /**
  * Страница чтения книги
  */
-class ReadBookActivity(override val layout: Int = R.layout.activity_read_book) : BaseActivity(), SwipeableTextView.SwipeableListener, ReadBookView, ViewTreeObserver.OnGlobalLayoutListener {
-
-    @InjectPresenter
-    internal var presenter: ReadBookPresenter? = null
-
-    @BindView(R.id.tvReadPercent)
-    protected var tvReadPercent: TextView? = null
-    @BindView(R.id.tvRead)
-    protected var tvReadPages: TextView? = null
-    @BindView(R.id.tvName)
-    protected var tvBookName: TextView? = null
-    @BindView(R.id.tvText)
-    protected var tvText: SwipeableTextView? = null
-    @BindView(R.id.pbLoading)
-    protected var pbLoading: View? = null
-    @BindView(R.id.llBookContent)
-    protected var llBookContent: View? = null
-
-    @ProvidePresenter
-    internal fun provideReadBookPresenter(): ReadBookPresenter {
-        return if (intent.extras!!.containsKey(BOOK_PATH_EXTRA)) {
-            ReadBookPresenter(intent.extras!!.getString(BOOK_PATH_EXTRA)!!)
-        } else ReadBookPresenter(intent.extras!!.getInt(BOOK_ID_EXTRA))
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        tvText!!.setSwipeableListener(this)
-    }
-
-    override fun showToast(text: String) {
-        UiUtils.showToast(this, text)
-    }
-
-    override fun showLoading(loading: Boolean) {
-        pbLoading!!.visibility = if (loading) View.VISIBLE else View.GONE
-    }
-
-    override fun setBookName(name: String) {
-        tvBookName!!.text = name
-    }
-
-    override fun onClick(paragraph: String) {
-        presenter!!.onParagraphClicked(paragraph)
-    }
-
-    override fun onLongClick(word: String) {
-        presenter!!.onWordClicked(word)
-    }
-
-    override fun onSwipeLeft() {
-        presenter!!.onSwipeLeft()
-    }
-
-    override fun onSwipeRight() {
-        presenter!!.onSwipeRight()
-    }
-
-    override fun setReadPages(text: String) {
-        tvReadPages!!.text = text
-    }
-
-    override fun setReadPercent(text: String) {
-        tvReadPercent!!.text = text
-    }
-
-    override fun setSourceText(text: CharSequence) {
-        tvText!!.text = text
-        tvText!!.updateWordLinks()
-    }
-
-    override fun setTranslationText(text: String) {
-        tvText!!.setTranslation(text)
-    }
-
-    override fun showTranslationPopup(original: String, translation: String) {
-        UiUtils.showWordPopup(this, original, translation, object : UiUtils.OnSpeakWordClickListener {
-            override fun onSpeakWordClicked(word: String) {
-                presenter!!.onSpeakWordClicked(word)
-            }
-        })
-    }
-
-    override fun initBookView(title: String, text: String) {
-        tvText!!.viewTreeObserver.addOnGlobalLayoutListener(this)
-    }
-
-    override fun showBookContent(show: Boolean) {
-        UiUtils.setVisibility(llBookContent!!, show)
-    }
-
-    override fun onGlobalLayout() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            tvText!!.viewTreeObserver.removeGlobalOnLayoutListener(this)
-            presenter!!.onGlobalLayout(
-                    tvText!!.width, tvText!!.height, tvText!!.paint, 1f, 0f, true)
-        } else {
-            tvText!!.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            presenter!!.onGlobalLayout(tvText!!.width, tvText!!.height, tvText!!.paint,
-                    tvText!!.lineSpacingMultiplier, tvText!!.lineSpacingExtra, tvText!!.includeFontPadding)
-        }
-    }
+class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.SwipeableListener {
 
     companion object {
-        private val BOOK_PATH_EXTRA = "book_path_extra"
-        private val BOOK_ID_EXTRA = "book_id_extra"
+
+        private const val BOOK_PATH_EXTRA = "book_path_extra"
+        private const val BOOK_ID_EXTRA = "book_id_extra"
 
         fun getStartIntent(context: Context, bookId: Int): Intent {
             val readIntent = Intent(context, ReadBookActivity::class.java)
@@ -141,5 +36,81 @@ class ReadBookActivity(override val layout: Int = R.layout.activity_read_book) :
             readIntent.putExtra(BOOK_PATH_EXTRA, bookPath)
             return readIntent
         }
+    }
+
+    override val layout: Int = R.layout.activity_read_book
+
+    @InjectPresenter
+    lateinit var presenter: ReadBookPresenter
+
+    @ProvidePresenter
+    internal fun providePresenter(): ReadBookPresenter {
+        if (intent.extras.containsKey(BOOK_PATH_EXTRA)) {
+            return ReadBookPresenter(intent.extras.getString(BOOK_PATH_EXTRA))
+        } else {
+            return ReadBookPresenter(intent.extras.getString(BOOK_ID_EXTRA))
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        tvText.setSwipeableListener(this)
+    }
+
+    override fun showToast(text: String) {
+        UiUtils.showToast(this, text)
+    }
+
+    override fun showLoading(show: Boolean) {
+        pbLoading.isVisible = show
+    }
+
+    override fun setBookName(name: String) {
+        tvName.text = name
+    }
+
+    override fun onClick(paragraph: String) {
+        presenter.onParagraphClicked(paragraph)
+    }
+
+    override fun onLongClick(word: String) {
+        presenter.onWordClicked(word)
+    }
+
+    override fun onSwipeLeft() {
+        presenter.onSwipeLeft()
+    }
+
+    override fun onSwipeRight() {
+        presenter.onSwipeRight()
+    }
+
+    override fun setReadPages(text: String) {
+        tvRead.text = text
+    }
+
+    override fun setReadPercent(text: String) {
+        tvReadPercent.text = text
+    }
+
+    override fun setSourceText(text: CharSequence) {
+        tvText.text = text
+        tvText.updateWordLinks()
+    }
+
+    override fun setTranslationText(text: String) {
+        tvText.setTranslation(text)
+    }
+
+    override fun showTranslationPopup(original: String, translation: String) {
+        UiUtils.showWordPopup(this, original, translation, presenter::onSpeakWordClicked)
+    }
+
+    override fun initBookView(title: String, text: String) {
+        tvText.addGlobalLayoutListener(presenter::onGlobalLayout)
+    }
+
+    override fun showBookContent(show: Boolean) {
+        llBookContent.isVisible = show
     }
 }

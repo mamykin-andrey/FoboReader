@@ -6,9 +6,10 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface ReadBookView : MvpView {
+
     fun showToast(text: String)
 
-    fun showLoading(loading: Boolean)
+    fun showLoading(show: Boolean)
 
     fun setBookName(name: String)
 

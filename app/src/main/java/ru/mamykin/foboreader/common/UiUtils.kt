@@ -104,14 +104,15 @@ object UiUtils {
         }
     }
 
-    fun showWordPopup(context: Context, source: String, translation: String,
-                      listener: OnSpeakWordClickListener) {
+    fun showWordPopup(context: Context, source: String,
+                      translation: String, onSpeakWordClicked: (String) -> Unit) {
+
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val vPopup = layoutInflater.inflate(R.layout.view_word_popup, null, false)
         val tvWordOriginal = vPopup.findViewById(R.id.tvWordOriginal) as TextView
         val tvWordTranslate = vPopup.findViewById(R.id.tvWordTranslate) as TextView
         val btnSpeaker = vPopup.findViewById(R.id.btnSpeaker)
-        btnSpeaker.setOnClickListener { v -> listener.onSpeakWordClicked(source) }
+        btnSpeaker.setOnClickListener { onSpeakWordClicked(source) }
         tvWordOriginal.text = source
         tvWordTranslate.text = translation
 
@@ -119,9 +120,5 @@ object UiUtils {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
         popup.showAtLocation(vPopup, Gravity.CENTER, 0, 200)
         vPopup.setOnClickListener { v -> popup.dismiss() }
-    }
-
-    interface OnSpeakWordClickListener {
-        fun onSpeakWordClicked(word: String)
     }
 }

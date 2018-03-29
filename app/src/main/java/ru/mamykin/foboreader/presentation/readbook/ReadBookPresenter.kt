@@ -3,20 +3,20 @@ package ru.mamykin.foboreader.presentation.readbook
 import android.content.Context
 import android.os.Build
 import android.speech.tts.TextToSpeech
-import android.text.TextPaint
 import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import org.greenrobot.eventbus.EventBus
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.ReaderApp
-import ru.mamykin.foboreader.domain.readbook.Paginator
-import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.common.events.UpdateEvent
-import ru.mamykin.foboreader.extension.applySchedulers
+import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.data.model.FictionBook
 import ru.mamykin.foboreader.data.model.Translation
-import ru.mamykin.foboreader.presentation.global.BasePresenter
 import ru.mamykin.foboreader.data.network.YandexTranslateService
+import ru.mamykin.foboreader.domain.readbook.Paginator
+import ru.mamykin.foboreader.extension.ViewParams
+import ru.mamykin.foboreader.extension.applySchedulers
+import ru.mamykin.foboreader.presentation.global.BasePresenter
 import rx.Subscriber
 import java.util.*
 import javax.inject.Inject
@@ -220,8 +220,16 @@ class ReadBookPresenter : BasePresenter<ReadBookView>, TextToSpeech.OnInitListen
      * Функция вызывается, когда TextView готов к отрисовке, и у него есть параметры
      * width, height и т д
      */
-    fun onGlobalLayout(width: Int, height: Int, paint: TextPaint, lineSpacingMultiplier: Float, lineSpacingExtra: Float, includeFontPadding: Boolean) {
-        paginator = Paginator(book!!.fullText, width, height, paint, lineSpacingMultiplier, lineSpacingExtra, includeFontPadding)
+    fun onGlobalLayout(viewParams: ViewParams) {
+        paginator = Paginator(
+                book!!.fullText,
+                viewParams.width,
+                viewParams.height,
+                viewParams.paint,
+                viewParams.lineSpacingMultiplier,
+                viewParams.lineSpacingExtra,
+                viewParams.includeFontPadding
+        )
         EventBus.getDefault().postSticky(UpdateEvent())
         loadPage(book!!.currentPage)
     }
