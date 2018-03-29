@@ -11,14 +11,16 @@ class SettingsInteractor @Inject constructor(
     fun getSettings(): Single<AppSettingsEntity> {
         val nightThemeEnabled = repository.getNightThemeEnabled()
         val manualBrightnessEnabled = repository.getManualBrightnessEnabled()
-        val manualBrightnessValue = repository.getManualBrightnessValue()
         val readTextSize = repository.getBookTextSize()
         val dropboxAccount = repository.getDropboxAccount()
+
+        val manualBrightnessValue = repository.getManualBrightnessValue()
+        val manualBrightnessPercentage = (manualBrightnessValue * 100).toInt()
 
         val appSettings = AppSettingsEntity(
                 nightThemeEnabled,
                 manualBrightnessEnabled,
-                manualBrightnessValue,
+                manualBrightnessPercentage,
                 readTextSize,
                 dropboxAccount
         )
@@ -33,8 +35,9 @@ class SettingsInteractor @Inject constructor(
         return repository.enableAutoBrightness(enable)
     }
 
-    fun changeBrightness(value: Int): Completable {
-        return repository.changeBrightness(value)
+    fun changeBrightness(percentage: Int): Completable {
+        val progressValue = percentage / 100f
+        return repository.changeBrightness(progressValue)
     }
 
     fun logoutDropbox(): Completable {
