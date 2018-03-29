@@ -1,31 +1,28 @@
 package ru.mamykin.foboreader.ui.store.list
 
+import android.graphics.Paint
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-
-import butterknife.BindView
-import butterknife.ButterKnife
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_store_book.view.*
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.data.model.StoreBook
+import ru.mamykin.foboreader.extension.isVisible
 
 class StoreBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    @BindView(R.id.tvName)
-    var tvBookName: TextView? = null
-    @BindView(R.id.tvAuthor)
-    var tvBookAuthor: TextView? = null
-    @BindView(R.id.tvCategory)
-    var tvBookCategory: TextView? = null
-    @BindView(R.id.tvPrice)
-    var tvBookPrice: TextView? = null
-    @BindView(R.id.tvOldPrice)
-    var tvBookOldPrice: TextView? = null
-    @BindView(R.id.tvRating)
-    var tvRating: TextView? = null
-    @BindView(R.id.ivCover)
-    var ivCover: ImageView? = null
 
-    init {
-        ButterKnife.bind(this, itemView)
+    fun bind(book: StoreBook) {
+        itemView.tvName.text = book.title
+        itemView.tvAuthor.text = book.author
+        itemView.tvCategory.text = book.genre
+        itemView.tvRating.text = book.ratingStr
+        itemView.tvPrice.text = book.price
+        itemView.tvOldPrice.text = book.oldPrice
+        itemView.tvOldPrice.isVisible = book.oldPrice != null
+        itemView.tvOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+        Picasso.with(itemView.context)
+                .load(book.pictureUrl)
+                .placeholder(R.drawable.img_no_image)
+                .into(itemView.ivCover)
     }
 }
