@@ -17,13 +17,13 @@ class SettingsPresenter @Inject constructor(
         loadSettings()
     }
 
-    fun onNightThemeCheckedChanged(isChecked: Boolean) {
+    fun onNightThemeEnabled(isChecked: Boolean) {
         interactor.enableNightTheme(isChecked)
                 .subscribe(Throwable::printStackTrace, viewState::restartActivity)
                 .unsubscribeOnDestory()
     }
 
-    fun onBrightnessAutoCheckedChanged(isChecked: Boolean) {
+    fun onAutoBrightnessEnabled(isChecked: Boolean) {
         interactor.enableAutoBrightness(isChecked)
                 .subscribe(this::displayAutoBrightness, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
@@ -35,7 +35,7 @@ class SettingsPresenter @Inject constructor(
                 .unsubscribeOnDestory()
     }
 
-    fun onDropboxLogoutPositive() {
+    fun onDropboxLogoutSelected() {
         interactor.logoutDropbox()
                 .subscribe({ it.printStackTrace() }, { viewState.setDropboxAccount("") })
                 .unsubscribeOnDestory()

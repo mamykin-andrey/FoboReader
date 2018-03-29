@@ -36,22 +36,12 @@ class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickLi
         outState.putString(MESSAGE_EXTRA, message)
     }
 
-    fun setPositiveClickListener(listener: PositiveClickListener): YesNoDialogFragment {
-        this.positiveListenerRef = WeakReference(listener)
+    fun setPositiveClickListener(positiveFun: () -> Unit): YesNoDialogFragment {
         return this
     }
 
-    fun setNegativeClickListener(listener: NegativeClickListener): YesNoDialogFragment {
-        this.negativeListenerRef = WeakReference(listener)
+    fun setNegativeClickListener(negativeFun: () -> Unit): YesNoDialogFragment {
         return this
-    }
-
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-    }
-
-    override fun onCancel(dialog: DialogInterface?) {
-        super.onCancel(dialog)
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
@@ -61,14 +51,6 @@ class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickLi
             negativeListenerRef!!.get()!!.onNegativeClick()
         }
         dismiss()
-    }
-
-    interface PositiveClickListener {
-        fun onPositiveClick()
-    }
-
-    interface NegativeClickListener {
-        fun onNegativeClick()
     }
 
     companion object {

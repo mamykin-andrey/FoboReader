@@ -3,104 +3,73 @@ package ru.mamykin.foboreader.ui.settings
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.AppCompatSeekBar
-import android.support.v7.widget.SwitchCompat
-import android.view.View
-import android.widget.ImageView
 import android.widget.SeekBar
-import android.widget.TextView
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import butterknife.BindView
-import butterknife.OnCheckedChanged
-import butterknife.OnClick
+import kotlinx.android.synthetic.main.activity_settings.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.presentation.settings.SettingsPresenter
-import ru.mamykin.foboreader.ui.global.YesNoDialogFragment
 import ru.mamykin.foboreader.presentation.settings.SettingsView
 import ru.mamykin.foboreader.ui.global.BaseActivity
 
 /**
  * Страница настроек
  */
-class SettingsActivity(override val layout: Int = R.layout.activity_settings) : BaseActivity(), SeekBar.OnSeekBarChangeListener, SettingsView {
+class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, SettingsView {
 
-    @BindView(R.id.switchBrightAuto)
-    protected var switchBrightAuto: SwitchCompat? = null
-    @BindView(R.id.switchNightTheme)
-    protected var switchNightTheme: SwitchCompat? = null
-    @BindView(R.id.seekbarBright)
-    protected var seekbarBright: AppCompatSeekBar? = null
-    @BindView(R.id.btnTranslateColor)
-    protected var btnTranslateColor: View? = null
-    @BindView(R.id.ivTranslateColor)
-    protected var ivTranslateColor: ImageView? = null
-    @BindView(R.id.btnDropboxLogout)
-    protected var btnDropboxLogout: View? = null
-    @BindView(R.id.btnTextSizeMinus)
-    protected var btnTextSizeMinus: View? = null
-    @BindView(R.id.btnTextSizePlus)
-    protected var btnTextSizePlus: View? = null
-    @BindView(R.id.tvTextSize)
-    protected var tvTextSize: TextView? = null
-    @BindView(R.id.tvDropboxAccount)
-    protected var tvDropboxAccount: TextView? = null
+    companion object {
+        const val DROPBOX_LOGOUT_DIALOG_TAG = "dropbox_dialog_tag"
+
+        fun getStartIntent(context: Context): Intent {
+            return Intent(context, SettingsActivity::class.java)
+        }
+    }
+
+    override val layout: Int = R.layout.activity_settings
 
     @InjectPresenter
-    internal var presenter: SettingsPresenter? = null
+    lateinit var presenter: SettingsPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initToolbar(getString(R.string.settings), true)
+        initClickListeners()
         seekbarBright!!.setOnSeekBarChangeListener(this)
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-        presenter!!.onBrightnessProgressChanged(progress)
+        presenter.onBrightnessProgressChanged(progress)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar) {
-
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {
-
     }
 
     override fun setDropboxAccount(account: String) {
-        tvDropboxAccount!!.text = account
+        tvDropboxAccount.text = account
     }
 
-    override fun showDropboxLogoutDialog() {
-        UiUtils.showDialog(this, R.string.dropbox_logout_title, R.string.dropbox_logout_message,
-                DROPBOX_DIALOG_TAG, object : YesNoDialogFragment.PositiveClickListener{
-            override fun onPositiveClick() {
-                presenter!!.onDropboxLogoutPositive()
-            }
-        }, null)
+    override fun setContentSizeText(size: Int) {
+        tvTextSize.text = size.toString()
     }
 
-    override fun setContentSizeText(text: String) {
-        tvTextSize!!.text = text
-    }
-
-    override fun setBrightnessPos(progress: Int) {
-        seekbarBright!!.progress = progress
+    override fun setBrightnessPos(position: Int) {
+        seekbarBright.progress = position
     }
 
     override fun setAutoBrightnessChecked(enabled: Boolean) {
-        switchBrightAuto!!.isChecked = enabled
+        switchBrightAuto.isChecked = enabled
     }
 
     override fun setBrightnessControlEnabled(enabled: Boolean) {
-        seekbarBright!!.isEnabled = enabled
+        seekbarBright.isEnabled = enabled
     }
 
     override fun setNightThemeEnabled(enabled: Boolean) {
-        switchNightTheme!!.isChecked = enabled
+        switchNightTheme.isChecked = enabled
     }
 
     override fun setTitle(title: String) {
@@ -115,26 +84,16 @@ class SettingsActivity(override val layout: Int = R.layout.activity_settings) : 
         UiUtils.restartActivity(this)
     }
 
-    @OnCheckedChanged(R.id.switchNightTheme)
-    fun onNightThemeCheckedChanged(isChecked: Boolean) {
-        presenter!!.onNightThemeCheckedChanged(isChecked)
+    private fun initClickListeners() {
+        switchNightTheme.setOnCheckedChangeListener { _, c -> presenter.onNightThemeEnabled(c) }
+        switchBrightAuto.setOnCheckedChangeListener { _, c -> presenter.onAutoBrightnessEnabled(c) }
+        btnDropboxLogout.setOnClickListener { showDropboxLogoutDialog() }
     }
 
-    @OnCheckedChanged(R.id.switchBrightAuto)
-    fun onBrightnessAutoCheckedChanged(isChecked: Boolean) {
-        presenter!!.onBrightnessAutoCheckedChanged(isChecked)
-    }
-
-    @OnClick(R.id.btnDropboxLogout)
-    fun onDropboxLogoutClicked() {
-        presenter!!.onDropboxLogoutClick()
-    }
-
-    companion object {
-        val DROPBOX_DIALOG_TAG = "dropbox_dialog_tag"
-
-        fun getStartIntent(context: Context): Intent {
-            return Intent(context, SettingsActivity::class.java)
-        }
+    private fun showDropboxLogoutDialog() {
+        val title = getString(R.string.dropbox_logout_title)
+        val message = getString(R.string.dropbox_logout_message)
+        UiUtils.showDialog(this, title, message,
+                DROPBOX_LOGOUT_DIALOG_TAG, presenter::onDropboxLogoutSelected)
     }
 }
