@@ -1,10 +1,10 @@
-package ru.mamykin.foboreader.common
+package ru.mamykin.foboreader.domain.readbook
 
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
+import ru.mamykin.foboreader.common.Utils
 import ru.mamykin.foboreader.data.model.FictionBook
-import ru.mamykin.foboreader.domain.readbook.TextHashMap
 import java.io.File
 import java.io.IOException
 import javax.xml.parsers.ParserConfigurationException

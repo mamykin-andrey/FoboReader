@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.common
+package ru.mamykin.foboreader.data.mapper
 
 import com.dropbox.core.v2.files.ListFolderResult
 import ru.mamykin.foboreader.data.model.DropboxFile

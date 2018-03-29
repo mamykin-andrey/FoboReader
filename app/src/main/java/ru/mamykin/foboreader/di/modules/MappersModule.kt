@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.di.modules
 
 import dagger.Module
 import dagger.Provides
-import ru.mamykin.foboreader.common.FolderToFilesListMapper
+import ru.mamykin.foboreader.data.mapper.FolderToFilesListMapper
 
 /**
  * Creation date: 5/29/2017
