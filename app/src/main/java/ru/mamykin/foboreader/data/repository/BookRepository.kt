@@ -23,10 +23,16 @@ class BookRepository @Inject constructor(
     }
 
     fun getBooks(searchQuery: String, sortOrder: BookDao.SortOrder): Single<List<FictionBook>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Single.fromCallable {
+            val bookDao = bookDbHelper.getBookDao()!!
+            return@fromCallable bookDao.getBooksList(searchQuery, sortOrder)
+        }
     }
 
     fun getBook(bookId: Int): Single<FictionBook> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Single.fromCallable {
+            val bookDao = bookDbHelper.getBookDao()!!
+            return@fromCallable bookDao.getBook(bookId)
+        }
     }
 }
