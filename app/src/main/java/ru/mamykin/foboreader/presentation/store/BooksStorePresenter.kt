@@ -16,7 +16,7 @@ class BooksStorePresenter @Inject constructor(
     }
 
     fun loadStoreCategories() {
-        interactor.loadStoreCategories()
+        interactor.getStoreCategories()
                 .doOnSubscribe { viewState.showLoading(true) }
                 .doAfterTerminate { viewState.showLoading(false) }
                 .subscribe(viewState::showBooks, this::displayLoadingError)
