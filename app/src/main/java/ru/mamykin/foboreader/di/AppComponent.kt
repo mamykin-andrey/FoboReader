@@ -12,7 +12,7 @@ import ru.mamykin.foboreader.presentation.main.MainPresenter
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksPresenter
 import ru.mamykin.foboreader.presentation.readbook.ReadBookPresenter
 import ru.mamykin.foboreader.presentation.settings.SettingsPresenter
-import ru.mamykin.foboreader.presentation.store.StorePresenter
+import ru.mamykin.foboreader.presentation.store.BooksStorePresenter
 import ru.mamykin.foboreader.ui.global.BaseActivity
 import ru.mamykin.foboreader.ui.mybooks.list.BooksRecyclerAdapter
 import ru.mamykin.foboreader.ui.store.list.BooksStoreRecyclerAdapter
@@ -53,7 +53,7 @@ interface AppComponent {
 
     fun inject(presenter: ReadBookPresenter)
 
-    fun inject(presenter: StorePresenter)
+    fun inject(presenter: BooksStorePresenter)
 
     fun inject(presenter: AboutPresenter)
 

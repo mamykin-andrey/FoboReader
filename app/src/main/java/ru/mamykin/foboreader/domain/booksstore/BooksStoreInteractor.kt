@@ -8,7 +8,7 @@ import javax.inject.Inject
 class BooksStoreInteractor @Inject constructor(
         private val repository: StoreBooksRepository
 ) {
-    fun getStoreCategories(): Single<List<StoreBook>> {
-        return repository.getStoreCategories()
+    fun getBooks(): Single<List<StoreBook>> {
+        return repository.getBooks()
     }
 }

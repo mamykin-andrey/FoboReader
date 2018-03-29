@@ -12,11 +12,11 @@ class BooksStorePresenter @Inject constructor(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        loadStoreCategories()
+        loadBooks()
     }
 
-    fun loadStoreCategories() {
-        interactor.getStoreCategories()
+    fun loadBooks() {
+        interactor.getBooks()
                 .doOnSubscribe { viewState.showLoading(true) }
                 .doAfterTerminate { viewState.showLoading(false) }
                 .subscribe(viewState::showBooks, this::displayLoadingError)

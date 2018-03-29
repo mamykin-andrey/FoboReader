@@ -43,7 +43,7 @@ class BooksStoreFragment : MvpAppCompatFragment(), BooksStoreView, SearchView.On
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val contentView = inflater!!.inflate(R.layout.fragment_main_store, container, false)
-        srlRefresh.setOnRefreshListener { presenter.loadStoreCategories() }
+        srlRefresh.setOnRefreshListener { presenter.loadBooks() }
 
         adapter = BooksStoreRecyclerAdapter()
         UiUtils.setupRecyclerView(context, rvBooks, adapter, LinearLayoutManager(context), false)
