@@ -1,155 +1,100 @@
 package ru.mamykin.foboreader.domain.readbook
 
 import ru.mamykin.foboreader.data.model.FictionBook
+import ru.mamykin.foboreader.data.repository.BooksRepository
+import ru.mamykin.foboreader.data.repository.TranslateRepository
+import ru.mamykin.foboreader.data.service.TextToSpeechService
+import ru.mamykin.foboreader.di.qualifiers.BookId
+import ru.mamykin.foboreader.di.qualifiers.BookPath
 import ru.mamykin.foboreader.extension.ViewParams
 import rx.Single
 import javax.inject.Inject
 
 class ReadBookInteractor @Inject constructor(
-
-//        private var paginator: Paginator? = null
-//        @Inject
-//        lateinit var bookDao: BookDao
-//        @Inject
-//lateinit var translateService: YandexTranslateService
-
-
-//        private var book: FictionBook? = null
-//                private var prevText: CharSequence? = null
-//                private var bookPath: String? = null
-//                private var bookId: Int? = null
-//                private var tts: TextToSpeech? = null
-//                private var ttsInit: Boolean = false
+        private val booksRepository: BooksRepository,
+        private val translateRepository: TranslateRepository,
+        private val textToSpeechService: TextToSpeechService,
+        @BookPath private val bookPath: String?,
+        @BookId private val bookId: Int?
 ) {
-    fun setupTextToSpeech() {
-        //tts = TextToSpeech(context, this)
-    }
 
-    fun getBook(): Single<FictionBook> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//        book!!.lastOpen = System.currentTimeMillis()
-//        bookDao!!.update(book)
-    }
+    private lateinit var paginator: Paginator
+    private lateinit var book: FictionBook
 
-    private fun loadBook(path: String) {
-//        book = bookDao!!.getBook(path)
-//        book!!.filePath = bookPath
-//        bookDao!!.update(book)
-        //BookXmlSaxParser.parseBook(book!!, parseListener)
-    }
+    fun loadBook(): Single<FictionBook> {
+        if (bookId == null && bookPath == null) {
+            return Single.error(IllegalStateException("No book ID, or book path was set!"))
+        }
 
-    /**
-     * Загружаем книгу по ID
-     */
-    private fun loadBook(id: Int) {
-        //book = bookDao!!.getBook(id)
-        //BookXmlSaxParser.parseBook(book!!, parseListener)
-    }
-
-    fun loadPage(page: Int): Single<ReadBookState> {
-        TODO("not implemented")
-//        if (page >= 0 && page < paginator!!.pagesCount) {
-//            paginator!!.currentIndex = page
-//            book!!.currentPage = page
-//            book!!.pagesCount = paginator!!.pagesCount
-//            bookDao!!.update(book)
-    }
-
-    fun isParagraphTranslationDisplayed(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    fun getBookFormat(): FictionBook.Format {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val bookObs = if (bookId != null) {
+            booksRepository.getBook(bookId)
+        } else {
+            booksRepository.getBook(bookPath!!)
+        }
+        return bookObs.doOnSuccess { this.book = it }
     }
 
     fun getTextTranslation(text: String): Single<Pair<String, String>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        /**
-         * val subscription = translateService!!.translate(
-        context!!.getString(R.string.yandex_api_key), s, "ru", "", "")
-        .applySchedulers()
-         */
+        val offlineTranslation = book.transMap!![text]
 
-        /**
-         * val translation = book!!.transMap!![s]
-        if (translation != null) {
-        prevText = paginator!!.currentPage
-        viewState.displaySourceParagraph(s!!)
-        viewState.displayParagraphTranslation(translation)
-        } else {
-        // Пробуем загрузить частично
-        showOfflineTranslation(book!!.transMap!!.getKey(s!!))
+        if (offlineTranslation != null) {
+            return Single.just(Pair(text, offlineTranslation))
         }
-         */
 
-        /**
-         * val subscription = translateService!!.translate(
-        context!!.getString(R.string.yandex_api_key), s, "ru", "", "")
-         */
-    }
-
-    fun getSourceParagraph(): CharSequence {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return translateRepository.getTextTranslation()
+                .map { Pair(text, it.text!!.joinToString()) }
     }
 
     fun voiceWord(word: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        /**
-         * if (TextUtils.isEmpty(word) || !ttsInit) {
-        return
-        }
-        tts!!.language = Locale.ENGLISH
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        tts!!.speak(word, TextToSpeech.QUEUE_ADD, null, null)
-        } else {
-        tts!!.speak(word, TextToSpeech.QUEUE_ADD, null)
-        }
-         */
+        textToSpeechService.voiceWord(word)
     }
 
     fun onViewInitCompleted(viewParams: ViewParams) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        /**
-         * paginator = Paginator(
-        book!!.fullText,
-        viewParams.width,
-        viewParams.height,
-        viewParams.paint,
-        viewParams.lineSpacingMultiplier,
-        viewParams.lineSpacingExtra,
-        viewParams.includeFontPadding
+        paginator = Paginator(
+                book.fullText,
+                viewParams.width,
+                viewParams.height,
+                viewParams.paint,
+                viewParams.lineSpacingMultiplier,
+                viewParams.lineSpacingExtra,
+                viewParams.includeFontPadding
         )
-         */
     }
 
     fun getLastReadedPage(): Single<ReadBookState> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Single.create {
+            BookXmlSaxParser.parseBook(book, {
+                it.onSuccess(getBookState())
+            })
+        }
     }
 
     fun getNextPage(): Single<ReadBookState> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        /**
-         * if (paginator!!.currentIndex < paginator!!.pagesCount) {
-        loadPage(paginator!!.currentIndex + 1)
+        val currentIndex = paginator.currentIndex
+        val pagesCount = paginator.pagesCount
+        if (currentIndex < pagesCount) {
+            paginator.currentIndex++
         }
-         */
+        return Single.just(getBookState())
     }
 
     fun getPrevPage(): Single<ReadBookState> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        /**
-         * if (paginator!!.currentIndex > 0) {
-        loadPage(paginator!!.currentIndex - 1)
+        if (paginator.currentIndex > 0) {
+            paginator.currentIndex--
         }
-         */
+        return Single.just(getBookState())
     }
 
-    /**
-     * override fun onInit(status: Int) {
-    if (status == TextToSpeech.SUCCESS) {
-    ttsInit = true
+    private fun getBookState(): ReadBookState {
+        return ReadBookState(
+                paginator.currentIndex,
+                paginator.currentPage!!.toString(),
+                paginator.currentIndex,
+                calculatePageReadPercentage(book)
+        )
     }
+
+    private fun calculatePageReadPercentage(book: FictionBook): Float {
+        return (book.currentPage / book.pagesCount).toFloat()
     }
-     */
 }

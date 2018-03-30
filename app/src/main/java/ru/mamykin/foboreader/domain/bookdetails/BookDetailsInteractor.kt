@@ -1,12 +1,12 @@
 package ru.mamykin.foboreader.domain.bookdetails
 
 import ru.mamykin.foboreader.data.model.FictionBook
-import ru.mamykin.foboreader.data.repository.BookRepository
+import ru.mamykin.foboreader.data.repository.BooksRepository
 import rx.Single
 import javax.inject.Inject
 
 class BookDetailsInteractor @Inject constructor(
-        private val repository: BookRepository,
+        private val repository: BooksRepository,
         private val bookId: Int
 ) {
 

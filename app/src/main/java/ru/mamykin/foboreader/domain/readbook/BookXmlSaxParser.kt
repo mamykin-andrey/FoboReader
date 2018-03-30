@@ -109,7 +109,7 @@ class BookXmlSaxParser(private val listener: SaxParserListener,
          * @param book     объект с книгой, в котором содержится путь к файлу
          * @param listener слушатель, в котором вызывается [SaxParserListener.onParseCompleted] по окончании парсинга
          */
-        fun parseBook(book: FictionBook, listener: SaxParserListener) {
+        fun parseBook(book: FictionBook, successFunc: () -> Unit) {
             try {
                 val factory = SAXParserFactory.newInstance()
                 val parser = factory.newSAXParser()

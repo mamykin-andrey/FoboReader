@@ -29,7 +29,7 @@ interface ReadBookView : MvpView {
 
     fun initBookView(title: String, text: String)
 
-    fun showPageText(text: String)
+    fun displayPageText(text: String)
 
     fun showBookContent(show: Boolean)
 }

@@ -16,8 +16,7 @@ class ReadBookPresenter @Inject constructor(
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
-        interactor.setupTextToSpeech()
-        interactor.getBook()
+        interactor.loadBook()
                 .doOnSubscribe { viewState.showLoading(true) }
                 .doAfterTerminate { viewState.showLoading(false) }
                 .subscribe(this::displayBookInfo, Throwable::printStackTrace)
@@ -79,6 +78,7 @@ class ReadBookPresenter @Inject constructor(
 
     private fun displayPageContent(state: ReadBookState) {
         viewState.displayCurrentPage(state.currentPage)
+        viewState.displayPageText(state.currentPageText)
         viewState.displayReadPages(state.pagesRead)
         viewState.displayReadPercent(state.readPercent)
     }

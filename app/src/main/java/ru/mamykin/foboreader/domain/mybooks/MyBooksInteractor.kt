@@ -2,13 +2,13 @@ package ru.mamykin.foboreader.domain.mybooks
 
 import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.data.model.FictionBook
-import ru.mamykin.foboreader.data.repository.BookRepository
+import ru.mamykin.foboreader.data.repository.BooksRepository
 import rx.Completable
 import rx.Single
 import javax.inject.Inject
 
 class MyBooksInteractor @Inject constructor(
-        private val repository: BookRepository
+        private val repository: BooksRepository
 ) {
     fun removeBook(bookId: Int): Completable {
         return repository.removeBook(bookId)
