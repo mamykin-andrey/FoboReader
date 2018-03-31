@@ -3,7 +3,6 @@ package ru.mamykin.foboreader.domain.readbook
 import ru.mamykin.foboreader.data.model.FictionBook
 import ru.mamykin.foboreader.data.repository.BooksRepository
 import ru.mamykin.foboreader.data.repository.TranslateRepository
-import ru.mamykin.foboreader.data.service.TextToSpeechService
 import ru.mamykin.foboreader.di.qualifiers.BookId
 import ru.mamykin.foboreader.di.qualifiers.BookPath
 import ru.mamykin.foboreader.extension.ViewParams

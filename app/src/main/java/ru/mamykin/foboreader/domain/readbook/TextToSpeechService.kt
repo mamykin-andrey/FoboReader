@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.service
+package ru.mamykin.foboreader.domain.readbook
 
 import android.content.Context
 import android.os.Build

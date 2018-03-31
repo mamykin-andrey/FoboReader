@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import ru.mamykin.foboreader.data.service.TextToSpeechService
+import ru.mamykin.foboreader.domain.readbook.TextToSpeechService
 import ru.mamykin.foboreader.di.qualifiers.BookId
 import ru.mamykin.foboreader.di.qualifiers.BookPath
 import ru.mamykin.foboreader.di.scope.ActivityScope
