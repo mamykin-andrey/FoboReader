@@ -1,11 +1,9 @@
 package ru.mamykin.foboreader.ui.devicebooks
 
 import android.os.Bundle
-import android.os.Environment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.*
-import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_device_books.*
@@ -16,21 +14,19 @@ import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksPresenter
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksView
 import ru.mamykin.foboreader.ui.devicebooks.list.FilesRecyclerAdapter
+import ru.mamykin.foboreader.ui.global.BaseFragment
 import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
 import javax.inject.Inject
 
 /**
  * Страница с файлами на устройстве
  */
-class DeviceBooksFragment : MvpAppCompatFragment(), DeviceBooksView, SearchView.OnQueryTextListener {
+class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryTextListener {
 
     companion object {
-        private const val CURRENT_DIR_EXTRA = "current_dir_extra"
 
-        fun newInstance(currentDir: String?): DeviceBooksFragment {
+        fun newInstance(): DeviceBooksFragment {
             val args = Bundle()
-            args.putString(CURRENT_DIR_EXTRA, currentDir
-                    ?: Environment.getExternalStorageDirectory().toString())
             val fragment = DeviceBooksFragment()
             fragment.arguments = args
             return fragment
@@ -48,10 +44,13 @@ class DeviceBooksFragment : MvpAppCompatFragment(), DeviceBooksView, SearchView.
         setHasOptionsMenu(true)
     }
 
-    @ProvidePresenter
-    fun provideDeviceBooksPresenter(): DeviceBooksPresenter {
-        return presenter
+    override fun injectDependencies() {
+        super.injectDependencies()
+        getAppComponent().getDeviceBooksComponent().inject(this)
     }
+
+    @ProvidePresenter
+    fun provideDeviceBooksPresenter() = presenter
 
     override fun onCreateView(inflater: LayoutInflater?,
                               container: ViewGroup?,

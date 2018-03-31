@@ -9,14 +9,12 @@ import javax.inject.Inject
 
 @InjectViewState
 class DeviceBooksPresenter @Inject constructor(
-        private val interactor: DeviceBooksInteractor,
-        private val currentDir: String
+        private val interactor: DeviceBooksInteractor
 ) : BasePresenter<DeviceBooksView>() {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-
-        loadFiles(currentDir)
+        loadRootDirectoryFiles()
     }
 
     fun onFileClicked(file: AndroidFile) {
@@ -34,6 +32,12 @@ class DeviceBooksPresenter @Inject constructor(
     fun onUpDirClicked() {
         interactor.openParentDirectory()
                 .subscribe(this::showFiles)
+                .unsubscribeOnDestory()
+    }
+
+    private fun loadRootDirectoryFiles() {
+        interactor.getRootDirectoryFiles()
+                .subscribe(this::showFiles, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 

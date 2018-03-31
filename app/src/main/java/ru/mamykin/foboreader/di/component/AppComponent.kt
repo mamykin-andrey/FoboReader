@@ -18,4 +18,6 @@ interface AppComponent {
     fun inject(application: ReaderApp)
 
     fun getBookDetailsComponent(bookDetailsModule: BookDetailsModule): BookDetailsComponent
+
+    fun getDeviceBooksComponent(): DeviceBooksComponent
 }

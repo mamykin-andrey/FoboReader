@@ -11,6 +11,16 @@ class DeviceBooksInteractor @Inject constructor(
 ) {
     private var currentDir: String = ""
 
+    fun getRootDirectoryFiles(): Single<FileStructureEntity> {
+        val rootDirectory = repository.getRootDirectory()
+        return repository.getFiles(rootDirectory)
+                .doOnSuccess(this::sortFiles)
+                .zipWith(repository.canReadDirectory(rootDirectory), { files, canRead ->
+                    Pair(files, canRead)
+                })
+                .map { FileStructureEntity(it.first, it.second, currentDir) }
+    }
+
     fun getFiles(currentDir: String): Single<FileStructureEntity> {
         this.currentDir = currentDir
 

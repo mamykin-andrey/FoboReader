@@ -13,7 +13,6 @@ import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.presentation.main.MainPresenter
 import ru.mamykin.foboreader.presentation.main.MainView
-import ru.mamykin.foboreader.ui.about.AboutActivity
 import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksFragment
 import ru.mamykin.foboreader.ui.dropbox.DropboxBooksFragment
 import ru.mamykin.foboreader.ui.global.BaseActivity
@@ -77,7 +76,7 @@ class MainActivity : BaseActivity(), MainView {
                     savedInstanceState, TAG_DROPBOX_BOOKS_FRAGMENT), getString(R.string.dropbox))
         } else {
             adapter.addFragment(MyBooksFragment.newInstance(), getString(R.string.my_books))
-            adapter.addFragment(DeviceBooksFragment.newInstance(null), getString(R.string.device))
+            adapter.addFragment(DeviceBooksFragment.newInstance(), getString(R.string.device))
             adapter.addFragment(DropboxBooksFragment.newInstance(null), getString(R.string.dropbox))
             adapter.addFragment(BooksStoreFragment.newInstance(), getString(R.string.store))
         }
