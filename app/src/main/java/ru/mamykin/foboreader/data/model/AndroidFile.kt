@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.data.model
 
-import ru.mamykin.foboreader.common.Utils
+import ru.mamykin.foboreader.domain.Utils
 
 /**
  * Creation date: 5/29/2017

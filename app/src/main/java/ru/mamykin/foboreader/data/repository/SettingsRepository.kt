@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.data.repository
 
-import ru.mamykin.foboreader.common.UiUtils
+import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.data.storage.PreferenceNames
 import ru.mamykin.foboreader.data.storage.PreferencesManager
 import rx.Completable

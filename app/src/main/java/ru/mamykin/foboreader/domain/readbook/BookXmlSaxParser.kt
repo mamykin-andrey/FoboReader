@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.domain.readbook
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
-import ru.mamykin.foboreader.common.Utils
+import ru.mamykin.foboreader.domain.Utils
 import ru.mamykin.foboreader.data.model.FictionBook
 import java.io.File
 import java.io.IOException

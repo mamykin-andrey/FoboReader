@@ -7,7 +7,7 @@ import android.widget.SeekBar
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_settings.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.common.UiUtils
+import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.presentation.settings.SettingsPresenter
 import ru.mamykin.foboreader.presentation.settings.SettingsView
 import ru.mamykin.foboreader.ui.global.BaseActivity

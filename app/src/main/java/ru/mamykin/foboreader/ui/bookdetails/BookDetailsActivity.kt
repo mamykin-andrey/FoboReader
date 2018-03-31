@@ -7,7 +7,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_book_detail.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.common.Utils
+import ru.mamykin.foboreader.domain.Utils
 import ru.mamykin.foboreader.di.modules.BookDetailsModule
 import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsPresenter
 import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsView

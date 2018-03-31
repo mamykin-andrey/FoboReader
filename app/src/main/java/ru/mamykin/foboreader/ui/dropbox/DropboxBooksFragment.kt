@@ -9,7 +9,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dropbox.core.android.Auth
 import kotlinx.android.synthetic.main.fragment_dropbox_books.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.common.UiUtils
+import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.data.model.DropboxFile
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.dropbox.DropboxBooksPresenter

@@ -8,7 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_device_books.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.common.UiUtils
+import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.data.model.AndroidFile
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksPresenter

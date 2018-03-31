@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.common
+package ru.mamykin.foboreader.ui.global
 
 import android.app.Activity
 import android.content.Context

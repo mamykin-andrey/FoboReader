@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.common
+package ru.mamykin.foboreader.domain
 
 import java.text.DecimalFormat
 import java.text.ParseException

@@ -4,7 +4,7 @@ import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
-import ru.mamykin.foboreader.common.UiUtils
+import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.data.storage.PreferenceNames
 import ru.mamykin.foboreader.data.storage.PreferencesManager
 import ru.mamykin.foboreader.di.component.AppComponent
