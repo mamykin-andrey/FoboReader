@@ -5,20 +5,22 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.*
 import android.widget.Toast
-import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_main_store.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.data.model.StoreBook
-import ru.mamykin.foboreader.presentation.store.BooksStoreView
 import ru.mamykin.foboreader.presentation.store.BooksStorePresenter
+import ru.mamykin.foboreader.presentation.store.BooksStoreView
+import ru.mamykin.foboreader.ui.global.BaseFragment
 import ru.mamykin.foboreader.ui.store.list.BooksStoreRecyclerAdapter
+import javax.inject.Inject
 
 /**
  * Страница с магазином книг
  */
-class BooksStoreFragment : MvpAppCompatFragment(), BooksStoreView, SearchView.OnQueryTextListener {
+class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTextListener {
 
     companion object {
 
@@ -30,14 +32,22 @@ class BooksStoreFragment : MvpAppCompatFragment(), BooksStoreView, SearchView.On
         }
     }
 
+    @Inject
     @InjectPresenter
     lateinit var presenter: BooksStorePresenter
 
     private lateinit var adapter: BooksStoreRecyclerAdapter
 
+    @ProvidePresenter
+    fun providePresenter() = presenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    override fun injectDependencies() {
+        getAppComponent().getBooksStoreComponent().inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
