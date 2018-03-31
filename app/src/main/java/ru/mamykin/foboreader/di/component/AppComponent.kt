@@ -20,4 +20,6 @@ interface AppComponent {
     fun getBookDetailsComponent(bookDetailsModule: BookDetailsModule): BookDetailsComponent
 
     fun getDeviceBooksComponent(): DeviceBooksComponent
+
+    fun getDropboxBooksComponent(): DropboxBooksComponent
 }

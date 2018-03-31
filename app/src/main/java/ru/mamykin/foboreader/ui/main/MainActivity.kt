@@ -13,6 +13,7 @@ import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.presentation.main.MainPresenter
 import ru.mamykin.foboreader.presentation.main.MainView
+import ru.mamykin.foboreader.ui.about.AboutActivity
 import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksFragment
 import ru.mamykin.foboreader.ui.dropbox.DropboxBooksFragment
 import ru.mamykin.foboreader.ui.global.BaseActivity

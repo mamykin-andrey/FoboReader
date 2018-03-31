@@ -7,9 +7,9 @@ import rx.Single
 import javax.inject.Inject
 
 class DropboxBooksInteractor @Inject constructor(
-        private val repository: DropboxBooksRepository,
-        private var currentDir: String
+        private val repository: DropboxBooksRepository
 ) {
+    private var currentDir: String = ""
 
     fun initDropbox(): Completable {
         return repository.initDropbox()
@@ -37,8 +37,8 @@ class DropboxBooksInteractor @Inject constructor(
         return repository.getAccountInfo()
     }
 
-    fun loadFiles(): Single<List<DropboxFile>> {
-        return repository.getFiles(currentDir)
+    fun openRootDirectory(): Single<List<DropboxFile>> {
+        return repository.getFiles("")
     }
 
     private fun formatParentDirectory(directoryPath: String): String {

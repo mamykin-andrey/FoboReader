@@ -13,10 +13,7 @@ class DropboxBooksPresenter @Inject constructor(
 
     override fun attachView(view: DropboxView) {
         super.attachView(view)
-
-        interactor.initDropbox()
-                .subscribe({ showAuth() }, { loadDropboxInfo() })
-                .unsubscribeOnDestory()
+        initDropbox()
     }
 
     fun onLoginClicked() {
@@ -45,19 +42,16 @@ class DropboxBooksPresenter @Inject constructor(
                 .unsubscribeOnDestory()
     }
 
-    private fun loadDropboxInfo() {
-        loadFiles()
-        loadAccountInfo()
-    }
-
-    private fun loadFiles() {
-        interactor.loadFiles()
-                .subscribe(this::displayFiles, Throwable::printStackTrace)
+    private fun initDropbox() {
+        interactor.initDropbox()
+                .subscribe({ showAuth() }, { loadRootFiles() })
                 .unsubscribeOnDestory()
     }
 
-    private fun loadAccountInfo() {
-        interactor.loadAccountInfo().subscribe()
+    private fun loadRootFiles() {
+        interactor.openRootDirectory()
+                .subscribe(this::displayFiles, Throwable::printStackTrace)
+                .unsubscribeOnDestory()
     }
 
     private fun displayFiles(files: List<DropboxFile>) {

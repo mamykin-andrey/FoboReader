@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.*
-import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dropbox.core.android.Auth
@@ -16,21 +15,19 @@ import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.dropbox.DropboxBooksPresenter
 import ru.mamykin.foboreader.presentation.dropbox.DropboxView
 import ru.mamykin.foboreader.ui.dropbox.list.DropboxRecyclerAdapter
+import ru.mamykin.foboreader.ui.global.BaseFragment
 import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
 import javax.inject.Inject
 
 /**
  * Страница с файлами Dropbox
  */
-class DropboxBooksFragment : MvpAppCompatFragment(), DropboxView, SearchView.OnQueryTextListener {
+class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryTextListener {
 
     companion object {
 
-        private val CURRENT_DIR_EXTRA = "url_path_extra"
-
-        fun newInstance(currentDir: String?): DropboxBooksFragment {
+        fun newInstance(): DropboxBooksFragment {
             val args = Bundle()
-            args.putString(CURRENT_DIR_EXTRA, currentDir ?: "")
             val fragment = DropboxBooksFragment()
             fragment.arguments = args
             return fragment
@@ -44,13 +41,15 @@ class DropboxBooksFragment : MvpAppCompatFragment(), DropboxView, SearchView.OnQ
     private lateinit var adapter: DropboxRecyclerAdapter
 
     @ProvidePresenter
-    fun providePresenter(): DropboxBooksPresenter {
-        return presenter
-    }
+    fun providePresenter(): DropboxBooksPresenter = presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    override fun injectDependencies() {
+        getAppComponent().getDropboxBooksComponent().inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?,
