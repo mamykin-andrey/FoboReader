@@ -26,4 +26,6 @@ interface AppComponent {
     fun getMyBooksComponent(): MyBooksComponent
 
     fun getReadBookComponent(module: ReadBookModule): ReadBookComponent
+
+    fun getSettingsComponent(): SettingsComponent
 }

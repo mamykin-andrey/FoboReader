@@ -12,6 +12,7 @@ import ru.mamykin.foboreader.presentation.settings.SettingsPresenter
 import ru.mamykin.foboreader.presentation.settings.SettingsView
 import ru.mamykin.foboreader.ui.global.BaseActivity
 import ru.mamykin.foboreader.ui.global.YesNoDialogFragment
+import javax.inject.Inject
 
 /**
  * Страница настроек
@@ -19,6 +20,7 @@ import ru.mamykin.foboreader.ui.global.YesNoDialogFragment
 class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, SettingsView {
 
     companion object {
+
         const val DROPBOX_LOGOUT_DIALOG_TAG = "dropbox_dialog_tag"
 
         fun getStartIntent(context: Context): Intent {
@@ -28,6 +30,7 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
 
     override val layout: Int = R.layout.activity_settings
 
+    @Inject
     @InjectPresenter
     lateinit var presenter: SettingsPresenter
 
@@ -36,7 +39,10 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
 
         initToolbar(getString(R.string.settings), true)
         initClickListeners()
-        seekbarBright!!.setOnSeekBarChangeListener(this)
+    }
+
+    override fun injectDependencies() {
+        getAppComponent().getSettingsComponent().inject(this)
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -89,6 +95,7 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     }
 
     private fun initClickListeners() {
+        seekbarBright.setOnSeekBarChangeListener(this)
         switchNightTheme.setOnCheckedChangeListener { _, c -> presenter.onNightThemeEnabled(c) }
         switchBrightAuto.setOnCheckedChangeListener { _, c -> presenter.onAutoBrightnessEnabled(c) }
         btnDropboxLogout.setOnClickListener { showDropboxLogoutDialog() }
