@@ -6,17 +6,16 @@ import android.support.v7.widget.SearchView
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.dropbox.core.android.Auth
 import kotlinx.android.synthetic.main.fragment_dropbox_books.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.data.model.DropboxFile
+import ru.mamykin.foboreader.di.modules.DropboxBooksModule
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.dropbox.DropboxBooksPresenter
 import ru.mamykin.foboreader.presentation.dropbox.DropboxView
 import ru.mamykin.foboreader.ui.dropbox.list.DropboxRecyclerAdapter
 import ru.mamykin.foboreader.ui.global.BaseFragment
-import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
+import ru.mamykin.foboreader.ui.global.UiUtils
 import javax.inject.Inject
 
 /**
@@ -49,7 +48,8 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
     }
 
     override fun injectDependencies() {
-        getAppComponent().getDropboxBooksComponent().inject(this)
+        val module = DropboxBooksModule(DropboxBooksRouter(activity))
+        getAppComponent().getDropboxBooksComponent(module).inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?,
@@ -88,10 +88,6 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
         tvCurrentDir.text = dir
     }
 
-    override fun openBook(path: String) {
-        startActivity(ReadBookActivity.getStartIntent(context, path))
-    }
-
     override fun showLoadingItem(position: Int) {
         adapter.showLoadingItem(position)
     }
@@ -118,10 +114,6 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
 
     override fun showUpButton(show: Boolean) {
         ibUp.isVisible = show
-    }
-
-    override fun startOAuth2Authentication() {
-        Auth.startOAuth2Authentication(context, context.getString(R.string.dropbox_api_key))
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {

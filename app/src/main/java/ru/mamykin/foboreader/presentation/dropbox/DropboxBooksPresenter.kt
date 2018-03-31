@@ -4,11 +4,13 @@ import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foboreader.data.model.DropboxFile
 import ru.mamykin.foboreader.domain.dropboxbooks.DropboxBooksInteractor
 import ru.mamykin.foboreader.presentation.global.BasePresenter
+import ru.mamykin.foboreader.ui.dropbox.DropboxBooksRouter
 import javax.inject.Inject
 
 @InjectViewState
 class DropboxBooksPresenter @Inject constructor(
-        private val interactor: DropboxBooksInteractor
+        private val interactor: DropboxBooksInteractor,
+        private val router: DropboxBooksRouter
 ) : BasePresenter<DropboxView>() {
 
     override fun attachView(view: DropboxView) {
@@ -18,7 +20,7 @@ class DropboxBooksPresenter @Inject constructor(
 
     fun onLoginClicked() {
         interactor.login()
-                .subscribe(viewState::startOAuth2Authentication)
+                .subscribe(router::startOAuth2Authentication)
                 .unsubscribeOnDestory()
     }
 
@@ -66,6 +68,6 @@ class DropboxBooksPresenter @Inject constructor(
 
     private fun openBook(bookPath: String) {
         viewState.hideLoadingItem()
-        viewState.openBook(bookPath)
+        router.openBook(bookPath)
     }
 }

@@ -8,11 +8,10 @@ import ru.mamykin.foboreader.data.model.DropboxFile
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface DropboxView : MvpView {
+
     fun showFiles(filesList: List<DropboxFile>)
 
     fun hideFiles()
-
-    fun openBook(path: String)
 
     fun showLoadingItem(position: Int)
 
@@ -29,6 +28,4 @@ interface DropboxView : MvpView {
     fun hideAuth()
 
     fun showUpButton(show: Boolean)
-
-    fun startOAuth2Authentication()
 }
