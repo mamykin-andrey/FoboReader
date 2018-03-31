@@ -41,7 +41,7 @@ class ReadBookInteractor @Inject constructor(
             return Single.just(Pair(text, offlineTranslation))
         }
 
-        return translateRepository.getTextTranslation()
+        return translateRepository.getTextTranslation(text)
                 .map { Pair(text, it.text!!.joinToString()) }
     }
 

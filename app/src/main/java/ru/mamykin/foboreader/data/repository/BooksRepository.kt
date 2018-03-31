@@ -7,7 +7,7 @@ import rx.Completable
 import rx.Single
 import javax.inject.Inject
 
-class BookRepository @Inject constructor(
+class BooksRepository @Inject constructor(
         private val bookDbHelper: BookDatabaseHelper
 ) {
     fun getBookInfo(bookId: Int): Single<FictionBook> {
@@ -32,7 +32,20 @@ class BookRepository @Inject constructor(
     fun getBook(bookId: Int): Single<FictionBook> {
         return Single.fromCallable {
             val bookDao = bookDbHelper.getBookDao()!!
-            return@fromCallable bookDao.getBook(bookId)
+            val book = bookDao.getBook(bookId)
+            book!!.lastOpen = System.currentTimeMillis()
+            bookDao.update(book)
+            return@fromCallable book
+        }
+    }
+
+    fun getBook(bookPath: String): Single<FictionBook> {
+        return Single.fromCallable {
+            val bookDao = bookDbHelper.getBookDao()!!
+            val book = bookDao.getBook(bookPath)
+            book.lastOpen = System.currentTimeMillis()
+            bookDao.update(book)
+            return@fromCallable book
         }
     }
 }
