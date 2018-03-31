@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.data.repository
 
-import ru.mamykin.foboreader.data.model.StoreBook
+import ru.mamykin.foboreader.entity.StoreBook
 import ru.mamykin.foboreader.data.network.BooksStoreService
 import rx.Single
 import javax.inject.Inject

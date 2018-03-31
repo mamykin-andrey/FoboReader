@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.data.model.StoreBook
+import ru.mamykin.foboreader.entity.StoreBook
 
 class BooksStoreRecyclerAdapter : RecyclerView.Adapter<StoreBookViewHolder>() {
 

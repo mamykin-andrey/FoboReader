@@ -6,7 +6,7 @@ import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_store_book.view.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.data.model.StoreBook
+import ru.mamykin.foboreader.entity.StoreBook
 import ru.mamykin.foboreader.extension.isVisible
 
 class StoreBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

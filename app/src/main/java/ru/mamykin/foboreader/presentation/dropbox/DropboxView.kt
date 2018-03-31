@@ -4,7 +4,7 @@ import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
-import ru.mamykin.foboreader.data.model.DropboxFile
+import ru.mamykin.foboreader.entity.DropboxFile
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface DropboxView : MvpView {

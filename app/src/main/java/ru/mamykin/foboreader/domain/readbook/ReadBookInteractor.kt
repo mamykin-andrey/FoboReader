@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.domain.readbook
 
-import ru.mamykin.foboreader.data.model.FictionBook
+import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.data.repository.BooksRepository
 import ru.mamykin.foboreader.data.repository.TranslateRepository
 import ru.mamykin.foboreader.di.qualifiers.BookId

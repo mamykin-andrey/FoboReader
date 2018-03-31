@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.model
+package ru.mamykin.foboreader.entity
 
 /**
  * Creation date: 5/29/2017

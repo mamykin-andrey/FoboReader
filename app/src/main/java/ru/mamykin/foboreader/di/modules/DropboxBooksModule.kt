@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.di.modules
 
 import dagger.Module
 import dagger.Provides
-import ru.mamykin.foboreader.data.model.mapper.FolderToFilesListMapper
+import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
 import ru.mamykin.foboreader.di.scope.FragmentScope
 import ru.mamykin.foboreader.ui.dropbox.DropboxBooksRouter
 

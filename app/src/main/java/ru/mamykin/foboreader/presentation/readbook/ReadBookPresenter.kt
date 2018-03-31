@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.presentation.readbook
 
 import com.arellomobile.mvp.InjectViewState
-import ru.mamykin.foboreader.data.model.FictionBook
+import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.domain.readbook.ReadBookInteractor
 import ru.mamykin.foboreader.domain.readbook.ReadBookState
 import ru.mamykin.foboreader.extension.ViewParams

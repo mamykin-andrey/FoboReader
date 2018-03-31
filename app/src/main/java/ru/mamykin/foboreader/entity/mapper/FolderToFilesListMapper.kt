@@ -1,7 +1,7 @@
-package ru.mamykin.foboreader.data.model.mapper
+package ru.mamykin.foboreader.entity.mapper
 
 import com.dropbox.core.v2.files.ListFolderResult
-import ru.mamykin.foboreader.data.model.DropboxFile
+import ru.mamykin.foboreader.entity.DropboxFile
 import java.util.*
 
 class FolderToFilesListMapper {

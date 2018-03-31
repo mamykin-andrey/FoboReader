@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.model
+package ru.mamykin.foboreader.entity
 
 import android.text.Html
 import android.text.Layout

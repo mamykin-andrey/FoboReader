@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.data.network
 
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ru.mamykin.foboreader.data.model.Translation
+import ru.mamykin.foboreader.entity.Translation
 import rx.Single
 
 /**

@@ -10,7 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_main_store.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.ui.global.UiUtils
-import ru.mamykin.foboreader.data.model.StoreBook
+import ru.mamykin.foboreader.entity.StoreBook
 import ru.mamykin.foboreader.presentation.store.BooksStorePresenter
 import ru.mamykin.foboreader.presentation.store.BooksStoreView
 import ru.mamykin.foboreader.ui.global.BaseFragment

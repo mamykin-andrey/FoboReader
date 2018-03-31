@@ -4,7 +4,7 @@ import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
 import ru.mamykin.foboreader.domain.Utils
-import ru.mamykin.foboreader.data.model.FictionBook
+import ru.mamykin.foboreader.entity.FictionBook
 import java.io.File
 import java.io.IOException
 import javax.xml.parsers.ParserConfigurationException

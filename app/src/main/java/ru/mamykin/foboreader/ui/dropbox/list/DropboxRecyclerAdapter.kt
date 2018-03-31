@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.data.model.DropboxFile
+import ru.mamykin.foboreader.entity.DropboxFile
 
 class DropboxRecyclerAdapter(
         private val onFileClickFunc: (Int, DropboxFile) -> Unit,

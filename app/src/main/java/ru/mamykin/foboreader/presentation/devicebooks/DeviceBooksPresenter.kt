@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.presentation.devicebooks
 
 import com.arellomobile.mvp.InjectViewState
-import ru.mamykin.foboreader.data.model.AndroidFile
+import ru.mamykin.foboreader.entity.AndroidFile
 import ru.mamykin.foboreader.domain.devicebooks.DeviceBooksInteractor
 import ru.mamykin.foboreader.domain.devicebooks.FileStructureEntity
 import ru.mamykin.foboreader.presentation.global.BasePresenter

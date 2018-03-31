@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.domain.devicebooks
 
-import ru.mamykin.foboreader.data.model.AndroidFile
+import ru.mamykin.foboreader.entity.AndroidFile
 
 data class FileStructureEntity(
         val files: List<AndroidFile>,

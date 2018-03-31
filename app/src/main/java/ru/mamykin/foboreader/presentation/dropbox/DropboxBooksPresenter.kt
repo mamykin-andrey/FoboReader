@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.presentation.dropbox
 
 import com.arellomobile.mvp.InjectViewState
-import ru.mamykin.foboreader.data.model.DropboxFile
+import ru.mamykin.foboreader.entity.DropboxFile
 import ru.mamykin.foboreader.domain.dropboxbooks.DropboxBooksInteractor
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import ru.mamykin.foboreader.ui.dropbox.DropboxBooksRouter

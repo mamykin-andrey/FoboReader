@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_book.view.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.data.model.FictionBook
+import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.extension.isVisible
 
 class BookViewHolder(itemView: View,

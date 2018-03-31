@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.presentation.bookdetails
 
 import com.arellomobile.mvp.InjectViewState
-import ru.mamykin.foboreader.data.model.FictionBook
+import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.domain.bookdetails.BookDetailsInteractor
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import ru.mamykin.foboreader.ui.bookdetails.BookDetailsRouter

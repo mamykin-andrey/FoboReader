@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.data.model.AndroidFile
+import ru.mamykin.foboreader.entity.AndroidFile
 import java.util.*
 
 class FilesRecyclerAdapter(

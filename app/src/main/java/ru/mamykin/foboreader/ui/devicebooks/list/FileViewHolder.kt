@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_file.view.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.data.model.AndroidFile
+import ru.mamykin.foboreader.entity.AndroidFile
 
 class FileViewHolder(itemView: View,
                      onItemClickFunc: (Int) -> Unit

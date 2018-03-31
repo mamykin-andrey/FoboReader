@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.data.repository
 
 import android.content.Context
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.data.model.Translation
+import ru.mamykin.foboreader.entity.Translation
 import ru.mamykin.foboreader.data.network.YandexTranslateService
 import rx.Single
 import javax.inject.Inject

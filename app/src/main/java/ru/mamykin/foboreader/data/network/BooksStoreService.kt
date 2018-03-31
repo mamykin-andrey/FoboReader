@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.data.network
 
 import retrofit2.http.GET
-import ru.mamykin.foboreader.data.model.StoreBook
+import ru.mamykin.foboreader.entity.StoreBook
 import rx.Single
 
 interface BooksStoreService {

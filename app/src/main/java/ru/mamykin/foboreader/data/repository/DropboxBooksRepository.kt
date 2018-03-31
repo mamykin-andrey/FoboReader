@@ -3,8 +3,8 @@ package ru.mamykin.foboreader.data.repository
 import android.os.Environment
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.files.FileMetadata
-import ru.mamykin.foboreader.data.model.mapper.FolderToFilesListMapper
-import ru.mamykin.foboreader.data.model.DropboxFile
+import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
+import ru.mamykin.foboreader.entity.DropboxFile
 import ru.mamykin.foboreader.data.storage.PreferenceNames
 import ru.mamykin.foboreader.data.storage.PreferencesManager
 import rx.Completable

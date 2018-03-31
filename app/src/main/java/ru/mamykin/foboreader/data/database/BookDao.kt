@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.data.database
 
 import com.j256.ormlite.dao.BaseDaoImpl
 import com.j256.ormlite.support.ConnectionSource
-import ru.mamykin.foboreader.data.model.FictionBook
+import ru.mamykin.foboreader.entity.FictionBook
 import java.sql.SQLException
 import java.util.*
 

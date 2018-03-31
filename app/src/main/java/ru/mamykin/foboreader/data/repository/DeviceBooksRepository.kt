@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.data.repository
 
 import android.os.Environment
-import ru.mamykin.foboreader.data.model.AndroidFile
+import ru.mamykin.foboreader.entity.AndroidFile
 import rx.Single
 import java.io.File
 import javax.inject.Inject
