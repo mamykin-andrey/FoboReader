@@ -7,7 +7,7 @@ import io.fabric.sdk.android.Fabric
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.data.storage.PreferenceNames
 import ru.mamykin.foboreader.data.storage.PreferencesManager
-import ru.mamykin.foboreader.di.AppComponent
+import ru.mamykin.foboreader.di.component.AppComponent
 import ru.mamykin.foboreader.di.DaggerAppComponent
 import ru.mamykin.foboreader.di.modules.AppModule
 import ru.mamykin.foboreader.di.modules.PreferencesModule
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class ReaderApp : MultiDexApplication(), PreferenceNames {
 
     companion object {
-        lateinit var component: AppComponent
+        lateinit var appComponent: AppComponent
             private set
     }
 
@@ -48,11 +48,11 @@ class ReaderApp : MultiDexApplication(), PreferenceNames {
     }
 
     private fun setupDagger() {
-        component = DaggerAppComponent.builder()
+        appComponent = DaggerAppComponent.builder()
                 .appModule(AppModule(this))
                 .preferencesModule(PreferencesModule())
                 .build()
 
-        component.inject(this)
+        appComponent.inject(this)
     }
 }

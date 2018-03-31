@@ -49,8 +49,8 @@ class DeviceBooksFragment : MvpAppCompatFragment(), DeviceBooksView, SearchView.
     }
 
     @ProvidePresenter
-    internal fun provideDeviceBooksPresenter(): DeviceBooksPresenter {
-        return DeviceBooksPresenter(arguments.getString(CURRENT_DIR_EXTRA))
+    fun provideDeviceBooksPresenter(): DeviceBooksPresenter {
+        return presenter
     }
 
     override fun onCreateView(inflater: LayoutInflater?,

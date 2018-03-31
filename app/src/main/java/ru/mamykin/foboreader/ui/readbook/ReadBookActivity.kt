@@ -7,13 +7,13 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_read_book.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.extension.addGlobalLayoutListener
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.readbook.ReadBookPresenter
 import ru.mamykin.foboreader.presentation.readbook.ReadBookView
 import ru.mamykin.foboreader.ui.global.BaseActivity
 import ru.mamykin.foboreader.ui.global.control.SwipeableTextView
+import javax.inject.Inject
 
 /**
  * Страница чтения книги
@@ -40,25 +40,18 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
 
     override val layout: Int = R.layout.activity_read_book
 
+    @Inject
     @InjectPresenter
     lateinit var presenter: ReadBookPresenter
 
     @ProvidePresenter
     internal fun providePresenter(): ReadBookPresenter {
-        if (intent.extras.containsKey(BOOK_PATH_EXTRA)) {
-            return ReadBookPresenter(intent.extras.getString(BOOK_PATH_EXTRA))
-        } else {
-            return ReadBookPresenter(intent.extras.getInt(BOOK_ID_EXTRA))
-        }
+        return presenter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         tvText.setSwipeableListener(this)
-    }
-
-    override fun showToast(text: String) {
-        UiUtils.showToast(this, text)
     }
 
     override fun showLoading(show: Boolean) {
@@ -85,25 +78,8 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
         presenter.onSwipeRight()
     }
 
-    override fun displayReadPages(text: String) {
-        tvRead.text = text
-    }
-
-    override fun displayReadPercent(text: String) {
-        tvReadPercent.text = text
-    }
-
-    override fun displaySourceParagraph(text: CharSequence) {
-        tvText.text = text
-        tvText.updateWordLinks()
-    }
-
     override fun displayParagraphTranslation(text: String) {
         tvText.setTranslation(text)
-    }
-
-    override fun displayWordTranslation(original: String, translation: String) {
-        UiUtils.showWordPopup(this, original, translation, presenter::onSpeakWordClicked)
     }
 
     override fun initBookView(title: String, text: String) {
@@ -112,5 +88,29 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
 
     override fun showBookContent(show: Boolean) {
         llBookContent.isVisible = show
+    }
+
+    override fun showParagraphLoading(show: Boolean) {
+    }
+
+    override fun showWordLoading(show: Boolean) {
+    }
+
+    override fun displayCurrentPage(page: Int) {
+    }
+
+    override fun displayReadPages(text: Int) {
+    }
+
+    override fun displayReadPercent(percent: Float) {
+    }
+
+    override fun displaySourceParagraph() {
+    }
+
+    override fun displayWordTranslation(originalAndTranslation: Pair<String, String>) {
+    }
+
+    override fun displayPageText(text: String) {
     }
 }

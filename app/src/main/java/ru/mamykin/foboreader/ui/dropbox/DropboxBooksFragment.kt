@@ -17,6 +17,7 @@ import ru.mamykin.foboreader.presentation.dropbox.DropboxBooksPresenter
 import ru.mamykin.foboreader.presentation.dropbox.DropboxView
 import ru.mamykin.foboreader.ui.dropbox.list.DropboxRecyclerAdapter
 import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
+import javax.inject.Inject
 
 /**
  * Страница с файлами Dropbox
@@ -36,14 +37,15 @@ class DropboxBooksFragment : MvpAppCompatFragment(), DropboxView, SearchView.OnQ
         }
     }
 
+    @Inject
     @InjectPresenter
     lateinit var presenter: DropboxBooksPresenter
 
     private lateinit var adapter: DropboxRecyclerAdapter
 
     @ProvidePresenter
-    internal fun providePresenter(): DropboxBooksPresenter {
-        return DropboxBooksPresenter(arguments.getString(CURRENT_DIR_EXTRA))
+    fun providePresenter(): DropboxBooksPresenter {
+        return presenter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

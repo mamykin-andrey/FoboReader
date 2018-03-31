@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.di
+package ru.mamykin.foboreader.di.component
 
 import dagger.Component
 import ru.mamykin.foboreader.ReaderApp

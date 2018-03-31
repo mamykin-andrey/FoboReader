@@ -7,7 +7,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_book_detail.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.common.Utils
 import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsPresenter
 import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsView
@@ -39,7 +38,7 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
 
     @ProvidePresenter
     fun providePresenter(): BookDetailsPresenter {
-        return BookDetailsPresenter(intent.extras.getInt(BOOK_ID_EXTRA))
+        return presenter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

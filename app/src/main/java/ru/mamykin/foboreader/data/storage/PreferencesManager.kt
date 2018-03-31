@@ -18,7 +18,7 @@ class PreferencesManager : PreferenceNames {
         get() = context!!.getSharedPreferences(PreferenceNames.PREFERENCES_FILE, Context.MODE_PRIVATE)
 
     init {
-        ReaderApp.component.inject(this)
+        ReaderApp.appComponent.inject(this)
     }
 
     fun putBoolean(key: String, value: Boolean) {

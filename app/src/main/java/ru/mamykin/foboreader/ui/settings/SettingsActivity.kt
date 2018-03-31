@@ -49,6 +49,9 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     override fun onStopTrackingTouch(seekBar: SeekBar) {
     }
 
+    override fun setupBrightness() {
+    }
+
     override fun setDropboxAccount(account: String) {
         tvDropboxAccount.text = account
     }

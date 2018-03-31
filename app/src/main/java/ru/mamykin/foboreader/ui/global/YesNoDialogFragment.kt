@@ -36,7 +36,7 @@ class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickLi
     }
 
     private lateinit var positiveClickFunc: () -> Unit
-    private lateinit var negativeClickFunc: () -> Unit
+    private var negativeClickFunc: (() -> Unit)? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val args = savedInstanceState ?: arguments
@@ -53,10 +53,10 @@ class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickLi
 
     override fun onClick(dialog: DialogInterface, which: Int) {
         if (which == Dialog.BUTTON_POSITIVE) {
-            positiveClickFunc()
+            positiveClickFunc.invoke()
         } else if (which == Dialog.BUTTON_NEGATIVE) {
-            negativeClickFunc()
+            negativeClickFunc?.invoke()
         }
-        dismiss()
+        this.dismiss()
     }
 }
