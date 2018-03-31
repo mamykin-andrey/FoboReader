@@ -9,8 +9,7 @@ import javax.inject.Singleton
     AppModule::class,
     NetworkModule::class,
     DatabaseModule::class,
-    PreferencesModule::class,
-    MappersModule::class
+    PreferencesModule::class
 ])
 @Singleton
 interface AppComponent {
