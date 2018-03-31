@@ -5,11 +5,13 @@ import ru.mamykin.foboreader.data.model.AndroidFile
 import ru.mamykin.foboreader.domain.devicebooks.DeviceBooksInteractor
 import ru.mamykin.foboreader.domain.devicebooks.FileStructureEntity
 import ru.mamykin.foboreader.presentation.global.BasePresenter
+import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksRouter
 import javax.inject.Inject
 
 @InjectViewState
 class DeviceBooksPresenter @Inject constructor(
-        private val interactor: DeviceBooksInteractor
+        private val interactor: DeviceBooksInteractor,
+        private val router: DeviceBooksRouter
 ) : BasePresenter<DeviceBooksView>() {
 
     override fun onFirstViewAttach() {
@@ -19,7 +21,7 @@ class DeviceBooksPresenter @Inject constructor(
 
     fun onFileClicked(file: AndroidFile) {
         interactor.openFile(file)
-                .subscribe({ viewState.openBook(it) }, { viewState.showPermissionMessage() })
+                .subscribe({ router.openBook(it) }, { viewState.showPermissionMessage() })
                 .unsubscribeOnDestory()
     }
 

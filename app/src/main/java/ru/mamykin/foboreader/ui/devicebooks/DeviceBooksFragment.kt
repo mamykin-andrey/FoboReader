@@ -8,14 +8,14 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_device_books.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.data.model.AndroidFile
+import ru.mamykin.foboreader.di.modules.DeviceBooksModule
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksPresenter
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksView
 import ru.mamykin.foboreader.ui.devicebooks.list.FilesRecyclerAdapter
 import ru.mamykin.foboreader.ui.global.BaseFragment
-import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
+import ru.mamykin.foboreader.ui.global.UiUtils
 import javax.inject.Inject
 
 /**
@@ -45,8 +45,8 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
     }
 
     override fun injectDependencies() {
-        super.injectDependencies()
-        getAppComponent().getDeviceBooksComponent().inject(this)
+        val module = DeviceBooksModule(DeviceBooksRouter(activity))
+        getAppComponent().getDeviceBooksComponent(module).inject(this)
     }
 
     @ProvidePresenter
@@ -85,10 +85,6 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
 
     override fun showPermissionMessage() {
         UiUtils.showToast(context, R.string.permission_denied)
-    }
-
-    override fun openBook(path: String) {
-        startActivity(ReadBookActivity.getStartIntent(context, path))
     }
 
     override fun showUpDir(show: Boolean) {
