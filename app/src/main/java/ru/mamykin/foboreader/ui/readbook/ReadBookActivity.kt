@@ -7,7 +7,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_read_book.*
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.di.modules.ReadBookModule
 import ru.mamykin.foboreader.extension.addGlobalLayoutListener
+import ru.mamykin.foboreader.extension.getNullableIntExtra
+import ru.mamykin.foboreader.extension.getNullableStringExtra
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.readbook.ReadBookPresenter
 import ru.mamykin.foboreader.presentation.readbook.ReadBookView
@@ -45,13 +48,17 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
     lateinit var presenter: ReadBookPresenter
 
     @ProvidePresenter
-    internal fun providePresenter(): ReadBookPresenter {
-        return presenter
-    }
+    internal fun providePresenter() = presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         tvText.setSwipeableListener(this)
+    }
+
+    override fun injectDependencies() {
+        val bookId = intent.getNullableIntExtra(BOOK_ID_EXTRA)
+        val bookPath = intent.getNullableStringExtra(BOOK_PATH_EXTRA)
+        getAppComponent().getReadBookComponent(ReadBookModule(bookId, bookPath)).inject(this)
     }
 
     override fun showLoading(show: Boolean) {
