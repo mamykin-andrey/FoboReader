@@ -7,13 +7,8 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
-import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.common.UiUtils
-import ru.mamykin.foboreader.presentation.main.MainPresenter
-import ru.mamykin.foboreader.presentation.main.MainView
-import ru.mamykin.foboreader.ui.about.AboutActivity
 import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksFragment
 import ru.mamykin.foboreader.ui.dropbox.DropboxBooksFragment
 import ru.mamykin.foboreader.ui.global.BaseActivity
@@ -24,10 +19,7 @@ import ru.mamykin.foboreader.ui.store.BooksStoreFragment
 /**
  * Основная страница, включает в себя страницу с книгами, файлами на устройстве, файлами Dropbox, магазином
  */
-class MainActivity : BaseActivity(), MainView {
-
-    @InjectPresenter
-    lateinit var presenter: MainPresenter
+class MainActivity : BaseActivity() {
 
     private lateinit var toggle: ActionBarDrawerToggle
 
@@ -58,9 +50,9 @@ class MainActivity : BaseActivity(), MainView {
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-            return
+        } else {
+            super.onBackPressed()
         }
-        super.onBackPressed()
     }
 
     private fun setupViewPager(viewPager: ViewPager, savedInstanceState: Bundle?) {
@@ -78,7 +70,7 @@ class MainActivity : BaseActivity(), MainView {
         } else {
             adapter.addFragment(MyBooksFragment.newInstance(), getString(R.string.my_books))
             adapter.addFragment(DeviceBooksFragment.newInstance(), getString(R.string.device))
-            adapter.addFragment(DropboxBooksFragment.newInstance(null), getString(R.string.dropbox))
+            adapter.addFragment(DropboxBooksFragment.newInstance(), getString(R.string.dropbox))
             adapter.addFragment(BooksStoreFragment.newInstance(), getString(R.string.store))
         }
         viewPager.adapter = adapter
@@ -103,20 +95,12 @@ class MainActivity : BaseActivity(), MainView {
                 startActivity(SettingsActivity.getStartIntent(this))
                 return true
             }
-            R.id.menu_about -> {
-                startActivity(AboutActivity.getStartIntent(this))
-                return true
-            }
             R.id.menu_exit -> {
                 startActivity(MainActivity.getHomeIntent())
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun restartActivity() {
-        UiUtils.restartActivity(this)
     }
 
     private fun setupDrawerLayout() {
@@ -127,6 +111,7 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     companion object {
+
         private const val TAG_MY_BOOKS_FRAGMENT = "tag_my_books_fragment"
         private const val TAG_STORE_FRAGMENT = "tag_store_fragment"
         private const val TAG_DEVICE_BOOKS_FRAGMENT = "tag_device_books_fragment"
