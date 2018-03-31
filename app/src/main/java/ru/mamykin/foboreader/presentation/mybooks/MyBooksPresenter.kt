@@ -5,11 +5,13 @@ import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.data.model.FictionBook
 import ru.mamykin.foboreader.domain.mybooks.MyBooksInteractor
 import ru.mamykin.foboreader.presentation.global.BasePresenter
+import ru.mamykin.foboreader.ui.mybooks.MyBooksRouter
 import javax.inject.Inject
 
 @InjectViewState
 class MyBooksPresenter @Inject constructor(
-        private val interactor: MyBooksInteractor
+        private val interactor: MyBooksInteractor,
+        private val router: MyBooksRouter
 ) : BasePresenter<MyBooksView>() {
 
     private var searchQuery: String = ""
@@ -39,24 +41,20 @@ class MyBooksPresenter @Inject constructor(
     fun onBookClicked(bookId: Int) {
         interactor.getBook(bookId)
                 .map { it.id }
-                .subscribe(viewState::openBook, Throwable::printStackTrace)
+                .subscribe(router::openBook, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
     fun onBookAboutClicked(bookId: Int) {
         interactor.getBook(bookId)
                 .map { it.id }
-                .subscribe(viewState::openBookDetails, Throwable::printStackTrace)
+                .subscribe(router::openBookDetails, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
     fun onBookShareClicked(bookId: Int) {
         interactor.getBook(bookId)
-                .subscribe({
-                    viewState.showBookShareDialog(it.bookTitle!!, it.docUrl!!)
-                }, {
-                    it.printStackTrace()
-                })
+                .subscribe({ router.showBookShareDialog(it.bookTitle!!, it.docUrl!!) }, { it.printStackTrace() })
                 .unsubscribeOnDestory()
     }
 

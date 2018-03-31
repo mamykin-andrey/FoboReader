@@ -12,12 +12,4 @@ interface MyBooksView : MvpView {
     fun showEmptyStateView(show: Boolean)
 
     fun showBooksList(booksList: List<FictionBook>)
-
-    fun openBook(bookId: Int)
-
-    fun openBookDetails(bookId: Int)
-
-    fun showBookShareDialog(bookName: String, url: String)
-
-    fun showBookShareDialog(bookName: String)
 }

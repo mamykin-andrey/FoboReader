@@ -23,7 +23,7 @@ interface AppComponent {
 
     fun getDropboxBooksComponent(module: DropboxBooksModule): DropboxBooksComponent
 
-    fun getMyBooksComponent(): MyBooksComponent
+    fun getMyBooksComponent(module: MyBooksModule): MyBooksComponent
 
     fun getReadBookComponent(module: ReadBookModule): ReadBookComponent
 
