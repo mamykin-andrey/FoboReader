@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.di.modules
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ru.mamykin.foboreader.data.storage.PreferencesManager
@@ -11,7 +12,7 @@ class PreferencesModule {
 
     @Provides
     @Singleton
-    internal fun providePreferencesManager(): PreferencesManager {
-        return PreferencesManager()
+    internal fun providePreferencesManager(context: Context): PreferencesManager {
+        return PreferencesManager(context)
     }
 }

@@ -4,13 +4,12 @@ import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
-import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.data.storage.PreferenceNames
 import ru.mamykin.foboreader.data.storage.PreferencesManager
 import ru.mamykin.foboreader.di.component.AppComponent
-import ru.mamykin.foboreader.di.DaggerAppComponent
+import ru.mamykin.foboreader.di.component.DaggerAppComponent
 import ru.mamykin.foboreader.di.modules.AppModule
-import ru.mamykin.foboreader.di.modules.PreferencesModule
+import ru.mamykin.foboreader.ui.global.UiUtils
 import javax.inject.Inject
 
 class ReaderApp : MultiDexApplication(), PreferenceNames {
@@ -50,7 +49,6 @@ class ReaderApp : MultiDexApplication(), PreferenceNames {
     private fun setupDagger() {
         appComponent = DaggerAppComponent.builder()
                 .appModule(AppModule(this))
-                .preferencesModule(PreferencesModule())
                 .build()
 
         appComponent.inject(this)

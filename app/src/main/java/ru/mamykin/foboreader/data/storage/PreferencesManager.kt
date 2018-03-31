@@ -5,21 +5,12 @@ import android.content.SharedPreferences
 import ru.mamykin.foboreader.ReaderApp
 import javax.inject.Inject
 
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
-class PreferencesManager : PreferenceNames {
-    @Inject
-    lateinit var context: Context
+class PreferencesManager(
+        context: Context
+) : PreferenceNames {
 
-    private val sharedPreferences: SharedPreferences
-        get() = context!!.getSharedPreferences(PreferenceNames.PREFERENCES_FILE, Context.MODE_PRIVATE)
-
-    init {
-        ReaderApp.appComponent.inject(this)
-    }
+    private val sharedPreferences: SharedPreferences = context
+            .getSharedPreferences(PreferenceNames.PREFERENCES_FILE, Context.MODE_PRIVATE)
 
     fun putBoolean(key: String, value: Boolean) {
         val sharedPreferences = sharedPreferences
