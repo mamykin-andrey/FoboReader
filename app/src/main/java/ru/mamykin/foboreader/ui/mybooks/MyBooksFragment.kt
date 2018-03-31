@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.*
-import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_my_books.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
@@ -15,14 +15,16 @@ import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksPresenter
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksView
 import ru.mamykin.foboreader.ui.bookdetails.BookDetailsActivity
+import ru.mamykin.foboreader.ui.global.BaseFragment
 import ru.mamykin.foboreader.ui.mybooks.list.BooksRecyclerAdapter
 import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
+import javax.inject.Inject
 
 /**
  * Страница с книгами пользователя
  */
-class MyBooksFragment : MvpAppCompatFragment(), SearchView.OnQueryTextListener,
-        MyBooksView, BooksRecyclerAdapter.OnBookClickListener {
+class MyBooksFragment : BaseFragment(), MyBooksView,
+        SearchView.OnQueryTextListener, BooksRecyclerAdapter.OnBookClickListener {
 
     companion object {
 
@@ -34,14 +36,22 @@ class MyBooksFragment : MvpAppCompatFragment(), SearchView.OnQueryTextListener,
         }
     }
 
+    @Inject
     @InjectPresenter
     lateinit var presenter: MyBooksPresenter
 
     private lateinit var adapter: BooksRecyclerAdapter
 
+    @ProvidePresenter
+    fun providePresenter() = presenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    override fun injectDependencies() {
+        getAppComponent().getMyBooksComponent().inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
