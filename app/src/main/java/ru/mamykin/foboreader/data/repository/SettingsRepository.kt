@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.data.repository
 
-import android.support.v7.app.AppCompatDelegate
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.data.storage.PreferenceNames
 import ru.mamykin.foboreader.data.storage.PreferencesManager
@@ -30,16 +29,11 @@ class SettingsRepository @Inject constructor(
     fun getDropboxAccount(): String {
         return preferencesManager.getString(PreferenceNames.DROPBOX_EMAIL_PREF)!!
     }
-
+    
     fun enableNightTheme(enable: Boolean): Completable {
-        return Completable.defer {
-            if (enable == UiUtils.nightMode) {
-                Completable.error(IllegalArgumentException("Night Theme already enabled!"))
-            } else {
-                preferencesManager.putBoolean(PreferenceNames.NIGHT_THEME_PREF, enable)
-                enableNightMode(enable)
-                Completable.complete()
-            }
+        return Completable.fromCallable {
+            UiUtils.enableNightMode(enable)
+            preferencesManager.putBoolean(PreferenceNames.NIGHT_THEME_PREF, enable)
         }
     }
 
@@ -60,14 +54,6 @@ class SettingsRepository @Inject constructor(
             preferencesManager.putBoolean(PreferenceNames.Companion.DROPBOX_LOGOUT_PREF, true)
             preferencesManager.removeValue(PreferenceNames.Companion.DROPBOX_TOKEN_PREF)
             preferencesManager.removeValue(PreferenceNames.Companion.DROPBOX_EMAIL_PREF)
-        }
-    }
-
-    private fun enableNightMode(enable: Boolean) {
-        if (enable) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 }

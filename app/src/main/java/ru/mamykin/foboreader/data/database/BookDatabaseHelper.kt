@@ -8,12 +8,10 @@ import com.j256.ormlite.table.TableUtils
 import ru.mamykin.foboreader.data.model.FictionBook
 import java.sql.SQLException
 
-class BookDatabaseHelper(context: Context) : OrmLiteSqliteOpenHelper(
-        context,
-        BookContract.DB_NAME,
-        null,
-        BookContract.DB_VERSION
-) {
+class BookDatabaseHelper(
+        context: Context
+) : OrmLiteSqliteOpenHelper(context, BookContract.DB_NAME, null, BookContract.DB_VERSION) {
+
     private var bookDao: BookDao? = null
 
     override fun onCreate(database: SQLiteDatabase, connectionSource: ConnectionSource) {
@@ -22,14 +20,12 @@ class BookDatabaseHelper(context: Context) : OrmLiteSqliteOpenHelper(
         } catch (e: SQLException) {
             e.printStackTrace()
         }
-
     }
 
     override fun onUpgrade(database: SQLiteDatabase,
                            connectionSource: ConnectionSource,
                            oldVersion: Int,
-                           newVersion: Int
-    ) {
+                           newVersion: Int) {
         try {
             TableUtils.dropTable<FictionBook, Any>(connectionSource, FictionBook::class.java, true)
         } catch (e: SQLException) {
@@ -37,7 +33,7 @@ class BookDatabaseHelper(context: Context) : OrmLiteSqliteOpenHelper(
         }
     }
 
-    fun getBookDao(): BookDao? {
+    fun getBookDao(): BookDao {
         if (bookDao == null) {
             try {
                 bookDao = BookDao(connectionSource, FictionBook::class.java)
@@ -45,6 +41,6 @@ class BookDatabaseHelper(context: Context) : OrmLiteSqliteOpenHelper(
                 e.printStackTrace()
             }
         }
-        return bookDao
+        return bookDao!!
     }
 }

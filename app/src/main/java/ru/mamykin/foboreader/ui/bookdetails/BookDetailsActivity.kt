@@ -50,11 +50,11 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
     }
 
     override fun showTitle(title: String) {
-        UiUtils.setTitle(this, title)
+        supportActionBar?.title = title
     }
 
     override fun setHomeEnabled(enabled: Boolean) {
-        UiUtils.setHomeEnabled(this, enabled)
+        supportActionBar?.setDisplayHomeAsUpEnabled(enabled)
     }
 
     override fun showBookName(name: String) {

@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_dropbox_books.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.data.model.DropboxFile
+import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.dropbox.DropboxBooksPresenter
 import ru.mamykin.foboreader.presentation.dropbox.DropboxView
 import ru.mamykin.foboreader.ui.dropbox.list.DropboxRecyclerAdapter
@@ -115,7 +116,7 @@ class DropboxBooksFragment : MvpAppCompatFragment(), DropboxView, SearchView.OnQ
     }
 
     override fun showUpButton(show: Boolean) {
-        UiUtils.setVisibility(ibUp, show)
+        ibUp.isVisible = show
     }
 
     override fun startOAuth2Authentication() {

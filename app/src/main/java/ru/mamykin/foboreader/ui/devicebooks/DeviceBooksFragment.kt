@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_device_books.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.data.model.AndroidFile
+import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksPresenter
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksView
 import ru.mamykin.foboreader.ui.devicebooks.list.FilesRecyclerAdapter
@@ -92,7 +93,7 @@ class DeviceBooksFragment : MvpAppCompatFragment(), DeviceBooksView, SearchView.
     }
 
     override fun showUpDir(show: Boolean) {
-        UiUtils.setVisibility(btnUpDir, show)
+        btnUpDir.isVisible = show
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {

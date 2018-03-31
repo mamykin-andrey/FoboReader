@@ -5,36 +5,26 @@ import android.content.Context
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.v4.view.MenuItemCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.ui.global.YesNoDialogFragment
 
 object UiUtils {
 
-    var nightMode: Boolean
-        get() = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
-        set(enabled) = AppCompatDelegate.setDefaultNightMode(if (enabled)
-            AppCompatDelegate.MODE_NIGHT_YES
-        else
-            AppCompatDelegate.MODE_NIGHT_NO)
-
-    fun setTitle(activity: AppCompatActivity, title: String) {
-        if (activity.supportActionBar != null) {
-            activity.supportActionBar!!.title = title
-        }
-    }
-
-    fun setHomeEnabled(activity: AppCompatActivity, homeEnabed: Boolean) {
-        if (activity.supportActionBar != null) {
-            activity.supportActionBar!!.setDisplayHomeAsUpEnabled(homeEnabed)
+    fun enableNightMode(enable: Boolean) {
+        if (enable) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 
@@ -44,42 +34,16 @@ object UiUtils {
         activity.startActivity(intent)
     }
 
-    fun showDialog(activity: AppCompatActivity, @StringRes title: Int,
-                   @StringRes text: Int, tag: String,
-                   positiveListener: YesNoDialogFragment.PositiveClickListener?,
-                   negativeListener: YesNoDialogFragment.NegativeClickListener?) {
-        YesNoDialogFragment.newInstance(activity.getString(title), activity.getString(text))
-                .setPositiveClickListener(positiveListener!!)
-                .setNegativeClickListener(negativeListener!!)
-                .show(activity.supportFragmentManager, tag)
-    }
-
-    fun showDialog(activity: AppCompatActivity, title: String?,
-                   text: String, tag: String,
-                   listener: YesNoDialogFragment.PositiveClickListener?) {
-        YesNoDialogFragment.newInstance(title!!, text)
-                .setPositiveClickListener(listener!!)
-                .show(activity.supportFragmentManager, tag)
+    fun showToast(context: Context, @StringRes message: Int) {
+        showToast(context, context.getString(message))
     }
 
     fun showToast(context: Context, message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
-
-    fun showToast(context: Context, @StringRes message: Int) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        showToast(context, message, Toast.LENGTH_LONG)
     }
 
     fun showToast(context: Context, message: String, length: Int) {
         Toast.makeText(context, message, length).show()
-    }
-
-    fun showToast(context: Context, @StringRes message: Int, length: Int) {
-        Toast.makeText(context, context.getString(message), length).show()
-    }
-
-    fun setVisibility(view: View, visible: Boolean) {
-        view.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     fun setupSearchView(context: Context, menu: Menu,

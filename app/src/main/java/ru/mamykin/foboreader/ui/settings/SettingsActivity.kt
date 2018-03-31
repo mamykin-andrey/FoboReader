@@ -11,6 +11,7 @@ import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.presentation.settings.SettingsPresenter
 import ru.mamykin.foboreader.presentation.settings.SettingsView
 import ru.mamykin.foboreader.ui.global.BaseActivity
+import ru.mamykin.foboreader.ui.global.YesNoDialogFragment
 
 /**
  * Страница настроек
@@ -73,11 +74,11 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     }
 
     override fun setTitle(title: String) {
-        UiUtils.setTitle(this, title)
+        supportActionBar?.title = title
     }
 
     override fun setHomeAsUpEnabled(enabled: Boolean) {
-        UiUtils.setHomeEnabled(this, enabled)
+        supportActionBar?.setDisplayHomeAsUpEnabled(enabled)
     }
 
     override fun restartActivity() {
@@ -93,7 +94,7 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     private fun showDropboxLogoutDialog() {
         val title = getString(R.string.dropbox_logout_title)
         val message = getString(R.string.dropbox_logout_message)
-        UiUtils.showDialog(this, title, message,
-                DROPBOX_LOGOUT_DIALOG_TAG, presenter::onDropboxLogoutSelected)
+        YesNoDialogFragment.newInstance(title, message, presenter::onDropboxLogoutSelected, null)
+                .show(supportFragmentManager, DROPBOX_LOGOUT_DIALOG_TAG)
     }
 }

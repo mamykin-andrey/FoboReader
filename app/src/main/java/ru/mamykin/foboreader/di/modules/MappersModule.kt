@@ -3,15 +3,14 @@ package ru.mamykin.foboreader.di.modules
 import dagger.Module
 import dagger.Provides
 import ru.mamykin.foboreader.data.mapper.FolderToFilesListMapper
+import javax.inject.Singleton
 
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
 @Module
+@Singleton
 class MappersModule {
+
     @Provides
+    @Singleton
     internal fun provideFolderToFilesListMapper(): FolderToFilesListMapper {
         return FolderToFilesListMapper()
     }

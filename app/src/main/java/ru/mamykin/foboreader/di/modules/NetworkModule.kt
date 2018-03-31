@@ -7,15 +7,14 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.mamykin.foboreader.data.network.BooksStoreService
 import ru.mamykin.foboreader.data.network.YandexTranslateService
+import javax.inject.Singleton
 
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
 @Module
-class ApiModule {
+@Singleton
+class NetworkModule {
+
     @Provides
+    @Singleton
     fun provideYandexTranslateService(): YandexTranslateService {
         val retrofit = Retrofit.Builder()
                 .baseUrl(YandexTranslateService.BASE_URL)
@@ -23,10 +22,11 @@ class ApiModule {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
 
-        return retrofit.create(YandexTranslateService::class.java!!)
+        return retrofit.create(YandexTranslateService::class.java)
     }
 
     @Provides
+    @Singleton
     fun provideBooksStoreService(): BooksStoreService {
         val retrofit = Retrofit.Builder()
                 .baseUrl(BooksStoreService.BASE_URL)
@@ -34,17 +34,6 @@ class ApiModule {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
 
-        return retrofit.create(BooksStoreService::class.java!!)
-    }
-
-    @Provides
-    fun provideUpdateService(): UpdateService {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(UpdateService.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build()
-
-        return retrofit.create(UpdateService::class.java!!)
+        return retrofit.create(BooksStoreService::class.java)
     }
 }

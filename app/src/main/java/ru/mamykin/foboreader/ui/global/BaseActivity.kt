@@ -7,7 +7,6 @@ import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.ReaderApp
-import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.data.storage.PreferenceNames
 import ru.mamykin.foboreader.data.storage.PreferencesManager
 import javax.inject.Inject
@@ -40,9 +39,10 @@ abstract class BaseActivity : MvpAppCompatActivity() {
     }
 
     protected fun initToolbar(title: String, homeEnabled: Boolean) {
-        setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
-        UiUtils.setTitle(this, title)
-        UiUtils.setHomeEnabled(this, homeEnabled)
+        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = title
+        supportActionBar?.setDisplayHomeAsUpEnabled(homeEnabled)
     }
 
     private fun setupBrightness() {

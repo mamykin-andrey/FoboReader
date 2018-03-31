@@ -19,7 +19,7 @@ class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickLi
         fun newInstance(title: String,
                         message: String,
                         positiveClickFunc: () -> Unit,
-                        negativeClickFunc: () -> Unit): YesNoDialogFragment {
+                        negativeClickFunc: (() -> Unit)?): YesNoDialogFragment {
 
             val dialogFragment = YesNoDialogFragment()
 

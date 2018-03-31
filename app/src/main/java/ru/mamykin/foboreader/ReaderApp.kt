@@ -8,6 +8,7 @@ import ru.mamykin.foboreader.common.UiUtils
 import ru.mamykin.foboreader.data.storage.PreferenceNames
 import ru.mamykin.foboreader.data.storage.PreferencesManager
 import ru.mamykin.foboreader.di.AppComponent
+import ru.mamykin.foboreader.di.DaggerAppComponent
 import ru.mamykin.foboreader.di.modules.AppModule
 import ru.mamykin.foboreader.di.modules.PreferencesModule
 import javax.inject.Inject
@@ -42,7 +43,8 @@ class ReaderApp : MultiDexApplication(), PreferenceNames {
     }
 
     private fun setupTheme() {
-        UiUtils.nightMode = preferencesManager.getBoolean(PreferenceNames.NIGHT_THEME_PREF)
+        val nightModeEnabled = preferencesManager.getBoolean(PreferenceNames.NIGHT_THEME_PREF)
+        UiUtils.enableNightMode(nightModeEnabled)
     }
 
     private fun setupDagger() {
