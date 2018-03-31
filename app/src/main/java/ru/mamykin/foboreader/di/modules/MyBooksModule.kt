@@ -5,8 +5,8 @@ import dagger.Provides
 import ru.mamykin.foboreader.di.scope.FragmentScope
 import ru.mamykin.foboreader.ui.mybooks.MyBooksRouter
 
-@FragmentScope
 @Module
+@FragmentScope
 class MyBooksModule(
         private val router: MyBooksRouter
 ) {
