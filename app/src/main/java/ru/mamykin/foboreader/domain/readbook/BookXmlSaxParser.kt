@@ -10,7 +10,7 @@ import java.io.IOException
 import javax.xml.parsers.ParserConfigurationException
 import javax.xml.parsers.SAXParserFactory
 
-class BookXmlSaxParser(private val listener: SaxParserListener,
+class BookXmlSaxParser(private val successFunc: () -> Unit,
                        private val book: FictionBook
 ) : DefaultHandler2() {
 
@@ -95,7 +95,7 @@ class BookXmlSaxParser(private val listener: SaxParserListener,
         book.bookText = textSb.toString()
         book.transMap = transMap
         book.sectionTitle = titleSb.toString()
-        listener.onParseCompleted()
+        successFunc()
     }
 
     interface SaxParserListener {
@@ -107,13 +107,13 @@ class BookXmlSaxParser(private val listener: SaxParserListener,
         /**
          * Парсинг книги по пути к файлу, вызывается при открытии файла с устройства
          * @param book     объект с книгой, в котором содержится путь к файлу
-         * @param listener слушатель, в котором вызывается [SaxParserListener.onParseCompleted] по окончании парсинга
+         * @param successFunc слушатель, в котором вызывается [SaxParserListener.onParseCompleted] по окончании парсинга
          */
         fun parseBook(book: FictionBook, successFunc: () -> Unit) {
             try {
                 val factory = SAXParserFactory.newInstance()
                 val parser = factory.newSAXParser()
-                val parseHandler = BookXmlSaxParser(listener, book)
+                val parseHandler = BookXmlSaxParser(successFunc, book)
                 parser.parse(File(book.filePath), parseHandler)
             } catch (e: ParserConfigurationException) {
                 e.printStackTrace()
