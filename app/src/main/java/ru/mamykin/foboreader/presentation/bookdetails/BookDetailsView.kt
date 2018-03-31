@@ -7,7 +7,6 @@ import java.util.*
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface BookDetailsView : MvpView {
-    fun openBook(bookId: Int)
 
     fun showTitle(title: String)
 

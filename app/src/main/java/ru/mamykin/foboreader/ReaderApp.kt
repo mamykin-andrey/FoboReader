@@ -55,4 +55,8 @@ class ReaderApp : MultiDexApplication(), PreferenceNames {
 
         appComponent.inject(this)
     }
+
+    fun getAppComponent(): AppComponent {
+        return appComponent
+    }
 }

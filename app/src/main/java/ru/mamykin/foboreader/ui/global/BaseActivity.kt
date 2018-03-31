@@ -5,6 +5,8 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.ReaderApp
+import ru.mamykin.foboreader.di.component.AppComponent
 
 abstract class BaseActivity : MvpAppCompatActivity() {
 
@@ -12,6 +14,7 @@ abstract class BaseActivity : MvpAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        injectDependencies()
 
         setContentView(layout)
         //ReaderApp.appComponent.inject(this)
@@ -56,4 +59,11 @@ abstract class BaseActivity : MvpAppCompatActivity() {
 //    private fun getSystemBrightness(): Float {
 //        return Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS).toFloat()
 //    }
+
+    open protected fun injectDependencies() {
+    }
+
+    protected fun getAppComponent(): AppComponent {
+        return (application as ReaderApp).getAppComponent()
+    }
 }

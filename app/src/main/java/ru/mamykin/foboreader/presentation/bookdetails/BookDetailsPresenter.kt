@@ -4,11 +4,13 @@ import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foboreader.data.model.FictionBook
 import ru.mamykin.foboreader.domain.bookdetails.BookDetailsInteractor
 import ru.mamykin.foboreader.presentation.global.BasePresenter
+import ru.mamykin.foboreader.ui.bookdetails.BookDetailsRouter
 import javax.inject.Inject
 
 @InjectViewState
 class BookDetailsPresenter @Inject constructor(
-        private val interactor: BookDetailsInteractor
+        private val interactor: BookDetailsInteractor,
+        private val router: BookDetailsRouter
 ) : BasePresenter<BookDetailsView>() {
 
     override fun onFirstViewAttach() {
@@ -34,6 +36,6 @@ class BookDetailsPresenter @Inject constructor(
     }
 
     fun onReadBookClicked() {
-        viewState.openBook(interactor.getBookId())
+        router.openBook(interactor.getBookId())
     }
 }

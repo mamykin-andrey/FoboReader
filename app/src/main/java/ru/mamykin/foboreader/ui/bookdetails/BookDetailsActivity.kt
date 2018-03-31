@@ -8,10 +8,10 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_book_detail.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.common.Utils
+import ru.mamykin.foboreader.di.modules.BookDetailsModule
 import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsPresenter
 import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsView
 import ru.mamykin.foboreader.ui.global.BaseActivity
-import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
 import java.util.*
 import javax.inject.Inject
 
@@ -23,6 +23,7 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
     override val layout: Int = R.layout.activity_book_detail
 
     companion object {
+
         private const val BOOK_ID_EXTRA = "book_id_extra"
 
         fun getStartIntent(context: Context, bookId: Int): Intent {
@@ -46,6 +47,13 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
 
         initToolbar(getString(R.string.about_book), true)
         fabRead.setOnClickListener { presenter.onReadBookClicked() }
+    }
+
+    override fun injectDependencies() {
+        val bookId = intent.getIntExtra(BOOK_ID_EXTRA, -1)
+        val bookDetailsRouter = BookDetailsRouter(this)
+        val bookDetailsModule = BookDetailsModule(bookDetailsRouter, bookId)
+        getAppComponent().getBookDetailsComponent(bookDetailsModule).inject(this)
     }
 
     override fun showTitle(title: String) {
@@ -82,9 +90,5 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
 
     override fun showBookCreatedDate(date: Date) {
         tvBookCreatedDate.text = Utils.getFormattedDate(date)
-    }
-
-    override fun openBook(bookId: Int) {
-        startActivity(ReadBookActivity.getStartIntent(this, bookId))
     }
 }
