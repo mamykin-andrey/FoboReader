@@ -9,11 +9,11 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_main_store.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.entity.StoreBook
 import ru.mamykin.foboreader.presentation.store.BooksStorePresenter
 import ru.mamykin.foboreader.presentation.store.BooksStoreView
 import ru.mamykin.foboreader.ui.global.BaseFragment
+import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.ui.store.list.BooksStoreRecyclerAdapter
 import javax.inject.Inject
 
@@ -50,13 +50,13 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
         getAppComponent().getBooksStoreComponent().inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val contentView = inflater!!.inflate(R.layout.fragment_main_store, container, false)
+        val contentView = inflater.inflate(R.layout.fragment_main_store, container, false)
         srlRefresh.setOnRefreshListener { presenter.loadBooks() }
 
         adapter = BooksStoreRecyclerAdapter()
-        UiUtils.setupRecyclerView(context, rvBooks, adapter, LinearLayoutManager(context), false)
+        UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), false)
 
         return contentView
     }
@@ -68,7 +68,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
-        UiUtils.setupSearchView(context, menu!!, R.id.action_search, R.string.menu_search, this)
+        UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, this)
     }
 
     override fun showBooks(booksList: List<StoreBook>) {
@@ -76,7 +76,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
     }
 
     override fun showMessage(message: String) {
-        UiUtils.showToast(context, message, Toast.LENGTH_SHORT)
+        UiUtils.showToast(context!!, message, Toast.LENGTH_SHORT)
     }
 
     override fun showLoading(show: Boolean) {

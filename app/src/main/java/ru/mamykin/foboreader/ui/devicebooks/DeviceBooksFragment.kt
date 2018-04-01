@@ -45,21 +45,21 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
     }
 
     override fun injectDependencies() {
-        val module = DeviceBooksModule(DeviceBooksRouter(activity))
+        val module = DeviceBooksModule(DeviceBooksRouter(activity!!))
         getAppComponent().getDeviceBooksComponent(module).inject(this)
     }
 
     @ProvidePresenter
     fun provideDeviceBooksPresenter() = presenter
 
-    override fun onCreateView(inflater: LayoutInflater?,
+    override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val contentView = inflater!!.inflate(R.layout.fragment_device_books, container, false)
+        val contentView = inflater.inflate(R.layout.fragment_device_books, container, false)
 
         adapter = FilesRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
-        UiUtils.setupRecyclerView(context, rvFiles!!, adapter, LinearLayoutManager(context), true)
+        UiUtils.setupRecyclerView(context!!, rvFiles!!, adapter, LinearLayoutManager(context), true)
         btnUpDir.setOnClickListener { presenter.onUpDirClicked() }
 
         return contentView
@@ -72,7 +72,7 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
-        UiUtils.setupSearchView(context, menu!!, R.id.action_search, R.string.menu_search, this)
+        UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, this)
     }
 
     override fun showFiles(files: List<AndroidFile>) {
@@ -84,7 +84,7 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
     }
 
     override fun showPermissionMessage() {
-        UiUtils.showToast(context, R.string.permission_denied)
+        UiUtils.showToast(context!!, R.string.permission_denied)
     }
 
     override fun showUpDir(show: Boolean) {

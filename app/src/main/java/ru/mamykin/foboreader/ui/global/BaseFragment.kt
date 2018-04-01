@@ -16,6 +16,6 @@ abstract class BaseFragment : MvpAppCompatFragment() {
     }
 
     protected fun getAppComponent(): AppComponent {
-        return (activity.application as ReaderApp).getAppComponent()
+        return (activity?.application as ReaderApp).getAppComponent()
     }
 }

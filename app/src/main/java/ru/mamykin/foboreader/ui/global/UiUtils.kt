@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.ui.global
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.support.annotation.IdRes
@@ -14,8 +15,8 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import android.widget.TextView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.view_word_popup.view.*
 import ru.mamykin.foboreader.R
 
 object UiUtils {
@@ -68,21 +69,22 @@ object UiUtils {
         }
     }
 
+    @SuppressLint("InflateParams")
     fun showWordPopup(context: Context, source: String,
                       translation: String, onSpeakWordClicked: (String) -> Unit) {
 
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val vPopup = layoutInflater.inflate(R.layout.view_word_popup, null, false)
-        val tvWordOriginal = vPopup.findViewById(R.id.tvWordOriginal) as TextView
-        val tvWordTranslate = vPopup.findViewById(R.id.tvWordTranslate) as TextView
-        val btnSpeaker = vPopup.findViewById(R.id.btnSpeaker)
+        val tvWordOriginal = vPopup.tvWordOriginal
+        val tvWordTranslate = vPopup.tvWordTranslate
+        val btnSpeaker = vPopup.btnSpeaker
         btnSpeaker.setOnClickListener { onSpeakWordClicked(source) }
         tvWordOriginal.text = source
         tvWordTranslate.text = translation
 
-        val popup = PopupWindow(vPopup,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+        val popup = PopupWindow(vPopup, ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, true)
         popup.showAtLocation(vPopup, Gravity.CENTER, 0, 200)
-        vPopup.setOnClickListener { v -> popup.dismiss() }
+        vPopup.setOnClickListener { popup.dismiss() }
     }
 }

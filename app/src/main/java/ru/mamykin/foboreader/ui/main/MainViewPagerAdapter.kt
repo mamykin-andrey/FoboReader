@@ -4,8 +4,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.PagerAdapter
-
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Адаптер для ViewPager главного экрана
@@ -31,7 +30,7 @@ class MainViewPagerAdapter(manager: FragmentManager) : FragmentStatePagerAdapter
         titlesList.add(title)
     }
 
-    override fun getItemPosition(`object`: Any?): Int {
+    override fun getItemPosition(obj: Any): Int {
         return PagerAdapter.POSITION_NONE
     }
 }

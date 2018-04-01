@@ -8,8 +8,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_my_books.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.di.modules.MyBooksModule
+import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksPresenter
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksView
@@ -49,22 +49,24 @@ class MyBooksFragment : BaseFragment(), MyBooksView,
     }
 
     override fun injectDependencies() {
-        val module = MyBooksModule(MyBooksRouter(activity))
+        val module = MyBooksModule(MyBooksRouter(activity!!))
         getAppComponent().getMyBooksComponent(module).inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val contentView = inflater!!.inflate(R.layout.fragment_my_books, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+
+        val contentView = inflater.inflate(R.layout.fragment_my_books, container, false)
 
         adapter = BooksRecyclerAdapter(this)
-        UiUtils.setupRecyclerView(context, rvBooks, adapter, LinearLayoutManager(context), false)
+        UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), false)
 
         return contentView
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
-        UiUtils.setupSearchView(context, menu!!, R.id.action_search, R.string.menu_search, this)
+        UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

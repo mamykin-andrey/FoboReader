@@ -25,9 +25,8 @@ class DropboxBooksRepository @Inject constructor(
         }
     }
 
-    fun loginDropbox(): Completable {
-        dropboxBooksStorage.dropboxLogouted = true
-        return Completable.complete()
+    fun loginDropbox() {
+        dropboxBooksStorage.authToken = null
     }
 
     fun getFiles(directory: String): Single<List<DropboxFile>> {

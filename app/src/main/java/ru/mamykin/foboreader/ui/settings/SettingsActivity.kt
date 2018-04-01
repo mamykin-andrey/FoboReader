@@ -58,7 +58,7 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     override fun setupBrightness() {
     }
 
-    override fun setDropboxAccount(account: String) {
+    override fun setDropboxAccount(account: String?) {
         tvDropboxAccount.text = account
     }
 

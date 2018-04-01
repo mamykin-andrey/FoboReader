@@ -48,16 +48,17 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
     }
 
     override fun injectDependencies() {
-        val module = DropboxBooksModule(DropboxBooksRouter(activity))
+        val module = DropboxBooksModule(DropboxBooksRouter(activity!!))
         getAppComponent().getDropboxBooksComponent(module).inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val contentView = inflater!!.inflate(R.layout.fragment_dropbox_books, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+
+        val contentView = inflater.inflate(R.layout.fragment_dropbox_books, container, false)
 
         adapter = DropboxRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
-        UiUtils.setupRecyclerView(context, rvBooks, adapter, LinearLayoutManager(context), true)
+        UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), true)
 
         btnLogin.setOnClickListener { presenter.onLoginClicked() }
         ibUp.setOnClickListener { presenter.onParentDirectoryClicked() }
@@ -72,7 +73,7 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
-        UiUtils.setupSearchView(context, menu!!, R.id.action_search, R.string.menu_search, this)
+        UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, this)
     }
 
     override fun showFiles(filesList: List<DropboxFile>) {

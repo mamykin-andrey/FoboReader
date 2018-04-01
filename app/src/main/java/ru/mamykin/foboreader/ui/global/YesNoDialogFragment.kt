@@ -40,7 +40,7 @@ class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickLi
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val args = savedInstanceState ?: arguments
-        val title = args.getString(TITLE_EXTRA)
+        val title = args!!.getString(TITLE_EXTRA)
         val message = args.getString(MESSAGE_EXTRA)
 
         val builder = AlertDialog.Builder(context)
