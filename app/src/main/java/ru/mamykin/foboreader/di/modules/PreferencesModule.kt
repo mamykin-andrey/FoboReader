@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import ru.mamykin.foboreader.data.storage.PreferencesManager
+import ru.mamykin.foboreader.data.PreferencesManager
 import javax.inject.Singleton
 
 @Module

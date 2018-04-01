@@ -12,7 +12,7 @@ import ru.mamykin.foboreader.data.repository.devicebooks.DeviceBooksRepository
 import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksRepository
 import ru.mamykin.foboreader.data.repository.settings.SettingsRepository
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
-import ru.mamykin.foboreader.data.storage.PreferencesManager
+import ru.mamykin.foboreader.data.PreferencesManager
 import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
 import javax.inject.Singleton
 
