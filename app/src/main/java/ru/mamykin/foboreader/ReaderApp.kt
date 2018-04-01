@@ -4,15 +4,14 @@ import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
-import ru.mamykin.foboreader.data.storage.PreferenceNames
-import ru.mamykin.foboreader.data.storage.PreferencesManager
+import ru.mamykin.foboreader.data.storage.SettingsStorage
 import ru.mamykin.foboreader.di.component.AppComponent
 import ru.mamykin.foboreader.di.component.DaggerAppComponent
 import ru.mamykin.foboreader.di.modules.AppModule
 import ru.mamykin.foboreader.ui.global.UiUtils
 import javax.inject.Inject
 
-class ReaderApp : MultiDexApplication(), PreferenceNames {
+class ReaderApp : MultiDexApplication() {
 
     companion object {
         lateinit var appComponent: AppComponent
@@ -20,7 +19,7 @@ class ReaderApp : MultiDexApplication(), PreferenceNames {
     }
 
     @Inject
-    lateinit var preferencesManager: PreferencesManager
+    lateinit var settingsStorage: SettingsStorage
 
     override fun onCreate() {
         super.onCreate()
@@ -42,7 +41,7 @@ class ReaderApp : MultiDexApplication(), PreferenceNames {
     }
 
     private fun setupTheme() {
-        val nightModeEnabled = preferencesManager.getBoolean(PreferenceNames.NIGHT_THEME_PREF)
+        val nightModeEnabled = settingsStorage.nightThemeEnabled
         UiUtils.enableNightMode(nightModeEnabled)
     }
 

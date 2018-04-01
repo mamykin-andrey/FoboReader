@@ -2,15 +2,15 @@ package ru.mamykin.foboreader.data.storage
 
 import android.content.Context
 import android.content.SharedPreferences
-import ru.mamykin.foboreader.ReaderApp
-import javax.inject.Inject
 
-class PreferencesManager(
-        context: Context
-) : PreferenceNames {
+class PreferencesManager(context: Context) {
+
+    companion object {
+        private const val PREFERENCES_FILE = "foboreader"
+    }
 
     private val sharedPreferences: SharedPreferences = context
-            .getSharedPreferences(PreferenceNames.PREFERENCES_FILE, Context.MODE_PRIVATE)
+            .getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
 
     fun putBoolean(key: String, value: Boolean) {
         val sharedPreferences = sharedPreferences
