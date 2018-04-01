@@ -5,5 +5,5 @@ data class AppSettingsEntity(
         val manualBrightnessEnabled: Boolean,
         val manualBrightnessValue: Int,
         val readTextSize: Int,
-        val dropboxAccount: String
+        val dropboxAccount: String?
 )

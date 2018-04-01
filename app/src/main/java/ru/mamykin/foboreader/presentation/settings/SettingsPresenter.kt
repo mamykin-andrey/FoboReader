@@ -13,33 +13,16 @@ class SettingsPresenter @Inject constructor(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-
         loadSettings()
     }
 
-    fun onNightThemeEnabled(isChecked: Boolean) {
-        interactor.enableNightTheme(isChecked)
-                .subscribe(Throwable::printStackTrace, viewState::restartActivity)
-                .unsubscribeOnDestory()
-    }
+    fun onNightThemeEnabled(isChecked: Boolean) = interactor.enableNightTheme(isChecked)
 
-    fun onAutoBrightnessEnabled(isChecked: Boolean) {
-        interactor.enableAutoBrightness(isChecked)
-                .subscribe(this::displayAutoBrightness, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
-    }
+    fun onAutoBrightnessEnabled(isChecked: Boolean) = interactor.enableAutoBrightness(isChecked)
 
-    fun onBrightnessProgressChanged(progress: Int) {
-        interactor.changeBrightness(progress)
-                .subscribe(Throwable::printStackTrace, viewState::setupBrightness)
-                .unsubscribeOnDestory()
-    }
+    fun onBrightnessProgressChanged(progress: Int) = interactor.changeBrightness(progress)
 
-    fun onDropboxLogoutSelected() {
-        interactor.logoutDropbox()
-                .subscribe({ it.printStackTrace() }, { viewState.setDropboxAccount("") })
-                .unsubscribeOnDestory()
-    }
+    fun onDropboxLogoutSelected() = interactor.logoutDropbox()
 
     private fun loadSettings() {
         interactor.getSettings()

@@ -7,7 +7,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface SettingsView : MvpView {
 
-    fun setDropboxAccount(account: String)
+    fun setDropboxAccount(account: String?)
 
     fun setContentSizeText(size: Int)
 

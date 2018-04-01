@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.domain.settings
 
 import ru.mamykin.foboreader.data.repository.SettingsRepository
-import rx.Completable
 import rx.Single
 import javax.inject.Inject
 
@@ -10,10 +9,10 @@ class SettingsInteractor @Inject constructor(
 ) {
     fun getSettings(): Single<AppSettingsEntity> {
         val nightThemeEnabled = repository.getNightThemeEnabled()
-        val manualBrightnessEnabled = repository.getManualBrightnessEnabled()
         val readTextSize = repository.getBookTextSize()
         val dropboxAccount = repository.getDropboxAccount()
 
+        val manualBrightnessEnabled = repository.getManualBrightnessEnabled()
         val manualBrightnessValue = repository.getManualBrightnessValue()
         val manualBrightnessPercentage = (manualBrightnessValue * 100).toInt()
 
@@ -27,20 +26,14 @@ class SettingsInteractor @Inject constructor(
         return Single.just(appSettings)
     }
 
-    fun enableNightTheme(enable: Boolean): Completable {
-        return repository.enableNightTheme(enable)
-    }
-
-    fun enableAutoBrightness(enable: Boolean): Single<Boolean> {
-        return repository.enableAutoBrightness(enable)
-    }
-
-    fun changeBrightness(percentage: Int): Completable {
+    fun changeBrightness(percentage: Int) {
         val progressValue = percentage / 100f
-        return repository.changeBrightness(progressValue)
+        repository.changeBrightness(progressValue)
     }
 
-    fun logoutDropbox(): Completable {
-        return repository.logoutDropbox()
-    }
+    fun enableNightTheme(enable: Boolean) = repository.enableNightTheme(enable)
+
+    fun enableAutoBrightness(enable: Boolean) = repository.enableAutoBrightness(enable)
+
+    fun logoutDropbox() = repository.logoutDropbox()
 }

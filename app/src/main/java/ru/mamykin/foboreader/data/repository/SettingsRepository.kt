@@ -1,59 +1,46 @@
 package ru.mamykin.foboreader.data.repository
 
+import ru.mamykin.foboreader.data.storage.SettingsStorage
 import ru.mamykin.foboreader.ui.global.UiUtils
-import ru.mamykin.foboreader.data.storage.PreferenceNames
-import ru.mamykin.foboreader.data.storage.PreferencesManager
-import rx.Completable
-import rx.Single
 import javax.inject.Inject
 
 class SettingsRepository @Inject constructor(
-        private val preferencesManager: PreferencesManager
+        private val settingsStorage: SettingsStorage
 ) {
     fun getNightThemeEnabled(): Boolean {
-        return preferencesManager.getBoolean(PreferenceNames.NIGHT_THEME_PREF)
+        return settingsStorage.nightThemeEnabled
     }
 
     fun getManualBrightnessEnabled(): Boolean {
-        return preferencesManager.getBoolean(PreferenceNames.BRIGHTNESS_AUTO_PREF)
+        return settingsStorage.manualBrightnessEnabled
     }
 
     fun getManualBrightnessValue(): Float {
-        return preferencesManager.getFloat(PreferenceNames.BRIGHTNESS_PREF, 1f)
+        return settingsStorage.manualBrightnessValue
     }
 
     fun getBookTextSize(): Int {
-        return preferencesManager.getInt(PreferenceNames.CONTENT_TEXT_SIZE_PREF, 16)
+        return settingsStorage.bookTextSize
     }
 
-    fun getDropboxAccount(): String {
-        return preferencesManager.getString(PreferenceNames.DROPBOX_EMAIL_PREF)!!
-    }
-    
-    fun enableNightTheme(enable: Boolean): Completable {
-        return Completable.fromCallable {
-            UiUtils.enableNightMode(enable)
-            preferencesManager.putBoolean(PreferenceNames.NIGHT_THEME_PREF, enable)
-        }
+    fun getDropboxAccount(): String? {
+        return settingsStorage.dropboxAccount
     }
 
-    fun enableAutoBrightness(enable: Boolean): Single<Boolean> {
-        // TODO: ну такое
-        preferencesManager.putBoolean(PreferenceNames.Companion.BRIGHTNESS_AUTO_PREF, enable)
-        return Single.just(enable)
+    fun enableNightTheme(enable: Boolean) {
+        settingsStorage.nightThemeEnabled = enable
+        UiUtils.enableNightMode(enable)
     }
 
-    fun changeBrightness(value: Float): Completable {
-        return Completable.fromCallable {
-            preferencesManager.putFloat(PreferenceNames.Companion.BRIGHTNESS_PREF, value)
-        }
+    fun enableAutoBrightness(auto: Boolean) {
+        settingsStorage.manualBrightnessEnabled = !auto
     }
 
-    fun logoutDropbox(): Completable {
-        return Completable.fromCallable {
-            preferencesManager.putBoolean(PreferenceNames.Companion.DROPBOX_LOGOUT_PREF, true)
-            preferencesManager.removeValue(PreferenceNames.Companion.DROPBOX_TOKEN_PREF)
-            preferencesManager.removeValue(PreferenceNames.Companion.DROPBOX_EMAIL_PREF)
-        }
+    fun changeBrightness(value: Float) {
+        settingsStorage.manualBrightnessValue = value
+    }
+
+    fun logoutDropbox() {
+        settingsStorage.dropboxAccount = null
     }
 }
