@@ -1,12 +1,12 @@
 package ru.mamykin.foboreader.data.repository
 
 import android.os.Environment
-import com.dropbox.core.android.Auth
+import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.FileMetadata
-import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
+import ru.mamykin.foboreader.data.exception.UserNotAuthorizedException
+import ru.mamykin.foboreader.data.storage.DropboxBooksStorage
 import ru.mamykin.foboreader.entity.DropboxFile
-import ru.mamykin.foboreader.data.storage.PreferenceNames
-import ru.mamykin.foboreader.data.storage.PreferencesManager
+import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
 import rx.Completable
 import rx.Single
 import java.io.File
@@ -14,33 +14,26 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 class DropboxBooksRepository @Inject constructor(
-        private val prefManager: PreferencesManager,
+        private val dropboxBooksStorage: DropboxBooksStorage,
         private val mapper: FolderToFilesListMapper
 ) {
     fun initDropbox(): Completable {
-        var authToken = prefManager.getString(PreferenceNames.DROPBOX_TOKEN_PREF, "")
+        val authToken = dropboxBooksStorage.authToken
         if (authToken?.isNotBlank() == true) {
-            initDropboxClient(authToken)
+            return Completable.fromCallable { initDropboxClient(authToken) }
+        } else {
+            return Completable.error { throw UserNotAuthorizedException() }
         }
-
-        val dropboxLogout = prefManager.getBoolean(PreferenceNames.DROPBOX_LOGOUT_PREF)
-        authToken = Auth.getOAuth2Token()
-        if (!dropboxLogout && authToken?.isNotBlank() == true) {
-            initDropboxClient(authToken)
-        }
-
-        return Completable.error(IllegalAccessException("Dropbox not authorized"))
     }
 
     fun loginDropbox(): Completable {
-        return Completable.fromCallable {
-            prefManager.removeValue(PreferenceNames.DROPBOX_LOGOUT_PREF)
-        }
+        dropboxBooksStorage.dropboxLogouted = true
+        return Completable.complete()
     }
 
     fun getFiles(directory: String): Single<List<DropboxFile>> {
-        val folderListResult = DropboxClientFactory.client.files().listFolder(directory)
-        return Single.just(folderListResult).map(mapper::transform)
+        val folder = getClient().files().listFolder(directory)
+        return Single.just(folder).map(mapper::transform)
     }
 
     fun downloadFile(file: DropboxFile): Single<String> {
@@ -48,20 +41,22 @@ class DropboxBooksRepository @Inject constructor(
             val fileMetadata = file.file as FileMetadata
             val downloadsDir = createDownloadsDir()
             val loadedFile = File(downloadsDir, file.name)
-
             val outputStream = FileOutputStream(loadedFile)
-            DropboxClientFactory.client
-                    .files()
+
+            getClient().files()
                     .download(file.pathLower, fileMetadata.rev)
                     .download(outputStream)
+
             return@fromCallable loadedFile.absolutePath
         }
     }
 
     fun getAccountInfo(): Single<String> {
-        val account = DropboxClientFactory.client.users().currentAccount
+        val account = getClient().users().currentAccount
         return Single.just(account.email)
     }
+
+    private fun getClient(): DbxClientV2 = DropboxClientFactory.client
 
     private fun initDropboxClient(authToken: String) {
         DropboxClientFactory.init(authToken)

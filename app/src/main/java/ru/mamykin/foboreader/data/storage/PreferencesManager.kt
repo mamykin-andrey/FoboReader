@@ -28,13 +28,13 @@ class PreferencesManager(
         return sharedPreferences.getBoolean(key, false)
     }
 
-    fun putString(key: String, value: String) {
+    fun putString(key: String, value: String?) {
         val sharedPreferences = sharedPreferences
         val editor = sharedPreferences.edit()
         editor.putString(key, value).apply()
     }
 
-    fun getString(key: String, defValue: String): String? {
+    fun getString(key: String, defValue: String?): String? {
         val sharedPreferences = sharedPreferences
         return sharedPreferences.getString(key, defValue)
     }
