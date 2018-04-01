@@ -9,7 +9,8 @@ import javax.inject.Singleton
     AppModule::class,
     NetworkModule::class,
     DatabaseModule::class,
-    PreferencesModule::class
+    PreferencesModule::class,
+    RepositoryModule::class
 ])
 @Singleton
 interface AppComponent {
