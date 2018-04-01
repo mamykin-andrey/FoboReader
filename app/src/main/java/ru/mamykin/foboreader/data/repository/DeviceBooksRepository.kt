@@ -2,12 +2,14 @@ package ru.mamykin.foboreader.data.repository
 
 import android.os.Environment
 import ru.mamykin.foboreader.entity.AndroidFile
+import ru.mamykin.foboreader.entity.mapper.FileToAndroidFileMapper
 import rx.Single
 import java.io.File
 import javax.inject.Inject
 
-class DeviceBooksRepository @Inject constructor() {
-
+class DeviceBooksRepository @Inject constructor(
+        private val mapper: FileToAndroidFileMapper
+) {
     fun getRootDirectory(): String {
         return Environment.getExternalStorageDirectory().absolutePath
     }
@@ -15,7 +17,7 @@ class DeviceBooksRepository @Inject constructor() {
     fun getFiles(path: String): Single<List<AndroidFile>> {
         val dir = File(path)
         return Single.just(dir.listFiles())
-                .map { it.map(::AndroidFile) }
+                .map(mapper::transform)
     }
 
     fun canReadDirectory(path: String): Single<Boolean> {
