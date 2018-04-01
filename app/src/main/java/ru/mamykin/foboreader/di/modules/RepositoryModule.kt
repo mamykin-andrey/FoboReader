@@ -44,8 +44,8 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideStoreBooksRepository(booksStoreService: BooksStoreService): StoreBooksRepository {
-        return StoreBooksRepository(booksStoreService)
+    fun provideStoreBooksRepository(booksStoreService: BooksStoreService): BooksStoreRepository {
+        return BooksStoreRepository(booksStoreService)
     }
 
     @Provides
