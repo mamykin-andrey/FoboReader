@@ -17,7 +17,10 @@ ext {
     picassoVersion = '2.5.2'
     ormliteVersion = '4.48'
     dropboxCoreSdkVersion = '2.1.1'
+    mockitoVersion = '2.13.0'
+    mockitoKotlinVersion = '1.5.0'
     junitVersion = '4.12'
+    kluentVersion = '1.35'
     espressoCoreVersion = '2.2.2'
 }
 
@@ -90,6 +93,9 @@ dependencies {
     }
 
     testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
+    testImplementation "org.amshove.kluent:kluent:$kluentVersion"
 
     androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoCoreVersion")
 }

@@ -1,22 +1,37 @@
 package ru.mamykin.foboreader.data.repository
 
-import org.junit.Assert.assertEquals
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
+import ru.mamykin.foboreader.entity.FictionBook
 
 class BooksRepositoryTest {
 
-    private lateinit var repository: BooksRepository
+    @Mock
+    lateinit var bookDao: BookDao
+    @Mock
+    lateinit var mockBook: FictionBook
+
+    val bookId = 1
+
+    lateinit var repository: BooksRepository
 
     @Before
-    fun setUp(){
-        //repository = BooksRepository()
+    fun setUp() {
+        MockitoAnnotations.initMocks(this)
+        repository = BooksRepository(bookDao)
     }
 
     @Test
-    @Throws(Exception::class)
-    fun addition_isCorrect() {
-        assertEquals(4, (2 + 2).toLong())
+    fun getBookInfo_returnsBookInfo_fromBookDao() {
+        whenever(bookDao.getBook(bookId)).thenReturn(mockBook)
+
+        val testObserver = repository.getBookInfo(bookId).test()
+
+        testObserver.assertCompleted().assertValue(mockBook)
     }
 }
