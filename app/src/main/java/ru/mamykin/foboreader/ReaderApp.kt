@@ -4,7 +4,7 @@ import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
-import ru.mamykin.foboreader.data.storage.SettingsStorage
+import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
 import ru.mamykin.foboreader.di.component.AppComponent
 import ru.mamykin.foboreader.di.component.DaggerAppComponent
 import ru.mamykin.foboreader.di.modules.AppModule

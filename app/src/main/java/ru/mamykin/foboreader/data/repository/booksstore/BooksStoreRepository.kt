@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.repository
+package ru.mamykin.foboreader.data.repository.booksstore
 
 import ru.mamykin.foboreader.data.network.BooksStoreService
 import ru.mamykin.foboreader.entity.StoreBook

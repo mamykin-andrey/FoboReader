@@ -1,6 +1,5 @@
-package ru.mamykin.foboreader.data.repository
+package ru.mamykin.foboreader.data.repository.settings
 
-import ru.mamykin.foboreader.data.storage.SettingsStorage
 import ru.mamykin.foboreader.ui.global.UiUtils
 import javax.inject.Inject
 

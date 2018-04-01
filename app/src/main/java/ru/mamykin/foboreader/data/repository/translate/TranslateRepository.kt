@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.repository
+package ru.mamykin.foboreader.data.repository.translate
 
 import android.content.Context
 import ru.mamykin.foboreader.R

@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.repository
+package ru.mamykin.foboreader.data.repository.dropboxbooks
 
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.http.OkHttp3Requestor

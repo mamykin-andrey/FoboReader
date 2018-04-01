@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.domain.settings
 
-import ru.mamykin.foboreader.data.repository.SettingsRepository
+import ru.mamykin.foboreader.data.repository.settings.SettingsRepository
 import rx.Single
 import javax.inject.Inject
 

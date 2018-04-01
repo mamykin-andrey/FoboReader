@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.repository
+package ru.mamykin.foboreader.data.repository.devicebooks
 
 import android.os.Environment
 import ru.mamykin.foboreader.entity.AndroidFile

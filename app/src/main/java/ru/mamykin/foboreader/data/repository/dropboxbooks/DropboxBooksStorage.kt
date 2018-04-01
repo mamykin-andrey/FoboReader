@@ -1,5 +1,6 @@
-package ru.mamykin.foboreader.data.storage
+package ru.mamykin.foboreader.data.repository.dropboxbooks
 
+import ru.mamykin.foboreader.data.storage.PreferencesManager
 import javax.inject.Inject
 
 class DropboxBooksStorage @Inject constructor(

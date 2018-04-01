@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.repository
+package ru.mamykin.foboreader.data.repository.books
 
 import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.entity.FictionBook

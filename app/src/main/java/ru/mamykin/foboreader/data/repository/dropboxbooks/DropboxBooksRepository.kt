@@ -1,10 +1,9 @@
-package ru.mamykin.foboreader.data.repository
+package ru.mamykin.foboreader.data.repository.dropboxbooks
 
 import android.os.Environment
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.FileMetadata
 import ru.mamykin.foboreader.data.exception.UserNotAuthorizedException
-import ru.mamykin.foboreader.data.storage.DropboxBooksStorage
 import ru.mamykin.foboreader.entity.DropboxFile
 import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
 import rx.Completable

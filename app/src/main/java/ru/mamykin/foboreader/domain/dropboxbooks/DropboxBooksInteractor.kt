@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.domain.dropboxbooks
 
 import ru.mamykin.foboreader.entity.DropboxFile
-import ru.mamykin.foboreader.data.repository.DropboxBooksRepository
+import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksRepository
 import rx.Completable
 import rx.Single
 import javax.inject.Inject
