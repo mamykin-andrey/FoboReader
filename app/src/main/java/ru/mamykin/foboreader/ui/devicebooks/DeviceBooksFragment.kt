@@ -56,13 +56,15 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val contentView = inflater.inflate(R.layout.fragment_device_books, container, false)
+        return inflater.inflate(R.layout.fragment_device_books, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         adapter = FilesRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
         UiUtils.setupRecyclerView(context!!, rvFiles!!, adapter, LinearLayoutManager(context), true)
         btnUpDir.setOnClickListener { presenter.onParentDirectoryClicked() }
-
-        return contentView
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

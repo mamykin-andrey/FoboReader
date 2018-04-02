@@ -13,9 +13,9 @@ class DropboxBooksPresenter @Inject constructor(
         private val router: DropboxBooksRouter
 ) : BasePresenter<DropboxView>() {
 
-    override fun attachView(view: DropboxView) {
-        super.attachView(view)
-        initDropbox()
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        loadRootFiles()
     }
 
     fun onLoginClicked() {
@@ -42,15 +42,9 @@ class DropboxBooksPresenter @Inject constructor(
                 .unsubscribeOnDestory()
     }
 
-    private fun initDropbox() {
-        interactor.initDropbox()
-                .subscribe({ showAuth() }, { loadRootFiles() })
-                .unsubscribeOnDestory()
-    }
-
     private fun loadRootFiles() {
         interactor.openRootDirectory()
-                .subscribe(this::displayFiles, Throwable::printStackTrace)
+                .subscribe({ displayFiles(it) }, { showAuth() })
                 .unsubscribeOnDestory()
     }
 

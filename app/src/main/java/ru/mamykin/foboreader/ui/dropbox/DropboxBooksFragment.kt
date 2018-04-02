@@ -8,8 +8,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_dropbox_books.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.entity.DropboxFile
 import ru.mamykin.foboreader.di.modules.DropboxBooksModule
+import ru.mamykin.foboreader.entity.DropboxFile
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.dropbox.DropboxBooksPresenter
 import ru.mamykin.foboreader.presentation.dropbox.DropboxView
@@ -55,15 +55,17 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val contentView = inflater.inflate(R.layout.fragment_dropbox_books, container, false)
+        return inflater.inflate(R.layout.fragment_dropbox_books, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         adapter = DropboxRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), true)
 
         btnLogin.setOnClickListener { presenter.onLoginClicked() }
         ibUp.setOnClickListener { presenter.onParentDirectoryClicked() }
-
-        return contentView
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

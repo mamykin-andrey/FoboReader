@@ -78,29 +78,17 @@ class MainActivity : BaseActivity() {
 
     private fun onNavigationItemSelected(item: MenuItem): Boolean {
         drawerLayout.closeDrawer(GravityCompat.START)
+
         when (item.itemId) {
-            R.id.menu_my_books -> {
-                viewpager.currentItem = MY_BOOKS_FRAGMENT_POS
-                return true
-            }
-            R.id.menu_device -> {
-                viewpager.currentItem = DEVICE_BOOKS_FRAGMENT_POS
-                return true
-            }
-            R.id.menu_dropbox -> {
-                viewpager.currentItem = DROPBOX_BOOKS_FRAGMENT_POS
-                return true
-            }
-            R.id.menu_settings -> {
-                startActivity(SettingsActivity.getStartIntent(this))
-                return true
-            }
-            R.id.menu_exit -> {
-                startActivity(MainActivity.getHomeIntent())
-                return true
-            }
+            R.id.menu_my_books -> viewpager.currentItem = MY_BOOKS_FRAGMENT_POS
+            R.id.menu_device -> viewpager.currentItem = DEVICE_BOOKS_FRAGMENT_POS
+            R.id.menu_dropbox -> viewpager.currentItem = DROPBOX_BOOKS_FRAGMENT_POS
+            R.id.menu_settings -> startActivity(SettingsActivity.getStartIntent(this))
+            R.id.menu_exit -> startActivity(MainActivity.getHomeIntent())
             else -> return super.onOptionsItemSelected(item)
         }
+
+        return true
     }
 
     private fun setupDrawerLayout() {

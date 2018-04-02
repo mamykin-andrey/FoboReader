@@ -41,7 +41,7 @@ class MyBooksFragment : BaseFragment(), MyBooksView,
     private lateinit var adapter: BooksRecyclerAdapter
 
     @ProvidePresenter
-    fun providePresenter() = presenter
+    fun providePresenter(): MyBooksPresenter = presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +56,14 @@ class MyBooksFragment : BaseFragment(), MyBooksView,
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val contentView = inflater.inflate(R.layout.fragment_my_books, container, false)
+        return inflater.inflate(R.layout.fragment_my_books, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         adapter = BooksRecyclerAdapter(this)
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), false)
-
-        return contentView
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
@@ -74,22 +76,14 @@ class MyBooksFragment : BaseFragment(), MyBooksView,
         inflater!!.inflate(R.menu.menu_books_list, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
-            R.id.actionSortName -> {
-                presenter.onSortByNameSelected()
-                return true
-            }
-            R.id.actionSortReaded -> {
-                presenter.onSortByReadedSelected()
-                return true
-            }
-            R.id.actionSortDate -> {
-                presenter.onSortByDateSelected()
-                return true
-            }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.actionSortName -> presenter.onSortByNameSelected()
+            R.id.actionSortReaded -> presenter.onSortByReadedSelected()
+            R.id.actionSortDate -> presenter.onSortByDateSelected()
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun onBookClicked(position: Int) {

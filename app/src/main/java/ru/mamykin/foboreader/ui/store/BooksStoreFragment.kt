@@ -52,13 +52,17 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val contentView = inflater.inflate(R.layout.fragment_main_store, container, false)
+
+        return inflater.inflate(R.layout.fragment_main_store, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         srlRefresh.setOnRefreshListener { presenter.loadBooks() }
 
         adapter = BooksStoreRecyclerAdapter()
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), false)
-
-        return contentView
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

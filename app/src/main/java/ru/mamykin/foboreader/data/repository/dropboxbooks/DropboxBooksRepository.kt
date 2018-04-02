@@ -17,22 +17,19 @@ class DropboxBooksRepository @Inject constructor(
         private val dropboxBooksStorage: DropboxBooksStorage,
         private val mapper: FolderToFilesListMapper
 ) {
-    fun initDropbox(): Completable {
-        val authToken = dropboxBooksStorage.authToken
-        if (authToken?.isNotBlank() == true) {
-            return Completable.fromCallable { initDropboxClient(authToken) }
-        } else {
-            return Completable.error { throw UserNotAuthorizedException() }
-        }
-    }
-
     fun loginDropbox() {
         clientFactory.getClient().auth()
     }
 
+    fun getRootDirectoryFiles(): Single<List<DropboxFile>> {
+        return initDropbox().andThen(getFiles(""))
+    }
+
     fun getFiles(directory: String): Single<List<DropboxFile>> {
-        val folder = getClient().files().listFolder(directory)
-        return Single.just(folder).map(mapper::transform)
+        return Single.fromCallable {
+            val folder = getClient().files().listFolder(directory)
+            return@fromCallable mapper.transform(folder)
+        }
     }
 
     fun downloadFile(file: DropboxFile): Single<String> {
@@ -55,11 +52,16 @@ class DropboxBooksRepository @Inject constructor(
         return Single.just(account.email)
     }
 
-    private fun getClient(): DbxClientV2 = clientFactory.getClient()
-
-    private fun initDropboxClient(authToken: String) {
-        clientFactory.init(authToken)
+    private fun initDropbox(): Completable {
+        val authToken = dropboxBooksStorage.authToken
+        if (authToken?.isNotBlank() == true) {
+            return Completable.fromAction { clientFactory.init(authToken) }
+        } else {
+            return Completable.error(UserNotAuthorizedException())
+        }
     }
+
+    private fun getClient(): DbxClientV2 = clientFactory.getClient()
 
     private fun createDownloadsDir(): File {
         val downloadsDir = Environment

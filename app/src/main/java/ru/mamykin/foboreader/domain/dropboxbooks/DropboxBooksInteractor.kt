@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.domain.dropboxbooks
 
 import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksRepository
 import ru.mamykin.foboreader.entity.DropboxFile
-import rx.Completable
 import rx.Single
 import javax.inject.Inject
 
@@ -11,17 +10,12 @@ class DropboxBooksInteractor @Inject constructor(
 ) {
     private var currentDir: String = ""
 
-    fun initDropbox(): Completable {
-        return repository.initDropbox()
-    }
-
     fun login() {
         return repository.loginDropbox()
     }
 
-    fun openDirectory(directory: DropboxFile): Single<List<DropboxFile>> {
-        currentDir = directory.pathLower
-        return repository.getFiles(currentDir)
+    fun openRootDirectory(): Single<List<DropboxFile>> {
+        return repository.getRootDirectoryFiles()
     }
 
     fun openParentDirectory(): Single<List<DropboxFile>> {
@@ -29,16 +23,17 @@ class DropboxBooksInteractor @Inject constructor(
         return repository.getFiles(currentDir)
     }
 
-    fun downloadFile(file: DropboxFile): Single<String> {
-        return repository.downloadFile(file)
+    fun openDirectory(directory: DropboxFile): Single<List<DropboxFile>> {
+        currentDir = directory.pathLower
+        return repository.getFiles(currentDir)
     }
 
     fun loadAccountInfo(): Single<String> {
         return repository.getAccountInfo()
     }
 
-    fun openRootDirectory(): Single<List<DropboxFile>> {
-        return repository.getFiles("")
+    fun downloadFile(file: DropboxFile): Single<String> {
+        return repository.downloadFile(file)
     }
 
     private fun formatParentDirectory(directoryPath: String): String {
