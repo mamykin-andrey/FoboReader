@@ -1,40 +1,34 @@
 package ru.mamykin.foboreader.domain.devicebooks
 
-import ru.mamykin.foboreader.entity.AndroidFile
 import ru.mamykin.foboreader.data.repository.devicebooks.DeviceBooksRepository
+import ru.mamykin.foboreader.entity.AndroidFile
+import ru.mamykin.foboreader.extension.getWeight
 import rx.Single
-import java.util.*
 import javax.inject.Inject
 
 class DeviceBooksInteractor @Inject constructor(
         private val repository: DeviceBooksRepository
 ) {
-    private var currentDir: String = ""
+    private var currentDirectory: String = ""
 
-    fun getRootDirectoryFiles(): Single<FileStructureEntity> {
-        val rootDirectory = repository.getRootDirectory()
-        return repository.getFiles(rootDirectory)
-                .doOnSuccess(this::sortFiles)
-                .zipWith(repository.canReadDirectory(rootDirectory), { files, canRead ->
-                    Pair(files, canRead)
-                })
-                .map { FileStructureEntity(it.first, it.second, currentDir) }
+    fun openDirectory(directory: String): Single<FileStructureEntity> {
+        this.currentDirectory = directory
+        val parentDirectory = formatParentDirectory(currentDirectory)
+
+        return repository.getFiles(currentDirectory)
+                .map { it.sortedBy(AndroidFile::getWeight) }
+                .zipWith(repository.canReadDirectory(parentDirectory), { f, c -> Pair(f, c) })
+                .map { FileStructureEntity(it.first, it.second, currentDirectory) }
     }
 
-    fun getFiles(currentDir: String): Single<FileStructureEntity> {
-        this.currentDir = currentDir
-
-        val parentDirectory = formatParentDirectory(currentDir)
-        return repository.getFiles(currentDir)
-                .doOnSuccess(this::sortFiles)
-                .zipWith(repository.canReadDirectory(parentDirectory), { files, canRead ->
-                    Pair(files, canRead)
-                })
-                .map { FileStructureEntity(it.first, it.second, currentDir) }
+    fun openRootDirectory(): Single<FileStructureEntity> {
+        this.currentDirectory = repository.getRootDirectory()
+        return openDirectory(currentDirectory)
     }
 
     fun openParentDirectory(): Single<FileStructureEntity> {
-        return getFiles(formatParentDirectory(currentDir))
+        this.currentDirectory = formatParentDirectory(currentDirectory)
+        return openDirectory(currentDirectory)
     }
 
     fun openFile(file: AndroidFile): Single<String> {
@@ -44,24 +38,7 @@ class DeviceBooksInteractor @Inject constructor(
         return Single.just(file.absolutePath)
     }
 
-    fun openDirectory(dir: AndroidFile): Single<String> {
-        if (!dir.canRead()) {
-            return Single.error(IllegalArgumentException())
-        }
-        return Single.just(dir.absolutePath)
-    }
-
-    private fun sortFiles(files: List<AndroidFile>) {
-        Collections.sort(files, { f1, f2 -> getFileWeight(f2) - getFileWeight(f1) })
-    }
-
     private fun formatParentDirectory(dir: String): String {
-        return dir.substring(0, currentDir.lastIndexOf("/"))
-    }
-
-    private fun getFileWeight(file: AndroidFile) = when {
-        file.isDirectory -> 2
-        file.isFictionBook -> 1
-        else -> 0
+        return dir.substring(0, currentDirectory.lastIndexOf("/"))
     }
 }

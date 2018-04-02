@@ -60,7 +60,7 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
 
         adapter = FilesRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
         UiUtils.setupRecyclerView(context!!, rvFiles!!, adapter, LinearLayoutManager(context), true)
-        btnUpDir.setOnClickListener { presenter.onUpDirClicked() }
+        btnUpDir.setOnClickListener { presenter.onParentDirectoryClicked() }
 
         return contentView
     }

@@ -1,9 +1,9 @@
 package ru.mamykin.foboreader.presentation.devicebooks
 
 import com.arellomobile.mvp.InjectViewState
-import ru.mamykin.foboreader.entity.AndroidFile
 import ru.mamykin.foboreader.domain.devicebooks.DeviceBooksInteractor
 import ru.mamykin.foboreader.domain.devicebooks.FileStructureEntity
+import ru.mamykin.foboreader.entity.AndroidFile
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksRouter
 import javax.inject.Inject
@@ -26,26 +26,20 @@ class DeviceBooksPresenter @Inject constructor(
     }
 
     fun onDirectoryClicked(dir: AndroidFile) {
-        interactor.openDirectory(dir)
-                .subscribe({ loadFiles(it) }, { viewState.showPermissionMessage() })
+        interactor.openDirectory(dir.absolutePath)
+                .subscribe({ showFiles(it) }, { viewState.showPermissionMessage() })
                 .unsubscribeOnDestory()
     }
 
-    fun onUpDirClicked() {
+    fun onParentDirectoryClicked() {
         interactor.openParentDirectory()
-                .subscribe(this::showFiles)
+                .subscribe({ showFiles(it) }, { viewState.showPermissionMessage() })
                 .unsubscribeOnDestory()
     }
 
     private fun loadRootDirectoryFiles() {
-        interactor.getRootDirectoryFiles()
-                .subscribe(this::showFiles, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
-    }
-
-    private fun loadFiles(currentDir: String) {
-        interactor.getFiles(currentDir)
-                .subscribe(this::showFiles)
+        interactor.openRootDirectory()
+                .subscribe({ showFiles(it) }, { viewState.showPermissionMessage() })
                 .unsubscribeOnDestory()
     }
 
