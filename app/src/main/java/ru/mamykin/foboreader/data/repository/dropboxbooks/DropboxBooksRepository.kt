@@ -13,6 +13,7 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 class DropboxBooksRepository @Inject constructor(
+        private val clientFactory: DropboxClientFactory,
         private val dropboxBooksStorage: DropboxBooksStorage,
         private val mapper: FolderToFilesListMapper
 ) {
@@ -26,7 +27,7 @@ class DropboxBooksRepository @Inject constructor(
     }
 
     fun loginDropbox() {
-        dropboxBooksStorage.authToken = null
+        clientFactory.getClient().auth()
     }
 
     fun getFiles(directory: String): Single<List<DropboxFile>> {
@@ -54,10 +55,10 @@ class DropboxBooksRepository @Inject constructor(
         return Single.just(account.email)
     }
 
-    private fun getClient(): DbxClientV2 = DropboxClientFactory.client
+    private fun getClient(): DbxClientV2 = clientFactory.getClient()
 
     private fun initDropboxClient(authToken: String) {
-        DropboxClientFactory.init(authToken)
+        clientFactory.init(authToken)
     }
 
     private fun createDownloadsDir(): File {
