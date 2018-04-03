@@ -9,13 +9,13 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_device_books.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.di.modules.DeviceBooksModule
-import ru.mamykin.foboreader.entity.AndroidFile
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksPresenter
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksView
 import ru.mamykin.foboreader.ui.devicebooks.list.FilesRecyclerAdapter
 import ru.mamykin.foboreader.ui.global.BaseFragment
 import ru.mamykin.foboreader.ui.global.UiUtils
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -78,7 +78,7 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
         UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, this)
     }
 
-    override fun showFiles(files: List<AndroidFile>) {
+    override fun showFiles(files: List<File>) {
         adapter.changeData(files)
     }
 

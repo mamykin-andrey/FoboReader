@@ -1,9 +1,9 @@
 package ru.mamykin.foboreader.domain.devicebooks
 
-import ru.mamykin.foboreader.entity.AndroidFile
+import java.io.File
 
 data class FileStructureEntity(
-        val files: List<AndroidFile>,
+        val files: List<File>,
         val isUpDirAvailable: Boolean,
         val currentDIr: String
 )

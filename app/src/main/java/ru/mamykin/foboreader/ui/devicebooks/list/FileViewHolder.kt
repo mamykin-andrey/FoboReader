@@ -4,7 +4,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_file.view.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.entity.AndroidFile
+import ru.mamykin.foboreader.extension.attributes
+import ru.mamykin.foboreader.extension.isFictionBook
+import java.io.File
 
 class FileViewHolder(itemView: View,
                      onItemClickFunc: (Int) -> Unit
@@ -14,7 +16,7 @@ class FileViewHolder(itemView: View,
         itemView.setOnClickListener { onItemClickFunc(adapterPosition) }
     }
 
-    fun bind(file: AndroidFile) {
+    fun bind(file: File) {
         itemView.tvFileName.text = file.name
         if (file.isDirectory) {
             itemView.ivFileType.setImageResource(R.drawable.ic_folder)
