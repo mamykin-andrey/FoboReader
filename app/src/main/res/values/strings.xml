@@ -90,4 +90,5 @@
     <string name="mail" translatable="false">mamykin.av@bk.ru</string>
     <string name="fbwt_format">fbwt</string>
     <string name="download_on">%1$s, скачать на %2$s</string>
+    <string name="wrong_file_format">Неподдерживаемый формат файла</string>
 </resources>

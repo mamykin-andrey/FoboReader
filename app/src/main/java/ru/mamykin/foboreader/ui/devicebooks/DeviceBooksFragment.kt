@@ -8,8 +8,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_device_books.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.entity.AndroidFile
 import ru.mamykin.foboreader.di.modules.DeviceBooksModule
+import ru.mamykin.foboreader.entity.AndroidFile
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksPresenter
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksView
@@ -45,12 +45,13 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
     }
 
     override fun injectDependencies() {
+        super.injectDependencies()
         val module = DeviceBooksModule(DeviceBooksRouter(activity!!))
         getAppComponent().getDeviceBooksComponent(module).inject(this)
     }
 
     @ProvidePresenter
-    fun provideDeviceBooksPresenter() = presenter
+    fun provideDeviceBooksPresenter(): DeviceBooksPresenter = presenter
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -85,8 +86,12 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
         tvCurrentDir.text = currentDir
     }
 
-    override fun showPermissionMessage() {
+    override fun showPermissionError() {
         UiUtils.showToast(context!!, R.string.permission_denied)
+    }
+
+    override fun showBookFormatError() {
+        UiUtils.showToast(context!!, getString(R.string.wrong_file_format))
     }
 
     override fun showUpDir(show: Boolean) {

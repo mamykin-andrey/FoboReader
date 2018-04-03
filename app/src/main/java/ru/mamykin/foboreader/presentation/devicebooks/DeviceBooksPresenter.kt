@@ -1,8 +1,10 @@
 package ru.mamykin.foboreader.presentation.devicebooks
 
 import com.arellomobile.mvp.InjectViewState
+import ru.mamykin.foboreader.domain.devicebooks.AccessDeniedException
 import ru.mamykin.foboreader.domain.devicebooks.DeviceBooksInteractor
 import ru.mamykin.foboreader.domain.devicebooks.FileStructureEntity
+import ru.mamykin.foboreader.domain.devicebooks.UnknownBookFormatException
 import ru.mamykin.foboreader.entity.AndroidFile
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksRouter
@@ -21,26 +23,33 @@ class DeviceBooksPresenter @Inject constructor(
 
     fun onFileClicked(file: AndroidFile) {
         interactor.openFile(file)
-                .subscribe({ router.openBook(it) }, { viewState.showPermissionMessage() })
+                .subscribe(router::openBook, this::showOpenFileError)
                 .unsubscribeOnDestory()
     }
 
     fun onDirectoryClicked(dir: AndroidFile) {
         interactor.openDirectory(dir.absolutePath)
-                .subscribe({ showFiles(it) }, { viewState.showPermissionMessage() })
+                .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
                 .unsubscribeOnDestory()
     }
 
     fun onParentDirectoryClicked() {
         interactor.openParentDirectory()
-                .subscribe({ showFiles(it) }, { viewState.showPermissionMessage() })
+                .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
                 .unsubscribeOnDestory()
     }
 
     private fun loadRootDirectoryFiles() {
         interactor.openRootDirectory()
-                .subscribe({ showFiles(it) }, { viewState.showPermissionMessage() })
+                .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
                 .unsubscribeOnDestory()
+    }
+
+    private fun showOpenFileError(error: Throwable) {
+        when (error) {
+            is AccessDeniedException -> viewState.showPermissionError()
+            is UnknownBookFormatException -> viewState.showBookFormatError()
+        }
     }
 
     private fun showFiles(structure: FileStructureEntity) {

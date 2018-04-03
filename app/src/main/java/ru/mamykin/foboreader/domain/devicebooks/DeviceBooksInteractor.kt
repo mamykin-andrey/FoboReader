@@ -31,11 +31,10 @@ class DeviceBooksInteractor @Inject constructor(
         return openDirectory(currentDirectory)
     }
 
-    fun openFile(file: AndroidFile): Single<String> {
-        if (!file.canRead()) {
-            return Single.error(IllegalArgumentException())
-        }
-        return Single.just(file.absolutePath)
+    fun openFile(file: AndroidFile): Single<String> = when {
+        !file.canRead() -> Single.error(AccessDeniedException())
+        !file.isFictionBook -> Single.error(UnknownBookFormatException())
+        else -> Single.just(file.absolutePath)
     }
 
     private fun formatParentDirectory(dir: String): String {

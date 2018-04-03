@@ -13,7 +13,9 @@ interface DeviceBooksView : MvpView {
 
     fun showCurrentDir(currentDir: String)
 
-    fun showPermissionMessage()
+    fun showPermissionError()
+
+    fun showBookFormatError()
 
     fun showUpDir(show: Boolean)
 }
