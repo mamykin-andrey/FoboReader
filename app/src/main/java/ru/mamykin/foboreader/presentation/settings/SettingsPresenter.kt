@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.presentation.settings
 
 import com.arellomobile.mvp.InjectViewState
-import ru.mamykin.foboreader.domain.settings.AppSettingsEntity
 import ru.mamykin.foboreader.domain.settings.SettingsInteractor
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import javax.inject.Inject
@@ -13,33 +12,35 @@ class SettingsPresenter @Inject constructor(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        loadSettings()
+        showSettings()
     }
 
-    fun onNightThemeEnabled(isChecked: Boolean) = interactor.enableNightTheme(isChecked)
-
-    fun onAutoBrightnessEnabled(isChecked: Boolean) = interactor.enableAutoBrightness(isChecked)
-
-    fun onBrightnessProgressChanged(progress: Int) = interactor.changeBrightness(progress)
-
-    fun onDropboxLogoutSelected() = interactor.logoutDropbox()
-
-    private fun loadSettings() {
-        interactor.getSettings()
-                .subscribe(this::displaySettings, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+    fun onNightThemeEnabled(isChecked: Boolean) {
+        interactor.enableNightTheme(isChecked)
     }
 
-    private fun displaySettings(appSettings: AppSettingsEntity) {
-        viewState.setNightThemeEnabled(appSettings.nightThemeEnabled)
-        viewState.setAutoBrightnessChecked(!appSettings.manualBrightnessEnabled)
-        viewState.setBrightnessControlEnabled(appSettings.manualBrightnessEnabled)
-        viewState.setBrightnessPos(appSettings.manualBrightnessValue)
-        viewState.setContentSizeText(appSettings.readTextSize)
-        viewState.setDropboxAccount(appSettings.dropboxAccount)
+    fun onAutoBrightnessEnabled(isChecked: Boolean) {
+        interactor.enableAutoBrightness(isChecked)
     }
 
-    private fun displayAutoBrightness(enabled: Boolean) {
+    fun onBrightnessProgressChanged(progress: Int) {
+        interactor.changeBrightness(progress)
+    }
+
+    fun onDropboxLogoutSelected() {
+        interactor.logoutDropbox()
+    }
+
+    private fun showSettings() {
+        viewState.setNightThemeEnabled(interactor.isNightThemeEnabled())
+        viewState.setAutoBrightnessChecked(!interactor.isManualBrightnessEnabled())
+        viewState.setBrightnessControlEnabled(interactor.isManualBrightnessEnabled())
+        viewState.setBrightnessPos(interactor.getManualBrightnessValue())
+        viewState.setContentSizeText(interactor.getReadTextSize())
+        viewState.setDropboxAccount(interactor.getDropboxAccount())
+    }
+
+    private fun showAutoBrightness(enabled: Boolean) {
         viewState.setAutoBrightnessChecked(enabled)
         viewState.setBrightnessControlEnabled(!enabled)
         viewState.setupBrightness()

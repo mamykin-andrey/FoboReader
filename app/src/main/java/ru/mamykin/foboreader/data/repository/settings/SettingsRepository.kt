@@ -6,11 +6,11 @@ import javax.inject.Inject
 class SettingsRepository @Inject constructor(
         private val settingsStorage: SettingsStorage
 ) {
-    fun getNightThemeEnabled(): Boolean {
+    fun isNightThemeEnabled(): Boolean {
         return settingsStorage.nightThemeEnabled
     }
 
-    fun getManualBrightnessEnabled(): Boolean {
+    fun isManualBrightnessEnabled(): Boolean {
         return settingsStorage.manualBrightnessEnabled
     }
 
