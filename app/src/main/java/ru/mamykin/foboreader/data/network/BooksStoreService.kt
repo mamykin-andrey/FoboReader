@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.data.network
 
 import retrofit2.http.GET
-import ru.mamykin.foboreader.entity.StoreBook
+import ru.mamykin.foboreader.entity.BooksStoreResponse
 import rx.Single
 
 interface BooksStoreService {
@@ -11,5 +11,5 @@ interface BooksStoreService {
     }
 
     @GET("v2/592995eb11000014010828ee")
-    fun getBooks(): Single<List<StoreBook>>
+    fun getBooks(): Single<BooksStoreResponse>
 }

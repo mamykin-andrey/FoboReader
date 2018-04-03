@@ -2,6 +2,8 @@ package ru.mamykin.foboreader.presentation.store
 
 import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foboreader.domain.booksstore.BooksStoreInteractor
+import ru.mamykin.foboreader.entity.BooksStoreResponse
+import ru.mamykin.foboreader.extension.applySchedulers
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import javax.inject.Inject
 
@@ -19,8 +21,13 @@ class BooksStorePresenter @Inject constructor(
         interactor.getBooks()
                 .doOnSubscribe { viewState.showLoading(true) }
                 .doAfterTerminate { viewState.showLoading(false) }
-                .subscribe(viewState::showBooks, this::displayLoadingError)
+                .applySchedulers()
+                .subscribe(this::showStoreInfo, this::displayLoadingError)
                 .unsubscribeOnDestory()
+    }
+
+    private fun showStoreInfo(response: BooksStoreResponse) {
+        viewState.showBooks(response.featured[0].books)
     }
 
     private fun displayLoadingError(e: Throwable) {

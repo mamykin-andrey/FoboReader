@@ -39,7 +39,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
     private lateinit var adapter: BooksStoreRecyclerAdapter
 
     @ProvidePresenter
-    fun providePresenter() = presenter
+    fun providePresenter(): BooksStorePresenter = presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +47,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
     }
 
     override fun injectDependencies() {
+        super.injectDependencies()
         getAppComponent().getBooksStoreComponent().inject(this)
     }
 

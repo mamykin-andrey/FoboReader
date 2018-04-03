@@ -28,12 +28,12 @@ class BooksStoreRepositoryTest {
         repository = BooksStoreRepository(booksService)
     }
 
-    @Test
-    fun getBooks_returnsBooksFromBooksService() {
-        whenever(booksService.getBooks()).thenReturn(Single.just(mockBooks))
-
-        val testSubscriber = repository.getBooks().test()
-
-        testSubscriber.assertCompleted().assertValue(mockBooks)
-    }
+//    @Test
+//    fun getBooks_returnsBooksFromBooksService() {
+//        whenever(booksService.getBooks()).thenReturn(Single.just(mockBooks))
+//
+//        val testSubscriber = repository.getBooks().test()
+//
+//        testSubscriber.assertCompleted().assertValue(mockBooks)
+//    }
 }
