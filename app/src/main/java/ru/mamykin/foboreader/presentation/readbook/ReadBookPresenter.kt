@@ -1,9 +1,9 @@
 package ru.mamykin.foboreader.presentation.readbook
 
 import com.arellomobile.mvp.InjectViewState
-import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.domain.readbook.ReadBookInteractor
 import ru.mamykin.foboreader.domain.readbook.ReadBookState
+import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.extension.ViewParams
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import javax.inject.Inject
@@ -15,12 +15,7 @@ class ReadBookPresenter @Inject constructor(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-
-        interactor.loadBook()
-                .doOnSubscribe { viewState.showLoading(true) }
-                .doAfterTerminate { viewState.showLoading(false) }
-                .subscribe(this::displayBookInfo, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+        loadBookInfo()
     }
 
     fun onTranslateParagraphClicked(paragraph: String) {
@@ -28,19 +23,19 @@ class ReadBookPresenter @Inject constructor(
                 .doOnSubscribe { viewState.showParagraphLoading(true) }
                 .doAfterTerminate { viewState.showParagraphLoading(false) }
                 .map { it.second }
-                .subscribe(viewState::displayParagraphTranslation)
+                .subscribe(viewState::showParagraphTranslation)
                 .unsubscribeOnDestory()
     }
 
     fun onHideParagraphClicked() {
-        viewState.displaySourceParagraph()
+        viewState.showSourceParagraph()
     }
 
     fun onWordClicked(word: String) {
         interactor.getTextTranslation(word)
                 .doOnSubscribe { viewState.showWordLoading(true) }
                 .doAfterTerminate { viewState.showWordLoading(false) }
-                .subscribe(viewState::displayWordTranslation)
+                .subscribe(viewState::showWordTranslation)
                 .unsubscribeOnDestory()
     }
 
@@ -70,16 +65,24 @@ class ReadBookPresenter @Inject constructor(
                 .unsubscribeOnDestory()
     }
 
+    private fun loadBookInfo() {
+        interactor.loadBook()
+                .doOnSubscribe { viewState.showLoading(true) }
+                .doAfterTerminate { viewState.showLoading(false) }
+                .subscribe(this::displayBookInfo, Throwable::printStackTrace)
+                .unsubscribeOnDestory()
+    }
+
     private fun displayBookInfo(book: FictionBook) {
         viewState.showBookContent(true)
-        viewState.displayBookName(book.bookTitle!!)
+        viewState.showBookName(book.bookTitle!!)
         viewState.initBookView(book.bookTitle!!, book.bookText!!)
     }
 
     private fun displayPageContent(state: ReadBookState) {
-        viewState.displayCurrentPage(state.currentPage)
-        viewState.displayPageText(state.currentPageText)
-        viewState.displayReadPages(state.pagesRead)
-        viewState.displayReadPercent(state.readPercent)
+        viewState.showCurrentPage(state.currentPage)
+        viewState.showPageText(state.currentPageText)
+        viewState.showReadPages(state.pagesRead)
+        viewState.showReadPercent(state.readPercent)
     }
 }

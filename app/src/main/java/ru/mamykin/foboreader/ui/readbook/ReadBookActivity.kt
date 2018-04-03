@@ -21,7 +21,7 @@ import javax.inject.Inject
 /**
  * Страница чтения книги
  */
-class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.SwipeableListener {
+class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.ActionListener {
 
     companion object {
 
@@ -48,14 +48,15 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
     lateinit var presenter: ReadBookPresenter
 
     @ProvidePresenter
-    internal fun providePresenter() = presenter
+    internal fun providePresenter(): ReadBookPresenter = presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tvText.setSwipeableListener(this)
+        tvText.setOnActionListener(this)
     }
 
     override fun injectDependencies() {
+        super.injectDependencies()
         val bookId = intent.getNullableIntExtra(BOOK_ID_EXTRA)
         val bookPath = intent.getNullableStringExtra(BOOK_PATH_EXTRA)
         getAppComponent().getReadBookComponent(ReadBookModule(bookId, bookPath)).inject(this)
@@ -65,7 +66,7 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
         pbLoading.isVisible = show
     }
 
-    override fun displayBookName(name: String) {
+    override fun showBookName(name: String) {
         tvName.text = name
     }
 
@@ -85,7 +86,7 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
         presenter.onSwipeRight()
     }
 
-    override fun displayParagraphTranslation(text: String) {
+    override fun showParagraphTranslation(text: String) {
         tvText.setTranslation(text)
     }
 
@@ -103,21 +104,23 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.Swipeab
     override fun showWordLoading(show: Boolean) {
     }
 
-    override fun displayCurrentPage(page: Int) {
+    override fun showCurrentPage(page: Int) {
     }
 
-    override fun displayReadPages(text: Int) {
+    override fun showReadPages(text: Int) {
     }
 
-    override fun displayReadPercent(percent: Float) {
+    override fun showReadPercent(percent: Float) {
     }
 
-    override fun displaySourceParagraph() {
+    override fun showSourceParagraph() {
     }
 
-    override fun displayWordTranslation(originalAndTranslation: Pair<String, String>) {
+    override fun showWordTranslation(textAndTranslation: Pair<String, String>) {
+        tvText.setTranslation(textAndTranslation.second)
     }
 
-    override fun displayPageText(text: String) {
+    override fun showPageText(text: String) {
+        tvText.text = text
     }
 }

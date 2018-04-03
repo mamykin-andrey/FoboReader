@@ -24,7 +24,7 @@ class SwipeableTextView : android.support.v7.widget.AppCompatTextView {
     private val availableSpaceRect = RectF()
     private var maxTextSize = textSize
     private val textRect = RectF()
-    private var listener: SwipeableListener? = null
+    private var listener: ActionListener? = null
     private var initializedDimens: Boolean = false
     private var widthLimit: Int = 0
 
@@ -73,7 +73,7 @@ class SwipeableTextView : android.support.v7.widget.AppCompatTextView {
         highlightColor = Color.TRANSPARENT
     }
 
-    fun setSwipeableListener(listener: SwipeableListener) {
+    fun setOnActionListener(listener: ActionListener) {
         this.listener = listener
     }
 
@@ -235,7 +235,8 @@ class SwipeableTextView : android.support.v7.widget.AppCompatTextView {
         return indices.toTypedArray<Int>()
     }
 
-    interface SwipeableListener {
+    interface ActionListener {
+
         fun onClick(paragraph: String)
 
         fun onLongClick(word: String)

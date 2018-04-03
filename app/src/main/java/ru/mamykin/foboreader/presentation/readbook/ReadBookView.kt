@@ -13,23 +13,23 @@ interface ReadBookView : MvpView {
 
     fun showWordLoading(show: Boolean)
 
-    fun displayBookName(name: String)
+    fun showBookName(name: String)
 
-    fun displayCurrentPage(page: Int)
+    fun showCurrentPage(page: Int)
 
-    fun displayReadPages(text: Int)
+    fun showReadPages(text: Int)
 
-    fun displayReadPercent(percent: Float)
+    fun showReadPercent(percent: Float)
 
-    fun displaySourceParagraph()
+    fun showSourceParagraph()
 
-    fun displayParagraphTranslation(text: String)
+    fun showParagraphTranslation(text: String)
 
-    fun displayWordTranslation(originalAndTranslation: Pair<String, String>)
+    fun showWordTranslation(textAndTranslation: Pair<String, String>)
 
     fun initBookView(title: String, text: String)
 
-    fun displayPageText(text: String)
+    fun showPageText(text: String)
 
     fun showBookContent(show: Boolean)
 }
