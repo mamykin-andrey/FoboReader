@@ -13,8 +13,8 @@ abstract class BaseActivity : MvpAppCompatActivity() {
     abstract val layout: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         injectDependencies()
+        super.onCreate(savedInstanceState)
 
         setContentView(layout)
         //ReaderApp.appComponent.inject(this)
@@ -60,7 +60,7 @@ abstract class BaseActivity : MvpAppCompatActivity() {
 //        return Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS).toFloat()
 //    }
 
-    open protected fun injectDependencies() {
+    protected open fun injectDependencies() {
     }
 
     protected fun getAppComponent(): AppComponent {

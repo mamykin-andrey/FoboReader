@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.SeekBar
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_settings.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.ui.global.UiUtils
@@ -34,6 +35,9 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     @InjectPresenter
     lateinit var presenter: SettingsPresenter
 
+    @ProvidePresenter
+    fun providePresenter(): SettingsPresenter = presenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,6 +46,7 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     }
 
     override fun injectDependencies() {
+        super.injectDependencies()
         getAppComponent().getSettingsComponent().inject(this)
     }
 
@@ -50,9 +55,11 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar) {
+        // Do nothing
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {
+        // Do nothing
     }
 
     override fun setupBrightness() {
