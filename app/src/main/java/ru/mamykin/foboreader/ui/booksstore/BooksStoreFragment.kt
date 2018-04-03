@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.ui.store
+package ru.mamykin.foboreader.ui.booksstore
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -10,11 +10,11 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_main_store.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.entity.StoreBook
-import ru.mamykin.foboreader.presentation.store.BooksStorePresenter
-import ru.mamykin.foboreader.presentation.store.BooksStoreView
+import ru.mamykin.foboreader.presentation.booksstore.BooksStorePresenter
+import ru.mamykin.foboreader.presentation.booksstore.BooksStoreView
 import ru.mamykin.foboreader.ui.global.BaseFragment
 import ru.mamykin.foboreader.ui.global.UiUtils
-import ru.mamykin.foboreader.ui.store.list.BooksStoreRecyclerAdapter
+import ru.mamykin.foboreader.ui.booksstore.list.BooksStoreRecyclerAdapter
 import javax.inject.Inject
 
 /**

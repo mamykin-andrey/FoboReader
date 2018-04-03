@@ -14,7 +14,7 @@ import ru.mamykin.foboreader.ui.dropbox.DropboxBooksFragment
 import ru.mamykin.foboreader.ui.global.BaseActivity
 import ru.mamykin.foboreader.ui.mybooks.MyBooksFragment
 import ru.mamykin.foboreader.ui.settings.SettingsActivity
-import ru.mamykin.foboreader.ui.store.BooksStoreFragment
+import ru.mamykin.foboreader.ui.booksstore.BooksStoreFragment
 
 /**
  * Основная страница, включает в себя страницу с книгами, файлами на устройстве, файлами Dropbox, магазином

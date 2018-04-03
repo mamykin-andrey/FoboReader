@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.presentation.store
+package ru.mamykin.foboreader.presentation.booksstore
 
 import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foboreader.domain.booksstore.BooksStoreInteractor

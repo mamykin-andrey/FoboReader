@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.presentation.store
+package ru.mamykin.foboreader.presentation.booksstore
 
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy

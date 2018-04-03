@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.ui.store.list
+package ru.mamykin.foboreader.ui.booksstore.list
 
 import android.graphics.Paint
 import android.support.v7.widget.RecyclerView
