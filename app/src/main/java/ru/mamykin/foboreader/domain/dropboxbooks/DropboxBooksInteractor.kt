@@ -10,10 +10,6 @@ class DropboxBooksInteractor @Inject constructor(
 ) {
     private var currentDir: String = ""
 
-    fun login() {
-        return repository.loginDropbox()
-    }
-
     fun openRootDirectory(): Single<List<DropboxFile>> {
         return repository.getRootDirectoryFiles()
     }

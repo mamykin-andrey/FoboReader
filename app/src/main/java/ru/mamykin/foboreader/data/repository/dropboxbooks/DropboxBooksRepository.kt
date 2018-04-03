@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.data.repository.dropboxbooks
 
 import android.os.Environment
+import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.FileMetadata
 import ru.mamykin.foboreader.data.exception.UserNotAuthorizedException
@@ -17,12 +18,15 @@ class DropboxBooksRepository @Inject constructor(
         private val dropboxBooksStorage: DropboxBooksStorage,
         private val mapper: FolderToFilesListMapper
 ) {
-    fun loginDropbox() {
-        clientFactory.getClient().auth()
-    }
-
     fun getRootDirectoryFiles(): Single<List<DropboxFile>> {
-        return initDropbox().andThen(getFiles(""))
+        val authToken = dropboxBooksStorage.authToken ?: Auth.getOAuth2Token()
+        if (authToken?.isNotBlank() == true) {
+            dropboxBooksStorage.authToken = authToken
+            return Completable.fromAction {
+                clientFactory.init(authToken)
+            }.andThen(getFiles(""))
+        }
+        return Single.error(UserNotAuthorizedException())
     }
 
     fun getFiles(directory: String): Single<List<DropboxFile>> {
@@ -50,15 +54,6 @@ class DropboxBooksRepository @Inject constructor(
     fun getAccountInfo(): Single<String> {
         val account = getClient().users().currentAccount
         return Single.just(account.email)
-    }
-
-    private fun initDropbox(): Completable {
-        val authToken = dropboxBooksStorage.authToken
-        if (authToken?.isNotBlank() == true) {
-            return Completable.fromAction { clientFactory.init(authToken) }
-        } else {
-            return Completable.error(UserNotAuthorizedException())
-        }
     }
 
     private fun getClient(): DbxClientV2 = clientFactory.getClient()

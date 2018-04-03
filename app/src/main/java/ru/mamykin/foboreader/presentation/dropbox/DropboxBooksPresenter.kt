@@ -3,8 +3,10 @@ package ru.mamykin.foboreader.presentation.dropbox
 import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foboreader.domain.dropboxbooks.DropboxBooksInteractor
 import ru.mamykin.foboreader.entity.DropboxFile
+import ru.mamykin.foboreader.extension.applySchedulers
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import ru.mamykin.foboreader.ui.dropbox.DropboxBooksRouter
+import rx.Single
 import javax.inject.Inject
 
 @InjectViewState
@@ -13,43 +15,50 @@ class DropboxBooksPresenter @Inject constructor(
         private val router: DropboxBooksRouter
 ) : BasePresenter<DropboxView>() {
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-        loadRootFiles()
+    override fun attachView(view: DropboxView?) {
+        super.attachView(view)
+        openRootDirectory()
     }
 
     fun onLoginClicked() {
-        interactor.login()
+        router.startOAuth2Authentication()
     }
 
     fun onFileClicked(position: Int, file: DropboxFile) {
         interactor.downloadFile(file)
+                .applySchedulers()
                 .doOnSubscribe { viewState.showLoadingItem(position) }
                 .doAfterTerminate { viewState.hideLoadingItem() }
-                .subscribe(this::openBook, Throwable::printStackTrace)
+                .subscribe(router::openBook, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
     fun onDirectoryClicked(dir: DropboxFile) {
         interactor.openDirectory(dir)
-                .subscribe(this::displayFiles, Throwable::printStackTrace)
+                .applySchedulers()
+                .showProgress()
+                .subscribe(this::showFiles, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
     fun onParentDirectoryClicked() {
         interactor.openParentDirectory()
-                .subscribe(this::displayFiles, Throwable::printStackTrace)
+                .applySchedulers()
+                .showProgress()
+                .subscribe(this::showFiles, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
-    private fun loadRootFiles() {
+    private fun openRootDirectory() {
         interactor.openRootDirectory()
-                .subscribe({ displayFiles(it) }, { showAuth() })
+                .applySchedulers()
+                .showProgress()
+                .subscribe({ showFiles(it) }, { showAuth() })
                 .unsubscribeOnDestory()
     }
 
-    private fun displayFiles(files: List<DropboxFile>) {
-        viewState.hideLoading()
+    private fun showFiles(files: List<DropboxFile>) {
+        viewState.hideAuth()
         viewState.showFiles(files)
     }
 
@@ -58,8 +67,9 @@ class DropboxBooksPresenter @Inject constructor(
         viewState.showAuth()
     }
 
-    private fun openBook(bookPath: String) {
-        viewState.hideLoadingItem()
-        router.openBook(bookPath)
+    private fun <T> Single<T>.showProgress(): Single<T> {
+        doOnSubscribe(viewState::showLoading)
+        doAfterTerminate(viewState::hideLoading)
+        return this
     }
 }

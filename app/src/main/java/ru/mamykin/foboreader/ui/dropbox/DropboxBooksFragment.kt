@@ -48,6 +48,7 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
     }
 
     override fun injectDependencies() {
+        super.injectDependencies()
         val module = DropboxBooksModule(DropboxBooksRouter(activity!!))
         getAppComponent().getDropboxBooksComponent(module).inject(this)
     }
