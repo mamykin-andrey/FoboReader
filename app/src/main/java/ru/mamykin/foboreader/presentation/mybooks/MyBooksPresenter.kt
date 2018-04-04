@@ -72,7 +72,7 @@ class MyBooksPresenter @Inject constructor(
     private fun loadBooks() {
         interactor.getBooks(searchQuery, sortOrder)
                 .applySchedulers()
-                .subscribe(this::showBooks, Throwable::printStackTrace)
+                .subscribe(this::showBooks, { it.printStackTrace() })
                 .unsubscribeOnDestory()
     }
 

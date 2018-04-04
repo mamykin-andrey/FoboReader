@@ -21,7 +21,7 @@ interface BookDao {
     @Query("SELECT * FROM fictionbook")
     fun getBooks(): List<FictionBook>
 
-    @Query("SELECT * FROM fictionbook WHERE bookTitle LIKE :query ORDER BY :sortOrder")
+    @Query("SELECT * FROM fictionbook WHERE bookTitle LIKE '%' || :query ORDER BY :sortOrder")
     fun getBooks(query: String, sortOrder: SortOrder): List<FictionBook>
 
     @Query("SELECT * FROM fictionbook WHERE filePath = :filePath LIMIT 1")
