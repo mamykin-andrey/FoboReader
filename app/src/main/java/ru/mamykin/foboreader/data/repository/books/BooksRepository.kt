@@ -10,28 +10,19 @@ import javax.inject.Inject
 class BooksRepository @Inject constructor(
         private val bookDao: BookDao
 ) {
-    fun getBookInfo(bookId: Int): Single<FictionBook> {
-        return Single.just(bookDao.getBook(bookId))
+    fun getBookInfo(bookPath: String): Single<FictionBook> {
+        return Single.just(bookDao.getBook(bookPath))
     }
 
-    fun removeBook(bookId: Int): Completable {
+    fun removeBook(bookPath: String): Completable {
         return Completable.fromCallable {
-            val book = bookDao.getBook(bookId)
+            val book = bookDao.getBook(bookPath)
             bookDao.delete(book!!)
         }
     }
 
     fun getBooks(query: String, sortOrder: BookDao.SortOrder): Single<List<FictionBook>> {
         return Single.fromCallable { bookDao.getBooks(query, sortOrder) }
-    }
-
-    fun getBook(bookId: Int): Single<FictionBook> {
-        return Single.create {
-            val book = bookDao.getBook(bookId)
-            book!!.lastOpen = System.currentTimeMillis()
-            bookDao.update(book)
-            BookXmlSaxParser.parseBook(book, { it.onSuccess(book) })
-        }
     }
 
     fun getBook(bookPath: String): Single<FictionBook> {
@@ -44,5 +35,5 @@ class BooksRepository @Inject constructor(
         }
     }
 
-    fun createBook(filePath: String) = FictionBook().apply { this.filePath = filePath }
+    private fun createBook(filePath: String) = FictionBook().apply { this.filePath = filePath }
 }

@@ -11,5 +11,5 @@ interface MyBooksView : MvpView {
 
     fun showEmptyStateView(show: Boolean)
 
-    fun showBooksList(booksList: List<FictionBook>)
+    fun showBooks(booksList: List<FictionBook>)
 }

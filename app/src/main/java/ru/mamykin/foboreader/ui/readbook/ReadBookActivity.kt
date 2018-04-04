@@ -9,8 +9,6 @@ import kotlinx.android.synthetic.main.activity_read_book.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.di.modules.ReadBookModule
 import ru.mamykin.foboreader.extension.addGlobalLayoutListener
-import ru.mamykin.foboreader.extension.getNullableIntExtra
-import ru.mamykin.foboreader.extension.getNullableStringExtra
 import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.readbook.ReadBookPresenter
 import ru.mamykin.foboreader.presentation.readbook.ReadBookView
@@ -57,9 +55,8 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.ActionL
 
     override fun injectDependencies() {
         super.injectDependencies()
-        val bookId = intent.getNullableIntExtra(BOOK_ID_EXTRA)
-        val bookPath = intent.getNullableStringExtra(BOOK_PATH_EXTRA)
-        getAppComponent().getReadBookComponent(ReadBookModule(bookId, bookPath)).inject(this)
+        val module = ReadBookModule(intent.getStringExtra(BOOK_PATH_EXTRA))
+        getAppComponent().getReadBookComponent(module).inject(this)
     }
 
     override fun showLoading(show: Boolean) {

@@ -24,11 +24,11 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
 
     companion object {
 
-        private const val BOOK_ID_EXTRA = "book_id_extra"
+        private const val BOOK_PATH_EXTRA = "book_path_extra"
 
-        fun getStartIntent(context: Context, bookId: Int): Intent {
+        fun getStartIntent(context: Context, bookPath: String): Intent {
             val bookDetailsIntent = Intent(context, BookDetailsActivity::class.java)
-            bookDetailsIntent.putExtra(BOOK_ID_EXTRA, bookId)
+            bookDetailsIntent.putExtra(BOOK_PATH_EXTRA, bookPath)
             return bookDetailsIntent
         }
     }
@@ -50,9 +50,9 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
     }
 
     override fun injectDependencies() {
-        val bookId = intent.getIntExtra(BOOK_ID_EXTRA, -1)
+        val bookPath = intent.getStringExtra(BOOK_PATH_EXTRA)
         val bookDetailsRouter = BookDetailsRouter(this)
-        val bookDetailsModule = BookDetailsModule(bookDetailsRouter, bookId)
+        val bookDetailsModule = BookDetailsModule(bookDetailsRouter, bookPath)
         getAppComponent().getBookDetailsComponent(bookDetailsModule).inject(this)
     }
 

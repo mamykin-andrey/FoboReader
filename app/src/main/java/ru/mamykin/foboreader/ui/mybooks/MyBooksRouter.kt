@@ -10,12 +10,12 @@ class MyBooksRouter(
         private val activity: Activity
 ) {
 
-    fun openBook(bookId: Int) {
-        activity.startActivity(ReadBookActivity.getStartIntent(activity, bookId))
+    fun openBook(bookPath: String) {
+        activity.startActivity(ReadBookActivity.getStartIntent(activity, bookPath))
     }
 
-    fun openBookDetails(bookId: Int) {
-        activity.startActivity(BookDetailsActivity.getStartIntent(activity, bookId))
+    fun openBookDetails(bookPath: String) {
+        activity.startActivity(BookDetailsActivity.getStartIntent(activity, bookPath))
     }
 
     fun showBookShareDialog(bookName: String, url: String) {

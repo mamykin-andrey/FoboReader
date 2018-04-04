@@ -87,19 +87,19 @@ class MyBooksFragment : BaseFragment(), MyBooksView,
     }
 
     override fun onBookClicked(position: Int) {
-        presenter.onBookClicked(position)
+        //presenter.onBookClicked(position)
     }
 
     override fun onBookAboutClicked(position: Int) {
-        presenter.onBookAboutClicked(position)
+        //presenter.onBookAboutClicked(position)
     }
 
     override fun onBookShareClicked(position: Int) {
-        presenter.onBookShareClicked(position)
+        //presenter.onBookShareClicked(position)
     }
 
     override fun onBookRemoveClicked(position: Int) {
-        presenter.onBookRemoveClicked(position)
+        //presenter.onBookRemoveClicked(position)
     }
 
     override fun showEmptyStateView(show: Boolean) {
@@ -107,7 +107,7 @@ class MyBooksFragment : BaseFragment(), MyBooksView,
         rvBooks.isVisible = !show
     }
 
-    override fun showBooksList(booksList: List<FictionBook>) {
+    override fun showBooks(booksList: List<FictionBook>) {
         showEmptyStateView(false)
         adapter.changeData(booksList)
     }

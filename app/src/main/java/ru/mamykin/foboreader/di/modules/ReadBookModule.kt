@@ -3,23 +3,15 @@ package ru.mamykin.foboreader.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import ru.mamykin.foboreader.domain.readbook.TextToSpeechService
-import ru.mamykin.foboreader.di.qualifiers.BookId
 import ru.mamykin.foboreader.di.qualifiers.BookPath
 import ru.mamykin.foboreader.di.scope.ActivityScope
+import ru.mamykin.foboreader.domain.readbook.TextToSpeechService
 
 @ActivityScope
 @Module
 class ReadBookModule(
-        private val bookId: Int?,
-        private val bookPath: String?
+        private val bookPath: String
 ) {
-
-    @BookId
-    @Provides
-    @ActivityScope
-    fun provideBookId() = bookId
-
     @BookPath
     @Provides
     @ActivityScope

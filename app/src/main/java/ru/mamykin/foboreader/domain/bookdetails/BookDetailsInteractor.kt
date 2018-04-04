@@ -1,21 +1,21 @@
 package ru.mamykin.foboreader.domain.bookdetails
 
-import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
-import ru.mamykin.foboreader.di.qualifiers.BookId
+import ru.mamykin.foboreader.di.qualifiers.BookPath
+import ru.mamykin.foboreader.entity.FictionBook
 import rx.Single
 import javax.inject.Inject
 
 class BookDetailsInteractor @Inject constructor(
         private val repository: BooksRepository,
-        @BookId private val bookId: Int
+        @BookPath private val bookPath: String
 ) {
 
     fun loadBookInfo(): Single<FictionBook> {
-        return repository.getBookInfo(bookId)
+        return repository.getBookInfo(bookPath)
     }
 
     fun getBookId(): Int {
-        return bookId
+        return 0
     }
 }

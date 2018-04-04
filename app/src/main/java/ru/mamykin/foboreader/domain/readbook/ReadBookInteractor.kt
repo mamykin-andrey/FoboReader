@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.domain.readbook
 
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
-import ru.mamykin.foboreader.di.qualifiers.BookId
 import ru.mamykin.foboreader.di.qualifiers.BookPath
 import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.extension.ViewParams
@@ -13,27 +12,18 @@ class ReadBookInteractor @Inject constructor(
         private val booksRepository: BooksRepository,
         private val translateRepository: TranslateRepository,
         private val textToSpeechService: TextToSpeechService,
-        @BookPath private val bookPath: String?,
-        @BookId private val bookId: Int?
+        @BookPath private val bookPath: String
 ) {
 
     private lateinit var paginator: Paginator
     private lateinit var book: FictionBook
 
-    fun loadBookInfo(): Single<FictionBook> {
-        if (bookId == null && bookPath == null) {
-            return Single.error(IllegalStateException("No book ID, or book path was set!"))
-        }
-        val bookObs = if (bookId != null) {
-            booksRepository.getBook(bookId)
-        } else {
-            booksRepository.getBook(bookPath!!)
-        }
-        return bookObs.doOnSuccess { this.book = it }
+    fun getBookInfo(): Single<FictionBook> {
+        return booksRepository.getBook(bookPath).doOnSuccess { this.book = it }
     }
 
     fun getTextTranslation(text: String): Single<Pair<String, String>> {
-        val offlineTranslation = book.transMap!![text]
+        val offlineTranslation = book.transMap[text]
 
         if (offlineTranslation != null) {
             return Single.just(Pair(text, offlineTranslation))

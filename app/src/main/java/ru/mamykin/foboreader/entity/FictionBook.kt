@@ -13,7 +13,6 @@ import java.util.*
 @Entity
 class FictionBook {
     @PrimaryKey
-    var id: Int = 0
     var filePath: String = ""
     var bookGenre: String? = null
     var coverFile: String? = null
@@ -44,7 +43,10 @@ class FictionBook {
     val isFbWtBook: Boolean = bookFormat == BookFormat.FBWT
 
     @Ignore
-    val readPercent: Float = (currentPage / pagesCount) * 100f
+    val readPercent: Float = when (pagesCount) {
+        0 -> 0f
+        else -> (currentPage / pagesCount) * 100f
+    }
 
     val fullText: Spannable
         get() {

@@ -7,10 +7,13 @@ import ru.mamykin.foboreader.entity.FictionBook
 interface BookDao {
 
     @Insert
-    fun insertAll(books: List<FictionBook>)
+    fun insert(book: FictionBook)
 
     @Insert
-    fun insert(book: FictionBook)
+    fun insertAll(books: List<FictionBook>)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun update(data: FictionBook): Int
 
     @Delete
     fun delete(book: FictionBook)
@@ -21,14 +24,8 @@ interface BookDao {
     @Query("SELECT * FROM fictionbook WHERE bookTitle LIKE :query ORDER BY :sortOrder")
     fun getBooks(query: String, sortOrder: SortOrder): List<FictionBook>
 
-    @Query("SELECT * FROM fictionbook WHERE id = :id LIMIT 1")
-    fun getBook(id: Int): FictionBook?
-
     @Query("SELECT * FROM fictionbook WHERE filePath = :filePath LIMIT 1")
     fun getBook(filePath: String): FictionBook?
-
-    @Update
-    fun update(data: FictionBook): Int
 
     enum class SortOrder {
         BY_NAME,
