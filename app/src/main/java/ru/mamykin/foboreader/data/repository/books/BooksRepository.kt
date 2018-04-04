@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.data.repository.books
 
 import ru.mamykin.foboreader.data.database.BookDao
+import ru.mamykin.foboreader.domain.readbook.BookXmlSaxParser
 import ru.mamykin.foboreader.entity.FictionBook
 import rx.Completable
 import rx.Single
@@ -27,20 +28,23 @@ class BooksRepository @Inject constructor(
     }
 
     fun getBook(bookId: Int): Single<FictionBook> {
-        return Single.fromCallable {
+        return Single.create {
             val book = bookDao.getBook(bookId)
             book!!.lastOpen = System.currentTimeMillis()
             bookDao.update(book)
-            return@fromCallable book
+
+            BookXmlSaxParser.parseBook(book, { it.onSuccess(book) })
         }
     }
 
     fun getBook(bookPath: String): Single<FictionBook> {
-        return Single.fromCallable {
+        return Single.create {
             val book = bookDao.getBook(bookPath)
+            book.filePath = bookPath
             book.lastOpen = System.currentTimeMillis()
             bookDao.update(book)
-            return@fromCallable book
+
+            BookXmlSaxParser.parseBook(book, { it.onSuccess(book) })
         }
     }
 }

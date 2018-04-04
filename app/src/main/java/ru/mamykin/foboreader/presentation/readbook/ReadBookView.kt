@@ -27,7 +27,7 @@ interface ReadBookView : MvpView {
 
     fun showWordTranslation(textAndTranslation: Pair<String, String>)
 
-    fun initBookView(title: String, text: String)
+    fun initBookView()
 
     fun showPageText(text: String)
 

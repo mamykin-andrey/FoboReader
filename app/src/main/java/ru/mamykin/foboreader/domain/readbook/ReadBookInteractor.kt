@@ -1,10 +1,10 @@
 package ru.mamykin.foboreader.domain.readbook
 
-import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
 import ru.mamykin.foboreader.di.qualifiers.BookId
 import ru.mamykin.foboreader.di.qualifiers.BookPath
+import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.extension.ViewParams
 import rx.Single
 import javax.inject.Inject
@@ -20,11 +20,10 @@ class ReadBookInteractor @Inject constructor(
     private lateinit var paginator: Paginator
     private lateinit var book: FictionBook
 
-    fun loadBook(): Single<FictionBook> {
+    fun loadBookInfo(): Single<FictionBook> {
         if (bookId == null && bookPath == null) {
             return Single.error(IllegalStateException("No book ID, or book path was set!"))
         }
-
         val bookObs = if (bookId != null) {
             booksRepository.getBook(bookId)
         } else {
@@ -58,14 +57,6 @@ class ReadBookInteractor @Inject constructor(
                 viewParams.lineSpacingExtra,
                 viewParams.includeFontPadding
         )
-    }
-
-    fun getLastReadedPage(): Single<ReadBookState> {
-        return Single.create {
-            BookXmlSaxParser.parseBook(book, {
-                it.onSuccess(getBookState())
-            })
-        }
     }
 
     fun getNextPage(): Single<ReadBookState> {

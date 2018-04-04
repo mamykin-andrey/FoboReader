@@ -48,9 +48,9 @@ class ReadBookPresenter @Inject constructor(
      */
     fun onViewInitCompleted(viewParams: ViewParams) {
         interactor.onViewInitCompleted(viewParams)
-        interactor.getLastReadedPage()
-                .subscribe(this::displayPageContent, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+//        interactor.getLastReadedPage()
+//                .subscribe(this::displayPageContent, Throwable::printStackTrace)
+//                .unsubscribeOnDestory()
     }
 
     fun onSwipeRight() {
@@ -66,7 +66,7 @@ class ReadBookPresenter @Inject constructor(
     }
 
     private fun loadBookInfo() {
-        interactor.loadBook()
+        interactor.loadBookInfo()
                 .doOnSubscribe { viewState.showLoading(true) }
                 .doAfterTerminate { viewState.showLoading(false) }
                 .subscribe(this::displayBookInfo, Throwable::printStackTrace)
@@ -74,9 +74,9 @@ class ReadBookPresenter @Inject constructor(
     }
 
     private fun displayBookInfo(book: FictionBook) {
+        viewState.initBookView()
         viewState.showBookContent(true)
         viewState.showBookName(book.bookTitle!!)
-        viewState.initBookView(book.bookTitle!!, book.bookText!!)
     }
 
     private fun displayPageContent(state: ReadBookState) {

@@ -90,7 +90,7 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.ActionL
         tvText.setTranslation(text)
     }
 
-    override fun initBookView(title: String, text: String) {
+    override fun initBookView() {
         tvText.addGlobalLayoutListener(presenter::onViewInitCompleted)
     }
 
