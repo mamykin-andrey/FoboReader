@@ -53,7 +53,7 @@ class FictionBook {
             val htmlTitle = Html.fromHtml(bookTitle).toString() + "\n\n"
             val spTitle = SpannableString(htmlTitle)
             spTitle.setSpan(AbsoluteSizeSpan(55), 0, htmlTitle.length, Spanned.SPAN_COMPOSING)
-            spTitle.setSpan({ Layout.Alignment.ALIGN_CENTER } as AlignmentSpan, 0, htmlTitle.length, Spanned.SPAN_COMPOSING)
+            spTitle.setSpan(Layout.Alignment.ALIGN_CENTER, 0, 0, Spanned.SPAN_COMPOSING)
 
             val htmlText = Html.fromHtml(bookText).toString()
             val spText = SpannableString(htmlText)

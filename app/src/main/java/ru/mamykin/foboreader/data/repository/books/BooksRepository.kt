@@ -29,7 +29,7 @@ class BooksRepository @Inject constructor(
         return Single.create {
             val book = bookDao.getBook(bookPath) ?: createBook(bookPath)
             BookXmlSaxParser.parseBook(book, {
-                bookDao.insert(book)
+                bookDao.update(book)
                 it.onSuccess(book)
             })
         }

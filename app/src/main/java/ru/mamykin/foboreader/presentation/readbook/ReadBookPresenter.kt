@@ -78,7 +78,7 @@ class ReadBookPresenter @Inject constructor(
     private fun displayBookInfo(book: FictionBook) {
         viewState.initBookView()
         viewState.showBookContent(true)
-        viewState.showBookName(book.bookTitle!!)
+        viewState.showBookName(book.bookTitle)
     }
 
     private fun displayPageContent(state: ReadBookState) {
