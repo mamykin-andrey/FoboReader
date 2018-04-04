@@ -37,13 +37,12 @@ class BookViewHolder(itemView: View,
     fun bind(book: FictionBook) {
 //        holder.ivBookCover!!.setImageBitmap(BitmapFactory
 //                .decodeResource(context!!.resources, R.drawable.img_no_image))
-        itemView.tvBookTitle!!.text = book.bookTitle
+        itemView.tvBookTitle.text = book.bookTitle
         itemView.tvAuthor.text = book.bookAuthor
-        itemView.pvProgress.setPercents(book.percents)
+        itemView.pvProgress.setPercents(book.readPercent)
         itemView.tvBooksPages.text = book.pagesCountString
-        itemView.tvBookAddedDate!!.text = book.lastOpenString
-        val isFBWTFormat = book.bookFormat == FictionBook.Format.FBWT
-        itemView.tvFormat.isVisible = isFBWTFormat
+        itemView.tvBookAddedDate.text = book.lastOpenString
+        itemView.tvFormat.isVisible = book.isFbWtBook
     }
 
     private fun onBookMenuClicked(view: View) {

@@ -26,9 +26,9 @@ class BookDetailsPresenter @Inject constructor(
     }
 
     private fun showBookInfo(book: FictionBook) {
-        viewState.showBookName(book.bookTitle!!)
+        viewState.showBookName(book.bookTitle)
         viewState.showBookAuthor(book.bookAuthor!!)
-        viewState.showBookPath(book.fileName)
+        viewState.showBookPath(book.filePath)
         viewState.showBookCurrentPage(book.currentPage.toString())
         viewState.showBookGenre(book.bookGenre!!)
         viewState.showBookOriginalLang(book.bookSrcLang!!)

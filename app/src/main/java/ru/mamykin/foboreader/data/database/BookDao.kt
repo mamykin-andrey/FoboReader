@@ -18,6 +18,9 @@ interface BookDao {
     @Query("SELECT * FROM fictionbook")
     fun getBooks(): List<FictionBook>
 
+    @Query("SELECT * FROM fictionbook WHERE bookTitle LIKE :query ORDER BY :sortOrder")
+    fun getBooks(query: String, sortOrder: SortOrder): List<FictionBook>
+
     @Query("SELECT * FROM fictionbook WHERE id = :id LIMIT 1")
     fun getBook(id: Int): FictionBook?
 
@@ -30,6 +33,6 @@ interface BookDao {
     enum class SortOrder {
         BY_NAME,
         BY_READED,
-        BY_DATE
+        BY_DATE;
     }
 }

@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.entity
 
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
@@ -11,39 +12,40 @@ import java.util.*
 
 
 @Entity
-class FictionBook(
-        @PrimaryKey
-        var id: Int,
-        var filePath: String,
-        var bookGenre: String?,
-        var coverFile: String?,
-        var bookAuthor: String?,
-        var bookTitle: String,
-        var bookLang: String?,
-        var bookSrcLang: String?,
-        var docLibrary: String?,
-        var docAuthor: String?,
-        var docUrl: String?,
-        var docDate: Date?,
-        var docVersion: Double?,
-        var sectionTitle: String?,
-        var currentPage: Int,
-        var pagesCount: Int,
-        var lastOpen: Long,
-        var bookText: String,
-        var transMap: TextHashMap
-) {
-    val bookFormat: BookFormat
-        get() {
-            if (filePath.endsWith(".fb2"))
-                return BookFormat.FB2
-            else
-                return BookFormat.FBWT
-        }
+class FictionBook {
+    @PrimaryKey
+    var id: Int = 0
+    var filePath: String = ""
+    var bookGenre: String? = null
+    var coverFile: String? = null
+    var bookAuthor: String? = null
+    var bookTitle: String = ""
+    var bookLang: String? = null
+    var bookSrcLang: String? = null
+    var docLibrary: String? = null
+    var docAuthor: String? = null
+    var docUrl: String? = null
+    var docDate: Date? = null
+    var docVersion: Double? = null
+    var sectionTitle: String? = null
+    var currentPage: Int = 0
+    var pagesCount: Int = 0
+    var lastOpen: Long = 0
+    var bookText: String = ""
+    @Ignore
+    var transMap: TextHashMap = TextHashMap()
 
+    @Ignore
+    val bookFormat: BookFormat = when {
+        filePath.endsWith(".fb2") -> BookFormat.FB2
+        else -> BookFormat.FBWT
+    }
 
-    val readPercent: Float
-        get() = (currentPage / pagesCount) * 100f
+    @Ignore
+    val isFbWtBook: Boolean = bookFormat == BookFormat.FBWT
+
+    @Ignore
+    val readPercent: Float = (currentPage / pagesCount) * 100f
 
     val fullText: Spannable
         get() {
