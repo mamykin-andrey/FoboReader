@@ -5,11 +5,6 @@ import retrofit2.http.Query
 import ru.mamykin.foboreader.entity.Translation
 import rx.Single
 
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
 interface YandexTranslateService {
 
     companion object {

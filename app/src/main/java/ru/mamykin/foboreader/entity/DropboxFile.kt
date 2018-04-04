@@ -6,11 +6,6 @@ import com.dropbox.core.v2.files.Metadata
 
 import ru.mamykin.foboreader.domain.Utils
 
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
 class DropboxFile(var file: Metadata?, var isUpDir: Boolean) {
 
     val name: String

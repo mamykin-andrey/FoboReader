@@ -2,11 +2,6 @@ package ru.mamykin.foboreader.entity
 
 import com.google.gson.annotations.SerializedName
 
-/**
- * Creation date: 5/29/2017
- * Creation time: 11:39 AM
- * @author Andrey Mamykin(mamykin_av)
- */
 class StoreBook {
     @SerializedName("id")
     var id: Int? = null

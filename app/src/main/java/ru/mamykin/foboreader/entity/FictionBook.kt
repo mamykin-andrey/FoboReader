@@ -10,7 +10,6 @@ import ru.mamykin.foboreader.domain.Utils
 import ru.mamykin.foboreader.domain.readbook.TextHashMap
 import java.util.*
 
-
 @Entity
 class FictionBook {
     @PrimaryKey
