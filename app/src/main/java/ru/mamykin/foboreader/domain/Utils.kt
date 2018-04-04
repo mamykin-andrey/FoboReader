@@ -29,21 +29,13 @@ object Utils {
      * @return строка с с датой последнего изменения файла
      */
     fun getLastModifiedString(modifiedTime: Long): String {
-        val diffInDays = (Date().time - modifiedTime) / (1000 * 60 * 60 * 24)
-        return if (diffInDays == 0L) {
-            "изменён сегодня"
-        } else if (diffInDays < 7) {
-            // Прошло меньше одной недели
-            "изменён " + diffInDays + getRightEnding(diffInDays, "дней", "день", "дня") + " назад"
-        } else if (diffInDays < 30) {
-            ("изменён " + diffInDays / 7
-                    + getRightEnding(diffInDays / 7, "недель", "неделю", "недели") + " назад")
-        } else if (diffInDays < 365) {
-            ("изменён " + diffInDays / 30
-                    + getRightEnding(diffInDays / 30, "месяцев", "месяц", "месяца") + " назад")
-        } else {
-            ("изменён " + diffInDays / 365
-                    + getRightEnding(diffInDays / 365, "лет", "год", "года") + " назад")
+        val diffInDays = ((Date().time - modifiedTime) / (1000 * 60 * 60 * 24)).toInt()
+        return when {
+            diffInDays == 0 -> "изменён сегодня"
+            diffInDays < 7 -> "изменён " + diffInDays + getRightEnding(diffInDays, "дней", "день", "дня") + " назад"
+            diffInDays < 30 -> "изменён " + diffInDays / 7 + getRightEnding(diffInDays / 7, "недель", "неделю", "недели") + " назад"
+            diffInDays < 365 -> "изменён " + diffInDays / 30 + getRightEnding(diffInDays / 30, "месяцев", "месяц", "месяца") + " назад"
+            else -> "изменён " + diffInDays / 365 + getRightEnding(diffInDays / 365, "лет", "год", "года") + " назад"
         }
     }
 
@@ -55,9 +47,9 @@ object Utils {
      * @param thirdFormat  третий вариант
      * @return правильное окончание для числа
      */
-    fun getRightEnding(number: Long, firstFormat: String, secondFormat: String,
+    fun getRightEnding(number: Int, firstFormat: String, secondFormat: String,
                        thirdFormat: String): String {
-        if (number % 10 == 1L) {
+        if (number % 10 == 1) {
             return " $secondFormat"
         } else if (number % 10 >= 2 && number <= 4) {
             return " $thirdFormat"

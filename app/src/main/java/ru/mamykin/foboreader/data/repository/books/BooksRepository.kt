@@ -23,7 +23,7 @@ class BooksRepository @Inject constructor(
 
     fun getBooks(searchQuery: String, sortOrder: BookDao.SortOrder): Single<List<FictionBook>> {
         return Single.fromCallable {
-            return@fromCallable bookDao.getBooksList(searchQuery, sortOrder)
+            return@fromCallable bookDao.getBooks(searchQuery, sortOrder)
         }
     }
 

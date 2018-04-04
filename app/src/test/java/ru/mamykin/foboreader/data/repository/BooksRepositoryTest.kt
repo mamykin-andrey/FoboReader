@@ -47,7 +47,7 @@ class BooksRepositoryTest {
     @Test
     fun getBooks_returnsBooksFromBookDao() {
         val mockBooks = listOf(mockBook, mockBook)
-        whenever(bookDao.getBooksList("", BookDao.SortOrder.BY_NAME)).thenReturn(mockBooks)
+        whenever(bookDao.getBooks("", BookDao.SortOrder.BY_NAME)).thenReturn(mockBooks)
 
         val testSubscriber = repository.getBooks("", BookDao.SortOrder.BY_NAME).test()
 

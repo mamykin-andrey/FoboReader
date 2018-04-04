@@ -9,6 +9,7 @@ ext {
     crashlyticsVersion = '2.9.1@aar'
     moxyVersion = '1.5.3'
     daggerVersion = '2.5'
+    roomVersion = '1.0.0'
     rxAndroidVersion = '1.2.1'
     rxJavaVersion = '1.1.6'
     retrofitVersion = '2.3.0'
@@ -69,6 +70,9 @@ dependencies {
 
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    implementation "android.arch.persistence.room:runtime:$roomVersion"
+    kapt "android.arch.persistence.room:compiler:$roomVersion"
 
     implementation "com.arello-mobile:moxy:$moxyVersion"
     implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
