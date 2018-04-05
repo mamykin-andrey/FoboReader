@@ -9,14 +9,17 @@ import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.extension.isVisible
 
 class BookViewHolder(itemView: View,
-                     private val listener: BooksRecyclerAdapter.OnBookClickListener
+                     private val onBookClickFunc: (Int) -> Unit,
+                     private val onBookAboutClickFunc: (Int) -> Unit,
+                     private val onBookShareClickFunc: (Int) -> Unit,
+                     private val onBookRemoveClickFunc: (Int) -> Unit
 ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
     private val menuListener = PopupMenu.OnMenuItemClickListener {
         when (it.itemId) {
-            R.id.menu_about_book -> listener.onBookAboutClicked(adapterPosition)
-            R.id.menu_share_book -> listener.onBookShareClicked(adapterPosition)
-            R.id.menu_remove_book -> listener.onBookRemoveClicked(adapterPosition)
+            R.id.menu_about_book -> onBookAboutClickFunc(adapterPosition)
+            R.id.menu_share_book -> onBookShareClickFunc(adapterPosition)
+            R.id.menu_remove_book -> onBookRemoveClickFunc(adapterPosition)
         }
         return@OnMenuItemClickListener true
     }
@@ -53,6 +56,6 @@ class BookViewHolder(itemView: View,
     }
 
     private fun onBookClicked() {
-        listener.onBookClicked(adapterPosition)
+        onBookClickFunc(adapterPosition)
     }
 }

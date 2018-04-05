@@ -9,7 +9,5 @@ import ru.mamykin.foboreader.entity.FictionBook
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface MyBooksView : MvpView {
 
-    fun showEmptyStateView(show: Boolean)
-
-    fun showBooks(booksList: List<FictionBook>)
+    fun showBooks(books: List<FictionBook>)
 }

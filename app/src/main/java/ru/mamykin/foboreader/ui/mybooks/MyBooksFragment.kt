@@ -86,30 +86,25 @@ class MyBooksFragment : BaseFragment(), MyBooksView,
         return true
     }
 
-    override fun onBookClicked(position: Int) {
-        //presenter.onBookClicked(position)
+    override fun onBookClicked(bookPath: String) {
+        presenter.onBookClicked(bookPath)
     }
 
-    override fun onBookAboutClicked(position: Int) {
-        //presenter.onBookAboutClicked(position)
+    override fun onBookAboutClicked(bookPath: String) {
+        presenter.onBookAboutClicked(bookPath)
     }
 
-    override fun onBookShareClicked(position: Int) {
-        //presenter.onBookShareClicked(position)
+    override fun onBookShareClicked(bookPath: String) {
+        presenter.onBookShareClicked(bookPath)
     }
 
-    override fun onBookRemoveClicked(position: Int) {
-        //presenter.onBookRemoveClicked(position)
+    override fun onBookRemoveClicked(bookPath: String) {
+        presenter.onBookRemoveClicked(bookPath)
     }
 
-    override fun showEmptyStateView(show: Boolean) {
-        vNoBooks.isVisible = show
-        rvBooks.isVisible = !show
-    }
-
-    override fun showBooks(booksList: List<FictionBook>) {
-        showEmptyStateView(false)
-        adapter.changeData(booksList)
+    override fun showBooks(books: List<FictionBook>) {
+        showEmptyState(books.isEmpty())
+        adapter.changeData(books)
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {
@@ -119,5 +114,10 @@ class MyBooksFragment : BaseFragment(), MyBooksView,
     override fun onQueryTextChange(newText: String): Boolean {
         presenter.onQueryTextChange(newText)
         return true
+    }
+
+    private fun showEmptyState(show: Boolean) {
+        vNoBooks.isVisible = show
+        rvBooks.isVisible = !show
     }
 }

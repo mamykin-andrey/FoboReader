@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.ui.mybooks
 import android.app.Activity
 import android.content.Intent
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.ui.bookdetails.BookDetailsActivity
 import ru.mamykin.foboreader.ui.readbook.ReadBookActivity
 
@@ -18,8 +19,8 @@ class MyBooksRouter(
         activity.startActivity(BookDetailsActivity.getStartIntent(activity, bookPath))
     }
 
-    fun showBookShareDialog(bookName: String, url: String) {
-        val shareText = activity.getString(R.string.download_on, bookName, url)
+    fun openBookShareDialog(book: FictionBook) {
+        val shareText = activity.getString(R.string.download_on, book.bookTitle, book.docUrl)
 
         val shareIntent = Intent()
         shareIntent.action = Intent.ACTION_SEND

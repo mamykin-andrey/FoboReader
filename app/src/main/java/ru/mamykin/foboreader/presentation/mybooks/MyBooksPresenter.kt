@@ -3,7 +3,6 @@ package ru.mamykin.foboreader.presentation.mybooks
 import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.domain.mybooks.MyBooksInteractor
-import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.extension.applySchedulers
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import ru.mamykin.foboreader.ui.mybooks.MyBooksRouter
@@ -38,9 +37,15 @@ class MyBooksPresenter @Inject constructor(
         loadBooks()
     }
 
+    fun onQueryTextChange(searchQuery: String) {
+        this.searchQuery = searchQuery
+        loadBooks()
+    }
+
     fun onBookClicked(bookPath: String) {
         interactor.getBook(bookPath)
                 .map { it.filePath }
+                .applySchedulers()
                 .subscribe(router::openBook, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
@@ -48,39 +53,29 @@ class MyBooksPresenter @Inject constructor(
     fun onBookAboutClicked(bookPath: String) {
         interactor.getBook(bookPath)
                 .map { it.filePath }
+                .applySchedulers()
                 .subscribe(router::openBookDetails, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
     fun onBookShareClicked(bookPath: String) {
         interactor.getBook(bookPath)
-                .subscribe({ router.showBookShareDialog(it.bookTitle, it.docUrl!!) }, { it.printStackTrace() })
+                .applySchedulers()
+                .subscribe(router::openBookShareDialog, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
     fun onBookRemoveClicked(bookPath: String) {
         interactor.removeBook(bookPath)
+                .applySchedulers()
                 .subscribe(this::loadBooks, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
-    }
-
-    fun onQueryTextChange(text: String) {
-        this.searchQuery = text
-        loadBooks()
     }
 
     private fun loadBooks() {
         interactor.getBooks(searchQuery, sortOrder)
                 .applySchedulers()
-                .subscribe(this::showBooks, { it.printStackTrace() })
+                .subscribe(viewState::showBooks, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
-    }
-
-    private fun showBooks(books: List<FictionBook>) {
-        if (books.isEmpty()) {
-            viewState.showEmptyStateView(true)
-        } else {
-            viewState.showBooks(books)
-        }
     }
 }

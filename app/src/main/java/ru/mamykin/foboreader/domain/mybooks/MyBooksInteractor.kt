@@ -10,15 +10,10 @@ import javax.inject.Inject
 class MyBooksInteractor @Inject constructor(
         private val repository: BooksRepository
 ) {
-    fun removeBook(bookPath: String): Completable {
-        return repository.removeBook(bookPath)
-    }
+    fun removeBook(bookPath: String): Completable = repository.removeBook(bookPath)
 
-    fun getBooks(searchQuery: String, sortOrder: BookDao.SortOrder): Single<List<FictionBook>> {
-        return repository.getBooks(searchQuery, sortOrder)
-    }
+    fun getBooks(searchQuery: String, sortOrder: BookDao.SortOrder): Single<List<FictionBook>> =
+            repository.getBooks(searchQuery, sortOrder)
 
-    fun getBook(bookPath: String): Single<FictionBook> {
-        return repository.getBook(bookPath)
-    }
+    fun getBook(bookPath: String): Single<FictionBook> = repository.getBook(bookPath)
 }
