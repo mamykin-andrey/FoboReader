@@ -33,31 +33,41 @@ class ReadBookPresenter @Inject constructor(
         interactor.getTextTranslation(word)
                 .doOnSubscribe { viewState.showWordLoading(true) }
                 .doAfterTerminate { viewState.showWordLoading(false) }
-                .subscribe(viewState::showWordTranslation)
+                .subscribe(viewState::showWordTranslation, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
-    fun onSpeakWordClicked(word: String) {
-        interactor.voiceWord(word)
-    }
+    fun onSpeakWordClicked(word: String) = interactor.voiceWord(word)
 
     /**
      * Вызывается когда View готов к отрисовке, и известны параметры его размеров
      */
     fun onViewInitCompleted(viewParams: ViewParams) {
-        interactor.onViewInitCompleted(viewParams)
-        val bookState = interactor.getBookState()
-        displayPageContent(bookState)
+        interactor.initPaginator(viewParams)
+                .applySchedulers()
+                .subscribe(this::showCurrentPage, Throwable::printStackTrace)
+                .unsubscribeOnDestory()
     }
 
     fun onSwipeRight() {
-        val bookState = interactor.getPrevPage()
-        displayPageContent(bookState)
+        interactor.getPrevPage()
+                .applySchedulers()
+                .subscribe(this::displayPageContent, Throwable::printStackTrace)
+                .unsubscribeOnDestory()
     }
 
     fun onSwipeLeft() {
-        val bookState = interactor.getNextPage()
-        displayPageContent(bookState)
+        interactor.getNextPage()
+                .applySchedulers()
+                .subscribe(this::displayPageContent, Throwable::printStackTrace)
+                .unsubscribeOnDestory()
+    }
+
+    private fun showCurrentPage() {
+        interactor.getCurrentPage()
+                .applySchedulers()
+                .subscribe(this::displayPageContent, Throwable::printStackTrace)
+                .unsubscribeOnDestory()
     }
 
     private fun loadBookInfo() {

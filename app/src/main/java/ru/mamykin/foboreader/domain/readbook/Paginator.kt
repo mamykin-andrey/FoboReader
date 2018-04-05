@@ -3,8 +3,7 @@ package ru.mamykin.foboreader.domain.readbook
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
-
-import java.util.ArrayList
+import java.util.*
 
 class Paginator(content: CharSequence,
                 width: Int,
@@ -25,7 +24,12 @@ class Paginator(content: CharSequence,
         get() = getPage(currentIndex)
 
     val readPercent: Float
-        get() = (currentIndex + 1) / pagesCount.toFloat() * 100
+        get() {
+            if (pagesCount == 0) {
+                return 0f
+            }
+            return (currentIndex + 1) / pagesCount.toFloat() * 100
+        }
 
     val readPages: String
         get() = (currentIndex + 1).toString() + "/" + pagesCount

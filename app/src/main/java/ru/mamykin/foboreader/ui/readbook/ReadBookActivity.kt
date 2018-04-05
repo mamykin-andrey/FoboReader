@@ -100,9 +100,8 @@ class ReadBookActivity : BaseActivity(), ReadBookView, OnActionListener, OnSwipe
     override fun showWordLoading(show: Boolean) {
     }
 
-    @SuppressLint("SetTextI18n")
     override fun showReadPercent(percent: Float) {
-        tvReadPercent.text = "$percent %"
+        tvReadPercent.text = getString(R.string.read_percent_string, percent)
     }
 
     override fun showWordTranslation(textAndTranslation: Pair<String, String>) {

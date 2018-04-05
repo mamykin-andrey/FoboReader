@@ -35,5 +35,11 @@ class BooksRepository @Inject constructor(
         }
     }
 
+    fun updateBook(book: FictionBook): Completable {
+        return Completable.fromAction {
+            bookDao.update(book)
+        }
+    }
+
     private fun createBook(filePath: String) = FictionBook().apply { this.filePath = filePath }
 }

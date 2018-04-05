@@ -5,6 +5,7 @@ import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
 import ru.mamykin.foboreader.di.qualifiers.BookPath
 import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.extension.ViewParams
+import rx.Completable
 import rx.Single
 import javax.inject.Inject
 
@@ -33,11 +34,9 @@ class ReadBookInteractor @Inject constructor(
                 .map { Pair(text, it.text!!.joinToString()) }
     }
 
-    fun voiceWord(word: String) {
-        textToSpeechService.voiceWord(word)
-    }
+    fun voiceWord(word: String) = textToSpeechService.voiceWord(word)
 
-    fun onViewInitCompleted(viewParams: ViewParams) {
+    fun initPaginator(viewParams: ViewParams): Completable {
         paginator = Paginator(
                 book.fullText,
                 viewParams.width,
@@ -47,35 +46,32 @@ class ReadBookInteractor @Inject constructor(
                 viewParams.lineSpacingExtra,
                 viewParams.includeFontPadding
         )
+        book.pagesCount = paginator.pagesCount
+        return booksRepository.updateBook(book)
     }
 
-    fun getNextPage(): ReadBookState {
-        val currentIndex = paginator.currentIndex
-        val pagesCount = paginator.pagesCount
-        if (currentIndex < pagesCount) {
+    fun getCurrentPage(): Single<ReadBookState> = Single.just(getBookState())
+
+    fun getNextPage(): Single<ReadBookState> {
+        if (paginator.currentIndex < paginator.pagesCount - 1) {
             paginator.currentIndex++
         }
-        return getBookState()
+        return Single.just(getBookState())
     }
 
-    fun getPrevPage(): ReadBookState {
+    fun getPrevPage(): Single<ReadBookState> {
         if (paginator.currentIndex > 0) {
             paginator.currentIndex--
         }
-        return getBookState()
+        return Single.just(getBookState())
     }
 
-    fun getBookState(): ReadBookState {
+    private fun getBookState(): ReadBookState {
         return ReadBookState(
-                paginator.currentIndex,
+                paginator.currentIndex + 1,
                 paginator.pagesCount,
-                paginator.currentPage!!.toString(),
-                calculatePageReadPercentage(book)
+                paginator.currentPage.toString(),
+                paginator.readPercent
         )
-    }
-
-    private fun calculatePageReadPercentage(book: FictionBook): Float = when (book.pagesCount) {
-        0 -> 0f
-        else -> (book.currentPage / book.pagesCount).toFloat()
     }
 }
