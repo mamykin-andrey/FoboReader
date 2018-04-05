@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llCardContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="3dp"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:orientation="horizontal">
+
             <ImageView
                 android:id="@+id/ivBookCover"
                 android:layout_width="100dp"
                 android:layout_height="120dp"
                 android:contentDescription="@string/book_cover_desc"
                 android:scaleType="centerCrop"
-                tools:src="@drawable/img_no_image"/>
+                tools:src="@drawable/img_no_image" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,11 +34,13 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     tools:ignore="UseCompoundDrawables">
+
                     <TextView
                         android:id="@+id/tvBookTitle"
                         android:layout_width="0dp"
@@ -46,7 +50,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:textSize="16sp"
-                        tools:text="Гарри поттер и кубок огня"/>
+                        tools:text="Гарри поттер и кубок огня" />
 
                     <TextView
                         android:id="@+id/tvFormat"
@@ -57,7 +61,7 @@
                         android:padding="2dp"
                         android:text="@string/fbwt_format"
                         android:textSize="11sp"
-                        tools:ignore="SmallSp"/>
+                        tools:ignore="SmallSp" />
 
                     <ImageButton
                         android:id="@+id/btnMenu"
@@ -67,20 +71,21 @@
                         android:background="?selectableItemBackground"
                         android:contentDescription="@string/context_menu_desc"
                         android:padding="10dp"
-                        android:src="@drawable/ic_dots"/>
+                        android:src="@drawable/ic_dots" />
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/tvAuthor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Льюис Кэролл"/>
+                    tools:text="Льюис Кэролл" />
 
                 <TextView
                     android:id="@+id/tvBooksPages"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    tools:text="16 страниц из 27"/>
+                    tools:text="16 страниц из 27" />
 
                 <ru.mamykin.foboreader.ui.global.control.PercentProgressView
                     android:id="@+id/pvProgress"
@@ -90,13 +95,13 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    tools:background="@android:color/darker_gray"/>
+                    tools:background="@android:color/darker_gray" />
 
                 <TextView
                     android:id="@+id/tvBookAddedDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Открывалась сегодня"/>
+                    tools:text="Открывалась сегодня" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
