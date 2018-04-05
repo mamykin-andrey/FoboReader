@@ -10,22 +10,22 @@ class DropboxBooksInteractor @Inject constructor(
 ) {
     private var currentDir: String = ""
 
-    fun openRootDirectory(): Single<List<DropboxFile>> {
+    fun getRootDirectoryFiles(): Single<List<DropboxFile>> {
         return repository.getRootDirectoryFiles()
     }
 
-    fun openParentDirectory(): Single<List<DropboxFile>> {
+    fun getParentDirectoryFiles(): Single<List<DropboxFile>> {
         currentDir = formatParentDirectory(currentDir)
         return repository.getFiles(currentDir)
     }
 
-    fun openDirectory(directory: DropboxFile): Single<List<DropboxFile>> {
+    fun getDirectoryFiles(directory: DropboxFile): Single<List<DropboxFile>> {
         currentDir = directory.pathLower
         return repository.getFiles(currentDir)
     }
 
-    fun loadAccountInfo(): Single<String> {
-        return repository.getAccountInfo()
+    fun getAccountEmail(): Single<String> {
+        return repository.getAccountEmail()
     }
 
     fun downloadFile(file: DropboxFile): Single<String> {

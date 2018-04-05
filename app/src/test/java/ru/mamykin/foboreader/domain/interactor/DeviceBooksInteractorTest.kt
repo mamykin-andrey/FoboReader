@@ -34,7 +34,7 @@
 ////        val fileStructure = FileStructureEntity(files, true, directory)
 ////        whenever(repository.canReadDirectory("")).thenReturn(Single.just(true))
 ////
-////        val testSubscriber = interactor.openDirectory("").test()
+////        val testSubscriber = interactor.getDirectoryFiles("").test()
 ////
 ////        testSubscriber.assertCompleted().assertValue(fileStructure)
 //

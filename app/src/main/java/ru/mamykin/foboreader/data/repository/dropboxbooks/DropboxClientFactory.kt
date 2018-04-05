@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.data.repository.dropboxbooks
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.http.OkHttp3Requestor
 import com.dropbox.core.v2.DbxClientV2
+import rx.Completable
 import javax.inject.Inject
 
 class DropboxClientFactory @Inject constructor() {
@@ -16,7 +17,7 @@ class DropboxClientFactory @Inject constructor() {
         return client!!
     }
 
-    fun init(accessToken: String) {
+    fun init(accessToken: String): Completable {
         if (client == null) {
             val requestConfig = DbxRequestConfig.newBuilder("FoBo Reader")
                     .withHttpRequestor(OkHttp3Requestor.INSTANCE)
@@ -24,5 +25,6 @@ class DropboxClientFactory @Inject constructor() {
 
             client = DbxClientV2(requestConfig, accessToken)
         }
+        return Completable.complete()
     }
 }

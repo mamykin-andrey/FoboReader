@@ -20,9 +20,7 @@ class DropboxBooksPresenter @Inject constructor(
         openRootDirectory()
     }
 
-    fun onLoginClicked() {
-        router.startOAuth2Authentication()
-    }
+    fun onLoginClicked() = router.startOAuth2Authentication()
 
     fun onFileClicked(position: Int, file: DropboxFile) {
         interactor.downloadFile(file)
@@ -34,7 +32,7 @@ class DropboxBooksPresenter @Inject constructor(
     }
 
     fun onDirectoryClicked(dir: DropboxFile) {
-        interactor.openDirectory(dir)
+        interactor.getDirectoryFiles(dir)
                 .applySchedulers()
                 .showProgress()
                 .subscribe(this::showFiles, Throwable::printStackTrace)
@@ -42,7 +40,7 @@ class DropboxBooksPresenter @Inject constructor(
     }
 
     fun onParentDirectoryClicked() {
-        interactor.openParentDirectory()
+        interactor.getParentDirectoryFiles()
                 .applySchedulers()
                 .showProgress()
                 .subscribe(this::showFiles, Throwable::printStackTrace)
@@ -50,7 +48,7 @@ class DropboxBooksPresenter @Inject constructor(
     }
 
     private fun openRootDirectory() {
-        interactor.openRootDirectory()
+        interactor.getRootDirectoryFiles()
                 .applySchedulers()
                 .showProgress()
                 .subscribe({ showFiles(it) }, { showAuth() })

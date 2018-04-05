@@ -7,7 +7,6 @@ import com.dropbox.core.v2.files.FileMetadata
 import ru.mamykin.foboreader.data.exception.UserNotAuthorizedException
 import ru.mamykin.foboreader.entity.DropboxFile
 import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
-import rx.Completable
 import rx.Single
 import java.io.File
 import java.io.FileOutputStream
@@ -15,16 +14,14 @@ import javax.inject.Inject
 
 class DropboxBooksRepository @Inject constructor(
         private val clientFactory: DropboxClientFactory,
-        private val dropboxBooksStorage: DropboxBooksStorage,
+        private val storage: DropboxBooksStorage,
         private val mapper: FolderToFilesListMapper
 ) {
     fun getRootDirectoryFiles(): Single<List<DropboxFile>> {
-        val authToken = dropboxBooksStorage.authToken ?: Auth.getOAuth2Token()
+        val authToken = storage.authToken ?: Auth.getOAuth2Token()
         if (authToken?.isNotBlank() == true) {
-            dropboxBooksStorage.authToken = authToken
-            return Completable.fromAction {
-                clientFactory.init(authToken)
-            }.andThen(getFiles(""))
+            storage.authToken = authToken
+            return clientFactory.init(authToken).andThen(getFiles(""))
         }
         return Single.error(UserNotAuthorizedException())
     }
@@ -51,7 +48,7 @@ class DropboxBooksRepository @Inject constructor(
         }
     }
 
-    fun getAccountInfo(): Single<String> {
+    fun getAccountEmail(): Single<String> {
         val account = getClient().users().currentAccount
         return Single.just(account.email)
     }

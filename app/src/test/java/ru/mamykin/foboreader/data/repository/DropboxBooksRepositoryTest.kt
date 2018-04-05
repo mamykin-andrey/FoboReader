@@ -3,14 +3,12 @@ package ru.mamykin.foboreader.data.repository
 import com.dropbox.core.v2.files.ListFolderResult
 import com.dropbox.core.v2.users.FullAccount
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import ru.mamykin.foboreader.data.exception.UserNotAuthorizedException
 import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksRepository
 import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksStorage
 import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxClientFactory
@@ -82,7 +80,7 @@ class DropboxBooksRepositoryTest {
         whenever(mockAccount.email).thenReturn(mockEmail)
         whenever(clientFactory.getClient().users().currentAccount).thenReturn(mockAccount)
 
-        val testSubscriber = repository.getAccountInfo().test()
+        val testSubscriber = repository.getAccountEmail().test()
 
         testSubscriber.assertCompleted().assertValue(mockEmail)
     }

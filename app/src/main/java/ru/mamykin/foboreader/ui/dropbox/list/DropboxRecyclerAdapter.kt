@@ -20,13 +20,11 @@ class DropboxRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: DropboxFileViewHolder, position: Int) {
-        val item = getItem(position)
+        val item = files[position]
         holder.bind(item, position, loadingItemPos)
     }
 
-    override fun getItemCount(): Int {
-        return files.size
-    }
+    override fun getItemCount(): Int = files.size
 
     fun changeData(files: List<DropboxFile>) {
         this.files = files
@@ -47,15 +45,11 @@ class DropboxRecyclerAdapter(
     }
 
     private fun onItemClicked(position: Int) {
-        val item = getItem(position)
+        val item = files[position]
         if (item.isDirectory) {
             onDirClickFunc(item)
         } else {
             onFileClickFunc(position, item)
         }
-    }
-
-    private fun getItem(position: Int): DropboxFile {
-        return files[position]
     }
 }
