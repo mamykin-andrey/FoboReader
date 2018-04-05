@@ -31,9 +31,13 @@ class ReadBookPresenter @Inject constructor(
 
     fun onWordClicked(word: String) {
         interactor.getTextTranslation(word)
+                .applySchedulers()
                 .doOnSubscribe { viewState.showWordLoading(true) }
                 .doAfterTerminate { viewState.showWordLoading(false) }
-                .subscribe(viewState::showWordTranslation, Throwable::printStackTrace)
+                .subscribe(
+                        { viewState.showWordTranslation(it.first, it.second) },
+                        { it.printStackTrace() }
+                )
                 .unsubscribeOnDestory()
     }
 
@@ -52,21 +56,21 @@ class ReadBookPresenter @Inject constructor(
     fun onSwipeRight() {
         interactor.getPrevPage()
                 .applySchedulers()
-                .subscribe(this::displayPageContent, Throwable::printStackTrace)
+                .subscribe(this::showPageContent, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
     fun onSwipeLeft() {
         interactor.getNextPage()
                 .applySchedulers()
-                .subscribe(this::displayPageContent, Throwable::printStackTrace)
+                .subscribe(this::showPageContent, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
     private fun showCurrentPage() {
         interactor.getCurrentPage()
                 .applySchedulers()
-                .subscribe(this::displayPageContent, Throwable::printStackTrace)
+                .subscribe(this::showPageContent, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
@@ -75,16 +79,16 @@ class ReadBookPresenter @Inject constructor(
                 .applySchedulers()
                 .doOnSubscribe { viewState.showLoading(true) }
                 .doAfterTerminate { viewState.showLoading(false) }
-                .subscribe(this::displayBookInfo, Throwable::printStackTrace)
+                .subscribe(this::showBookInfo, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
     }
 
-    private fun displayBookInfo(book: FictionBook) {
+    private fun showBookInfo(book: FictionBook) {
         viewState.initBookView()
         viewState.showBookName(book.bookTitle)
     }
 
-    private fun displayPageContent(state: ReadBookState) {
+    private fun showPageContent(state: ReadBookState) {
         viewState.showReaded(state.currentPage, state.pagesCount)
         viewState.showReadPercent(state.readPercent)
         viewState.showPageText(state.currentPageText)

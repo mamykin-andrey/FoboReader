@@ -15,7 +15,5 @@ class BookDetailsInteractor @Inject constructor(
         return repository.getBookInfo(bookPath)
     }
 
-    fun getBookId(): Int {
-        return 0
-    }
+    fun getBookPath(): String = bookPath
 }

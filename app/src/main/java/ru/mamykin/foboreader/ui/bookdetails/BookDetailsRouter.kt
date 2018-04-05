@@ -7,7 +7,7 @@ import javax.inject.Inject
 class BookDetailsRouter @Inject constructor(
         private val activity: AppCompatActivity
 ) {
-    fun openBook(bookId: Int) {
-        activity.startActivity(ReadBookActivity.getStartIntent(activity, bookId))
+    fun openBook(bookPath: String) {
+        activity.startActivity(ReadBookActivity.getStartIntent(activity, bookPath))
     }
 }

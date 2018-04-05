@@ -17,7 +17,7 @@ interface ReadBookView : MvpView {
 
     fun showWordLoading(show: Boolean)
 
-    fun showWordTranslation(textAndTranslation: Pair<String, String>)
+    fun showWordTranslation(word: String, translation: String)
 
     fun showBookName(name: String)
 

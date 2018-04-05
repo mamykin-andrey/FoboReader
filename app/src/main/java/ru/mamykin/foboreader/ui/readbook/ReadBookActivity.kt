@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.ui.readbook
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,13 +25,6 @@ class ReadBookActivity : BaseActivity(), ReadBookView, OnActionListener, OnSwipe
     companion object {
 
         private const val BOOK_PATH_EXTRA = "book_path_extra"
-        private const val BOOK_ID_EXTRA = "book_id_extra"
-
-        fun getStartIntent(context: Context, bookId: Int): Intent {
-            val readIntent = Intent(context, ReadBookActivity::class.java)
-            readIntent.putExtra(BOOK_ID_EXTRA, bookId)
-            return readIntent
-        }
 
         fun getStartIntent(context: Context, bookPath: String): Intent {
             val readIntent = Intent(context, ReadBookActivity::class.java)
@@ -104,16 +96,15 @@ class ReadBookActivity : BaseActivity(), ReadBookView, OnActionListener, OnSwipe
         tvReadPercent.text = getString(R.string.read_percent_string, percent)
     }
 
-    override fun showWordTranslation(textAndTranslation: Pair<String, String>) {
-        //tvText.setTranslation(textAndTranslation.second)
+    override fun showWordTranslation(word: String, translation: String) {
+        // TODO: show word popup
     }
 
     override fun showPageText(text: String) {
         tvText.text = text
     }
 
-    @SuppressLint("SetTextI18n")
     override fun showReaded(currentPage: Int, pagesCount: Int) {
-        tvRead.text = "$currentPage / $pagesCount"
+        tvRead.text = getString(R.string.read_pages_format, currentPage, pagesCount)
     }
 }

@@ -36,6 +36,6 @@ class BookDetailsPresenter @Inject constructor(
     }
 
     fun onReadBookClicked() {
-        router.openBook(interactor.getBookId())
+        router.openBook(interactor.getBookPath())
     }
 }

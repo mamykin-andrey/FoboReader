@@ -70,7 +70,7 @@ class ReadBookInteractor @Inject constructor(
         return ReadBookState(
                 paginator.currentIndex + 1,
                 paginator.pagesCount,
-                paginator.currentPage.toString(),
+                paginator.currentPage,
                 paginator.readPercent
         )
     }

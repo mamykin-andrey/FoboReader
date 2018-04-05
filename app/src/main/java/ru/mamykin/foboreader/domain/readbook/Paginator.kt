@@ -3,8 +3,10 @@ package ru.mamykin.foboreader.domain.readbook
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
-import java.util.*
 
+/**
+ * Class, that implements pagination in TextView
+ */
 class Paginator(content: CharSequence,
                 width: Int,
                 height: Int,
@@ -13,54 +15,44 @@ class Paginator(content: CharSequence,
                 spacingAdd: Float,
                 includePad: Boolean
 ) {
+    private val pages = mutableListOf<CharSequence>()
 
-    private val pagesList = ArrayList<CharSequence>()
     var currentIndex = 0
 
-    val pagesCount: Int
-        get() = pagesList.size
+    val pagesCount: Int = pages.size
 
-    val currentPage: CharSequence?
-        get() = getPage(currentIndex)
+    val currentPage: CharSequence = pages[currentIndex]
 
-    val readPercent: Float
-        get() {
-            if (pagesCount == 0) {
-                return 0f
-            }
-            return (currentIndex + 1) / pagesCount.toFloat() * 100
-        }
-
-    val readPages: String
-        get() = (currentIndex + 1).toString() + "/" + pagesCount
+    val readPercent: Float = when (pagesCount) {
+        0 -> 0f
+        else -> (currentIndex + 1) / pagesCount.toFloat() * 100
+    }
 
     init {
-        val layout = StaticLayout(content, paint, width,
-                Layout.Alignment.ALIGN_NORMAL, spacingMult, spacingAdd, includePad)
+        val layout = StaticLayout(
+                content,
+                paint, width,
+                Layout.Alignment.ALIGN_NORMAL,
+                spacingMult,
+                spacingAdd,
+                includePad
+        )
+        fillPages(layout, height)
+    }
 
+    private fun fillPages(layout: StaticLayout, height: Int) {
         val lines = layout.lineCount
         val text = layout.text
         var startOffset = 0
-        var lHeight = height
+        var bottomLineHeight = height
 
         for (i in 0 until lines) {
-            if (lHeight < layout.getLineBottom(i)) {
-                addPage(text.subSequence(startOffset, layout.getLineStart(i)))
+            if (bottomLineHeight < layout.getLineBottom(i)) {
+                pages.add(text.subSequence(startOffset, layout.getLineStart(i)))
                 startOffset = layout.getLineStart(i)
-                lHeight = layout.getLineTop(i) + height
-            }
-            if (i == lines - 1) {
-                addPage(text.subSequence(startOffset, layout.getLineEnd(i)))
-                break
+                bottomLineHeight = layout.getLineTop(i) + height
             }
         }
-    }
-
-    private fun addPage(text: CharSequence) {
-        pagesList.add(text)
-    }
-
-    fun getPage(index: Int): CharSequence? {
-        return if (index >= 0 && index < pagesList.size) pagesList[index] else null
+        pages.add(text.subSequence(startOffset, layout.getLineEnd(lines - 1)))
     }
 }
