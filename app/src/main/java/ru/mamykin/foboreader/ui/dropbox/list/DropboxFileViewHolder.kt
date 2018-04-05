@@ -5,6 +5,8 @@ import android.view.View
 import kotlinx.android.synthetic.main.item_file.view.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.entity.DropboxFile
+import ru.mamykin.foboreader.extension.attributes
+import ru.mamykin.foboreader.extension.isFictionBook
 
 class DropboxFileViewHolder(itemView: View,
                             onItemClickFunc: (Int) -> Unit

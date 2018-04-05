@@ -5,7 +5,6 @@ import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
-import android.text.style.AlignmentSpan
 import ru.mamykin.foboreader.domain.Utils
 import ru.mamykin.foboreader.domain.readbook.TextHashMap
 import java.util.*
@@ -34,7 +33,7 @@ class FictionBook {
     var transMap: TextHashMap = TextHashMap()
 
     @Ignore
-    val bookFormat: BookFormat = when {
+    private val bookFormat: BookFormat = when {
         filePath.endsWith(".fb2") -> BookFormat.FB2
         else -> BookFormat.FBWT
     }
