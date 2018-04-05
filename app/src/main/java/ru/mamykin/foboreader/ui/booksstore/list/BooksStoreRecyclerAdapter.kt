@@ -21,9 +21,7 @@ class BooksStoreRecyclerAdapter : RecyclerView.Adapter<StoreBookViewHolder>() {
         holder.bind(item)
     }
 
-    override fun getItemCount(): Int {
-        return books.size
-    }
+    override fun getItemCount(): Int = books.size
 
     fun changeData(books: List<StoreBook>) {
         this.books = books

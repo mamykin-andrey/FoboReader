@@ -19,14 +19,15 @@ class BooksStorePresenter @Inject constructor(
 
     fun loadBooks() {
         interactor.getBooks()
+                .applySchedulers()
                 .doOnSubscribe { viewState.showLoading(true) }
                 .doAfterTerminate { viewState.showLoading(false) }
-                .applySchedulers()
                 .subscribe(this::showStoreInfo, this::displayLoadingError)
                 .unsubscribeOnDestory()
     }
 
     private fun showStoreInfo(response: BooksStoreResponse) {
+        // TODO
         viewState.showBooks(response.featured[0].books)
     }
 
