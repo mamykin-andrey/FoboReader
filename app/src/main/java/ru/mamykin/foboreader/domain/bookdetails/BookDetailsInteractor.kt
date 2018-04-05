@@ -10,10 +10,7 @@ class BookDetailsInteractor @Inject constructor(
         private val repository: BooksRepository,
         @BookPath private val bookPath: String
 ) {
-
-    fun loadBookInfo(): Single<FictionBook> {
-        return repository.getBookInfo(bookPath)
-    }
+    fun loadBookInfo(): Single<FictionBook> = repository.getBookInfo(bookPath)
 
     fun getBookPath(): String = bookPath
 }

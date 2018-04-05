@@ -7,8 +7,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_book_detail.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.domain.Utils
 import ru.mamykin.foboreader.di.modules.BookDetailsModule
+import ru.mamykin.foboreader.domain.Utils
 import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsPresenter
 import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsView
 import ru.mamykin.foboreader.ui.global.BaseActivity
@@ -19,8 +19,6 @@ import javax.inject.Inject
  * Страница с информацией о книге
  */
 class BookDetailsActivity : BaseActivity(), BookDetailsView {
-
-    override val layout: Int = R.layout.activity_book_detail
 
     companion object {
 
@@ -33,23 +31,25 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
         }
     }
 
+    override val layout: Int = R.layout.activity_book_detail
+
     @Inject
     @InjectPresenter
     lateinit var presenter: BookDetailsPresenter
 
     @ProvidePresenter
-    fun providePresenter(): BookDetailsPresenter {
-        return presenter
-    }
+    fun providePresenter(): BookDetailsPresenter = presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initToolbar(getString(R.string.about_book), true)
+
         fabRead.setOnClickListener { presenter.onReadBookClicked() }
     }
 
     override fun injectDependencies() {
+        super.injectDependencies()
         val bookPath = intent.getStringExtra(BOOK_PATH_EXTRA)
         val bookDetailsRouter = BookDetailsRouter(this)
         val bookDetailsModule = BookDetailsModule(bookDetailsRouter, bookPath)
