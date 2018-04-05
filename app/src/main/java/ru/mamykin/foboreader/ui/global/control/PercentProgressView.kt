@@ -16,7 +16,7 @@ class PercentProgressView(context: Context, attrs: AttributeSet) : LinearLayout(
         inflate(getContext(), R.layout.view_percent_progress, this)
     }
 
-    fun setPercents(percents: Float) {
+    fun setPercentage(percents: Float) {
         val paramsFill = LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.MATCH_PARENT, percents / 100f)
         vFill.layoutParams = paramsFill

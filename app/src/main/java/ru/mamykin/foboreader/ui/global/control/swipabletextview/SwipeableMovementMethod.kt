@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.ui.global.control.swipabletextview
 
 import android.os.Handler
-import android.text.Selection
 import android.text.Spannable
 import android.text.method.LinkMovementMethod
 import android.text.method.MovementMethod
@@ -16,7 +15,6 @@ class SwipeableMovementMethod : LinkMovementMethod() {
 
     companion object {
 
-        //const val MIN_COORD_THRESHOLD = 100
         const val MIN_TIME_THRESHOLD = 100
 
         private var instance: SwipeableMovementMethod? = null
@@ -58,32 +56,13 @@ class SwipeableMovementMethod : LinkMovementMethod() {
     }
 
     private fun handleUpAction(event: MotionEvent, buffer: Spannable, widget: TextView) {
-        //val xDiff = Math.abs(event.x - startXCoord)
         val eventTime = event.eventTime - startTime
 
-        when {
-            //xDiff > MIN_COORD_THRESHOLD -> handleSwipeAction(event, buffer, widget, xDiff)
-            eventTime < MIN_TIME_THRESHOLD -> handleClickAction(event, buffer, widget)
+        if (eventTime < MIN_TIME_THRESHOLD) {
+            longClickHandler.removeCallbacksAndMessages(null)
+            val link = getClickableSpan(event, widget, buffer)
+            link.onClick(widget)
         }
-    }
-
-    private fun handleSwipeAction(event: MotionEvent,
-                                  buffer: Spannable,
-                                  widget: TextView,
-                                  xDiff: Double
-    ) {
-        longClickHandler.removeCallbacksAndMessages(null)
-//        val link = getClickableSpan(event, widget, buffer)
-//        when {
-//            xDiff > 0 -> link.onSwipeRight(widget)
-//            xDiff < 0 -> link.onSwipeLeft(widget)
-//        }
-    }
-
-    private fun handleClickAction(event: MotionEvent, buffer: Spannable, widget: TextView) {
-        longClickHandler.removeCallbacksAndMessages(null)
-        val link = getClickableSpan(event, widget, buffer)
-        link.onClick(widget)
     }
 
     private fun getClickableSpan(event: MotionEvent,
@@ -99,4 +78,4 @@ class SwipeableMovementMethod : LinkMovementMethod() {
         val spans = buffer.getSpans(offset, offset, SwipeableSpan::class.java)
         return spans[0]
     }
-}
+}s

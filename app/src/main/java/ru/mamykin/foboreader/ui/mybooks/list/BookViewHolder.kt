@@ -42,7 +42,7 @@ class BookViewHolder(itemView: View,
 //                .decodeResource(context!!.resources, R.drawable.img_no_image))
         itemView.tvBookTitle.text = book.bookTitle
         itemView.tvAuthor.text = book.bookAuthor
-        itemView.pvProgress.setPercents(book.readPercent)
+        itemView.pvProgress.setPercentage(book.readPercent)
         itemView.tvBooksPages.text = book.pagesCountString
         itemView.tvBookAddedDate.text = book.lastOpenString
         itemView.tvFormat.isVisible = book.isFbWtBook
