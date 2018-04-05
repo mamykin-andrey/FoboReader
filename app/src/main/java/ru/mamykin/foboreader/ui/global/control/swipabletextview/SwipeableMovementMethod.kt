@@ -78,4 +78,4 @@ class SwipeableMovementMethod : LinkMovementMethod() {
         val spans = buffer.getSpans(offset, offset, SwipeableSpan::class.java)
         return spans[0]
     }
-}s
+}

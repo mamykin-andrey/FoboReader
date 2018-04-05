@@ -16,8 +16,8 @@ class StoreBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.tvAuthor.text = book.author
         itemView.tvCategory.text = book.genre
         itemView.tvRating.text = book.ratingStr
-        itemView.tvPrice.text = book.price
-        itemView.tvOldPrice.text = book.oldPrice
+        itemView.tvPrice.text = book.priceStr
+        itemView.tvOldPrice.text = book.oldPriceStr
         itemView.tvOldPrice.isVisible = book.oldPrice != null
         itemView.tvOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         Picasso.with(itemView.context)

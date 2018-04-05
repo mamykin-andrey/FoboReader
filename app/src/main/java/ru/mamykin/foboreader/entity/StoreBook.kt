@@ -2,45 +2,32 @@ package ru.mamykin.foboreader.entity
 
 import com.google.gson.annotations.SerializedName
 
-class StoreBook {
-    @SerializedName("id")
-    var id: Int? = null
-    @SerializedName("title")
-    var title: String? = null
-    @SerializedName("author")
-    var author: String? = null
-    @SerializedName("authorId")
-    var authorId: Int? = null
-    @SerializedName("genre")
-    var genre: String? = null
-    @SerializedName("rating")
-    var rating: Double? = null
-    @SerializedName("oldPrice")
-    var oldPrice: String? = null
-        get() = field!! + " Р"
-    @SerializedName("price")
-    var price: String? = null
-        get() = field!! + " Р"
-    @SerializedName("pictureUrl")
-    var pictureUrl: String? = null
-
+data class StoreBook(
+        @SerializedName("id")
+        val id: Int,
+        @SerializedName("title")
+        var title: String,
+        @SerializedName("author")
+        var author: String,
+        @SerializedName("authorId")
+        var authorId: Int,
+        @SerializedName("genre")
+        var genre: String,
+        @SerializedName("rating")
+        var rating: Double,
+        @SerializedName("oldPrice")
+        var oldPrice: String?,
+        @SerializedName("price")
+        var price: String,
+        @SerializedName("pictureUrl")
+        var pictureUrl: String
+) {
     val ratingStr: String
         get() = rating.toString()
 
-    /**
-     * No args constructor for use in serialization
-     */
-    constructor() {}
+    val oldPriceStr: String
+        get() = "$oldPrice Р"
 
-    constructor(id: Int?, title: String, author: String, authorId: Int?, genre: String, rating: Double?, oldPrice: String, price: String, pictureUrl: String) {
-        this.id = id
-        this.title = title
-        this.author = author
-        this.authorId = authorId
-        this.genre = genre
-        this.rating = rating
-        this.oldPrice = oldPrice
-        this.price = price
-        this.pictureUrl = pictureUrl
-    }
+    val priceStr: String
+        get() = "$price Р"
 }
