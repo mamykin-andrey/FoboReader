@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.data.repository.booksstore
 
 import ru.mamykin.foboreader.data.network.BooksStoreService
-import ru.mamykin.foboreader.entity.BooksStoreResponse
+import ru.mamykin.foboreader.entity.booksstore.BooksStoreResponse
 import rx.Single
 import javax.inject.Inject
 

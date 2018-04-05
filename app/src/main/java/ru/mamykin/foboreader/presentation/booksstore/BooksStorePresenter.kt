@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.presentation.booksstore
 
 import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foboreader.domain.booksstore.BooksStoreInteractor
-import ru.mamykin.foboreader.entity.BooksStoreResponse
+import ru.mamykin.foboreader.entity.booksstore.BooksStoreResponse
 import ru.mamykin.foboreader.extension.applySchedulers
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import javax.inject.Inject
