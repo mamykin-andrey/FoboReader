@@ -10,26 +10,26 @@ import javax.inject.Inject
 class DeviceBooksInteractor @Inject constructor(
         private val repository: DeviceBooksRepository
 ) {
-    private var currentDirectory: String = ""
+    private var currentDir: String = ""
 
-    fun openDirectory(directory: String): Single<FileStructureEntity> {
-        this.currentDirectory = directory
-        val parentDirectory = formatParentDirectory(currentDirectory)
+    fun getDirectoryFiles(directory: String): Single<FileStructureEntity> {
+        this.currentDir = directory
+        val parentDirectory = formatParentDirectory(currentDir)
 
-        return repository.getFiles(currentDirectory)
+        return repository.getFiles(currentDir)
                 .map { it.sortedBy(File::getWeight) }
                 .zipWith(repository.canReadDirectory(parentDirectory), { f, c -> Pair(f, c) })
-                .map { FileStructureEntity(it.first, it.second, currentDirectory) }
+                .map { FileStructureEntity(it.first, it.second, currentDir) }
     }
 
-    fun openRootDirectory(): Single<FileStructureEntity> {
-        this.currentDirectory = repository.getRootDirectory()
-        return openDirectory(currentDirectory)
+    fun getRootDirectoryFiles(): Single<FileStructureEntity> {
+        currentDir = repository.getRootDirectory()
+        return getDirectoryFiles(currentDir)
     }
 
-    fun openParentDirectory(): Single<FileStructureEntity> {
-        this.currentDirectory = formatParentDirectory(currentDirectory)
-        return openDirectory(currentDirectory)
+    fun getParentDirectoryFiles(): Single<FileStructureEntity> {
+        this.currentDir = formatParentDirectory(currentDir)
+        return getDirectoryFiles(currentDir)
     }
 
     fun openFile(file: File): Single<String> = when {
@@ -39,6 +39,6 @@ class DeviceBooksInteractor @Inject constructor(
     }
 
     private fun formatParentDirectory(dir: String): String {
-        return dir.substring(0, currentDirectory.lastIndexOf("/"))
+        return dir.substring(0, currentDir.lastIndexOf("/"))
     }
 }

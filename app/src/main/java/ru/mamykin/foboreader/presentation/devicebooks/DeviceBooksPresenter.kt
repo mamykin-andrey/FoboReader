@@ -18,7 +18,7 @@ class DeviceBooksPresenter @Inject constructor(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        loadRootDirectoryFiles()
+        openRootDirectory()
     }
 
     fun onFileClicked(file: File) {
@@ -28,19 +28,19 @@ class DeviceBooksPresenter @Inject constructor(
     }
 
     fun onDirectoryClicked(dir: File) {
-        interactor.openDirectory(dir.absolutePath)
+        interactor.getDirectoryFiles(dir.absolutePath)
                 .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
                 .unsubscribeOnDestory()
     }
 
     fun onParentDirectoryClicked() {
-        interactor.openParentDirectory()
+        interactor.getParentDirectoryFiles()
                 .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
                 .unsubscribeOnDestory()
     }
 
-    private fun loadRootDirectoryFiles() {
-        interactor.openRootDirectory()
+    private fun openRootDirectory() {
+        interactor.getRootDirectoryFiles()
                 .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
                 .unsubscribeOnDestory()
     }
@@ -53,7 +53,7 @@ class DeviceBooksPresenter @Inject constructor(
     }
 
     private fun showFiles(structure: FileStructureEntity) {
-        viewState.showUpDir(structure.isUpDirAvailable)
+        viewState.showParentDirAvailable(structure.isParentDirAvailable)
         viewState.showCurrentDir(structure.currentDIr)
         viewState.showFiles(structure.files)
     }

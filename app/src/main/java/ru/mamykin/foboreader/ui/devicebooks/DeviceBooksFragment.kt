@@ -65,6 +65,7 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
 
         adapter = FilesRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
         UiUtils.setupRecyclerView(context!!, rvFiles!!, adapter, LinearLayoutManager(context), true)
+
         btnUpDir.setOnClickListener { presenter.onParentDirectoryClicked() }
     }
 
@@ -94,7 +95,7 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
         UiUtils.showToast(context!!, getString(R.string.wrong_file_format))
     }
 
-    override fun showUpDir(show: Boolean) {
+    override fun showParentDirAvailable(show: Boolean) {
         btnUpDir.isVisible = show
     }
 

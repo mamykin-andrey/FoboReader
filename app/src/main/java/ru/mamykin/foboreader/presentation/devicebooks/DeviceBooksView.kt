@@ -16,5 +16,5 @@ interface DeviceBooksView : MvpView {
 
     fun showBookFormatError()
 
-    fun showUpDir(show: Boolean)
+    fun showParentDirAvailable(show: Boolean)
 }

@@ -7,9 +7,7 @@ import javax.inject.Inject
 
 class DeviceBooksRepository @Inject constructor() {
 
-    fun getRootDirectory(): String {
-        return Environment.getExternalStorageDirectory().absolutePath
-    }
+    fun getRootDirectory(): String = Environment.getExternalStorageDirectory().absolutePath
 
     fun getFiles(path: String): Single<List<File>> {
         val dir = File(path)
