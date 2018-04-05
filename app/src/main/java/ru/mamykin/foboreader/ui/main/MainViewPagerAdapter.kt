@@ -4,33 +4,25 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.PagerAdapter
-import java.util.*
 
 /**
  * Адаптер для ViewPager главного экрана
  */
 class MainViewPagerAdapter(manager: FragmentManager) : FragmentStatePagerAdapter(manager) {
-    private val fragmentsList = ArrayList<Fragment>()
-    private val titlesList = ArrayList<String>()
 
-    override fun getItem(position: Int): Fragment? {
-        return fragmentsList[position]
-    }
+    private val fragments = mutableListOf<Fragment>()
+    private val titles = mutableListOf<String>()
 
-    override fun getCount(): Int {
-        return fragmentsList.size
-    }
+    override fun getItem(position: Int): Fragment = fragments[position]
 
-    override fun getPageTitle(position: Int): CharSequence {
-        return titlesList[position]
-    }
+    override fun getCount(): Int = fragments.size
+
+    override fun getPageTitle(position: Int): CharSequence = titles[position]
+
+    override fun getItemPosition(obj: Any): Int = PagerAdapter.POSITION_NONE
 
     fun addFragment(fragment: Fragment, title: String) {
-        fragmentsList.add(fragment)
-        titlesList.add(title)
-    }
-
-    override fun getItemPosition(obj: Any): Int {
-        return PagerAdapter.POSITION_NONE
+        fragments.add(fragment)
+        this.titles.add(title)
     }
 }
