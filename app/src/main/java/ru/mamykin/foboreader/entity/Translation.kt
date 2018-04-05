@@ -1,6 +1,12 @@
 package ru.mamykin.foboreader.entity
 
-class Translation(var code: Int, lang: String, text: Array<String>) {
-    var lang: String? = lang
-    var text: Array<String>? = text
-}
+import com.google.gson.annotations.SerializedName
+
+data class Translation(
+        @SerializedName("code")
+        val code: Int,
+        @SerializedName("lang")
+        val lang: String,
+        @SerializedName("text")
+        val text: List<String>
+)
