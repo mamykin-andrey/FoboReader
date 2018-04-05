@@ -7,21 +7,17 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface SettingsView : MvpView {
 
-    fun setDropboxAccount(account: String?)
+    fun showDropboxAccount(account: String?)
 
-    fun setContentSizeText(size: Int)
+    fun showContentSizeText(size: Int)
 
-    fun setBrightnessPos(position: Int)
+    fun showBrightnessPos(position: Int)
 
-    fun setAutoBrightnessChecked(enabled: Boolean)
+    fun showAutoBrightnessEnabled(enabled: Boolean)
 
-    fun setBrightnessControlEnabled(enabled: Boolean)
+    fun showBrightnessControlEnabled(enabled: Boolean)
 
-    fun setNightThemeEnabled(enabled: Boolean)
-
-    fun setTitle(title: String)
-
-    fun setHomeAsUpEnabled(enabled: Boolean)
+    fun showNightThemeEnabled(enabled: Boolean)
 
     fun restartActivity()
 

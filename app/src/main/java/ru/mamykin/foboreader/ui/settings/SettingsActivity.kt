@@ -8,10 +8,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_settings.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.presentation.settings.SettingsPresenter
 import ru.mamykin.foboreader.presentation.settings.SettingsView
 import ru.mamykin.foboreader.ui.global.BaseActivity
+import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.ui.global.YesNoDialogFragment
 import javax.inject.Inject
 
@@ -65,36 +65,32 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     override fun setupBrightness() {
     }
 
-    override fun setDropboxAccount(account: String?) {
+    override fun showDropboxAccount(account: String?) {
         tvDropboxAccount.text = account
     }
 
-    override fun setContentSizeText(size: Int) {
+    override fun showContentSizeText(size: Int) {
         tvTextSize.text = size.toString()
     }
 
-    override fun setBrightnessPos(position: Int) {
+    override fun showBrightnessPos(position: Int) {
         seekbarBright.progress = position
     }
 
-    override fun setAutoBrightnessChecked(enabled: Boolean) {
+    override fun showAutoBrightnessEnabled(enabled: Boolean) {
         switchBrightAuto.isChecked = enabled
     }
 
-    override fun setBrightnessControlEnabled(enabled: Boolean) {
+    override fun showBrightnessControlEnabled(enabled: Boolean) {
         seekbarBright.isEnabled = enabled
     }
 
-    override fun setNightThemeEnabled(enabled: Boolean) {
+    override fun showNightThemeEnabled(enabled: Boolean) {
         switchNightTheme.isChecked = enabled
     }
 
-    override fun setTitle(title: String) {
+    override fun showTitle(title: String) {
         supportActionBar?.title = title
-    }
-
-    override fun setHomeAsUpEnabled(enabled: Boolean) {
-        supportActionBar?.setDisplayHomeAsUpEnabled(enabled)
     }
 
     override fun restartActivity() {
