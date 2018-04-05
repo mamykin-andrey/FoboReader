@@ -8,7 +8,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_book_detail.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.di.modules.BookDetailsModule
-import ru.mamykin.foboreader.domain.Utils
+import ru.mamykin.foboreader.extension.asFormattedDate
 import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsPresenter
 import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsView
 import ru.mamykin.foboreader.ui.global.BaseActivity
@@ -89,6 +89,6 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
     }
 
     override fun showBookCreatedDate(date: Date) {
-        tvBookCreatedDate.text = Utils.getFormattedDate(date)
+        tvBookCreatedDate.text = date.asFormattedDate()
     }
 }

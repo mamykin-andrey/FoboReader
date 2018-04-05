@@ -3,13 +3,14 @@ package ru.mamykin.foboreader.domain.readbook
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
-import ru.mamykin.foboreader.domain.Utils
 import ru.mamykin.foboreader.entity.FictionBook
+import ru.mamykin.foboreader.extension.parseDate
 import java.io.File
 import java.io.IOException
 import javax.xml.parsers.ParserConfigurationException
 import javax.xml.parsers.SAXParserFactory
 
+// TODO: REFACTOR
 class BookXmlSaxParser(private val successFunc: () -> Unit,
                        private val book: FictionBook
 ) : DefaultHandler2() {
@@ -71,7 +72,7 @@ class BookXmlSaxParser(private val successFunc: () -> Unit,
                 "src-lang" -> book.bookSrcLang = String(ch, start, length)
                 "library" -> book.docLibrary = String(ch, start, length)
                 "url" -> book.docUrl = String(ch, start, length)
-                "date" -> book.docDate = Utils.getDateFromString(String(ch, start, length))
+                "date" -> book.docDate = String(ch, start, length).parseDate()
                 "version" -> book.docVersion = java.lang.Double.parseDouble(String(ch, start, length))
             }
     }

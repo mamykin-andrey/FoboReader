@@ -4,7 +4,7 @@ import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
 import ru.mamykin.foboreader.di.qualifiers.BookPath
 import ru.mamykin.foboreader.entity.FictionBook
-import ru.mamykin.foboreader.extension.ViewParams
+import ru.mamykin.foboreader.entity.ViewParams
 import rx.Completable
 import rx.Single
 import javax.inject.Inject
@@ -31,7 +31,7 @@ class ReadBookInteractor @Inject constructor(
         }
 
         return translateRepository.getTextTranslation(text)
-                .map { Pair(text, it.text!!.joinToString()) }
+                .map { Pair(text, it.text.joinToString()) }
     }
 
     fun voiceWord(word: String) = textToSpeechService.voiceWord(word)

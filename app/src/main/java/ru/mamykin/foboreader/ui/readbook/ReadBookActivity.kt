@@ -100,7 +100,7 @@ class ReadBookActivity : BaseActivity(), ReadBookView, OnActionListener, OnSwipe
         // TODO: show word popup
     }
 
-    override fun showPageText(text: String) {
+    override fun showPageText(text: CharSequence) {
         tvText.text = text
     }
 

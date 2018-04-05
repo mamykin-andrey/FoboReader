@@ -89,10 +89,6 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
         switchNightTheme.isChecked = enabled
     }
 
-    override fun showTitle(title: String) {
-        supportActionBar?.title = title
-    }
-
     override fun restartActivity() {
         UiUtils.restartActivity(this)
     }

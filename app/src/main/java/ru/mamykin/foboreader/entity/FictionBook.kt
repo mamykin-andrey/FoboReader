@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
 import ru.mamykin.foboreader.domain.readbook.TextHashMap
-import ru.mamykin.foboreader.extension.getQuantityString
+import ru.mamykin.foboreader.extension.getPluralsString
 import java.util.*
 
 @Entity
@@ -62,7 +62,7 @@ class FictionBook {
 
     val pagesCountString: String
         get() {
-            val pagesFormat = currentPage.getQuantityString("страниц", "страница", "страницы")
+            val pagesFormat = currentPage.getPluralsString("страниц", "страница", "страницы")
             return "$currentPage $pagesFormat из $pagesCount"
         }
 
@@ -79,22 +79,22 @@ class FictionBook {
         }
 
     private fun getLastDaysOpenString(days: Int): String {
-        val quantityStr = days.getQuantityString("дней", "день", "дня") + " назад"
+        val quantityStr = days.getPluralsString("дней", "день", "дня") + " назад"
         return "Открывалась $days $quantityStr"
     }
 
     private fun getLastWeeksOpenString(weeks: Int): String {
-        val quantityStr = weeks.getQuantityString("недель", "неделю", "недели") + " назад"
+        val quantityStr = weeks.getPluralsString("недель", "неделю", "недели") + " назад"
         return "Открывалась $weeks $quantityStr"
     }
 
     private fun getLastMonthsOpenString(months: Int): String {
-        val quantityStr = months.getQuantityString("месяцев", "месяц", "месяца") + " назад"
+        val quantityStr = months.getPluralsString("месяцев", "месяц", "месяца") + " назад"
         return "Открывалась $months $quantityStr"
     }
 
     private fun getLastYearsOpenString(years: Int): String {
-        val quantityStr = years.getQuantityString("лет", "год", "года") + " назад"
+        val quantityStr = years.getPluralsString("лет", "год", "года") + " назад"
         return "Открывалась $years $quantityStr"
     }
 

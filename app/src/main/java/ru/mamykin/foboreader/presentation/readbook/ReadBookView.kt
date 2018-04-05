@@ -25,5 +25,5 @@ interface ReadBookView : MvpView {
 
     fun showReadPercent(percent: Float)
 
-    fun showPageText(text: String)
+    fun showPageText(text: CharSequence)
 }

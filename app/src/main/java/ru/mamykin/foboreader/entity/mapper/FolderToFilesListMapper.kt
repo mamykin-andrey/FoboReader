@@ -11,7 +11,7 @@ class FolderToFilesListMapper @Inject constructor() {
         val metaDataList = result.entries
         val filesList = ArrayList<DropboxFile>(metaDataList.size)
         for (metadata in metaDataList) {
-            filesList.add(DropboxFile(metadata, false))
+            filesList.add(DropboxFile(metadata))
         }
         return filesList
     }

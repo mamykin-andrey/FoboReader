@@ -4,7 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foboreader.domain.readbook.ReadBookInteractor
 import ru.mamykin.foboreader.domain.readbook.ReadBookState
 import ru.mamykin.foboreader.entity.FictionBook
-import ru.mamykin.foboreader.extension.ViewParams
+import ru.mamykin.foboreader.entity.ViewParams
 import ru.mamykin.foboreader.extension.applySchedulers
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import javax.inject.Inject
