@@ -9,91 +9,94 @@ import android.view.MotionEvent
 import android.widget.TextView
 
 /**
- * Класс для {@link ru.mamykin.foboreader.ui.controls.SwipeableTextView}, для определения
- * клика, лонг тапа, и горизонталных свайпов
+ * Вспомогательный класс для SwipeableTextView, позволяющий
+ * отлавливать клики, лонг тапы, и горизонталных свайпы
  */
 class SwipeableMovementMethod : LinkMovementMethod() {
-    //private boolean longClick = false;
-    private var longClickHandler: Handler? = null
-    private var xStart: Double = 0.toDouble()
-    private var tStart: Long = 0
-
-    override fun onTouchEvent(widget: TextView, buffer: Spannable, event: MotionEvent): Boolean {
-        val action = event.action
-
-        //longClick = false;
-        if (action == MotionEvent.ACTION_CANCEL && longClickHandler != null) {
-            // Отмена
-            longClickHandler!!.removeCallbacksAndMessages(null)
-        } else if (action == MotionEvent.ACTION_DOWN) {
-            // Нажатие
-            xStart = event.x.toDouble()
-            tStart = event.eventTime
-            val link = getClickableSpan(event, widget, buffer)
-            Selection.setSelection(buffer,
-                    buffer.getSpanStart(link),
-                    buffer.getSpanEnd(link))
-            // Long click
-            longClickHandler!!.postDelayed({
-                //longClick = true;
-                link.onLongClick(widget)
-            }, 1000)
-            return true
-        } else if (action == MotionEvent.ACTION_UP) {
-            // Отпускание
-            val xDiff = event.x - xStart
-            val tDiff = event.eventTime - tStart
-            if (Math.abs(xDiff) > 100) {
-                // Horizontal swipe
-                cancelLongClick()
-                val link = getClickableSpan(event, widget, buffer)
-                if (xDiff > 0)
-                    link.onSwipeRight(widget)
-                else if (xDiff < 0)
-                    link.onSwipeLeft(widget)
-            } else if (tDiff < 1000) {
-                // Click
-                cancelLongClick()
-                val link = getClickableSpan(event, widget, buffer)
-                link.onClick(widget)
-            }
-            return true
-        }
-        return true
-    }
-
-    private fun cancelLongClick() {
-        if (longClickHandler != null) {
-            longClickHandler!!.removeCallbacksAndMessages(null)
-        }
-    }
-
-    private fun getClickableSpan(event: MotionEvent, widget: TextView, buffer: Spannable): SwipeableSpan {
-        var x = event.x.toInt()
-        var y = event.y.toInt()
-        x -= widget.totalPaddingLeft
-        y -= widget.totalPaddingTop
-        x += widget.scrollX
-        y += widget.scrollY
-
-        val layout = widget.layout
-        val line = layout.getLineForVertical(y)
-        val off = layout.getOffsetForHorizontal(line, x.toFloat())
-
-        val spans = buffer.getSpans<SwipeableSpan>(off, off, SwipeableSpan::class.java)
-        return spans[0]
-    }
 
     companion object {
+
+        const val MIN_COORD_THRESHOLD = 100
+        const val MIN_TIME_THRESHOLD = 100
+
         private var instance: SwipeableMovementMethod? = null
 
         fun getInstance(): MovementMethod {
             if (instance == null) {
                 instance = SwipeableMovementMethod()
-                instance!!.longClickHandler = Handler()
             }
 
             return instance as SwipeableMovementMethod
         }
+    }
+
+    private var longClickHandler = Handler()
+    private var startXCoord: Double = 0.0
+    private var startTime: Long = 0
+
+    override fun onTouchEvent(widget: TextView, buffer: Spannable, event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_CANCEL -> handleCancelAction()
+            MotionEvent.ACTION_DOWN -> handleDownAction(event, buffer, widget)
+            MotionEvent.ACTION_UP -> handleUpAction(event, buffer, widget)
+        }
+        return true
+    }
+
+    private fun handleCancelAction() {
+        longClickHandler.removeCallbacksAndMessages(null)
+    }
+
+    private fun handleDownAction(event: MotionEvent, buffer: Spannable, widget: TextView) {
+        startXCoord = event.x.toDouble()
+        startTime = event.eventTime
+
+        val link = getClickableSpan(event, widget, buffer)
+        Selection.setSelection(buffer, buffer.getSpanStart(link), buffer.getSpanEnd(link))
+
+        longClickHandler.postDelayed({ link.onLongClick(widget) }, 1000)
+    }
+
+    private fun handleUpAction(event: MotionEvent, buffer: Spannable, widget: TextView) {
+        val xDiff = Math.abs(event.x - startXCoord)
+        val eventTime = event.eventTime - startTime
+
+        when {
+            xDiff > MIN_COORD_THRESHOLD -> handleSwipeAction(event, buffer, widget, xDiff)
+            eventTime < MIN_TIME_THRESHOLD -> handleClickAction(event, buffer, widget)
+        }
+    }
+
+    private fun handleSwipeAction(event: MotionEvent,
+                                  buffer: Spannable,
+                                  widget: TextView,
+                                  xDiff: Double
+    ) {
+        longClickHandler.removeCallbacksAndMessages(null)
+        val link = getClickableSpan(event, widget, buffer)
+        when {
+            xDiff > 0 -> link.onSwipeRight(widget)
+            xDiff < 0 -> link.onSwipeLeft(widget)
+        }
+    }
+
+    private fun handleClickAction(event: MotionEvent, buffer: Spannable, widget: TextView) {
+        longClickHandler.removeCallbacksAndMessages(null)
+        val link = getClickableSpan(event, widget, buffer)
+        link.onClick(widget)
+    }
+
+    private fun getClickableSpan(event: MotionEvent,
+                                 widget: TextView,
+                                 buffer: Spannable
+    ): SwipeableSpan {
+        val clickX = event.x - widget.totalPaddingLeft + widget.scrollX
+        val clickY = event.y.toInt() - widget.totalPaddingTop + widget.scrollY
+
+        val line = widget.layout.getLineForVertical(clickY)
+        val offset = widget.layout.getOffsetForHorizontal(line, clickX)
+
+        val spans = buffer.getSpans(offset, offset, SwipeableSpan::class.java)
+        return spans[0]
     }
 }
