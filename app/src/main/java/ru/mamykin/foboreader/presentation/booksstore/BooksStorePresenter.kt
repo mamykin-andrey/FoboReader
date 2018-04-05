@@ -23,7 +23,7 @@ class BooksStorePresenter @Inject constructor(
                 .doOnSubscribe { viewState.showLoading(true) }
                 .doAfterTerminate { viewState.showLoading(false) }
                 .subscribe(this::showStoreInfo, this::displayLoadingError)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     private fun showStoreInfo(response: BooksStoreResponse) {

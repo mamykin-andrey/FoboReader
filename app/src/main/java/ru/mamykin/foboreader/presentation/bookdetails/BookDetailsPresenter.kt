@@ -23,7 +23,7 @@ class BookDetailsPresenter @Inject constructor(
         interactor.loadBookInfo()
                 .applySchedulers()
                 .subscribe(this::showBookInfo, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     private fun showBookInfo(book: FictionBook) {

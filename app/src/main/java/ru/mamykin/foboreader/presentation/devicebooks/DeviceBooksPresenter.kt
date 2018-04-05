@@ -24,25 +24,25 @@ class DeviceBooksPresenter @Inject constructor(
     fun onFileClicked(file: File) {
         interactor.openFile(file)
                 .subscribe(router::openBook, this::showOpenFileError)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onDirectoryClicked(dir: File) {
         interactor.getDirectoryFiles(dir.absolutePath)
                 .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onParentDirectoryClicked() {
         interactor.getParentDirectoryFiles()
                 .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     private fun openRootDirectory() {
         interactor.getRootDirectoryFiles()
                 .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     private fun showOpenFileError(error: Throwable) {

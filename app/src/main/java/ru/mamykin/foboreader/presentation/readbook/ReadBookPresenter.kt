@@ -26,7 +26,7 @@ class ReadBookPresenter @Inject constructor(
                 .doAfterTerminate { viewState.showParagraphLoading(false) }
                 .map { it.second }
                 .subscribe(viewState::showParagraphTranslation, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onWordClicked(word: String) {
@@ -38,7 +38,7 @@ class ReadBookPresenter @Inject constructor(
                         { viewState.showWordTranslation(it.first, it.second) },
                         { it.printStackTrace() }
                 )
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onSpeakWordClicked(word: String) = interactor.voiceWord(word)
@@ -50,28 +50,28 @@ class ReadBookPresenter @Inject constructor(
         interactor.initPaginator(viewParams)
                 .applySchedulers()
                 .subscribe(this::showCurrentPage, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onSwipeRight() {
         interactor.getPrevPage()
                 .applySchedulers()
                 .subscribe(this::showPageContent, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onSwipeLeft() {
         interactor.getNextPage()
                 .applySchedulers()
                 .subscribe(this::showPageContent, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     private fun showCurrentPage() {
         interactor.getCurrentPage()
                 .applySchedulers()
                 .subscribe(this::showPageContent, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     private fun loadBookInfo() {
@@ -80,7 +80,7 @@ class ReadBookPresenter @Inject constructor(
                 .doOnSubscribe { viewState.showLoading(true) }
                 .doAfterTerminate { viewState.showLoading(false) }
                 .subscribe(this::showBookInfo, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     private fun showBookInfo(book: FictionBook) {

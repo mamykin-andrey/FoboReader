@@ -28,7 +28,7 @@ class DropboxBooksPresenter @Inject constructor(
                 .doOnSubscribe { viewState.showLoadingItem(position) }
                 .doAfterTerminate { viewState.hideLoadingItem() }
                 .subscribe(router::openBook, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onDirectoryClicked(dir: DropboxFile) {
@@ -36,7 +36,7 @@ class DropboxBooksPresenter @Inject constructor(
                 .applySchedulers()
                 .showProgress()
                 .subscribe(this::showFiles, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onParentDirectoryClicked() {
@@ -44,7 +44,7 @@ class DropboxBooksPresenter @Inject constructor(
                 .applySchedulers()
                 .showProgress()
                 .subscribe(this::showFiles, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     private fun openRootDirectory() {
@@ -52,7 +52,7 @@ class DropboxBooksPresenter @Inject constructor(
                 .applySchedulers()
                 .showProgress()
                 .subscribe({ showFiles(it) }, { showAuth() })
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     private fun showFiles(files: List<DropboxFile>) {

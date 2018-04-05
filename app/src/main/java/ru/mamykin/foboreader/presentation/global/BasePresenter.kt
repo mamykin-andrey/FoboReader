@@ -10,16 +10,12 @@ abstract class BasePresenter<V : MvpView> : MvpPresenter<V>() {
 
     private val compositeSubscription = CompositeSubscription()
 
-    protected fun unsubscribeOnDestroy(subscription: Subscription) {
-        this.compositeSubscription.add(subscription)
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         compositeSubscription.clear()
     }
 
-    fun Subscription.unsubscribeOnDestory() {
+    fun Subscription.unsubscribeOnDestroy() {
         compositeSubscription.add(this)
     }
 }

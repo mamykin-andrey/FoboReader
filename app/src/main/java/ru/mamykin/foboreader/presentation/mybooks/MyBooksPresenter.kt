@@ -47,7 +47,7 @@ class MyBooksPresenter @Inject constructor(
                 .map { it.filePath }
                 .applySchedulers()
                 .subscribe(router::openBook, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onBookAboutClicked(bookPath: String) {
@@ -55,27 +55,27 @@ class MyBooksPresenter @Inject constructor(
                 .map { it.filePath }
                 .applySchedulers()
                 .subscribe(router::openBookDetails, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onBookShareClicked(bookPath: String) {
         interactor.getBook(bookPath)
                 .applySchedulers()
                 .subscribe(router::openBookShareDialog, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     fun onBookRemoveClicked(bookPath: String) {
         interactor.removeBook(bookPath)
                 .applySchedulers()
                 .subscribe(this::loadBooks, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 
     private fun loadBooks() {
         interactor.getBooks(searchQuery, sortOrder)
                 .applySchedulers()
                 .subscribe(viewState::showBooks, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+                .unsubscribeOnDestroy()
     }
 }

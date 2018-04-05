@@ -8,6 +8,7 @@ import ru.mamykin.foboreader.entity.StoreBook
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface BooksStoreView : MvpView {
+
     fun showBooks(booksList: List<StoreBook>)
 
     fun showMessage(message: String)
