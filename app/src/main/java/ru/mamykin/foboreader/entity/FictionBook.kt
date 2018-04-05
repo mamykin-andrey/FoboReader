@@ -5,8 +5,8 @@ import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
-import ru.mamykin.foboreader.domain.Utils
 import ru.mamykin.foboreader.domain.readbook.TextHashMap
+import ru.mamykin.foboreader.extension.getQuantityString
 import java.util.*
 
 @Entity
@@ -47,6 +47,7 @@ class FictionBook {
         else -> (currentPage / pagesCount) * 100f
     }
 
+    @Suppress("deprecation")
     val fullText: Spannable
         get() {
             val htmlTitle = Html.fromHtml(bookTitle).toString() + "\n\n"
@@ -61,7 +62,7 @@ class FictionBook {
 
     val pagesCountString: String
         get() {
-            val pagesFormat = Utils.getRightEnding(currentPage, "страниц", "страница", "страницы")
+            val pagesFormat = currentPage.getQuantityString("страниц", "страница", "страницы")
             return "$currentPage $pagesFormat из $pagesCount"
         }
 
@@ -70,12 +71,32 @@ class FictionBook {
             val diffInDays = ((Date().time - lastOpen) / (1000 * 60 * 60 * 24)).toInt()
             return when {
                 diffInDays == 0 -> "Открывалась сегодня"
-                diffInDays < 7 -> "Открывалась " + diffInDays + Utils.getRightEnding(diffInDays, "дней", "день", "дня") + " назад"
-                diffInDays < 30 -> "Открывалась " + diffInDays / 7 + Utils.getRightEnding(diffInDays / 7, "недель", "неделю", "недели") + " назад"
-                diffInDays < 365 -> "Открывалась " + diffInDays / 30 + Utils.getRightEnding(diffInDays / 30, "месяцев", "месяц", "месяца") + " назад"
-                else -> "Открывалась " + diffInDays / 365 + Utils.getRightEnding(diffInDays / 365, "лет", "год", "года") + " назад"
+                diffInDays < 7 -> getLastDaysOpenString(diffInDays)
+                diffInDays < 30 -> getLastWeeksOpenString(diffInDays / 7)
+                diffInDays < 365 -> getLastMonthsOpenString(diffInDays / 30)
+                else -> getLastYearsOpenString(diffInDays / 365)
             }
         }
+
+    private fun getLastDaysOpenString(days: Int): String {
+        val quantityStr = days.getQuantityString("дней", "день", "дня") + " назад"
+        return "Открывалась $days $quantityStr"
+    }
+
+    private fun getLastWeeksOpenString(weeks: Int): String {
+        val quantityStr = weeks.getQuantityString("недель", "неделю", "недели") + " назад"
+        return "Открывалась $weeks $quantityStr"
+    }
+
+    private fun getLastMonthsOpenString(months: Int): String {
+        val quantityStr = months.getQuantityString("месяцев", "месяц", "месяца") + " назад"
+        return "Открывалась $months $quantityStr"
+    }
+
+    private fun getLastYearsOpenString(years: Int): String {
+        val quantityStr = years.getQuantityString("лет", "год", "года") + " назад"
+        return "Открывалась $years $quantityStr"
+    }
 
     enum class BookFormat {
         FB2, FBWT
