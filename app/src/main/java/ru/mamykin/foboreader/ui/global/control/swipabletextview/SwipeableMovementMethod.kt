@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.ui.global.widget
+package ru.mamykin.foboreader.ui.global.control.swipabletextview
 
 import android.os.Handler
 import android.text.Selection
@@ -16,7 +16,7 @@ class SwipeableMovementMethod : LinkMovementMethod() {
 
     companion object {
 
-        const val MIN_COORD_THRESHOLD = 100
+        //const val MIN_COORD_THRESHOLD = 100
         const val MIN_TIME_THRESHOLD = 100
 
         private var instance: SwipeableMovementMethod? = null
@@ -51,18 +51,18 @@ class SwipeableMovementMethod : LinkMovementMethod() {
         startXCoord = event.x.toDouble()
         startTime = event.eventTime
 
-        val link = getClickableSpan(event, widget, buffer)
-        Selection.setSelection(buffer, buffer.getSpanStart(link), buffer.getSpanEnd(link))
+//        val link = getClickableSpan(event, widget, buffer)
+//        Selection.setSelection(buffer, buffer.getSpanStart(link), buffer.getSpanEnd(link))
 
-        longClickHandler.postDelayed({ link.onLongClick(widget) }, 1000)
+        //longClickHandler.postDelayed({ link.onLongClick(widget) }, 1000)
     }
 
     private fun handleUpAction(event: MotionEvent, buffer: Spannable, widget: TextView) {
-        val xDiff = Math.abs(event.x - startXCoord)
+        //val xDiff = Math.abs(event.x - startXCoord)
         val eventTime = event.eventTime - startTime
 
         when {
-            xDiff > MIN_COORD_THRESHOLD -> handleSwipeAction(event, buffer, widget, xDiff)
+            //xDiff > MIN_COORD_THRESHOLD -> handleSwipeAction(event, buffer, widget, xDiff)
             eventTime < MIN_TIME_THRESHOLD -> handleClickAction(event, buffer, widget)
         }
     }
@@ -73,11 +73,11 @@ class SwipeableMovementMethod : LinkMovementMethod() {
                                   xDiff: Double
     ) {
         longClickHandler.removeCallbacksAndMessages(null)
-        val link = getClickableSpan(event, widget, buffer)
-        when {
-            xDiff > 0 -> link.onSwipeRight(widget)
-            xDiff < 0 -> link.onSwipeLeft(widget)
-        }
+//        val link = getClickableSpan(event, widget, buffer)
+//        when {
+//            xDiff > 0 -> link.onSwipeRight(widget)
+//            xDiff < 0 -> link.onSwipeLeft(widget)
+//        }
     }
 
     private fun handleClickAction(event: MotionEvent, buffer: Spannable, widget: TextView) {

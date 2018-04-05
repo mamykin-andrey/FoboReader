@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.ui.readbook
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -13,13 +14,14 @@ import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.readbook.ReadBookPresenter
 import ru.mamykin.foboreader.presentation.readbook.ReadBookView
 import ru.mamykin.foboreader.ui.global.BaseActivity
-import ru.mamykin.foboreader.ui.global.control.SwipeableTextView
+import ru.mamykin.foboreader.ui.global.control.swipabletextview.OnActionListener
+import ru.mamykin.foboreader.ui.global.control.swipabletextview.OnSwipeListener
 import javax.inject.Inject
 
 /**
  * Страница чтения книги
  */
-class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.ActionListener {
+class ReadBookActivity : BaseActivity(), ReadBookView, OnActionListener, OnSwipeListener {
 
     companion object {
 
@@ -51,6 +53,7 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.ActionL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         tvText.setOnActionListener(this)
+        tvText.setOnSwipeListener(this)
     }
 
     override fun injectDependencies() {
@@ -68,7 +71,7 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.ActionL
     }
 
     override fun onClick(paragraph: String) {
-        presenter.onTranslateParagraphClicked(paragraph)
+        presenter.onParagraphClicked(paragraph)
     }
 
     override fun onLongClick(word: String) {
@@ -84,15 +87,11 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.ActionL
     }
 
     override fun showParagraphTranslation(text: String) {
-        tvText.setTranslation(text)
+        //tvText.setTranslation(text)
     }
 
     override fun initBookView() {
         tvText.addGlobalLayoutListener(presenter::onViewInitCompleted)
-    }
-
-    override fun showBookContent(show: Boolean) {
-        llBookContent.isVisible = show
     }
 
     override fun showParagraphLoading(show: Boolean) {
@@ -101,23 +100,21 @@ class ReadBookActivity : BaseActivity(), ReadBookView, SwipeableTextView.ActionL
     override fun showWordLoading(show: Boolean) {
     }
 
-    override fun showCurrentPage(page: Int) {
-    }
-
-    override fun showReadPages(text: Int) {
-    }
-
+    @SuppressLint("SetTextI18n")
     override fun showReadPercent(percent: Float) {
-    }
-
-    override fun showSourceParagraph() {
+        tvReadPercent.text = "$percent %"
     }
 
     override fun showWordTranslation(textAndTranslation: Pair<String, String>) {
-        tvText.setTranslation(textAndTranslation.second)
+        //tvText.setTranslation(textAndTranslation.second)
     }
 
     override fun showPageText(text: String) {
         tvText.text = text
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun showReaded(currentPage: Int, pagesCount: Int) {
+        tvRead.text = "$currentPage / $pagesCount"
     }
 }

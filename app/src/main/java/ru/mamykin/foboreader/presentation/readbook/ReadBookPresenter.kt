@@ -19,17 +19,14 @@ class ReadBookPresenter @Inject constructor(
         loadBookInfo()
     }
 
-    fun onTranslateParagraphClicked(paragraph: String) {
+    fun onParagraphClicked(paragraph: String) {
         interactor.getTextTranslation(paragraph)
+                .applySchedulers()
                 .doOnSubscribe { viewState.showParagraphLoading(true) }
                 .doAfterTerminate { viewState.showParagraphLoading(false) }
                 .map { it.second }
-                .subscribe(viewState::showParagraphTranslation)
+                .subscribe(viewState::showParagraphTranslation, Throwable::printStackTrace)
                 .unsubscribeOnDestory()
-    }
-
-    fun onHideParagraphClicked() {
-        viewState.showSourceParagraph()
     }
 
     fun onWordClicked(word: String) {
@@ -49,21 +46,18 @@ class ReadBookPresenter @Inject constructor(
      */
     fun onViewInitCompleted(viewParams: ViewParams) {
         interactor.onViewInitCompleted(viewParams)
-//        interactor.getLastReadedPage()
-//                .subscribe(this::displayPageContent, Throwable::printStackTrace)
-//                .unsubscribeOnDestory()
+        val bookState = interactor.getBookState()
+        displayPageContent(bookState)
     }
 
     fun onSwipeRight() {
-        interactor.getPrevPage()
-                .subscribe(this::displayPageContent, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+        val bookState = interactor.getPrevPage()
+        displayPageContent(bookState)
     }
 
     fun onSwipeLeft() {
-        interactor.getNextPage()
-                .subscribe(this::displayPageContent, Throwable::printStackTrace)
-                .unsubscribeOnDestory()
+        val bookState = interactor.getNextPage()
+        displayPageContent(bookState)
     }
 
     private fun loadBookInfo() {
@@ -77,14 +71,12 @@ class ReadBookPresenter @Inject constructor(
 
     private fun displayBookInfo(book: FictionBook) {
         viewState.initBookView()
-        viewState.showBookContent(true)
         viewState.showBookName(book.bookTitle)
     }
 
     private fun displayPageContent(state: ReadBookState) {
-        viewState.showCurrentPage(state.currentPage)
-        viewState.showPageText(state.currentPageText)
-        viewState.showReadPages(state.pagesRead)
+        viewState.showReaded(state.currentPage, state.pagesCount)
         viewState.showReadPercent(state.readPercent)
+        viewState.showPageText(state.currentPageText)
     }
 }

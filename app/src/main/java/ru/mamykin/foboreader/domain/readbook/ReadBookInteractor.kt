@@ -49,32 +49,33 @@ class ReadBookInteractor @Inject constructor(
         )
     }
 
-    fun getNextPage(): Single<ReadBookState> {
+    fun getNextPage(): ReadBookState {
         val currentIndex = paginator.currentIndex
         val pagesCount = paginator.pagesCount
         if (currentIndex < pagesCount) {
             paginator.currentIndex++
         }
-        return Single.just(getBookState())
+        return getBookState()
     }
 
-    fun getPrevPage(): Single<ReadBookState> {
+    fun getPrevPage(): ReadBookState {
         if (paginator.currentIndex > 0) {
             paginator.currentIndex--
         }
-        return Single.just(getBookState())
+        return getBookState()
     }
 
-    private fun getBookState(): ReadBookState {
+    fun getBookState(): ReadBookState {
         return ReadBookState(
                 paginator.currentIndex,
+                paginator.pagesCount,
                 paginator.currentPage!!.toString(),
-                paginator.currentIndex,
                 calculatePageReadPercentage(book)
         )
     }
 
-    private fun calculatePageReadPercentage(book: FictionBook): Float {
-        return (book.currentPage / book.pagesCount).toFloat()
+    private fun calculatePageReadPercentage(book: FictionBook): Float = when (book.pagesCount) {
+        0 -> 0f
+        else -> (book.currentPage / book.pagesCount).toFloat()
     }
 }
