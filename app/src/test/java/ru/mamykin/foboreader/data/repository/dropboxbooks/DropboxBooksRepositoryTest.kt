@@ -9,11 +9,10 @@ import org.junit.Ignore
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksRepository
-import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksStorage
-import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxClientFactory
+import ru.mamykin.foboreader.data.exception.UserNotAuthorizedException
 import ru.mamykin.foboreader.entity.DropboxFile
 import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
+import rx.Completable
 
 class DropboxBooksRepositoryTest {
 
@@ -30,58 +29,48 @@ class DropboxBooksRepositoryTest {
 
     lateinit var mockFiles: List<DropboxFile>
 
-    val authToken = "S1828HD9J"
-
     lateinit var repository: DropboxBooksRepository
+
+    private val authToken = "S1828HD9J"
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        mockFiles = listOf(mockFile, mockFile)
         repository = DropboxBooksRepository(clientFactory, storage, mapper)
     }
 
     @Test
-    fun initDropbox_returnsError_whenAuthTokenEmpty() {
-        whenever(storage.authToken).thenReturn(null)
+    fun getRootDirectoryFiles_throwsUserNotAuthorizedException_whenAuthTokenIsBlank() {
+        whenever(storage.authToken).thenReturn("")
 
-//        val testSubscriber = repository.initDropbox().test()
-//
-//        testSubscriber.assertNotCompleted().assertError(UserNotAuthorizedException::class.java)
-    }
+        val testSubscriber = repository.getRootDirectoryFiles().test()
 
-    @Test
-    fun initDropbox_callsInitClient_whenAuthTokenNotEmpty() {
-        whenever(storage.authToken).thenReturn(authToken)
-
-//        val testSubscriber = repository.initDropbox().test()
-//
-//        verify(clientFactory).init(authToken)
-//        testSubscriber.assertCompleted().assertNoErrors()
+        testSubscriber.assertNotCompleted().assertError(UserNotAuthorizedException::class.java)
     }
 
     @Test
     @Ignore
-    fun getFiles_returnsFolderFiles() {
-        val directory = "/books"
-        whenever(clientFactory.getClient().files().listFolder(directory)).thenReturn(mockFolder)
+    fun getRootDirectoryFiles_returnsRootDirectoryFiles_whenAuthTokenIsNotBlank() {
+        whenever(storage.authToken).thenReturn(authToken)
+        whenever(clientFactory.init(authToken)).thenReturn(Completable.complete())
+        whenever(clientFactory.getClient().files().listFolder("")).thenReturn(mockFolder)
         whenever(mapper.transform(mockFolder)).thenReturn(mockFiles)
 
-        val testSubscriber = repository.getFiles(directory).test()
+        val testSubscriber = repository.getRootDirectoryFiles().test()
 
         testSubscriber.assertCompleted().assertValue(mockFiles)
     }
 
     @Test
     @Ignore
-    fun getAccountInfo_returnsAccountInfoFromClientFactory() {
+    fun getAccountEmail_returnsAccountEmail() {
         val mockAccount = mock<FullAccount>()
-        val mockEmail = "test@test.ru"
-        whenever(mockAccount.email).thenReturn(mockEmail)
+        val email = "test@test.ru"
+        whenever(mockAccount.email).thenReturn(email)
         whenever(clientFactory.getClient().users().currentAccount).thenReturn(mockAccount)
 
         val testSubscriber = repository.getAccountEmail().test()
 
-        testSubscriber.assertCompleted().assertValue(mockEmail)
+        testSubscriber.assertCompleted().assertValue(email)
     }
 }
