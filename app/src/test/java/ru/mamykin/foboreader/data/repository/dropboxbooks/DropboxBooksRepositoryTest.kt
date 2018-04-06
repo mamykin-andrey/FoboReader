@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.repository
+package ru.mamykin.foboreader.data.repository.dropboxbooks
 
 import com.dropbox.core.v2.files.ListFolderResult
 import com.dropbox.core.v2.users.FullAccount

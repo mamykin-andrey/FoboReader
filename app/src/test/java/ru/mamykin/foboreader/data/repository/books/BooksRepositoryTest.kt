@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.repository
+package ru.mamykin.foboreader.data.repository.books
 
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
