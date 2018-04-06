@@ -15,7 +15,6 @@ class ReadBookInteractor @Inject constructor(
         private val textToSpeechService: TextToSpeechService,
         @BookPath private val bookPath: String
 ) {
-
     private lateinit var paginator: Paginator
     private lateinit var book: FictionBook
 
