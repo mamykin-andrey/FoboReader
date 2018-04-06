@@ -5,14 +5,11 @@ import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
 import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.extension.parseDate
-import java.io.File
-import java.io.IOException
-import javax.xml.parsers.ParserConfigurationException
-import javax.xml.parsers.SAXParserFactory
 
 // TODO: REFACTOR
-class BookXmlSaxParser(private val successFunc: () -> Unit,
-                       private val book: FictionBook
+class BookXmlSaxParserHandler(
+        private val successFunc: () -> Unit,
+        private val book: FictionBook
 ) : DefaultHandler2() {
 
     private val titleSb = StringBuilder()
@@ -97,33 +94,5 @@ class BookXmlSaxParser(private val successFunc: () -> Unit,
         book.transMap = transMap
         book.sectionTitle = titleSb.toString()
         successFunc()
-    }
-
-    interface SaxParserListener {
-        fun onParseCompleted()
-    }
-
-    companion object {
-
-        /**
-         * Парсинг книги по пути к файлу, вызывается при открытии файла с устройства
-         * @param book     объект с книгой, в котором содержится путь к файлу
-         * @param successFunc слушатель, в котором вызывается [SaxParserListener.onParseCompleted] по окончании парсинга
-         */
-        fun parseBook(book: FictionBook, successFunc: () -> Unit) {
-            try {
-                val factory = SAXParserFactory.newInstance()
-                val parser = factory.newSAXParser()
-                val parseHandler = BookXmlSaxParser(successFunc, book)
-                parser.parse(File(book.filePath), parseHandler)
-            } catch (e: ParserConfigurationException) {
-                e.printStackTrace()
-            } catch (e: SAXException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-        }
     }
 }

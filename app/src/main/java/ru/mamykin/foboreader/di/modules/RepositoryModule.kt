@@ -6,6 +6,7 @@ import dagger.Provides
 import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.data.network.BooksStoreService
 import ru.mamykin.foboreader.data.network.YandexTranslateService
+import ru.mamykin.foboreader.data.repository.books.BookParser
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.booksstore.BooksStoreRepository
 import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksRepository
@@ -23,8 +24,8 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideBooksRepository(bookDao: BookDao): BooksRepository {
-        return BooksRepository(bookDao)
+    fun provideBooksRepository(bookDao: BookDao, bookParser: BookParser): BooksRepository {
+        return BooksRepository(bookDao, bookParser)
     }
 
     @Provides
