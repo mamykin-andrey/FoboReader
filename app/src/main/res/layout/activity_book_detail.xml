@@ -3,204 +3,189 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.bookdetails.BookDetailsActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <include layout="@layout/appbar" />
 
-        <LinearLayout
-            android:id="@+id/llBookDetails"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:id="@+id/rlBookMainInfo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#EEEEEE"
-            android:orientation="horizontal">
+            android:layout_below="@id/appbarLayout"
+            android:background="@color/lightGrey"
+            android:padding="@dimen/activity_horizontal_margin">
 
             <ImageView
+                android:id="@+id/ivBookCover"
                 android:layout_width="100dp"
                 android:layout_height="120dp"
-                android:layout_margin="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:contentDescription="@null"
                 android:scaleType="centerCrop"
                 android:src="@drawable/img_no_image" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvBookName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="vertical">
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_toEndOf="@id/ivBookCover"
+                android:layout_toRightOf="@id/ivBookCover"
+                android:textColor="@color/darkGrey"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Harry Potter and the Goblet of Fire" />
 
-                <TextView
-                    android:id="@+id/tvBookName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textColor="#444"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="Harry Potter and the Goblet of Fire" />
+            <TextView
+                android:id="@+id/tvBookAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvBookName"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@id/ivBookCover"
+                android:layout_toRightOf="@id/ivBookCover"
+                android:textColor="@color/darkGrey"
+                android:textSize="16sp"
+                tools:text="Joanne Rowling" />
 
-                <TextView
-                    android:id="@+id/tvBookAuthor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#444"
-                    android:textSize="16sp"
-                    tools:text="Joanne Rowling" />
+        </RelativeLayout>
 
-            </LinearLayout>
+        <!-- TODO: move this views to list view -->
 
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvBookmarksTitle"
+            style="@style/DetailsBookTitleStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
+            android:layout_below="@id/rlBookMainInfo"
+            android:text="@string/bookmarks" />
 
-            <TextView
-                style="@style/DetailsBookTitleStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/bookmarks" />
+        <TextView
+            android:id="@+id/tvBookmarks"
+            style="@style/DetailsTextNameStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookmarksTitle"
+            android:text="@string/no_bookmarks" />
 
-            <TextView
-                style="@style/DetailsTextNameStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/no_bookmarks" />
+        <TextView
+            android:id="@+id/tvBookInfoTitle"
+            style="@style/DetailsBookTitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookmarks"
+            android:text="@string/book_info_title" />
 
-            <TextView
-                style="@style/DetailsBookTitleStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/book_info_title" />
+        <TextView
+            android:id="@+id/tvBookPathTitle"
+            style="@style/DetailsTextNameStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookInfoTitle"
+            android:text="@string/book_path" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvBookPath"
+            style="@style/DetailsListItemTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookInfoTitle"
+            android:layout_toEndOf="@id/tvBookPathTitle"
+            android:layout_toRightOf="@id/tvBookPathTitle"
+            tools:text="sdcard/Download/harry_potter.fb2" />
 
-                <TextView
-                    style="@style/DetailsTextNameStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/book_path" />
+        <TextView
+            android:id="@+id/tvCurrentPageTitle"
+            style="@style/DetailsTextNameStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookPath"
+            android:text="@string/current_page" />
 
-                <TextView
-                    android:id="@+id/tvBookPath"
-                    style="@style/DetailsTextValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="sdcard/Download/harry_potter.fb2" />
+        <TextView
+            android:id="@+id/tvCurrentPage"
+            style="@style/DetailsListItemTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookPath"
+            android:layout_toEndOf="@id/tvCurrentPageTitle"
+            android:layout_toRightOf="@id/tvCurrentPageTitle"
+            tools:text="42" />
 
-            </LinearLayout>
+        <TextView
+            android:id="@+id/tvBookGenreTitle"
+            style="@style/DetailsTextNameStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvCurrentPageTitle"
+            android:text="@string/book_genre" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvBookGenre"
+            style="@style/DetailsListItemTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvCurrentPageTitle"
+            android:layout_toEndOf="@id/tvBookGenreTitle"
+            android:layout_toRightOf="@id/tvBookGenreTitle"
+            tools:text="Фантастика" />
 
-                <TextView
-                    style="@style/DetailsTextNameStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/current_page" />
+        <TextView
+            android:id="@+id/tvBookLanguageTitle"
+            style="@style/DetailsTextNameStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookGenreTitle"
+            android:text="@string/original_language" />
 
-                <TextView
-                    android:id="@+id/tvBookCurrentPage"
-                    style="@style/DetailsTextValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="42" />
+        <TextView
+            android:id="@+id/tvBookLanguage"
+            style="@style/DetailsListItemTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookGenreTitle"
+            android:layout_toEndOf="@id/tvBookLanguageTitle"
+            android:layout_toRightOf="@id/tvBookLanguageTitle"
+            tools:text="Английский" />
 
-            </LinearLayout>
+        <TextView
+            android:id="@+id/tvBookCreatedDateTitle"
+            style="@style/DetailsTextNameStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookLanguageTitle"
+            android:text="@string/created_date" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvBookCreatedDate"
+            style="@style/DetailsListItemTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookLanguageTitle"
+            android:layout_toEndOf="@id/tvBookCreatedDateTitle"
+            android:layout_toRightOf="@id/tvBookCreatedDateTitle"
+            tools:text="22.06.1993" />
 
-                <TextView
-                    style="@style/DetailsTextNameStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/book_genre" />
-
-                <TextView
-                    android:id="@+id/tvBookGenre"
-                    style="@style/DetailsTextValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Фантастика" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/DetailsTextNameStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/original_language" />
-
-                <TextView
-                    android:id="@+id/tvBookLanguage"
-                    style="@style/DetailsTextValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Английский" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/DetailsTextNameStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/created_date" />
-
-                <TextView
-                    android:id="@+id/tvBookCreatedDate"
-                    style="@style/DetailsTextValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="22.06.1993" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabRead"
         style="@style/FloatingButtonStyle"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
         android:src="@drawable/ic_book_read"
-        app:layout_anchor="@id/llBookDetails"
+        app:layout_anchor="@id/rlBookMainInfo"
         app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>

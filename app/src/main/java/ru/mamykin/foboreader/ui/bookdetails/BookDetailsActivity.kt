@@ -77,7 +77,7 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
     }
 
     override fun showBookCurrentPage(currentPage: String) {
-        tvBookCurrentPage.text = currentPage
+        tvCurrentPage.text = currentPage
     }
 
     override fun showBookGenre(genre: String) {
