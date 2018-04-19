@@ -6,6 +6,7 @@ apply plugin: 'io.fabric'
 
 ext {
     compatLibVersion = '27.1.0'
+    constraintLayoutVersion = '1.0.2'
     crashlyticsVersion = '2.9.1@aar'
     moxyVersion = '1.5.3'
     daggerVersion = '2.5'
@@ -36,7 +37,7 @@ android {
         multiDexEnabled true
         applicationId "ru.mamykin.foboreader"
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion 21
         versionCode 2
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -89,6 +90,7 @@ dependencies {
     implementation "com.android.support:cardview-v7:$compatLibVersion"
     implementation "com.android.support:design:$compatLibVersion"
     implementation "com.android.support:appcompat-v7:$compatLibVersion"
+    implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 
     implementation "com.j256.ormlite:ormlite-android:$ormliteVersion"
     implementation "com.dropbox.core:dropbox-core-sdk:$dropboxCoreSdkVersion"

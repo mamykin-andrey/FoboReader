@@ -88,4 +88,11 @@
     <style name="StoreAccentTextStyle">
         <item name="android:textSize">12sp</item>
     </style>
+
+    <style name="StoreTitleStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#444</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
 </resources>
