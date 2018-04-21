@@ -19,9 +19,10 @@ class StoreBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.tvPrice.text = book.priceStr
         itemView.tvOldPrice.text = book.oldPriceStr
         itemView.tvOldPrice.isVisible = book.oldPrice != null
-        itemView.tvOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+        itemView.tvOldPrice.paintFlags = itemView.tvOldPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         Picasso.with(itemView.context)
                 .load(book.pictureUrl)
+                .resize(500, 500)
                 .placeholder(R.drawable.img_no_image)
                 .into(itemView.ivCover)
     }
