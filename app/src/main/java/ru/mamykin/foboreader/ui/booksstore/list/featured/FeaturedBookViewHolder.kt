@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.ui.booksstore.list
+package ru.mamykin.foboreader.ui.booksstore.list.featured
 
 import android.graphics.Paint
 import android.support.v7.widget.RecyclerView
@@ -9,7 +9,7 @@ import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.entity.StoreBook
 import ru.mamykin.foboreader.extension.isVisible
 
-class PromotedBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class FeaturedBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(book: StoreBook) {
         itemView.tvName.text = book.title

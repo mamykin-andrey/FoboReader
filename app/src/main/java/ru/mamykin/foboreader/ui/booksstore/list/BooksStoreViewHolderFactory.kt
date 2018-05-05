@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.ui.booksstore.list.BooksStoreRecyclerAdapter.Companion.VIEW_TYPE_FEATURED_CATEGORIES
+import ru.mamykin.foboreader.ui.booksstore.list.featured.FeaturedBookViewHolder
+import ru.mamykin.foboreader.ui.booksstore.list.promoted.PromotedCategoriesContainerViewHolder
 
 class BooksStoreViewHolderFactory {
 
@@ -12,8 +14,8 @@ class BooksStoreViewHolderFactory {
         val resourceId = getResourceId(viewType)
         val itemView = LayoutInflater.from(parent.context).inflate(resourceId, parent, false)
         return when (viewType) {
-            VIEW_TYPE_FEATURED_CATEGORIES -> FeaturedCategoriesViewHolder(itemView)
-            else -> PromotedBookViewHolder(itemView)
+            VIEW_TYPE_FEATURED_CATEGORIES -> PromotedCategoriesContainerViewHolder(itemView)
+            else -> FeaturedBookViewHolder(itemView)
         }
     }
 

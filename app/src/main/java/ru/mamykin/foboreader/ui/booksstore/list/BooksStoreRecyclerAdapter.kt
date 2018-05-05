@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import ru.mamykin.foboreader.entity.StoreBook
 import ru.mamykin.foboreader.entity.booksstore.PromotedCategory
+import ru.mamykin.foboreader.ui.booksstore.list.featured.FeaturedBookViewHolder
+import ru.mamykin.foboreader.ui.booksstore.list.promoted.PromotedCategoriesContainerViewHolder
 
 class BooksStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -20,8 +22,8 @@ class BooksStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             viewHolderFactory.create(parent, viewType)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) = when (getItemViewType(position)) {
-        VIEW_TYPE_FEATURED_CATEGORIES -> (holder as FeaturedCategoriesViewHolder).bind(featuredCategories)
-        else -> (holder as PromotedBookViewHolder).bind(books[position])
+        VIEW_TYPE_FEATURED_CATEGORIES -> (holder as PromotedCategoriesContainerViewHolder).bind(featuredCategories)
+        else -> (holder as FeaturedBookViewHolder).bind(books[position])
     }
 
     override fun getItemCount(): Int = books.size
