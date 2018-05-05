@@ -4,11 +4,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.ui.booksstore.list.BooksStoreRecyclerAdapter.Companion.VIEW_TYPE_FEATURED_CATEGORIES
+import ru.mamykin.foboreader.ui.booksstore.list.MainStoreRecyclerAdapter.Companion.VIEW_TYPE_FEATURED_CATEGORIES
 import ru.mamykin.foboreader.ui.booksstore.list.featured.FeaturedBookViewHolder
 import ru.mamykin.foboreader.ui.booksstore.list.promoted.PromotedCategoriesContainerViewHolder
 
-class BooksStoreViewHolderFactory {
+class MainStoreViewHolderFactory {
 
     fun create(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val resourceId = getResourceId(viewType)

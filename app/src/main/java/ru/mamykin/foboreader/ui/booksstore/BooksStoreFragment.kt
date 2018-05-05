@@ -14,7 +14,7 @@ import ru.mamykin.foboreader.entity.booksstore.PromotedCategory
 import ru.mamykin.foboreader.entity.booksstore.StoreCategory
 import ru.mamykin.foboreader.presentation.booksstore.BooksStorePresenter
 import ru.mamykin.foboreader.presentation.booksstore.BooksStoreView
-import ru.mamykin.foboreader.ui.booksstore.list.BooksStoreRecyclerAdapter
+import ru.mamykin.foboreader.ui.booksstore.list.MainStoreRecyclerAdapter
 import ru.mamykin.foboreader.ui.global.BaseFragment
 import ru.mamykin.foboreader.ui.global.UiUtils
 import javax.inject.Inject
@@ -38,7 +38,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
     @InjectPresenter
     lateinit var presenter: BooksStorePresenter
 
-    private lateinit var adapter: BooksStoreRecyclerAdapter
+    private lateinit var adapter: MainStoreRecyclerAdapter
 
     @ProvidePresenter
     fun providePresenter(): BooksStorePresenter = presenter
@@ -64,7 +64,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
 
         srlRefresh.setOnRefreshListener { presenter.loadBooks() }
 
-        adapter = BooksStoreRecyclerAdapter()
+        adapter = MainStoreRecyclerAdapter()
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), false)
     }
 
