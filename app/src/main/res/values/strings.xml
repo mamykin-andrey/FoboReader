@@ -69,4 +69,5 @@
     <!-- Non-translatable strings -->
     <string name="yandex_api_key" translatable="false">API KEY</string>
     <string name="dropbox_api_key" translatable="false">API KEY</string>
+    <string name="linear_layout_manager">LinearLayoutManager</string>
 </resources>

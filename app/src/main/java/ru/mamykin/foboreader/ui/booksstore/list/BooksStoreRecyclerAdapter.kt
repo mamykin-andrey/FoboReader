@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.ui.booksstore.list
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import ru.mamykin.foboreader.entity.StoreBook
-import ru.mamykin.foboreader.entity.booksstore.FeaturedCategory
+import ru.mamykin.foboreader.entity.booksstore.PromotedCategory
 
 class BooksStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -14,7 +14,7 @@ class BooksStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 
     private val viewHolderFactory = BooksStoreViewHolderFactory()
     private var books: List<StoreBook> = listOf()
-    private var featuredCategories: List<FeaturedCategory> = listOf()
+    private var featuredCategories: List<PromotedCategory> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             viewHolderFactory.create(parent, viewType)
@@ -31,12 +31,12 @@ class BooksStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
         else -> VIEW_TYPE_PROMOTED_BOOKS
     }
 
-    fun changePromotedBooks(books: List<StoreBook>) {
+    fun changeFeaturedCategories(books: List<StoreBook>) {
         this.books = books
         notifyDataSetChanged()
     }
 
-    fun changeFeaturedCategories(categories: List<FeaturedCategory>) {
+    fun changePromotedCategories(categories: List<PromotedCategory>) {
         this.featuredCategories = categories
         notifyDataSetChanged()
     }

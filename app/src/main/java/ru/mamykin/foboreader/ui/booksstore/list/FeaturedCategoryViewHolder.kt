@@ -5,11 +5,11 @@ import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_featured_book.view.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.entity.booksstore.FeaturedCategory
+import ru.mamykin.foboreader.entity.booksstore.PromotedCategory
 
 class FeaturedCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(category: FeaturedCategory) {
+    fun bind(category: PromotedCategory) {
         itemView.tvTitle.text = category.title
         itemView.tvSubtitle.text = category.subtitle
         Picasso.with(itemView.context)
