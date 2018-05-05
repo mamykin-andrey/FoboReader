@@ -84,11 +84,11 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
 
     override fun showFeaturedCategories(featured: List<FeaturedCategory>) {
         val books = featured.flatMap { it.books }.toList()
-        adapter.changeFeaturedCategories(books)
+        adapter.changeFeaturedBooks(books)
     }
 
     override fun showStoreCategories(categories: List<StoreCategory>) {
-        // TODO: Not implemented
+        adapter.changeStoreCategories(categories)
     }
 
     override fun showMessage(message: String) {
