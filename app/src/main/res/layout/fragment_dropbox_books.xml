@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -36,41 +37,12 @@
             android:background="@drawable/bg_dropbox_btn"
             android:text="@string/dropbox_auth_button"
             android:textColor="#EEEEEE" />
+
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/llFiles"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvBooks"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_text_dir"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/ibUp"
-                style="@style/FilesButtonUpStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_back" />
-
-            <TextView
-                android:id="@+id/tvCurrentDir"
-                style="@style/FilesTextCurrentDirStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="/books/folder" />
-        </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvBooks"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</FrameLayout>

@@ -84,7 +84,7 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
     }
 
     override fun showCurrentDir(currentDir: String) {
-        tvCurrentDir.text = currentDir
+        btnUp.text = currentDir
     }
 
     override fun showPermissionError() {

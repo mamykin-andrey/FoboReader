@@ -20,7 +20,7 @@
             android:src="@drawable/ic_back" />
 
         <TextView
-            android:id="@+id/tvCurrentDir"
+            android:id="@+id/btnUp"
             style="@style/FilesTextCurrentDirStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

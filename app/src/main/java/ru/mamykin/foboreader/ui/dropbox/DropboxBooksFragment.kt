@@ -62,11 +62,14 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = DropboxRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
+        adapter = DropboxRecyclerAdapter(
+                presenter::onFileClicked,
+                presenter::onDirectoryClicked,
+                presenter::onParentDirectoryClicked
+        )
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), true)
 
         btnLogin.setOnClickListener { presenter.onLoginClicked() }
-        ibUp.setOnClickListener { presenter.onParentDirectoryClicked() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -79,45 +82,27 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
         UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, this)
     }
 
-    override fun showFiles(filesList: List<DropboxFile>) {
-        rvBooks.visibility = View.VISIBLE
-        adapter.changeData(filesList)
-    }
-
-    override fun hideFiles() {
-        rvBooks.visibility = View.GONE
-    }
-
-    override fun showCurrentDir(dir: String) {
-        tvCurrentDir.text = dir
-    }
-
-    override fun showLoadingItem(position: Int) {
-        adapter.showLoadingItem(position)
-    }
-
-    override fun hideLoadingItem() {
+    override fun showFiles(files: List<DropboxFile>) {
         adapter.hideLoadingItem()
+        pbLoading.isVisible = false
+        llNoAuth.isVisible = false
+        rvBooks.isVisible = true
+        adapter.changeData(files)
     }
 
-    override fun showLoading() {
-        pbLoading.visibility = View.VISIBLE
+    override fun showLoadingItem(position: Int?) {
+        if (position == null)
+            adapter.hideLoadingItem()
+        else
+            adapter.showLoadingItem(position)
     }
 
-    override fun hideLoading() {
-        pbLoading.visibility = View.GONE
+    override fun showLoading(show: Boolean) {
+        pbLoading.isVisible = show
     }
 
-    override fun showAuth() {
-        llNoAuth.visibility = View.VISIBLE
-    }
-
-    override fun hideAuth() {
-        llNoAuth.visibility = View.GONE
-    }
-
-    override fun showUpButton(show: Boolean) {
-        ibUp.isVisible = show
+    override fun showAuth(show: Boolean) {
+        llNoAuth.isVisible = show
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {

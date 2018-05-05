@@ -26,7 +26,7 @@ class DropboxBooksPresenter @Inject constructor(
         interactor.downloadFile(file)
                 .applySchedulers()
                 .doOnSubscribe { viewState.showLoadingItem(position) }
-                .doAfterTerminate { viewState.hideLoadingItem() }
+                .doAfterTerminate { viewState.showLoadingItem(null) }
                 .subscribe(router::openBook, Throwable::printStackTrace)
                 .unsubscribeOnDestroy()
     }
@@ -56,18 +56,16 @@ class DropboxBooksPresenter @Inject constructor(
     }
 
     private fun showFiles(files: List<DropboxFile>) {
-        viewState.hideAuth()
         viewState.showFiles(files)
     }
 
     private fun showAuth() {
-        viewState.hideFiles()
-        viewState.showAuth()
+        viewState.showAuth(true)
     }
 
     private fun <T> Single<T>.showProgress(): Single<T> {
-        doOnSubscribe(viewState::showLoading)
-        doAfterTerminate(viewState::hideLoading)
+        doOnSubscribe { viewState.showLoading(true) }
+        doAfterTerminate { viewState.showLoading(false) }
         return this
     }
 }
