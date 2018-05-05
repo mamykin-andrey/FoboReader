@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.mamykin.foboreader">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -54,6 +55,6 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="4f9483ce404f1a80d793e9d4467888b1034627ad" />
+            android:value="@string/fabric_api_key" />
     </application>
 </manifest>
