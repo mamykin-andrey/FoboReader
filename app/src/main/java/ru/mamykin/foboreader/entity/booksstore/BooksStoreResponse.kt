@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class BooksStoreResponse(
         @SerializedName("promotions")
-        val promotions: List<StorePromotion>,
+        val promotions: List<FeaturedCategory>,
         @SerializedName("featured")
         val featured: List<StoreFeatured>,
         @SerializedName("categories")

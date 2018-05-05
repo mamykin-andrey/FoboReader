@@ -77,7 +77,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
     }
 
     override fun showBooks(booksList: List<StoreBook>) {
-        adapter.changeData(booksList)
+        adapter.changePromotedBooks(booksList)
     }
 
     override fun showMessage(message: String) {
