@@ -1,23 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/group_main">
-        <item android:id="@+id/menu_my_books"
-              android:icon="@drawable/ic_book"
-              android:title="@string/my_books"/>
-        <item android:id="@+id/menu_device"
-              android:icon="@drawable/ic_phone"
-              android:title="@string/device"/>
-        <item android:id="@+id/menu_dropbox"
-              android:icon="@drawable/ic_dropbox"
-              android:title="@string/dropbox"/>
-        <item android:id="@+id/menu_settings"
-              android:icon="@drawable/ic_settings"
-              android:title="@string/settings"/>
+        <item
+            android:id="@+id/menu_my_books"
+            android:icon="@drawable/ic_book"
+            android:title="@string/my_books" />
+        <item
+            android:id="@+id/menu_device"
+            android:icon="@drawable/ic_phone"
+            android:title="@string/device" />
+        <item
+            android:id="@+id/menu_dropbox"
+            android:icon="@drawable/ic_dropbox"
+            android:title="@string/dropbox" />
+        <item
+            android:id="@+id/menu_books_store"
+            android:icon="@drawable/ic_store"
+            android:title="@string/books_store" />
+        <item
+            android:id="@+id/menu_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings" />
+
     </group>
     <group android:id="@+id/group_other">
-        <item android:id="@+id/menu_about"
-              android:title="@string/about_program"/>
-        <item android:id="@+id/menu_exit"
-              android:title="@string/exit"/>
+        <item
+            android:id="@+id/menu_about"
+            android:title="@string/about_program" />
+        <item
+            android:id="@+id/menu_exit"
+            android:title="@string/exit" />
     </group>
 </menu>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,7 +15,7 @@
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:indeterminate="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/ivFileType"
@@ -25,20 +24,22 @@
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:contentDescription="@string/file_icon_desc"
-        tools:src="@drawable/ic_folder"/>
+        tools:src="@drawable/ic_folder" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/tvFileName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:maxLines="1"
             android:textSize="16sp"
-            tools:text="Робинзон Крузо"/>
+            tools:text="Робинзон Крузо" />
+
         <TextView
             android:id="@+id/tvFileAttributes"
             android:layout_width="match_parent"
@@ -46,6 +47,8 @@
             android:maxLines="1"
             android:textColor="#AAAAAA"
             android:textSize="14sp"
-            tools:text="rwx------ 2016-09-09 16:51"/>
+            tools:text="rwx------ 2016-09-09 16:51" />
+
     </LinearLayout>
+
 </LinearLayout>

@@ -5,5 +5,5 @@
     <color name="readTextColor">#999999</color>
     <color name="negativeTextColor">#AAAAAA</color>
     <color name="negativeColorBackgroundDark">#555555</color>
-    <color name="aboutTextColor">#999</color>
+    <color name="darkGrey">#999</color>
 </resources>

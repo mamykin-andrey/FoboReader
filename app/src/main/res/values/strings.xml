@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">FoBo Reader</string>
-    <string name="read_percent_string">%.2f%%</string>
     <string name="menu_search">Поиск</string>
     <string name="menu_sort">Сортировка</string>
     <string name="my_books">Мои книги</string>
@@ -9,7 +8,6 @@
     <string name="device">Устройство</string>
     <string name="dropbox">Dropbox</string>
     <string name="settings">Настройки</string>
-    <string name="about_text">Данное приложение разработано в рамках конкурса IT-Planet «Разработка мобильных приложений»</string>
     <string name="exit">Выход</string>
     <string name="see_all_btn">Все</string>
     <string name="recent">Недавние</string>
@@ -54,24 +52,6 @@
     <string name="permission_denied">Доступ запрещен</string>
     <string name="about_program">О программе</string>
     <string name="price">Цена:</string>
-    <string name="gitlab">Gitlab.com</string>
-    <string name="feedback">Обратная связь</string>
-    <string name="vk">Вконтакте</string>
-    <string name="libs">Сторонние библиотеки</string>
-    <string name="google_plus">Google Plus</string>
-    <string name="changelog_title">What\'s new</string>
-    <string name="libraries_title">Сторонние библиотеки</string>
-    <string name="libs_text">Crashlytics от Fabric
-        Moxy от Arello Mobile
-        Dagger от Google
-        Butterknife от Jake Wharton
-        RxJava от ReactiveX
-        Retrofit2 от SquareUp
-        Picasso от SquareUp
-        Ormlite от j256
-        Eventbus от Greenrobot
-        Dropbox API
-    </string>
     <string name="send_email_title">Отправить email</string>
     <string name="feedback_hint">Обратная связь</string>
     <string name="book_path">Файл:</string>
@@ -81,13 +61,12 @@
     <string name="created_date">Дата создания:</string>
     <string name="restart_app_title">Внимание</string>
     <string name="restart_app_text">Применить выбранный язык, приложение будет перезапущено?</string>
-    <!-- Non-translatable strings -->
-    <string name="yandex_api_key" translatable="false">trnsl.1.1.20170113T101808Z.0188eae8ab6860f6.56cf55caa007b73c95ca0318be6d30ed2de15532</string>
-    <string name="dropbox_api_key" translatable="false">mbo98pyzoi2dfxs</string>
-    <string name="gitlab_profile" translatable="false">https://gitlab.com/users/mamykin.av/projects</string>
-    <string name="challenge_link" translatable="false">http://world-it-planet.org/projects/competition_detail.php?ID=62249</string>
-    <string name="google_profile" translatable="false">https://plus.google.com/u/0/111455238676040220610</string>
-    <string name="mail" translatable="false">mamykin.av@bk.ru</string>
     <string name="fbwt_format">fbwt</string>
+    <string name="wrong_file_format">Неподдерживаемый формат файла</string>
     <string name="download_on">%1$s, скачать на %2$s</string>
+    <string name="read_pages_format">%1$d / %2$d</string>
+    <string name="read_percent_string">%.2f%%</string>
+    <!-- Non-translatable strings -->
+    <string name="yandex_api_key" translatable="false">API KEY</string>
+    <string name="dropbox_api_key" translatable="false">API KEY</string>
 </resources>

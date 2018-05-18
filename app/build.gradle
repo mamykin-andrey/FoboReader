@@ -1,31 +1,42 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.21.6'
-    }
-}
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
+ext {
+    compatLibVersion = '27.1.0'
+    constraintLayoutVersion = '1.0.2'
+    crashlyticsVersion = '2.9.1@aar'
+    moxyVersion = '1.5.3'
+    daggerVersion = '2.5'
+    roomVersion = '1.0.0'
+    rxAndroidVersion = '1.2.1'
+    rxJavaVersion = '1.1.6'
+    retrofitVersion = '2.3.0'
+    converterGsonVersion = '2.1.0'
+    adapterRxJavaVersion = '2.1.0'
+    picassoVersion = '2.5.2'
+    ormliteVersion = '4.48'
+    dropboxCoreSdkVersion = '2.1.1'
+    mockitoVersion = '2.13.0'
+    mockitoKotlinVersion = '1.5.0'
+    junitVersion = '4.12'
+    kluentVersion = '1.35'
+    espressoCoreVersion = '2.2.2'
 }
 
-ext {
-    compatLibVersion = "25.3.1"
-}
+def propertiesFile = rootProject.file('local.properties')
+def properties = new Properties()
+properties.load(new FileInputStream(propertiesFile))
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         multiDexEnabled true
-        applicationId "ru.mamykin.foreignbooksreader"
-        minSdkVersion 9
+        applicationId "ru.mamykin.foboreader"
+        minSdkVersion 14
         targetSdkVersion 21
         versionCode 2
         versionName "1.1"
@@ -33,10 +44,10 @@ android {
     }
     signingConfigs {
         release {
-            keyAlias 'reader'
-            keyPassword '654321'
-            storeFile file('reader.keystore')
-            storePassword '654321'
+            keyAlias properties['keyAlias']
+            keyPassword properties['keyPassword']
+            storeFile file(properties['storeFile'])
+            storePassword properties['storePassword']
         }
     }
     buildTypes {
@@ -52,55 +63,45 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2') {
-        exclude group: 'com.android.support', module: 'support-annotations'
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    implementation "android.arch.persistence.room:runtime:$roomVersion"
+    kapt "android.arch.persistence.room:compiler:$roomVersion"
+
+    implementation "com.arello-mobile:moxy:$moxyVersion"
+    implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
+    kapt "com.arello-mobile:moxy-compiler:$moxyVersion"
+
+    implementation "io.reactivex:rxandroid:$rxAndroidVersion"
+    implementation "io.reactivex:rxjava:$rxJavaVersion"
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
+    implementation "com.squareup.picasso:picasso:$picassoVersion"
+
+    implementation "com.android.support:cardview-v7:$compatLibVersion"
+    implementation "com.android.support:design:$compatLibVersion"
+    implementation "com.android.support:appcompat-v7:$compatLibVersion"
+    implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
+
+    implementation "com.j256.ormlite:ormlite-android:$ormliteVersion"
+    implementation "com.dropbox.core:dropbox-core-sdk:$dropboxCoreSdkVersion"
+    implementation("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion") {
+        transitive = true
     }
 
-    compile('com.google.apis:google-api-services-translate:v2-rev48-1.22.0') {
-        exclude module: 'httpclient'
-        exclude group: 'org.apache.httpcomponents'
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-        exclude group: 'com.google.code.findbugs'
-    }
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
-        transitive = true;
-    }
-    compile 'com.arello-mobile:moxy:1.5.1'
-    compile 'com.arello-mobile:moxy-app-compat:1.5.1'
-    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.1'
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
+    testImplementation "org.amshove.kluent:kluent:$kluentVersion"
 
-    compile 'com.google.dagger:dagger:2.5'
-    provided 'org.glassfish:javax.annotation:10.0-b28'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.5'
-
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.6'
-
-    compile "com.squareup.retrofit2:retrofit:2.1.0"
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-
-    compile 'com.squareup.picasso:picasso:2.5.2'
-
-    compile "com.android.support:cardview-v7:$compatLibVersion"
-    compile "com.android.support:design:$compatLibVersion"
-    compile "com.android.support:appcompat-v7:$compatLibVersion"
-
-    compile 'com.j256.ormlite:ormlite-android:4.48'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile "com.dropbox.core:dropbox-core-sdk:2.1.1"
-
-    testCompile "junit:junit:4.12"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoCoreVersion")
 }
