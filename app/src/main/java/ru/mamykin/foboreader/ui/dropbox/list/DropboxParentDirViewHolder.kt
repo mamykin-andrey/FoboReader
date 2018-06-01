@@ -10,7 +10,7 @@ class DropboxParentDirViewHolder(
         private val onClickFunc: () -> Unit) : RecyclerView.ViewHolder(itemView) {
 
     fun bind() {
-        itemView.tvFileName.text = "Вверх..."
+        itemView.tvFileName.text = itemView.context.getString(R.string.navigate_up)
         itemView.ivFileType.setImageResource(R.drawable.ic_back)
         itemView.tvFileAttributes.visibility = View.GONE
         itemView.setOnClickListener { onClickFunc() }

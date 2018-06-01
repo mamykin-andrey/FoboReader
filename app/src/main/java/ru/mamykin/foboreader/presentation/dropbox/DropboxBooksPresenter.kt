@@ -35,7 +35,7 @@ class DropboxBooksPresenter @Inject constructor(
         interactor.getDirectoryFiles(dir)
                 .applySchedulers()
                 .showProgress()
-                .subscribe(this::showFiles, Throwable::printStackTrace)
+                .subscribe(viewState::showFiles, Throwable::printStackTrace)
                 .unsubscribeOnDestroy()
     }
 
@@ -43,7 +43,7 @@ class DropboxBooksPresenter @Inject constructor(
         interactor.getParentDirectoryFiles()
                 .applySchedulers()
                 .showProgress()
-                .subscribe(this::showFiles, Throwable::printStackTrace)
+                .subscribe(viewState::showFiles, Throwable::printStackTrace)
                 .unsubscribeOnDestroy()
     }
 
@@ -51,16 +51,8 @@ class DropboxBooksPresenter @Inject constructor(
         interactor.getRootDirectoryFiles()
                 .applySchedulers()
                 .showProgress()
-                .subscribe({ showFiles(it) }, { showAuth() })
+                .subscribe({ viewState.showFiles(it) }, { viewState.showAuth(true) })
                 .unsubscribeOnDestroy()
-    }
-
-    private fun showFiles(files: List<DropboxFile>) {
-        viewState.showFiles(files)
-    }
-
-    private fun showAuth() {
-        viewState.showAuth(true)
     }
 
     private fun <T> Single<T>.showProgress(): Single<T> {

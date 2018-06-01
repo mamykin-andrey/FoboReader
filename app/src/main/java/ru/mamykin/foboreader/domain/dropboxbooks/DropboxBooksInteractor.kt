@@ -16,6 +16,7 @@ class DropboxBooksInteractor @Inject constructor(
 
     fun getParentDirectoryFiles(): Single<List<DropboxFile>> {
         formatParentDirectory(currentDir)?.let {
+            currentDir = it
             return repository.getFiles(it)
         }
         return Single.error(RuntimeException("No parent directory"))
