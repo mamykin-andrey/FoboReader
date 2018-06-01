@@ -25,7 +25,7 @@ class Paginator(content: CharSequence, viewParams: ViewParams) {
 
     val pagesCount: Int = pages.size
 
-    val readPercent: Float = when (pagesCount) {
+    fun getReadPercent(): Float = when (pagesCount) {
         0 -> 0f
         else -> (currentIndex + 1) / pagesCount.toFloat() * 100
     }

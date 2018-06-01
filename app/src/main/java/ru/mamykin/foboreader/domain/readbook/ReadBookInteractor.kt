@@ -62,7 +62,7 @@ class ReadBookInteractor @Inject constructor(
                 paginator.currentIndex + 1,
                 paginator.pagesCount,
                 paginator.getCurrentPage(),
-                paginator.readPercent
+                paginator.getReadPercent()
         )
     }
 }
