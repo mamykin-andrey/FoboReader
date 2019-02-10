@@ -5,6 +5,7 @@ import ru.mamykin.foboreader.domain.devicebooks.AccessDeniedException
 import ru.mamykin.foboreader.domain.devicebooks.DeviceBooksInteractor
 import ru.mamykin.foboreader.domain.devicebooks.FileStructureEntity
 import ru.mamykin.foboreader.domain.devicebooks.UnknownBookFormatException
+import ru.mamykin.foboreader.extension.applySchedulers
 import ru.mamykin.foboreader.presentation.global.BasePresenter
 import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksRouter
 import java.io.File
@@ -41,6 +42,7 @@ class DeviceBooksPresenter @Inject constructor(
 
     private fun openRootDirectory() {
         interactor.getRootDirectoryFiles()
+                .applySchedulers()
                 .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
                 .unsubscribeOnDestroy()
     }
