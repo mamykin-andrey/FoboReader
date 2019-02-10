@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ru.mamykin.foboreader.ui.global.control.swipabletextview.SwipeableTextView
+        <ru.mamykin.paginatedtextview.view.PaginatedTextView
             android:id="@+id/tvText"
             android:layout_width="match_parent"
             android:layout_height="0dp"

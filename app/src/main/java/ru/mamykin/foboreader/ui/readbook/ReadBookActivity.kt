@@ -13,8 +13,9 @@ import ru.mamykin.foboreader.extension.isVisible
 import ru.mamykin.foboreader.presentation.readbook.ReadBookPresenter
 import ru.mamykin.foboreader.presentation.readbook.ReadBookView
 import ru.mamykin.foboreader.ui.global.BaseActivity
-import ru.mamykin.foboreader.ui.global.control.swipabletextview.OnActionListener
-import ru.mamykin.foboreader.ui.global.control.swipabletextview.OnSwipeListener
+import ru.mamykin.paginatedtextview.pagination.ReadState
+import ru.mamykin.paginatedtextview.view.OnActionListener
+import ru.mamykin.paginatedtextview.view.OnSwipeListener
 import javax.inject.Inject
 
 /**
@@ -76,6 +77,9 @@ class ReadBookActivity : BaseActivity(), ReadBookView, OnActionListener, OnSwipe
 
     override fun onSwipeRight() {
         presenter.onSwipeRight()
+    }
+
+    override fun onPageLoaded(state: ReadState) {
     }
 
     override fun showParagraphTranslation(text: String) {
