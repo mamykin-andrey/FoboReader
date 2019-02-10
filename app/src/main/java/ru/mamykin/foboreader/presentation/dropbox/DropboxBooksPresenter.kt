@@ -51,7 +51,7 @@ class DropboxBooksPresenter @Inject constructor(
         interactor.getRootDirectoryFiles()
                 .applySchedulers()
                 .showProgress()
-                .subscribe({ viewState.showFiles(it) }, { viewState.showAuth(true) })
+                .subscribe({ viewState.showFiles(it) }, { viewState.showAuth() })
                 .unsubscribeOnDestroy()
     }
 

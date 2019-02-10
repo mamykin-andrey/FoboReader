@@ -101,8 +101,9 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
         pbLoading.isVisible = show
     }
 
-    override fun showAuth(show: Boolean) {
-        llNoAuth.isVisible = show
+    override fun showAuth() {
+        llNoAuth.isVisible = true
+        rvBooks.isVisible = false
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {

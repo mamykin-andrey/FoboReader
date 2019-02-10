@@ -15,5 +15,5 @@ interface DropboxView : MvpView {
 
     fun showLoading(show: Boolean)
 
-    fun showAuth(show: Boolean)
+    fun showAuth()
 }
