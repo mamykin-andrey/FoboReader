@@ -10,14 +10,9 @@ class DropboxClientFactory @Inject constructor() {
 
     private var client: DbxClientV2? = null
 
-    fun getClient(): DbxClientV2 {
-        if (client == null) {
-            throw IllegalStateException("Client not initialized")
-        }
-        return client!!
-    }
+    fun getClient(): DbxClientV2 = client ?: throw IllegalStateException("Client not initialized")
 
-    fun init(accessToken: String): Completable {
+    fun init(accessToken: String): Completable = Completable.fromCallable {
         if (client == null) {
             val requestConfig = DbxRequestConfig.newBuilder("FoBo Reader")
                     .withHttpRequestor(OkHttp3Requestor.INSTANCE)
@@ -25,6 +20,5 @@ class DropboxClientFactory @Inject constructor() {
 
             client = DbxClientV2(requestConfig, accessToken)
         }
-        return Completable.complete()
     }
 }

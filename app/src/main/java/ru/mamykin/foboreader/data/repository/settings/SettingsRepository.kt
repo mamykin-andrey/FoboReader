@@ -6,29 +6,18 @@ import javax.inject.Inject
 class SettingsRepository @Inject constructor(
         private val settingsStorage: SettingsStorage
 ) {
-    fun isNightThemeEnabled(): Boolean {
-        return settingsStorage.nightThemeEnabled
-    }
+    fun isNightThemeEnabled(): Boolean = settingsStorage.nightThemeEnabled
 
-    fun isManualBrightnessEnabled(): Boolean {
-        return settingsStorage.manualBrightnessEnabled
-    }
+    fun isManualBrightnessEnabled(): Boolean = settingsStorage.manualBrightnessEnabled
 
-    fun getManualBrightnessValue(): Float {
-        return settingsStorage.manualBrightnessValue
-    }
+    fun getManualBrightnessValue(): Float = settingsStorage.manualBrightnessValue
 
-    fun getBookTextSize(): Int {
-        return settingsStorage.bookTextSize
-    }
+    fun getBookTextSize(): Int = settingsStorage.bookTextSize
 
-    fun getDropboxAccount(): String? {
-        return settingsStorage.dropboxAccount
-    }
+    fun getDropboxAccount(): String? = settingsStorage.dropboxAccount
 
-    fun enableNightTheme(enable: Boolean) {
+    fun enableNightTheme(enable: Boolean) = UiUtils.enableNightMode(enable).also {
         settingsStorage.nightThemeEnabled = enable
-        UiUtils.enableNightMode(enable)
     }
 
     fun enableAutoBrightness(auto: Boolean) {
