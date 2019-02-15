@@ -71,4 +71,5 @@
     <string name="navigate_up">Вверх...</string>
     <string name="no_storage_permission_title">Нет разрешения на доступ к памяти устройства</string>
     <string name="no_storage_permission_text">Разрешение необходимо чтобы просматривать и загружать книги из памяти устройства</string>
+    <string name="grant_permissions">Разрешить</string>
 </resources>

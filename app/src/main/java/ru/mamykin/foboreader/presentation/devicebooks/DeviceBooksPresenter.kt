@@ -25,6 +25,14 @@ class DeviceBooksPresenter @Inject constructor(
         checkHasStoragePermission()
     }
 
+    fun checkHasStoragePermission() {
+        if (permissionsManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            openRootDirectory()
+        } else {
+            viewState.showNoPermissionView()
+        }
+    }
+
     fun onFileClicked(file: File) {
         interactor.openFile(file)
                 .subscribe(router::openBook, this::showOpenFileError)
@@ -41,14 +49,6 @@ class DeviceBooksPresenter @Inject constructor(
         interactor.getParentDirectoryFiles()
                 .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
                 .unsubscribeOnDestroy()
-    }
-
-    private fun checkHasStoragePermission() {
-        if (permissionsManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            openRootDirectory()
-        } else {
-            viewState.showNoPermissionView()
-        }
     }
 
     private fun openRootDirectory() {
