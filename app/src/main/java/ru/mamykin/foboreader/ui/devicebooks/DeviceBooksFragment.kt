@@ -7,6 +7,7 @@ import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_device_books.*
+import kotlinx.android.synthetic.main.layout_no_permission.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.di.modules.DeviceBooksModule
 import ru.mamykin.foboreader.extension.isVisible
@@ -24,13 +25,7 @@ import javax.inject.Inject
 class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryTextListener {
 
     companion object {
-
-        fun newInstance(): DeviceBooksFragment {
-            val args = Bundle()
-            val fragment = DeviceBooksFragment()
-            fragment.arguments = args
-            return fragment
-        }
+        fun newInstance() = DeviceBooksFragment()
     }
 
     @Inject
@@ -38,6 +33,9 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
     lateinit var presenter: DeviceBooksPresenter
 
     private lateinit var adapter: FilesRecyclerAdapter
+
+    @ProvidePresenter
+    fun provideDeviceBooksPresenter(): DeviceBooksPresenter = presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +47,6 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
         val module = DeviceBooksModule(DeviceBooksRouter(activity!!))
         getAppComponent().getDeviceBooksComponent(module).inject(this)
     }
-
-    @ProvidePresenter
-    fun provideDeviceBooksPresenter(): DeviceBooksPresenter = presenter
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -77,6 +72,12 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
         UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, this)
+    }
+
+    override fun showNoPermissionView() {
+        clNoPermission.isVisible = true
+        tvTitle.text = getString(R.string.no_storage_permission_title)
+        tvSubtitle.text = getString(R.string.no_storage_permission_text)
     }
 
     override fun showFiles(files: List<File>) {

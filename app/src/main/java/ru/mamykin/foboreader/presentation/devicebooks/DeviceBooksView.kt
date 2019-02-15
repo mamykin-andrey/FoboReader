@@ -8,6 +8,8 @@ import java.io.File
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface DeviceBooksView : MvpView {
 
+    fun showNoPermissionView()
+
     fun showFiles(files: List<File>)
 
     fun showCurrentDir(currentDir: String)
