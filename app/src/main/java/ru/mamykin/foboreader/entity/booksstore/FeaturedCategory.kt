@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.entity.booksstore
 import com.google.gson.annotations.SerializedName
 import ru.mamykin.foboreader.entity.StoreBook
 
-data class StoreFeatured(
+data class FeaturedCategory(
         @SerializedName("title")
         val title: String,
         @SerializedName("subtitle")

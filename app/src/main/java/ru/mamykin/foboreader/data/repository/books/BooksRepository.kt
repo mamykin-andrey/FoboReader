@@ -10,34 +10,26 @@ class BooksRepository @Inject constructor(
         private val bookDao: BookDao,
         private val bookParser: BookParser
 ) {
-    fun getBookInfo(bookPath: String): Single<FictionBook> {
-        return Single.just(bookDao.getBook(bookPath))
+    fun getBookInfo(bookPath: String): Single<FictionBook> = Single.just(bookDao.getBook(bookPath))
+
+    fun removeBook(bookPath: String): Completable = Completable.fromCallable {
+        bookDao.getBook(bookPath)?.let { bookDao.delete(it) }
     }
 
-    fun removeBook(bookPath: String): Completable {
-        return Completable.fromCallable {
-            val book = bookDao.getBook(bookPath)
-            bookDao.delete(book!!)
-        }
-    }
+    fun getBooks(query: String, sortOrder: BookDao.SortOrder): Single<List<FictionBook>> =
+            Single.fromCallable { bookDao.getBooks(query, sortOrder) }
 
-    fun getBooks(query: String, sortOrder: BookDao.SortOrder): Single<List<FictionBook>> {
-        return Single.fromCallable { bookDao.getBooks(query, sortOrder) }
-    }
-    
     fun getBook(bookPath: String): Single<FictionBook> {
         return Single.create {
-            val book = bookDao.getBook(bookPath) ?: createBook(bookPath)
-            bookParser.parse(book, {
+            val book = bookDao.getBook(bookPath) ?: FictionBook().apply {
+                filePath = bookPath
+            }
+            bookParser.parse(book) {
                 bookDao.update(book)
                 it.onSuccess(book)
-            })
+            }
         }
     }
 
-    fun updateBook(book: FictionBook): Completable {
-        return Completable.fromAction { bookDao.update(book) }
-    }
-
-    private fun createBook(filePath: String) = FictionBook().apply { this.filePath = filePath }
+    fun updateBook(book: FictionBook): Completable = Completable.fromAction { bookDao.update(book) }
 }

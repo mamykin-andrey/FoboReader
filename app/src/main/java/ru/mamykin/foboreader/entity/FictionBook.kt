@@ -5,6 +5,7 @@ import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.AlignmentSpan
 import ru.mamykin.foboreader.domain.readbook.TextHashMap
 import ru.mamykin.foboreader.extension.getPluralsString
 import java.util.*
@@ -50,14 +51,15 @@ class FictionBook {
     @Suppress("deprecation")
     val fullText: Spannable
         get() {
-            val htmlTitle = Html.fromHtml(bookTitle).toString() + "\n\n"
-            val spTitle = SpannableString(htmlTitle)
-            spTitle.setSpan(AbsoluteSizeSpan(55), 0, htmlTitle.length, Spanned.SPAN_COMPOSING)
-            spTitle.setSpan(Layout.Alignment.ALIGN_CENTER, 0, 0, Spanned.SPAN_COMPOSING)
+            val titleHtml = Html.fromHtml(bookTitle).toString() + "\n\n"
+            val titleSpannable = SpannableString(titleHtml)
+            titleSpannable.setSpan(AbsoluteSizeSpan(55), 0, titleHtml.length, Spanned.SPAN_COMPOSING)
+            val centerAlignment = AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER)
+            titleSpannable.setSpan(centerAlignment, 0, titleSpannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-            val htmlText = Html.fromHtml(bookText).toString()
-            val spText = SpannableString(htmlText)
-            return SpannableString(TextUtils.concat(spTitle, spText))
+            val textHtml = Html.fromHtml(bookText).toString()
+            val textSpannable = SpannableString(textHtml)
+            return SpannableString(TextUtils.concat(titleSpannable, textSpannable))
         }
 
     val pagesCountString: String

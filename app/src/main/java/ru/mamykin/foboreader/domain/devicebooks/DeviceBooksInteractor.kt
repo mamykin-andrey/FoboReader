@@ -18,7 +18,7 @@ class DeviceBooksInteractor @Inject constructor(
 
         return repository.getFiles(currentDir)
                 .map { it.sortedBy(File::getWeight) }
-                .zipWith(repository.canReadDirectory(parentDirectory), { f, c -> Pair(f, c) })
+                .zipWith(repository.canReadDirectory(parentDirectory)) { f, c -> Pair(f, c) }
                 .map { FileStructureEntity(it.first, it.second, currentDir) }
     }
 

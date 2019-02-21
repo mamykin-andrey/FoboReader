@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.ui.global.control
+package ru.mamykin.foboreader.ui.global
 
 import android.content.Context
 import android.util.AttributeSet

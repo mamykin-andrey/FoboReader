@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.entity.booksstore
 
 import com.google.gson.annotations.SerializedName
 
-data class StorePromotion(
+data class PromotedCategory(
         @SerializedName("categoryId")
         val categoryId: Int,
         @SerializedName("title")

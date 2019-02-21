@@ -15,8 +15,11 @@ class DropboxBooksInteractor @Inject constructor(
     }
 
     fun getParentDirectoryFiles(): Single<List<DropboxFile>> {
-        currentDir = formatParentDirectory(currentDir)
-        return repository.getFiles(currentDir)
+        formatParentDirectory(currentDir)?.let {
+            currentDir = it
+            return repository.getFiles(it)
+        }
+        return Single.error(RuntimeException("No parent directory"))
     }
 
     fun getDirectoryFiles(directory: DropboxFile): Single<List<DropboxFile>> {
@@ -32,7 +35,8 @@ class DropboxBooksInteractor @Inject constructor(
         return repository.downloadFile(file)
     }
 
-    private fun formatParentDirectory(directoryPath: String): String {
-        return directoryPath.substring(0, directoryPath.lastIndexOf("/"))
+    private fun formatParentDirectory(directoryPath: String): String? {
+        val rootDirIndex = directoryPath.lastIndexOf("/")
+        return if (rootDirIndex == -1) null else directoryPath.substring(0, rootDirIndex)
     }
 }

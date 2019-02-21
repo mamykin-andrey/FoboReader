@@ -27,8 +27,9 @@ class BooksStorePresenter @Inject constructor(
     }
 
     private fun showStoreInfo(response: BooksStoreResponse) {
-        // TODO
-        viewState.showBooks(response.featured[0].books)
+        viewState.showPromotedCategories(response.promotions)
+        viewState.showFeaturedCategories(response.featured)
+        viewState.showStoreCategories(response.categories)
     }
 
     private fun displayLoadingError(e: Throwable) {

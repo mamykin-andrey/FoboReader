@@ -14,7 +14,7 @@ fun CharSequence.allIndexesOf(char: Char): List<Int> {
     return indices
 }
 
-fun String.parseDate(): Date? {
+fun String.toDate(): Date? {
     val format = SimpleDateFormat("yyyy-MM-dd", Locale("ru"))
     try {
         return format.parse(this)

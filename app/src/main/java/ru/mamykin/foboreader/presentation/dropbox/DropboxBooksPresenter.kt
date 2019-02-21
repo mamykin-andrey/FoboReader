@@ -26,7 +26,7 @@ class DropboxBooksPresenter @Inject constructor(
         interactor.downloadFile(file)
                 .applySchedulers()
                 .doOnSubscribe { viewState.showLoadingItem(position) }
-                .doAfterTerminate { viewState.hideLoadingItem() }
+                .doAfterTerminate { viewState.showLoadingItem(null) }
                 .subscribe(router::openBook, Throwable::printStackTrace)
                 .unsubscribeOnDestroy()
     }
@@ -35,7 +35,7 @@ class DropboxBooksPresenter @Inject constructor(
         interactor.getDirectoryFiles(dir)
                 .applySchedulers()
                 .showProgress()
-                .subscribe(this::showFiles, Throwable::printStackTrace)
+                .subscribe(viewState::showFiles, Throwable::printStackTrace)
                 .unsubscribeOnDestroy()
     }
 
@@ -43,7 +43,7 @@ class DropboxBooksPresenter @Inject constructor(
         interactor.getParentDirectoryFiles()
                 .applySchedulers()
                 .showProgress()
-                .subscribe(this::showFiles, Throwable::printStackTrace)
+                .subscribe(viewState::showFiles, Throwable::printStackTrace)
                 .unsubscribeOnDestroy()
     }
 
@@ -51,23 +51,13 @@ class DropboxBooksPresenter @Inject constructor(
         interactor.getRootDirectoryFiles()
                 .applySchedulers()
                 .showProgress()
-                .subscribe({ showFiles(it) }, { showAuth() })
+                .subscribe({ viewState.showFiles(it) }, { viewState.showAuth() })
                 .unsubscribeOnDestroy()
     }
 
-    private fun showFiles(files: List<DropboxFile>) {
-        viewState.hideAuth()
-        viewState.showFiles(files)
-    }
-
-    private fun showAuth() {
-        viewState.hideFiles()
-        viewState.showAuth()
-    }
-
     private fun <T> Single<T>.showProgress(): Single<T> {
-        doOnSubscribe(viewState::showLoading)
-        doAfterTerminate(viewState::hideLoading)
+        doOnSubscribe { viewState.showLoading(true) }
+        doAfterTerminate { viewState.showLoading(false) }
         return this
     }
 }

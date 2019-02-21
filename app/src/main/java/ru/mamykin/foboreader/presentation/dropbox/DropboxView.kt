@@ -9,23 +9,11 @@ import ru.mamykin.foboreader.entity.DropboxFile
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface DropboxView : MvpView {
 
-    fun showFiles(filesList: List<DropboxFile>)
+    fun showFiles(files: List<DropboxFile>)
 
-    fun hideFiles()
+    fun showLoadingItem(position: Int?)
 
-    fun showLoadingItem(position: Int)
-
-    fun hideLoadingItem()
-
-    fun showLoading()
-
-    fun hideLoading()
-
-    fun showCurrentDir(dir: String)
+    fun showLoading(show: Boolean)
 
     fun showAuth()
-
-    fun hideAuth()
-
-    fun showUpButton(show: Boolean)
 }

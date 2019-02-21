@@ -36,15 +36,7 @@ class ReadBookInteractor @Inject constructor(
     fun voiceWord(word: String) = textToSpeechService.voiceWord(word)
 
     fun initPaginator(viewParams: ViewParams): Completable {
-        paginator = Paginator(
-                book.fullText,
-                viewParams.width,
-                viewParams.height,
-                viewParams.paint,
-                viewParams.lineSpacingMultiplier,
-                viewParams.lineSpacingExtra,
-                viewParams.includeFontPadding
-        )
+        paginator = Paginator(book.fullText, viewParams)
         book.pagesCount = paginator.pagesCount
         return booksRepository.updateBook(book)
     }
@@ -69,8 +61,8 @@ class ReadBookInteractor @Inject constructor(
         return ReadBookState(
                 paginator.currentIndex + 1,
                 paginator.pagesCount,
-                paginator.currentPage,
-                paginator.readPercent
+                paginator.getCurrentPage(),
+                paginator.getReadPercent()
         )
     }
 }
