@@ -1,38 +1,23 @@
 package ru.mamykin.foboreader.ui.global
 
-import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.UiModeManager.MODE_NIGHT_NO
 import android.content.Context
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatDelegate
+import android.support.v7.app.AppCompatDelegate.MODE_NIGHT_YES
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.Menu
-import android.view.ViewGroup
-import android.widget.PopupWindow
 import android.widget.Toast
-import kotlinx.android.synthetic.main.view_word_popup.view.*
-import ru.mamykin.foboreader.R
 
 object UiUtils {
 
     fun enableNightMode(enable: Boolean) {
-        if (enable) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-    }
-
-    fun restartActivity(activity: Activity) {
-        val intent = activity.intent
-        activity.finish()
-        activity.startActivity(intent)
+        val nightMode = if (enable) MODE_NIGHT_YES else MODE_NIGHT_NO
+        AppCompatDelegate.setDefaultNightMode(nightMode)
     }
 
     fun showToast(context: Context, @StringRes message: Int) {
@@ -67,24 +52,5 @@ object UiUtils {
                     context, DividerItemDecoration.VERTICAL)
             recyclerView.addItemDecoration(itemDecorator)
         }
-    }
-
-    @SuppressLint("InflateParams")
-    fun showWordPopup(context: Context, source: String,
-                      translation: String, onSpeakWordClicked: (String) -> Unit) {
-
-        val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val vPopup = layoutInflater.inflate(R.layout.view_word_popup, null, false)
-        val tvWordOriginal = vPopup.tvWordOriginal
-        val tvWordTranslate = vPopup.tvWordTranslate
-        val btnSpeaker = vPopup.btnSpeaker
-        btnSpeaker.setOnClickListener { onSpeakWordClicked(source) }
-        tvWordOriginal.text = source
-        tvWordTranslate.text = translation
-
-        val popup = PopupWindow(vPopup, ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, true)
-        popup.showAtLocation(vPopup, Gravity.CENTER, 0, 200)
-        vPopup.setOnClickListener { popup.dismiss() }
     }
 }

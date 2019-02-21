@@ -28,14 +28,14 @@ class BookDetailsPresenter @Inject constructor(
                 .unsubscribeOnDestroy()
     }
 
-    private fun showBookInfo(book: FictionBook) {
-        viewState.showBookName(book.bookTitle)
-        viewState.showBookAuthor(book.bookAuthor!!)
-        viewState.showBookPath(book.filePath)
-        viewState.showBookCurrentPage(book.currentPage.toString())
-        viewState.showBookGenre(book.bookGenre!!)
-        viewState.showBookOriginalLang(book.bookSrcLang!!)
-        viewState.showBookCreatedDate(book.docDate!!)
+    private fun showBookInfo(book: FictionBook) = with(viewState) {
+        showBookName(book.bookTitle)
+        showBookAuthor(book.bookAuthor!!)
+        showBookPath(book.filePath)
+        showBookCurrentPage(book.currentPage.toString())
+        showBookGenre(book.bookGenre!!)
+        showBookOriginalLang(book.bookSrcLang!!)
+        showBookCreatedDate(book.docDate!!)
     }
 
     fun onReadBookClicked() = router.openBook(interactor.getBookPath())

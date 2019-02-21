@@ -6,7 +6,6 @@ import android.arch.persistence.room.PrimaryKey
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.AlignmentSpan
-import ru.mamykin.foboreader.domain.readbook.TextHashMap
 import ru.mamykin.foboreader.extension.getPluralsString
 import java.util.*
 
@@ -31,7 +30,7 @@ class FictionBook {
     var lastOpen: Long = 0
     var bookText: String = ""
     @Ignore
-    var transMap: TextHashMap = TextHashMap()
+    var transMap: HashMap<String, String> = HashMap()
 
     @Ignore
     private val bookFormat: BookFormat = when {

@@ -21,6 +21,7 @@ fun Long.getBytesSizeString(): String {
     }
 }
 
+// TODO: refactor
 fun Long.getLastModifiedString(): String {
     val daysCount = ((Date().time - this) / (1000 * 60 * 60 * 24)).toInt()
     return when {

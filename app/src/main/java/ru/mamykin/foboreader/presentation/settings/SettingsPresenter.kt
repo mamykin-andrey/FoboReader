@@ -31,18 +31,18 @@ class SettingsPresenter @Inject constructor(
         interactor.logoutDropbox()
     }
 
-    private fun showSettings() {
-        viewState.showNightThemeEnabled(interactor.isNightThemeEnabled())
-        viewState.showAutoBrightnessEnabled(!interactor.isManualBrightnessEnabled())
-        viewState.showBrightnessControlEnabled(interactor.isManualBrightnessEnabled())
-        viewState.showBrightnessPos(interactor.getManualBrightnessValue())
-        viewState.showContentSizeText(interactor.getReadTextSize())
-        viewState.showDropboxAccount(interactor.getDropboxAccount())
+    private fun showSettings() = with(viewState) {
+        showNightThemeEnabled(interactor.isNightThemeEnabled())
+        showAutoBrightnessEnabled(!interactor.isManualBrightnessEnabled())
+        showBrightnessControlEnabled(interactor.isManualBrightnessEnabled())
+        showBrightnessPos(interactor.getManualBrightnessValue())
+        showContentSizeText(interactor.getReadTextSize())
+        showDropboxAccount(interactor.getDropboxAccount())
     }
 
-    private fun showAutoBrightness(enabled: Boolean) {
-        viewState.showAutoBrightnessEnabled(enabled)
-        viewState.showBrightnessControlEnabled(!enabled)
-        viewState.setupBrightness()
+    private fun showAutoBrightness(enabled: Boolean) = with(viewState) {
+        showAutoBrightnessEnabled(enabled)
+        showBrightnessControlEnabled(!enabled)
+        setupBrightness()
     }
 }

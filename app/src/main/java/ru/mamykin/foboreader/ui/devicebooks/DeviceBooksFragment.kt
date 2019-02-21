@@ -119,11 +119,7 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
         btnUpDir.isVisible = show
     }
 
-    override fun onQueryTextSubmit(query: String): Boolean {
-        return false
-    }
+    override fun onQueryTextSubmit(query: String): Boolean = false
 
-    override fun onQueryTextChange(newText: String): Boolean {
-        return false
-    }
+    override fun onQueryTextChange(newText: String): Boolean = false
 }

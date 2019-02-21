@@ -22,10 +22,11 @@ class MyBooksRouter(
     fun openBookShareDialog(book: FictionBook) {
         val shareText = activity.getString(R.string.download_on, book.bookTitle, book.docUrl)
 
-        val shareIntent = Intent()
-        shareIntent.action = Intent.ACTION_SEND
-        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText)
-        shareIntent.type = "text/plain"
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, shareText)
+        }
 
         activity.startActivity(shareIntent)
     }

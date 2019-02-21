@@ -55,9 +55,7 @@ class DropboxBooksPresenter @Inject constructor(
                 .unsubscribeOnDestroy()
     }
 
-    private fun <T> Single<T>.showProgress(): Single<T> {
-        doOnSubscribe { viewState.showLoading(true) }
-        doAfterTerminate { viewState.showLoading(false) }
-        return this
-    }
+    private fun <T> Single<T>.showProgress(): Single<T> =
+            doOnSubscribe { viewState.showLoading(true) }
+                    .doAfterTerminate { viewState.showLoading(false) }
 }

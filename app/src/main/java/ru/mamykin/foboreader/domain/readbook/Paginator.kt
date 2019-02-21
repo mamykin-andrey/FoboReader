@@ -5,7 +5,7 @@ import android.text.StaticLayout
 import ru.mamykin.foboreader.entity.ViewParams
 
 /**
- * Class, that implements pagination in TextView
+ * Class, which implements pagination in TextView
  */
 class Paginator(content: CharSequence, viewParams: ViewParams) {
 

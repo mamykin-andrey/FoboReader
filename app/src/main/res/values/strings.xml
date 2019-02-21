@@ -68,8 +68,9 @@
     <string name="read_percent_string">%.2f%%</string>
     <!-- Non-translatable strings -->
     <string name="linear_layout_manager">LinearLayoutManager</string>
-    <string name="navigate_up">Вверх...</string>
+    <string name="navigate_up">Вверх…</string>
     <string name="no_storage_permission_title">Нет разрешения на доступ к памяти устройства</string>
     <string name="no_storage_permission_text">Разрешение необходимо чтобы просматривать и загружать книги из памяти устройства</string>
     <string name="grant_permissions">Разрешить</string>
+    <string name="book_price_format">"%1$s ₽"</string>
 </resources>

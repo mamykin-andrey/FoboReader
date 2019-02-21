@@ -25,12 +25,7 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
 
     companion object {
 
-        fun newInstance(): DropboxBooksFragment {
-            val args = Bundle()
-            val fragment = DropboxBooksFragment()
-            fragment.arguments = args
-            return fragment
-        }
+        fun newInstance(): DropboxBooksFragment = DropboxBooksFragment()
     }
 
     @Inject
@@ -91,10 +86,7 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
     }
 
     override fun showLoadingItem(position: Int?) {
-        if (position == null)
-            adapter.hideLoadingItem()
-        else
-            adapter.showLoadingItem(position)
+        position?.let { adapter.showLoadingItem(it) } ?: adapter.hideLoadingItem()
     }
 
     override fun showLoading(show: Boolean) {
@@ -106,11 +98,7 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
         rvBooks.isVisible = false
     }
 
-    override fun onQueryTextSubmit(query: String): Boolean {
-        return false
-    }
+    override fun onQueryTextSubmit(query: String): Boolean = false
 
-    override fun onQueryTextChange(newText: String): Boolean {
-        return false
-    }
+    override fun onQueryTextChange(newText: String): Boolean = false
 }

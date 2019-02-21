@@ -26,13 +26,13 @@ class BooksStorePresenter @Inject constructor(
                 .unsubscribeOnDestroy()
     }
 
-    private fun showStoreInfo(response: BooksStoreResponse) {
-        viewState.showPromotedCategories(response.promotions)
-        viewState.showFeaturedCategories(response.featured)
-        viewState.showStoreCategories(response.categories)
+    private fun showStoreInfo(response: BooksStoreResponse) = with(viewState) {
+        showPromotedCategories(response.promotions)
+        showFeaturedCategories(response.featured)
+        showStoreCategories(response.categories)
     }
 
-    private fun displayLoadingError(e: Throwable) {
-        viewState.showMessage(e.localizedMessage)
+    private fun displayLoadingError(e: Throwable) = with(viewState) {
+        showMessage(e.localizedMessage)
     }
 }

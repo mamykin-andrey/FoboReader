@@ -18,19 +18,19 @@ class ReadBookInteractor @Inject constructor(
     private lateinit var paginator: Paginator
     private lateinit var book: FictionBook
 
-    fun getBookInfo(): Single<FictionBook> {
-        return booksRepository.getBook(bookPath).doOnSuccess { this.book = it }
-    }
+    fun getBookInfo(): Single<FictionBook> =
+            booksRepository.getBook(bookPath)
+                    .doOnSuccess { this.book = it }
 
     fun getTextTranslation(text: String): Single<Pair<String, String>> {
         val offlineTranslation = book.transMap[text]
 
         if (offlineTranslation != null) {
-            return Single.just(Pair(text, offlineTranslation))
+            return Single.just(text to offlineTranslation)
         }
 
         return translateRepository.getTextTranslation(text)
-                .map { Pair(text, it.text.joinToString()) }
+                .map { text to it.text.joinToString() }
     }
 
     fun voiceWord(word: String) = textToSpeechService.voiceWord(word)
@@ -41,28 +41,29 @@ class ReadBookInteractor @Inject constructor(
         return booksRepository.updateBook(book)
     }
 
-    fun getCurrentPage(): Single<ReadBookState> = Single.just(getBookState())
+    fun getCurrentPage(): Single<ReadBookState> =
+            Single.just(getBookState())
 
-    fun getNextPage(): Single<ReadBookState> {
-        if (paginator.currentIndex < paginator.pagesCount - 1) {
-            paginator.currentIndex++
+    fun getNextPage(): Single<ReadBookState> = with(paginator) {
+        if (currentIndex < pagesCount - 1) {
+            currentIndex++
         }
         return Single.just(getBookState())
     }
 
-    fun getPrevPage(): Single<ReadBookState> {
-        if (paginator.currentIndex > 0) {
-            paginator.currentIndex--
+    fun getPrevPage(): Single<ReadBookState> = with(paginator) {
+        if (currentIndex > 0) {
+            currentIndex--
         }
         return Single.just(getBookState())
     }
 
-    private fun getBookState(): ReadBookState {
-        return ReadBookState(
-                paginator.currentIndex + 1,
-                paginator.pagesCount,
-                paginator.getCurrentPage(),
-                paginator.getReadPercent()
+    private fun getBookState(): ReadBookState = with(paginator) {
+        ReadBookState(
+                currentIndex + 1,
+                pagesCount,
+                getCurrentPage(),
+                getReadPercent()
         )
     }
 }

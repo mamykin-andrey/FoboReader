@@ -7,12 +7,6 @@ import javax.inject.Inject
 
 class FolderToFilesListMapper @Inject constructor() {
 
-    fun transform(result: ListFolderResult): List<DropboxFile> {
-        val metaDataList = result.entries
-        val filesList = ArrayList<DropboxFile>(metaDataList.size)
-        for (metadata in metaDataList) {
-            filesList.add(DropboxFile(metadata))
-        }
-        return filesList
-    }
+    fun transform(result: ListFolderResult): List<DropboxFile> =
+            result.entries.map { DropboxFile(it) }
 }

@@ -27,10 +27,8 @@ class ReadBookActivity : BaseActivity(), ReadBookView, OnActionListener, OnSwipe
 
         private const val BOOK_PATH_EXTRA = "book_path_extra"
 
-        fun getStartIntent(context: Context, bookPath: String): Intent {
-            val readIntent = Intent(context, ReadBookActivity::class.java)
-            readIntent.putExtra(BOOK_PATH_EXTRA, bookPath)
-            return readIntent
+        fun getStartIntent(context: Context, bookPath: String) = Intent(context, ReadBookActivity::class.java).apply {
+            putExtra(BOOK_PATH_EXTRA, bookPath)
         }
     }
 

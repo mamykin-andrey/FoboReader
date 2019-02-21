@@ -5,8 +5,7 @@ import java.util.*
 
 fun Date.asFormattedDate(): String? {
     return try {
-        val format = SimpleDateFormat("MMM dd, yyyy", Locale("RU", "ru"))
-        format.format(date)
+        SimpleDateFormat("MMM dd, yyyy", Locale("RU", "ru")).format(date)
     } catch (e: Exception) {
         null
     }

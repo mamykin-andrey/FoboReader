@@ -8,6 +8,8 @@ import javax.inject.Inject
 class PermissionsManager @Inject constructor(
         private val context: Context
 ) {
-    fun hasPermissions(vararg permissions: String) =
-            permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
+    fun hasPermissions(vararg permissions: String) = permissions.all(this::isPermissionGranted)
+
+    private fun isPermissionGranted(permission: String) =
+            ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
 }

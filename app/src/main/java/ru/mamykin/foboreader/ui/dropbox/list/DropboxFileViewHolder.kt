@@ -36,20 +36,20 @@ class DropboxFileViewHolder(itemView: View,
         }
     }
 
-    private fun bindOtherFile(file: DropboxFile) {
-        itemView.ivFileType.setImageResource(R.drawable.ic_file)
-        itemView.tvFileAttributes.visibility = View.VISIBLE
-        itemView.tvFileAttributes.text = file.attributes
+    private fun bindOtherFile(file: DropboxFile) = with(itemView) {
+        ivFileType.setImageResource(R.drawable.ic_file)
+        tvFileAttributes.visibility = View.VISIBLE
+        tvFileAttributes.text = file.attributes
     }
 
-    private fun bindFictionBook(file: DropboxFile) {
-        itemView.ivFileType.setImageResource(R.drawable.ic_book)
-        itemView.tvFileAttributes.visibility = View.VISIBLE
-        itemView.tvFileAttributes.text = file.attributes
+    private fun bindFictionBook(file: DropboxFile) = with(itemView) {
+        ivFileType.setImageResource(R.drawable.ic_book)
+        tvFileAttributes.visibility = View.VISIBLE
+        tvFileAttributes.text = file.attributes
     }
 
-    private fun bindFolder() {
-        itemView.ivFileType.setImageResource(R.drawable.ic_folder)
-        itemView.tvFileAttributes.visibility = View.GONE
+    private fun bindFolder() = with(itemView) {
+        ivFileType.setImageResource(R.drawable.ic_folder)
+        tvFileAttributes.visibility = View.GONE
     }
 }

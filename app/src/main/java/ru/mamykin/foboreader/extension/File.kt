@@ -4,6 +4,7 @@ import com.dropbox.core.v2.files.FileMetadata
 import ru.mamykin.foboreader.entity.DropboxFile
 import java.io.File
 
+// TODO: refactor
 val File.isFictionBook: Boolean
     get() = this.name.endsWith(".fb2") || this.name.endsWith(".fbwt")
 

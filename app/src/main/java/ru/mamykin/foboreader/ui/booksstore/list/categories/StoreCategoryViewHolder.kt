@@ -7,7 +7,7 @@ import ru.mamykin.foboreader.entity.booksstore.StoreCategory
 
 class StoreCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(category: StoreCategory) {
-        itemView.tvCategoryName.text = category.title
+    fun bind(category: StoreCategory) = with(itemView) {
+        tvCategoryName.text = category.title
     }
 }

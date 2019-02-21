@@ -5,7 +5,9 @@ import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
 import ru.mamykin.foboreader.entity.FictionBook
 import ru.mamykin.foboreader.extension.toDate
+import java.util.*
 
+// TODO: refactor
 class BookXmlSaxParserHandler(
         private val successFunc: () -> Unit,
         private val book: FictionBook
@@ -13,7 +15,7 @@ class BookXmlSaxParserHandler(
 
     private val titleSb = StringBuilder()
     private val textSb = StringBuilder()
-    private val transMap = TextHashMap()
+    private val transMap = HashMap<String, String>()
     private var lastSentence: String = ""
     private var currentElement: String = ""
     private var inTitleInfo: Boolean = false

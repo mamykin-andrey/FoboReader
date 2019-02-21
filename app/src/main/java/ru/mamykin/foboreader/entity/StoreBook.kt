@@ -21,13 +21,4 @@ data class StoreBook(
         var price: String,
         @SerializedName("pictureUrl")
         var pictureUrl: String
-) {
-    val ratingStr: String
-        get() = rating.toString()
-
-    val oldPriceStr: String
-        get() = "$oldPrice Р"
-
-    val priceStr: String
-        get() = "$price Р"
-}
+)

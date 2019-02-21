@@ -25,10 +25,12 @@ class MainStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             viewHolderFactory.create(parent, viewType)
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) = when (getItemViewType(position)) {
-        VIEW_TYPE_PROMOTED_CATEGORIES -> (holder as PromotedCategoriesContainerViewHolder).bind(promotedCategories)
-        VIEW_TYPE_FEATURED_BOOKS -> (holder as FeaturedBookViewHolder).bind(featuredBooks[position])
-        else -> (holder as StoreCategoryViewHolder).bind(storeCategories[position - featuredBooks.size])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (getItemViewType(position)) {
+            VIEW_TYPE_PROMOTED_CATEGORIES -> (holder as PromotedCategoriesContainerViewHolder).bind(promotedCategories)
+            VIEW_TYPE_FEATURED_BOOKS -> (holder as FeaturedBookViewHolder).bind(featuredBooks[position])
+            else -> (holder as StoreCategoryViewHolder).bind(storeCategories[position - featuredBooks.size])
+        }
     }
 
     override fun getItemCount(): Int = featuredBooks.size + storeCategories.size

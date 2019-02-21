@@ -26,12 +26,7 @@ class MyBooksFragment : BaseFragment(), MyBooksView,
 
     companion object {
 
-        fun newInstance(): MyBooksFragment {
-            val args = Bundle()
-            val fragment = MyBooksFragment()
-            fragment.arguments = args
-            return fragment
-        }
+        fun newInstance() = MyBooksFragment()
     }
 
     @Inject
@@ -107,9 +102,7 @@ class MyBooksFragment : BaseFragment(), MyBooksView,
         adapter.changeData(books)
     }
 
-    override fun onQueryTextSubmit(query: String): Boolean {
-        return false
-    }
+    override fun onQueryTextSubmit(query: String) = false
 
     override fun onQueryTextChange(newText: String): Boolean {
         presenter.onQueryTextChange(newText)

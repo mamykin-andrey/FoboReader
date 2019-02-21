@@ -11,7 +11,6 @@ import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.presentation.settings.SettingsPresenter
 import ru.mamykin.foboreader.presentation.settings.SettingsView
 import ru.mamykin.foboreader.ui.global.BaseActivity
-import ru.mamykin.foboreader.ui.global.UiUtils
 import ru.mamykin.foboreader.ui.global.YesNoDialogFragment
 import javax.inject.Inject
 
@@ -90,7 +89,7 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     }
 
     override fun restartActivity() {
-        UiUtils.restartActivity(this)
+        recreate()
     }
 
     private fun initClickListeners() {

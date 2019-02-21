@@ -26,12 +26,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
 
     companion object {
 
-        fun newInstance(): BooksStoreFragment {
-            val args = Bundle()
-            val fragment = BooksStoreFragment()
-            fragment.arguments = args
-            return fragment
-        }
+        fun newInstance(): BooksStoreFragment = BooksStoreFragment()
     }
 
     @Inject
@@ -99,11 +94,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
         srlRefresh.isRefreshing = show
     }
 
-    override fun onQueryTextSubmit(query: String): Boolean {
-        return false
-    }
+    override fun onQueryTextSubmit(query: String): Boolean = false
 
-    override fun onQueryTextChange(newText: String): Boolean {
-        return false
-    }
+    override fun onQueryTextChange(newText: String): Boolean = false
 }

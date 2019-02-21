@@ -13,6 +13,7 @@ import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksRouter
 import java.io.File
 import javax.inject.Inject
 
+// TODO: remove dependency to Android SDK (permission)
 @InjectViewState
 class DeviceBooksPresenter @Inject constructor(
         private val interactor: DeviceBooksInteractor,
@@ -35,39 +36,39 @@ class DeviceBooksPresenter @Inject constructor(
 
     fun onFileClicked(file: File) {
         interactor.openFile(file)
-                .subscribe(router::openBook, this::showOpenFileError)
+                .subscribe(router::openBook, this::onError)
                 .unsubscribeOnDestroy()
     }
 
     fun onDirectoryClicked(dir: File) {
         interactor.getDirectoryFiles(dir.absolutePath)
-                .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
+                .subscribe(this::showFiles, this::onError)
                 .unsubscribeOnDestroy()
     }
 
     fun onParentDirectoryClicked() {
         interactor.getParentDirectoryFiles()
-                .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
+                .subscribe(this::showFiles, this::onError)
                 .unsubscribeOnDestroy()
     }
 
     private fun openRootDirectory() {
         interactor.getRootDirectoryFiles()
                 .applySchedulers()
-                .subscribe({ showFiles(it) }, { viewState.showPermissionError() })
+                .subscribe(this::showFiles, this::onError)
                 .unsubscribeOnDestroy()
     }
 
-    private fun showOpenFileError(error: Throwable) {
+    private fun onError(error: Throwable) {
         when (error) {
             is AccessDeniedException -> viewState.showPermissionError()
             is UnknownBookFormatException -> viewState.showBookFormatError()
         }
     }
 
-    private fun showFiles(structure: FileStructureEntity) {
-        viewState.showParentDirAvailable(structure.isParentDirAvailable)
-        viewState.showCurrentDir(structure.currentDIr)
-        viewState.showFiles(structure.files)
+    private fun showFiles(structure: FileStructureEntity) = with(viewState) {
+        showParentDirAvailable(structure.isParentDirAvailable)
+        showCurrentDir(structure.currentDIr)
+        showFiles(structure.files)
     }
 }

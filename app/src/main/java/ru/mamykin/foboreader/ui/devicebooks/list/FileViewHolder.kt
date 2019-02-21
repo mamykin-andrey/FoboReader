@@ -6,29 +6,32 @@ import kotlinx.android.synthetic.main.item_file.view.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.extension.attributes
 import ru.mamykin.foboreader.extension.isFictionBook
+import ru.mamykin.foboreader.extension.isVisible
 import java.io.File
 
+// TODO: refactor
 class FileViewHolder(itemView: View,
-                     onItemClickFunc: (Int) -> Unit
+                     private val onItemClickFunc: (Int) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
 
-    init {
-        itemView.setOnClickListener { onItemClickFunc(adapterPosition) }
-    }
-
-    fun bind(file: File) {
-        itemView.tvFileName.text = file.name
-        if (file.isDirectory) {
-            itemView.ivFileType.setImageResource(R.drawable.ic_folder)
-            itemView.tvFileAttributes.visibility = View.GONE
-        } else if (file.isFictionBook) {
-            itemView.ivFileType.setImageResource(R.drawable.ic_book)
-            itemView.tvFileAttributes.visibility = View.VISIBLE
-            itemView.tvFileAttributes.text = file.attributes
-        } else {
-            itemView.ivFileType.setImageResource(R.drawable.ic_file)
-            itemView.tvFileAttributes.visibility = View.VISIBLE
-            itemView.tvFileAttributes.text = file.attributes
+    fun bind(file: File) = with(itemView) {
+        setOnClickListener { onItemClickFunc(adapterPosition) }
+        tvFileName.text = file.name
+        when {
+            file.isDirectory -> {
+                ivFileType.setImageResource(R.drawable.ic_folder)
+                tvFileAttributes.isVisible = false
+            }
+            file.isFictionBook -> {
+                ivFileType.setImageResource(R.drawable.ic_book)
+                tvFileAttributes.isVisible = true
+                tvFileAttributes.text = file.attributes
+            }
+            else -> {
+                ivFileType.setImageResource(R.drawable.ic_file)
+                tvFileAttributes.isVisible = true
+                tvFileAttributes.text = file.attributes
+            }
         }
     }
 }

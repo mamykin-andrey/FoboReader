@@ -33,6 +33,7 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
 
     override val layout: Int = R.layout.activity_book_detail
 
+    // TODO: get presenter from component
     @Inject
     @InjectPresenter
     lateinit var presenter: BookDetailsPresenter
@@ -44,7 +45,6 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
         super.onCreate(savedInstanceState)
 
         initToolbar(getString(R.string.about_book), true)
-
         fabRead.setOnClickListener { presenter.onReadBookClicked() }
     }
 

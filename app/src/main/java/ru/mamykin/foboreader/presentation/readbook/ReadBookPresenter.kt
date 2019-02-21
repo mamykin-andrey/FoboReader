@@ -34,17 +34,16 @@ class ReadBookPresenter @Inject constructor(
                 .applySchedulers()
                 .doOnSubscribe { viewState.showWordLoading(true) }
                 .doAfterTerminate { viewState.showWordLoading(false) }
-                .subscribe(
-                        { viewState.showWordTranslation(it.first, it.second) },
-                        { it.printStackTrace() }
-                )
+                .subscribe({ viewState.showWordTranslation(it.first, it.second) }, { it.printStackTrace() })
                 .unsubscribeOnDestroy()
     }
 
-    fun onSpeakWordClicked(word: String) = interactor.voiceWord(word)
+    fun onSpeakWordClicked(word: String) {
+        interactor.voiceWord(word)
+    }
 
     /**
-     * Вызывается когда View готов к отрисовке, и известны параметры его размеров
+     * Called when view are ready to drawing and it have measured
      */
     fun onViewInitCompleted(viewParams: ViewParams) {
         interactor.initPaginator(viewParams)
@@ -83,14 +82,14 @@ class ReadBookPresenter @Inject constructor(
                 .unsubscribeOnDestroy()
     }
 
-    private fun showBookInfo(book: FictionBook) {
-        viewState.initBookView()
-        viewState.showBookName(book.bookTitle)
+    private fun showBookInfo(book: FictionBook) = with(viewState) {
+        initBookView()
+        showBookName(book.bookTitle)
     }
 
-    private fun showPageContent(state: ReadBookState) {
-        viewState.showReaded(state.currentPage, state.pagesCount)
-        viewState.showReadPercent(state.readPercent)
-        viewState.showPageText(state.currentPageText)
+    private fun showPageContent(state: ReadBookState) = with(viewState) {
+        showReaded(state.currentPage, state.pagesCount)
+        showReadPercent(state.readPercent)
+        showPageText(state.currentPageText)
     }
 }

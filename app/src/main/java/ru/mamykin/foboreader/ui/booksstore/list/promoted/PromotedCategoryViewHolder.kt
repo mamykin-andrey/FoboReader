@@ -9,13 +9,13 @@ import ru.mamykin.foboreader.entity.booksstore.PromotedCategory
 
 class PromotedCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(category: PromotedCategory) {
-        itemView.tvTitle.text = category.title
-        itemView.tvSubtitle.text = category.subtitle
-        Picasso.with(itemView.context)
+    fun bind(category: PromotedCategory) = with(itemView) {
+        tvTitle.text = category.title
+        tvSubtitle.text = category.subtitle
+        Picasso.with(context)
                 .load(category.pictureUrl)
                 .resize(500, 500)
                 .placeholder(R.drawable.img_no_image)
-                .into(itemView.ivCover)
+                .into(ivCover)
     }
 }
