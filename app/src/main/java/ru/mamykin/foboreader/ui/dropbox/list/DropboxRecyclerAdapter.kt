@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.entity.DropboxFile
 
-// TODO: refactor
 class DropboxRecyclerAdapter(
         private val onFileClickFunc: (Int, DropboxFile) -> Unit,
         private val onDirClickFunc: (DropboxFile) -> Unit,
@@ -19,13 +18,14 @@ class DropboxRecyclerAdapter(
     }
 
     private var files: List<DropboxFile> = listOf()
-    private var loadingItemPos = -1
+    private var loadingItemPos: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_file, parent, false)
         return when (viewType) {
             VIEW_TYPE_PARENT_DIR -> DropboxParentDirViewHolder(itemView, onParentDirClickFunc)
-            else -> DropboxFileViewHolder(itemView, this::onItemClicked)
+            VIEW_TYPE_FILE -> DropboxFileViewHolder(itemView, this::onItemClicked)
+            else -> throw IllegalStateException("Unknown view type!")
         }
     }
 
@@ -59,12 +59,11 @@ class DropboxRecyclerAdapter(
         notifyItemChanged(prevLoadingItemPos)
     }
 
-    private fun onItemClicked(position: Int) {
-        val item = getItem(position)
-        if (item.isDirectory) {
-            onDirClickFunc(item)
+    private fun onItemClicked(position: Int) = getItem(position).run {
+        if (isDirectory) {
+            onDirClickFunc.invoke(this)
         } else {
-            onFileClickFunc(position, item)
+            onFileClickFunc.invoke(position, this)
         }
     }
 

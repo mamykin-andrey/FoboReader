@@ -73,4 +73,5 @@
     <string name="no_storage_permission_text">Разрешение необходимо чтобы просматривать и загружать книги из памяти устройства</string>
     <string name="grant_permissions">Разрешить</string>
     <string name="book_price_format">"%1$s ₽"</string>
+    <string name="dropbox_download_file_error">Ошибка скачивания файла</string>
 </resources>

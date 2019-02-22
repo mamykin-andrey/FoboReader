@@ -13,16 +13,16 @@ class BooksRepository @Inject constructor(
     fun getBookInfo(bookPath: String): Single<FictionBook> = Single.just(bookDao.getBook(bookPath))
 
     fun removeBook(bookPath: String): Completable = Completable.fromCallable {
-        bookDao.getBook(bookPath)?.let { bookDao.delete(it) }
+        bookDao.getBook(bookPath)?.let(bookDao::delete)
     }
 
     fun getBooks(query: String, sortOrder: BookDao.SortOrder): Single<List<FictionBook>> =
             Single.fromCallable { bookDao.getBooks(query, sortOrder) }
 
-    fun getBook(bookPath: String): Single<FictionBook> {
+    fun getBook(filePath: String): Single<FictionBook> {
         return Single.create {
-            val book = bookDao.getBook(bookPath) ?: FictionBook().apply {
-                filePath = bookPath
+            val book = bookDao.getBook(filePath) ?: FictionBook().apply {
+                this.filePath = filePath
             }
             bookParser.parse(book) {
                 bookDao.update(book)

@@ -1,10 +1,11 @@
 package ru.mamykin.foboreader.data.repository.dropboxbooks
 
 import android.os.Environment
+import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
+import com.dropbox.core.http.OkHttp3Requestor
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.FileMetadata
-import ru.mamykin.foboreader.data.exception.UserNotAuthorizedException
 import ru.mamykin.foboreader.entity.DropboxFile
 import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
 import rx.Single
@@ -13,55 +14,52 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 class DropboxBooksRepository @Inject constructor(
-        private val clientFactory: DropboxClientFactory,
         private val storage: DropboxBooksStorage,
         private val mapper: FolderToFilesListMapper
 ) {
-    fun getRootDirectoryFiles(): Single<List<DropboxFile>> {
-        val authToken = storage.authToken ?: Auth.getOAuth2Token()
-        if (authToken?.isNotBlank() == true) {
-            storage.authToken = authToken
-            return clientFactory.init(authToken).andThen(getFiles(""))
-        }
-        return Single.error(UserNotAuthorizedException())
+    private val client: DbxClientV2 by lazy {
+        val authToken = storage.authToken
+                ?: Auth.getOAuth2Token().also { storage.authToken = it }
+                ?: throw IllegalStateException("Try to call client method before client initialization!")
+
+        val requestConfig = DbxRequestConfig.newBuilder("FoBo Reader")
+                .withHttpRequestor(OkHttp3Requestor.INSTANCE)
+                .build()
+
+        DbxClientV2(requestConfig, authToken)
     }
 
-    fun getFiles(directory: String): Single<List<DropboxFile>> {
-        return Single.fromCallable {
-            val folder = getClient().files().listFolder(directory)
-            return@fromCallable mapper.transform(folder)
-        }
+    fun isAuthorized(): Boolean = !storage.authToken.isNullOrBlank()
+
+    fun getFiles(directory: String): Single<List<DropboxFile>> = Single.fromCallable {
+        client.files()
+                .listFolder(directory)
+                .let(mapper::transform)
     }
 
-    fun downloadFile(file: DropboxFile): Single<String> {
-        return Single.fromCallable {
-            val fileMetadata = file.file as FileMetadata
-            val downloadsDir = createDownloadsDir()
-            val loadedFile = File(downloadsDir, file.name)
-            val outputStream = FileOutputStream(loadedFile)
+    fun downloadFile(file: DropboxFile): Single<String> = Single.fromCallable {
+        val fileMetadata = file.file as FileMetadata
+        val loadedFile = File(getDownloadsDir(), file.name)
+        val outputStream = FileOutputStream(loadedFile)
 
-            getClient().files()
-                    .download(file.pathLower, fileMetadata.rev)
-                    .download(outputStream)
+        client.files()
+                .download(file.pathLower, fileMetadata.rev)
+                .download(outputStream)
 
-            return@fromCallable loadedFile.absolutePath
-        }
+        loadedFile.absolutePath
     }
 
-    fun getAccountEmail(): Single<String> {
-        val account = getClient().users().currentAccount
-        return Single.just(account.email)
-    }
+    fun getAccountEmail(): Single<String> = Single.just(
+            client.users()
+                    .currentAccount
+                    .email
+    )
 
-    private fun getClient(): DbxClientV2 = clientFactory.getClient()
-
-    private fun createDownloadsDir(): File {
+    private fun getDownloadsDir(): File {
         val downloadsDir = Environment
                 .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
-        if (!downloadsDir.exists() && !downloadsDir.mkdirs() && downloadsDir.isDirectory) {
-            throw IllegalAccessException("Cannot access Downloads directory!")
-        }
-        return downloadsDir
+        return downloadsDir.takeIf { (it.exists() || it.mkdirs()) && it.isDirectory }
+                ?: throw IllegalAccessException("Cannot access Downloads directory!")
     }
 }

@@ -10,33 +10,26 @@ class DropboxBooksInteractor @Inject constructor(
 ) {
     private var currentDir: String = ""
 
-    fun getRootDirectoryFiles(): Single<List<DropboxFile>> {
-        return repository.getRootDirectoryFiles()
-    }
+    fun getRootDirectoryFiles(): Single<List<DropboxFile>> = repository.getFiles(currentDir)
 
+    // TODO: change to Maybe after migration to RxJava2
     fun getParentDirectoryFiles(): Single<List<DropboxFile>> {
-        formatParentDirectory(currentDir)?.let {
-            currentDir = it
-            return repository.getFiles(it)
+        if (!hasParentDirectory()) {
+            return Single.error(RuntimeException("No parent directory"))
         }
-        return Single.error(RuntimeException("No parent directory"))
+        return getParentDirectoryPath().also { currentDir = it }.let { repository.getFiles(it) }
     }
 
-    fun getDirectoryFiles(directory: DropboxFile): Single<List<DropboxFile>> {
-        currentDir = directory.pathLower
-        return repository.getFiles(currentDir)
-    }
+    fun getDirectoryFiles(directory: DropboxFile): Single<List<DropboxFile>> =
+            directory.pathLower.also { currentDir = it }.let { repository.getFiles(it) }
 
-    fun getAccountEmail(): Single<String> {
-        return repository.getAccountEmail()
-    }
+    fun getAccountEmail(): Single<String> = repository.getAccountEmail()
 
-    fun downloadFile(file: DropboxFile): Single<String> {
-        return repository.downloadFile(file)
-    }
+    fun downloadFile(file: DropboxFile): Single<String> = repository.downloadFile(file)
 
-    private fun formatParentDirectory(directoryPath: String): String? {
-        val rootDirIndex = directoryPath.lastIndexOf("/")
-        return if (rootDirIndex == -1) null else directoryPath.substring(0, rootDirIndex)
-    }
+    fun isAuthorized(): Boolean = repository.isAuthorized()
+
+    private fun hasParentDirectory(): Boolean = currentDir.lastIndexOf("/") != -1
+
+    private fun getParentDirectoryPath(): String = with(currentDir) { substring(0, lastIndexOf("/")) }
 }

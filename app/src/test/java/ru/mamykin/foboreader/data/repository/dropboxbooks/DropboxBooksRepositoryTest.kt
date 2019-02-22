@@ -17,8 +17,6 @@ import rx.Completable
 class DropboxBooksRepositoryTest {
 
     @Mock
-    lateinit var clientFactory: DropboxClientFactory
-    @Mock
     lateinit var storage: DropboxBooksStorage
     @Mock
     lateinit var mapper: FolderToFilesListMapper
@@ -36,27 +34,18 @@ class DropboxBooksRepositoryTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        repository = DropboxBooksRepository(clientFactory, storage, mapper)
-    }
-
-    @Test
-    fun getRootDirectoryFiles_throwsUserNotAuthorizedException_whenAuthTokenIsBlank() {
-        whenever(storage.authToken).thenReturn("")
-
-        val testSubscriber = repository.getRootDirectoryFiles().test()
-
-        testSubscriber.assertNotCompleted().assertError(UserNotAuthorizedException::class.java)
+        repository = DropboxBooksRepository(storage, mapper)
     }
 
     @Test
     @Ignore
     fun getRootDirectoryFiles_returnsRootDirectoryFiles_whenAuthTokenIsNotBlank() {
         whenever(storage.authToken).thenReturn(authToken)
-        whenever(clientFactory.init(authToken)).thenReturn(Completable.complete())
-        whenever(clientFactory.getClient().files().listFolder("")).thenReturn(mockFolder)
+//        whenever(clientFactory.init(authToken)).thenReturn(Completable.complete())
+//        whenever(clientFactory.getClient().files().listFolder("")).thenReturn(mockFolder)
         whenever(mapper.transform(mockFolder)).thenReturn(mockFiles)
 
-        val testSubscriber = repository.getRootDirectoryFiles().test()
+//        val testSubscriber = repository.getRootDirectoryFiles().test()
 
         testSubscriber.assertCompleted().assertValue(mockFiles)
     }
@@ -67,7 +56,7 @@ class DropboxBooksRepositoryTest {
         val mockAccount = mock<FullAccount>()
         val email = "test@test.ru"
         whenever(mockAccount.email).thenReturn(email)
-        whenever(clientFactory.getClient().users().currentAccount).thenReturn(mockAccount)
+//        whenever(clientFactory.getClient().users().currentAccount).thenReturn(mockAccount)
 
         val testSubscriber = repository.getAccountEmail().test()
 

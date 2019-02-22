@@ -11,7 +11,6 @@ import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.booksstore.BooksStoreRepository
 import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksRepository
 import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksStorage
-import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxClientFactory
 import ru.mamykin.foboreader.data.repository.settings.SettingsRepository
 import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
@@ -31,11 +30,10 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideDropboxBooksRepository(
-            clientFactory: DropboxClientFactory,
             storage: DropboxBooksStorage,
             mapper: FolderToFilesListMapper): DropboxBooksRepository {
 
-        return DropboxBooksRepository(clientFactory, storage, mapper)
+        return DropboxBooksRepository(storage, mapper)
     }
 
     @Provides

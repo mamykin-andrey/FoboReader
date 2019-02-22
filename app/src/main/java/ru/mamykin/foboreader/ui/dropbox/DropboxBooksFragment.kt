@@ -3,7 +3,9 @@ package ru.mamykin.foboreader.ui.dropbox
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_dropbox_books.*
@@ -16,7 +18,6 @@ import ru.mamykin.foboreader.presentation.dropbox.DropboxView
 import ru.mamykin.foboreader.ui.dropbox.list.DropboxRecyclerAdapter
 import ru.mamykin.foboreader.ui.global.BaseFragment
 import ru.mamykin.foboreader.ui.global.UiUtils
-import javax.inject.Inject
 
 /**
  * Страница с файлами Dropbox
@@ -28,7 +29,8 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
         fun newInstance(): DropboxBooksFragment = DropboxBooksFragment()
     }
 
-    @Inject
+    override val layoutId: Int = R.layout.fragment_dropbox_books
+
     @InjectPresenter
     lateinit var presenter: DropboxBooksPresenter
 
@@ -45,13 +47,9 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
     override fun injectDependencies() {
         super.injectDependencies()
         val module = DropboxBooksModule(DropboxBooksRouter(activity!!))
-        getAppComponent().getDropboxBooksComponent(module).inject(this)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        return inflater.inflate(R.layout.fragment_dropbox_books, container, false)
+        presenter = getAppComponent()
+                .getDropboxBooksComponent(module)
+                .getDropboxBooksPresenter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,14 +77,18 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
 
     override fun showFiles(files: List<DropboxFile>) {
         adapter.hideLoadingItem()
+        adapter.changeData(files)
         pbLoading.isVisible = false
         llNoAuth.isVisible = false
         rvBooks.isVisible = true
-        adapter.changeData(files)
     }
 
-    override fun showLoadingItem(position: Int?) {
-        position?.let { adapter.showLoadingItem(it) } ?: adapter.hideLoadingItem()
+    override fun showLoadingItem(position: Int) {
+        adapter.showLoadingItem(position)
+    }
+
+    override fun hideLoadingItem() {
+        adapter.hideLoadingItem()
     }
 
     override fun showLoading(show: Boolean) {
@@ -96,6 +98,10 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
     override fun showAuth() {
         llNoAuth.isVisible = true
         rvBooks.isVisible = false
+    }
+
+    override fun onError(message: String) {
+        showSnackbar(message)
     }
 
     override fun onQueryTextSubmit(query: String): Boolean = false

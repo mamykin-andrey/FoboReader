@@ -7,12 +7,14 @@ import javax.inject.Inject
 
 class DeviceBooksRepository @Inject constructor() {
 
-    fun getRootDirectory(): String = Environment.getExternalStorageDirectory().absolutePath
+    fun getRootDirectory(): String =
+            Environment.getExternalStorageDirectory().absolutePath
 
-    fun getFiles(path: String): Single<List<File>> = Single.just(File(path).listFiles().toList())
+    fun getFiles(path: String): Single<List<File>> = Single.just(
+            File(path).listFiles().toList()
+    )
 
-    fun canReadDirectory(path: String): Single<Boolean> {
-        val dir = File(path)
-        return Single.just(dir.canRead() && dir.isDirectory)
-    }
+    fun canReadDirectory(path: String): Single<Boolean> = Single.just(
+            File(path).let { it.isDirectory && it.canRead() }
+    )
 }
