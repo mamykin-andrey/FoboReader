@@ -17,7 +17,6 @@ import ru.mamykin.foboreader.domain.entity.booksstore.FeaturedCategory
 import ru.mamykin.foboreader.domain.entity.booksstore.PromotedCategory
 import ru.mamykin.foboreader.domain.entity.booksstore.StoreCategory
 import ru.mamykin.foboreader.presentation.booksstore.list.MainStoreRecyclerAdapter
-import javax.inject.Inject
 
 /**
  * Страница с магазином книг
@@ -31,32 +30,27 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
 
     override val layoutId: Int = R.layout.fragment_main_store
 
-    @Inject
     @InjectPresenter
     lateinit var presenter: BooksStorePresenter
 
     private lateinit var adapter: MainStoreRecyclerAdapter
 
     @ProvidePresenter
-    fun providePresenter(): BooksStorePresenter = presenter
+    fun providePresenter(): BooksStorePresenter = getAppComponent()
+            .getBooksStoreComponent()
+            .getBooksStorePresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun injectDependencies() {
-        super.injectDependencies()
-        getAppComponent().getBooksStoreComponent().inject(this)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         srlRefresh.setOnRefreshListener { presenter.loadBooks() }
-
         adapter = MainStoreRecyclerAdapter()
-        UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), false)
+        UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

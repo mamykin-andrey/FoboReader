@@ -11,7 +11,7 @@ import com.arellomobile.mvp.MvpAppCompatFragment
 import ru.mamykin.foboreader.ReaderApp
 import ru.mamykin.foboreader.core.di.component.AppComponent
 
-abstract class BaseFragment : MvpAppCompatFragment() {
+abstract class BaseFragment : MvpAppCompatFragment(), BaseView {
 
     abstract val layoutId: Int
 
@@ -22,8 +22,11 @@ abstract class BaseFragment : MvpAppCompatFragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater.inflate(layoutId, container, false)
+                              savedInstanceState: Bundle?): View? = inflater.inflate(layoutId, container, false)
+
+    override fun onError(message: String) {
+        showSnackbar(message, false)
+    }
 
     protected open fun injectDependencies() {
     }

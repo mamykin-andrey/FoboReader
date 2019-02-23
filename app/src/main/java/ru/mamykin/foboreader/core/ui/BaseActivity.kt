@@ -12,7 +12,7 @@ import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.ReaderApp
 import ru.mamykin.foboreader.core.di.component.AppComponent
 
-abstract class BaseActivity : MvpAppCompatActivity() {
+abstract class BaseActivity : MvpAppCompatActivity(), BaseView {
 
     abstract val layout: Int
 
@@ -35,6 +35,10 @@ abstract class BaseActivity : MvpAppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onError(message: String) {
+        showSnackbar(message, false)
     }
 
     protected fun initToolbar(title: String, homeEnabled: Boolean) {

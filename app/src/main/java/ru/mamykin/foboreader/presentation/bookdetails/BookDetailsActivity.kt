@@ -32,12 +32,9 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
     lateinit var presenter: BookDetailsPresenter
 
     @ProvidePresenter
-    fun providePresenter(): BookDetailsPresenter = presenter
-
-    override fun injectDependencies() {
-        val bookPath = intent.getStringExtra(BOOK_PATH_EXTRA)
-        presenter = getAppComponent()
-                .getBookDetailsComponent(BookDetailsModule(bookPath))
+    fun providePresenter(): BookDetailsPresenter = intent.getStringExtra(BOOK_PATH_EXTRA).let {
+        getAppComponent()
+                .getBookDetailsComponent(BookDetailsModule(it))
                 .getBookDetailsPresenter()
     }
 
@@ -88,9 +85,5 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
 
     override fun showBookCreatedDate(date: Date) {
         tvBookCreatedDate.text = date.asFormattedDate()
-    }
-
-    override fun onError(message: String) {
-        showSnackbar(message, false)
     }
 }

@@ -44,7 +44,8 @@ object UiUtils {
     fun setupRecyclerView(context: Context,
                           recyclerView: RecyclerView,
                           adapter: RecyclerView.Adapter<*>,
-                          manager: RecyclerView.LayoutManager, useDivider: Boolean) {
+                          manager: RecyclerView.LayoutManager,
+                          useDivider: Boolean = false) {
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
         if (useDivider) {
