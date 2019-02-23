@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="ru.mamykin.foboreader.ui.splash.SplashActivity"
+            android:name="ru.mamykin.foboreader.presentation.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Splash">
             <intent-filter>
@@ -26,16 +26,16 @@
         </activity>
 
         <activity
-            android:name="ru.mamykin.foboreader.ui.bookdetails.BookDetailsActivity"
+            android:name="ru.mamykin.foboreader.presentation.bookdetails.BookDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="ru.mamykin.foboreader.ui.main.MainActivity"
+            android:name="ru.mamykin.foboreader.presentation.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="ru.mamykin.foboreader.ui.readbook.ReadBookActivity"
+            android:name="ru.mamykin.foboreader.presentation.readbook.ReadBookActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="ru.mamykin.foboreader.ui.settings.SettingsActivity"
+            android:name="ru.mamykin.foboreader.presentation.settings.SettingsActivity"
             android:screenOrientation="portrait" />
 
         <activity

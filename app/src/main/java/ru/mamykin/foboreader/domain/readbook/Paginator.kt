@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.domain.readbook
 
 import android.text.Layout
 import android.text.StaticLayout
-import ru.mamykin.foboreader.entity.ViewParams
+import ru.mamykin.foboreader.domain.entity.ViewParams
 
 /**
  * Class, which implements pagination in TextView

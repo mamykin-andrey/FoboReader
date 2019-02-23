@@ -1,12 +1,11 @@
 package ru.mamykin.foboreader.presentation.bookdetails
 
 import com.arellomobile.mvp.InjectViewState
+import ru.mamykin.foboreader.core.extension.applySchedulers
+import ru.mamykin.foboreader.core.platform.Schedulers
+import ru.mamykin.foboreader.core.ui.BasePresenter
 import ru.mamykin.foboreader.domain.bookdetails.BookDetailsInteractor
-import ru.mamykin.foboreader.entity.FictionBook
-import ru.mamykin.foboreader.extension.applySchedulers
-import ru.mamykin.foboreader.presentation.global.BasePresenter
-import ru.mamykin.foboreader.presentation.global.Schedulers
-import ru.mamykin.foboreader.ui.bookdetails.BookDetailsRouter
+import ru.mamykin.foboreader.domain.entity.FictionBook
 import javax.inject.Inject
 
 @InjectViewState

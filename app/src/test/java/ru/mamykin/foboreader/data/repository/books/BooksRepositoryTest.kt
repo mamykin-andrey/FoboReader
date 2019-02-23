@@ -8,9 +8,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import ru.mamykin.foboreader.data.database.BookDao
-import ru.mamykin.foboreader.data.repository.books.BookParser
-import ru.mamykin.foboreader.data.repository.books.BooksRepository
-import ru.mamykin.foboreader.entity.FictionBook
+import ru.mamykin.foboreader.domain.entity.FictionBook
 
 class BooksRepositoryTest {
 

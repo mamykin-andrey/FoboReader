@@ -1,8 +1,8 @@
 package ru.mamykin.foboreader.data.repository.books
 
 import ru.mamykin.foboreader.domain.readbook.BookXmlSaxParserHandler
-import ru.mamykin.foboreader.entity.FictionBook
-import ru.mamykin.foboreader.platform.Log
+import ru.mamykin.foboreader.domain.entity.FictionBook
+import ru.mamykin.foboreader.core.platform.Log
 import java.io.File
 import javax.inject.Inject
 import javax.xml.parsers.SAXParserFactory

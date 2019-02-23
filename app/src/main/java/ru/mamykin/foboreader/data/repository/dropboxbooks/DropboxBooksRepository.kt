@@ -6,8 +6,8 @@ import com.dropbox.core.android.Auth
 import com.dropbox.core.http.OkHttp3Requestor
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.FileMetadata
-import ru.mamykin.foboreader.entity.DropboxFile
-import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
+import ru.mamykin.foboreader.domain.entity.DropboxFile
+import ru.mamykin.foboreader.domain.entity.mapper.FolderToFilesListMapper
 import rx.Single
 import java.io.File
 import java.io.FileOutputStream

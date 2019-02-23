@@ -7,7 +7,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import ru.mamykin.foboreader.data.repository.devicebooks.DeviceBooksRepository
-import ru.mamykin.foboreader.extension.isFictionBook
+import ru.mamykin.foboreader.core.extension.isFictionBook
 import java.io.File
 
 class DeviceBooksInteractorTest {

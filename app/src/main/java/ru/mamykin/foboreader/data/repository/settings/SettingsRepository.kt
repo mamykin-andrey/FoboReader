@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.data.repository.settings
 
-import ru.mamykin.foboreader.ui.global.UiUtils
+import ru.mamykin.foboreader.core.ui.UiUtils
 import javax.inject.Inject
 
 class SettingsRepository @Inject constructor(

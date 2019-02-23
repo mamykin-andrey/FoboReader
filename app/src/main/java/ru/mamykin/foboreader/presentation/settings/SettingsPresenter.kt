@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.presentation.settings
 
 import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foboreader.domain.settings.SettingsInteractor
-import ru.mamykin.foboreader.presentation.global.BasePresenter
+import ru.mamykin.foboreader.core.ui.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState

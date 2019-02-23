@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.data.database
 
 import android.arch.persistence.room.*
-import ru.mamykin.foboreader.entity.FictionBook
+import ru.mamykin.foboreader.domain.entity.FictionBook
 
 @Dao
 interface BookDao {

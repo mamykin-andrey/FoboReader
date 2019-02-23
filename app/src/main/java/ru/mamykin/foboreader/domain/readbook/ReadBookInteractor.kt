@@ -2,9 +2,9 @@ package ru.mamykin.foboreader.domain.readbook
 
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
-import ru.mamykin.foboreader.di.qualifiers.BookPath
-import ru.mamykin.foboreader.entity.FictionBook
-import ru.mamykin.foboreader.entity.ViewParams
+import ru.mamykin.foboreader.core.di.qualifiers.BookPath
+import ru.mamykin.foboreader.domain.entity.FictionBook
+import ru.mamykin.foboreader.domain.entity.ViewParams
 import rx.Completable
 import rx.Single
 import javax.inject.Inject

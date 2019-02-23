@@ -8,9 +8,8 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import ru.mamykin.foboreader.domain.bookdetails.BookDetailsInteractor
-import ru.mamykin.foboreader.entity.FictionBook
+import ru.mamykin.foboreader.domain.entity.FictionBook
 import ru.mamykin.foboreader.presentation.TestSchedulers
-import ru.mamykin.foboreader.ui.bookdetails.BookDetailsRouter
 import rx.Single
 import java.util.*
 

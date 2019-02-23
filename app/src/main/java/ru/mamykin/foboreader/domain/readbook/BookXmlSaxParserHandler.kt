@@ -3,8 +3,8 @@ package ru.mamykin.foboreader.domain.readbook
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
-import ru.mamykin.foboreader.entity.FictionBook
-import ru.mamykin.foboreader.extension.toDate
+import ru.mamykin.foboreader.domain.entity.FictionBook
+import ru.mamykin.foboreader.core.extension.toDate
 import java.util.*
 
 // TODO: refactor

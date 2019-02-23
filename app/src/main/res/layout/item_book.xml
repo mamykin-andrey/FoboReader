@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
+            android:background="?android:selectableItemBackground"
             android:orientation="horizontal">
 
             <ImageView
@@ -68,7 +68,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:background="?selectableItemBackground"
+                        android:background="?android:selectableItemBackground"
                         android:contentDescription="@string/context_menu_desc"
                         android:padding="10dp"
                         android:src="@drawable/ic_dots" />
@@ -87,7 +87,7 @@
                     android:layout_marginTop="5dp"
                     tools:text="16 страниц из 27" />
 
-                <ru.mamykin.foboreader.ui.global.PercentProgressView
+                <ru.mamykin.foboreader.core.ui.controls.PercentProgressView
                     android:id="@+id/pvProgress"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"

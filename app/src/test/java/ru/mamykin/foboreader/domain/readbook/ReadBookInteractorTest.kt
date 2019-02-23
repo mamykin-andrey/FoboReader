@@ -7,7 +7,7 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
-import ru.mamykin.foboreader.entity.FictionBook
+import ru.mamykin.foboreader.domain.entity.FictionBook
 import rx.Single
 
 class ReadBookInteractorTest {

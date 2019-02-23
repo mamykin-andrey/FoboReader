@@ -2,14 +2,13 @@ package ru.mamykin.foboreader.presentation.devicebooks
 
 import android.Manifest
 import com.arellomobile.mvp.InjectViewState
+import ru.mamykin.foboreader.core.extension.applySchedulers
 import ru.mamykin.foboreader.domain.devicebooks.AccessDeniedException
 import ru.mamykin.foboreader.domain.devicebooks.DeviceBooksInteractor
 import ru.mamykin.foboreader.domain.devicebooks.FileStructureEntity
 import ru.mamykin.foboreader.domain.devicebooks.UnknownBookFormatException
-import ru.mamykin.foboreader.extension.applySchedulers
-import ru.mamykin.foboreader.presentation.global.BasePresenter
-import ru.mamykin.foboreader.presentation.global.PermissionsManager
-import ru.mamykin.foboreader.ui.devicebooks.DeviceBooksRouter
+import ru.mamykin.foboreader.core.ui.BasePresenter
+import ru.mamykin.foboreader.core.platform.PermissionsManager
 import java.io.File
 import javax.inject.Inject
 

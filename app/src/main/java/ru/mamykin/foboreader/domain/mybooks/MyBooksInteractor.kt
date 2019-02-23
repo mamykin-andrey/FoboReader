@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.domain.mybooks
 
 import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
-import ru.mamykin.foboreader.entity.FictionBook
+import ru.mamykin.foboreader.domain.entity.FictionBook
 import rx.Completable
 import rx.Single
 import javax.inject.Inject

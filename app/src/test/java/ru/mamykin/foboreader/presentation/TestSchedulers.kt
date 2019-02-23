@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.presentation
 
-import ru.mamykin.foboreader.presentation.global.Schedulers
+import ru.mamykin.foboreader.core.platform.Schedulers
 import rx.Scheduler
 
 class TestSchedulers : Schedulers {

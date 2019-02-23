@@ -9,9 +9,8 @@ import org.junit.Ignore
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import ru.mamykin.foboreader.data.exception.UserNotAuthorizedException
-import ru.mamykin.foboreader.entity.DropboxFile
-import ru.mamykin.foboreader.entity.mapper.FolderToFilesListMapper
+import ru.mamykin.foboreader.domain.entity.DropboxFile
+import ru.mamykin.foboreader.domain.entity.mapper.FolderToFilesListMapper
 import rx.Completable
 
 class DropboxBooksRepositoryTest {

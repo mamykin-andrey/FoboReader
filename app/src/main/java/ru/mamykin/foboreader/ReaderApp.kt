@@ -5,10 +5,10 @@ import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
 import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
-import ru.mamykin.foboreader.di.component.AppComponent
-import ru.mamykin.foboreader.di.component.DaggerAppComponent
-import ru.mamykin.foboreader.di.modules.AppModule
-import ru.mamykin.foboreader.ui.global.UiUtils
+import ru.mamykin.foboreader.core.di.component.AppComponent
+import ru.mamykin.foboreader.core.di.component.DaggerAppComponent
+import ru.mamykin.foboreader.core.di.modules.AppModule
+import ru.mamykin.foboreader.core.ui.UiUtils
 import javax.inject.Inject
 
 class ReaderApp : MultiDexApplication() {
