@@ -1,7 +1,9 @@
 package ru.mamykin.foboreader.presentation.bookdetails
 
 import com.arellomobile.mvp.InjectViewState
+import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.extension.applySchedulers
+import ru.mamykin.foboreader.core.platform.ResourcesManager
 import ru.mamykin.foboreader.core.platform.Schedulers
 import ru.mamykin.foboreader.core.ui.BasePresenter
 import ru.mamykin.foboreader.domain.bookdetails.BookDetailsInteractor
@@ -11,9 +13,11 @@ import javax.inject.Inject
 @InjectViewState
 class BookDetailsPresenter @Inject constructor(
         private val interactor: BookDetailsInteractor,
-        private val router: BookDetailsRouter,
+        private val resourcesManager: ResourcesManager,
         private val schedulers: Schedulers
 ) : BasePresenter<BookDetailsView>() {
+
+    var router: BookDetailsRouter? = null
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -23,7 +27,10 @@ class BookDetailsPresenter @Inject constructor(
     private fun loadBookInfo() {
         interactor.getBookInfo()
                 .applySchedulers(schedulers.io(), schedulers.main())
-                .subscribe(this::showBookInfo, Throwable::printStackTrace)
+                .subscribe(
+                        { showBookInfo(it) },
+                        { viewState.onError(resourcesManager.getString(R.string.book_details_load_info_error)) }
+                )
                 .unsubscribeOnDestroy()
     }
 
@@ -37,5 +44,5 @@ class BookDetailsPresenter @Inject constructor(
         showBookCreatedDate(book.docDate!!)
     }
 
-    fun onReadBookClicked() = router.openBook(interactor.getBookPath())
+    fun onReadBookClicked() = router?.openBook(interactor.getBookPath())
 }

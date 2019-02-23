@@ -28,9 +28,7 @@ abstract class BaseFragment : MvpAppCompatFragment() {
     protected open fun injectDependencies() {
     }
 
-    protected fun getAppComponent(): AppComponent {
-        return (activity?.application as ReaderApp).getAppComponent()
-    }
+    protected fun getAppComponent(): AppComponent = (activity!!.application as ReaderApp).appComponent
 
     protected fun showToast(@StringRes messageResId: Int, long: Boolean = false) {
         showToast(getString(messageResId, long))

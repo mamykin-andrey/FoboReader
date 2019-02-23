@@ -13,10 +13,8 @@ import javax.inject.Inject
 
 class ReaderApp : MultiDexApplication() {
 
-    companion object {
-        lateinit var appComponent: AppComponent
-            private set
-    }
+    lateinit var appComponent: AppComponent
+        private set
 
     @Inject
     lateinit var settingsStorage: SettingsStorage
@@ -51,9 +49,5 @@ class ReaderApp : MultiDexApplication() {
                 .build()
 
         appComponent.inject(this)
-    }
-
-    fun getAppComponent(): AppComponent {
-        return appComponent
     }
 }

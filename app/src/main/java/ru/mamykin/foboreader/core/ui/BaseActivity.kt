@@ -1,8 +1,12 @@
 package ru.mamykin.foboreader.core.ui
 
 import android.os.Bundle
+import android.support.annotation.StringRes
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatActivity
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.ReaderApp
@@ -63,7 +67,25 @@ abstract class BaseActivity : MvpAppCompatActivity() {
     protected open fun injectDependencies() {
     }
 
-    protected fun getAppComponent(): AppComponent {
-        return (application as ReaderApp).getAppComponent()
+    protected fun getAppComponent(): AppComponent = (application as ReaderApp).appComponent
+
+    protected fun showToast(@StringRes messageResId: Int, long: Boolean = false) {
+        showToast(getString(messageResId, long))
+    }
+
+    protected fun showToast(message: String, long: Boolean = false) {
+        val duration = if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+        Toast.makeText(this, message, duration).show()
+    }
+
+    protected fun showSnackbar(@StringRes messageResId: Int, long: Boolean = false) {
+        showSnackbar(getString(messageResId, long))
+    }
+
+    protected fun showSnackbar(message: String, long: Boolean = false) {
+        val duration = if (long) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT
+        findViewById<View>(android.R.id.content)?.let {
+            Snackbar.make(it, message, duration)
+        }
     }
 }
