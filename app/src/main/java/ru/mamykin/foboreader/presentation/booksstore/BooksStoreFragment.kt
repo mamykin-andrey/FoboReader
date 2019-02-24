@@ -6,7 +6,6 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_main_store.*
@@ -65,7 +64,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
     }
 
     override fun showMessage(message: String) {
-        UiUtils.showToast(context!!, message, Toast.LENGTH_SHORT)
+        showToast(message)
     }
 
     override fun showLoading(show: Boolean) {

@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_device_books.*
@@ -16,9 +18,9 @@ import ru.mamykin.foboreader.BuildConfig
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.di.modules.DeviceBooksModule
 import ru.mamykin.foboreader.core.extension.isVisible
-import ru.mamykin.foboreader.presentation.devicebooks.list.FilesRecyclerAdapter
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.core.ui.UiUtils
+import ru.mamykin.foboreader.presentation.devicebooks.list.FilesRecyclerAdapter
 import java.io.File
 import javax.inject.Inject
 
@@ -102,11 +104,11 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
     }
 
     override fun showPermissionError() {
-        UiUtils.showToast(context!!, R.string.permission_denied)
+        showToast(R.string.permission_denied)
     }
 
     override fun showBookFormatError() {
-        UiUtils.showToast(context!!, getString(R.string.wrong_file_format))
+        showToast(getString(R.string.wrong_file_format))
     }
 
     override fun showParentDirAvailable(show: Boolean) {

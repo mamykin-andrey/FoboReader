@@ -20,18 +20,6 @@ object UiUtils {
         AppCompatDelegate.setDefaultNightMode(nightMode)
     }
 
-    fun showToast(context: Context, @StringRes message: Int) {
-        showToast(context, context.getString(message))
-    }
-
-    fun showToast(context: Context, message: String) {
-        showToast(context, message, Toast.LENGTH_LONG)
-    }
-
-    fun showToast(context: Context, message: String, length: Int) {
-        Toast.makeText(context, message, length).show()
-    }
-
     fun setupSearchView(context: Context, menu: Menu,
                         @IdRes menuRes: Int, @StringRes hint: Int,
                         listener: SearchView.OnQueryTextListener) {
