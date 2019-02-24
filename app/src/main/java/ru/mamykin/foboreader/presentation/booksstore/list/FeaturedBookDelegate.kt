@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.presentation.booksstore.list.featured
+package ru.mamykin.foboreader.presentation.booksstore.list
 
 import android.graphics.Paint
 import android.support.v7.widget.RecyclerView
@@ -7,7 +7,19 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_featured_book.view.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.extension.isVisible
+import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.foboreader.domain.entity.StoreBook
+
+class FeaturedBookDelegate : AdapterDelegate<FeaturedBookViewHolder, StoreBook>() {
+
+    override fun createViewHolder(itemView: View) = FeaturedBookViewHolder(itemView)
+
+    override fun getLayoutId(): Int = R.layout.item_featured_book
+
+    override fun isForViewType(item: Any): Boolean = item is StoreBook
+
+    override fun innerBindViewHolder(holder: FeaturedBookViewHolder, item: StoreBook) = holder.bind(item)
+}
 
 class FeaturedBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

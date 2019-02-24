@@ -13,9 +13,6 @@ import kotlinx.android.synthetic.main.fragment_main_store.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.core.ui.UiUtils
-import ru.mamykin.foboreader.domain.entity.booksstore.FeaturedCategory
-import ru.mamykin.foboreader.domain.entity.booksstore.PromotedCategory
-import ru.mamykin.foboreader.domain.entity.booksstore.StoreCategory
 import ru.mamykin.foboreader.presentation.booksstore.list.MainStoreRecyclerAdapter
 
 /**
@@ -63,17 +60,8 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
         UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, this)
     }
 
-    override fun showPromotedCategories(categories: List<PromotedCategory>) {
-        adapter.changePromotedCategories(categories)
-    }
-
-    override fun showFeaturedCategories(featured: List<FeaturedCategory>) {
-        val books = featured.flatMap { it.books }.toList()
-        adapter.changeFeaturedBooks(books)
-    }
-
-    override fun showStoreCategories(categories: List<StoreCategory>) {
-        adapter.changeStoreCategories(categories)
+    override fun showStoreBooks(books: List<Any>) {
+        adapter.changeItems(books)
     }
 
     override fun showMessage(message: String) {

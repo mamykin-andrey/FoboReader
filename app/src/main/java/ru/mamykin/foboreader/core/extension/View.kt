@@ -2,9 +2,13 @@ package ru.mamykin.foboreader.core.extension
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.support.annotation.LayoutRes
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.TextView
+import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.domain.entity.ViewParams
 
 var View.isVisible: Boolean
@@ -30,3 +34,6 @@ fun TextView.addGlobalLayoutListener(callbackFunc: (ViewParams) -> Unit) {
         }
     })
 }
+
+fun ViewGroup.inflateView(@LayoutRes resId: Int, attach: Boolean = false) =
+        LayoutInflater.from(this.context).inflate(R.layout.item_promoted_category, this, attach)

@@ -32,9 +32,7 @@ class BooksStorePresenter @Inject constructor(
                 .unsubscribeOnDestroy()
     }
 
-    private fun showStoreInfo(response: BooksStoreResponse) = with(viewState) {
-        showPromotedCategories(response.promotions)
-        showFeaturedCategories(response.featured)
-        showStoreCategories(response.categories)
+    private fun showStoreInfo(response: BooksStoreResponse) = with(response) {
+        viewState.showStoreBooks(promotions + featured + categories)
     }
 }
