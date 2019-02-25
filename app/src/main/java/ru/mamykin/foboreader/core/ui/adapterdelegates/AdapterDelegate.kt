@@ -13,7 +13,6 @@ abstract class AdapterDelegate<H, T> {
 
     abstract fun innerBindViewHolder(holder: H, item: T)
 
-    fun bindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
-        innerBindViewHolder(holder as H, item as T)
-    }
+    fun bindViewHolder(holder: RecyclerView.ViewHolder, item: Any) =
+            innerBindViewHolder(holder as H, item as T)
 }

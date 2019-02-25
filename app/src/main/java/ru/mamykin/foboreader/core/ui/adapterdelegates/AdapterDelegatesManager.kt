@@ -20,15 +20,13 @@ class AdapterDelegatesManager {
     }
 
     fun getItemViewType(items: List<Any>, position: Int): Int {
-        for ((viewType, delegate) in delegates) {
-            if (delegate.isForViewType(items[position])) {
-                return viewType
-            }
-        }
-        throw IllegalStateException("Unknown viewType for position: $position!")
+        return delegates.entries.find { it.value.isForViewType(items[position]) }?.key
+                ?: throw IllegalStateException("Unknown viewType for position: $position!")
+
     }
 
     private fun getDelegateForViewType(viewType: Int): AdapterDelegate<*, *> {
-        return delegates[viewType] ?: throw IllegalStateException("No viewType was found: $viewType!")
+        return delegates[viewType]
+                ?: throw IllegalStateException("No viewType was found: $viewType!")
     }
 }
