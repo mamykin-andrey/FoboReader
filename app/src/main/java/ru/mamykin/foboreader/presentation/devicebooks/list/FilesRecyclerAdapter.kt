@@ -1,43 +1,35 @@
 package ru.mamykin.foboreader.presentation.devicebooks.list
 
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegatesManager
 import java.io.File
-import java.util.*
 
 class FilesRecyclerAdapter(
-        private val onFileClickFunc: (File) -> Unit,
-        private val onDirClickFunc: (File) -> Unit
-) : RecyclerView.Adapter<FileViewHolder>() {
+        onFileClickFunc: (File) -> Unit,
+        onDirClickFunc: (File) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var files: List<File> = Collections.emptyList()
+    private var items: List<File> = listOf()
+    private val delegatesManager = AdapterDelegatesManager()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_file, parent, false)
-        return FileViewHolder(view, this::onItemClicked)
+    init {
+        delegatesManager.addDelegate(DirectoryDelegate { onDirClickFunc(items[it]) })
+        delegatesManager.addDelegate(FileDelegate { onFileClickFunc(items[it]) })
+        delegatesManager.addDelegate(FictionBookDelegate { onFileClickFunc(items[it]) })
     }
 
-    override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
-        val file = getItem(position)
-        holder.bind(file)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+            delegatesManager.createViewHolder(parent, viewType)
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        delegatesManager.onBindViewHolder(items, holder, position)
     }
 
-    override fun getItemCount(): Int = files.size
+    override fun getItemCount(): Int = items.size
 
     fun changeData(files: List<File>) {
-        this.files = files
+        this.items = files
         notifyDataSetChanged()
-    }
-
-    private fun getItem(position: Int): File = files[position]
-
-    private fun onItemClicked(position: Int) {
-        val item = getItem(position)
-        when {
-            item.isDirectory -> onDirClickFunc(item)
-            else -> onFileClickFunc(item)
-        }
     }
 }
