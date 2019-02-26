@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
@@ -16,13 +16,11 @@ import kotlinx.android.synthetic.main.fragment_device_books.*
 import kotlinx.android.synthetic.main.layout_no_permission.*
 import ru.mamykin.foboreader.BuildConfig
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.di.modules.DeviceBooksModule
 import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.core.ui.UiUtils
 import ru.mamykin.foboreader.presentation.devicebooks.list.FilesRecyclerAdapter
 import java.io.File
-import javax.inject.Inject
 
 /**
  * Страница с файлами на устройстве
@@ -38,32 +36,25 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
 
     override val layoutId: Int = R.layout.fragment_device_books
 
-    @Inject
     @InjectPresenter
     lateinit var presenter: DeviceBooksPresenter
 
     private lateinit var adapter: FilesRecyclerAdapter
 
     @ProvidePresenter
-    fun provideDeviceBooksPresenter(): DeviceBooksPresenter = presenter
+    fun provideDeviceBooksPresenter(): DeviceBooksPresenter = getAppComponent()
+            .getDeviceBooksComponent()
+            .getDeviceBooksPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun injectDependencies() {
-        super.injectDependencies()
-        val module = DeviceBooksModule(DeviceBooksRouter(activity!!))
-        getAppComponent().getDeviceBooksComponent(module).inject(this)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = FilesRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
-        UiUtils.setupRecyclerView(context!!, rvFiles!!, adapter, LinearLayoutManager(context), true)
-
+        initFilesRecyclerView()
         btnUpDir.setOnClickListener { presenter.onParentDirectoryClicked() }
     }
 
@@ -118,4 +109,10 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
     override fun onQueryTextSubmit(query: String): Boolean = false
 
     override fun onQueryTextChange(newText: String): Boolean = false
+
+    private fun initFilesRecyclerView() {
+        adapter = FilesRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
+        rvFiles.adapter = adapter
+        rvFiles.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+    }
 }

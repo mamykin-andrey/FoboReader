@@ -1,8 +1,7 @@
 package ru.mamykin.foboreader.domain.devicebooks
 
-import ru.mamykin.foboreader.data.repository.devicebooks.DeviceBooksRepository
-import ru.mamykin.foboreader.core.extension.getWeight
 import ru.mamykin.foboreader.core.extension.isFictionBook
+import ru.mamykin.foboreader.data.repository.devicebooks.DeviceBooksRepository
 import rx.Single
 import java.io.File
 import javax.inject.Inject
@@ -13,13 +12,12 @@ class DeviceBooksInteractor @Inject constructor(
     private var currentDir: String = ""
 
     fun getDirectoryFiles(directory: String): Single<FileStructureEntity> {
-        this.currentDir = directory
-        val parentDirectory = formatParentDirectory(currentDir)
+        currentDir = directory
 
         return repository.getFiles(currentDir)
-                .map { it.sortedBy(File::getWeight) }
-                .zipWith(repository.canReadDirectory(parentDirectory)) { f, c -> Pair(f, c) }
-                .map { FileStructureEntity(it.first, it.second, currentDir) }
+                .map { it.sortedBy(this::getFileWeight) }
+                .zipWith(repository.canReadDirectory(getParentDirectory())) { f, c -> Pair(f, c) }
+                .map { FileStructureEntity(currentDir, it.first, it.second) }
     }
 
     fun getRootDirectoryFiles(): Single<FileStructureEntity> {
@@ -28,7 +26,7 @@ class DeviceBooksInteractor @Inject constructor(
     }
 
     fun getParentDirectoryFiles(): Single<FileStructureEntity> {
-        this.currentDir = formatParentDirectory(currentDir)
+        currentDir = getParentDirectory()
         return getDirectoryFiles(currentDir)
     }
 
@@ -38,7 +36,13 @@ class DeviceBooksInteractor @Inject constructor(
         else -> Single.just(file.absolutePath)
     }
 
-    private fun formatParentDirectory(dir: String): String {
-        return dir.substring(0, currentDir.lastIndexOf("/"))
+    private fun getParentDirectory(): String {
+        return currentDir.substring(0, currentDir.lastIndexOf("/"))
+    }
+
+    private fun getFileWeight(file: File) = when {
+        file.isDirectory -> 0
+        file.isFictionBook -> 1
+        else -> 2
     }
 }

@@ -1,13 +1,12 @@
 package ru.mamykin.foboreader.core.di.component
 
 import dagger.Subcomponent
-import ru.mamykin.foboreader.core.di.modules.DeviceBooksModule
 import ru.mamykin.foboreader.core.di.scope.FragmentScope
-import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksFragment
+import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksPresenter
 
 @FragmentScope
-@Subcomponent(modules = [DeviceBooksModule::class])
+@Subcomponent
 interface DeviceBooksComponent {
 
-    fun inject(fragment: DeviceBooksFragment)
+    fun getDeviceBooksPresenter(): DeviceBooksPresenter
 }

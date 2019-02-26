@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical">
 
     <include layout="@layout/layout_no_permission" />
 
@@ -33,8 +33,9 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvFiles"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            android:id="@+id/rvFiles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="@string/linear_layout_manager"/>
 
 </LinearLayout>

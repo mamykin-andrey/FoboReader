@@ -25,9 +25,3 @@ val DropboxFile.attributes: String
         val lastModified = fileData.serverModified.time.getLastModifiedString()
         return "$size, $lastModified"
     }
-
-fun File.getWeight() = when {
-    this.isDirectory -> 0
-    this.isFictionBook -> 1
-    else -> 2
-}

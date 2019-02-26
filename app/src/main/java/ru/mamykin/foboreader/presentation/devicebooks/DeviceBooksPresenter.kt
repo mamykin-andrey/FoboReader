@@ -2,23 +2,22 @@ package ru.mamykin.foboreader.presentation.devicebooks
 
 import android.Manifest
 import com.arellomobile.mvp.InjectViewState
-import ru.mamykin.foboreader.core.extension.applySchedulers
+import ru.mamykin.foboreader.core.platform.PermissionsManager
+import ru.mamykin.foboreader.core.ui.BasePresenter
 import ru.mamykin.foboreader.domain.devicebooks.AccessDeniedException
 import ru.mamykin.foboreader.domain.devicebooks.DeviceBooksInteractor
 import ru.mamykin.foboreader.domain.devicebooks.FileStructureEntity
 import ru.mamykin.foboreader.domain.devicebooks.UnknownBookFormatException
-import ru.mamykin.foboreader.core.ui.BasePresenter
-import ru.mamykin.foboreader.core.platform.PermissionsManager
 import java.io.File
 import javax.inject.Inject
 
-// TODO: remove dependency to Android SDK (permission)
 @InjectViewState
 class DeviceBooksPresenter @Inject constructor(
         private val interactor: DeviceBooksInteractor,
-        private val router: DeviceBooksRouter,
         private val permissionsManager: PermissionsManager
 ) : BasePresenter<DeviceBooksView>() {
+
+    var router: DeviceBooksRouter? = null
 
     override fun attachView(view: DeviceBooksView) {
         super.attachView(view)
@@ -35,7 +34,7 @@ class DeviceBooksPresenter @Inject constructor(
 
     fun onFileClicked(file: File) {
         interactor.openFile(file)
-                .subscribe(router::openBook, this::onError)
+                .subscribe({ router?.openBook(it) }, { onError(it) })
                 .unsubscribeOnDestroy()
     }
 
@@ -53,7 +52,6 @@ class DeviceBooksPresenter @Inject constructor(
 
     private fun openRootDirectory() {
         interactor.getRootDirectoryFiles()
-                .applySchedulers()
                 .subscribe(this::showFiles, this::onError)
                 .unsubscribeOnDestroy()
     }
@@ -67,7 +65,7 @@ class DeviceBooksPresenter @Inject constructor(
 
     private fun showFiles(structure: FileStructureEntity) = with(viewState) {
         showParentDirAvailable(structure.isParentDirAvailable)
-        showCurrentDir(structure.currentDIr)
+        showCurrentDir(structure.directoryName)
         showFiles(structure.files)
     }
 }
