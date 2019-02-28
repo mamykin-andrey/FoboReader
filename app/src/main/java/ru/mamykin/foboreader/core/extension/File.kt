@@ -20,7 +20,7 @@ val File.attributes: String
 
 val DropboxFile.attributes: String
     get() {
-        val fileData = file as FileMetadata
+        val fileData = dropboxFile as FileMetadata
         val size = fileData.size.getBytesSizeString()
         val lastModified = fileData.serverModified.time.getLastModifiedString()
         return "$size, $lastModified"

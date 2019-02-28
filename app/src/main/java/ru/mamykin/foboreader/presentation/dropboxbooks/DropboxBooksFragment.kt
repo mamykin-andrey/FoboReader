@@ -10,12 +10,11 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.fragment_dropbox_books.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.di.modules.DropboxBooksModule
 import ru.mamykin.foboreader.core.extension.isVisible
-import ru.mamykin.foboreader.domain.entity.DropboxFile
-import ru.mamykin.foboreader.presentation.dropboxbooks.list.DropboxRecyclerAdapter
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.core.ui.UiUtils
+import ru.mamykin.foboreader.domain.entity.DropboxFile
+import ru.mamykin.foboreader.presentation.dropboxbooks.list.DropboxRecyclerAdapter
 
 /**
  * Страница с файлами Dropbox
@@ -35,32 +34,22 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
     private lateinit var adapter: DropboxRecyclerAdapter
 
     @ProvidePresenter
-    fun providePresenter(): DropboxBooksPresenter = presenter
+    fun providePresenter(): DropboxBooksPresenter = getAppComponent()
+            .getDropboxBooksComponent()
+            .getDropboxBooksPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun injectDependencies() {
-        super.injectDependencies()
-        val module = DropboxBooksModule(DropboxBooksRouter(activity!!))
-        presenter = getAppComponent()
-                .getDropboxBooksComponent(module)
-                .getDropboxBooksPresenter()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = DropboxRecyclerAdapter(
-                presenter::onFileClicked,
-                presenter::onDirectoryClicked,
-                presenter::onParentDirectoryClicked
-        )
+        adapter = DropboxRecyclerAdapter(presenter::onFileClicked, presenter::onDirectoryClicked)
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), true)
-
         btnLogin.setOnClickListener { presenter.onLoginClicked() }
+        presenter.router = DropboxBooksRouter(activity!!)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -73,8 +62,12 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
         UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, this)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.router = null
+    }
+
     override fun showFiles(files: List<DropboxFile>) {
-        adapter.hideLoadingItem()
         adapter.changeData(files)
         pbLoading.isVisible = false
         llNoAuth.isVisible = false
@@ -82,11 +75,11 @@ class DropboxBooksFragment : BaseFragment(), DropboxView, SearchView.OnQueryText
     }
 
     override fun showLoadingItem(position: Int) {
-        adapter.showLoadingItem(position)
+        //adapter.showLoadingItem(position)
     }
 
     override fun hideLoadingItem() {
-        adapter.hideLoadingItem()
+        //adapter.hideLoadingItem()
     }
 
     override fun showLoading(show: Boolean) {

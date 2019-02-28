@@ -3,8 +3,8 @@ package ru.mamykin.foboreader.domain.entity
 import com.dropbox.core.v2.files.FolderMetadata
 import com.dropbox.core.v2.files.Metadata
 
-class DropboxFile(var file: Metadata) {
-    val name: String = file.name
-    val pathLower: String = file.pathLower
-    val isDirectory: Boolean = file is FolderMetadata
+class DropboxFile(val dropboxFile: Metadata) {
+    val name: String = dropboxFile.name
+    val pathLower: String = dropboxFile.pathLower
+    val isDirectory: Boolean = dropboxFile is FolderMetadata
 }

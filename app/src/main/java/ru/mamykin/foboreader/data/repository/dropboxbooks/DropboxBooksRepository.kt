@@ -38,7 +38,7 @@ class DropboxBooksRepository @Inject constructor(
     }
 
     fun downloadFile(file: DropboxFile): Single<String> = Single.fromCallable {
-        val fileMetadata = file.file as FileMetadata
+        val fileMetadata = file.dropboxFile as FileMetadata
         val loadedFile = File(getDownloadsDir(), file.name)
         val outputStream = FileOutputStream(loadedFile)
 
