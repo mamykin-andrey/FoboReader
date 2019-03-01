@@ -3,29 +3,29 @@ package ru.mamykin.foboreader.core.ui.adapterdelegates
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
-class AdapterDelegatesManager {
+class AdapterDelegatesManager<T> {
 
-    private val delegates: HashMap<Int, AdapterDelegate<*, *>> = hashMapOf()
+    private val delegates: HashMap<Int, AdapterDelegate<*, T>> = hashMapOf()
 
-    fun addDelegate(delegate: AdapterDelegate<*, *>) {
+    fun addDelegate(delegate: AdapterDelegate<*, T>) {
         delegates[delegates.size + 1] = delegate
     }
 
     fun createViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
             getDelegateForViewType(viewType).createViewHolder(parent)
 
-    fun onBindViewHolder(items: List<Any>, holder: RecyclerView.ViewHolder, position: Int) {
+    fun bindViewHolder(items: List<T>, holder: RecyclerView.ViewHolder, position: Int) {
         val delegate = getDelegateForViewType(getItemViewType(items, position))
         delegate.bindViewHolder(holder, items[position])
     }
 
-    fun getItemViewType(items: List<Any>, position: Int): Int {
+    fun getItemViewType(items: List<T>, position: Int): Int {
         return delegates.entries.find { it.value.isForViewType(items[position]) }?.key
                 ?: throw IllegalStateException("Unknown viewType for position: $position!")
 
     }
 
-    private fun getDelegateForViewType(viewType: Int): AdapterDelegate<*, *> {
+    private fun getDelegateForViewType(viewType: Int): AdapterDelegate<*, T> {
         return delegates[viewType]
                 ?: throw IllegalStateException("No viewType was found: $viewType!")
     }

@@ -10,15 +10,18 @@ import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.foboreader.domain.entity.StoreBook
 
-class FeaturedBookDelegate : AdapterDelegate<FeaturedBookViewHolder, StoreBook>() {
-
-    override fun createViewHolder(itemView: View) = FeaturedBookViewHolder(itemView)
+class FeaturedBookDelegate : AdapterDelegate<FeaturedBookViewHolder, Any>() {
 
     override fun getLayoutId(): Int = R.layout.item_featured_book
 
     override fun isForViewType(item: Any): Boolean = item is StoreBook
 
-    override fun innerBindViewHolder(holder: FeaturedBookViewHolder, item: StoreBook) = holder.bind(item)
+    override fun createViewHolder(itemView: View): RecyclerView.ViewHolder =
+            FeaturedBookViewHolder(itemView)
+
+    override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
+        (holder as FeaturedBookViewHolder).bind(item as StoreBook)
+    }
 }
 
 class FeaturedBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

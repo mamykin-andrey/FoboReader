@@ -14,13 +14,15 @@ class DropboxFictionBookDelegate(
         private val onClickFunc: (Int) -> Unit
 ) : AdapterDelegate<DropboxFictionBookViewHolder, DropboxFile>() {
 
-    override fun isForViewType(item: Any): Boolean = (item as DropboxFile).isFictionBook
+    override fun isForViewType(item: DropboxFile): Boolean = item.isFictionBook
 
     override fun getLayoutId(): Int = R.layout.item_file
 
     override fun createViewHolder(itemView: View): RecyclerView.ViewHolder = DropboxFictionBookViewHolder(itemView)
 
-    override fun innerBindViewHolder(holder: DropboxFictionBookViewHolder, item: DropboxFile) = holder.bind(item, onClickFunc)
+    override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: DropboxFile) {
+        (holder as DropboxFileViewHolder).bind(item, onClickFunc)
+    }
 }
 
 class DropboxFictionBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

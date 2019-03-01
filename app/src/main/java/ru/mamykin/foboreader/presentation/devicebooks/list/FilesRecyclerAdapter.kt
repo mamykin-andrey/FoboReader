@@ -11,7 +11,7 @@ class FilesRecyclerAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<File> = listOf()
-    private val delegatesManager = AdapterDelegatesManager()
+    private val delegatesManager = AdapterDelegatesManager<File>()
 
     init {
         delegatesManager.addDelegate(DirectoryDelegate { onDirClickFunc(items[it]) })
@@ -23,7 +23,7 @@ class FilesRecyclerAdapter(
             delegatesManager.createViewHolder(parent, viewType)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        delegatesManager.onBindViewHolder(items, holder, position)
+        delegatesManager.bindViewHolder(items, holder, position)
     }
 
     override fun getItemCount(): Int = items.size

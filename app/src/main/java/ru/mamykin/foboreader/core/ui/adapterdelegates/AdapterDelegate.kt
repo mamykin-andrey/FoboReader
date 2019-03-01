@@ -5,14 +5,11 @@ import android.view.View
 
 abstract class AdapterDelegate<H, T> {
 
-    abstract fun isForViewType(item: Any): Boolean
+    abstract fun isForViewType(item: T): Boolean
 
     abstract fun getLayoutId(): Int
 
     abstract fun createViewHolder(itemView: View): RecyclerView.ViewHolder
 
-    abstract fun innerBindViewHolder(holder: H, item: T)
-
-    fun bindViewHolder(holder: RecyclerView.ViewHolder, item: Any) =
-            innerBindViewHolder(holder as H, item as T)
+    abstract fun bindViewHolder(holder: RecyclerView.ViewHolder, item: T)
 }

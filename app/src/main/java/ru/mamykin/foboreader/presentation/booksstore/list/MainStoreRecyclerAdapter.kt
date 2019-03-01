@@ -8,7 +8,7 @@ class MainStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 
     private var items: List<Any> = listOf()
 
-    private val delegatesManager = AdapterDelegatesManager()
+    private val delegatesManager = AdapterDelegatesManager<Any>()
 
     init {
         delegatesManager.addDelegate(StoreCategoryDelegate())
@@ -19,7 +19,7 @@ class MainStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
             delegatesManager.createViewHolder(parent, viewType)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        delegatesManager.onBindViewHolder(items, holder, position)
+        delegatesManager.bindViewHolder(items, holder, position)
     }
 
     override fun getItemCount(): Int = items.count()

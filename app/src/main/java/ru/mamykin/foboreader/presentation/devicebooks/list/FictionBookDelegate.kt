@@ -14,15 +14,16 @@ class FictionBookDelegate(
         private val onClickFunc: (Int) -> Unit
 ) : AdapterDelegate<FictionBookViewHolder, File>() {
 
-    override fun isForViewType(item: Any) = (item as File).isFictionBook
+    override fun isForViewType(item: File) = item.isFictionBook
 
     override fun getLayoutId(): Int = R.layout.item_file
 
     override fun createViewHolder(itemView: View): RecyclerView.ViewHolder =
             FictionBookViewHolder(itemView, onClickFunc)
 
-    override fun innerBindViewHolder(holder: FictionBookViewHolder, item: File) =
-            holder.bind(item)
+    override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: File) {
+        (holder as FictionBookViewHolder).bind(item)
+    }
 }
 
 class FictionBookViewHolder(itemView: View,

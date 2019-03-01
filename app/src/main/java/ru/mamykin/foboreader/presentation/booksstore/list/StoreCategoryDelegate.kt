@@ -7,15 +7,18 @@ import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.foboreader.domain.entity.booksstore.StoreCategory
 
-class StoreCategoryDelegate : AdapterDelegate<StoreCategoryViewHolder, StoreCategory>() {
+class StoreCategoryDelegate : AdapterDelegate<StoreCategoryViewHolder, Any>() {
 
     override fun isForViewType(item: Any): Boolean = item is StoreCategory
 
     override fun getLayoutId(): Int = R.layout.item_store_category
 
-    override fun createViewHolder(itemView: View) = StoreCategoryViewHolder(itemView)
+    override fun createViewHolder(itemView: View): RecyclerView.ViewHolder =
+            StoreCategoryViewHolder(itemView)
 
-    override fun innerBindViewHolder(holder: StoreCategoryViewHolder, item: StoreCategory) = holder.bind(item)
+    override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
+        (holder as StoreCategoryViewHolder).bind(item as StoreCategory)
+    }
 }
 
 class StoreCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

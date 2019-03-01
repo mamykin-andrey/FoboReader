@@ -13,15 +13,15 @@ class FileDelegate(
         private val onClickFunc: (Int) -> Unit
 ) : AdapterDelegate<FileViewHolder, File>() {
 
-    override fun isForViewType(item: Any) = (item as File).isDirectory
+    override fun isForViewType(item: File): Boolean = item.isDirectory
 
     override fun getLayoutId(): Int = R.layout.item_file
 
     override fun createViewHolder(itemView: View): RecyclerView.ViewHolder =
             FileViewHolder(itemView, onClickFunc)
 
-    override fun innerBindViewHolder(holder: FileViewHolder, item: File) =
-            holder.bind(item)
+    override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: File) =
+            (holder as FileViewHolder).bind(item)
 }
 
 class FileViewHolder(itemView: View,

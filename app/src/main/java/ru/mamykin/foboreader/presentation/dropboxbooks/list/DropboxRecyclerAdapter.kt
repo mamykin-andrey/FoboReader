@@ -11,7 +11,7 @@ class DropboxRecyclerAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<DropboxFile> = listOf()
-    private val delegatesManager = AdapterDelegatesManager()
+    private val delegatesManager = AdapterDelegatesManager<DropboxFile>()
 
     init {
         delegatesManager.addDelegate(DropboxDirectoryDelegate { onDirClickFunc(items[it]) })
@@ -23,12 +23,13 @@ class DropboxRecyclerAdapter(
             delegatesManager.createViewHolder(parent, viewType)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        delegatesManager.onBindViewHolder(items, holder, position)
+        delegatesManager.bindViewHolder(items, holder, position)
     }
 
     override fun getItemCount(): Int = items.size
 
-    override fun getItemViewType(position: Int): Int = delegatesManager.getItemViewType(items, position)
+    override fun getItemViewType(position: Int): Int =
+            delegatesManager.getItemViewType(items, position)
 
     fun changeData(items: List<DropboxFile>) {
         this.items = items
