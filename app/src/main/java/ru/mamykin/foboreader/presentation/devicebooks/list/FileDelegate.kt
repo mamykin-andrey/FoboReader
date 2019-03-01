@@ -11,7 +11,7 @@ import java.io.File
 
 class FileDelegate(
         private val onClickFunc: (Int) -> Unit
-) : AdapterDelegate<FileViewHolder, File>() {
+) : AdapterDelegate<File>() {
 
     override fun isForViewType(item: File): Boolean = item.isDirectory
 

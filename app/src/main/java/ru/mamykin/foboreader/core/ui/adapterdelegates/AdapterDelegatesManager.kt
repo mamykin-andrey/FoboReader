@@ -5,9 +5,9 @@ import android.view.ViewGroup
 
 class AdapterDelegatesManager<T> {
 
-    private val delegates: HashMap<Int, AdapterDelegate<*, T>> = hashMapOf()
+    private val delegates: HashMap<Int, AdapterDelegate<T>> = hashMapOf()
 
-    fun addDelegate(delegate: AdapterDelegate<*, T>) {
+    fun addDelegate(delegate: AdapterDelegate<T>) {
         delegates[delegates.size + 1] = delegate
     }
 
@@ -25,7 +25,7 @@ class AdapterDelegatesManager<T> {
 
     }
 
-    private fun getDelegateForViewType(viewType: Int): AdapterDelegate<*, T> {
+    private fun getDelegateForViewType(viewType: Int): AdapterDelegate<T> {
         return delegates[viewType]
                 ?: throw IllegalStateException("No viewType was found: $viewType!")
     }

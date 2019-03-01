@@ -7,7 +7,7 @@ import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.foboreader.domain.entity.booksstore.StoreCategory
 
-class StoreCategoryDelegate : AdapterDelegate<StoreCategoryViewHolder, Any>() {
+class StoreCategoryDelegate : AdapterDelegate<Any>() {
 
     override fun isForViewType(item: Any): Boolean = item is StoreCategory
 

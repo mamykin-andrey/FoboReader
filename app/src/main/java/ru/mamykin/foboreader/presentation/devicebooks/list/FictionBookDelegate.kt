@@ -12,7 +12,7 @@ import java.io.File
 
 class FictionBookDelegate(
         private val onClickFunc: (Int) -> Unit
-) : AdapterDelegate<FictionBookViewHolder, File>() {
+) : AdapterDelegate<File>() {
 
     override fun isForViewType(item: File) = item.isFictionBook
 

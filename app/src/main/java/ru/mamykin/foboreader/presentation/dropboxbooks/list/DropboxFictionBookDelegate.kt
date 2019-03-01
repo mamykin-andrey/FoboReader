@@ -12,7 +12,7 @@ import ru.mamykin.foboreader.domain.entity.DropboxFile
 
 class DropboxFictionBookDelegate(
         private val onClickFunc: (Int) -> Unit
-) : AdapterDelegate<DropboxFictionBookViewHolder, DropboxFile>() {
+) : AdapterDelegate<DropboxFile>() {
 
     override fun isForViewType(item: DropboxFile): Boolean = item.isFictionBook
 

@@ -9,7 +9,7 @@ import ru.mamykin.foboreader.domain.entity.DropboxFile
 
 class DropboxDirectoryDelegate(
         private val onClickFunc: (Int) -> Unit
-) : AdapterDelegate<DropboxDirectoryViewHolder, DropboxFile>() {
+) : AdapterDelegate<DropboxFile>() {
 
     override fun isForViewType(item: DropboxFile): Boolean = item.isDirectory
 

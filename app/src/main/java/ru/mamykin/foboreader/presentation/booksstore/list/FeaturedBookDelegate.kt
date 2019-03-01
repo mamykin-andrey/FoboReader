@@ -10,7 +10,7 @@ import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.foboreader.domain.entity.StoreBook
 
-class FeaturedBookDelegate : AdapterDelegate<FeaturedBookViewHolder, Any>() {
+class FeaturedBookDelegate : AdapterDelegate<Any>() {
 
     override fun getLayoutId(): Int = R.layout.item_featured_book
 
