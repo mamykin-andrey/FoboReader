@@ -23,6 +23,6 @@ class MainViewPagerAdapter(manager: FragmentManager) : FragmentStatePagerAdapter
 
     fun addFragment(fragment: Fragment, title: String) {
         fragments.add(fragment)
-        this.titles.add(title)
+        titles.add(title)
     }
 }

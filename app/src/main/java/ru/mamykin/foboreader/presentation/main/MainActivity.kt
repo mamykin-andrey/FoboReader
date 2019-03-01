@@ -9,10 +9,10 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.core.ui.BaseActivity
 import ru.mamykin.foboreader.presentation.booksstore.BooksStoreFragment
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksFragment
 import ru.mamykin.foboreader.presentation.dropboxbooks.DropboxBooksFragment
-import ru.mamykin.foboreader.core.ui.BaseActivity
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksFragment
 import ru.mamykin.foboreader.presentation.settings.SettingsActivity
 
@@ -28,16 +28,12 @@ class MainActivity : BaseActivity() {
         private const val DROPBOX_BOOKS_FRAGMENT_POS = 2
         private const val BOOKS_STORE_FRAGMENT_POS = 3
 
-        fun getHomeIntent(): Intent {
-            val homeIntent = Intent(Intent.ACTION_MAIN)
-            homeIntent.addCategory(Intent.CATEGORY_HOME)
-            homeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            return homeIntent
+        fun getHomeIntent() = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_HOME)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
 
-        fun getStartIntent(context: Context): Intent {
-            return Intent(context, MainActivity::class.java)
-        }
+        fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
 
     private lateinit var toggle: ActionBarDrawerToggle
@@ -75,12 +71,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
-        val adapter = MainViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(MyBooksFragment.newInstance(), getString(R.string.my_books))
-        adapter.addFragment(DeviceBooksFragment.newInstance(), getString(R.string.device))
-        adapter.addFragment(DropboxBooksFragment.newInstance(), getString(R.string.dropbox))
-        adapter.addFragment(BooksStoreFragment.newInstance(), getString(R.string.store))
-        viewPager.adapter = adapter
+        viewPager.adapter = MainViewPagerAdapter(supportFragmentManager).apply {
+            addFragment(MyBooksFragment.newInstance(), getString(R.string.my_books))
+            addFragment(DeviceBooksFragment.newInstance(), getString(R.string.device))
+            addFragment(DropboxBooksFragment.newInstance(), getString(R.string.dropbox))
+            addFragment(BooksStoreFragment.newInstance(), getString(R.string.store))
+        }
     }
 
     private fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -100,9 +96,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupDrawerLayout() {
-        navigationDrawer.setNavigationItemSelectedListener({ this.onNavigationItemSelected(it) })
-        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name)
-        toggle.isDrawerIndicatorEnabled = true
-        drawerLayout.addDrawerListener(toggle)
+        navigationDrawer.setNavigationItemSelectedListener { onNavigationItemSelected(it) }
+        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name).apply {
+            isDrawerIndicatorEnabled = true
+        }.also {
+            drawerLayout.addDrawerListener(it)
+        }
     }
 }
