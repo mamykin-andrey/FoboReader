@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.domain.devicebooks
 
 import ru.mamykin.foboreader.core.extension.isFictionBook
+import ru.mamykin.foboreader.data.model.FileStructure
 import ru.mamykin.foboreader.data.repository.devicebooks.DeviceBooksRepository
 import rx.Single
 import java.io.File
@@ -11,21 +12,19 @@ class DeviceBooksInteractor @Inject constructor(
 ) {
     private var currentDir: String = ""
 
-    fun getDirectoryFiles(directory: String): Single<FileStructureEntity> {
+    fun getDirectoryFiles(directory: String): Single<List<FileStructure>> {
         currentDir = directory
 
         return repository.getFiles(currentDir)
                 .map { it.sortedBy(this::getFileWeight) }
-                .zipWith(repository.canReadDirectory(getParentDirectory())) { f, c -> Pair(f, c) }
-                .map { FileStructureEntity(currentDir, it.first, it.second) }
     }
 
-    fun getRootDirectoryFiles(): Single<FileStructureEntity> {
+    fun getRootDirectoryFiles(): Single<FileStructure> {
         currentDir = repository.getRootDirectory()
         return getDirectoryFiles(currentDir)
     }
 
-    fun getParentDirectoryFiles(): Single<FileStructureEntity> {
+    fun getParentDirectoryFiles(): Single<List<FileStructure>> {
         currentDir = getParentDirectory()
         return getDirectoryFiles(currentDir)
     }
@@ -40,9 +39,9 @@ class DeviceBooksInteractor @Inject constructor(
         return currentDir.substring(0, currentDir.lastIndexOf("/"))
     }
 
-    private fun getFileWeight(file: File) = when {
-        file.isDirectory -> 0
-        file.isFictionBook -> 1
+    private fun getFileWeight(file: FileStructure) = when (file.type) {
+        FileStructure.FileType.Folder -> 0
+        FileStructure.FileType.FictionBook -> 1
         else -> 2
     }
 }

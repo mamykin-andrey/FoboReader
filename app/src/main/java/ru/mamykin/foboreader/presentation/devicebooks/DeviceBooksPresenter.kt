@@ -7,8 +7,8 @@ import ru.mamykin.foboreader.core.platform.PermissionsManager
 import ru.mamykin.foboreader.core.platform.ResourcesManager
 import ru.mamykin.foboreader.core.platform.Schedulers
 import ru.mamykin.foboreader.core.ui.BasePresenter
+import ru.mamykin.foboreader.data.model.FileStructure
 import ru.mamykin.foboreader.domain.devicebooks.DeviceBooksInteractor
-import ru.mamykin.foboreader.domain.devicebooks.FileStructureEntity
 import java.io.File
 import javax.inject.Inject
 
@@ -59,7 +59,7 @@ class DeviceBooksPresenter @Inject constructor(
                 .unsubscribeOnDestroy()
     }
 
-    private fun showFiles(structure: FileStructureEntity) = with(viewState) {
+    private fun showFiles(structure: FileStructure) = with(viewState) {
         showParentDirAvailable(structure.isParentDirAvailable)
         showCurrentDir(structure.directoryName)
         showFiles(structure.files)
