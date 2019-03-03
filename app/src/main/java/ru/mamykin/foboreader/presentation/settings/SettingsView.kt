@@ -1,11 +1,11 @@
 package ru.mamykin.foboreader.presentation.settings
 
-import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import ru.mamykin.foboreader.core.ui.BaseView
 
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface SettingsView : MvpView {
+interface SettingsView : BaseView {
 
     fun showDropboxAccount(account: String?)
 

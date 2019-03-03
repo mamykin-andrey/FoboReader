@@ -1,13 +1,17 @@
 package ru.mamykin.foboreader.presentation.settings
 
 import com.arellomobile.mvp.InjectViewState
+import ru.mamykin.foboreader.core.platform.ResourcesManager
+import ru.mamykin.foboreader.core.platform.Schedulers
 import ru.mamykin.foboreader.domain.settings.SettingsInteractor
 import ru.mamykin.foboreader.core.ui.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
 class SettingsPresenter @Inject constructor(
-        private val interactor: SettingsInteractor
+        private val interactor: SettingsInteractor,
+        override val resourcesManager: ResourcesManager,
+        override val schedulers: Schedulers
 ) : BasePresenter<SettingsView>() {
 
     override fun onFirstViewAttach() {

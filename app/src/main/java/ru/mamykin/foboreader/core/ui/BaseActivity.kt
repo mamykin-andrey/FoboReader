@@ -41,6 +41,10 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView {
         showSnackbar(message, false)
     }
 
+    override fun showLoading(show: Boolean) {
+
+    }
+
     protected fun initToolbar(title: String, homeEnabled: Boolean) {
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)

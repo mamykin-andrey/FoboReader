@@ -10,41 +10,36 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.ui.BaseActivity
 import ru.mamykin.foboreader.core.ui.YesNoDialogFragment
-import javax.inject.Inject
 
 /**
  * Страница настроек
  */
-class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, SettingsView {
+class SettingsActivity : BaseActivity(), SettingsView, SeekBar.OnSeekBarChangeListener {
 
     companion object {
 
         const val DROPBOX_LOGOUT_DIALOG_TAG = "dropbox_dialog_tag"
 
-        fun getStartIntent(context: Context): Intent {
-            return Intent(context, SettingsActivity::class.java)
-        }
+        fun start(context: Context) = context.startActivity(
+                Intent(context, SettingsActivity::class.java)
+        )
     }
 
     override val layout: Int = R.layout.activity_settings
 
-    @Inject
     @InjectPresenter
     lateinit var presenter: SettingsPresenter
 
     @ProvidePresenter
-    fun providePresenter(): SettingsPresenter = presenter
+    fun providePresenter(): SettingsPresenter = getAppComponent()
+            .getSettingsComponent()
+            .getSettingsPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initToolbar(getString(R.string.settings), true)
         initClickListeners()
-    }
-
-    override fun injectDependencies() {
-        super.injectDependencies()
-        getAppComponent().getSettingsComponent().inject(this)
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -60,6 +55,7 @@ class SettingsActivity : BaseActivity(), SeekBar.OnSeekBarChangeListener, Settin
     }
 
     override fun setupBrightness() {
+
     }
 
     override fun showDropboxAccount(account: String?) {

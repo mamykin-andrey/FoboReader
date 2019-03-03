@@ -28,12 +28,9 @@ class MainActivity : BaseActivity() {
         private const val DROPBOX_BOOKS_FRAGMENT_POS = 2
         private const val BOOKS_STORE_FRAGMENT_POS = 3
 
-        fun getHomeIntent() = Intent(Intent.ACTION_MAIN).apply {
-            addCategory(Intent.CATEGORY_HOME)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-
-        fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
+        fun start(context: Context) = context.startActivity(
+                Intent(context, MainActivity::class.java)
+        )
     }
 
     private lateinit var toggle: ActionBarDrawerToggle
@@ -87,8 +84,7 @@ class MainActivity : BaseActivity() {
             R.id.menu_device -> viewpager.currentItem = DEVICE_BOOKS_FRAGMENT_POS
             R.id.menu_dropbox -> viewpager.currentItem = DROPBOX_BOOKS_FRAGMENT_POS
             R.id.menu_books_store -> viewpager.currentItem = BOOKS_STORE_FRAGMENT_POS
-            R.id.menu_settings -> startActivity(SettingsActivity.getStartIntent(this))
-            R.id.menu_exit -> startActivity(getHomeIntent())
+            R.id.menu_settings -> SettingsActivity.start(this)
             else -> return super.onOptionsItemSelected(item)
         }
 
