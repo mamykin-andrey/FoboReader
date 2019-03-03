@@ -12,8 +12,8 @@ import javax.inject.Inject
 @InjectViewState
 class MyBooksPresenter @Inject constructor(
         private val interactor: MyBooksInteractor,
-        private val resourcesManager: ResourcesManager,
-        private val schedulers: Schedulers
+        override val resourcesManager: ResourcesManager,
+        override val schedulers: Schedulers
 ) : BasePresenter<MyBooksView>() {
 
     private var searchQuery: String = ""
@@ -25,18 +25,8 @@ class MyBooksPresenter @Inject constructor(
         loadBooks()
     }
 
-    fun onSortByNameSelected() {
-        sortOrder = BookDao.SortOrder.BY_NAME
-        loadBooks()
-    }
-
-    fun onSortByReadedSelected() {
-        sortOrder = BookDao.SortOrder.BY_READED
-        loadBooks()
-    }
-
-    fun onSortByDateSelected() {
-        sortOrder = BookDao.SortOrder.BY_DATE
+    fun onSortBooksClicked(sortOrder: BookDao.SortOrder) {
+        this.sortOrder = sortOrder
         loadBooks()
     }
 
@@ -48,42 +38,37 @@ class MyBooksPresenter @Inject constructor(
     fun onBookClicked(bookPath: String) {
         interactor.getBook(bookPath)
                 .map { it.filePath }
-                .subscribeOn(schedulers.io())
-                .observeOn(schedulers.main())
-                .subscribe({ router?.openBook(it) }, { viewState.onError(resourcesManager.getString(R.string.error_book_open)) })
+                .applySchedulers()
+                .subscribe({ router?.openBook(it) }, { onError(R.string.error_book_open) })
                 .unsubscribeOnDestroy()
     }
 
     fun onBookAboutClicked(bookPath: String) {
         interactor.getBook(bookPath)
                 .map { it.filePath }
-                .subscribeOn(schedulers.io())
-                .observeOn(schedulers.main())
-                .subscribe({ router?.openBookDetails(it) }, { viewState.onError(resourcesManager.getString(R.string.error_book_open)) })
+                .applySchedulers()
+                .subscribe({ router?.openBookDetails(it) }, { onError(R.string.error_book_open) })
                 .unsubscribeOnDestroy()
     }
 
     fun onBookShareClicked(bookPath: String) {
         interactor.getBook(bookPath)
-                .subscribeOn(schedulers.io())
-                .observeOn(schedulers.main())
-                .subscribe({ router?.openBookShareDialog(it) }) { viewState.onError(resourcesManager.getString(R.string.error_book_open)) }
+                .applySchedulers()
+                .subscribe({ router?.openBookShareDialog(it) }, { onError(R.string.error_book_open) })
                 .unsubscribeOnDestroy()
     }
 
     fun onBookRemoveClicked(bookPath: String) {
         interactor.removeBook(bookPath)
-                .subscribeOn(schedulers.io())
-                .observeOn(schedulers.main())
-                .subscribe({ loadBooks() }, { viewState.onError(resourcesManager.getString(R.string.error_book_open)) })
+                .applySchedulers()
+                .subscribe({ loadBooks() }, { onError(R.string.error_book_open) })
                 .unsubscribeOnDestroy()
     }
 
     private fun loadBooks() {
         interactor.getBooks(searchQuery, sortOrder)
-                .subscribeOn(schedulers.io())
-                .observeOn(schedulers.main())
-                .subscribe({ viewState.showBooks(it) }) { viewState.onError(resourcesManager.getString(R.string.error_book_list_loading)) }
+                .applySchedulers()
+                .subscribe({ viewState.showBooks(it) }, { onError(R.string.error_book_list_loading) })
                 .unsubscribeOnDestroy()
     }
 }

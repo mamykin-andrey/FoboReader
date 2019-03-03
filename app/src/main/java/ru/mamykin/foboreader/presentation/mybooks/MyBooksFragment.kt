@@ -14,6 +14,7 @@ import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.core.ui.UiUtils
+import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.domain.entity.FictionBook
 import ru.mamykin.foboreader.presentation.mybooks.list.BooksRecyclerAdapter
 
@@ -74,9 +75,9 @@ class MyBooksFragment : BaseFragment(), MyBooksView, SearchView.OnQueryTextListe
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.actionSortName -> presenter.onSortByNameSelected()
-            R.id.actionSortReaded -> presenter.onSortByReadedSelected()
-            R.id.actionSortDate -> presenter.onSortByDateSelected()
+            R.id.actionSortName -> presenter.onSortBooksClicked(BookDao.SortOrder.BY_NAME)
+            R.id.actionSortReaded -> presenter.onSortBooksClicked(BookDao.SortOrder.BY_READED)
+            R.id.actionSortDate -> presenter.onSortBooksClicked(BookDao.SortOrder.BY_DATE)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

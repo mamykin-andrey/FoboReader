@@ -24,7 +24,10 @@ class ReadBookPresenter @Inject constructor(
         interactor.getParagraphTranslation(paragraph)
                 .applySchedulers()
                 .showProgress(viewState::showParagraphLoading)
-                .subscribe({ viewState.showParagraphTranslation(it) }, { onError(R.string.error_translation) })
+                .subscribe(
+                        { viewState.showParagraphTranslation(it) },
+                        { onError(R.string.error_translation) }
+                )
                 .unsubscribeOnDestroy()
     }
 
@@ -32,7 +35,10 @@ class ReadBookPresenter @Inject constructor(
         interactor.getWordTranslation(word)
                 .applySchedulers()
                 .showProgress(viewState::showWordLoading)
-                .subscribe({ viewState.showWordTranslation(word, it) }, { onError(R.string.error_translation) })
+                .subscribe(
+                        { viewState.showWordTranslation(word, it) },
+                        { onError(R.string.error_translation) }
+                )
                 .unsubscribeOnDestroy()
     }
 
@@ -44,7 +50,10 @@ class ReadBookPresenter @Inject constructor(
         interactor.getBookInfo()
                 .applySchedulers()
                 .showProgress()
-                .subscribe({ viewState.showBookName(it.bookTitle) }, { onError(R.string.error_book_loading) })
+                .subscribe(
+                        { viewState.showBookName(it.bookTitle) },
+                        { onError(R.string.error_book_loading) }
+                )
                 .unsubscribeOnDestroy()
     }
 }

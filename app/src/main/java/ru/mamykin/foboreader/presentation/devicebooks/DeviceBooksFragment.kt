@@ -94,14 +94,6 @@ class DeviceBooksFragment : BaseFragment(), DeviceBooksView, SearchView.OnQueryT
         btnUp.text = currentDir
     }
 
-    override fun showPermissionError() {
-        showToast(R.string.permission_denied)
-    }
-
-    override fun showBookFormatError() {
-        showToast(getString(R.string.wrong_file_format))
-    }
-
     override fun showParentDirAvailable(show: Boolean) {
         btnUpDir.isVisible = show
     }

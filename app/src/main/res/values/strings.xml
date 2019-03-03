@@ -80,4 +80,7 @@
     <string name="error_book_list_loading">Не удалось загрузить список книг</string>
     <string name="error_book_loading">Не удалось загрузить информацию о книге</string>
     <string name="error_translation">Не удалось осуществить перевод</string>
+    <string name="error_directory_open">Не удалось открыть каталог</string>
+    <string name="error_access_denied">Доступ запрещен</string>
+    <string name="error_unexpected_file_format">Неподдерживаемый формат файла</string>
 </resources>

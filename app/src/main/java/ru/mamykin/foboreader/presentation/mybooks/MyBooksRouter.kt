@@ -10,13 +10,12 @@ import ru.mamykin.foboreader.presentation.readbook.ReadBookActivity
 class MyBooksRouter(
         private val activity: Activity
 ) {
-
     fun openBook(bookPath: String) {
         ReadBookActivity.start(activity, bookPath)
     }
 
     fun openBookDetails(bookPath: String) {
-        activity.startActivity(BookDetailsActivity.getStartIntent(activity, bookPath))
+        BookDetailsActivity.start(activity, bookPath)
     }
 
     fun openBookShareDialog(book: FictionBook) {

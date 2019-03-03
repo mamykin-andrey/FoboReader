@@ -21,9 +21,11 @@ class BookDetailsActivity : BaseActivity(), BookDetailsView {
 
         private const val BOOK_PATH_EXTRA = "book_path_extra"
 
-        fun getStartIntent(context: Context, bookPath: String) = Intent(context, BookDetailsActivity::class.java).apply {
-            putExtra(BOOK_PATH_EXTRA, bookPath)
-        }
+        fun start(context: Context, bookPath: String) =
+                context.startActivity(Intent(context, BookDetailsActivity::class.java)
+                        .apply {
+                            putExtra(BOOK_PATH_EXTRA, bookPath)
+                        })
     }
 
     override val layout: Int = R.layout.activity_book_detail

@@ -15,11 +15,6 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView {
 
     abstract val layoutId: Int
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        injectDependencies()
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? = inflater.inflate(layoutId, container, false)
@@ -28,10 +23,12 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView {
         showSnackbar(message, false)
     }
 
-    protected open fun injectDependencies() {
+    override fun showLoading(show: Boolean) {
+
     }
 
-    protected fun getAppComponent(): AppComponent = (activity!!.application as ReaderApp).appComponent
+    protected fun getAppComponent(): AppComponent =
+            (activity!!.application as ReaderApp).appComponent
 
     protected fun showToast(@StringRes messageResId: Int, long: Boolean = false) {
         showToast(getString(messageResId, long))

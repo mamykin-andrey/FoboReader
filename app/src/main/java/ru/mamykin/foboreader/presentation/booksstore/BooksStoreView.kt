@@ -10,6 +10,4 @@ interface BooksStoreView : BaseView {
     fun showStoreBooks(books: List<Any>)
 
     fun showMessage(message: String)
-
-    fun showLoading(show: Boolean)
 }

@@ -12,8 +12,8 @@ import javax.inject.Inject
 @InjectViewState
 class DropboxBooksPresenter @Inject constructor(
         private val interactor: DropboxBooksInteractor,
-        private val resourcesManager: ResourcesManager,
-        private val schedulers: Schedulers
+        override val resourcesManager: ResourcesManager,
+        override val schedulers: Schedulers
 ) : BasePresenter<DropboxView>() {
 
     var router: DropboxBooksRouter? = null
@@ -33,24 +33,18 @@ class DropboxBooksPresenter @Inject constructor(
 
     fun onFileClicked(file: DropboxFile) {
         interactor.downloadFile(file)
-                .subscribeOn(schedulers.io())
-                .observeOn(schedulers.main())
+                .applySchedulers()
                 //.doOnSubscribe { viewState.showLoadingItem(position) }
                 //.doAfterTerminate { viewState.hideLoadingItem() }
-                .subscribe(
-                        { router?.openBook(it) },
-                        { viewState.onError(resourcesManager.getString(R.string.dropbox_download_file_error)) }
-                )
+                .subscribe({ router?.openBook(it) }, { onError(R.string.dropbox_download_file_error) })
                 .unsubscribeOnDestroy()
     }
 
     fun onDirectoryClicked(dir: DropboxFile) {
         interactor.getDirectoryFiles(dir)
-                .subscribeOn(schedulers.io())
-                .observeOn(schedulers.main())
-                .doOnSubscribe { viewState.showLoading(true) }
-                .doAfterTerminate { viewState.showLoading(false) }
-                .subscribe(viewState::showFiles, Throwable::printStackTrace)
+                .applySchedulers()
+                .showProgress()
+                .subscribe({ viewState.showFiles(it) }) { onError(R.string.error_directory_open) }
                 .unsubscribeOnDestroy()
     }
 
@@ -65,11 +59,9 @@ class DropboxBooksPresenter @Inject constructor(
 
     private fun openRootDirectory() {
         interactor.getRootDirectoryFiles()
-                .subscribeOn(schedulers.io())
-                .observeOn(schedulers.main())
-                .doOnSubscribe { viewState.showLoading(true) }
-                .doAfterTerminate { viewState.showLoading(false) }
-                .subscribe({ viewState.showFiles(it) }, Throwable::printStackTrace)
+                .applySchedulers()
+                .showProgress()
+                .subscribe({ viewState.showFiles(it) }) { onError(R.string.error_directory_open) }
                 .unsubscribeOnDestroy()
     }
 }

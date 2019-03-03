@@ -7,14 +7,14 @@ import java.io.File
 
 class FilesRecyclerAdapter(
         onFileClickFunc: (File) -> Unit,
-        onDirClickFunc: (File) -> Unit
+        onDirClickFunc: (String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<File> = listOf()
     private val delegatesManager = AdapterDelegatesManager<File>()
 
     init {
-        delegatesManager.addDelegate(DirectoryDelegate { onDirClickFunc(items[it]) })
+        delegatesManager.addDelegate(DirectoryDelegate { onDirClickFunc(items[it].absolutePath) })
         delegatesManager.addDelegate(FileDelegate { onFileClickFunc(items[it]) })
         delegatesManager.addDelegate(FictionBookDelegate { onFileClickFunc(items[it]) })
     }

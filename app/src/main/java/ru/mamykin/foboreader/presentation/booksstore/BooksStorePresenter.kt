@@ -2,8 +2,8 @@ package ru.mamykin.foboreader.presentation.booksstore
 
 import com.arellomobile.mvp.InjectViewState
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.extension.applySchedulers
 import ru.mamykin.foboreader.core.platform.ResourcesManager
+import ru.mamykin.foboreader.core.platform.Schedulers
 import ru.mamykin.foboreader.core.ui.BasePresenter
 import ru.mamykin.foboreader.domain.booksstore.BooksStoreInteractor
 import ru.mamykin.foboreader.domain.entity.booksstore.BooksStoreResponse
@@ -12,7 +12,8 @@ import javax.inject.Inject
 @InjectViewState
 class BooksStorePresenter @Inject constructor(
         private val interactor: BooksStoreInteractor,
-        private val resourcesManager: ResourcesManager
+        override val resourcesManager: ResourcesManager,
+        override val schedulers: Schedulers
 ) : BasePresenter<BooksStoreView>() {
 
     override fun onFirstViewAttach() {
@@ -23,12 +24,8 @@ class BooksStorePresenter @Inject constructor(
     fun loadBooks() {
         interactor.getBooks()
                 .applySchedulers()
-                .doOnSubscribe { viewState.showLoading(true) }
-                .doAfterTerminate { viewState.showLoading(false) }
-                .subscribe(
-                        { showStoreInfo(it) },
-                        { viewState.onError(resourcesManager.getString(R.string.books_store_load_error)) }
-                )
+                .showProgress()
+                .subscribe({ showStoreInfo(it) }, { onError(R.string.books_store_load_error) })
                 .unsubscribeOnDestroy()
     }
 
