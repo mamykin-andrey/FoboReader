@@ -9,6 +9,7 @@ import android.text.style.AlignmentSpan
 import ru.mamykin.foboreader.core.extension.getPluralsString
 import java.util.*
 
+// TODO: refactor
 @Entity
 class FictionBook {
     @PrimaryKey
@@ -20,7 +21,6 @@ class FictionBook {
     var bookLang: String? = null
     var bookSrcLang: String? = null
     var docLibrary: String? = null
-    var docAuthor: String? = null
     var docUrl: String? = null
     var docDate: Date? = null
     var docVersion: Double? = null

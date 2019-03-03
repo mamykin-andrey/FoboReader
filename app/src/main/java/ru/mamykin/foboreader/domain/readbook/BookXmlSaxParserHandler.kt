@@ -3,11 +3,10 @@ package ru.mamykin.foboreader.domain.readbook
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
-import ru.mamykin.foboreader.domain.entity.FictionBook
 import ru.mamykin.foboreader.core.extension.toDate
+import ru.mamykin.foboreader.domain.entity.FictionBook
 import java.util.*
 
-// TODO: refactor
 class BookXmlSaxParserHandler(
         private val successFunc: () -> Unit,
         private val book: FictionBook
@@ -15,18 +14,13 @@ class BookXmlSaxParserHandler(
 
     private val titleSb = StringBuilder()
     private val textSb = StringBuilder()
-    private val transMap = HashMap<String, String>()
+    private val translationMap = HashMap<String, String>()
     private var lastSentence: String = ""
     private var currentElement: String = ""
-    private var inTitleInfo: Boolean = false
 
     override fun startElement(uri: String, localName: String, elemName: String, attributes: Attributes) {
         super.startElement(uri, localName, elemName, attributes)
-
         currentElement = elemName
-        val elemType = ElementType.parse(currentElement)
-        if (elemType == ElementType.TitleInfo)
-            inTitleInfo = true
     }
 
     override fun characters(ch: CharArray, start: Int, length: Int) {
@@ -35,8 +29,10 @@ class BookXmlSaxParserHandler(
         val str = String(ch, start, length)
         when (ElementType.parse(currentElement)) {
             ElementType.Title -> titleSb.append(wrapWithTag(str, currentElement))
-            ElementType.Paragraph -> lastSentence = str.trim().also { textSb.append(wrapWithTag(it, currentElement)) }
-            ElementType.Translation -> transMap[lastSentence] = str.trim { it <= ' ' }
+            ElementType.Paragraph -> lastSentence = str.trim().also {
+                textSb.append(wrapWithTag(it, currentElement))
+            }
+            ElementType.Translation -> translationMap[lastSentence] = str.trim { it <= ' ' }
             ElementType.BookTitle -> book.bookTitle = str
             ElementType.Lang -> book.bookLang = str
             ElementType.SrcLang -> book.bookSrcLang = str
@@ -45,35 +41,16 @@ class BookXmlSaxParserHandler(
             ElementType.Date -> book.docDate = str.toDate()
             ElementType.Version -> book.docVersion = str.toDoubleOrNull()
             ElementType.Genre -> book.bookGenre = str
-            ElementType.FirstName -> {
-                if (inTitleInfo)
-                    book.bookAuthor = "$str "
-                else
-                    book.docAuthor = "$str "
-            }
-            ElementType.LastName -> {
-                if (inTitleInfo)
-                    book.bookAuthor = book.bookAuthor + str + " "
-                else
-                    book.docAuthor = book.docAuthor + str + " "
-            }
-            ElementType.MiddleName -> {
-                if (inTitleInfo)
-                    book.bookAuthor = book.bookAuthor + str
-                else
-                    book.docAuthor = book.docAuthor + str
-            }
+            ElementType.FirstName -> book.bookAuthor = "$str "
+            ElementType.LastName -> book.bookAuthor = book.bookAuthor + str + " "
+            ElementType.MiddleName -> book.bookAuthor = book.bookAuthor + str
         }
     }
 
     @Throws(SAXException::class)
     override fun endElement(uri: String, localName: String, qName: String) {
         super.endElement(uri, localName, qName)
-
         currentElement = ""
-        val elemType = ElementType.parse(currentElement)
-        if (elemType == ElementType.TitleInfo)
-            inTitleInfo = false
     }
 
     @Throws(SAXException::class)
@@ -81,14 +58,16 @@ class BookXmlSaxParserHandler(
         super.endDocument()
 
         book.bookText = textSb.toString()
-        book.transMap = transMap
+        book.transMap = translationMap
         book.sectionTitle = titleSb.toString()
         successFunc.invoke()
     }
 
     private fun wrapWithTag(element: String, tag: String): String = "<$tag>$element</$tag>"
 
-    sealed class ElementType(val tag: String?) {
+    sealed class ElementType(
+            val tag: String?
+    ) {
         object TitleInfo : ElementType("title-info")
         object Title : ElementType("title")
         object Paragraph : ElementType("p")
@@ -107,7 +86,25 @@ class BookXmlSaxParserHandler(
         object Other : ElementType(null)
 
         companion object {
-            private val types = listOf(TitleInfo, Title, Paragraph, Translation, Other)
+
+            private val types = listOf(
+                    TitleInfo,
+                    Title,
+                    Paragraph,
+                    Translation,
+                    BookTitle,
+                    Lang,
+                    SrcLang,
+                    Library,
+                    Url,
+                    Date,
+                    Version,
+                    Genre,
+                    FirstName,
+                    LastName,
+                    MiddleName,
+                    Other
+            )
 
             fun parse(tag: String): ElementType = types.find { it.tag == tag } ?: Other
         }
