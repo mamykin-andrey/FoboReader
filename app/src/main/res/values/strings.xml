@@ -78,4 +78,6 @@
     <string name="books_store_load_error">Ошибка загрузки списка книг</string>
     <string name="error_book_open">Ошибка открытия книги</string>
     <string name="error_book_list_loading">Не удалось загрузить список книг</string>
+    <string name="error_book_loading">Не удалось загрузить информацию о книге</string>
+    <string name="error_translation">Не удалось осуществить перевод</string>
 </resources>

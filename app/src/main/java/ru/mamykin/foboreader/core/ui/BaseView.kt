@@ -4,5 +4,7 @@ import com.arellomobile.mvp.MvpView
 
 interface BaseView : MvpView {
 
+    fun showLoading(show: Boolean)
+
     fun onError(message: String)
 }

@@ -6,7 +6,9 @@ import android.speech.tts.TextToSpeech
 import java.util.*
 import javax.inject.Inject
 
-class TextToSpeechService @Inject constructor(context: Context) : TextToSpeech.OnInitListener {
+class TextToSpeechService @Inject constructor(
+        context: Context
+) : TextToSpeech.OnInitListener {
 
     private val textToSpeech = TextToSpeech(context, this)
     private var ttsInit = false

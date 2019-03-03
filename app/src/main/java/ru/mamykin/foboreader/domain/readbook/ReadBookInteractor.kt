@@ -1,11 +1,9 @@
 package ru.mamykin.foboreader.domain.readbook
 
+import ru.mamykin.foboreader.core.di.qualifiers.BookPath
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
-import ru.mamykin.foboreader.core.di.qualifiers.BookPath
 import ru.mamykin.foboreader.domain.entity.FictionBook
-import ru.mamykin.foboreader.domain.entity.ViewParams
-import rx.Completable
 import rx.Single
 import javax.inject.Inject
 
@@ -15,55 +13,18 @@ class ReadBookInteractor @Inject constructor(
         private val textToSpeechService: TextToSpeechService,
         @BookPath private val bookPath: String
 ) {
-    private lateinit var paginator: Paginator
     private lateinit var book: FictionBook
 
     fun getBookInfo(): Single<FictionBook> =
             booksRepository.getBook(bookPath)
                     .doOnSuccess { this.book = it }
 
-    fun getTextTranslation(text: String): Single<Pair<String, String>> {
-        val offlineTranslation = book.transMap[text]
+    fun getParagraphTranslation(paragraph: String): Single<String> =
+            book.transMap[paragraph]?.let { Single.just(it) }
+                    ?: translateRepository.getTextTranslation(paragraph)
 
-        if (offlineTranslation != null) {
-            return Single.just(text to offlineTranslation)
-        }
-
-        return translateRepository.getTextTranslation(text)
-                .map { text to it.text.joinToString() }
-    }
+    fun getWordTranslation(word: String): Single<String> =
+            translateRepository.getTextTranslation(word)
 
     fun voiceWord(word: String) = textToSpeechService.voiceWord(word)
-
-    fun initPaginator(viewParams: ViewParams): Completable {
-        paginator = Paginator(book.fullText, viewParams)
-        book.pagesCount = paginator.pagesCount
-        return booksRepository.updateBook(book)
-    }
-
-    fun getCurrentPage(): Single<ReadBookState> =
-            Single.just(getBookState())
-
-    fun getNextPage(): Single<ReadBookState> = with(paginator) {
-        if (currentIndex < pagesCount - 1) {
-            currentIndex++
-        }
-        return Single.just(getBookState())
-    }
-
-    fun getPrevPage(): Single<ReadBookState> = with(paginator) {
-        if (currentIndex > 0) {
-            currentIndex--
-        }
-        return Single.just(getBookState())
-    }
-
-    private fun getBookState(): ReadBookState = with(paginator) {
-        ReadBookState(
-                currentIndex + 1,
-                pagesCount,
-                getCurrentPage(),
-                getReadPercent()
-        )
-    }
 }

@@ -1,17 +1,18 @@
 package ru.mamykin.foboreader.presentation.readbook
 
 import com.arellomobile.mvp.InjectViewState
-import ru.mamykin.foboreader.core.extension.applySchedulers
-import ru.mamykin.foboreader.domain.readbook.ReadBookInteractor
-import ru.mamykin.foboreader.domain.readbook.ReadBookState
-import ru.mamykin.foboreader.domain.entity.FictionBook
-import ru.mamykin.foboreader.domain.entity.ViewParams
+import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.core.platform.ResourcesManager
+import ru.mamykin.foboreader.core.platform.Schedulers
 import ru.mamykin.foboreader.core.ui.BasePresenter
+import ru.mamykin.foboreader.domain.readbook.ReadBookInteractor
 import javax.inject.Inject
 
 @InjectViewState
 class ReadBookPresenter @Inject constructor(
-        private val interactor: ReadBookInteractor
+        private val interactor: ReadBookInteractor,
+        override val resourcesManager: ResourcesManager,
+        override val schedulers: Schedulers
 ) : BasePresenter<ReadBookView>() {
 
     override fun onFirstViewAttach() {
@@ -20,21 +21,18 @@ class ReadBookPresenter @Inject constructor(
     }
 
     fun onParagraphClicked(paragraph: String) {
-        interactor.getTextTranslation(paragraph)
+        interactor.getParagraphTranslation(paragraph)
                 .applySchedulers()
-                .doOnSubscribe { viewState.showParagraphLoading(true) }
-                .doAfterTerminate { viewState.showParagraphLoading(false) }
-                .map { it.second }
-                .subscribe(viewState::showParagraphTranslation, Throwable::printStackTrace)
+                .showProgress(viewState::showParagraphLoading)
+                .subscribe({ viewState.showParagraphTranslation(it) }, { onError(R.string.error_translation) })
                 .unsubscribeOnDestroy()
     }
 
     fun onWordClicked(word: String) {
-        interactor.getTextTranslation(word)
+        interactor.getWordTranslation(word)
                 .applySchedulers()
-                .doOnSubscribe { viewState.showWordLoading(true) }
-                .doAfterTerminate { viewState.showWordLoading(false) }
-                .subscribe({ viewState.showWordTranslation(it.first, it.second) }, { it.printStackTrace() })
+                .showProgress(viewState::showWordLoading)
+                .subscribe({ viewState.showWordTranslation(word, it) }, { onError(R.string.error_translation) })
                 .unsubscribeOnDestroy()
     }
 
@@ -42,54 +40,11 @@ class ReadBookPresenter @Inject constructor(
         interactor.voiceWord(word)
     }
 
-    /**
-     * Called when view are ready to drawing and it have measured
-     */
-    fun onViewInitCompleted(viewParams: ViewParams) {
-        interactor.initPaginator(viewParams)
-                .applySchedulers()
-                .subscribe(this::showCurrentPage, Throwable::printStackTrace)
-                .unsubscribeOnDestroy()
-    }
-
-    fun onSwipeRight() {
-        interactor.getPrevPage()
-                .applySchedulers()
-                .subscribe(this::showPageContent, Throwable::printStackTrace)
-                .unsubscribeOnDestroy()
-    }
-
-    fun onSwipeLeft() {
-        interactor.getNextPage()
-                .applySchedulers()
-                .subscribe(this::showPageContent, Throwable::printStackTrace)
-                .unsubscribeOnDestroy()
-    }
-
-    private fun showCurrentPage() {
-        interactor.getCurrentPage()
-                .applySchedulers()
-                .subscribe(this::showPageContent, Throwable::printStackTrace)
-                .unsubscribeOnDestroy()
-    }
-
     private fun loadBookInfo() {
         interactor.getBookInfo()
                 .applySchedulers()
-                .doOnSubscribe { viewState.showLoading(true) }
-                .doAfterTerminate { viewState.showLoading(false) }
-                .subscribe(this::showBookInfo, Throwable::printStackTrace)
+                .showProgress()
+                .subscribe({ viewState.showBookName(it.bookTitle) }, { onError(R.string.error_book_loading) })
                 .unsubscribeOnDestroy()
-    }
-
-    private fun showBookInfo(book: FictionBook) = with(viewState) {
-        initBookView()
-        showBookName(book.bookTitle)
-    }
-
-    private fun showPageContent(state: ReadBookState) = with(viewState) {
-        showReaded(state.currentPage, state.pagesCount)
-        showReadPercent(state.readPercent)
-        showPageText(state.currentPageText)
     }
 }

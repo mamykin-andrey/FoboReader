@@ -8,6 +8,6 @@ class BookDetailsRouter @Inject constructor(
         private val activity: AppCompatActivity
 ) {
     fun openBook(bookPath: String) {
-        activity.startActivity(ReadBookActivity.getStartIntent(activity, bookPath))
+        ReadBookActivity.start(activity, bookPath)
     }
 }

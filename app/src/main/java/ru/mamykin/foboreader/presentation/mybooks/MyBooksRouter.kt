@@ -12,7 +12,7 @@ class MyBooksRouter(
 ) {
 
     fun openBook(bookPath: String) {
-        activity.startActivity(ReadBookActivity.getStartIntent(activity, bookPath))
+        ReadBookActivity.start(activity, bookPath)
     }
 
     fun openBookDetails(bookPath: String) {
