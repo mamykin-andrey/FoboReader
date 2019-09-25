@@ -138,31 +138,6 @@
 
         <include layout="@layout/layout_divider" />
 
-        <LinearLayout
-            android:id="@+id/btnDropboxLogout"
-            style="@style/SettingsButtonItemStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/SettingsTextItemStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/dropbox_logout" />
-
-            <TextView
-                android:id="@+id/tvDropboxAccount"
-                style="@style/SettingsTextSubItemStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                tools:text="mamykin.andrey@gmail.com" />
-
-        </LinearLayout>
-
-        <include layout="@layout/layout_divider" />
-
     </LinearLayout>
 
 </ScrollView>

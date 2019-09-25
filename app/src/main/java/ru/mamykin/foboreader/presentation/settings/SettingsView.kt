@@ -7,8 +7,6 @@ import ru.mamykin.foboreader.core.ui.BaseView
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface SettingsView : BaseView {
 
-    fun showDropboxAccount(account: String?)
-
     fun showContentSizeText(size: Int)
 
     fun showBrightnessPos(position: Int)

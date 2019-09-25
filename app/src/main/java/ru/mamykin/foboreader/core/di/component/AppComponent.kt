@@ -21,8 +21,6 @@ interface AppComponent {
 
     fun getDeviceBooksComponent(): DeviceBooksComponent
 
-    fun getDropboxBooksComponent(): DropboxBooksComponent
-
     fun getMyBooksComponent(): MyBooksComponent
 
     fun getReadBookComponent(readBookModule: ReadBookModule): ReadBookComponent

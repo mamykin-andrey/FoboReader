@@ -19,10 +19,6 @@ class SettingsInteractor @Inject constructor(
         repository.enableAutoBrightness(enable)
     }
 
-    fun logoutDropbox() {
-        repository.logoutDropbox()
-    }
-
     fun isNightThemeEnabled(): Boolean {
         return repository.isNightThemeEnabled()
     }
@@ -37,9 +33,5 @@ class SettingsInteractor @Inject constructor(
 
     fun getReadTextSize(): Int {
         return repository.getBookTextSize()
-    }
-
-    fun getDropboxAccount(): String? {
-        return repository.getDropboxAccount()
     }
 }

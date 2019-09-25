@@ -38,19 +38,5 @@
             android:name="ru.mamykin.foboreader.presentation.settings.SettingsActivity"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name="com.dropbox.core.android.AuthActivity"
-            android:configChanges="orientation|keyboard"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <data android:scheme="db-mbo98pyzoi2dfxs" />
-
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
     </application>
 </manifest>

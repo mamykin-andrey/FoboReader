@@ -14,8 +14,6 @@ class SettingsRepository @Inject constructor(
 
     fun getBookTextSize(): Int = settingsStorage.bookTextSize
 
-    fun getDropboxAccount(): String? = settingsStorage.dropboxAccount
-
     fun enableNightTheme(enable: Boolean) = UiUtils.enableNightMode(enable).also {
         settingsStorage.nightThemeEnabled = enable
     }
@@ -26,9 +24,5 @@ class SettingsRepository @Inject constructor(
 
     fun changeBrightness(value: Float) {
         settingsStorage.manualBrightnessValue = value
-    }
-
-    fun logoutDropbox() {
-        settingsStorage.dropboxAccount = null
     }
 }

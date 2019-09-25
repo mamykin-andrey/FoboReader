@@ -12,7 +12,6 @@ import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.ui.BaseActivity
 import ru.mamykin.foboreader.presentation.booksstore.BooksStoreFragment
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksFragment
-import ru.mamykin.foboreader.presentation.dropboxbooks.DropboxBooksFragment
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksFragment
 import ru.mamykin.foboreader.presentation.settings.SettingsActivity
 
@@ -25,7 +24,6 @@ class MainActivity : BaseActivity() {
 
         private const val MY_BOOKS_FRAGMENT_POS = 0
         private const val DEVICE_BOOKS_FRAGMENT_POS = 1
-        private const val DROPBOX_BOOKS_FRAGMENT_POS = 2
         private const val BOOKS_STORE_FRAGMENT_POS = 3
 
         fun start(context: Context) = context.startActivity(
@@ -71,7 +69,6 @@ class MainActivity : BaseActivity() {
         viewPager.adapter = MainViewPagerAdapter(supportFragmentManager).apply {
             addFragment(MyBooksFragment.newInstance(), getString(R.string.my_books))
             addFragment(DeviceBooksFragment.newInstance(), getString(R.string.device))
-            addFragment(DropboxBooksFragment.newInstance(), getString(R.string.dropbox))
             addFragment(BooksStoreFragment.newInstance(), getString(R.string.store))
         }
     }
@@ -82,7 +79,6 @@ class MainActivity : BaseActivity() {
         when (item.itemId) {
             R.id.menu_my_books -> viewpager.currentItem = MY_BOOKS_FRAGMENT_POS
             R.id.menu_device -> viewpager.currentItem = DEVICE_BOOKS_FRAGMENT_POS
-            R.id.menu_dropbox -> viewpager.currentItem = DROPBOX_BOOKS_FRAGMENT_POS
             R.id.menu_books_store -> viewpager.currentItem = BOOKS_STORE_FRAGMENT_POS
             R.id.menu_settings -> SettingsActivity.start(this)
             else -> return super.onOptionsItemSelected(item)

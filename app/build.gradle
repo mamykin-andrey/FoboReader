@@ -18,7 +18,6 @@ ext {
     adapterRxJavaVersion = '2.1.0'
     picassoVersion = '2.5.2'
     ormliteVersion = '4.48'
-    dropboxCoreSdkVersion = '2.1.1'
     mockitoVersion = '2.13.0'
     mockitoKotlinVersion = '1.5.0'
     junitVersion = '4.12'
@@ -85,7 +84,6 @@ dependencies {
 
     implementation 'ru.mamykin.widget:paginatedtextview:0.1.0'
     implementation "com.j256.ormlite:ormlite-android:$ormliteVersion"
-    implementation "com.dropbox.core:dropbox-core-sdk:$dropboxCoreSdkVersion"
     implementation("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion") {
         transitive = true
     }

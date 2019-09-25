@@ -10,10 +10,6 @@
             android:icon="@drawable/ic_phone"
             android:title="@string/device" />
         <item
-            android:id="@+id/menu_dropbox"
-            android:icon="@drawable/ic_dropbox"
-            android:title="@string/dropbox" />
-        <item
             android:id="@+id/menu_books_store"
             android:icon="@drawable/ic_store"
             android:title="@string/books_store" />

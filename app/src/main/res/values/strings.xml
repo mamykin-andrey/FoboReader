@@ -6,7 +6,6 @@
     <string name="recent_books">Недавние</string>
     <string name="books_store">Магазин</string>
     <string name="device">Устройство</string>
-    <string name="dropbox">Dropbox</string>
     <string name="settings">Настройки</string>
     <string name="exit">Выход</string>
     <string name="see_all_btn">Все</string>
@@ -26,9 +25,7 @@
     <string name="sort_by_name">По названию</string>
     <string name="sort_by_readed">По прочитанному</string>
     <string name="sort_by_date">По дате</string>
-    <string name="dropbox_auth_button">Авторизоваться</string>
     <string name="book_category_desc">Изображение категории</string>
-    <string name="dropbox_file_icon_desc">Иконка файла Dropbox</string>
     <string name="menu_delete">Удалить</string>
     <string name="about_book">О книге</string>
     <string name="menu_share_book">Поделиться</string>
@@ -39,11 +36,8 @@
     <string name="translate_color">Цвет перевода</string>
     <string name="translate_color_description">Цвет параграфа с переводом</string>
     <string name="text_size">Размер текста</string>
-    <string name="dropbox_logout">Выйти из Dropbox</string>
     <string name="brightness_auto">Яркость по-умолчанию</string>
     <string name="settings_screen">Настройки</string>
-    <string name="dropbox_logout_title">Выйти из Dropbox</string>
-    <string name="dropbox_logout_message">Вы уверены, что хотите выйти из учётной записи Dropbox?</string>
     <string name="book_content_title">Содержание</string>
     <string name="no_bookmarks">Закладки отсутствуют</string>
     <string name="book_info_title">Информация о книге</string>
@@ -73,7 +67,6 @@
     <string name="no_storage_permission_text">Разрешение необходимо чтобы просматривать и загружать книги из памяти устройства</string>
     <string name="grant_permissions">Разрешить</string>
     <string name="book_price_format">"%1$s ₽"</string>
-    <string name="dropbox_download_file_error">Ошибка скачивания файла</string>
     <string name="book_details_load_info_error">Ошибка загрузки информации о книге</string>
     <string name="books_store_load_error">Ошибка загрузки списка книг</string>
     <string name="error_book_open">Ошибка открытия книги</string>

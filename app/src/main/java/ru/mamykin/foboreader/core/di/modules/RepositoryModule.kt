@@ -9,12 +9,9 @@ import ru.mamykin.foboreader.data.network.YandexTranslateService
 import ru.mamykin.foboreader.data.repository.books.BookParser
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.booksstore.BooksStoreRepository
-import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksRepository
-import ru.mamykin.foboreader.data.repository.dropboxbooks.DropboxBooksStorage
 import ru.mamykin.foboreader.data.repository.settings.SettingsRepository
 import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
-import ru.mamykin.foboreader.domain.entity.mapper.FolderToFilesListMapper
 import javax.inject.Singleton
 
 @Module
@@ -25,15 +22,6 @@ class RepositoryModule {
     @Singleton
     fun provideBooksRepository(bookDao: BookDao, bookParser: BookParser): BooksRepository {
         return BooksRepository(bookDao, bookParser)
-    }
-
-    @Provides
-    @Singleton
-    fun provideDropboxBooksRepository(
-            storage: DropboxBooksStorage,
-            mapper: FolderToFilesListMapper): DropboxBooksRepository {
-
-        return DropboxBooksRepository(storage, mapper)
     }
 
     @Provides

@@ -9,7 +9,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_settings.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.ui.BaseActivity
-import ru.mamykin.foboreader.core.ui.YesNoDialogFragment
 
 /**
  * Страница настроек
@@ -17,8 +16,6 @@ import ru.mamykin.foboreader.core.ui.YesNoDialogFragment
 class SettingsActivity : BaseActivity(), SettingsView, SeekBar.OnSeekBarChangeListener {
 
     companion object {
-
-        const val DROPBOX_LOGOUT_DIALOG_TAG = "dropbox_dialog_tag"
 
         fun start(context: Context) = context.startActivity(
                 Intent(context, SettingsActivity::class.java)
@@ -58,10 +55,6 @@ class SettingsActivity : BaseActivity(), SettingsView, SeekBar.OnSeekBarChangeLi
 
     }
 
-    override fun showDropboxAccount(account: String?) {
-        tvDropboxAccount.text = account
-    }
-
     override fun showContentSizeText(size: Int) {
         tvTextSize.text = size.toString()
     }
@@ -90,13 +83,5 @@ class SettingsActivity : BaseActivity(), SettingsView, SeekBar.OnSeekBarChangeLi
         seekbarBright.setOnSeekBarChangeListener(this)
         switchNightTheme.setOnCheckedChangeListener { _, c -> presenter.onNightThemeEnabled(c) }
         switchBrightAuto.setOnCheckedChangeListener { _, c -> presenter.onAutoBrightnessEnabled(c) }
-        btnDropboxLogout.setOnClickListener { showDropboxLogoutDialog() }
-    }
-
-    private fun showDropboxLogoutDialog() {
-        val title = getString(R.string.dropbox_logout_title)
-        val message = getString(R.string.dropbox_logout_message)
-        YesNoDialogFragment.newInstance(title, message, presenter::onDropboxLogoutSelected, null)
-                .show(supportFragmentManager, DROPBOX_LOGOUT_DIALOG_TAG)
     }
 }
