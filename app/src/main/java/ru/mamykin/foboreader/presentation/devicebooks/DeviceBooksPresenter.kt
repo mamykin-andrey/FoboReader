@@ -43,13 +43,13 @@ class DeviceBooksPresenter @Inject constructor(
 
     fun onDirectoryClicked(directoryPath: String) {
         interactor.getDirectoryFiles(directoryPath)
-                .subscribe({ showFiles(it) }) { onError(R.string.error_access_denied) }
+                .subscribe({ showFiles(it.first()) }, { onError(R.string.error_access_denied) })
                 .unsubscribeOnDestroy()
     }
 
     fun onParentDirectoryClicked() {
         interactor.getParentDirectoryFiles()
-                .subscribe({ showFiles(it) }) { onError(R.string.error_access_denied) }
+                .subscribe({ showFiles(it.first()) }, { onError(R.string.error_access_denied) })
                 .unsubscribeOnDestroy()
     }
 

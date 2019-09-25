@@ -10,7 +10,8 @@ class TranslateRepository @Inject constructor(
         private val translateService: YandexTranslateService,
         context: Context
 ) {
-    private val apiKey = context.getString(R.string.yandex_api_key)
+//    private val apiKey = context.getString(R.string.yandex_api_key)
+    private val apiKey = ""
 
     fun getTextTranslation(text: String): Single<String> =
             translateService.translate(apiKey, text, "ru", "", "")

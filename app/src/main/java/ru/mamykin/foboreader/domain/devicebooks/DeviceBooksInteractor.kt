@@ -21,7 +21,7 @@ class DeviceBooksInteractor @Inject constructor(
 
     fun getRootDirectoryFiles(): Single<FileStructure> {
         currentDir = repository.getRootDirectory()
-        return getDirectoryFiles(currentDir)
+        return getDirectoryFiles(currentDir).map { it.first() }
     }
 
     fun getParentDirectoryFiles(): Single<List<FileStructure>> {

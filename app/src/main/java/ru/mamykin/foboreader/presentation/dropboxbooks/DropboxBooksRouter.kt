@@ -9,7 +9,7 @@ class DropboxBooksRouter(
         private val activity: Activity
 ) {
     fun startOAuth2Authentication() {
-        Auth.startOAuth2Authentication(activity, activity.getString(R.string.dropbox_api_key))
+//        Auth.startOAuth2Authentication(activity, activity.getString(R.string.dropbox_api_key))
     }
 
     fun openBook(path: String) {
