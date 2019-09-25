@@ -30,6 +30,6 @@ class BooksStorePresenter @Inject constructor(
     }
 
     private fun showStoreInfo(response: BooksStoreResponse) = with(response) {
-        viewState.showStoreBooks(promotions + featured + categories)
+        viewState.showStoreBooks(featured.first().books)
     }
 }

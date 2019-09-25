@@ -4,15 +4,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegatesManager
 
-class MainStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BooksStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<Any> = listOf()
 
     private val delegatesManager = AdapterDelegatesManager<Any>()
 
     init {
-        delegatesManager.addDelegate(StoreCategoryDelegate())
-        delegatesManager.addDelegate(FeaturedBookDelegate())
+        delegatesManager.addDelegate(StoreBookDelegate())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -27,7 +26,6 @@ class MainStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     override fun getItemViewType(position: Int): Int =
             delegatesManager.getItemViewType(items, position)
 
-    // TODO: DiffUtil
     fun changeItems(items: List<Any>) {
         this.items = items
         notifyDataSetChanged()

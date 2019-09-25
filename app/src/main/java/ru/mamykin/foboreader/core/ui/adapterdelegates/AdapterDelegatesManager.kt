@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.core.ui.adapterdelegates
 
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.ViewGroup
 
 class AdapterDelegatesManager<T> {
@@ -11,8 +12,11 @@ class AdapterDelegatesManager<T> {
         delegates[delegates.size + 1] = delegate
     }
 
-    fun createViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            getDelegateForViewType(viewType).createViewHolder(parent)
+    fun createViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val delegate = getDelegateForViewType(viewType)
+        val itemView = LayoutInflater.from(parent.context).inflate(delegate.getLayoutId(), parent, false)
+        return delegate.createViewHolder(itemView)
+    }
 
     fun bindViewHolder(items: List<T>, holder: RecyclerView.ViewHolder, position: Int) {
         val delegate = getDelegateForViewType(getItemViewType(items, position))

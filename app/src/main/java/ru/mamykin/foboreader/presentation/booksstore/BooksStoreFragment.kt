@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_main_store.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.core.ui.UiUtils
-import ru.mamykin.foboreader.presentation.booksstore.list.MainStoreRecyclerAdapter
+import ru.mamykin.foboreader.presentation.booksstore.list.BooksStoreRecyclerAdapter
 
 /**
  * Страница с магазином книг
@@ -29,7 +29,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
     @InjectPresenter
     lateinit var presenter: BooksStorePresenter
 
-    private lateinit var adapter: MainStoreRecyclerAdapter
+    private lateinit var adapter: BooksStoreRecyclerAdapter
 
     @ProvidePresenter
     fun providePresenter(): BooksStorePresenter = getAppComponent()
@@ -45,7 +45,7 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
         super.onViewCreated(view, savedInstanceState)
 
         srlRefresh.setOnRefreshListener { presenter.loadBooks() }
-        adapter = MainStoreRecyclerAdapter()
+        adapter = BooksStoreRecyclerAdapter()
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context))
     }
 

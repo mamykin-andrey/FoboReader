@@ -15,10 +15,6 @@ data class StoreBook(
         var genre: String,
         @SerializedName("rating")
         var rating: Double,
-        @SerializedName("oldPrice")
-        var oldPrice: String?,
-        @SerializedName("price")
-        var price: String,
         @SerializedName("pictureUrl")
         var pictureUrl: String
 )
