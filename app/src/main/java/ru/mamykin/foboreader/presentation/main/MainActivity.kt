@@ -3,10 +3,10 @@ package ru.mamykin.foboreader.presentation.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.app.ActionBarDrawerToggle
-import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.ui.BaseActivity
@@ -15,9 +15,6 @@ import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksFragment
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksFragment
 import ru.mamykin.foboreader.presentation.settings.SettingsActivity
 
-/**
- * Основная страница, включает в себя страницу с книгами, файлами на устройстве, файлами Dropbox, магазином
- */
 class MainActivity : BaseActivity() {
 
     companion object {

@@ -1,18 +1,17 @@
 package ru.mamykin.foboreader.core.ui
 
 import android.os.Bundle
-import androidx.annotation.StringRes
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import com.arellomobile.mvp.MvpAppCompatActivity
+import androidx.annotation.StringRes
+import androidx.appcompat.widget.Toolbar
+import com.google.android.material.snackbar.Snackbar
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.ReaderApp
 import ru.mamykin.foboreader.core.di.component.AppComponent
 
-abstract class BaseActivity : MvpAppCompatActivity(), BaseView {
+abstract class BaseActivity : AndroidXMvpActivity(), BaseView {
 
     abstract val layout: Int
 

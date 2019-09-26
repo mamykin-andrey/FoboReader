@@ -1,17 +1,16 @@
 package ru.mamykin.foboreader.core.ui
 
 import android.os.Bundle
-import androidx.annotation.StringRes
-import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.arellomobile.mvp.MvpAppCompatFragment
+import androidx.annotation.StringRes
+import com.google.android.material.snackbar.Snackbar
 import ru.mamykin.foboreader.ReaderApp
 import ru.mamykin.foboreader.core.di.component.AppComponent
 
-abstract class BaseFragment : MvpAppCompatFragment(), BaseView {
+abstract class BaseFragment : AndroidXMvpFragment(), BaseView {
 
     abstract val layoutId: Int
 
