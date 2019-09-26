@@ -45,7 +45,7 @@ abstract class BaseActivity : AndroidXMvpActivity(), BaseView {
     }
 
     protected fun initToolbar(title: String, homeEnabled: Boolean) {
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = title
         supportActionBar?.setDisplayHomeAsUpEnabled(homeEnabled)
