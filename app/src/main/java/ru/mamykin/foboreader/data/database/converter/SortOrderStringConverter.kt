@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.data.database.converter
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import ru.mamykin.foboreader.data.database.BookDao
 
 class SortOrderStringConverter {

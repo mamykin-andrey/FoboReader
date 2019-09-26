@@ -1,8 +1,8 @@
 package ru.mamykin.foboreader.data.database
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import ru.mamykin.foboreader.data.database.converter.DateTimestampConverter
 import ru.mamykin.foboreader.data.database.converter.SortOrderStringConverter
 import ru.mamykin.foboreader.domain.entity.FictionBook

@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.data.database
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import ru.mamykin.foboreader.domain.entity.FictionBook
 
 @Dao

@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.core.ui
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import ru.mamykin.foboreader.core.platform.ResourcesManager

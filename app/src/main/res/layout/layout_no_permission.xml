@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clNoPermission"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -63,6 +63,6 @@
             app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
             app:layout_constraintVertical_chainStyle="packed" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </merge>

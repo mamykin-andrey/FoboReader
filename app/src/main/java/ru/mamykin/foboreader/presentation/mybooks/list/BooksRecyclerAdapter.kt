@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.presentation.mybooks.list
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegatesManager
 import ru.mamykin.foboreader.domain.entity.FictionBook

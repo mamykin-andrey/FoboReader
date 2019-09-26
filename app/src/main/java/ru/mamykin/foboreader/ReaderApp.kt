@@ -1,14 +1,11 @@
 package ru.mamykin.foboreader
 
-import android.support.multidex.MultiDexApplication
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
-import io.fabric.sdk.android.Fabric
-import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
+import androidx.multidex.MultiDexApplication
 import ru.mamykin.foboreader.core.di.component.AppComponent
 import ru.mamykin.foboreader.core.di.component.DaggerAppComponent
 import ru.mamykin.foboreader.core.di.modules.AppModule
 import ru.mamykin.foboreader.core.ui.UiUtils
+import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
 import javax.inject.Inject
 
 class ReaderApp : MultiDexApplication() {
@@ -22,20 +19,7 @@ class ReaderApp : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         setupDagger()
-        setupCrashlytics()
         setupTheme()
-    }
-
-    private fun setupCrashlytics() {
-        val core = CrashlyticsCore.Builder()
-                .disabled(BuildConfig.DEBUG)
-                .build()
-
-        val crashlytics = Crashlytics.Builder()
-                .core(core)
-                .build()
-
-        Fabric.with(this, crashlytics)
     }
 
     private fun setupTheme() {

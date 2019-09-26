@@ -1,8 +1,8 @@
 package ru.mamykin.foboreader.presentation.mybooks.list
 
 import android.graphics.BitmapFactory
-import android.support.v7.widget.PopupMenu
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.widget.PopupMenu
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_book.view.*
 import ru.mamykin.foboreader.R

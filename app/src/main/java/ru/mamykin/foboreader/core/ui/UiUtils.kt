@@ -2,14 +2,14 @@ package ru.mamykin.foboreader.core.ui
 
 import android.app.UiModeManager.MODE_NIGHT_NO
 import android.content.Context
-import android.support.annotation.IdRes
-import android.support.annotation.StringRes
-import android.support.v4.view.MenuItemCompat
-import android.support.v7.app.AppCompatDelegate
-import android.support.v7.app.AppCompatDelegate.MODE_NIGHT_YES
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
+import androidx.core.view.MenuItemCompat
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.SearchView
 import android.view.Menu
 import android.widget.Toast
 

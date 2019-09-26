@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.core.platform
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import javax.inject.Inject
 
 class PermissionsManager @Inject constructor(

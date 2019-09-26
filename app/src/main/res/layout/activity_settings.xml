@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchNightTheme"
             style="@style/SettingsTextItemStyle"
             android:layout_width="match_parent"
@@ -20,7 +20,7 @@
 
         <include layout="@layout/layout_divider" />
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchBrightAuto"
             style="@style/SettingsTextItemStyle"
             android:layout_width="match_parent"
@@ -47,7 +47,7 @@
                 android:contentDescription="@null"
                 android:src="@drawable/ic_sun" />
 
-            <android.support.v7.widget.AppCompatSeekBar
+            <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/seekbarBright"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

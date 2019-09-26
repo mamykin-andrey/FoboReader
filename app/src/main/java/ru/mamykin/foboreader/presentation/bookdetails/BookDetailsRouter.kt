@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.presentation.bookdetails
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import ru.mamykin.foboreader.presentation.readbook.ReadBookActivity
 import javax.inject.Inject
 
