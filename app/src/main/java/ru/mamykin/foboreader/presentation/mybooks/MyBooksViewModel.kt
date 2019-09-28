@@ -3,9 +3,9 @@ package ru.mamykin.foboreader.presentation.mybooks
 import androidx.lifecycle.MutableLiveData
 import ru.mamykin.foboreader.core.extension.applySchedulers
 import ru.mamykin.foboreader.core.extension.toLiveData
+import ru.mamykin.foboreader.core.mvvm.BaseViewModel
 import ru.mamykin.foboreader.core.platform.ResourcesManager
 import ru.mamykin.foboreader.core.platform.Schedulers
-import ru.mamykin.foboreader.core.ui.BaseViewModel
 import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.domain.entity.FictionBook
 import ru.mamykin.foboreader.domain.mybooks.MyBooksInteractor

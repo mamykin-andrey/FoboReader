@@ -7,6 +7,7 @@ ext {
     compatLibVersion = '27.1.1'
     constraintLayoutVersion = '1.0.2'
     moxyVersion = '1.5.3'
+    viewModelVersion = '1.1.0'
     daggerVersion = '2.5'
     roomVersion = '1.1.1'
     rxAndroidVersion = '1.2.1'
@@ -66,6 +67,9 @@ dependencies {
     implementation "com.arello-mobile:moxy:$moxyVersion"
     implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
     kapt "com.arello-mobile:moxy-compiler:$moxyVersion"
+
+    implementation "android.arch.lifecycle:extensions:$viewModelVersion"
+    implementation "android.arch.lifecycle:viewmodel:$viewModelVersion"
 
     implementation "io.reactivex:rxandroid:$rxAndroidVersion"
     implementation "io.reactivex:rxjava:$rxJavaVersion"

@@ -21,15 +21,13 @@ class MyBookDelegate(
 
     override fun getLayoutId(): Int = R.layout.item_book
 
-    override fun createViewHolder(itemView: View): RecyclerView.ViewHolder {
-        return BookViewHolder(
-                itemView,
-                onBookClicked,
-                onBookAboutClicked,
-                onBookShareClicked,
-                onBookRemoveClicked
-        )
-    }
+    override fun createViewHolder(itemView: View): RecyclerView.ViewHolder = BookViewHolder(
+            itemView,
+            onBookClicked,
+            onBookAboutClicked,
+            onBookShareClicked,
+            onBookRemoveClicked
+    )
 
     override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: FictionBook) {
         (holder as BookViewHolder).bind(item)

@@ -1,11 +1,11 @@
 package ru.mamykin.foboreader.presentation.mybooks.list
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegatesManager
 import ru.mamykin.foboreader.domain.entity.FictionBook
 
-class BooksRecyclerAdapter(
+class MyBooksRecyclerAdapter(
         onBookClicked: (String) -> Unit,
         onBookAboutClicked: (String) -> Unit,
         onBookShareClicked: (String) -> Unit,
@@ -30,9 +30,10 @@ class BooksRecyclerAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
             delegatesManager.bindViewHolder(books, holder, position)
 
-    override fun getItemCount(): Int {
-        return books.size
-    }
+    override fun getItemCount(): Int = books.size
+
+    override fun getItemViewType(position: Int): Int =
+            delegatesManager.getItemViewType(books, position)
 
     fun changeData(books: List<FictionBook>) {
         this.books = books

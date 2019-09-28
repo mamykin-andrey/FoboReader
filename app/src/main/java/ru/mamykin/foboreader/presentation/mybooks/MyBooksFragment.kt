@@ -15,7 +15,7 @@ import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.core.ui.UiUtils
 import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.domain.entity.FictionBook
-import ru.mamykin.foboreader.presentation.mybooks.list.BooksRecyclerAdapter
+import ru.mamykin.foboreader.presentation.mybooks.list.MyBooksRecyclerAdapter
 
 /**
  * Страница с книгами пользователя
@@ -29,12 +29,12 @@ class MyBooksFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
     override val layoutId: Int = R.layout.fragment_my_books
 
-    private lateinit var viewModel: MyBooksViewModel
-
-    private lateinit var adapter: BooksRecyclerAdapter
+    private val viewModel: MyBooksViewModel by viewModel()
+    private lateinit var adapter: MyBooksRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getAppComponent().getMyBooksComponent().inject(this)
         setHasOptionsMenu(true)
     }
 
@@ -42,7 +42,7 @@ class MyBooksFragment : BaseFragment(), SearchView.OnQueryTextListener {
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
-        adapter = BooksRecyclerAdapter(
+        adapter = MyBooksRecyclerAdapter(
                 viewModel::onBookClicked,
                 viewModel::onBookAboutClicked,
                 viewModel::onBookShareClicked,

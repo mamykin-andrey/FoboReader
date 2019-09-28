@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.ui
+package ru.mamykin.foboreader.core.mvvm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

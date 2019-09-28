@@ -6,13 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import ru.mamykin.foboreader.ReaderApp
 import ru.mamykin.foboreader.core.di.component.AppComponent
+import javax.inject.Inject
 
 abstract class BaseFragment : AndroidXMvpFragment(), BaseView {
 
     abstract val layoutId: Int
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getAppComponent().inject(this)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -24,12 +36,15 @@ abstract class BaseFragment : AndroidXMvpFragment(), BaseView {
         showSnackbar(message, false)
     }
 
-    override fun showLoading(show: Boolean) {
-
-    }
+    override fun showLoading(show: Boolean) {}
 
     protected fun getAppComponent(): AppComponent =
             (activity!!.application as ReaderApp).appComponent
+
+    inline fun <reified T : ViewModel> viewModel(): Lazy<T> = lazy { getViewModel<T>() }
+
+    inline fun <reified T : ViewModel> getViewModel(): T =
+            ViewModelProviders.of(this, viewModelFactory)[T::class.java]
 
     protected fun showToast(@StringRes messageResId: Int, long: Boolean = false) {
         showToast(getString(messageResId, long))
