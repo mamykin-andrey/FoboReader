@@ -7,25 +7,25 @@ import ru.mamykin.foboreader.domain.entity.FictionBook
 interface BookDao {
 
     @Insert
-    fun insert(book: FictionBook)
+    suspend fun insert(book: FictionBook)
 
     @Insert
-    fun insertAll(books: List<FictionBook>)
+    suspend fun insertAll(books: List<FictionBook>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(data: FictionBook): Int
+    suspend fun update(data: FictionBook): Int
 
     @Delete
-    fun delete(book: FictionBook)
+    suspend fun delete(book: FictionBook)
 
     @Query("SELECT * FROM fictionbook")
-    fun getBooks(): List<FictionBook>
+    suspend fun getBooks(): List<FictionBook>
 
     @Query("SELECT * FROM fictionbook WHERE bookTitle LIKE '%' || :query ORDER BY :sortOrder")
-    fun getBooks(query: String, sortOrder: SortOrder): List<FictionBook>
+    suspend fun getBooks(query: String, sortOrder: SortOrder): List<FictionBook>
 
     @Query("SELECT * FROM fictionbook WHERE filePath = :filePath LIMIT 1")
-    fun getBook(filePath: String): FictionBook?
+    suspend fun getBook(filePath: String): FictionBook?
 
     enum class SortOrder {
         BY_NAME,

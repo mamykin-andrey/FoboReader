@@ -20,28 +20,22 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideBooksRepository(bookDao: BookDao, bookParser: BookParser): BooksRepository {
-        return BooksRepository(bookDao, bookParser)
-    }
+    fun provideBooksRepository(bookDao: BookDao, bookParser: BookParser) =
+            BooksRepository(bookDao, bookParser)
 
     @Provides
     @Singleton
-    fun provideSettingsRepository(storage: SettingsStorage): SettingsRepository {
-        return SettingsRepository(storage)
-    }
+    fun provideSettingsRepository(storage: SettingsStorage) = SettingsRepository(storage)
 
     @Provides
     @Singleton
-    fun provideStoreBooksRepository(booksStoreService: BooksStoreService): BooksStoreRepository {
-        return BooksStoreRepository(booksStoreService)
-    }
+    fun provideStoreBooksRepository(booksStoreService: BooksStoreService) =
+            BooksStoreRepository(booksStoreService)
 
     @Provides
     @Singleton
     fun provideTranslateRepository(
-            yandexTranslateService: YandexTranslateService,
-            context: Context): TranslateRepository {
-
-        return TranslateRepository(yandexTranslateService, context)
-    }
+            translationService: YandexTranslateService,
+            context: Context
+    ) = TranslateRepository(translationService, context)
 }

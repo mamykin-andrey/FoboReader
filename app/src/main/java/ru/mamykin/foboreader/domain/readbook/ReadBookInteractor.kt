@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.domain.readbook
 
+import kotlinx.coroutines.runBlocking
 import ru.mamykin.foboreader.core.di.qualifiers.BookPath
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
@@ -15,9 +16,10 @@ class ReadBookInteractor @Inject constructor(
 ) {
     private lateinit var book: FictionBook
 
-    fun getBookInfo(): Single<FictionBook> =
-            booksRepository.getBook(bookPath)
-                    .doOnSuccess { this.book = it }
+    fun getBookInfo(): Single<FictionBook> {
+        return Single.fromCallable { runBlocking { booksRepository.getBook(bookPath) } }
+                .doOnSuccess { this.book = it }
+    }
 
     fun getParagraphTranslation(paragraph: String): Single<String> =
             book.transMap[paragraph]?.let { Single.just(it) }

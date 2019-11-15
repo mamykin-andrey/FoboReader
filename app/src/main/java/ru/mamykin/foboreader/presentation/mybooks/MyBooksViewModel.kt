@@ -1,91 +1,98 @@
 package ru.mamykin.foboreader.presentation.mybooks
 
-import androidx.lifecycle.MutableLiveData
-import ru.mamykin.foboreader.core.extension.applySchedulers
-import ru.mamykin.foboreader.core.extension.toLiveData
-import ru.mamykin.foboreader.core.mvvm.BaseViewModel
-import ru.mamykin.foboreader.core.platform.ResourcesManager
-import ru.mamykin.foboreader.core.platform.Schedulers
+import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.core.mvvm.BaseViewModel2
 import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.domain.entity.FictionBook
 import ru.mamykin.foboreader.domain.mybooks.MyBooksInteractor
 import javax.inject.Inject
 
 class MyBooksViewModel @Inject constructor(
-        private val interactor: MyBooksInteractor,
-        private val resourcesManager: ResourcesManager,
-        override val schedulers: Schedulers
-) : BaseViewModel() {
-
+        private val interactor: MyBooksInteractor
+) : BaseViewModel2<MyBooksViewModel.ViewState, MyBooksViewModel.Action, MyBooksRouter>(
+        ViewState(isLoading = true)
+) {
     private var searchQuery: String = ""
     private var sortOrder: BookDao.SortOrder = BookDao.SortOrder.BY_NAME
-    var router: MyBooksRouter? = null
-    private val _books = MutableLiveData<List<FictionBook>>()
-    val books get() = _books.toLiveData()
 
     init {
         loadBooks()
     }
 
-    fun onSortBooksClicked(sortOrder: BookDao.SortOrder) {
+    override fun reduceState(action: Action): ViewState = when (action) {
+        is Action.BooksLoaded -> state.copy(isLoading = false, books = action.books)
+        is Action.Error -> state.copy(isLoading = false, error = action.error)
+    }
+
+    private fun loadBooks() = launch {
+        runCatching { interactor.getBooks(searchQuery, sortOrder) }
+                .onSuccess { onAction(Action.BooksLoaded(it)) }
+                .onFailure { onAction(Action.Error(R.string.error_book_list_loading)) }
+    }
+
+    private fun onSortBooksClicked(sortOrder: BookDao.SortOrder) {
         this.sortOrder = sortOrder
         loadBooks()
     }
 
-    fun onQueryTextChange(searchQuery: String) {
+    private fun onQueryTextChanged(searchQuery: String) {
         this.searchQuery = searchQuery
         loadBooks()
     }
 
-    fun onBookClicked(bookPath: String) {
-        interactor.getBook(bookPath)
-                .map { it.filePath }
-                .applySchedulers()
-                .subscribe(
-                        { router?.openBook(it) },
-                        { /*onError(R.string.error_book_open)*/ }
-                )
-                .unsubscribeOnDestroy()
+    private fun onBookClicked(bookPath: String) = launch {
+        runCatching { interactor.getBookFilePath(bookPath) }
+                .onSuccess { router?.openBook(it) }
+                .onFailure { onAction(Action.Error(R.string.error_book_open)) }
     }
 
-    fun onBookAboutClicked(bookPath: String) {
-        interactor.getBook(bookPath)
-                .map { it.filePath }
-                .applySchedulers()
-                .subscribe(
-                        { router?.openBookDetails(it) },
-                        { /*onError(R.string.error_book_open)*/ }
-                )
-                .unsubscribeOnDestroy()
+    private fun onBookAboutClicked(bookPath: String) = launch {
+        runCatching { interactor.getBookFilePath(bookPath) }
+                .onSuccess { router?.openBookDetails(it) }
+                .onFailure { onAction(Action.Error(R.string.error_book_open)) }
     }
 
-    fun onBookShareClicked(bookPath: String) {
-        interactor.getBook(bookPath)
-                .applySchedulers()
-                .subscribe(
-                        { router?.openBookShareDialog(it) },
-                        { /*onError(R.string.error_book_open)*/ }
-                )
-                .unsubscribeOnDestroy()
+    private fun onBookShareClicked(bookPath: String) = launch {
+        runCatching { interactor.getBook(bookPath) }
+                .onSuccess { router?.openBookShareDialog(it) }
+                .onFailure { onAction(Action.Error(R.string.error_book_open)) }
     }
 
-    fun onBookRemoveClicked(bookPath: String) {
-        interactor.removeBook(bookPath)
-                .applySchedulers()
-                .subscribe(
-                        { loadBooks() },
-                        { /*onError(R.string.error_book_open)*/ }
-                )
-                .unsubscribeOnDestroy()
+    private fun onBookRemoveClicked(bookPath: String) = launch {
+        runCatching { interactor.removeBook(bookPath) }
+                .onSuccess { loadBooks() }
+                .onFailure { onAction(Action.Error(R.string.error_book_open)) }
     }
 
-    private fun loadBooks() {
-        interactor.getBooks(searchQuery, sortOrder)
-                .applySchedulers()
-                .subscribe(
-                        { _books.value = it },
-                        { /*onError(R.string.error_book_list_loading)*/ }
-                )
-                .unsubscribeOnDestroy()
+    fun onEvent(event: Event) {
+        when (event) {
+            is Event.OnSortBooksClicked -> onSortBooksClicked(event.sortOrder)
+            is Event.OnQueryTextChanged -> onQueryTextChanged(event.searchQuery)
+            is Event.OnBookClicked -> onBookClicked(event.bookPath)
+            is Event.OnBookAboutClicked -> onBookAboutClicked(event.bookPath)
+            is Event.OnBookShareClicked -> onBookShareClicked(event.bookPath)
+            is Event.OnBookRemoveClicked -> onBookRemoveClicked(event.bookPath)
+        }
     }
+
+    sealed class Event {
+        data class OnSortBooksClicked(val sortOrder: BookDao.SortOrder) : Event()
+        data class OnQueryTextChanged(val searchQuery: String) : Event()
+        data class OnBookClicked(val bookPath: String) : Event()
+        data class OnBookAboutClicked(val bookPath: String) : Event()
+        data class OnBookShareClicked(val bookPath: String) : Event()
+        data class OnBookRemoveClicked(val bookPath: String) : Event()
+    }
+
+    sealed class Action {
+        data class BooksLoaded(val books: List<FictionBook>) : Action()
+        data class Error(val error: Int) : Action()
+    }
+
+    data class ViewState(
+            val isLoading: Boolean = false,
+            val books: List<FictionBook> = emptyList(),
+            val error: Int? = null
+    )
 }

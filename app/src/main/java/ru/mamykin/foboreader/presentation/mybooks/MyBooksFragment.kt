@@ -43,10 +43,10 @@ class MyBooksFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
         initViewModel()
         adapter = MyBooksRecyclerAdapter(
-                viewModel::onBookClicked,
-                viewModel::onBookAboutClicked,
-                viewModel::onBookShareClicked,
-                viewModel::onBookRemoveClicked
+                { viewModel.onEvent(MyBooksViewModel.Event.OnBookClicked(it)) },
+                { viewModel.onEvent(MyBooksViewModel.Event.OnBookAboutClicked(it)) },
+                { viewModel.onEvent(MyBooksViewModel.Event.OnBookShareClicked(it)) },
+                { viewModel.onEvent(MyBooksViewModel.Event.OnBookRemoveClicked(it)) }
         )
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), false)
     }
@@ -68,9 +68,9 @@ class MyBooksFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.actionSortName -> viewModel.onSortBooksClicked(BookDao.SortOrder.BY_NAME)
-            R.id.actionSortReaded -> viewModel.onSortBooksClicked(BookDao.SortOrder.BY_READED)
-            R.id.actionSortDate -> viewModel.onSortBooksClicked(BookDao.SortOrder.BY_DATE)
+            R.id.actionSortName -> viewModel.onEvent(MyBooksViewModel.Event.OnSortBooksClicked(BookDao.SortOrder.BY_NAME))
+            R.id.actionSortReaded -> viewModel.onEvent(MyBooksViewModel.Event.OnSortBooksClicked(BookDao.SortOrder.BY_READED))
+            R.id.actionSortDate -> viewModel.onEvent(MyBooksViewModel.Event.OnSortBooksClicked(BookDao.SortOrder.BY_DATE))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -78,17 +78,17 @@ class MyBooksFragment : BaseFragment(), SearchView.OnQueryTextListener {
 
     private fun initViewModel() {
         viewModel.router = MyBooksRouter(activity!!)
-        viewModel.books.observe(viewLifecycleOwner, Observer {
-            when (it.isNotEmpty()) {
-                true -> showBooks(it)
-                false -> showEmptyState(true)
-            }
+        viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
+            showBooks(state.books)
+            state.error?.let(::getString)?.let { showSnackbar(it) }
         })
     }
 
     private fun showBooks(books: List<FictionBook>) {
-        showEmptyState(books.isEmpty())
-        adapter.changeData(books)
+        books.takeIf { it.isNotEmpty() }
+                ?.let(adapter::changeData)
+                ?.also { showEmptyState(show = false) }
+                ?: showEmptyState(show = true)
     }
 
     private fun showEmptyState(show: Boolean) {
@@ -99,7 +99,7 @@ class MyBooksFragment : BaseFragment(), SearchView.OnQueryTextListener {
     override fun onQueryTextSubmit(query: String) = false
 
     override fun onQueryTextChange(newText: String): Boolean {
-        viewModel.onQueryTextChange(newText)
+        viewModel.onEvent(MyBooksViewModel.Event.OnQueryTextChanged(newText))
         return true
     }
 }

@@ -1,8 +1,6 @@
 package ru.mamykin.foboreader.core.mvvm
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.mamykin.foboreader.core.extension.toLiveData
 import ru.mamykin.foboreader.core.platform.Schedulers
 import rx.Single
 import rx.Subscription
@@ -12,8 +10,6 @@ abstract class BaseViewModel : ViewModel() {
 
     protected abstract val schedulers: Schedulers
     private val compositeSubscription = CompositeSubscription()
-    val _error = MutableLiveData<String>()
-    val error = _error.toLiveData()
 
     protected fun Subscription.unsubscribeOnDestroy() {
         compositeSubscription.add(this)
