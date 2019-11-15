@@ -1,21 +1,41 @@
 package ru.mamykin.foboreader.core.mvvm
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.mamykin.foboreader.core.platform.Schedulers
-import rx.Single
-import rx.Subscription
-import rx.subscriptions.CompositeSubscription
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
+import kotlin.properties.Delegates
 
-abstract class BaseViewModel : ViewModel() {
+abstract class BaseViewModel<ViewState, Action, Router>(
+        initialState: ViewState
+) : ViewModel(), CoroutineScope {
 
-    protected abstract val schedulers: Schedulers
-    private val compositeSubscription = CompositeSubscription()
+    private val parentJob = Job()
 
-    protected fun Subscription.unsubscribeOnDestroy() {
-        compositeSubscription.add(this)
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + parentJob
+
+    var router: Router? = null // TODO: нормальный механизм навигации
+
+    protected var state: ViewState by Delegates.observable(initialState) { _, _, new ->
+        _stateLiveData.value = new
+    }
+    private val _stateLiveData = MutableLiveData<ViewState>()
+
+    val stateLiveData: LiveData<ViewState>
+        get() = _stateLiveData
+
+    abstract fun reduceState(action: Action): ViewState
+
+    open fun onAction(action: Action) {
+        state = reduceState(action)
     }
 
-    protected fun <T> Single<T>.applySchedulers(): Single<T> =
-            subscribeOn(schedulers.io())
-                    .observeOn(schedulers.main())
+    override fun onCleared() {
+        super.onCleared()
+        parentJob.cancel()
+    }
 }

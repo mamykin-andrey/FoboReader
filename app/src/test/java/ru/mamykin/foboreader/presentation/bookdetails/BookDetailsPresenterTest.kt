@@ -25,7 +25,7 @@ class BookDetailsPresenterTest {
     @Mock
     lateinit var view: BookDetailsView
 
-    lateinit var presenter: BookDetailsPresenter
+    lateinit var presenter: BookDetailsViewModel
 
     private val book: FictionBook = createBook()
 
@@ -34,7 +34,7 @@ class BookDetailsPresenterTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = BookDetailsPresenter(interactor, router, testSchedulers)
+        presenter = BookDetailsViewModel(interactor, router, testSchedulers)
         presenter.setViewState(viewState)
     }
 

@@ -1,40 +1,28 @@
 package ru.mamykin.foboreader.presentation.booksstore
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.appcompat.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_main_store.*
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.core.ui.UiUtils
 import ru.mamykin.foboreader.presentation.booksstore.list.BooksStoreRecyclerAdapter
 
-/**
- * Страница с магазином книг
- */
-class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTextListener {
+class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
 
     companion object {
 
         fun newInstance(): BooksStoreFragment = BooksStoreFragment()
     }
 
-    override val layoutId: Int = R.layout.fragment_main_store
-
-    @InjectPresenter
-    lateinit var presenter: BooksStorePresenter
-
     private lateinit var adapter: BooksStoreRecyclerAdapter
-
-    @ProvidePresenter
-    fun providePresenter(): BooksStorePresenter = getAppComponent()
-            .getBooksStoreComponent()
-            .getBooksStorePresenter()
+    private val viewModel: BooksStoreViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +32,10 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        srlRefresh.setOnRefreshListener { presenter.loadBooks() }
+        srlRefresh.setOnRefreshListener { viewModel.loadBooks() }
         adapter = BooksStoreRecyclerAdapter()
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context))
+        initViewModel()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -56,22 +45,23 @@ class BooksStoreFragment : BaseFragment(), BooksStoreView, SearchView.OnQueryTex
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
-        UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, this)
+        UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 
-    override fun showStoreBooks(books: List<Any>) {
-        adapter.changeItems(books)
+    private fun initViewModel() {
+        viewModel.loadBooks()
+        viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
+            srlRefresh.isRefreshing = state.isLoading
+            state.isError.takeIf { it }?.let { showSnackbar(R.string.books_store_load_error) }
+            state.books.takeIf { it.isNotEmpty() }?.let(adapter::changeItems)
+        })
     }
-
-    override fun showMessage(message: String) {
-        showToast(message)
-    }
-
-    override fun showLoading(show: Boolean) {
-        srlRefresh.isRefreshing = show
-    }
-
-    override fun onQueryTextSubmit(query: String): Boolean = false
-
-    override fun onQueryTextChange(newText: String): Boolean = false
 }

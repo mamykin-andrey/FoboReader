@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.presentation.mybooks
 
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.mvvm.BaseViewModel2
+import ru.mamykin.foboreader.core.mvvm.BaseViewModel
 import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.domain.entity.FictionBook
 import ru.mamykin.foboreader.domain.mybooks.MyBooksInteractor
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class MyBooksViewModel @Inject constructor(
         private val interactor: MyBooksInteractor
-) : BaseViewModel2<MyBooksViewModel.ViewState, MyBooksViewModel.Action, MyBooksRouter>(
+) : BaseViewModel<MyBooksViewModel.ViewState, MyBooksViewModel.Action, MyBooksRouter>(
         ViewState(isLoading = true)
 ) {
     private var searchQuery: String = ""

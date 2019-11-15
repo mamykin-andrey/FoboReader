@@ -6,27 +6,26 @@ import javax.inject.Inject
 class SettingsStorage @Inject constructor(
         private val prefManager: PreferencesManager
 ) {
-
     companion object {
-        const val NIGHT_THEME_PREF = "night_theme"
-        const val BRIGHTNESS_VALUE_PREF = "brightness"
-        const val MANUAL_BRIGHTNESS_PREF = "brightness_enabled"
-        const val CONTENT_TEXT_SIZE_PREF = "content_text_size"
+        private const val NIGHT_THEME_ENABLED = "night_theme_enabled"
+        private const val MANUAL_BRIGHTNESS_ENABLED = "manual_brightness_enabled"
+        private const val BRIGHTNESS = "brightness"
+        private const val READ_TEXT_SIZE = "read_text_size"
     }
 
-    var nightThemeEnabled: Boolean
-        get() = prefManager.getBoolean(NIGHT_THEME_PREF, false)
-        set(value) = prefManager.putBoolean(NIGHT_THEME_PREF, value)
+    var isNightTheme: Boolean
+        get() = prefManager.getBoolean(NIGHT_THEME_ENABLED, false)
+        set(value) = prefManager.putBoolean(NIGHT_THEME_ENABLED, value)
 
-    var manualBrightnessEnabled: Boolean
-        get() = prefManager.getBoolean(MANUAL_BRIGHTNESS_PREF, false)
-        set(value) = prefManager.putBoolean(MANUAL_BRIGHTNESS_PREF, value)
+    var isManualBrightness: Boolean
+        get() = prefManager.getBoolean(MANUAL_BRIGHTNESS_ENABLED, false)
+        set(value) = prefManager.putBoolean(MANUAL_BRIGHTNESS_ENABLED, value)
 
-    var manualBrightnessValue: Float
-        get() = prefManager.getFloat(BRIGHTNESS_VALUE_PREF, 1f)
-        set(value) = prefManager.putFloat(BRIGHTNESS_VALUE_PREF, value)
+    var brightness: Int
+        get() = prefManager.getInt(BRIGHTNESS, 100)
+        set(value) = prefManager.putInt(BRIGHTNESS, value)
 
-    var bookTextSize: Int
-        get() = prefManager.getInt(CONTENT_TEXT_SIZE_PREF, 16)
-        set(value) = prefManager.putInt(CONTENT_TEXT_SIZE_PREF, value)
+    var readTextSize: Int
+        get() = prefManager.getInt(READ_TEXT_SIZE, 16)
+        set(value) = prefManager.putInt(READ_TEXT_SIZE, value)
 }

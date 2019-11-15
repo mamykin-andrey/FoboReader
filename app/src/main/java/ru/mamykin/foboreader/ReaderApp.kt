@@ -23,7 +23,7 @@ class ReaderApp : MultiDexApplication() {
     }
 
     private fun setupTheme() {
-        val nightModeEnabled = settingsStorage.nightThemeEnabled
+        val nightModeEnabled = settingsStorage.isNightTheme
         UiUtils.enableNightMode(nightModeEnabled)
     }
 

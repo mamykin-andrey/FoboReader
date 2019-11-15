@@ -1,91 +1,60 @@
 package ru.mamykin.foboreader.presentation.bookdetails
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_book_detail.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.di.modules.BookDetailsModule
 import ru.mamykin.foboreader.core.extension.asFormattedDate
+import ru.mamykin.foboreader.core.extension.showSnackbar
+import ru.mamykin.foboreader.core.extension.startActivity
 import ru.mamykin.foboreader.core.ui.BaseActivity
-import java.util.*
+import ru.mamykin.foboreader.domain.entity.FictionBook
 
-/**
- * Страница с информацией о книге
- */
-class BookDetailsActivity : BaseActivity(), BookDetailsView {
+class BookDetailsActivity : BaseActivity(R.layout.activity_book_detail) {
 
     companion object {
 
         private const val BOOK_PATH_EXTRA = "book_path_extra"
 
-        fun start(context: Context, bookPath: String) =
-                context.startActivity(Intent(context, BookDetailsActivity::class.java)
-                        .apply {
-                            putExtra(BOOK_PATH_EXTRA, bookPath)
-                        })
+        fun start(context: Context, bookPath: String) {
+            context.startActivity<BookDetailsActivity>(BOOK_PATH_EXTRA to bookPath)
+        }
     }
 
-    override val layout: Int = R.layout.activity_book_detail
-
-    @InjectPresenter
-    lateinit var presenter: BookDetailsPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): BookDetailsPresenter = intent.getStringExtra(BOOK_PATH_EXTRA).let {
-        getAppComponent()
-                .getBookDetailsComponent(BookDetailsModule(it))
-                .getBookDetailsPresenter()
-    }
+    private val viewModel: BookDetailsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initToolbar(getString(R.string.about_book), true)
-        fabRead.setOnClickListener { presenter.onReadBookClicked() }
-        presenter.router = BookDetailsRouter(this)
+        fabRead.setOnClickListener {
+            viewModel.onEvent(BookDetailsViewModel.Event.OnReadBookClicked)
+        }
+        initViewModel()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter.router = null
+        viewModel.router = null
     }
 
-    override fun showTitle(title: String) {
-        supportActionBar?.title = title
+    private fun initViewModel() {
+        viewModel.loadData(intent.getStringExtra(BOOK_PATH_EXTRA)!!)
+        viewModel.router = BookDetailsRouter(this)
+        viewModel.stateLiveData.observe(this, Observer { state ->
+            if (state.error) showSnackbar(R.string.book_details_load_info_error)
+            state.book?.let(::showBookInfo)
+        })
     }
 
-    override fun setHomeEnabled(enabled: Boolean) {
-        supportActionBar?.setDisplayHomeAsUpEnabled(enabled)
-    }
-
-    override fun showBookName(name: String) {
-        tvBookName.text = name
-    }
-
-    override fun showBookAuthor(author: String) {
-        tvBookAuthor.text = author
-    }
-
-    override fun showBookPath(path: String) {
-        tvBookPath.text = path
-    }
-
-    override fun showBookCurrentPage(currentPage: String) {
-        tvCurrentPage.text = currentPage
-    }
-
-    override fun showBookGenre(genre: String) {
-        tvBookGenre.text = genre
-    }
-
-    override fun showBookOriginalLang(lang: String) {
-        tvBookLanguage.text = lang
-    }
-
-    override fun showBookCreatedDate(date: Date) {
-        tvBookCreatedDate.text = date.asFormattedDate()
+    private fun showBookInfo(book: FictionBook) {
+        tvBookName.text = book.bookTitle
+        tvBookAuthor.text = book.bookAuthor!!
+        tvBookPath.text = book.filePath
+        tvCurrentPage.text = book.currentPage.toString()
+        tvBookGenre.text = book.bookGenre!!
+        tvBookLanguage.text = book.bookSrcLang!!
+        tvBookCreatedDate.text = book.docDate!!.asFormattedDate()
     }
 }

@@ -1,87 +1,55 @@
 package ru.mamykin.foboreader.presentation.settings
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.widget.SeekBar
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import kotlinx.android.synthetic.main.activity_settings.*
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.core.extension.setOnSeekBarChangeListener
+import ru.mamykin.foboreader.core.extension.startActivity
 import ru.mamykin.foboreader.core.ui.BaseActivity
+import ru.mamykin.foboreader.core.ui.UiUtils
+import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
 
-/**
- * Страница настроек
- */
-class SettingsActivity : BaseActivity(), SettingsView, SeekBar.OnSeekBarChangeListener {
+class SettingsActivity : BaseActivity(R.layout.activity_settings) {
 
     companion object {
 
-        fun start(context: Context) = context.startActivity(
-                Intent(context, SettingsActivity::class.java)
-        )
+        fun start(context: Context) {
+            context.startActivity<SettingsActivity>()
+        }
     }
 
-    override val layout: Int = R.layout.activity_settings
-
-    @InjectPresenter
-    lateinit var presenter: SettingsPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): SettingsPresenter = getAppComponent()
-            .getSettingsComponent()
-            .getSettingsPresenter()
+    private lateinit var settings: SettingsStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initToolbar(getString(R.string.settings), true)
-        initClickListeners()
+        initViews()
+        loadSettings()
     }
 
-    override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-        presenter.onBrightnessProgressChanged(progress)
+    private fun loadSettings() {
+        switchNightTheme.isChecked = settings.isNightTheme
+        switchBrightAuto.isChecked = !settings.isManualBrightness
+        seekbarBright.isEnabled = settings.isManualBrightness
+        seekbarBright.progress = settings.brightness
+        tvTextSize.text = settings.readTextSize.toString()
     }
 
-    override fun onStartTrackingTouch(seekBar: SeekBar) {
-        // Do nothing
+    private fun enableNightTheme(enable: Boolean) {
+        settings.isNightTheme = enable
+        UiUtils.enableNightMode(enable)
     }
 
-    override fun onStopTrackingTouch(seekBar: SeekBar) {
-        // Do nothing
+    private fun enableAutoBrightness(enable: Boolean) {
+        switchBrightAuto.isChecked = enable
+        seekbarBright.isEnabled = !enable
     }
 
-    override fun setupBrightness() {
-
-    }
-
-    override fun showContentSizeText(size: Int) {
-        tvTextSize.text = size.toString()
-    }
-
-    override fun showBrightnessPos(position: Int) {
-        seekbarBright.progress = position
-    }
-
-    override fun showAutoBrightnessEnabled(enabled: Boolean) {
-        switchBrightAuto.isChecked = enabled
-    }
-
-    override fun showBrightnessControlEnabled(enabled: Boolean) {
-        seekbarBright.isEnabled = enabled
-    }
-
-    override fun showNightThemeEnabled(enabled: Boolean) {
-        switchNightTheme.isChecked = enabled
-    }
-
-    override fun restartActivity() {
-        recreate()
-    }
-
-    private fun initClickListeners() {
-        seekbarBright.setOnSeekBarChangeListener(this)
-        switchNightTheme.setOnCheckedChangeListener { _, c -> presenter.onNightThemeEnabled(c) }
-        switchBrightAuto.setOnCheckedChangeListener { _, c -> presenter.onAutoBrightnessEnabled(c) }
+    private fun initViews() {
+        seekbarBright.setOnSeekBarChangeListener { settings.brightness = it }
+        switchNightTheme.setOnCheckedChangeListener { _, c -> enableNightTheme(c) }
+        switchBrightAuto.setOnCheckedChangeListener { _, c -> enableAutoBrightness(c) }
     }
 }

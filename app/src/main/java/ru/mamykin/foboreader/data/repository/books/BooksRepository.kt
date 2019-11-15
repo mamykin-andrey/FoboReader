@@ -8,8 +8,8 @@ class BooksRepository @Inject constructor(
         private val bookDao: BookDao,
         private val bookParser: BookParser
 ) {
-    suspend fun getBookInfo(bookPath: String): FictionBook? {
-        return bookDao.getBook(bookPath)
+    suspend fun getBookInfo(bookPath: String): FictionBook {
+        return bookDao.getBook(bookPath)!!
     }
 
     suspend fun removeBook(bookPath: String) {

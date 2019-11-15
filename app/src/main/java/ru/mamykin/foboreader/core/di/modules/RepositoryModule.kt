@@ -9,8 +9,6 @@ import ru.mamykin.foboreader.data.network.YandexTranslateService
 import ru.mamykin.foboreader.data.repository.books.BookParser
 import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.booksstore.BooksStoreRepository
-import ru.mamykin.foboreader.data.repository.settings.SettingsRepository
-import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
 import javax.inject.Singleton
 
@@ -22,10 +20,6 @@ class RepositoryModule {
     @Singleton
     fun provideBooksRepository(bookDao: BookDao, bookParser: BookParser) =
             BooksRepository(bookDao, bookParser)
-
-    @Provides
-    @Singleton
-    fun provideSettingsRepository(storage: SettingsStorage) = SettingsRepository(storage)
 
     @Provides
     @Singleton

@@ -1,9 +1,9 @@
 package ru.mamykin.foboreader.data.network
 
+import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.mamykin.foboreader.domain.entity.Translation
-import rx.Single
 
 interface YandexTranslateService {
 
@@ -18,5 +18,5 @@ interface YandexTranslateService {
             @Query("lang") lang: String,
             @Query("format") format: String,
             @Query("options") options: String
-    ): Single<Translation>
+    ): Deferred<Translation>
 }

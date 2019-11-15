@@ -1,25 +1,24 @@
 package ru.mamykin.foboreader.presentation.main
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.core.extension.startActivity
 import ru.mamykin.foboreader.core.ui.BaseActivity
 import ru.mamykin.foboreader.presentation.booksstore.BooksStoreFragment
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksFragment
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksFragment
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(R.layout.activity_main) {
 
     companion object {
 
-        fun start(context: Context) =
-                context.startActivity(Intent(context, MainActivity::class.java))
+        fun start(context: Context) {
+            context.startActivity<MainActivity>()
+        }
     }
-
-    override val layout: Int = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
