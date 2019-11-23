@@ -36,7 +36,7 @@
             android:name="ru.mamykin.foboreader.presentation.readbook.ReadBookActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="ru.mamykin.foboreader.presentation.settings.SettingsActivity"
+            android:name="ru.mamykin.settings.presentation.SettingsActivity"
             android:screenOrientation="portrait" />
 
     </application>

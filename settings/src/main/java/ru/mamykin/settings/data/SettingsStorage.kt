@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.data.repository.settings
+package ru.mamykin.settings.data
 
 import ru.mamykin.core.data.PreferencesManager
 import javax.inject.Inject

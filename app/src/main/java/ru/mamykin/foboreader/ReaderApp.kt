@@ -5,7 +5,7 @@ import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.foboreader.core.di.component.AppComponent
 import ru.mamykin.foboreader.core.di.component.DaggerAppComponent
 import ru.mamykin.foboreader.core.di.modules.AppModule
-import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
+import ru.mamykin.settings.data.SettingsStorage
 import javax.inject.Inject
 
 class ReaderApp : MultiDexApplication() {
@@ -14,7 +14,7 @@ class ReaderApp : MultiDexApplication() {
         private set
 
     @Inject
-    lateinit var settingsStorage: SettingsStorage
+    lateinit var settingsStorage: ru.mamykin.settings.data.SettingsStorage
 
     override fun onCreate() {
         super.onCreate()

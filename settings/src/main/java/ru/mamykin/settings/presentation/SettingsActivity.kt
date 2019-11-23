@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.presentation.settings
+package ru.mamykin.settings.presentation
 
 import android.content.Context
 import android.os.Bundle
@@ -7,8 +7,8 @@ import ru.mamykin.core.extension.setOnSeekBarChangeListener
 import ru.mamykin.core.extension.startActivity
 import ru.mamykin.core.ui.BaseActivity
 import ru.mamykin.core.ui.UiUtils
-import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
+import ru.mamykin.settings.R
+import ru.mamykin.settings.data.SettingsStorage
 
 class SettingsActivity : BaseActivity(R.layout.activity_settings) {
 

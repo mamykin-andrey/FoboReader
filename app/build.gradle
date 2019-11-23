@@ -57,6 +57,9 @@ dependencies {
 
     implementation project(":core")
     implementation project(":book_details")
+    implementation project(":books_store")
+    implementation project(":read_book")
+    implementation project(":settings")
 
     implementation "io.reactivex:rxandroid:$rxAndroidVersion"
     implementation "io.reactivex:rxjava:$rxJavaVersion"
