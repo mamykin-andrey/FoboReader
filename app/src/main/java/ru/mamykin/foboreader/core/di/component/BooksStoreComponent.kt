@@ -5,5 +5,4 @@ import ru.mamykin.foboreader.core.di.scope.FragmentScope
 
 @FragmentScope
 @Subcomponent
-interface BooksStoreComponent {
-}
+interface BooksStoreComponent

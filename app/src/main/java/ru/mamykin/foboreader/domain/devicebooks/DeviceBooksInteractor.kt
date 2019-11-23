@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.domain.devicebooks
 
-import ru.mamykin.foboreader.core.extension.isFictionBook
+import ru.mamykin.core.extension.isFictionBook
 import ru.mamykin.foboreader.data.model.FileStructure
 import ru.mamykin.foboreader.data.repository.devicebooks.DeviceBooksRepository
 import java.io.File

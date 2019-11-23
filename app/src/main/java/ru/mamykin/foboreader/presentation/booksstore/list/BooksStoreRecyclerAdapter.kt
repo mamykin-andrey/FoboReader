@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.presentation.booksstore.list
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
-import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegatesManager
+import ru.mamykin.core.ui.adapterdelegates.AdapterDelegatesManager
 
 class BooksStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

@@ -12,7 +12,7 @@ interface YandexTranslateService {
     }
 
     @GET("api/v1.5/tr.json/translate")
-    fun translate(
+    fun translateAsync(
             @Query("key") key: String,
             @Query("text") text: String,
             @Query("lang") lang: String,

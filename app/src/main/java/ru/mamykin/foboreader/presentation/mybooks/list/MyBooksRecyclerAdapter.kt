@@ -2,8 +2,8 @@ package ru.mamykin.foboreader.presentation.mybooks.list
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegatesManager
-import ru.mamykin.foboreader.domain.entity.FictionBook
+import ru.mamykin.core.ui.adapterdelegates.AdapterDelegatesManager
+import ru.mamykin.core.data.model.FictionBook
 
 class MyBooksRecyclerAdapter(
         onBookClicked: (String) -> Unit,

@@ -3,8 +3,8 @@ package ru.mamykin.foboreader.presentation.mybooks
 import android.app.Activity
 import android.content.Intent
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.domain.entity.FictionBook
-import ru.mamykin.foboreader.presentation.bookdetails.BookDetailsActivity
+import ru.mamykin.core.data.model.FictionBook
+import ru.mamykin.book_details.presentation.BookDetailsActivity
 import ru.mamykin.foboreader.presentation.readbook.ReadBookActivity
 
 class MyBooksRouter(

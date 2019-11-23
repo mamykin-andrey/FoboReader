@@ -1,13 +1,12 @@
 package ru.mamykin.foboreader.core.di.modules
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
-import ru.mamykin.foboreader.data.database.BookDao
+import ru.mamykin.core.data.BookParser
+import ru.mamykin.core.data.database.BookDao
+import ru.mamykin.core.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.network.BooksStoreService
 import ru.mamykin.foboreader.data.network.YandexTranslateService
-import ru.mamykin.foboreader.data.repository.books.BookParser
-import ru.mamykin.foboreader.data.repository.books.BooksRepository
 import ru.mamykin.foboreader.data.repository.booksstore.BooksStoreRepository
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
 import javax.inject.Singleton
@@ -28,8 +27,6 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideTranslateRepository(
-            translationService: YandexTranslateService,
-            context: Context
-    ) = TranslateRepository(translationService, context)
+    fun provideTranslateRepository(translationService: YandexTranslateService) =
+            TranslateRepository(translationService)
 }

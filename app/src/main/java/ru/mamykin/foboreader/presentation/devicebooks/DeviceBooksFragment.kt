@@ -13,16 +13,16 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import kotlinx.android.synthetic.main.fragment_device_books.*
 import kotlinx.android.synthetic.main.layout_no_permission.*
+import ru.mamykin.core.extension.isVisible
+import ru.mamykin.core.extension.showSnackbar
+import ru.mamykin.core.ui.BaseFragment
+import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.foboreader.BuildConfig
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.extension.isVisible
-import ru.mamykin.foboreader.core.extension.showSnackbar
-import ru.mamykin.foboreader.core.ui.BaseFragment
-import ru.mamykin.foboreader.core.ui.UiUtils
 import ru.mamykin.foboreader.data.model.FileStructure
 import ru.mamykin.foboreader.presentation.devicebooks.list.FilesRecyclerAdapter
 
-class DeviceBooksFragment : BaseFragment(R.layout.fragment_device_books) {
+class DeviceBooksFragment() : BaseFragment(R.layout.fragment_device_books) {
 
     companion object {
 

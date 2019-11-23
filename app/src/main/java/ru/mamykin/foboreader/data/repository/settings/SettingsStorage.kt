@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.data.repository.settings
 
-import ru.mamykin.foboreader.data.PreferencesManager
+import ru.mamykin.core.data.PreferencesManager
 import javax.inject.Inject
 
 class SettingsStorage @Inject constructor(

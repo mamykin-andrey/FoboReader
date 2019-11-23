@@ -6,5 +6,4 @@ import ru.mamykin.foboreader.core.di.scope.ActivityScope
 
 @ActivityScope
 @Subcomponent(modules = [BookDetailsModule::class])
-interface BookDetailsComponent {
-}
+interface BookDetailsComponent

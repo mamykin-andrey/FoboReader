@@ -4,11 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_read_book.*
+import ru.mamykin.core.extension.isVisible
+import ru.mamykin.core.extension.showSnackbar
+import ru.mamykin.core.extension.startActivity
+import ru.mamykin.core.ui.BaseActivity
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.extension.isVisible
-import ru.mamykin.foboreader.core.extension.showSnackbar
-import ru.mamykin.foboreader.core.extension.startActivity
-import ru.mamykin.foboreader.core.ui.BaseActivity
 import ru.mamykin.paginatedtextview.pagination.ReadState
 import ru.mamykin.paginatedtextview.view.OnActionListener
 
@@ -48,7 +48,7 @@ class ReadBookActivity : BaseActivity(R.layout.activity_read_book) {
         viewModel.stateLiveData.observe(this, Observer { state ->
             pbLoading.isVisible = state.isLoading
             pbLoading.isVisible = state.isTranslationLoading
-            state.wordTranslation?.let {  }
+            state.wordTranslation?.let { }
             state.paragraphTranslation?.let { }
             state.bookInfo?.let { tvName.text = it.bookTitle }
             if (state.isTranslationError) showSnackbar(R.string.error_translation)

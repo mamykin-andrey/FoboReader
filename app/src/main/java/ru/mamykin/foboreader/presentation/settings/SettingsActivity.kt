@@ -3,11 +3,11 @@ package ru.mamykin.foboreader.presentation.settings
 import android.content.Context
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_settings.*
+import ru.mamykin.core.extension.setOnSeekBarChangeListener
+import ru.mamykin.core.extension.startActivity
+import ru.mamykin.core.ui.BaseActivity
+import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.extension.setOnSeekBarChangeListener
-import ru.mamykin.foboreader.core.extension.startActivity
-import ru.mamykin.foboreader.core.ui.BaseActivity
-import ru.mamykin.foboreader.core.ui.UiUtils
 import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
 
 class SettingsActivity : BaseActivity(R.layout.activity_settings) {
@@ -24,7 +24,7 @@ class SettingsActivity : BaseActivity(R.layout.activity_settings) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initToolbar(getString(R.string.settings), true)
+        //initToolbar(getString(R.string.settings), true)
         initViews()
         loadSettings()
     }

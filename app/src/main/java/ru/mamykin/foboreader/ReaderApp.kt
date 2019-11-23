@@ -1,10 +1,10 @@
 package ru.mamykin.foboreader
 
 import androidx.multidex.MultiDexApplication
+import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.foboreader.core.di.component.AppComponent
 import ru.mamykin.foboreader.core.di.component.DaggerAppComponent
 import ru.mamykin.foboreader.core.di.modules.AppModule
-import ru.mamykin.foboreader.core.ui.UiUtils
 import ru.mamykin.foboreader.data.repository.settings.SettingsStorage
 import javax.inject.Inject
 

@@ -8,10 +8,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_main_store.*
+import ru.mamykin.core.extension.showSnackbar
+import ru.mamykin.core.ui.BaseFragment
+import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.extension.showSnackbar
-import ru.mamykin.foboreader.core.ui.BaseFragment
-import ru.mamykin.foboreader.core.ui.UiUtils
 import ru.mamykin.foboreader.presentation.booksstore.list.BooksStoreRecyclerAdapter
 
 class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {

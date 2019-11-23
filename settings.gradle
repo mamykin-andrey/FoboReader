@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':book_details', ':core'

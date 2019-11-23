@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.presentation.booksstore
 
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.mvvm.BaseViewModel
+import ru.mamykin.core.mvvm.BaseViewModel
 import ru.mamykin.foboreader.domain.booksstore.BooksStoreInteractor
 import ru.mamykin.foboreader.domain.entity.StoreBook
 import javax.inject.Inject

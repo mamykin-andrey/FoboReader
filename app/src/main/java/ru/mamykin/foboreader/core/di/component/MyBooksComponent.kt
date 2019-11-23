@@ -6,5 +6,4 @@ import ru.mamykin.foboreader.core.di.scope.FragmentScope
 
 @FragmentScope
 @Subcomponent(modules = [MyBooksModule::class])
-interface MyBooksComponent {
-}
+interface MyBooksComponent

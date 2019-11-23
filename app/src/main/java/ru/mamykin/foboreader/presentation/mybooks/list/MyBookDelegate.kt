@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_book.view.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.extension.isVisible
-import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
-import ru.mamykin.foboreader.domain.entity.FictionBook
+import ru.mamykin.core.extension.isVisible
+import ru.mamykin.core.ui.adapterdelegates.AdapterDelegate
+import ru.mamykin.core.data.model.FictionBook
 
 class MyBookDelegate(
         private val onBookClicked: (String) -> Unit,

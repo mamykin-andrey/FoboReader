@@ -4,9 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.mamykin.core.extension.startActivity
+import ru.mamykin.core.ui.BaseActivity
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.extension.startActivity
-import ru.mamykin.foboreader.core.ui.BaseActivity
 import ru.mamykin.foboreader.presentation.booksstore.BooksStoreFragment
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksFragment
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksFragment
@@ -22,7 +22,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initToolbar(getString(R.string.app_name), false)
+//        initToolbar(getString(R.string.app_name), false)
         initBottomNavigationView()
     }
 

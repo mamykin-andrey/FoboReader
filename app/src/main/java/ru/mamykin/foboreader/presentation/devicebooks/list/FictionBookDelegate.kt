@@ -4,10 +4,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_file.view.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.extension.attributes
-import ru.mamykin.foboreader.core.extension.isFictionBook
-import ru.mamykin.foboreader.core.extension.isVisible
-import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
+import ru.mamykin.core.extension.attributes
+import ru.mamykin.core.extension.isFictionBook
+import ru.mamykin.core.extension.isVisible
+import ru.mamykin.core.ui.adapterdelegates.AdapterDelegate
 import java.io.File
 
 class FictionBookDelegate(

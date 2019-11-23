@@ -2,8 +2,8 @@ package ru.mamykin.foboreader.presentation.devicebooks
 
 import androidx.annotation.StringRes
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.mvvm.BaseViewModel
-import ru.mamykin.foboreader.core.platform.PermissionsManager
+import ru.mamykin.core.mvvm.BaseViewModel
+import ru.mamykin.core.platform.PermissionsManager
 import ru.mamykin.foboreader.data.model.FileStructure
 import ru.mamykin.foboreader.domain.devicebooks.DeviceBooksInteractor
 import java.io.File

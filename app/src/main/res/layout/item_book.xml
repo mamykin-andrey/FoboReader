@@ -59,9 +59,9 @@
                         android:layout_gravity="center"
                         android:background="@drawable/bg_file_format"
                         android:padding="2dp"
-                        android:text="@string/fbwt_format"
+                        android:text="fbwt"
                         android:textSize="11sp"
-                        tools:ignore="SmallSp" />
+                        tools:ignore="HardcodedText,SmallSp" />
 
                     <ImageButton
                         android:id="@+id/btnMenu"
@@ -87,7 +87,7 @@
                     android:layout_marginTop="5dp"
                     tools:text="16 страниц из 27" />
 
-                <ru.mamykin.foboreader.core.ui.controls.PercentProgressView
+                <ru.mamykin.foboreader.presentation.mybooks.PercentProgressView
                     android:id="@+id/pvProgress"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"

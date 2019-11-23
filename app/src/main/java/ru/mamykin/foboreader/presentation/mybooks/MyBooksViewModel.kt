@@ -2,9 +2,9 @@ package ru.mamykin.foboreader.presentation.mybooks
 
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.mvvm.BaseViewModel
-import ru.mamykin.foboreader.data.database.BookDao
-import ru.mamykin.foboreader.domain.entity.FictionBook
+import ru.mamykin.core.mvvm.BaseViewModel
+import ru.mamykin.core.data.database.BookDao
+import ru.mamykin.core.data.model.FictionBook
 import ru.mamykin.foboreader.domain.mybooks.MyBooksInteractor
 import javax.inject.Inject
 

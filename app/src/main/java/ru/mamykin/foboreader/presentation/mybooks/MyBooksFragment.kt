@@ -9,12 +9,12 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_my_books.*
+import ru.mamykin.core.data.database.BookDao
+import ru.mamykin.core.extension.isVisible
+import ru.mamykin.core.extension.showSnackbar
+import ru.mamykin.core.ui.BaseFragment
+import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.extension.isVisible
-import ru.mamykin.foboreader.core.extension.showSnackbar
-import ru.mamykin.foboreader.core.ui.BaseFragment
-import ru.mamykin.foboreader.core.ui.UiUtils
-import ru.mamykin.foboreader.data.database.BookDao
 import ru.mamykin.foboreader.presentation.mybooks.list.MyBooksRecyclerAdapter
 
 class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {

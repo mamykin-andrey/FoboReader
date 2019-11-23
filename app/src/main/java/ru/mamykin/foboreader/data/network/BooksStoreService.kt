@@ -1,7 +1,8 @@
 package ru.mamykin.foboreader.data.network
 
+import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
-import ru.mamykin.foboreader.domain.entity.booksstore.BooksStoreResponse
+import ru.mamykin.foboreader.data.model.BooksStoreResponse
 
 interface BooksStoreService {
 
@@ -10,5 +11,5 @@ interface BooksStoreService {
     }
 
     @GET("v2/592995eb11000014010828ee")
-    suspend fun getBooks(): BooksStoreResponse
+    fun getBooksAsync(): Deferred<BooksStoreResponse>
 }

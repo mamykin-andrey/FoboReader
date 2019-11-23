@@ -1,8 +1,8 @@
 package ru.mamykin.foboreader.domain.mybooks
 
-import ru.mamykin.foboreader.data.database.BookDao
-import ru.mamykin.foboreader.data.repository.books.BooksRepository
-import ru.mamykin.foboreader.domain.entity.FictionBook
+import ru.mamykin.core.data.database.BookDao
+import ru.mamykin.core.data.repository.books.BooksRepository
+import ru.mamykin.core.data.model.FictionBook
 import javax.inject.Inject
 
 class MyBooksInteractor @Inject constructor(

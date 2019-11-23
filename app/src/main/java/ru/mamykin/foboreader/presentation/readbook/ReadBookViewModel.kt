@@ -1,8 +1,8 @@
 package ru.mamykin.foboreader.presentation.readbook
 
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.mvvm.BaseViewModel
-import ru.mamykin.foboreader.domain.entity.FictionBook
+import ru.mamykin.core.mvvm.BaseViewModel
+import ru.mamykin.core.data.model.FictionBook
 import ru.mamykin.foboreader.domain.readbook.ReadBookInteractor
 import javax.inject.Inject
 
