@@ -72,6 +72,13 @@ dependencies {
     api "android.arch.lifecycle:extensions:$viewModelVersion"
     api "android.arch.lifecycle:viewmodel:$viewModelVersion"
 
+    api "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    api "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    api "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
+    api "com.squareup.picasso:picasso:$picassoVersion"
+
+    api 'ru.mamykin.widget:paginatedtextview:0.1.0'
+
     testApi "junit:junit:$junitVersion"
     testApi "org.mockito:mockito-core:$mockitoVersion"
     testApi "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"

@@ -7,9 +7,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.mamykin.core.extension.startActivity
 import ru.mamykin.core.ui.BaseActivity
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.presentation.booksstore.BooksStoreFragment
-import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksFragment
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksFragment
+import ru.mamykin.store.presentation.BooksStoreFragment
 
 class MainActivity : BaseActivity(R.layout.activity_main) {
 
@@ -30,7 +29,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         bnvMain.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_my_books -> openScreen(MyBooksFragment.newInstance())
-                R.id.menu_device -> openScreen(DeviceBooksFragment.newInstance())
                 R.id.menu_books_store -> openScreen(BooksStoreFragment.newInstance())
                 R.id.menu_settings -> openScreen(BooksStoreFragment.newInstance())
             }

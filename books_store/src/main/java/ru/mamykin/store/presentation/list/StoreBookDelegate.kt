@@ -1,11 +1,11 @@
-package ru.mamykin.foboreader.presentation.booksstore.list
+package ru.mamykin.store.presentation.list
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_store_book.view.*
-import ru.mamykin.foboreader.R
 import ru.mamykin.core.ui.adapterdelegates.AdapterDelegate
-import ru.mamykin.foboreader.domain.entity.StoreBook
+import ru.mamykin.store.R
+import ru.mamykin.store.domain.entity.StoreBook
 
 class StoreBookDelegate : AdapterDelegate<Any>() {
 

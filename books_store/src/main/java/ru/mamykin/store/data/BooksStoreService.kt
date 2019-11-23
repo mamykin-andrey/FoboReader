@@ -1,8 +1,8 @@
-package ru.mamykin.foboreader.data.network
+package ru.mamykin.store.data
 
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
-import ru.mamykin.foboreader.data.model.BooksStoreResponse
+import ru.mamykin.store.data.model.BooksStoreResponse
 
 interface BooksStoreService {
 

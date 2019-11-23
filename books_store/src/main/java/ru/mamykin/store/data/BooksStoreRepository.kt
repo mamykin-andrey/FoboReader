@@ -1,7 +1,6 @@
-package ru.mamykin.foboreader.data.repository.booksstore
+package ru.mamykin.store.data
 
-import ru.mamykin.foboreader.data.network.BooksStoreService
-import ru.mamykin.foboreader.data.model.BooksStoreResponse
+import ru.mamykin.store.data.model.BooksStoreResponse
 import javax.inject.Inject
 
 class BooksStoreRepository @Inject constructor(

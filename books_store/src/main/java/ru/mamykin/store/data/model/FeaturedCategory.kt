@@ -1,7 +1,7 @@
-package ru.mamykin.foboreader.data.model
+package ru.mamykin.store.data.model
 
 import com.google.gson.annotations.SerializedName
-import ru.mamykin.foboreader.domain.entity.StoreBook
+import ru.mamykin.store.domain.entity.StoreBook
 
 data class FeaturedCategory(
         @SerializedName("title")

@@ -8,7 +8,7 @@ import dagger.multibindings.IntoMap
 import ru.mamykin.foboreader.core.di.qualifiers.ViewModelKey
 import ru.mamykin.core.mvvm.ViewModelFactory
 import ru.mamykin.book_details.presentation.BookDetailsViewModel
-import ru.mamykin.foboreader.presentation.booksstore.BooksStoreViewModel
+import ru.mamykin.store.presentation.BooksStoreViewModel
 import ru.mamykin.foboreader.presentation.devicebooks.DeviceBooksViewModel
 import ru.mamykin.foboreader.presentation.mybooks.MyBooksViewModel
 

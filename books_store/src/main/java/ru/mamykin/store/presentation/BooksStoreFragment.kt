@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.presentation.booksstore
+package ru.mamykin.store.presentation
 
 import android.os.Bundle
 import android.view.Menu
@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.fragment_main_store.*
 import ru.mamykin.core.extension.showSnackbar
 import ru.mamykin.core.ui.BaseFragment
 import ru.mamykin.core.ui.UiUtils
-import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.presentation.booksstore.list.BooksStoreRecyclerAdapter
+import ru.mamykin.store.R
+import ru.mamykin.store.presentation.list.BooksStoreRecyclerAdapter
 
 class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
 

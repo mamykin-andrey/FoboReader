@@ -3,24 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-ext {
-    compatLibVersion = '27.1.1'
-    constraintLayoutVersion = '1.0.2'
-    daggerVersion = '2.5'
-    rxAndroidVersion = '1.2.1'
-    rxJavaVersion = '1.1.6'
-    retrofitVersion = '2.3.0'
-    converterGsonVersion = '2.1.0'
-    adapterRxJavaVersion = '2.1.0'
-    picassoVersion = '2.5.2'
-    ormliteVersion = '4.48'
-    mockitoVersion = '2.13.0'
-    mockitoKotlinVersion = '1.5.0'
-    junitVersion = '4.12'
-    kluentVersion = '1.35'
-    espressoCoreVersion = '2.2.2'
-}
-
 def propertiesFile = rootProject.file('local.properties')
 def properties = new Properties()
 properties.load(new FileInputStream(propertiesFile))
@@ -60,14 +42,4 @@ dependencies {
     implementation project(":books_store")
     implementation project(":read_book")
     implementation project(":settings")
-
-    implementation "io.reactivex:rxandroid:$rxAndroidVersion"
-    implementation "io.reactivex:rxjava:$rxJavaVersion"
-
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
-    implementation "com.squareup.picasso:picasso:$picassoVersion"
-
-    implementation 'ru.mamykin.widget:paginatedtextview:0.1.0'
 }

@@ -1,9 +1,9 @@
-package ru.mamykin.foboreader.presentation.booksstore
+package ru.mamykin.store.presentation
 
 import kotlinx.coroutines.launch
 import ru.mamykin.core.mvvm.BaseViewModel
-import ru.mamykin.foboreader.domain.booksstore.BooksStoreInteractor
-import ru.mamykin.foboreader.domain.entity.StoreBook
+import ru.mamykin.store.domain.BooksStoreInteractor
+import ru.mamykin.store.domain.entity.StoreBook
 import javax.inject.Inject
 
 class BooksStoreViewModel @Inject constructor(

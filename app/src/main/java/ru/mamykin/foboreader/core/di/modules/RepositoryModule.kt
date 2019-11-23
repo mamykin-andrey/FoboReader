@@ -5,9 +5,9 @@ import dagger.Provides
 import ru.mamykin.core.data.BookParser
 import ru.mamykin.core.data.database.BookDao
 import ru.mamykin.core.data.repository.books.BooksRepository
-import ru.mamykin.foboreader.data.network.BooksStoreService
+import ru.mamykin.store.data.BooksStoreService
 import ru.mamykin.foboreader.data.network.YandexTranslateService
-import ru.mamykin.foboreader.data.repository.booksstore.BooksStoreRepository
+import ru.mamykin.store.data.BooksStoreRepository
 import ru.mamykin.foboreader.data.repository.translate.TranslateRepository
 import javax.inject.Singleton
 

@@ -1,7 +1,7 @@
-package ru.mamykin.foboreader.domain.booksstore
+package ru.mamykin.store.domain
 
-import ru.mamykin.foboreader.data.repository.booksstore.BooksStoreRepository
-import ru.mamykin.foboreader.domain.entity.StoreBook
+import ru.mamykin.store.data.BooksStoreRepository
+import ru.mamykin.store.domain.entity.StoreBook
 import javax.inject.Inject
 
 class BooksStoreInteractor @Inject constructor(
