@@ -21,7 +21,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        initToolbar(getString(R.string.app_name), false)
+        initToolbar(getString(R.string.app_name), false)
         initBottomNavigationView()
     }
 

@@ -27,7 +27,7 @@ class BookDetailsActivity : BaseActivity(R.layout.activity_book_detail) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // initToolbar(getString(R.string.about_book), true)
+        initToolbar(getString(R.string.about_book), true)
         fabRead.setOnClickListener {
             viewModel.onEvent(BookDetailsViewModel.Event.OnReadBookClicked)
         }

@@ -9,14 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import ru.mamykin.core.di.DependenciesProvider
+import ru.mamykin.core.di.ComponentHolder
 
 abstract class BaseFragment(
         @LayoutRes private val layoutId: Int
 ) : Fragment() {
 
     val viewModelFactory: ViewModelProvider.Factory by lazy {
-        (activity!!.application as DependenciesProvider).viewModelFactory()
+        (activity!!.application as ComponentHolder)
+                .dependenciesProvider()
+                .viewModelFactory()
     }
 
     inline fun <reified T : ViewModel> viewModel(): Lazy<T> = lazy { getViewModel<T>() }

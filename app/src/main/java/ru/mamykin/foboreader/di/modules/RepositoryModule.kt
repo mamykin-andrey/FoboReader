@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import ru.mamykin.core.data.BookParser
 import ru.mamykin.core.data.database.BookDao
-import ru.mamykin.core.data.repository.books.BooksRepository
+import ru.mamykin.read_book.data.BooksRepository
 import ru.mamykin.store.data.BooksStoreService
 import ru.mamykin.read_book.data.YandexTranslateService
 import ru.mamykin.store.data.BooksStoreRepository

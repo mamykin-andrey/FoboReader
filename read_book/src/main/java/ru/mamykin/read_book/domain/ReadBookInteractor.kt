@@ -1,7 +1,7 @@
 package ru.mamykin.read_book.domain
 
 import ru.mamykin.core.data.model.FictionBook
-import ru.mamykin.core.data.repository.books.BooksRepository
+import ru.mamykin.read_book.data.BooksRepository
 import ru.mamykin.read_book.data.TranslateRepository
 import javax.inject.Inject
 

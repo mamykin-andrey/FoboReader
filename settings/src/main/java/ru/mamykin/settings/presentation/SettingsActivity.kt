@@ -24,7 +24,7 @@ class SettingsActivity : BaseActivity(R.layout.activity_settings) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //initToolbar(getString(R.string.settings), true)
+        initToolbar(getString(R.string.settings), true)
         initViews()
         loadSettings()
     }
