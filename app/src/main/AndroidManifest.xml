@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="ru.mamykin.foboreader.presentation.splash.SplashActivity"
+            android:name="ru.mamykin.foboreader.ui.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Splash">
             <intent-filter>
@@ -30,10 +30,10 @@
             android:name="ru.mamykin.book_details.presentation.BookDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="ru.mamykin.foboreader.presentation.main.MainActivity"
+            android:name="ru.mamykin.foboreader.ui.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="ru.mamykin.foboreader.presentation.readbook.ReadBookActivity"
+            android:name="ru.mamykin.read_book.preentation.ReadBookActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="ru.mamykin.settings.presentation.SettingsActivity"

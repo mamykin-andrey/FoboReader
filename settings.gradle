@@ -1,1 +1,1 @@
-include ':app', ':book_details', ':core', ':settings', ':read_book', ':books_store'
+include ':app', ':book_details', ':core', ':settings', ':read_book', ':books_store', ':my_books'

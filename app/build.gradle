@@ -7,6 +7,10 @@ def propertiesFile = rootProject.file('local.properties')
 def properties = new Properties()
 properties.load(new FileInputStream(propertiesFile))
 
+ext {
+    daggerVersion = '2.5'
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion '27.0.3'
@@ -42,4 +46,7 @@ dependencies {
     implementation project(":books_store")
     implementation project(":read_book")
     implementation project(":settings")
+    implementation project(":my_books")
+
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 }
