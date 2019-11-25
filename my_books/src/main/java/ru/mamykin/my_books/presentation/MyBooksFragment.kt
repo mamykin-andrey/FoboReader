@@ -1,11 +1,8 @@
 package ru.mamykin.my_books.presentation
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_my_books.*
@@ -27,14 +24,10 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
     private val viewModel: MyBooksViewModel by viewModel()
     private lateinit var adapter: MyBooksRecyclerAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initToolbar()
         initViewModel()
         adapter = MyBooksRecyclerAdapter(
                 { viewModel.onEvent(MyBooksViewModel.Event.OnBookClicked(it)) },
@@ -45,42 +38,39 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), false)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
-        super.onPrepareOptionsMenu(menu)
-        UiUtils.setupSearchView(
-                context!!,
-                menu!!,
-                R.id.action_search,
-                R.string.menu_search,
-                object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        return false
-                    }
-
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        viewModel.onEvent(MyBooksViewModel.Event.OnQueryTextChanged(newText!!))
-                        return true
-                    }
-                }
-        )
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater!!.inflate(R.menu.menu_books_list, menu)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.router = null
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    private fun initToolbar() {
+        toolbar!!.title = getString(R.string.my_books)
+        toolbar!!.inflateMenu(R.menu.menu_books_list)
+        toolbar!!.setOnMenuItemClickListener(::onMenuItemClicked)
+//        UiUtils.setupSearchView(
+//                context!!,
+//                menu!!,
+//                R.id.action_search,
+//                R.string.menu_search,
+//                object : SearchView.OnQueryTextListener {
+//                    override fun onQueryTextSubmit(query: String?): Boolean {
+//                        return false
+//                    }
+//
+//                    override fun onQueryTextChange(newText: String?): Boolean {
+//                        viewModel.onEvent(MyBooksViewModel.Event.OnQueryTextChanged(newText!!))
+//                        return true
+//                    }
+//                }
+//        )
+    }
+
+    private fun onMenuItemClicked(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.actionSortName -> viewModel.onEvent(MyBooksViewModel.Event.OnSortBooksClicked(BookDao.SortOrder.BY_NAME))
             R.id.actionSortReaded -> viewModel.onEvent(MyBooksViewModel.Event.OnSortBooksClicked(BookDao.SortOrder.BY_READED))
             R.id.actionSortDate -> viewModel.onEvent(MyBooksViewModel.Event.OnSortBooksClicked(BookDao.SortOrder.BY_DATE))
-            else -> return super.onOptionsItemSelected(item)
+            else -> return false
         }
         return true
     }

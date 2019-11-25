@@ -21,7 +21,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initToolbar(getString(R.string.app_name), false)
         initBottomNavigationView()
     }
 
@@ -32,7 +31,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
                 R.id.menu_books_store -> openScreen(BooksStoreFragment.newInstance())
                 R.id.menu_settings -> openScreen(BooksStoreFragment.newInstance())
             }
-            true
+            return@setOnNavigationItemSelectedListener true
         }
     }
 
