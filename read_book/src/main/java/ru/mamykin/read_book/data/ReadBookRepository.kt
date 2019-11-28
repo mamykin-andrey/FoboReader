@@ -5,7 +5,7 @@ import ru.mamykin.core.data.database.BookDao
 import ru.mamykin.core.data.model.FictionBook
 import javax.inject.Inject
 
-class BooksRepository @Inject constructor(
+class ReadBookRepository @Inject constructor(
         private val bookDao: BookDao,
         private val bookParser: BookParser
 ) {

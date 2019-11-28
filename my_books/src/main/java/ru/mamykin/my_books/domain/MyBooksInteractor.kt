@@ -2,25 +2,25 @@ package ru.mamykin.my_books.domain
 
 import ru.mamykin.core.data.database.BookDao
 import ru.mamykin.core.data.model.FictionBook
-import ru.mamykin.my_books.data.BooksRepository
+import ru.mamykin.my_books.data.MyBooksRepository
 import javax.inject.Inject
 
 class MyBooksInteractor @Inject constructor(
-        private val repository: BooksRepository
+        private val repositoryMy: MyBooksRepository
 ) {
     suspend fun removeBook(bookPath: String) {
-        repository.removeBook(bookPath)
+        repositoryMy.removeBook(bookPath)
     }
 
     suspend fun getBooks(searchQuery: String, sortOrder: BookDao.SortOrder): List<FictionBook> {
-        return repository.getBooks(searchQuery, sortOrder)
+        return repositoryMy.getBooks(searchQuery, sortOrder)
     }
 
     suspend fun getBook(bookPath: String): FictionBook {
-        return repository.getBook(bookPath)
+        return repositoryMy.getBook(bookPath)
     }
 
     suspend fun getBookFilePath(bookPath: String): String {
-        return repository.getBook(bookPath).filePath
+        return repositoryMy.getBook(bookPath).filePath
     }
 }

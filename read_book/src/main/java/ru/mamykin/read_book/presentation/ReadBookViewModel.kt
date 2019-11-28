@@ -1,4 +1,4 @@
-package ru.mamykin.read_book.preentation
+package ru.mamykin.read_book.presentation
 
 import kotlinx.coroutines.launch
 import ru.mamykin.core.data.model.FictionBook

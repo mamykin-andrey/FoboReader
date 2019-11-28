@@ -2,9 +2,13 @@ package ru.mamykin.core.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PreferencesManager(context: Context) {
-
+@Singleton
+class PreferencesManager @Inject constructor(
+        context: Context
+) {
     companion object {
         private const val PREFERENCES_FILE = "foboreader"
     }

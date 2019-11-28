@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.di.modules
+package ru.mamykin.core.di.module
 
 import android.content.Context
 import dagger.Module
@@ -6,10 +6,9 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-@Singleton
 class AppModule(private val context: Context) {
 
-    @Provides
     @Singleton
+    @Provides
     fun provideContext(): Context = context
 }

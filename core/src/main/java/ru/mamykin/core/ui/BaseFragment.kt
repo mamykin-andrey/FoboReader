@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import ru.mamykin.core.R
 import ru.mamykin.core.di.ComponentHolder
+import ru.mamykin.core.di.DependenciesProvider
 
 abstract class BaseFragment(
         @LayoutRes private val layoutId: Int
@@ -20,10 +21,11 @@ abstract class BaseFragment(
     protected var toolbar: Toolbar? = null
 
     val viewModelFactory: ViewModelProvider.Factory by lazy {
-        (activity!!.application as ComponentHolder)
-                .dependenciesProvider()
-                .viewModelFactory()
+        dependenciesProvider().viewModelFactory()
     }
+
+    protected fun dependenciesProvider() =
+            (activity!!.application as ComponentHolder).dependenciesProvider()
 
     inline fun <reified T : ViewModel> viewModel(): Lazy<T> = lazy { getViewModel<T>() }
 

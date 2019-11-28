@@ -1,4 +1,4 @@
-package ru.mamykin.read_book.preentation
+package ru.mamykin.read_book.presentation
 
 import android.content.Context
 import android.os.Bundle
@@ -11,6 +11,7 @@ import ru.mamykin.core.ui.BaseActivity
 import ru.mamykin.paginatedtextview.pagination.ReadState
 import ru.mamykin.paginatedtextview.view.OnActionListener
 import ru.mamykin.read_book.R
+import ru.mamykin.read_book.di.DaggerReadBookComponent
 
 class ReadBookActivity : BaseActivity(R.layout.activity_read_book) {
 
@@ -27,6 +28,7 @@ class ReadBookActivity : BaseActivity(R.layout.activity_read_book) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initDi()
         tvText.setOnActionListener(object : OnActionListener {
             override fun onClick(paragraph: String) {
                 viewModel.onParagraphClicked(paragraph)
@@ -42,6 +44,13 @@ class ReadBookActivity : BaseActivity(R.layout.activity_read_book) {
             }
         })
         initViewModel()
+    }
+
+    private fun initDi() {
+        DaggerReadBookComponent.builder()
+                .appComponent(appComponent())
+                .build()
+                .inject(this)
     }
 
     private fun initViewModel() {

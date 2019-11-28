@@ -33,10 +33,10 @@
             android:name="ru.mamykin.foboreader.ui.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="ru.mamykin.read_book.preentation.ReadBookActivity"
+            android:name="ru.mamykin.read_book.presentation.ReadBookActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="ru.mamykin.settings.presentation.SettingsActivity"
+            android:name="ru.mamykin.settings.presentation.SettingsFragment"
             android:screenOrientation="portrait" />
 
     </application>

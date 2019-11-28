@@ -1,32 +1,45 @@
 package ru.mamykin.settings.presentation
 
-import android.content.Context
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_settings.*
+import android.view.View
+import kotlinx.android.synthetic.main.fragment_settings.*
 import ru.mamykin.core.extension.setOnSeekBarChangeListener
-import ru.mamykin.core.extension.startActivity
-import ru.mamykin.core.ui.BaseActivity
+import ru.mamykin.core.ui.BaseFragment
 import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.settings.R
-import ru.mamykin.settings.data.SettingsStorage
+import ru.mamykin.core.data.SettingsStorage
+import javax.inject.Inject
 
-class SettingsActivity : BaseActivity(R.layout.activity_settings) {
+class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
     companion object {
 
-        fun start(context: Context) {
-            context.startActivity<SettingsActivity>()
-        }
+        fun newInstance() = SettingsFragment()
     }
 
-    private lateinit var settings: SettingsStorage
+    @Inject
+    lateinit var settings: SettingsStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
 
-        initToolbar(getString(R.string.settings), true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initToolbar()
         initViews()
         loadSettings()
+    }
+
+    private fun initToolbar() {
+        toolbar!!.setTitle(R.string.settings_screen)
+    }
+
+    private fun initViews() {
+        seekbarBright.setOnSeekBarChangeListener { settings.brightness = it }
+        switchNightTheme.setOnCheckedChangeListener { _, c -> enableNightTheme(c) }
+        switchBrightAuto.setOnCheckedChangeListener { _, c -> enableAutoBrightness(c) }
     }
 
     private fun loadSettings() {
@@ -45,11 +58,5 @@ class SettingsActivity : BaseActivity(R.layout.activity_settings) {
     private fun enableAutoBrightness(enable: Boolean) {
         switchBrightAuto.isChecked = enable
         seekbarBright.isEnabled = !enable
-    }
-
-    private fun initViews() {
-        seekbarBright.setOnSeekBarChangeListener { settings.brightness = it }
-        switchNightTheme.setOnCheckedChangeListener { _, c -> enableNightTheme(c) }
-        switchBrightAuto.setOnCheckedChangeListener { _, c -> enableAutoBrightness(c) }
     }
 }

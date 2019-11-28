@@ -1,12 +1,12 @@
 package ru.mamykin.read_book.domain
 
 import ru.mamykin.core.data.model.FictionBook
-import ru.mamykin.read_book.data.BooksRepository
+import ru.mamykin.read_book.data.ReadBookRepository
 import ru.mamykin.read_book.data.TranslateRepository
 import javax.inject.Inject
 
 class ReadBookInteractor @Inject constructor(
-        private val booksRepository: BooksRepository,
+        private val readBookRepository: ReadBookRepository,
         private val translateRepository: TranslateRepository,
         private val textToSpeechService: TextToSpeechService
 ) {
@@ -14,7 +14,7 @@ class ReadBookInteractor @Inject constructor(
 
     suspend fun getBookInfo(): FictionBook {
         val bookPath = ""
-        return booksRepository.getBook(bookPath)
+        return readBookRepository.getBook(bookPath)
                 .also { this.book = it }
     }
 

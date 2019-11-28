@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import ru.mamykin.core.R
 import ru.mamykin.core.di.ComponentHolder
+import ru.mamykin.core.di.component.AppComponent
 
 abstract class BaseActivity(
         @LayoutRes private val layoutId: Int
@@ -24,6 +25,8 @@ abstract class BaseActivity(
 
     inline fun <reified T : ViewModel> getViewModel(): T =
             ViewModelProviders.of(this, viewModelFactory)[T::class.java]
+
+    protected fun appComponent() = (application as ComponentHolder).appComponent()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

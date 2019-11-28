@@ -1,22 +1,17 @@
 package ru.mamykin.foboreader
 
 import androidx.multidex.MultiDexApplication
-import ru.mamykin.core.di.ComponentHolder
-import ru.mamykin.core.di.DependenciesProvider
+import ru.mamykin.core.data.SettingsStorage
+import ru.mamykin.core.di.component.AppComponent
+import ru.mamykin.core.di.component.DaggerAppComponent
+import ru.mamykin.core.di.module.AppModule
 import ru.mamykin.core.ui.UiUtils
-import ru.mamykin.foboreader.di.component.AppComponent
-import ru.mamykin.foboreader.di.component.DaggerAppComponent
-import ru.mamykin.foboreader.di.modules.AppModule
-import javax.inject.Inject
 
-class ReaderApp : MultiDexApplication(), ComponentHolder {
+class ReaderApp : MultiDexApplication() {
 
     private lateinit var appComponent: AppComponent
 
-    @Inject
-    lateinit var settingsStorage: ru.mamykin.settings.data.SettingsStorage
-
-    override fun dependenciesProvider(): DependenciesProvider = appComponent
+    private lateinit var settingsStorage: SettingsStorage
 
     override fun onCreate() {
         super.onCreate()
@@ -34,6 +29,6 @@ class ReaderApp : MultiDexApplication(), ComponentHolder {
                 .appModule(AppModule(this))
                 .build()
 
-        appComponent.inject(this)
+        settingsStorage = appComponent.settingsStorage()
     }
 }

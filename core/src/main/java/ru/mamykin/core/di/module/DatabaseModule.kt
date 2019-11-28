@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.di.modules
+package ru.mamykin.core.di.module
 
 import android.content.Context
 import androidx.room.Room

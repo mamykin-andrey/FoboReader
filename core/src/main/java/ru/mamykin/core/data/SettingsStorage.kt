@@ -1,8 +1,9 @@
-package ru.mamykin.settings.data
+package ru.mamykin.core.data
 
-import ru.mamykin.core.data.PreferencesManager
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SettingsStorage @Inject constructor(
         private val prefManager: PreferencesManager
 ) {
