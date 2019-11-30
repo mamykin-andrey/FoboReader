@@ -4,17 +4,15 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import ru.mamykin.core.mvvm.ViewModelFactory
+import javax.inject.Singleton
 
 @Module
 abstract class ViewModelModule {
 
+    @Singleton
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(MyBooksViewModel::class)
-//    abstract fun provideMyBooksViewModel(viewModel: MyBooksViewModel): ViewModel
 //
 //    @Binds
 //    @IntoMap

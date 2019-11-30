@@ -14,17 +14,16 @@ import ru.mamykin.store.presentation.list.BooksStoreRecyclerAdapter
 class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
 
     companion object {
-
         fun newInstance(): BooksStoreFragment = BooksStoreFragment()
     }
 
     private val adapter = BooksStoreRecyclerAdapter()
-    private val viewModel: BooksStoreViewModel by viewModel()
+//    private val viewModel: BooksStoreViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        srlRefresh.setOnRefreshListener { viewModel.loadBooks() }
+        //srlRefresh.setOnRefreshListener { viewModel.loadBooks() }
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context))
         initToolbar()
         initViewModel()
@@ -46,11 +45,11 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
     }
 
     private fun initViewModel() {
-        viewModel.loadBooks()
-        viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
-            srlRefresh.isRefreshing = state.isLoading
-            state.isError.takeIf { it }?.let { showSnackbar(R.string.books_store_load_error) }
-            state.books.takeIf { it.isNotEmpty() }?.let(adapter::changeItems)
-        })
+//        viewModel.loadBooks()
+//        viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
+//            srlRefresh.isRefreshing = state.isLoading
+//            state.isError.takeIf { it }?.let { showSnackbar(R.string.books_store_load_error) }
+//            state.books.takeIf { it.isNotEmpty() }?.let(adapter::changeItems)
+//        })
     }
 }

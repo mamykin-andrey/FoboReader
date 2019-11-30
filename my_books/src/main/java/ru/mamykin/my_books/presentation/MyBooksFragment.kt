@@ -12,17 +12,33 @@ import ru.mamykin.core.extension.showSnackbar
 import ru.mamykin.core.ui.BaseFragment
 import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.my_books.R
+import ru.mamykin.my_books.di.DaggerMyBooksComponent
+import ru.mamykin.my_books.di.MyBooksModule
 import ru.mamykin.my_books.presentation.list.MyBooksRecyclerAdapter
+import javax.inject.Inject
 
 class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
 
     companion object {
-
         fun newInstance() = MyBooksFragment()
     }
 
-    private val viewModel: MyBooksViewModel by viewModel()
+    @Inject
+    lateinit var viewModel: MyBooksViewModel
     private lateinit var adapter: MyBooksRecyclerAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initDi()
+    }
+
+    private fun initDi() {
+        DaggerMyBooksComponent.builder()
+                .appComponent(getAppComponent())
+                .myBooksModule(MyBooksModule(this))
+                .build()
+                .inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

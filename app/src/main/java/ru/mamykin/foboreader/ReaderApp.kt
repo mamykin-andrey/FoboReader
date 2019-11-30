@@ -2,12 +2,13 @@ package ru.mamykin.foboreader
 
 import androidx.multidex.MultiDexApplication
 import ru.mamykin.core.data.SettingsStorage
+import ru.mamykin.core.di.ComponentHolder
 import ru.mamykin.core.di.component.AppComponent
 import ru.mamykin.core.di.component.DaggerAppComponent
 import ru.mamykin.core.di.module.AppModule
 import ru.mamykin.core.ui.UiUtils
 
-class ReaderApp : MultiDexApplication() {
+class ReaderApp : MultiDexApplication(), ComponentHolder {
 
     private lateinit var appComponent: AppComponent
 
@@ -18,6 +19,8 @@ class ReaderApp : MultiDexApplication() {
         setupDagger()
         setupTheme()
     }
+
+    override fun getAppComponent(): AppComponent = appComponent
 
     private fun setupTheme() {
         val nightModeEnabled = settingsStorage.isNightTheme

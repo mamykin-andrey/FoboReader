@@ -8,11 +8,8 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import ru.mamykin.core.R
 import ru.mamykin.core.di.ComponentHolder
-import ru.mamykin.core.di.DependenciesProvider
 
 abstract class BaseFragment(
         @LayoutRes private val layoutId: Int
@@ -20,17 +17,16 @@ abstract class BaseFragment(
 
     protected var toolbar: Toolbar? = null
 
-    val viewModelFactory: ViewModelProvider.Factory by lazy {
-        dependenciesProvider().viewModelFactory()
-    }
-
-    protected fun dependenciesProvider() =
-            (activity!!.application as ComponentHolder).dependenciesProvider()
-
     inline fun <reified T : ViewModel> viewModel(): Lazy<T> = lazy { getViewModel<T>() }
 
-    inline fun <reified T : ViewModel> getViewModel(): T =
-            ViewModelProviders.of(this, viewModelFactory)[T::class.java]
+    inline fun <reified T : ViewModel> getViewModel(): T = null!!
+
+    protected fun getAppComponent() = (activity?.application as ComponentHolder).getAppComponent()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getAppComponent().inject(this)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,

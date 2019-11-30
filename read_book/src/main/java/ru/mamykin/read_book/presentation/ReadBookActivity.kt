@@ -16,7 +16,6 @@ import ru.mamykin.read_book.di.DaggerReadBookComponent
 class ReadBookActivity : BaseActivity(R.layout.activity_read_book) {
 
     companion object {
-
         private const val BOOK_PATH_EXTRA = "book_path_extra"
 
         fun start(context: Context, bookPath: String) {
@@ -48,7 +47,7 @@ class ReadBookActivity : BaseActivity(R.layout.activity_read_book) {
 
     private fun initDi() {
         DaggerReadBookComponent.builder()
-                .appComponent(appComponent())
+                .appComponent(getAppComponent())
                 .build()
                 .inject(this)
     }
