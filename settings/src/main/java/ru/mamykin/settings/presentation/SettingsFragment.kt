@@ -35,6 +35,14 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         seekbarBright.setOnSeekBarChangeListener { settings.brightness = it }
         switchNightTheme.setOnCheckedChangeListener { _, c -> enableNightTheme(c) }
         switchBrightAuto.setOnCheckedChangeListener { _, c -> enableAutoBrightness(c) }
+        btnTextSizeMinus.setOnClickListener {
+            settings.readTextSize--
+            tvTextSize.text = settings.readTextSize.toString()
+        }
+        btnTextSizePlus.setOnClickListener {
+            settings.readTextSize++
+            tvTextSize.text = settings.readTextSize.toString()
+        }
     }
 
     private fun loadSettings() {

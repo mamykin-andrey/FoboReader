@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
@@ -121,8 +122,9 @@
                     android:id="@+id/btnTextSizeMinus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_text_size_button"
                     android:contentDescription="@null"
-                    android:padding="5dp"
+                    android:padding="4dp"
                     android:src="@drawable/ic_minus" />
 
                 <TextView
@@ -130,14 +132,17 @@
                     style="@style/SettingsTextItemStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     tools:text="16" />
 
                 <ImageButton
                     android:id="@+id/btnTextSizePlus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_text_size_button"
                     android:contentDescription="@null"
-                    android:padding="5dp"
+                    android:padding="4dp"
                     android:src="@drawable/ic_plus" />
 
             </LinearLayout>
