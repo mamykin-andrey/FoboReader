@@ -4,9 +4,8 @@ import kotlinx.coroutines.launch
 import ru.mamykin.core.mvvm.BaseViewModel
 import ru.mamykin.store.domain.BooksStoreInteractor
 import ru.mamykin.store.domain.entity.StoreBook
-import javax.inject.Inject
 
-class BooksStoreViewModel @Inject constructor(
+class BooksStoreViewModel (
         private val interactor: BooksStoreInteractor
 ) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action, String>(
         ViewState(isLoading = true)

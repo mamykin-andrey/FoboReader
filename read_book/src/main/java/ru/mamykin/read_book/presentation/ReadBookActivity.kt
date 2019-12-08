@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_read_book.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.core.extension.isVisible
 import ru.mamykin.core.extension.showSnackbar
 import ru.mamykin.core.extension.startActivity
@@ -11,7 +12,6 @@ import ru.mamykin.core.ui.BaseActivity
 import ru.mamykin.paginatedtextview.pagination.ReadState
 import ru.mamykin.paginatedtextview.view.OnActionListener
 import ru.mamykin.read_book.R
-import ru.mamykin.read_book.di.DaggerReadBookComponent
 
 class ReadBookActivity : BaseActivity(R.layout.activity_read_book) {
 
@@ -23,18 +23,17 @@ class ReadBookActivity : BaseActivity(R.layout.activity_read_book) {
         }
     }
 
-    private val viewModel: ReadBookViewModel by viewModel()
+    private val readBookViewModel: ReadBookViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initDi()
         tvText.setOnActionListener(object : OnActionListener {
             override fun onClick(paragraph: String) {
-                viewModel.onParagraphClicked(paragraph)
+                readBookViewModel.onParagraphClicked(paragraph)
             }
 
             override fun onLongClick(word: String) {
-                viewModel.onWordClicked(word)
+                readBookViewModel.onWordClicked(word)
             }
 
             override fun onPageLoaded(state: ReadState) = with(state) {
@@ -45,15 +44,8 @@ class ReadBookActivity : BaseActivity(R.layout.activity_read_book) {
         initViewModel()
     }
 
-    private fun initDi() {
-        DaggerReadBookComponent.builder()
-                .appComponent(getAppComponent())
-                .build()
-                .inject(this)
-    }
-
     private fun initViewModel() {
-        viewModel.stateLiveData.observe(this, Observer { state ->
+        readBookViewModel.stateLiveData.observe(this, Observer { state ->
             pbLoading.isVisible = state.isLoading
             pbLoading.isVisible = state.isTranslationLoading
             state.wordTranslation?.let { }

@@ -3,9 +3,8 @@ package ru.mamykin.my_books.data
 import ru.mamykin.core.data.BookParser
 import ru.mamykin.core.data.database.BookDao
 import ru.mamykin.core.data.model.FictionBook
-import javax.inject.Inject
 
-class MyBooksRepository @Inject constructor(
+class MyBooksRepository constructor(
         private val bookDao: BookDao,
         private val bookParser: BookParser
 ) {

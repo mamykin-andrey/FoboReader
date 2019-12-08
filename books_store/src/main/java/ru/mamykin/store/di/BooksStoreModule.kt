@@ -1,23 +1,15 @@
 package ru.mamykin.store.di
 
-import dagger.Provides
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.module
+import ru.mamykin.store.data.BooksStoreRepository
 import ru.mamykin.store.data.BooksStoreService
-import javax.inject.Singleton
+import ru.mamykin.store.domain.BooksStoreInteractor
+import ru.mamykin.store.presentation.BooksStoreViewModel
 
-class BooksStoreModule {
-
-    @Provides
-    @Singleton
-    fun provideBooksStoreService(): BooksStoreService {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(BooksStoreService.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build()
-
-        return retrofit.create(BooksStoreService::class.java)
-    }
+val booksStoreModule = module {
+    factory { BooksStoreService.create() }
+    factory { BooksStoreRepository(get()) }
+    factory { BooksStoreInteractor(get()) }
+    viewModel { BooksStoreViewModel(get()) }
 }

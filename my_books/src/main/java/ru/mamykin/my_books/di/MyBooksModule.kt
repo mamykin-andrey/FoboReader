@@ -1,19 +1,13 @@
 package ru.mamykin.my_books.di
 
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import dagger.Module
-import dagger.Provides
-import ru.mamykin.core.di.module.KotlinViewModelProvider
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.module
+import ru.mamykin.my_books.data.MyBooksRepository
+import ru.mamykin.my_books.domain.MyBooksInteractor
 import ru.mamykin.my_books.presentation.MyBooksViewModel
 
-@Module
-class MyBooksModule(
-        private val fragment: Fragment
-) {
-    @MyBooksScope
-    @Provides
-    fun provideMyBookViewModel(viewModel: MyBooksViewModel): ViewModel {
-        return KotlinViewModelProvider.of(fragment, viewModel)
-    }
+val myBooksModule = module {
+    factory { MyBooksRepository(get(), get()) }
+    factory { MyBooksInteractor(get()) }
+    viewModel { MyBooksViewModel(get()) }
 }

@@ -2,12 +2,11 @@ package ru.mamykin.core.data
 
 import ru.mamykin.core.data.model.FictionBook
 import java.io.File
-import javax.inject.Inject
 import javax.xml.parsers.SAXParserFactory
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class BookParser @Inject constructor() {
+class BookParser {
 
     suspend fun parse(book: FictionBook) = suspendCoroutine<Unit> { cont ->
         runCatching {

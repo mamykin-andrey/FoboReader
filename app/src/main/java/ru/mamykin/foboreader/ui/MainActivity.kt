@@ -43,7 +43,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.frContent, fragment, tag)
-                .addToBackStack(null)
                 .commit()
     }
 }

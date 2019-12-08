@@ -3,12 +3,12 @@ package ru.mamykin.settings.presentation
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_settings.*
+import org.koin.android.ext.android.inject
+import ru.mamykin.core.data.SettingsStorage
 import ru.mamykin.core.extension.setOnSeekBarChangeListener
 import ru.mamykin.core.ui.BaseFragment
 import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.settings.R
-import ru.mamykin.core.data.SettingsStorage
-import javax.inject.Inject
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
@@ -17,12 +17,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         fun newInstance() = SettingsFragment()
     }
 
-    @Inject
-    lateinit var settings: SettingsStorage
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private val settings: SettingsStorage by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

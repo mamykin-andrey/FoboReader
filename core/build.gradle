@@ -6,7 +6,7 @@ ext {
     compatLibVersion = '27.1.1'
     constraintLayoutVersion = '1.0.2'
     viewModelVersion = '1.1.0'
-    daggerVersion = '2.5'
+    koin_version= "2.0.1"
     roomVersion = '2.2.1'
     rxAndroidVersion = '1.2.1'
     rxJavaVersion = '1.1.6'
@@ -57,8 +57,8 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    api "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    api "org.koin:koin-androidx-scope:$koin_version"
+    api "org.koin:koin-androidx-viewmodel:$koin_version"
 
     api "androidx.room:room-runtime:$roomVersion"
     api "androidx.room:room-ktx:$roomVersion"

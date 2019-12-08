@@ -1,8 +1,6 @@
 package ru.mamykin.read_book.data
 
-import javax.inject.Inject
-
-class TranslateRepository @Inject constructor(
+class TranslateRepository constructor(
         private val translateService: YandexTranslateService
 ) {
     private val apiKey = ""

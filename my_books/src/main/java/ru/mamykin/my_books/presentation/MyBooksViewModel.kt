@@ -6,9 +6,8 @@ import ru.mamykin.core.data.model.FictionBook
 import ru.mamykin.core.mvvm.BaseViewModel
 import ru.mamykin.my_books.R
 import ru.mamykin.my_books.domain.MyBooksInteractor
-import javax.inject.Inject
 
-class MyBooksViewModel @Inject constructor(
+class MyBooksViewModel constructor(
         private val interactor: MyBooksInteractor
 ) : BaseViewModel<MyBooksViewModel.ViewState, MyBooksViewModel.Action, MyBooksRouter>(
         ViewState(isLoading = true)

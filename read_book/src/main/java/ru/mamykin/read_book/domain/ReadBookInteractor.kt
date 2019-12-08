@@ -3,9 +3,8 @@ package ru.mamykin.read_book.domain
 import ru.mamykin.core.data.model.FictionBook
 import ru.mamykin.read_book.data.ReadBookRepository
 import ru.mamykin.read_book.data.TranslateRepository
-import javax.inject.Inject
 
-class ReadBookInteractor @Inject constructor(
+class ReadBookInteractor constructor(
         private val readBookRepository: ReadBookRepository,
         private val translateRepository: TranslateRepository,
         private val textToSpeechService: TextToSpeechService

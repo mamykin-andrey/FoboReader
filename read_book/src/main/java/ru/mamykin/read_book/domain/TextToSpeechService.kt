@@ -4,9 +4,8 @@ import android.content.Context
 import android.os.Build
 import android.speech.tts.TextToSpeech
 import java.util.*
-import javax.inject.Inject
 
-class TextToSpeechService @Inject constructor(
+class TextToSpeechService constructor(
         context: Context
 ) : TextToSpeech.OnInitListener {
 

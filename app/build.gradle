@@ -1,15 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
 
 def propertiesFile = rootProject.file('local.properties')
 def properties = new Properties()
 properties.load(new FileInputStream(propertiesFile))
-
-ext {
-    daggerVersion = '2.5'
-}
 
 android {
     compileSdkVersion 29
@@ -47,6 +42,4 @@ dependencies {
     implementation project(":read_book")
     implementation project(":settings")
     implementation project(":my_books")
-
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 }

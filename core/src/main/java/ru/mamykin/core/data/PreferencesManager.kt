@@ -2,11 +2,8 @@ package ru.mamykin.core.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class PreferencesManager @Inject constructor(
+class PreferencesManager constructor(
         context: Context
 ) {
     companion object {
