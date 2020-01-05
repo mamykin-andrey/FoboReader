@@ -2,12 +2,11 @@ package ru.mamykin.settings.presentation
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_settings.*
-import org.koin.android.ext.android.inject
-import ru.mamykin.core.data.SettingsStorage
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.core.extension.setOnSeekBarChangeListener
 import ru.mamykin.core.ui.BaseFragment
-import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.settings.R
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
@@ -17,14 +16,14 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         fun newInstance() = SettingsFragment()
     }
 
-    private val settings: SettingsStorage by inject()
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initToolbar()
         initViews()
-        loadSettings()
+        initViewModel()
     }
 
     private fun initToolbar() {
@@ -32,34 +31,31 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
     }
 
     private fun initViews() {
-        seekbarBright.setOnSeekBarChangeListener { settings.brightness = it }
-        switchNightTheme.setOnCheckedChangeListener { _, c -> enableNightTheme(c) }
-        switchBrightAuto.setOnCheckedChangeListener { _, c -> enableAutoBrightness(c) }
+        seekbarBright.setOnSeekBarChangeListener {
+            viewModel.onEvent(SettingsViewModel.Event.BrightnessChanged(it))
+        }
+        switchNightTheme.setOnCheckedChangeListener { _, c ->
+            viewModel.onEvent(SettingsViewModel.Event.NightThemeEnabled(c))
+        }
+        switchBrightAuto.setOnCheckedChangeListener { _, c ->
+            viewModel.onEvent(SettingsViewModel.Event.BrightAutoEnabled(c))
+        }
         btnTextSizeMinus.setOnClickListener {
-            settings.readTextSize--
-            tvTextSize.text = settings.readTextSize.toString()
+            viewModel.onEvent(SettingsViewModel.Event.TextSizeDecreased)
         }
         btnTextSizePlus.setOnClickListener {
-            settings.readTextSize++
-            tvTextSize.text = settings.readTextSize.toString()
+            viewModel.onEvent(SettingsViewModel.Event.TextSizeIncreased)
         }
     }
 
-    private fun loadSettings() {
-        switchNightTheme.isChecked = settings.isNightTheme
-        switchBrightAuto.isChecked = !settings.isManualBrightness
-        seekbarBright.isEnabled = settings.isManualBrightness
-        seekbarBright.progress = settings.brightness
-        tvTextSize.text = settings.readTextSize.toString()
-    }
-
-    private fun enableNightTheme(enable: Boolean) {
-        settings.isNightTheme = enable
-        UiUtils.enableNightMode(enable)
-    }
-
-    private fun enableAutoBrightness(enable: Boolean) {
-        switchBrightAuto.isChecked = enable
-        seekbarBright.isEnabled = !enable
+    private fun initViewModel() {
+        viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
+            switchNightTheme.isChecked = state.nightTheme
+            seekbarBright.isEnabled = state.manualBrightness
+            switchBrightAuto.isChecked = !state.manualBrightness
+            seekbarBright.progress = state.brightness
+            tvTextSize.text = state.textSize
+        })
+        viewModel.loadSettings()
     }
 }

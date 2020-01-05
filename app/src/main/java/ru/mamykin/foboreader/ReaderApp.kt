@@ -9,6 +9,7 @@ import ru.mamykin.core.data.SettingsStorage
 import ru.mamykin.core.di.appModule
 import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.my_books.di.myBooksModule
+import ru.mamykin.settings.di.settingsModule
 import ru.mamykin.store.di.booksStoreModule
 
 class ReaderApp : MultiDexApplication() {
@@ -33,7 +34,8 @@ class ReaderApp : MultiDexApplication() {
             modules(listOf(
                     appModule,
                     myBooksModule,
-                    booksStoreModule
+                    booksStoreModule,
+                    settingsModule
             ))
         }
     }
