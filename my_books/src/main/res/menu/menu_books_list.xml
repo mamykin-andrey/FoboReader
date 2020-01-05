@@ -7,12 +7,10 @@
         android:icon="@drawable/ic_search"
         android:title="@string/menu_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:iconTint="@android:color/black"
         app:showAsAction="ifRoom|collapseActionView" />
     <item
         android:icon="@drawable/ic_sort"
         android:title="@string/menu_sort"
-        app:iconTint="@android:color/black"
         app:showAsAction="ifRoom">
         <menu>
             <item
