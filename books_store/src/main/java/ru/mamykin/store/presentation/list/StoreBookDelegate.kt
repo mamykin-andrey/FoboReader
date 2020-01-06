@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_store_book.view.*
 import ru.mamykin.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.store.R
-import ru.mamykin.store.domain.entity.StoreBook
+import ru.mamykin.store.domain.model.StoreBook
 
 class StoreBookDelegate : AdapterDelegate<Any>() {
 

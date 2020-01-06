@@ -1,11 +1,12 @@
 package ru.mamykin.store.presentation
 
+import android.util.Log
 import kotlinx.coroutines.launch
 import ru.mamykin.core.mvvm.BaseViewModel
 import ru.mamykin.store.domain.BooksStoreInteractor
-import ru.mamykin.store.domain.entity.StoreBook
+import ru.mamykin.store.domain.model.StoreBook
 
-class BooksStoreViewModel (
+class BooksStoreViewModel(
         private val interactor: BooksStoreInteractor
 ) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action, String>(
         ViewState(isLoading = true)
@@ -13,7 +14,10 @@ class BooksStoreViewModel (
     fun loadBooks() = launch {
         runCatching { interactor.getBooks() }
                 .onSuccess { onAction(Action.BooksLoaded(it)) }
-                .onFailure { onAction(Action.LoadingError) }
+                .onFailure {
+                    it.printStackTrace()
+                    onAction(Action.LoadingError)
+                }
     }
 
     override fun reduceState(action: Action): ViewState = when (action) {

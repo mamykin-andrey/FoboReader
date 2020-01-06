@@ -46,11 +46,11 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
     }
 
     private fun initViewModel() {
-        viewModel.loadBooks()
         viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
             srlRefresh.isRefreshing = state.isLoading
-            state.isError.takeIf { it }?.let { showSnackbar(R.string.books_store_load_error) }
+            if (state.isError) showSnackbar(R.string.books_store_load_error)
             state.books.takeIf { it.isNotEmpty() }?.let(adapter::changeItems)
         })
+        viewModel.loadBooks()
     }
 }
