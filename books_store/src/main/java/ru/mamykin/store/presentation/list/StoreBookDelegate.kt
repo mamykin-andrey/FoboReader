@@ -2,6 +2,7 @@ package ru.mamykin.store.presentation.list
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_store_book.view.*
 import ru.mamykin.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.store.R
@@ -23,6 +24,7 @@ class StoreBookDelegate : AdapterDelegate<Any>() {
 class StoreCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(book: StoreBook) = with(itemView) {
+        Picasso.with(context).load(book.cover).into(ivBookCover)
         tvBookName.text = book.title
         tvBookAuthor.text = book.author
         tvBookGenre.text = book.genre
