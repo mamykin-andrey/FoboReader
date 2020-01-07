@@ -3,15 +3,18 @@ package ru.mamykin.store.presentation.list
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.mamykin.core.ui.adapterdelegates.AdapterDelegatesManager
+import ru.mamykin.store.domain.model.StoreBook
 
-class BooksStoreRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BooksStoreRecyclerAdapter(
+        onBookClicked: (StoreBook) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<Any> = listOf()
 
     private val delegatesManager = AdapterDelegatesManager<Any>()
 
     init {
-        delegatesManager.addDelegate(StoreBookDelegate())
+        delegatesManager.addDelegate(StoreBookDelegate(onBookClicked))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

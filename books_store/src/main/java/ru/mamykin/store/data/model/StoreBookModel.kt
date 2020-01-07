@@ -12,6 +12,8 @@ data class StoreBookModel(
         val title: String,
         @SerializedName("lang")
         val lang: String,
+        @SerializedName("format")
+        val format: String,
         @SerializedName("cover")
         val cover: String,
         @SerializedName("link")
@@ -22,6 +24,7 @@ data class StoreBookModel(
             author = author,
             title = title,
             lang = lang,
+            _format = format,
             cover = cover,
             link = link
     )

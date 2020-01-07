@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_main_store.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.mamykin.core.extension.externalMediaDir
 import ru.mamykin.core.extension.showSnackbar
 import ru.mamykin.core.ui.BaseFragment
 import ru.mamykin.core.ui.UiUtils
@@ -18,13 +19,17 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
         fun newInstance(): BooksStoreFragment = BooksStoreFragment()
     }
 
-    private val adapter = BooksStoreRecyclerAdapter()
+    private val adapter = BooksStoreRecyclerAdapter { book ->
+        context?.externalMediaDir?.let { file ->
+            viewModel.onEvent(BooksStoreViewModel.Event.BookClicked(book, file))
+        }
+    }
     private val viewModel: BooksStoreViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //srlRefresh.setOnRefreshListener { viewModel.loadBooks() }
+        srlRefresh.setOnRefreshListener { viewModel.onEvent(BooksStoreViewModel.Event.LoadBooks) }
         UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context))
         initToolbar()
         initViewModel()
@@ -34,15 +39,6 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
         toolbar!!.title = getString(R.string.books_store)
         toolbar!!.inflateMenu(R.menu.menu_books_store)
         toolbar!!.setOnMenuItemClickListener { true }
-//        UiUtils.setupSearchView(context!!, menu!!, R.id.action_search, R.string.menu_search, object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                return false
-//            }
-//        })
     }
 
     private fun initViewModel() {
@@ -51,6 +47,6 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
             if (state.isError) showSnackbar(R.string.books_store_load_error)
             state.books.takeIf { it.isNotEmpty() }?.let(adapter::changeItems)
         })
-        viewModel.loadBooks()
+        viewModel.onEvent(BooksStoreViewModel.Event.LoadBooks)
     }
 }

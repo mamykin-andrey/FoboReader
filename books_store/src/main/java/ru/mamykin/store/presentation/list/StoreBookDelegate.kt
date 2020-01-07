@@ -8,25 +8,33 @@ import ru.mamykin.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.store.R
 import ru.mamykin.store.domain.model.StoreBook
 
-class StoreBookDelegate : AdapterDelegate<Any>() {
+class StoreBookDelegate(
+        private val onBookClicked: (StoreBook) -> Unit
+) : AdapterDelegate<Any>() {
 
     override fun isForViewType(item: Any): Boolean = item is StoreBook
 
     override fun getLayoutId(): Int = R.layout.item_store_book
 
-    override fun createViewHolder(itemView: View) = StoreCategoryViewHolder(itemView)
+    override fun createViewHolder(itemView: View) =
+            StoreCategoryViewHolder(itemView, onBookClicked)
 
     override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
         (holder as StoreCategoryViewHolder).bind(item as StoreBook)
     }
 }
 
-class StoreCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class StoreCategoryViewHolder(
+        containerView: View,
+        private val onBookClicked: (StoreBook) -> Unit
+) : RecyclerView.ViewHolder(containerView) {
 
     fun bind(book: StoreBook) = with(itemView) {
         Picasso.with(context).load(book.cover).into(ivBookCover)
         tvBookName.text = book.title
         tvBookAuthor.text = book.author
         tvBookGenre.text = book.genre
+
+        clBook.setOnClickListener { onBookClicked(book) }
     }
 }

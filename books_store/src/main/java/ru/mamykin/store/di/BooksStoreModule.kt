@@ -10,5 +10,5 @@ val booksStoreModule = module {
     single { NetworkDependencies.service() }
     factory { BooksStoreRepository(get()) }
     factory { BooksStoreInteractor(get()) }
-    viewModel { BooksStoreViewModel(get()) }
+    viewModel { BooksStoreViewModel(get(), get()) }
 }

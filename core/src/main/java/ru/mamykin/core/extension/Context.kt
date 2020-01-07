@@ -3,12 +3,14 @@ package ru.mamykin.core.extension
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import java.io.File
 import java.io.Serializable
 
 fun Activity.showSnackbar(@StringRes messageRes: Int, long: Boolean = false) {
@@ -52,4 +54,11 @@ fun List<Pair<String, Any>>.toBundle(): Bundle = Bundle().apply {
             else -> throw IllegalArgumentException("$v is of a type that is not currently supported")
         }
     }
+}
+
+val Context.externalMediaDir: File?
+get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    externalMediaDirs.first()
+} else {
+    getExternalFilesDir(null)
 }
