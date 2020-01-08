@@ -1,5 +1,6 @@
 package ru.mamykin.core.mvvm
 
+import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,6 +35,7 @@ abstract class BaseViewModel<ViewState, Action, Router>(
         state = reduceState(action)
     }
 
+    @CallSuper
     override fun onCleared() {
         super.onCleared()
         parentJob.cancel()

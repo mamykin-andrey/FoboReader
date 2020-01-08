@@ -1,18 +1,15 @@
 package ru.mamykin.store.presentation
 
-import android.app.DownloadManager
-import android.content.Context
-import android.net.Uri
-import androidx.core.content.getSystemService
 import kotlinx.coroutines.launch
 import ru.mamykin.core.mvvm.BaseViewModel
+import ru.mamykin.store.R
 import ru.mamykin.store.domain.BooksStoreInteractor
+import ru.mamykin.store.domain.FileDownloader
 import ru.mamykin.store.domain.model.StoreBook
-import java.io.File
 
 class BooksStoreViewModel(
         private val interactor: BooksStoreInteractor,
-        private val context: Context
+        private val fileDownloader: FileDownloader
 ) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action, String>(
         ViewState(isLoading = true)
 ) {
@@ -24,7 +21,7 @@ class BooksStoreViewModel(
     fun onEvent(event: Event) {
         when (event) {
             is Event.LoadBooks -> loadBooks()
-            is Event.BookClicked -> downloadBook(event.book, event.downloadsDir)
+            is Event.BookClicked -> downloadBook(event.book)
         }
     }
 
@@ -34,17 +31,21 @@ class BooksStoreViewModel(
                 .onFailure { onAction(Action.LoadingError) }
     }
 
-    private fun downloadBook(book: StoreBook, downloadsDir: File) {
-        val bookFile = File(downloadsDir, book.getBookName())
+    private fun downloadBook(book: StoreBook) {
+        fileDownloader.download(
+                book.link,
+                book.getBookName(),
+                book.title,
+                R.string.downloading_book,
+                {
+                    // TODO: parse book, add it to db and open my_books screen
+                }
+        )
+    }
 
-        val request = DownloadManager.Request(Uri.parse(book.link))
-                .setTitle(book.title)
-                .setDescription("Загрузка книги")
-                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                .setDestinationUri(Uri.fromFile(bookFile))
-
-        val downloadManager: DownloadManager? = context.getSystemService()
-        downloadManager?.enqueue(request)
+    override fun onCleared() {
+        super.onCleared()
+        fileDownloader.release()
     }
 
     sealed class Action {
@@ -53,7 +54,7 @@ class BooksStoreViewModel(
     }
 
     sealed class Event {
-        data class BookClicked(val book: StoreBook, val downloadsDir: File) : Event()
+        data class BookClicked(val book: StoreBook) : Event()
         object LoadBooks : Event()
     }
 

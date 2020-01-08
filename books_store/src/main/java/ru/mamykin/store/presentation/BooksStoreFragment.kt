@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_main_store.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.mamykin.core.extension.externalMediaDir
 import ru.mamykin.core.extension.showSnackbar
 import ru.mamykin.core.ui.BaseFragment
 import ru.mamykin.core.ui.UiUtils
@@ -19,10 +18,8 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
         fun newInstance(): BooksStoreFragment = BooksStoreFragment()
     }
 
-    private val adapter = BooksStoreRecyclerAdapter { book ->
-        context?.externalMediaDir?.let { file ->
-            viewModel.onEvent(BooksStoreViewModel.Event.BookClicked(book, file))
-        }
+    private val adapter = BooksStoreRecyclerAdapter {
+        viewModel.onEvent(BooksStoreViewModel.Event.BookClicked(it))
     }
     private val viewModel: BooksStoreViewModel by viewModel()
 
