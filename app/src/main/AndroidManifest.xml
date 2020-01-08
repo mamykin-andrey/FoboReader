@@ -27,7 +27,7 @@
         </activity>
 
         <activity
-            android:name="ru.mamykin.book_details.presentation.BookDetailsActivity"
+            android:name="ru.mamykin.my_books.presentation.book_details.BookDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="ru.mamykin.foboreader.ui.MainActivity"

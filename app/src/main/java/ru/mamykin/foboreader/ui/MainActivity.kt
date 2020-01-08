@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.mamykin.core.extension.startActivity
 import ru.mamykin.core.ui.BaseActivity
 import ru.mamykin.foboreader.R
-import ru.mamykin.my_books.presentation.MyBooksFragment
+import ru.mamykin.my_books.presentation.my_books.MyBooksFragment
 import ru.mamykin.settings.presentation.SettingsFragment
 import ru.mamykin.store.presentation.BooksStoreFragment
 

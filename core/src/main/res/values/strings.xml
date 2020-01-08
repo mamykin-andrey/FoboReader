@@ -27,7 +27,6 @@
     <string name="book_category_desc">Изображение категории</string>
     <string name="menu_delete">Удалить</string>
     <string name="about_book">О книге</string>
-    <string name="menu_share_book">Поделиться</string>
     <string name="auth_button">Авторизоваться</string>
     <string name="navigation_background_desc">Фоновое изображение</string>
     <string name="error_book_load">Не удалось загрузить книгу, попробуйте снова, или перезапустите приложение</string>
@@ -66,6 +65,7 @@
     <string name="book_details_load_info_error">Ошибка загрузки информации о книге</string>
     <string name="books_store_load_error">Ошибка загрузки списка книг</string>
     <string name="error_book_open">Ошибка открытия книги</string>
+    <string name="error_book_remove">Ошибка открытия книги</string>
     <string name="error_book_list_loading">Не удалось загрузить список книг</string>
     <string name="error_book_loading">Не удалось загрузить информацию о книге</string>
     <string name="error_translation">Не удалось осуществить перевод</string>

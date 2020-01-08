@@ -9,7 +9,6 @@ import android.text.style.AlignmentSpan
 import ru.mamykin.core.extension.getPluralsString
 import java.util.*
 
-// TODO: refactor
 @Entity
 class FictionBook {
     @PrimaryKey

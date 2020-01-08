@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/menu_about_book"
-          android:title="@string/about_book"
-          app:showAsAction="ifRoom"/>
-    <item android:id="@+id/menu_share_book"
-          android:title="@string/menu_share_book"
-          app:showAsAction="ifRoom"/>
-    <item android:id="@+id/menu_remove_book"
-          android:title="@string/menu_delete"
-          app:showAsAction="ifRoom"/>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_about_book"
+        android:title="@string/about_book"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_remove_book"
+        android:title="@string/menu_delete"
+        app:showAsAction="ifRoom" />
 </menu>

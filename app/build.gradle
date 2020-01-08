@@ -37,7 +37,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(":core")
-    implementation project(":book_details")
     implementation project(":books_store")
     implementation project(":read_book")
     implementation project(":settings")
