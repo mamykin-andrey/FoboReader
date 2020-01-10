@@ -37,9 +37,9 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         openScreen(MyBooksFragment.Companion::newInstance)
     }
 
-    private inline fun <reified T : Fragment> openScreen(newFragmentFunc: () -> T) {
+    private inline fun <reified T : Fragment> openScreen(newInstance: () -> T) {
         val tag = T::class.java.name
-        val fragment = supportFragmentManager.findFragmentByTag(tag) ?: newFragmentFunc()
+        val fragment = supportFragmentManager.findFragmentByTag(tag) ?: newInstance()
         supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.frContent, fragment, tag)

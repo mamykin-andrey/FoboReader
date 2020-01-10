@@ -14,12 +14,12 @@ interface BookInfoDao {
     @Delete
     suspend fun delete(book: BookInfoModel)
 
-    @Query("SELECT * FROM bookinfo")
+    @Query("SELECT * FROM bookinfomodel")
     suspend fun getBooks(): List<BookInfoModel>
 
-    @Query("SELECT * FROM bookinfo WHERE title LIKE :query")
+    @Query("SELECT * FROM bookinfomodel WHERE title LIKE :query")
     suspend fun findBooks(query: String): List<BookInfoModel>
 
-    @Query("SELECT * FROM bookinfo WHERE id = :id LIMIT 1")
+    @Query("SELECT * FROM bookinfomodel WHERE id = :id LIMIT 1")
     suspend fun getBook(id: Long): BookInfoModel?
 }

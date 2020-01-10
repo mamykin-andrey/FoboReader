@@ -32,6 +32,11 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
         initViewModel()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.router = null
+    }
+
     private fun initToolbar() {
         toolbar!!.title = getString(R.string.books_store)
         toolbar!!.inflateMenu(R.menu.menu_books_store)
@@ -44,6 +49,7 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
             if (state.isError) showSnackbar(R.string.books_store_load_error)
             state.books.takeIf { it.isNotEmpty() }?.let(adapter::changeItems)
         })
+        viewModel.router = BooksStoreRouterImpl(this)
         viewModel.onEvent(BooksStoreViewModel.Event.LoadBooks)
     }
 }

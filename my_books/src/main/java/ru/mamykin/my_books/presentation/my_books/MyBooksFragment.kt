@@ -22,7 +22,7 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
     }
 
     private val viewModel: MyBooksViewModel by viewModel()
-    private val adapter: MyBooksRecyclerAdapter = MyBooksRecyclerAdapter(viewModel::onEvent)
+    private val adapter: MyBooksRecyclerAdapter = MyBooksRecyclerAdapter { viewModel.onEvent(it) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -10,12 +10,15 @@ import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
 import ru.mamykin.core.extension.externalMediaDir
 import ru.mamykin.core.extension.getLongExtra
+import ru.mamykin.store.R
 import java.io.File
+
 
 class FileDownloader(
         private val context: Context
 ) {
     private var downloadCompleteReceiver: DownloadCompleteReceiver? = null
+    private val downloadManager: DownloadManager? = context.getSystemService<DownloadManager>()
 
     /**
      * Downloading file by it's [url] into folder media/app_name/[fileName]
@@ -29,10 +32,13 @@ class FileDownloader(
             fileName: String,
             title: String,
             @StringRes descriptionRes: Int,
-            callback: () -> Unit
+            onSuccess: () -> Unit,
+            onError: (Int) -> Unit
     ) {
+        downloadManager ?: return
         val downloadsDir = context.externalMediaDir ?: return
         val bookFile = File(downloadsDir, fileName)
+        bookFile.takeIf { it.exists() }?.delete()
 
         val request = DownloadManager.Request(Uri.parse(url))
                 .setTitle(title)
@@ -40,10 +46,9 @@ class FileDownloader(
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 .setDestinationUri(Uri.fromFile(bookFile))
 
-        val downloadManager: DownloadManager? = context.getSystemService()
-        val downloadId = downloadManager?.enqueue(request)
+        val downloadId = downloadManager.enqueue(request)
 
-        downloadCompleteReceiver = DownloadCompleteReceiver(downloadId, callback)
+        downloadCompleteReceiver = DownloadCompleteReceiver(downloadId, onSuccess, onError)
         context.registerReceiver(
                 downloadCompleteReceiver,
                 IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
@@ -55,15 +60,25 @@ class FileDownloader(
                 ?.let { context.unregisterReceiver(it) }
     }
 
-    private class DownloadCompleteReceiver(
+    private inner class DownloadCompleteReceiver(
             private val downloadId: Long?,
-            private val callback: () -> Unit
+            private val onSuccess: () -> Unit,
+            private val onError: (Int) -> Unit
     ) : BroadcastReceiver() {
 
         override fun onReceive(context: Context?, intent: Intent?) {
             val loadedId = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID)
-            if (downloadId == loadedId) {
-                callback()
+            if (downloadId != null && downloadId == loadedId) {
+                val query = DownloadManager.Query().apply { setFilterById(downloadId) }
+                val cursor = downloadManager!!.query(query)?.apply { moveToFirst() } ?: return
+
+                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                val reason = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_REASON))
+                when {
+                    status == DownloadManager.STATUS_SUCCESSFUL -> onSuccess()
+                    reason == DownloadManager.ERROR_INSUFFICIENT_SPACE -> onError(R.string.error_insufficient_space)
+                    else -> onError(R.string.download_book_common_error)
+                }
             }
         }
     }
