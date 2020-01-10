@@ -1,9 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply from: '../buildsystem/dependencies.gradle'
-apply from: '../buildsystem/project.gradle'
+apply from: "$rootDir/buildsystem/dependencies.gradle"
+apply from: "$rootDir/buildsystem/project.gradle"
 
 android {
     compileSdkVersion compile_sdk_version
@@ -29,5 +28,4 @@ android {
 
 dependencies {
     implementation project(":core")
-    kapt roomCompiler
 }

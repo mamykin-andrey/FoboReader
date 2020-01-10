@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply from: '../buildsystem/dependencies.gradle'
-apply from: '../buildsystem/project.gradle'
+apply from: "$rootDir/buildsystem/dependencies.gradle"
+apply from: "$rootDir/buildsystem/project.gradle"
 
 def propertiesFile = rootProject.file('local.properties')
 def properties = new Properties()
@@ -39,8 +39,8 @@ dependencies {
     implementation kotlinStdLib
 
     implementation project(":core")
-    implementation project(":books_store")
-    implementation project(":read_book")
-    implementation project(":settings")
-    implementation project(":my_books")
+    implementation project(":feature:books_store")
+    implementation project(":feature:read_book")
+    implementation project(":feature:settings")
+    implementation project(":feature:my_books")
 }

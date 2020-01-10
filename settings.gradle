@@ -1,1 +1,1 @@
-include ':app', ':core', ':settings', ':read_book', ':books_store', ':my_books', ":buildsystem"
+include ':app', ':core', ":buildsystem", ':feature:settings', ':feature:read_book', ':feature:books_store', ':feature:my_books'
