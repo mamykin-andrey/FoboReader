@@ -1,6 +1,6 @@
 package ru.mamykin.core.platform
 
-interface Router {
+interface Navigator {
 
     fun openMyBooksScreen()
 }

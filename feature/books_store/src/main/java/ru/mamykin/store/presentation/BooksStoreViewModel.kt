@@ -2,13 +2,13 @@ package ru.mamykin.store.presentation
 
 import kotlinx.coroutines.launch
 import ru.mamykin.core.mvvm.BaseViewModel
-import ru.mamykin.core.platform.Router
+import ru.mamykin.core.platform.Navigator
 import ru.mamykin.store.domain.BooksStoreInteractor
 import ru.mamykin.store.domain.model.StoreBook
 
 class BooksStoreViewModel(
         private val interactor: BooksStoreInteractor
-) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action, Router>(
+) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action, Navigator>(
         ViewState(isLoading = true)
 ) {
     override fun reduceState(action: Action): ViewState = when (action) {

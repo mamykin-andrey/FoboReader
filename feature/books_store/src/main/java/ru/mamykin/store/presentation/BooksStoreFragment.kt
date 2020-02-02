@@ -9,7 +9,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.mamykin.core.extension.showSnackbar
-import ru.mamykin.core.platform.Router
+import ru.mamykin.core.platform.Navigator
 import ru.mamykin.core.ui.BaseFragment
 import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.store.R
@@ -19,7 +19,7 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
 
     private val adapter = BooksStoreRecyclerAdapter { viewModel.downloadBook(it) }
     private val viewModel: BooksStoreViewModel by viewModel()
-    private val router: Router by inject { parametersOf(activity) }
+    private val navigator: Navigator by inject { parametersOf(activity) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,6 +51,6 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
             if (state.isError) showSnackbar(R.string.books_store_load_error)
             state.books.takeIf { it.isNotEmpty() }?.let(adapter::changeItems)
         })
-        viewModel.router = router
+        viewModel.router = navigator
     }
 }

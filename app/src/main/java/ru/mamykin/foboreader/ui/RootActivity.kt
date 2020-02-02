@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.ui
 
-import android.content.Context
 import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -9,26 +8,19 @@ import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import ru.mamykin.core.data.SettingsStorage
-import ru.mamykin.core.extension.startActivity
-import ru.mamykin.core.platform.Router
+import ru.mamykin.core.platform.Navigator
 import ru.mamykin.core.ui.BaseActivity
 import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.navigation.KeepStateNavigator
-import ru.mamykin.foboreader.platform.MainRouter
+import ru.mamykin.foboreader.navigation.MainNavigator
 
 class RootActivity : BaseActivity(R.layout.root_activity) {
-
-    companion object {
-
-        fun start(context: Context) {
-            context.startActivity<RootActivity>()
-        }
-    }
 
     private val settingsStorage: SettingsStorage by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         initRouter()
         initTheme()
@@ -37,8 +29,8 @@ class RootActivity : BaseActivity(R.layout.root_activity) {
 
     private fun initRouter() {
         loadKoinModules(module(override = true) {
-            single<Router> {
-                MainRouter(this@RootActivity)
+            single<Navigator> {
+                MainNavigator(this@RootActivity)
             }
         })
     }

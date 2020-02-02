@@ -16,26 +16,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity
-            android:name="ru.mamykin.foboreader.ui.SplashActivity"
+            android:name="ru.mamykin.foboreader.ui.RootActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Splash">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <activity
             android:name="ru.mamykin.my_books.presentation.book_details.BookDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="ru.mamykin.foboreader.ui.RootActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name="ru.mamykin.read_book.presentation.ReadBookActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name="ru.mamykin.settings.presentation.SettingsFragment"
             android:screenOrientation="portrait" />

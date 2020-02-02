@@ -1,13 +1,13 @@
-package ru.mamykin.foboreader.platform
+package ru.mamykin.foboreader.navigation
 
 import android.app.Activity
 import androidx.navigation.findNavController
-import ru.mamykin.core.platform.Router
+import ru.mamykin.core.platform.Navigator
 import ru.mamykin.foboreader.R
 
-class MainRouter(
+class MainNavigator(
         private val activity: Activity
-) : Router {
+) : Navigator {
 
     override fun openMyBooksScreen() {
         activity.findNavController(R.id.fr_main_nav_host)
