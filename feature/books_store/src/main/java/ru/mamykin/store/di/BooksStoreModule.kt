@@ -8,9 +8,10 @@ import ru.mamykin.store.domain.FileDownloader
 import ru.mamykin.store.presentation.BooksStoreViewModel
 
 val booksStoreModule = module {
-    single { NetworkDependencies.service() }
+    single { NetworkDependencies.client() }
+    single { NetworkDependencies.service(get()) }
     factory { BooksStoreRepository(get()) }
-    factory { FileDownloader(get()) }
+    factory { FileDownloader(get(), get()) }
     factory { BooksStoreInteractor(get(), get()) }
     viewModel { BooksStoreViewModel(get()) }
 }

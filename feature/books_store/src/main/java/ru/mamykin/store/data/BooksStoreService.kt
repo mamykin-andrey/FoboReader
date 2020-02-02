@@ -10,6 +10,6 @@ interface BooksStoreService {
         const val BASE_URL = "https://demo2817206.mockable.io"
     }
 
-    @GET("ping")
+    @GET("books")
     fun getBooksAsync(): Deferred<StoreBooksModel>
 }

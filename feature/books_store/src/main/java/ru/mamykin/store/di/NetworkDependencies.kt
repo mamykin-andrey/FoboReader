@@ -9,10 +9,10 @@ import ru.mamykin.store.data.BooksStoreService
 
 internal object NetworkDependencies {
 
-    fun service(): BooksStoreService {
+    fun service(client: OkHttpClient): BooksStoreService {
         val retrofit = Retrofit.Builder()
                 .baseUrl(BooksStoreService.BASE_URL)
-                .client(client())
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .build()
@@ -20,7 +20,7 @@ internal object NetworkDependencies {
         return retrofit.create(BooksStoreService::class.java)
     }
 
-    private fun client(): OkHttpClient {
+    fun client(): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()

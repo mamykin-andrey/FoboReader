@@ -1,15 +1,14 @@
 package ru.mamykin.store.presentation
 
-import androidx.annotation.StringRes
 import kotlinx.coroutines.launch
 import ru.mamykin.core.mvvm.BaseViewModel
+import ru.mamykin.core.platform.Router
 import ru.mamykin.store.domain.BooksStoreInteractor
-import ru.mamykin.store.domain.DownloadBookException
 import ru.mamykin.store.domain.model.StoreBook
 
 class BooksStoreViewModel(
         private val interactor: BooksStoreInteractor
-) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action, BooksStoreRouter>(
+) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action, Router>(
         ViewState(isLoading = true)
 ) {
     override fun reduceState(action: Action): ViewState = when (action) {
@@ -18,40 +17,22 @@ class BooksStoreViewModel(
         is Action.DownloadBookError -> state.copy(isLoading = false, isError = true)
     }
 
-    fun onEvent(event: Event) = when (event) {
-        is Event.LoadBooks -> loadBooks()
-        is Event.BookClicked -> downloadBook(event.book)
-    }
-
-    private fun loadBooks() = launch {
+    fun loadBooks() = launch {
         runCatching { interactor.getBooks() }
                 .onSuccess { onAction(Action.BooksLoaded(it)) }
                 .onFailure { onAction(Action.LoadingError) }
     }
 
-    private fun downloadBook(book: StoreBook) = launch {
+    fun downloadBook(book: StoreBook) = launch {
         runCatching { interactor.downloadBook(book) }
                 .onSuccess { router?.openMyBooksScreen() }
-                .onFailure {
-                    val ex = it as DownloadBookException
-                    onAction(Action.DownloadBookError(ex.errMsgRes))
-                }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        interactor.onCleared()
+                .onFailure { onAction(Action.DownloadBookError) }
     }
 
     sealed class Action {
         data class BooksLoaded(val books: List<StoreBook>) : Action()
         object LoadingError : Action()
-        data class DownloadBookError(@StringRes val errMsgRes: Int) : Action()
-    }
-
-    sealed class Event {
-        data class BookClicked(val book: StoreBook) : Event()
-        object LoadBooks : Event()
+        object DownloadBookError : Action()
     }
 
     data class ViewState(
