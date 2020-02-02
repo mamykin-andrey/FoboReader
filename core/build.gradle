@@ -55,6 +55,7 @@ dependencies {
     api retrofitCoroutinesAdapter
     api retrofitLoggingInterceptor
     api picasso
+    api okio
 
     api paginatedTextView
 

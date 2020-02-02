@@ -38,6 +38,7 @@ ext {
     lifecycleViewModel = "android.arch.lifecycle:viewmodel:$viewModelVersion"
 
     retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    okio = "com.squareup.okio:okio:$retrofitVersion"
     retrofitGsonConverter = "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     retrofitCoroutinesAdapter = 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
     retrofitLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:4.3.0"

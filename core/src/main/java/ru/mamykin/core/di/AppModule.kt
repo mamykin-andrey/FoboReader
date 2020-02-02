@@ -5,7 +5,7 @@ import ru.mamykin.core.data.BookParser
 import ru.mamykin.core.data.PreferencesManager
 import ru.mamykin.core.data.SettingsStorage
 
-val appModule = module {
+val coreModule = module {
     single { PreferencesManager(get()) }
     single { SettingsStorage(get()) }
     factory { BookParser() }

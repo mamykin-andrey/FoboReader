@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="ru.mamykin.foboreader.ReaderApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -30,7 +29,7 @@
             android:name="ru.mamykin.my_books.presentation.book_details.BookDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="ru.mamykin.foboreader.ui.MainActivity"
+            android:name="ru.mamykin.foboreader.ui.RootActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="ru.mamykin.read_book.presentation.ReadBookActivity"

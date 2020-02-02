@@ -5,7 +5,7 @@ import ru.mamykin.core.BuildConfig
 
 object Log {
 
-    fun error(message: String, tag: String? = "") {
+    fun error(message: String, tag: String? = "foboreader") {
         if (BuildConfig.DEBUG) {
             Log.e(tag, message)
         }

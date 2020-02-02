@@ -56,8 +56,7 @@ fun List<Pair<String, Any>>.toBundle(): Bundle = Bundle().apply {
     }
 }
 
-val Context.externalMediaDir: File?
-get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+fun Context.getExternalMediaDir(): File? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
     externalMediaDirs.first()
 } else {
     getExternalFilesDir(null)

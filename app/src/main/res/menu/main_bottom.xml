@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_my_books"
+        android:id="@+id/myBooksFragment"
         android:icon="@drawable/ic_book"
         android:title="@string/my_books" />
     <item
-        android:id="@+id/menu_books_store"
+        android:id="@+id/booksStoreFragment"
         android:icon="@drawable/ic_store"
         android:title="@string/books_store" />
     <item
-        android:id="@+id/menu_settings"
+        android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings" />
 </menu>

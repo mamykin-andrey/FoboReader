@@ -15,6 +15,8 @@ abstract class BaseFragment(
 
     protected var toolbar: Toolbar? = null
 
+    private var dataLoaded = false
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -24,4 +26,13 @@ abstract class BaseFragment(
         toolbar = view.findViewById(R.id.toolbar)
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (!dataLoaded) {
+            loadData()
+        }
+    }
+
+    open fun loadData() {}
 }
