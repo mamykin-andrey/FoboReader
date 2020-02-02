@@ -24,7 +24,7 @@ data class StoreBookModel(
             author = author,
             title = title,
             lang = lang,
-            _format = format,
+            format = format,
             cover = cover,
             link = link
     )

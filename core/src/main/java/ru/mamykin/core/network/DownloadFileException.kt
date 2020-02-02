@@ -1,3 +1,3 @@
-package ru.mamykin.store.domain
+package ru.mamykin.core.network
 
 class DownloadFileException : RuntimeException()

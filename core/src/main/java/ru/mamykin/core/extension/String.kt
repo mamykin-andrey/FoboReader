@@ -14,3 +14,7 @@ fun String.toDate(): Date? {
 
     return null
 }
+
+fun String.transliterate(): String {
+    return StringTransliterator.transliterate(this)
+}

@@ -2,11 +2,11 @@ package ru.mamykin.store.presentation
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_main_store.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.mamykin.core.extension.showSnackbar
 import ru.mamykin.core.ui.BaseFragment
 import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.store.R
@@ -42,5 +42,9 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
             if (state.isError) showSnackbar(R.string.books_store_load_error)
             state.books.takeIf { it.isNotEmpty() }?.let(adapter::changeItems)
         })
+    }
+
+    private fun showSnackbar(msgId: Int) {
+        Toast.makeText(context, getString(msgId), Toast.LENGTH_SHORT).show()
     }
 }

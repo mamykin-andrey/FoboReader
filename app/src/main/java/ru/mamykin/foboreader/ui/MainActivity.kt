@@ -1,6 +1,9 @@
 package ru.mamykin.foboreader.ui
 
 import android.os.Bundle
+import androidx.annotation.StringRes
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
@@ -11,7 +14,7 @@ import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.navigation.NavigatorImpl
 
-class MainActivity : BaseActivity(R.layout.main_activity) {
+class MainActivity : BaseActivity(R.layout.activity_main) {
 
     private val settingsStorage: SettingsStorage by inject()
 
@@ -39,5 +42,9 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
 
     private fun initTheme() {
         UiUtils.enableNightMode(settingsStorage.isNightTheme)
+    }
+
+    fun showSnackbar(@StringRes messageResId: Int) {
+        Snackbar.make(cl_main, getString(messageResId), Snackbar.LENGTH_SHORT)
     }
 }

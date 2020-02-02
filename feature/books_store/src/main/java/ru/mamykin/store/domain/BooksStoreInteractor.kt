@@ -1,5 +1,6 @@
 package ru.mamykin.store.domain
 
+import ru.mamykin.core.network.FileDownloader
 import ru.mamykin.store.data.BooksStoreRepository
 import ru.mamykin.store.domain.model.StoreBook
 
@@ -12,6 +13,6 @@ class BooksStoreInteractor constructor(
     }
 
     suspend fun downloadBook(book: StoreBook) {
-        fileDownloader.download(book.link, book.getBookName())
+        fileDownloader.download(book.link, book.getFileName())
     }
 }
