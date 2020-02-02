@@ -7,7 +7,8 @@ import ru.mamykin.store.domain.BooksStoreInteractor
 import ru.mamykin.store.domain.model.StoreBook
 
 class BooksStoreViewModel(
-        private val interactor: BooksStoreInteractor
+        private val interactor: BooksStoreInteractor,
+        private val navigator: Navigator
 ) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action, Navigator>(
         ViewState(isLoading = true)
 ) {
@@ -25,7 +26,7 @@ class BooksStoreViewModel(
 
     fun downloadBook(book: StoreBook) = launch {
         runCatching { interactor.downloadBook(book) }
-                .onSuccess { router?.openMyBooksScreen() }
+                .onSuccess { navigator.openMyBooksScreen() }
                 .onFailure { onAction(Action.DownloadBookError) }
     }
 

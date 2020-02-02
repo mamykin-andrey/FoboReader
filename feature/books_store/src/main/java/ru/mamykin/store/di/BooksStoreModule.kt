@@ -13,5 +13,5 @@ val booksStoreModule = module {
     factory { BooksStoreRepository(get()) }
     factory { FileDownloader(get(), get()) }
     factory { BooksStoreInteractor(get(), get()) }
-    viewModel { BooksStoreViewModel(get()) }
+    viewModel { BooksStoreViewModel(get(), get()) }
 }

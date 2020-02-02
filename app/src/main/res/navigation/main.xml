@@ -3,27 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_main"
-    app:startDestination="@id/myBooksFragment">
+    app:startDestination="@id/tabsFragment">
 
-    <keep_state_fragment
-        android:id="@+id/myBooksFragment"
-        android:name="ru.mamykin.my_books.presentation.my_books.MyBooksFragment"
-        android:label="MyBooksFragment">
-
-        <action
-            android:id="@+id/action_myBooksFragment_to_booksStoreFragment"
-            app:destination="@id/booksStoreFragment" />
-
-    </keep_state_fragment>
-
-    <keep_state_fragment
-        android:id="@+id/booksStoreFragment"
-        android:name="ru.mamykin.store.presentation.BooksStoreFragment"
-        android:label="BooksStoreFragment" />
-
-    <keep_state_fragment
-        android:id="@+id/settingsFragment"
-        android:name="ru.mamykin.settings.presentation.SettingsFragment"
-        android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/tabsFragment"
+        android:name="ru.mamykin.foboreader.ui.TabsFragment"
+        android:label="TabsFragment" />
 
 </navigation>
