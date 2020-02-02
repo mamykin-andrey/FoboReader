@@ -10,7 +10,7 @@ class MainRouter(
 ) : Router {
 
     override fun openMyBooksScreen() {
-        activity.findNavController(R.id.frMainNavHost)
+        activity.findNavController(R.id.fr_main_nav_host)
                 .navigate(R.id.myBooksFragment)
     }
 }
