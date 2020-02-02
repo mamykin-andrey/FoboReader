@@ -15,6 +15,7 @@ abstract class BaseViewModel<ViewState, Action, Router>(
 ) : ViewModel(), CoroutineScope {
 
     private val parentJob = Job()
+    private val stateDebugger = StateDebugger<ViewState>()
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + parentJob
@@ -23,6 +24,7 @@ abstract class BaseViewModel<ViewState, Action, Router>(
 
     protected var state: ViewState by Delegates.observable(initialState) { _, _, new ->
         _stateLiveData.value = new
+        stateDebugger.onStateChanged(new)
     }
     private val _stateLiveData = MutableLiveData<ViewState>()
 
@@ -30,6 +32,10 @@ abstract class BaseViewModel<ViewState, Action, Router>(
         get() = _stateLiveData
 
     abstract fun reduceState(action: Action): ViewState
+
+    init {
+        state = initialState
+    }
 
     open fun onAction(action: Action) {
         state = reduceState(action)

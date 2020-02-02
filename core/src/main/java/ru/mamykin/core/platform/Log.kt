@@ -5,9 +5,17 @@ import ru.mamykin.core.BuildConfig
 
 object Log {
 
-    fun error(message: String, tag: String? = "foboreader") {
+    private const val DEFAULT_TAG = "foboreader"
+
+    fun error(message: String, tag: String? = DEFAULT_TAG) {
         if (BuildConfig.DEBUG) {
             Log.e(tag, message)
+        }
+    }
+
+    fun debug(message: String, tag: String? = DEFAULT_TAG) {
+        if (BuildConfig.DEBUG) {
+            Log.d(tag, message)
         }
     }
 }
