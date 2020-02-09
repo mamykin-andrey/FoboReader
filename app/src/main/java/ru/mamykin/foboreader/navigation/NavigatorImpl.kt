@@ -19,4 +19,12 @@ class NavigatorImpl(
     override fun openTabsScreen() {
         navController.navigate(R.id.tabsFragment)
     }
+
+    override fun openBook(id: Long) {
+        // TODO
+    }
+
+    override fun openBookDetails(id: Long) {
+        // TODO
+    }
 }

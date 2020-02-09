@@ -19,10 +19,9 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     private val settingsStorage: SettingsStorage by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
+        initTheme()
         super.onCreate(savedInstanceState)
         initRouter()
-        initTheme()
     }
 
     fun openTab(tab: TabsFragment.Tab) {
@@ -41,6 +40,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     }
 
     private fun initTheme() {
+        setTheme(R.style.AppTheme)
         UiUtils.enableNightMode(settingsStorage.isNightTheme)
     }
 

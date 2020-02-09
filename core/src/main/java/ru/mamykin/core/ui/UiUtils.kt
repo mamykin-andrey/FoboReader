@@ -1,31 +1,48 @@
 package ru.mamykin.core.ui
 
-import android.app.UiModeManager.MODE_NIGHT_NO
 import android.content.Context
+import android.view.Menu
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
-import androidx.core.view.MenuItemCompat
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import androidx.appcompat.widget.SearchView
-import android.view.Menu
 
 object UiUtils {
 
     fun enableNightMode(enable: Boolean) {
-        val nightMode = if (enable) MODE_NIGHT_YES else MODE_NIGHT_NO
-        AppCompatDelegate.setDefaultNightMode(nightMode)
+        AppCompatDelegate.setDefaultNightMode(
+                if (enable)
+                    AppCompatDelegate.MODE_NIGHT_YES
+                else
+                    AppCompatDelegate.MODE_NIGHT_NO
+        )
     }
 
-    fun setupSearchView(context: Context, menu: Menu,
-                        @IdRes menuRes: Int, @StringRes hint: Int,
-                        listener: SearchView.OnQueryTextListener) {
+    fun setupSearchView(
+            context: Context,
+            menu: Menu,
+            @IdRes menuRes: Int,
+            @StringRes hint: Int,
+            onQueryChanged: (String) -> Unit = {},
+            onQuerySubmit: (String) -> Unit = {}
+    ) {
         val searchItem = menu.findItem(menuRes)
         val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
         searchView.queryHint = context.getString(hint)
-        searchView.setOnQueryTextListener(listener)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { onQuerySubmit(it) }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { onQueryChanged(it) }
+                return true
+            }
+        })
     }
 
     fun setupRecyclerView(context: Context,

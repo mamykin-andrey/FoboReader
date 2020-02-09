@@ -40,5 +40,6 @@ class BooksStoreViewModel(
             val isLoading: Boolean = false,
             val books: List<StoreBook> = emptyList(),
             val isError: Boolean = false
+            // TODO: downloadBookError
     )
 }

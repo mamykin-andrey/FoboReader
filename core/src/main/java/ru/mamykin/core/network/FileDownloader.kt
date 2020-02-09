@@ -36,10 +36,14 @@ class FileDownloader(
 
         val newFile = createFile(fileName)
         runCatching { downloadFile(url, newFile) }
-                .onSuccess { showNotificationFun?.invoke(fileName, NotificationEvent.Finish) }
-                .onFailure { showNotificationFun?.invoke(fileName, NotificationEvent.Error) }
-
-        Log.debug("File downloaded to ${newFile.absolutePath}")
+                .onSuccess {
+                    showNotificationFun?.invoke(fileName, NotificationEvent.Finish)
+                    Log.debug("File downloaded to ${newFile.absolutePath}")
+                }
+                .onFailure {
+                    showNotificationFun?.invoke(fileName, NotificationEvent.Error)
+                    throw it
+                }
     }
 
     private fun createFile(fileName: String): File {

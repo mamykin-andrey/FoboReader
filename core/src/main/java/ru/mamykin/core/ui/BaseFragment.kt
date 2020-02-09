@@ -30,6 +30,7 @@ abstract class BaseFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (!dataLoaded) {
+            dataLoaded = true
             loadData()
         }
     }

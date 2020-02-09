@@ -37,6 +37,9 @@ abstract class BaseViewModel<ViewState, Action, Router>(
         state = initialState
     }
 
+    open fun loadData() {
+    }
+
     open fun onAction(action: Action) {
         state = reduceState(action)
     }
