@@ -3,16 +3,23 @@ package ru.mamykin.my_books.domain.my_books
 import ru.mamykin.my_books.data.MyBooksRepository
 import ru.mamykin.my_books.domain.model.BookInfo
 
-class BooksListInteractor constructor(
-        private val repository: MyBooksRepository
+class MyBooksInteractor constructor(
+        private val repository: MyBooksRepository,
+        private val booksScanner: BookFilesScanner
 ) {
-    suspend fun getBooks(query: String? = null, sortOrder: SortOrder? = null): List<BookInfo> {
-        val books = if (query.isNullOrEmpty())
-            repository.getBooks()
-        else
-            repository.findBooks(query)
+    private var scanned = false
 
-        return sortBooks(books, sortOrder)
+    suspend fun getBooks(query: String? = null, sortOrder: SortOrder? = null): List<BookInfo> {
+        booksScanner.takeIf { !scanned }?.scan()
+
+        //val books = if (query.isNullOrEmpty())
+        val books = repository.getBooks()
+//        else
+//            repository.findBooks(query)
+
+        return books
+
+        //return sortBooks(books, sortOrder)
     }
 
     private fun sortBooks(books: List<BookInfo>, sortOrder: SortOrder?): List<BookInfo> {

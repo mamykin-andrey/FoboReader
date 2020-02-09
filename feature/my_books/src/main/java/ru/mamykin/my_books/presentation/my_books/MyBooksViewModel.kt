@@ -2,74 +2,58 @@ package ru.mamykin.my_books.presentation.my_books
 
 import kotlinx.coroutines.launch
 import ru.mamykin.core.mvvm.BaseViewModel
+import ru.mamykin.core.platform.Navigator
 import ru.mamykin.my_books.R
 import ru.mamykin.my_books.domain.model.BookInfo
-import ru.mamykin.my_books.domain.my_books.BooksListInteractor
+import ru.mamykin.my_books.domain.my_books.MyBooksInteractor
 import ru.mamykin.my_books.domain.my_books.SortOrder
+import ru.mamykin.my_books.presentation.my_books.list.BookAction
 
 class MyBooksViewModel constructor(
-        private val interactor: BooksListInteractor
-) : BaseViewModel<MyBooksViewModel.ViewState, MyBooksViewModel.Action, MyBooksRouter>(
+        private val interactor: MyBooksInteractor,
+        private val navigator: Navigator
+) : BaseViewModel<MyBooksViewModel.ViewState, MyBooksViewModel.Action, Unit>(
         ViewState(isLoading = true)
 ) {
     private var searchQuery: String = ""
     private var sortOrder: SortOrder = SortOrder.ByName
-
-    init {
-        loadBooks()
-    }
 
     override fun reduceState(action: Action): ViewState = when (action) {
         is Action.BooksLoaded -> state.copy(isLoading = false, books = action.books)
         is Action.Error -> state.copy(isLoading = false, error = action.error)
     }
 
-    private fun loadBooks() = launch {
+    fun loadBooks() = launch {
         runCatching { interactor.getBooks(searchQuery, sortOrder) }
                 .onSuccess { onAction(Action.BooksLoaded(it)) }
-                .onFailure { onAction(Action.Error(R.string.error_book_list_loading)) }
+                .onFailure {
+                    it.printStackTrace()
+                    onAction(Action.Error(R.string.error_book_list_loading))
+                }
     }
 
-    fun onEvent(event: Event) {
-        when (event) {
-            is Event.OnSortBooksClicked -> onSortBooksClicked(event.order)
-            is Event.OnQueryTextChanged -> onQueryTextChanged(event.query)
-            is Event.OnBookClicked -> onBookClicked(event.id)
-            is Event.OnBookAboutClicked -> onBookAboutClicked(event.id)
-            is Event.OnBookRemoveClicked -> onBookRemoveClicked(event.id)
+    fun onBookAction(action: BookAction, id: Long) {
+        when (action) {
+            is BookAction.Open -> navigator.openBook(id)
+            is BookAction.About -> navigator.openBookDetails(id)
+            is BookAction.Remove -> removeBook(id)
         }
     }
 
-    private fun onSortBooksClicked(sortOrder: SortOrder) {
-        this.sortOrder = sortOrder
-        loadBooks()
-    }
-
-    private fun onQueryTextChanged(searchQuery: String) {
-        this.searchQuery = searchQuery
-        loadBooks()
-    }
-
-    private fun onBookClicked(id: Long) = launch {
-        router?.openBook(id)
-    }
-
-    private fun onBookAboutClicked(id: Long) = launch {
-        router?.openBookDetails(id)
-    }
-
-    private fun onBookRemoveClicked(id: Long) = launch {
+    private fun removeBook(id: Long) = launch {
         runCatching { interactor.removeBook(id) }
                 .onSuccess { loadBooks() }
                 .onFailure { onAction(Action.Error(R.string.error_book_remove)) }
     }
 
-    sealed class Event {
-        data class OnSortBooksClicked(val order: SortOrder) : Event()
-        data class OnQueryTextChanged(val query: String) : Event()
-        data class OnBookClicked(val id: Long) : Event()
-        data class OnBookAboutClicked(val id: Long) : Event()
-        data class OnBookRemoveClicked(val id: Long) : Event()
+    fun sortBooks(sortOrder: SortOrder) {
+        this.sortOrder = sortOrder
+        loadBooks()
+    }
+
+    fun filterBooks(searchQuery: String) {
+        this.searchQuery = searchQuery
+        loadBooks()
     }
 
     sealed class Action {

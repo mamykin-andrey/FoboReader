@@ -4,10 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.mamykin.core.ui.adapterdelegates.AdapterDelegatesManager
 import ru.mamykin.my_books.domain.model.BookInfo
-import ru.mamykin.my_books.presentation.my_books.MyBooksViewModel
 
 class MyBooksRecyclerAdapter(
-        onAction: (MyBooksViewModel.Event) -> Unit
+        onAction: (BookAction, Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var books: List<BookInfo> = listOf()

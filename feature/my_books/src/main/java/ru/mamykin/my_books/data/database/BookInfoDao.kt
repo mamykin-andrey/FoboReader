@@ -5,8 +5,12 @@ import ru.mamykin.my_books.data.model.BookInfoModel
 
 @Dao
 interface BookInfoDao {
+
     @Insert
     suspend fun insert(book: BookInfoModel)
+
+    @Insert
+    suspend fun insertAll(books: List<BookInfoModel>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(book: BookInfoModel): Int

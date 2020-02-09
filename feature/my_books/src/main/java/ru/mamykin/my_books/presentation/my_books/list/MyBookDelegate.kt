@@ -7,10 +7,9 @@ import kotlinx.android.synthetic.main.item_book.view.*
 import ru.mamykin.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.my_books.R
 import ru.mamykin.my_books.domain.model.BookInfo
-import ru.mamykin.my_books.presentation.my_books.MyBooksViewModel
 
 class MyBookDelegate(
-        private val onAction: (MyBooksViewModel.Event) -> Unit
+        private val onAction: (BookAction, Long) -> Unit
 ) : AdapterDelegate<BookInfo>() {
 
     override fun isForViewType(item: BookInfo): Boolean = true
@@ -29,17 +28,17 @@ class MyBookDelegate(
 
 class BookViewHolder(
         itemView: View,
-        private val onAction: (MyBooksViewModel.Event) -> Unit
+        private val onAction: (BookAction, Long) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(book: BookInfo) = with(itemView) {
-        setOnClickListener { onAction(MyBooksViewModel.Event.OnBookClicked(book.id)) }
+        setOnClickListener { onAction(BookAction.Open, book.id) }
         btnMenu.setOnClickListener {
             PopupMenu(context, itemView).apply {
                 setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.menu_about_book -> onAction(MyBooksViewModel.Event.OnBookAboutClicked(book.id))
-                        R.id.menu_remove_book -> onAction(MyBooksViewModel.Event.OnBookRemoveClicked(book.id))
+                        R.id.menu_about_book -> onAction(BookAction.About, book.id)
+                        R.id.menu_remove_book -> onAction(BookAction.Remove, book.id)
                     }
                     return@setOnMenuItemClickListener true
                 }
@@ -55,4 +54,10 @@ class BookViewHolder(
         // tvBookAddedDate.text = book.lastOpenString
         // tvFormat.isVisible = book.isFbWtBook
     }
+}
+
+sealed class BookAction {
+    object Open : BookAction()
+    object About : BookAction()
+    object Remove : BookAction()
 }
