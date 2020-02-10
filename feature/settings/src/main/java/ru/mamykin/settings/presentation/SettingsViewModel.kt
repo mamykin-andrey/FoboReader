@@ -11,9 +11,9 @@ class SettingsViewModel constructor(
 ) {
     fun loadSettings() = launch {
         onAction(Action.SettingsLoaded(
-                settings.isNightTheme,
-                settings.brightness,
-                settings.readTextSize
+                nightTheme = settings.isNightTheme,
+                brightness = settings.brightness,
+                textSize = settings.readTextSize
         ))
     }
 
@@ -22,35 +22,37 @@ class SettingsViewModel constructor(
                 nightTheme = action.nightTheme,
                 manualBrightness = action.brightness == null,
                 brightness = action.brightness ?: 100,
-                textSize = action.textSize.toString()
+                textSize = action.textSize
         )
     }
 
-    fun onEvent(event: Event) {
-        when (event) {
-            is Event.BrightnessChanged -> settings.brightness = event.value
-            is Event.NightThemeEnabled -> settings.isNightTheme = event.value
-            is Event.BrightAutoEnabled -> event.value.takeIf { it }?.let { settings.brightness = null }
-            is Event.TextSizeDecreased -> {
-                settings.readTextSize
-                        .takeIf { it > 10 }
-                        ?.let { settings.readTextSize = it - 1 }
-            }
-            is Event.TextSizeIncreased -> {
-                settings.readTextSize
-                        .takeIf { it < 30 }
-                        ?.let { settings.readTextSize = it + 1 }
-            }
-        }
+    fun increaseTextSize() {
+        changeTextSize(settings.readTextSize + 1)
+    }
+
+    fun decreaseTextSize() {
+        changeTextSize(settings.readTextSize - 1)
+    }
+
+    private fun changeTextSize(newSize: Int) {
+        newSize.takeIf { it in 10..30 }
+                ?.let { settings.readTextSize = it }
+                ?.also { loadSettings() }
+    }
+
+    fun switchAutoBrightness(value: Boolean) {
+        value.takeIf { it }?.let { settings.brightness = null }
         loadSettings()
     }
 
-    sealed class Event {
-        data class BrightnessChanged(val value: Int) : Event()
-        data class NightThemeEnabled(val value: Boolean) : Event()
-        data class BrightAutoEnabled(val value: Boolean) : Event()
-        object TextSizeDecreased : Event()
-        object TextSizeIncreased : Event()
+    fun changeTheme(value: Boolean) {
+        settings.isNightTheme = value
+        loadSettings()
+    }
+
+    fun changeBrightness(value: Int) {
+        settings.brightness = value
+        loadSettings()
     }
 
     sealed class Action {
@@ -65,6 +67,6 @@ class SettingsViewModel constructor(
             val nightTheme: Boolean = false,
             val manualBrightness: Boolean = false,
             val brightness: Int = 0,
-            val textSize: String = ""
+            val textSize: Int = 0
     )
 }

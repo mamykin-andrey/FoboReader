@@ -4,22 +4,12 @@ import android.content.Context
 import android.view.Menu
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 
 object UiUtils {
-
-    fun enableNightMode(enable: Boolean) {
-        AppCompatDelegate.setDefaultNightMode(
-                if (enable)
-                    AppCompatDelegate.MODE_NIGHT_YES
-                else
-                    AppCompatDelegate.MODE_NIGHT_NO
-        )
-    }
 
     fun setupSearchView(
             context: Context,

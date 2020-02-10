@@ -8,9 +8,9 @@ import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import ru.mamykin.core.data.SettingsStorage
+import ru.mamykin.core.extension.enableNightTheme
 import ru.mamykin.core.platform.Navigator
 import ru.mamykin.core.ui.BaseActivity
-import ru.mamykin.core.ui.UiUtils
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.navigation.NavigatorImpl
 
@@ -41,7 +41,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
 
     private fun initTheme() {
         setTheme(R.style.AppTheme)
-        UiUtils.enableNightMode(settingsStorage.isNightTheme)
+        enableNightTheme(settingsStorage.isNightTheme)
     }
 
     fun showSnackbar(@StringRes messageResId: Int) {

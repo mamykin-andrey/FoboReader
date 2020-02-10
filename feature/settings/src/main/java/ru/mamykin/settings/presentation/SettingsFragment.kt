@@ -2,19 +2,16 @@ package ru.mamykin.settings.presentation
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.mamykin.core.extension.enableNightTheme
 import ru.mamykin.core.extension.setOnSeekBarChangeListener
 import ru.mamykin.core.ui.BaseFragment
 import ru.mamykin.settings.R
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
-
-    companion object {
-
-        fun newInstance() = SettingsFragment()
-    }
 
     private val viewModel: SettingsViewModel by viewModel()
 
@@ -32,30 +29,35 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
     private fun initViews() {
         seekbarBright.setOnSeekBarChangeListener {
-            viewModel.onEvent(SettingsViewModel.Event.BrightnessChanged(it))
+            viewModel.changeBrightness(it)
         }
         switchNightTheme.setOnCheckedChangeListener { _, c ->
-            viewModel.onEvent(SettingsViewModel.Event.NightThemeEnabled(c))
+            viewModel.changeTheme(c)
         }
         switchBrightAuto.setOnCheckedChangeListener { _, c ->
-            viewModel.onEvent(SettingsViewModel.Event.BrightAutoEnabled(c))
+            viewModel.switchAutoBrightness(c)
         }
         btnTextSizeMinus.setOnClickListener {
-            viewModel.onEvent(SettingsViewModel.Event.TextSizeDecreased)
+            viewModel.decreaseTextSize()
         }
         btnTextSizePlus.setOnClickListener {
-            viewModel.onEvent(SettingsViewModel.Event.TextSizeIncreased)
+            viewModel.increaseTextSize()
         }
     }
 
     private fun initViewModel() {
         viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
-            switchNightTheme.isChecked = state.nightTheme
+            showTheme(state.nightTheme)
             seekbarBright.isEnabled = state.manualBrightness
             switchBrightAuto.isChecked = !state.manualBrightness
             seekbarBright.progress = state.brightness
-            tvTextSize.text = state.textSize
+            tvTextSize.text = "${state.textSize}"
         })
         viewModel.loadSettings()
+    }
+
+    private fun showTheme(nightTheme: Boolean) {
+        switchNightTheme.isChecked = nightTheme
+        (activity as AppCompatActivity).enableNightTheme(nightTheme)
     }
 }

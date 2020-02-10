@@ -8,7 +8,10 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.Serializable
@@ -60,4 +63,12 @@ fun Context.getExternalMediaDir(): File? = if (Build.VERSION.SDK_INT >= Build.VE
     externalMediaDirs.first()
 } else {
     getExternalFilesDir(null)
+}
+
+fun AppCompatActivity?.enableNightTheme(enable: Boolean) {
+    val newValue = if (enable) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+    val value = AppCompatDelegate.getDefaultNightMode()
+    newValue.takeIf { it != value }
+            ?.let(AppCompatDelegate::setDefaultNightMode)
+            ?.also { this?.takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate() }
 }
