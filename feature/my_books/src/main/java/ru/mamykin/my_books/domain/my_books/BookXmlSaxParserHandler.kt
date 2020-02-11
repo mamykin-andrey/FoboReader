@@ -63,8 +63,7 @@ class BookXmlSaxParserHandler(
                         languages = listOf(),
                         date = date,
                         currentPage = 0,
-                        lastOpen = System.currentTimeMillis(),
-                        format = 0
+                        lastOpen = System.currentTimeMillis()
                 )
         )
     }

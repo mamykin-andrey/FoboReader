@@ -1,108 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/llCardContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    app:cardElevation="3dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true">
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="3dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true">
+        android:background="?android:selectableItemBackground">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/ivBookCover"
+            android:layout_width="100dp"
+            android:layout_height="120dp"
+            android:contentDescription="@string/book_cover_desc"
+            android:scaleType="centerCrop"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvBookTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/btnMenu"
+            app:layout_constraintLeft_toRightOf="@id/ivBookCover"
+            app:layout_constraintRight_toLeftOf="@id/btnMenu"
+            app:layout_constraintTop_toTopOf="@id/btnMenu"
+            tools:text="@tools:sample/lorem/random" />
+
+        <ImageButton
+            android:id="@+id/btnMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:background="?android:selectableItemBackground"
-            android:orientation="horizontal">
+            android:contentDescription="@string/context_menu_desc"
+            android:padding="10dp"
+            android:src="@drawable/ic_dots"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/ivBookCover"
-                android:layout_width="100dp"
-                android:layout_height="120dp"
-                android:contentDescription="@string/book_cover_desc"
-                android:scaleType="centerCrop"
-                tools:src="@drawable/img_no_image" />
+        <TextView
+            android:id="@+id/tvFileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintLeft_toLeftOf="@id/tvBookTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvBookTitle"
+            tools:ignore="SmallSp"
+            tools:text="FB2, 112 KB" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvAuthor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintLeft_toLeftOf="@id/tvBookTitle"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvFileInfo"
+            tools:text="@tools:sample/lorem/random" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+        <ru.mamykin.my_books.presentation.my_books.PercentProgressView
+            android:id="@+id/pvProgress"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintBottom_toTopOf="@id/tvBooksPages"
+            app:layout_constraintLeft_toLeftOf="@id/tvBooksPages"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:background="@android:color/darker_gray" />
 
-                    <TextView
-                        android:id="@+id/tvBookTitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textSize="16sp"
-                        tools:text="Гарри поттер и кубок огня" />
+        <TextView
+            android:id="@+id/tvBooksPages"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/tvBookTitle"
+            tools:text="16 страниц из 27" />
 
-                    <TextView
-                        android:id="@+id/tvFormat"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/bg_file_format"
-                        android:padding="2dp"
-                        android:text="fbwt"
-                        android:textSize="11sp"
-                        tools:ignore="HardcodedText,SmallSp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <ImageButton
-                        android:id="@+id/btnMenu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="?android:selectableItemBackground"
-                        android:contentDescription="@string/context_menu_desc"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_dots" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvAuthor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="Льюис Кэролл" />
-
-                <TextView
-                    android:id="@+id/tvBooksPages"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    tools:text="16 страниц из 27" />
-
-                <ru.mamykin.my_books.presentation.my_books.PercentProgressView
-                    android:id="@+id/pvProgress"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    tools:background="@android:color/darker_gray" />
-
-                <TextView
-                    android:id="@+id/tvBookAddedDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="Открывалась сегодня" />
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+</androidx.cardview.widget.CardView>

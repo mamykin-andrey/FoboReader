@@ -17,8 +17,7 @@ data class BookInfoModel(
         val languages: List<String>,
         val date: Date?,
         val currentPage: Int,
-        val lastOpen: Long,
-        val format: Int
+        val lastOpen: Long
 ) {
     fun toDomainModel() = BookInfo(
             id = id,
@@ -30,8 +29,7 @@ data class BookInfoModel(
             languages = languages,
             date = date,
             currentPage = currentPage,
-            lastOpen = lastOpen,
-            format = format
+            lastOpen = lastOpen
     )
 }
 
@@ -45,6 +43,5 @@ fun BookInfo.toDatabaseModel() = BookInfoModel(
         languages = languages,
         date = date,
         currentPage = currentPage,
-        lastOpen = lastOpen,
-        format = format
+        lastOpen = lastOpen
 )

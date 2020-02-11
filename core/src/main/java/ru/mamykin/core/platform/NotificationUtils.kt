@@ -27,7 +27,7 @@ object NotificationUtils {
         val channel = NotificationChannel(
                 GENERAL_CHANNEL_ID,
                 "Общие уведомления",
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
             description = "Общие уведомления от приложения"
             enableLights(true)

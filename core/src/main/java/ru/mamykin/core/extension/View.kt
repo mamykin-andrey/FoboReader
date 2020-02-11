@@ -9,6 +9,8 @@ import android.view.ViewTreeObserver
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.LayoutRes
+import androidx.annotation.MenuRes
+import androidx.appcompat.widget.PopupMenu
 import ru.mamykin.core.platform.ViewParams
 
 var View.isVisible: Boolean
@@ -48,4 +50,15 @@ fun SeekBar.setOnSeekBarChangeListener(callback: (Int) -> Unit) {
 
         override fun onStopTrackingTouch(seekBar: SeekBar?) {}
     })
+}
+
+fun View.showPopupMenu(@MenuRes menuRes: Int, vararg clicks: Pair<Int, () -> Unit>) {
+    PopupMenu(context, this).apply {
+        setOnMenuItemClickListener {
+            clicks.find { (id, _) -> it.itemId == id }?.second?.invoke()
+            return@setOnMenuItemClickListener true
+        }
+        inflate(menuRes)
+        show()
+    }
 }

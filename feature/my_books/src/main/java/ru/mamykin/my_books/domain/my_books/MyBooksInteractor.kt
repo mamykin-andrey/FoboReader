@@ -10,20 +10,20 @@ class MyBooksInteractor constructor(
     private var scanned = false
 
     suspend fun getBooks(query: String? = null, sortOrder: SortOrder? = null): List<BookInfo> {
-        booksScanner.takeIf { !scanned }?.scan()
+        booksScanner.takeIf { !scanned }
+                ?.scan()
+                ?.also { scanned = true }
 
-        //val books = if (query.isNullOrEmpty())
-        val books = repository.getBooks()
-//        else
-//            repository.findBooks(query)
+        val books = if (query.isNullOrEmpty())
+            repository.getBooks()
+        else
+            repository.findBooks(query)
 
-        return books
-
-        //return sortBooks(books, sortOrder)
+        return sortBooks(books, sortOrder)
     }
 
     private fun sortBooks(books: List<BookInfo>, sortOrder: SortOrder?): List<BookInfo> {
-        // TODO: SORT
+        // TODO: sort books by sort order
         return books
     }
 
