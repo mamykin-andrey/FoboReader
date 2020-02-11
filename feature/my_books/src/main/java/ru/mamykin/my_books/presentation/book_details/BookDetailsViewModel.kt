@@ -7,7 +7,7 @@ import ru.mamykin.my_books.domain.model.BookInfo
 
 class BookDetailsViewModel constructor(
         private val interactor: BookDetailsInteractor
-) : BaseViewModel<BookDetailsViewModel.ViewState, BookDetailsViewModel.Action, String>(
+) : BaseViewModel<BookDetailsViewModel.ViewState, BookDetailsViewModel.Action>(
         ViewState(isLoading = true)
 ) {
     private var bookId: Long = -1

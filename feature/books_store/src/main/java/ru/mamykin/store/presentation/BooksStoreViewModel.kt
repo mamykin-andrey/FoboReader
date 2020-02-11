@@ -9,7 +9,7 @@ import ru.mamykin.store.domain.model.StoreBook
 class BooksStoreViewModel(
         private val interactor: BooksStoreInteractor,
         private val navigator: Navigator
-) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action, Unit>(
+) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action>(
         ViewState(isLoading = true)
 ) {
     override fun reduceState(action: Action): ViewState = when (action) {

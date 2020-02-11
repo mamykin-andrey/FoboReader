@@ -12,7 +12,7 @@ import ru.mamykin.my_books.presentation.my_books.list.BookAction
 class MyBooksViewModel constructor(
         private val interactor: MyBooksInteractor,
         private val navigator: Navigator
-) : BaseViewModel<MyBooksViewModel.ViewState, MyBooksViewModel.Action, Unit>(
+) : BaseViewModel<MyBooksViewModel.ViewState, MyBooksViewModel.Action>(
         ViewState(isLoading = true)
 ) {
     private var searchQuery: String = ""

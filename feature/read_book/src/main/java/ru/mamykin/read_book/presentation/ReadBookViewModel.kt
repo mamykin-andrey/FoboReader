@@ -7,10 +7,10 @@ import ru.mamykin.read_book.domain.ReadBookInteractor
 
 class ReadBookViewModel constructor(
         private val interactor: ReadBookInteractor
-) : BaseViewModel<ReadBookViewModel.ViewState, ReadBookViewModel.Action, String>(
+) : BaseViewModel<ReadBookViewModel.ViewState, ReadBookViewModel.Action>(
         initialState = ViewState(isLoading = true)
 ) {
-    init {
+    override fun loadData() {
         loadBookInfo()
     }
 
@@ -68,16 +68,6 @@ class ReadBookViewModel constructor(
         runCatching { interactor.getBookInfo() }
                 .onSuccess { onAction(Action.BookInfoLoaded(it)) }
                 .onFailure { onAction(Action.BookLoadingError) }
-    }
-
-    fun onEvent(event: Event) {
-        when (event) {
-            is Event.OnSpeakWordClicked -> interactor.voiceWord(event.word)
-        }
-    }
-
-    sealed class Event {
-        data class OnSpeakWordClicked(val word: String) : Event()
     }
 
     sealed class Action {

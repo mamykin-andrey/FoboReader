@@ -6,7 +6,7 @@ import ru.mamykin.core.mvvm.BaseViewModel
 
 class SettingsViewModel constructor(
         private val settings: SettingsStorage
-) : BaseViewModel<SettingsViewModel.ViewState, SettingsViewModel.Action, String>(
+) : BaseViewModel<SettingsViewModel.ViewState, SettingsViewModel.Action>(
         ViewState()
 ) {
     fun loadSettings() = launch {
