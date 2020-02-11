@@ -15,8 +15,8 @@ interface BookInfoDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(book: BookInfoModel): Int
 
-    @Delete
-    suspend fun delete(book: BookInfoModel)
+    @Query("DELETE FROM bookinfomodel WHERE id = :bookId")
+    suspend fun remove(bookId: Long)
 
     @Query("SELECT * FROM bookinfomodel")
     suspend fun getBooks(): List<BookInfoModel>

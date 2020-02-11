@@ -64,9 +64,9 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
     private fun initViewModel() {
         viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
             srlScanBooks.isRefreshing = state.isLoading
-            state.books.takeIf { it.isNotEmpty() }?.let(adapter::changeData)
+            adapter.changeData(state.books)
             showEmptyState(state.books.isEmpty())
-            state.error?.let(::getString)?.let { showSnackbar(it) }
+            state.error?.let { showSnackbar(it) }
         })
     }
 

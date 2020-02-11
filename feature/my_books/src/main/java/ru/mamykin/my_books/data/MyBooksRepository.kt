@@ -19,6 +19,6 @@ class MyBooksRepository constructor(
     }
 
     suspend fun removeBook(id: Long) {
-        bookInfoDao.getBook(id)?.let { bookInfoDao.delete(it) }
+        bookInfoDao.remove(id)
     }
 }
