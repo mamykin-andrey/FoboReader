@@ -9,10 +9,15 @@ class MyBooksInteractor constructor(
 ) {
     private var scanned = false
 
+    suspend fun scanNewFiles(force: Boolean = false) {
+        if (!force && scanned) return
+
+        booksScanner.scan()
+        scanned = true
+    }
+
     suspend fun getBooks(query: String? = null, sortOrder: SortOrder? = null): List<BookInfo> {
-        booksScanner.takeIf { !scanned }
-                ?.scan()
-                ?.also { scanned = true }
+        scanNewFiles()
 
         val books = if (query.isNullOrEmpty())
             repository.getBooks()

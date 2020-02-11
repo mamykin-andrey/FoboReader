@@ -4,7 +4,6 @@ import androidx.navigation.findNavController
 import ru.mamykin.core.platform.Navigator
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.ui.MainActivity
-import ru.mamykin.foboreader.ui.TabsFragment
 
 class NavigatorImpl(
         private val activity: MainActivity
@@ -13,7 +12,7 @@ class NavigatorImpl(
     private val navController by lazy { activity.findNavController(R.id.fr_main_nav_host) }
 
     override fun openMyBooksScreen() {
-        activity.openTab(TabsFragment.Tab.MyBooks)
+        activity.openMyBooksScreen()
     }
 
     override fun openTabsScreen() {

@@ -24,13 +24,13 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         initRouter()
     }
 
-    fun openTab(tab: TabsFragment.Tab) {
+    fun openMyBooksScreen() {
         supportFragmentManager.findFragmentById(R.id.fr_main_nav_host)
                 ?.childFragmentManager
                 ?.fragments
                 ?.firstOrNull()
                 ?.let { it as? TabsFragment }
-                ?.openTab(tab)
+                ?.openMyBooksTab()
     }
 
     private fun initRouter() {

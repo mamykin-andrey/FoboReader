@@ -37,7 +37,7 @@ class BookViewHolder(
                     R.id.menu_remove_book to { onAction(BookAction.Remove, book.id) }
             )
         }
-        //ivBookCover!!.setImageBitmap(BitmapFactory.decodeResource(context!!.resources, R.drawable.img_no_image))
+        ivBookCover.setImageResource(R.drawable.img_no_image)
         tvBookTitle.text = book.title
         tvAuthor.text = book.author
         // pvProgress.setPercentage(book.readPercent)

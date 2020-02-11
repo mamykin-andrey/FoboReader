@@ -19,17 +19,22 @@ class MyBooksViewModel constructor(
     private var sortOrder: SortOrder = SortOrder.ByName
 
     override fun reduceState(action: Action): ViewState = when (action) {
+        is Action.Loading -> state.copy(isLoading = true, error = null)
         is Action.BooksLoaded -> state.copy(isLoading = false, books = action.books)
         is Action.Error -> state.copy(isLoading = false, error = action.error)
+    }
+
+    fun scanBooks() = launch {
+        onAction(Action.Loading)
+        runCatching { interactor.scanNewFiles(force = true) }
+                .onSuccess { loadBooks() }
+                .onFailure { onAction(Action.Error(R.string.error_book_list_loading)) }
     }
 
     fun loadBooks() = launch {
         runCatching { interactor.getBooks(searchQuery, sortOrder) }
                 .onSuccess { onAction(Action.BooksLoaded(it)) }
-                .onFailure {
-                    it.printStackTrace()
-                    onAction(Action.Error(R.string.error_book_list_loading))
-                }
+                .onFailure { onAction(Action.Error(R.string.error_book_list_loading)) }
     }
 
     fun onBookAction(action: BookAction, id: Long) {
@@ -57,6 +62,7 @@ class MyBooksViewModel constructor(
     }
 
     sealed class Action {
+        object Loading : Action()
         data class BooksLoaded(val books: List<BookInfo>) : Action()
         data class Error(val error: Int) : Action()
     }

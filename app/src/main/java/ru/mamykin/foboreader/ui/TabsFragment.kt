@@ -8,27 +8,28 @@ import kotlinx.android.synthetic.main.fragment_tabs.*
 import ru.mamykin.core.ui.BaseFragment
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.navigation.KeepStateNavigator
+import ru.mamykin.my_books.presentation.my_books.MyBooksFragment
 
 class TabsFragment : BaseFragment(R.layout.fragment_tabs) {
 
     private val navController by lazy { activity!!.findNavController(R.id.fr_tabs_host) }
+    private val navHostFragment by lazy { childFragmentManager.findFragmentById(R.id.fr_tabs_host) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBottomNavigationView()
     }
 
-    fun openTab(tab: Tab) {
-        val fragmentId = when (tab) {
-            Tab.MyBooks -> R.id.myBooksFragment
-            Tab.BooksStore -> R.id.booksStoreFragment
-            Tab.Settings -> R.id.settingsFragment
-        }
-        bnv_tabs.selectedItemId = fragmentId
+    fun openMyBooksTab() {
+        bnv_tabs.selectedItemId = R.id.myBooksFragment
+        navHostFragment!!.childFragmentManager
+                .fragments
+                .firstOrNull()
+                ?.let { it as? MyBooksFragment }
+                ?.scanBooks()
     }
 
     private fun initBottomNavigationView() {
-        val navHostFragment = childFragmentManager.findFragmentById(R.id.fr_tabs_host)
         val navigator = KeepStateNavigator(
                 context!!,
                 navHostFragment!!.childFragmentManager,
@@ -37,11 +38,5 @@ class TabsFragment : BaseFragment(R.layout.fragment_tabs) {
         navController.navigatorProvider.addNavigator(navigator)
         navController.setGraph(R.navigation.tabs)
         bnv_tabs.setupWithNavController(navController)
-    }
-
-    sealed class Tab {
-        object MyBooks : Tab()
-        object BooksStore : Tab()
-        object Settings : Tab()
     }
 }

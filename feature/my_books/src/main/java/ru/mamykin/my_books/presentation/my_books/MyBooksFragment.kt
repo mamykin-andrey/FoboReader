@@ -26,11 +26,16 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initViewModel()
-        UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context), false)
+        UiUtils.setupRecyclerView(context!!, rvMyBooks, adapter, LinearLayoutManager(context), false)
+        srlScanBooks.isEnabled = false
     }
 
     override fun loadData() {
         viewModel.loadBooks()
+    }
+
+    fun scanBooks() {
+        viewModel.scanBooks()
     }
 
     private fun initToolbar() {
@@ -58,6 +63,7 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
 
     private fun initViewModel() {
         viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
+            srlScanBooks.isRefreshing = state.isLoading
             state.books.takeIf { it.isNotEmpty() }?.let(adapter::changeData)
             showEmptyState(state.books.isEmpty())
             state.error?.let(::getString)?.let { showSnackbar(it) }
@@ -65,7 +71,7 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
     }
 
     private fun showEmptyState(show: Boolean) {
-        vNoBooks.isVisible = show
-        rvBooks.isVisible = !show
+        vNoMyBooks.isVisible = show
+        rvMyBooks.isVisible = !show
     }
 }
