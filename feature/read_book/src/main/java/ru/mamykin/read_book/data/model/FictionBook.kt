@@ -1,11 +1,11 @@
-package ru.mamykin.core.data.model
+package ru.mamykin.read_book.data.model
 
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
 import android.text.*
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.AlignmentSpan
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import ru.mamykin.core.extension.getPluralsString
 import java.util.*
 

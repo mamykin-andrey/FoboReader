@@ -1,6 +1,6 @@
 package ru.mamykin.read_book.data
 
-import ru.mamykin.core.data.model.FictionBook
+import ru.mamykin.read_book.data.model.FictionBook
 
 class ReadBookRepository(
 ) {

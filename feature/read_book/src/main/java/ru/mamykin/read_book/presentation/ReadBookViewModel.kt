@@ -1,7 +1,7 @@
 package ru.mamykin.read_book.presentation
 
 import kotlinx.coroutines.launch
-import ru.mamykin.core.data.model.FictionBook
+import ru.mamykin.read_book.data.model.FictionBook
 import ru.mamykin.core.mvvm.BaseViewModel
 import ru.mamykin.read_book.domain.ReadBookInteractor
 
