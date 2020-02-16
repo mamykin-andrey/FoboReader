@@ -2,11 +2,13 @@ package ru.mamykin.foboreader.my_books.presentation.book_details
 
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
+import ru.mamykin.foboreader.core.platform.Navigator
 import ru.mamykin.foboreader.my_books.domain.book_details.BookDetailsInteractor
 import ru.mamykin.foboreader.my_books.domain.model.BookInfo
 
-class BookDetailsViewModel constructor(
-        private val interactor: BookDetailsInteractor
+class BookDetailsViewModel(
+        private val interactor: BookDetailsInteractor,
+        private val navigator: Navigator
 ) : BaseViewModel<BookDetailsViewModel.ViewState, BookDetailsViewModel.Action>(
         ViewState(isLoading = true)
 ) {
@@ -22,24 +24,14 @@ class BookDetailsViewModel constructor(
         is Action.LoadingError -> state.copy(isLoading = false, error = true)
     }
 
-    private fun onReadBookClicked() {
-        // TODO: router?.openBook(bookPath)
+    fun onReadBookClicked() {
+        navigator.openBook(bookId)
     }
 
     private fun loadBookInfo() = launch {
         interactor.getBookInfo(bookId)
                 ?.let { sendAction(Action.BookLoaded(it)) }
                 ?: sendAction(Action.LoadingError)
-    }
-
-    fun onEvent(event: Event) {
-        when (event) {
-            is Event.OnReadBookClicked -> onReadBookClicked()
-        }
-    }
-
-    sealed class Event {
-        object OnReadBookClicked : Event()
     }
 
     sealed class Action {

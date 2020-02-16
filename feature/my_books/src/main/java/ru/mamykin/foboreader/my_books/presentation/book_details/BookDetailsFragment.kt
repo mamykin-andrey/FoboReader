@@ -29,9 +29,7 @@ class BookDetailsFragment : BaseFragment(R.layout.activity_book_detail) {
     }
 
     private fun initViews() {
-        fabRead.setOnClickListener {
-            viewModel.onEvent(BookDetailsViewModel.Event.OnReadBookClicked)
-        }
+        fabRead.setOnClickListener { viewModel.onReadBookClicked() }
     }
 
     private fun initToolbar() {
