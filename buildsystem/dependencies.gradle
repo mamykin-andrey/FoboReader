@@ -46,6 +46,9 @@ ext {
 
     paginatedTextView = 'ru.mamykin.widget:paginatedtextview:0.1.0'
 
+    navigationFragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    navigationUi = "androidx.navigation:navigation-ui-ktx:$nav_version"
+
     junit = "junit:junit:$junitVersion"
     mockito = "org.mockito:mockito-core:$mockitoVersion"
     mockitoKotlin = "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"

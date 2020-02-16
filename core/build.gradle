@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs"
 apply from: '../buildsystem/dependencies.gradle'
 apply from: '../buildsystem/project.gradle'
 
@@ -58,6 +59,9 @@ dependencies {
     api okio
 
     api paginatedTextView
+
+    api navigationFragment
+    api navigationUi
 
     testApi junit
     testApi mockito

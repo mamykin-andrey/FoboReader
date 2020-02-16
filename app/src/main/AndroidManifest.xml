@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".ReaderApp"
+        android:name=".app.ReaderApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +18,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="ru.mamykin.foboreader.ui.MainActivity"
+            android:name="ru.mamykin.foboreader.app.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Splash">
 
@@ -30,15 +30,15 @@
         </activity>
 
         <activity
-            android:name="ru.mamykin.my_books.presentation.book_details.BookDetailsActivity"
+            android:name="ru.mamykin.foboreader.my_books.presentation.book_details.BookDetailsActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="ru.mamykin.read_book.presentation.ReadBookActivity"
+            android:name="ru.mamykin.foboreader.read_book.presentation.ReadBookActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="ru.mamykin.settings.presentation.SettingsFragment"
+            android:name="ru.mamykin.foboreader.settings.presentation.SettingsFragment"
             android:screenOrientation="portrait" />
 
     </application>
