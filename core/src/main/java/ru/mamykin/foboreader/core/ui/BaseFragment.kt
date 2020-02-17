@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import ru.mamykin.foboreader.core.R
 
 abstract class BaseFragment(
@@ -14,6 +15,8 @@ abstract class BaseFragment(
 ) : Fragment() {
 
     protected var toolbar: Toolbar? = null
+    protected open val useNavigationIcon: Boolean
+        get() = false
 
     private var dataLoaded = false
 
@@ -23,8 +26,15 @@ abstract class BaseFragment(
             savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(layoutId, container, false)
-        toolbar = view.findViewById(R.id.toolbar)
+        initToolbar(view)
         return view
+    }
+
+    private fun initToolbar(view: View) {
+        toolbar = view.findViewById(R.id.toolbar)
+        toolbar?.takeIf { useNavigationIcon }
+                ?.setNavigationOnClickListener { onNavigationIconClicked() }
+                ?: run { toolbar?.navigationIcon = null }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,4 +46,8 @@ abstract class BaseFragment(
     }
 
     open fun loadData() {}
+
+    open fun onNavigationIconClicked() {
+        findNavController().popBackStack()
+    }
 }

@@ -12,6 +12,8 @@ import ru.mamykin.foboreader.my_books.domain.model.BookInfo
 
 class BookDetailsFragment : BaseFragment(R.layout.activity_book_detail) {
 
+    override val useNavigationIcon = true
+
     private val viewModel: BookDetailsViewModel by viewModel()
     private val bookId: Long by lazy {
         BookDetailsFragmentArgs.fromBundle(arguments!!).bookId
@@ -32,8 +34,8 @@ class BookDetailsFragment : BaseFragment(R.layout.activity_book_detail) {
         fabRead.setOnClickListener { viewModel.onReadBookClicked() }
     }
 
-    private fun initToolbar() {
-        toolbar!!.title = getString(R.string.book_info_title)
+    private fun initToolbar() = toolbar?.apply {
+        title = getString(R.string.book_info_title)
     }
 
     private fun initViewModel() {
