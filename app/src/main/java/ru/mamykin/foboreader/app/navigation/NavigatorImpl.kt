@@ -1,10 +1,10 @@
 package ru.mamykin.foboreader.app.navigation
 
 import androidx.navigation.findNavController
-import ru.mamykin.foboreader.core.platform.Navigator
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.app.ui.MainActivity
 import ru.mamykin.foboreader.app.ui.TabsFragmentDirections
+import ru.mamykin.foboreader.core.platform.Navigator
 
 class NavigatorImpl(
         private val activity: MainActivity
@@ -21,13 +21,14 @@ class NavigatorImpl(
     }
 
     override fun openBook(id: Long) {
-        // TODO
+        val action = TabsFragmentDirections.actionReadBook()
+                .setBookId(id)
+        navController.navigate(action)
     }
 
     override fun openBookDetails(id: Long) {
-        val action = TabsFragmentDirections.actionTabsFragmentToBookDetailsFragment()
+        val action = TabsFragmentDirections.actionBookDetails()
                 .setBookId(id)
-
         navController.navigate(action)
     }
 }
