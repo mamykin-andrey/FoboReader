@@ -3,10 +3,10 @@ package ru.mamykin.foboreader.my_books.presentation.my_books.list
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_book.view.*
+import ru.mamykin.foboreader.core.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.showPopupMenu
 import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.foboreader.my_books.R
-import ru.mamykin.foboreader.my_books.domain.model.BookInfo
 
 class MyBookDelegate(
         private val onAction: (BookAction, Long) -> Unit

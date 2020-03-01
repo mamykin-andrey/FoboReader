@@ -5,10 +5,10 @@ import android.view.View
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_book_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.mamykin.foboreader.core.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.my_books.R
-import ru.mamykin.foboreader.my_books.domain.model.BookInfo
 
 class BookDetailsFragment : BaseFragment(R.layout.activity_book_detail) {
 

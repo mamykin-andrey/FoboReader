@@ -2,8 +2,8 @@ package ru.mamykin.foboreader.my_books.di
 
 import android.content.Context
 import androidx.room.Room
-import ru.mamykin.foboreader.my_books.data.database.BookInfoDao
-import ru.mamykin.foboreader.my_books.data.database.BookInfoDatabase
+import ru.mamykin.foboreader.core.data.database.BookInfoDao
+import ru.mamykin.foboreader.core.data.database.BookInfoDatabase
 
 object DatabaseDependencies {
 

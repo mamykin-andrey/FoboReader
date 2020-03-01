@@ -1,8 +1,8 @@
-package ru.mamykin.foboreader.my_books.data.model
+package ru.mamykin.foboreader.core.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.mamykin.foboreader.my_books.domain.model.BookInfo
+import ru.mamykin.foboreader.core.domain.model.BookInfo
 import java.util.*
 
 @Entity

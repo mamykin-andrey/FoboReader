@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs"
 apply from: "$rootDir/buildsystem/dependencies.gradle"
 apply from: "$rootDir/buildsystem/project.gradle"
@@ -30,5 +29,4 @@ android {
 
 dependencies {
     implementation project(":core")
-    kapt roomCompiler
 }

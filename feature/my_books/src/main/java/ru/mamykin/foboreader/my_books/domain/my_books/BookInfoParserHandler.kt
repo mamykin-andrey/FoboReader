@@ -3,11 +3,11 @@ package ru.mamykin.foboreader.my_books.domain.my_books
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
+import ru.mamykin.foboreader.core.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.toDate
-import ru.mamykin.foboreader.my_books.domain.model.BookInfo
 import java.util.*
 
-class BookXmlSaxParserHandler(
+class BookInfoParserHandler(
         private val filePath: String,
         private val successFunc: (BookInfo) -> Unit
 ) : DefaultHandler2() {

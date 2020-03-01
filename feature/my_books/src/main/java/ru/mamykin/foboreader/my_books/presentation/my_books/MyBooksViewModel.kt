@@ -1,9 +1,9 @@
 package ru.mamykin.foboreader.my_books.presentation.my_books
 
 import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.core.domain.model.BookInfo
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
 import ru.mamykin.foboreader.core.platform.Navigator
-import ru.mamykin.foboreader.my_books.domain.model.BookInfo
 import ru.mamykin.foboreader.my_books.domain.my_books.MyBooksInteractor
 import ru.mamykin.foboreader.my_books.domain.my_books.SortOrder
 import ru.mamykin.foboreader.my_books.presentation.my_books.list.BookAction

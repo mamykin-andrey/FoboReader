@@ -1,7 +1,7 @@
-package ru.mamykin.foboreader.my_books.data.database
+package ru.mamykin.foboreader.core.data.database
 
 import androidx.room.*
-import ru.mamykin.foboreader.my_books.data.model.BookInfoModel
+import ru.mamykin.foboreader.core.data.model.BookInfoModel
 
 @Dao
 interface BookInfoDao {

@@ -1,9 +1,9 @@
-package ru.mamykin.foboreader.my_books.data
+package ru.mamykin.foboreader.core.data
 
-import ru.mamykin.foboreader.my_books.data.database.BookInfoDao
-import ru.mamykin.foboreader.my_books.domain.model.BookInfo
+import ru.mamykin.foboreader.core.data.database.BookInfoDao
+import ru.mamykin.foboreader.core.domain.model.BookInfo
 
-class MyBooksRepository constructor(
+class BookInfoRepository constructor(
         private val bookInfoDao: BookInfoDao
 ) {
     suspend fun getBooks(query: String?): List<BookInfo> = with(bookInfoDao) {

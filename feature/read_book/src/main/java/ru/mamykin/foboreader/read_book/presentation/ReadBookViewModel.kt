@@ -1,94 +1,110 @@
 package ru.mamykin.foboreader.read_book.presentation
 
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.read_book.data.model.FictionBook
+import ru.mamykin.foboreader.core.domain.model.BookInfo
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
 import ru.mamykin.foboreader.read_book.domain.ReadBookInteractor
 
 class ReadBookViewModel constructor(
         private val interactor: ReadBookInteractor
 ) : BaseViewModel<ReadBookViewModel.ViewState, ReadBookViewModel.Action>(
-        initialState = ViewState(isLoading = true)
+        ViewState(isBookInfoLoading = true)
 ) {
-    override fun loadData() {
-        loadBookInfo()
-    }
-
     override fun reduceState(action: Action): ViewState = when (action) {
-        is Action.TranslationLoading -> state.copy(
-                isTranslationLoading = true
+        is Action.BookInfoLoading -> state.copy(isBookInfoLoading = true)
+        is Action.BookInfoLoaded -> state.copy(
+                isBookInfoLoading = false,
+                pageText = "Hello world",
+                title = action.bookInfo.title,
+                currentPage = action.bookInfo.currentPage
         )
+        is Action.BookPageLoaded -> state.copy(
+                pageText = action.pageText,
+                currentPage = action.pageNum
+        )
+
+        is Action.TranslationLoading -> state.copy(isTranslationLoading = true)
         is Action.TranslationError -> state.copy(
                 isTranslationLoading = false,
-                isTranslationError = true
+                error = "Не удалось загрузить перевод"
         )
+
         is Action.ParagraphTranslationLoaded -> state.copy(
                 isTranslationLoading = false,
                 paragraphTranslation = action.source to action.translation
         )
-        is Action.ParagraphTranslationHided -> state.copy(
-                paragraphTranslation = null
-        )
-        is Action.WordTranslationLoaded -> ViewState(
+        is Action.ParagraphTranslationHided -> state.copy(paragraphTranslation = null)
+
+        is Action.WordTranslationLoaded -> state.copy(
                 isTranslationLoading = false,
                 wordTranslation = action.source to action.translation
         )
-        is Action.WordTranslationHided -> ViewState(
-                wordTranslation = null
-        )
-        is Action.BookInfoLoading -> ViewState(
-                isLoading = true
-        )
-        is Action.BookInfoLoaded -> state.copy(
-                isLoading = false,
-                bookInfo = action.book
-        )
-        is Action.BookLoadingError -> state.copy(
-                isLoading = false,
-                isBookLoadingError = true
-        )
+        is Action.WordTranslationHided -> state.copy(wordTranslation = null)
+    }
+
+    fun loadBookInfo(id: Long) = launch {
+        sendAction(Action.BookInfoLoading)
+
+        val bookInfo = interactor.getBookInfo(id)
+        sendAction(Action.BookInfoLoaded(bookInfo))
+
+        val (text, num) = interactor.getBookText()
+        sendAction(Action.BookPageLoaded(text, num))
     }
 
     fun onParagraphClicked(paragraph: String) = launch {
         sendAction(Action.TranslationLoading)
-        runCatching { interactor.getParagraphTranslation(paragraph) }
-                .onSuccess { sendAction(Action.ParagraphTranslationLoaded(paragraph, it)) }
-                .onFailure { sendAction(Action.TranslationError) }
+
+        interactor.getParagraphTranslation(paragraph)
+                ?.let { sendAction(Action.ParagraphTranslationLoaded(paragraph, it)) }
+                ?: sendAction(Action.TranslationError)
     }
 
     fun onWordClicked(word: String) = launch {
         sendAction(Action.TranslationLoading)
-        runCatching { interactor.getWordTranslation(word) }
-                .onSuccess { sendAction(Action.WordTranslationLoaded(word, it)) }
-                .onFailure { sendAction(Action.TranslationError) }
-    }
 
-    private fun loadBookInfo() = launch {
-        sendAction(Action.BookInfoLoading)
-        runCatching { interactor.getBookInfo() }
-                .onSuccess { sendAction(Action.BookInfoLoaded(it)) }
-                .onFailure { sendAction(Action.BookLoadingError) }
+        interactor.getWordTranslation(word)
+                ?.let { sendAction(Action.WordTranslationLoaded(word, it)) }
+                ?: sendAction(Action.TranslationError)
     }
 
     sealed class Action {
         object TranslationLoading : Action()
-        data class ParagraphTranslationLoaded(val source: String, val translation: String) : Action()
-        object ParagraphTranslationHided : Action()
-        data class WordTranslationLoaded(val source: String, val translation: String) : Action()
-        object WordTranslationHided : Action()
-        object BookInfoLoading : Action()
-        data class BookInfoLoaded(val book: FictionBook) : Action()
         object TranslationError : Action()
-        object BookLoadingError : Action()
+
+        data class ParagraphTranslationLoaded(
+                val source: String,
+                val translation: String
+        ) : Action()
+
+        object ParagraphTranslationHided : Action()
+
+        data class WordTranslationLoaded(
+                val source: String,
+                val translation: String
+        ) : Action()
+
+        object WordTranslationHided : Action()
+
+        object BookInfoLoading : Action()
+        data class BookInfoLoaded(val bookInfo: BookInfo) : Action()
+
+        data class BookPageLoaded(
+                val pageText: String,
+                val pageNum: Int
+        ) : Action()
     }
 
     data class ViewState(
-            val isLoading: Boolean = false,
+            val isBookInfoLoading: Boolean = false,
             val isTranslationLoading: Boolean = false,
+            val title: String = "",
+            val pageText: String = "",
+            val currentPage: Int = 0,
+            val totalPages: Int = 0,
+            val readPercent: Float = 0f,
             val wordTranslation: Pair<String, String>? = null,
             val paragraphTranslation: Pair<String, String>? = null,
-            val bookInfo: FictionBook? = null,
-            val isBookLoadingError: Boolean = false,
-            val isTranslationError: Boolean = false
+            val error: String? = null
     )
 }

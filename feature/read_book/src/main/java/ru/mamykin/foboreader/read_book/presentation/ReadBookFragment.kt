@@ -15,6 +15,12 @@ import ru.mamykin.paginatedtextview.view.OnActionListener
 class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
 
     private val viewModel: ReadBookViewModel by viewModel()
+    private lateinit var args: ReadBookFragmentArgs
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        args = ReadBookFragmentArgs.fromBundle(arguments!!)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,15 +41,20 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         initViewModel()
     }
 
+    override fun loadData() {
+        viewModel.loadBookInfo(args.bookId)
+    }
+
     private fun initViewModel() {
         viewModel.stateLiveData.observe(this, Observer { state ->
-            pbLoading.isVisible = state.isLoading
             pbLoading.isVisible = state.isTranslationLoading
-            state.wordTranslation?.let { }
-            state.paragraphTranslation?.let { }
-            state.bookInfo?.let { tvName.text = it.bookTitle }
-            if (state.isTranslationError) showSnackbar(R.string.error_translation)
-            if (state.isBookLoadingError) showSnackbar(R.string.error_book_loading)
+            tvText.text = state.pageText
+            state.wordTranslation?.let { /* TODO */ }
+            state.paragraphTranslation?.let { /* TODO */ }
+            tvName.text = state.title
+            tvRead.text = "${state.currentPage}/${state.totalPages}"
+            tvReadPercent.text = "${state.readPercent}"
+            state.error?.let { showSnackbar(it) }
         })
     }
 }

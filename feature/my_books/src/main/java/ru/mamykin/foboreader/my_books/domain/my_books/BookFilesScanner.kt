@@ -4,13 +4,13 @@ import android.content.Context
 import ru.mamykin.foboreader.core.extension.getExternalMediaDir
 import ru.mamykin.foboreader.core.extension.isFictionBook
 import ru.mamykin.foboreader.core.platform.Log
-import ru.mamykin.foboreader.my_books.data.database.BookInfoDao
-import ru.mamykin.foboreader.my_books.data.model.toDatabaseModel
+import ru.mamykin.foboreader.core.data.database.BookInfoDao
+import ru.mamykin.foboreader.core.data.model.toDatabaseModel
 
 class BookFilesScanner(
         private val context: Context,
         private val bookInfoDao: BookInfoDao,
-        private val bookParser: BookParser
+        private val bookInfoParser: BookInfoParser
 ) {
     suspend fun scan() {
         val dir = context.getExternalMediaDir() ?: run {
@@ -24,7 +24,7 @@ class BookFilesScanner(
                 ?.filter { it.isFictionBook }
                 ?.map { it.absolutePath }
                 ?.filterNot { addedFiles.contains(it) }
-                ?.map { bookParser.parse(it).toDatabaseModel() }
+                ?.map { bookInfoParser.parse(it).toDatabaseModel() }
                 ?.let { bookInfoDao.insertAll(it) }
     }
 }

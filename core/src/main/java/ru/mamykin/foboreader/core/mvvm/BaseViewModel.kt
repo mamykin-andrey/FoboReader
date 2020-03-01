@@ -35,9 +35,6 @@ abstract class BaseViewModel<ViewState, Action>(
         state = initialState
     }
 
-    open fun loadData() {
-    }
-
     open fun sendAction(action: Action) {
         state = reduceState(action)
     }
