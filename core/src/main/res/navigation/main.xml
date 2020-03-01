@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/tabsFragment">
+
+    <fragment
+        android:id="@+id/tabsFragment"
+        android:name="ru.mamykin.foboreader.app.ui.TabsFragment"
+        android:label="TabsFragment">
+
+        <action
+            android:id="@+id/action_book_details"
+            app:destination="@id/bookDetailsFragment" />
+
+        <action
+            android:id="@+id/action_read_book"
+            app:destination="@id/readBookFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookDetailsFragment"
+        android:name="ru.mamykin.foboreader.my_books.presentation.book_details.BookDetailsFragment"
+        android:label="BookDetailsFragment">
+
+        <argument
+            android:name="bookId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+
+        <action
+            android:id="@+id/action_read_book"
+            app:destination="@id/readBookFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/readBookFragment"
+        android:name="ru.mamykin.foboreader.read_book.presentation.ReadBookFragment"
+        android:label="ReadBookFragment">
+
+        <argument
+            android:name="bookId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+
+    </fragment>
+
+</navigation>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="ru.mamykin.settings.presentation.SettingsFragment">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchNightTheme"
+                style="@style/SettingsTextItemStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="18dp"
+                android:text="@string/night_theme"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchBrightAuto"
+                style="@style/SettingsTextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/brightness_auto"
+                app:layout_constraintTop_toBottomOf="@id/switchNightTheme" />
+
+            <ImageView
+                android:id="@+id/ivBrightnessIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_sun"
+                app:layout_constraintLeft_toLeftOf="@id/switchBrightAuto"
+                app:layout_constraintTop_toBottomOf="@id/switchBrightAuto" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/seekbarBright"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/ivBrightnessIcon"
+                app:layout_constraintLeft_toRightOf="@id/ivBrightnessIcon"
+                app:layout_constraintRight_toRightOf="@id/switchBrightAuto"
+                app:layout_constraintTop_toTopOf="@id/ivBrightnessIcon" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clTranslationColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp"
+                app:layout_constraintBottom_toTopOf="@id/barrierTextSize"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivBrightnessIcon">
+
+                <TextView
+                    android:id="@+id/tvTranslationColorTitle"
+                    style="@style/SettingsTextItemStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/translate_color"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/ivTranslationColor"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvTranslationColorSubtitle"
+                    style="@style/SettingsTextSubItemStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/translate_color_description"
+                    app:layout_constraintLeft_toLeftOf="@id/tvTranslationColorTitle"
+                    app:layout_constraintRight_toRightOf="@id/tvTranslationColorTitle"
+                    app:layout_constraintTop_toBottomOf="@id/tvTranslationColorTitle" />
+
+                <ImageView
+                    android:id="@+id/ivTranslationColor"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_translate_color"
+                    app:layout_constraintBottom_toBottomOf="@id/tvTranslationColorSubtitle"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvTranslationColorTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrierTextSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="top"
+                app:constraint_referenced_ids="tvTextSizeTitle,btnTextSizeMinus,tvTextSize,btnTextSizePlus"
+                tools:layout_editor_absoluteX="411dp" />
+
+            <TextView
+                android:id="@+id/tvTextSizeTitle"
+                style="@style/SettingsTextItemStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/barrierTextSize" />
+
+            <ImageButton
+                android:id="@+id/btnTextSizeMinus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_text_size_button"
+                android:contentDescription="@null"
+                android:padding="4dp"
+                android:src="@drawable/ic_minus"
+                app:layout_constraintBottom_toBottomOf="@id/btnTextSizePlus"
+                app:layout_constraintRight_toLeftOf="@id/tvTextSize"
+                app:layout_constraintTop_toTopOf="@id/btnTextSizePlus" />
+
+            <TextView
+                android:id="@+id/tvTextSize"
+                style="@style/SettingsTextItemStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/btnTextSizePlus"
+                app:layout_constraintRight_toLeftOf="@id/btnTextSizePlus"
+                app:layout_constraintTop_toTopOf="@id/btnTextSizePlus"
+                tools:text="16" />
+
+            <ImageButton
+                android:id="@+id/btnTextSizePlus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/bg_text_size_button"
+                android:contentDescription="@null"
+                android:padding="4dp"
+                android:src="@drawable/ic_plus"
+                app:layout_constraintBottom_toBottomOf="@id/tvTextSizeTitle"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvTextSizeTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ru.mamykin.foboreader">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,49 +9,26 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="ru.mamykin.foboreader.ReaderApp"
+        android:name=".app.ReaderApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
         <activity
-            android:name="ru.mamykin.foboreader.ui.splash.SplashActivity"
+            android:name="ru.mamykin.foboreader.app.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Splash">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
-        <activity
-            android:name="ru.mamykin.foboreader.ui.bookdetails.BookDetailsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="ru.mamykin.foboreader.ui.main.MainActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="ru.mamykin.foboreader.ui.readbook.ReadBookActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="ru.mamykin.foboreader.ui.settings.SettingsActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.dropbox.core.android.AuthActivity"
-            android:configChanges="orientation|keyboard"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <data android:scheme="db-mbo98pyzoi2dfxs" />
-
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
     </application>
+
 </manifest>

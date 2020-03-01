@@ -1,54 +1,25 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
-
-ext {
-    compatLibVersion = '27.1.1'
-    constraintLayoutVersion = '1.0.2'
-    crashlyticsVersion = '2.9.1@aar'
-    moxyVersion = '1.5.3'
-    daggerVersion = '2.5'
-    roomVersion = '1.0.0'
-    rxAndroidVersion = '1.2.1'
-    rxJavaVersion = '1.1.6'
-    retrofitVersion = '2.3.0'
-    converterGsonVersion = '2.1.0'
-    adapterRxJavaVersion = '2.1.0'
-    picassoVersion = '2.5.2'
-    ormliteVersion = '4.48'
-    dropboxCoreSdkVersion = '2.1.1'
-    mockitoVersion = '2.13.0'
-    mockitoKotlinVersion = '1.5.0'
-    junitVersion = '4.12'
-    kluentVersion = '1.35'
-    espressoCoreVersion = '2.2.2'
-}
+apply plugin: "androidx.navigation.safeargs"
+apply from: "$rootDir/buildsystem/dependencies.gradle"
+apply from: "$rootDir/buildsystem/project.gradle"
 
 def propertiesFile = rootProject.file('local.properties')
 def properties = new Properties()
 properties.load(new FileInputStream(propertiesFile))
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
     defaultConfig {
         multiDexEnabled true
         applicationId "ru.mamykin.foboreader"
-        minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 2
-        versionName "1.1"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    signingConfigs {
-        release {
-            keyAlias properties['keyAlias']
-            keyPassword properties['keyPassword']
-            storeFile file(properties['storeFile'])
-            storePassword properties['storePassword']
-        }
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode version_code
+        versionName version_name
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -60,49 +31,17 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation kotlinStdLib
 
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-
-    implementation "android.arch.persistence.room:runtime:$roomVersion"
-    kapt "android.arch.persistence.room:compiler:$roomVersion"
-
-    implementation "com.arello-mobile:moxy:$moxyVersion"
-    implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
-    kapt "com.arello-mobile:moxy-compiler:$moxyVersion"
-
-    implementation "io.reactivex:rxandroid:$rxAndroidVersion"
-    implementation "io.reactivex:rxjava:$rxJavaVersion"
-
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
-    implementation "com.squareup.picasso:picasso:$picassoVersion"
-
-    implementation "com.android.support:cardview-v7:$compatLibVersion"
-    implementation "com.android.support:design:$compatLibVersion"
-    implementation "com.android.support:appcompat-v7:$compatLibVersion"
-    implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
-
-    implementation 'ru.mamykin.widget:paginatedtextview:0.1.0'
-    implementation "com.j256.ormlite:ormlite-android:$ormliteVersion"
-    implementation "com.dropbox.core:dropbox-core-sdk:$dropboxCoreSdkVersion"
-    implementation("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion") {
-        transitive = true
-    }
-
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    testImplementation "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
-    testImplementation "org.amshove.kluent:kluent:$kluentVersion"
-
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoCoreVersion")
+    implementation project(":core")
+    implementation project(":feature:books_store")
+    implementation project(":feature:read_book")
+    implementation project(":feature:settings")
+    implementation project(":feature:my_books")
 }

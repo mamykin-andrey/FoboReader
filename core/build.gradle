@@ -1,0 +1,72 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs"
+apply from: '../buildsystem/dependencies.gradle'
+apply from: '../buildsystem/project.gradle'
+
+android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
+
+    defaultConfig {
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode version_code
+        versionName version_name
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api kotlinStdLib
+
+    api coreKtx
+    api recyclerView
+
+    api coroutinesCore
+    api coroutinesAndroid
+
+    api koinScope
+    api koinViewModel
+
+    api roomRuntime
+    api roomKtx
+    kapt roomCompiler
+
+    api cardView
+    api materialLib
+    api constraintLayout
+
+    api lifecycleExtensions
+    api lifecycleViewModel
+
+    api retrofit
+    api retrofitGsonConverter
+    api retrofitCoroutinesAdapter
+    api retrofitLoggingInterceptor
+    api picasso
+    api okio
+
+    api paginatedTextView
+
+    api navigationFragment
+    api navigationUi
+
+    testApi junit
+    testApi mockito
+    testApi mockitoKotlin
+    testApi kluent
+
+    androidTestApi espressoCore
+}
