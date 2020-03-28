@@ -8,19 +8,15 @@ import ru.mamykin.foboreader.read_book.domain.ReadBookInteractor
 class ReadBookViewModel constructor(
         private val interactor: ReadBookInteractor
 ) : BaseViewModel<ReadBookViewModel.ViewState, ReadBookViewModel.Action>(
-        ViewState(isBookInfoLoading = true)
+        ViewState(isBookLoading = true)
 ) {
     override fun reduceState(action: Action): ViewState = when (action) {
-        is Action.BookInfoLoading -> state.copy(isBookInfoLoading = true)
-        is Action.BookInfoLoaded -> state.copy(
-                isBookInfoLoading = false,
-                pageText = "Hello world",
-                title = action.bookInfo.title,
-                currentPage = action.bookInfo.currentPage
-        )
-        is Action.BookPageLoaded -> state.copy(
-                pageText = action.pageText,
-                currentPage = action.pageNum
+        is Action.BookLoading -> state.copy(isBookLoading = true)
+        is Action.BookLoaded -> state.copy(
+                isBookLoading = false,
+                text = action.text,
+                title = action.info.title,
+                currentPage = action.info.currentPage
         )
 
         is Action.TranslationLoading -> state.copy(isTranslationLoading = true)
@@ -43,13 +39,12 @@ class ReadBookViewModel constructor(
     }
 
     fun loadBookInfo(id: Long) = launch {
-        sendAction(Action.BookInfoLoading)
+        sendAction(Action.BookLoading)
 
-        val bookInfo = interactor.getBookInfo(id)
-        sendAction(Action.BookInfoLoaded(bookInfo))
+        val info = interactor.getBookInfo(id)
+        val content = interactor.getBookContent(info.filePath)
 
-        val (text, num) = interactor.getBookText()
-        sendAction(Action.BookPageLoaded(text, num))
+        sendAction(Action.BookLoaded(info, content.text))
     }
 
     fun onParagraphClicked(paragraph: String) = launch {
@@ -86,20 +81,15 @@ class ReadBookViewModel constructor(
 
         object WordTranslationHided : Action()
 
-        object BookInfoLoading : Action()
-        data class BookInfoLoaded(val bookInfo: BookInfo) : Action()
-
-        data class BookPageLoaded(
-                val pageText: String,
-                val pageNum: Int
-        ) : Action()
+        object BookLoading : Action()
+        data class BookLoaded(val info: BookInfo, val text: String) : Action()
     }
 
     data class ViewState(
-            val isBookInfoLoading: Boolean = false,
+            val isBookLoading: Boolean = false,
             val isTranslationLoading: Boolean = false,
             val title: String = "",
-            val pageText: String = "",
+            val text: String = "",
             val currentPage: Int = 0,
             val totalPages: Int = 0,
             val readPercent: Float = 0f,

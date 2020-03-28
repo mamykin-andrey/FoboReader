@@ -32,7 +32,7 @@ class MyBooksInteractor constructor(
     }
 
     suspend fun removeBook(id: Long) {
-        val bookInfo = repository.getBook(id) ?: run {
+        val bookInfo = repository.getBookInfo(id) ?: run {
             Log.error("Wrong book id: $id!")
             return
         }

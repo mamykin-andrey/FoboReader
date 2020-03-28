@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.read_book.presentation
 
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_read_book.*
@@ -46,9 +47,9 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     }
 
     private fun initViewModel() {
-        viewModel.stateLiveData.observe(this, Observer { state ->
+        viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
             pbLoading.isVisible = state.isTranslationLoading
-            tvText.text = state.pageText
+            tvText.setup(Html.fromHtml(state.text))
             state.wordTranslation?.let { /* TODO */ }
             state.paragraphTranslation?.let { /* TODO */ }
             tvName.text = state.title

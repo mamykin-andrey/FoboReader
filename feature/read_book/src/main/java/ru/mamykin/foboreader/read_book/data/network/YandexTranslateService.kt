@@ -1,9 +1,9 @@
-package ru.mamykin.foboreader.read_book.data
+package ru.mamykin.foboreader.read_book.data.network
 
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ru.mamykin.foboreader.read_book.domain.entity.Translation
+import ru.mamykin.foboreader.read_book.data.model.Translation
 
 interface YandexTranslateService {
 

@@ -7,6 +7,6 @@ class BookDetailsInteractor constructor(
         private val repository: BookInfoRepository
 ) {
     suspend fun getBookInfo(id: Long): BookInfo? {
-        return repository.getBook(id)
+        return repository.getBookInfo(id)
     }
 }
