@@ -18,19 +18,16 @@ class ReadBookViewModel constructor(
                 title = action.info.title,
                 currentPage = action.info.currentPage
         )
-
         is Action.TranslationLoading -> state.copy(isTranslationLoading = true)
         is Action.TranslationError -> state.copy(
                 isTranslationLoading = false,
                 error = "Не удалось загрузить перевод"
         )
-
         is Action.ParagraphTranslationLoaded -> state.copy(
                 isTranslationLoading = false,
                 paragraphTranslation = action.source to action.translation
         )
         is Action.ParagraphTranslationHided -> state.copy(paragraphTranslation = null)
-
         is Action.WordTranslationLoaded -> state.copy(
                 isTranslationLoading = false,
                 wordTranslation = action.source to action.translation

@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.read_book.presentation
 import android.os.Bundle
 import android.text.Html
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_read_book.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -17,6 +18,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
 
     private val viewModel: ReadBookViewModel by viewModel()
     private lateinit var args: ReadBookFragmentArgs
+    private var lastTextHashCode: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +29,11 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         super.onViewCreated(view, savedInstanceState)
         tvText.setOnActionListener(object : OnActionListener {
             override fun onClick(paragraph: String) {
-                viewModel.onParagraphClicked(paragraph)
+                viewModel.onParagraphClicked(paragraph.trim())
             }
 
             override fun onLongClick(word: String) {
-                viewModel.onWordClicked(word)
+                viewModel.onWordClicked(word.trim())
             }
 
             override fun onPageLoaded(state: ReadState) = with(state) {
@@ -49,13 +51,20 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     private fun initViewModel() {
         viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
             pbLoading.isVisible = state.isTranslationLoading
-            tvText.setup(Html.fromHtml(state.text))
+            setText(state.text)
             state.wordTranslation?.let { /* TODO */ }
-            state.paragraphTranslation?.let { /* TODO */ }
+            state.paragraphTranslation?.let { Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show() }
             tvName.text = state.title
             tvRead.text = "${state.currentPage}/${state.totalPages}"
             tvReadPercent.text = "${state.readPercent}"
             state.error?.let { showSnackbar(it) }
         })
+    }
+
+    private fun setText(text: String) {
+        text.hashCode()
+                .takeIf { it != lastTextHashCode }
+                ?.also { tvText.setup(Html.fromHtml(text)) }
+                ?.also { lastTextHashCode = it }
     }
 }

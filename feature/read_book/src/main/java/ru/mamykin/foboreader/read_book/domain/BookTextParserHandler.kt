@@ -11,8 +11,9 @@ class BookTextParserHandler(
 
     private var currentElement: ElementType = ElementType.Unknown
     private var currentTag: String = ""
+    private var lastSentence: String = ""
     private val sentences = mutableListOf<String>()
-    private val translations = mutableListOf<String>()
+    private val translationsMap = HashMap<String, String>()
 
     override fun startElement(
             uri: String,
@@ -29,8 +30,11 @@ class BookTextParserHandler(
         super.characters(ch, start, length)
         val str = String(ch, start, length)
         when (currentElement) {
-            ElementType.Paragraph -> sentences.add(str.trim().wrapWithTag(currentTag))
-            ElementType.Translation -> translations.add(str.trim())
+            ElementType.Paragraph -> str.trim()
+                    .also { lastSentence = it }
+                    .wrapWithTag(currentTag)
+                    .let { sentences.add(it) }
+            ElementType.Translation -> translationsMap[lastSentence] = str.trim()
         }
     }
 
@@ -45,14 +49,12 @@ class BookTextParserHandler(
     @Throws(SAXException::class)
     override fun endDocument() {
         super.endDocument()
-        val translationsMap = translations.takeIf { it.isNotEmpty() }?.let {
-            HashMap<String, String>(sentences.size).apply {
-                sentences.forEachIndexed { index, s ->
-                    this[s] = it[index]
-                }
-            }
-        }
-        successFunc.invoke(BookContent(sentences.joinToString(""), translationsMap))
+        successFunc.invoke(
+                BookContent(
+                        sentences.joinToString(""),
+                        translationsMap.takeIf { it.isNotEmpty() }
+                )
+        )
     }
 
     sealed class ElementType {
