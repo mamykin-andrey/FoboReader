@@ -44,8 +44,6 @@ ext {
     retrofitLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:4.3.0"
     picasso = "com.squareup.picasso:picasso:$picassoVersion"
 
-    paginatedTextView = 'ru.mamykin.widget:paginatedtextview:0.1.0'
-
     navigationFragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
     navigationUi = "androidx.navigation:navigation-ui-ktx:$nav_version"
 

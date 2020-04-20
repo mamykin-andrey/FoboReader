@@ -1,18 +1,20 @@
 package ru.mamykin.foboreader.read_book.presentation
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
+import android.text.SpannableString
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_read_book.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.core.extension.isVisible
+import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.read_book.R
-import ru.mamykin.paginatedtextview.pagination.ReadState
-import ru.mamykin.paginatedtextview.view.OnActionListener
+import ru.mamykin.widget.paginatedtextview.pagination.ReadState
+import ru.mamykin.widget.paginatedtextview.view.OnActionListener
 
 class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
 
@@ -51,9 +53,9 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     private fun initViewModel() {
         viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
             pbLoading.isVisible = state.isTranslationLoading
-            setText(state.text)
+            showBookText(state.text)
             state.wordTranslation?.let { /* TODO */ }
-            state.paragraphTranslation?.let { Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show() }
+            state.paragraphTranslation?.let { (p, t) -> showParagraphTranslation(p, t) }
             tvName.text = state.title
             tvRead.text = "${state.currentPage}/${state.totalPages}"
             tvReadPercent.text = "${state.readPercent}"
@@ -61,10 +63,16 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         })
     }
 
-    private fun setText(text: String) {
+    private fun showBookText(text: String) {
         text.hashCode()
                 .takeIf { it != lastTextHashCode }
                 ?.also { tvText.setup(Html.fromHtml(text)) }
                 ?.also { lastTextHashCode = it }
+    }
+
+    private fun showParagraphTranslation(paragraph: String, translation: String) {
+        tvText.text = SpannableString(paragraph + "\n\n" + translation)
+                .apply { setColor(Color.RED, paragraph.length, length - 1) }
+        lastTextHashCode = 0
     }
 }

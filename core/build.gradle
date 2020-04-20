@@ -58,8 +58,6 @@ dependencies {
     api picasso
     api okio
 
-    api paginatedTextView
-
     api navigationFragment
     api navigationUi
 

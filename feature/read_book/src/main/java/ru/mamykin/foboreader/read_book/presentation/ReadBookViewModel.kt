@@ -45,11 +45,14 @@ class ReadBookViewModel constructor(
     }
 
     fun onParagraphClicked(paragraph: String) = launch {
-        sendAction(Action.TranslationLoading)
-
-        interactor.getParagraphTranslation(paragraph)
-                ?.let { sendAction(Action.ParagraphTranslationLoaded(paragraph, it)) }
-                ?: sendAction(Action.TranslationError)
+        if (state.paragraphTranslation != null) {
+            sendAction(Action.ParagraphTranslationHided)
+        } else {
+            sendAction(Action.TranslationLoading)
+            interactor.getParagraphTranslation(paragraph)
+                    ?.let { sendAction(Action.ParagraphTranslationLoaded(paragraph, it)) }
+                    ?: sendAction(Action.TranslationError)
+        }
     }
 
     fun onWordClicked(word: String) = launch {
