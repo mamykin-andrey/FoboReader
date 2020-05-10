@@ -11,11 +11,11 @@
         android:label="TabsFragment">
 
         <action
-            android:id="@+id/action_book_details"
+            android:id="@+id/tabs_to_book_details"
             app:destination="@id/bookDetailsFragment" />
 
         <action
-            android:id="@+id/action_read_book"
+            android:id="@+id/tabs_to_read_book"
             app:destination="@id/readBookFragment" />
 
     </fragment>
@@ -31,7 +31,7 @@
             app:argType="long" />
 
         <action
-            android:id="@+id/action_read_book"
+            android:id="@+id/book_details_to_read_book"
             app:destination="@id/readBookFragment" />
 
     </fragment>

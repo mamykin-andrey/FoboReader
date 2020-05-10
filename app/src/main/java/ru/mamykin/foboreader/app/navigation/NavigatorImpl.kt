@@ -1,6 +1,8 @@
 package ru.mamykin.foboreader.app.navigation
 
+import android.widget.ImageView
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.app.ui.MainActivity
 import ru.mamykin.foboreader.app.ui.TabsFragmentDirections
@@ -21,14 +23,15 @@ class NavigatorImpl(
     }
 
     override fun openBook(id: Long) {
-        val action = TabsFragmentDirections.actionReadBook()
+        val action = TabsFragmentDirections.tabsToReadBook()
                 .setBookId(id)
         navController.navigate(action)
     }
 
-    override fun openBookDetails(id: Long) {
-        val action = TabsFragmentDirections.actionBookDetails()
+    override fun openBookDetails(id: Long, sharedImage: ImageView) {
+        val action = TabsFragmentDirections.tabsToBookDetails()
                 .setBookId(id)
-        navController.navigate(action)
+        val extras = FragmentNavigatorExtras(sharedImage to id.toString())
+        navController.navigate(action, extras)
     }
 }

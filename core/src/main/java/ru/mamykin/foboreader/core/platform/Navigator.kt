@@ -1,5 +1,7 @@
 package ru.mamykin.foboreader.core.platform
 
+import android.widget.ImageView
+
 interface Navigator {
 
     fun openMyBooksScreen()
@@ -8,5 +10,5 @@ interface Navigator {
 
     fun openBook(id: Long)
 
-    fun openBookDetails(id: Long)
+    fun openBookDetails(id: Long, sharedImage: ImageView)
 }

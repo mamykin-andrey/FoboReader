@@ -18,7 +18,7 @@ val myBooksModule = module {
     factory { BookInfoRepository(get()) }
 
     factory { MyBooksInteractor(get(), get()) }
-    viewModel { MyBooksViewModel(get(), get()) }
+    viewModel { MyBooksViewModel(get()) }
 
     factory { BookDetailsInteractor(get()) }
     viewModel { BookDetailsViewModel(get(), get()) }

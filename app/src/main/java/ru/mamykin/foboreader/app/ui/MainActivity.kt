@@ -7,12 +7,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
+import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.app.navigation.NavigatorImpl
 import ru.mamykin.foboreader.core.data.SettingsStorage
 import ru.mamykin.foboreader.core.extension.enableNightTheme
 import ru.mamykin.foboreader.core.platform.Navigator
 import ru.mamykin.foboreader.core.ui.BaseActivity
-import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.app.navigation.NavigatorImpl
 
 class MainActivity : BaseActivity(R.layout.activity_main) {
 
@@ -21,7 +21,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         initTheme()
         super.onCreate(savedInstanceState)
-        initRouter()
+        initNavigator()
     }
 
     fun openMyBooksScreen() {
@@ -33,7 +33,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
                 ?.openMyBooksTab()
     }
 
-    private fun initRouter() {
+    private fun initNavigator() {
         loadKoinModules(module(override = true) {
             single<Navigator> { NavigatorImpl(this@MainActivity) }
         })

@@ -5,14 +5,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_main_store.*
+import kotlinx.android.synthetic.main.fragment_books_store.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.core.ui.UiUtils
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.presentation.list.BooksStoreRecyclerAdapter
 
-class BooksStoreFragment : BaseFragment(R.layout.fragment_main_store) {
+class BooksStoreFragment : BaseFragment(R.layout.fragment_books_store) {
 
     private val adapter = BooksStoreRecyclerAdapter { viewModel.downloadBook(it) }
     private val viewModel: BooksStoreViewModel by viewModel()

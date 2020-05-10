@@ -19,6 +19,7 @@ class BookInfoParserHandler(
     private var firstName = ""
     private var lastName = ""
     private var middleName = ""
+    private var coverUrl = ""
 
     override fun startElement(
             uri: String,
@@ -40,6 +41,7 @@ class BookInfoParserHandler(
             ElementType.FirstName -> firstName = str
             ElementType.LastName -> lastName = str
             ElementType.MiddleName -> middleName = str
+            ElementType.Cover -> coverUrl = str
         }
     }
 
@@ -57,7 +59,7 @@ class BookInfoParserHandler(
                         id = 0,
                         filePath = filePath,
                         genre = genre,
-                        coverUrl = null,
+                        coverUrl = coverUrl,
                         author = author,
                         title = title,
                         languages = listOf(),
@@ -75,6 +77,7 @@ class BookInfoParserHandler(
         object FirstName : ElementType()
         object LastName : ElementType()
         object MiddleName : ElementType()
+        object Cover : ElementType()
         object Unknown : ElementType()
 
         companion object {
@@ -86,6 +89,7 @@ class BookInfoParserHandler(
                 "first-name" -> FirstName
                 "last-name" -> LastName
                 "middle-name" -> MiddleName
+                "cover" -> Cover
                 else -> Unknown
             }
         }

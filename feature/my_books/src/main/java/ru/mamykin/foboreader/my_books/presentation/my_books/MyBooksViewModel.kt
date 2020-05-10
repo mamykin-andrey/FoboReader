@@ -3,14 +3,11 @@ package ru.mamykin.foboreader.my_books.presentation.my_books
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.domain.model.BookInfo
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
-import ru.mamykin.foboreader.core.platform.Navigator
 import ru.mamykin.foboreader.my_books.domain.my_books.MyBooksInteractor
 import ru.mamykin.foboreader.my_books.domain.my_books.SortOrder
-import ru.mamykin.foboreader.my_books.presentation.my_books.list.BookAction
 
 class MyBooksViewModel constructor(
-        private val interactor: MyBooksInteractor,
-        private val navigator: Navigator
+        private val interactor: MyBooksInteractor
 ) : BaseViewModel<MyBooksViewModel.ViewState, MyBooksViewModel.Action>(
         ViewState(isLoading = true)
 ) {
@@ -31,15 +28,7 @@ class MyBooksViewModel constructor(
         sendAction(Action.BooksLoaded(books))
     }
 
-    fun onBookAction(action: BookAction, id: Long) {
-        when (action) {
-            is BookAction.Open -> navigator.openBook(id)
-            is BookAction.About -> navigator.openBookDetails(id)
-            is BookAction.Remove -> removeBook(id)
-        }
-    }
-
-    private fun removeBook(id: Long) = launch {
+    fun removeBook(id: Long) = launch {
         interactor.removeBook(id)
         loadBooks()
     }

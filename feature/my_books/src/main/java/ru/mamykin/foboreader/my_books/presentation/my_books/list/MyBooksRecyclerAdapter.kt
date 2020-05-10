@@ -1,19 +1,26 @@
 package ru.mamykin.foboreader.my_books.presentation.my_books.list
 
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import ru.mamykin.foboreader.core.domain.model.BookInfo
 import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegatesManager
 
 class MyBooksRecyclerAdapter(
-        onAction: (BookAction, Long) -> Unit
+        onBookClicked: (Long) -> Unit,
+        onAboutClicked: (Long, ImageView) -> Unit,
+        onRemoveClicked: (Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var books: List<BookInfo> = listOf()
     private val delegatesManager = AdapterDelegatesManager<BookInfo>()
 
     init {
-        delegatesManager.addDelegate(MyBookDelegate(onAction))
+        delegatesManager.addDelegate(MyBookDelegate(
+                onBookClicked,
+                onAboutClicked,
+                onRemoveClicked
+        ))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =

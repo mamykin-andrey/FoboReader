@@ -11,7 +11,7 @@
         android:label="MyBooksFragment">
 
         <action
-            android:id="@+id/action_myBooksFragment_to_booksStoreFragment"
+            android:id="@+id/my_books_to_books_store"
             app:destination="@id/booksStoreFragment" />
 
     </keep_state_fragment>
