@@ -6,6 +6,8 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_my_books.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.core.extension.isVisible
@@ -17,6 +19,8 @@ import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.domain.my_books.SortOrder
 import ru.mamykin.foboreader.my_books.presentation.my_books.list.MyBooksRecyclerAdapter
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
 
     private val viewModel: MyBooksViewModel by viewModel()
@@ -51,7 +55,7 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
                 menu,
                 R.id.action_search,
                 R.string.menu_search,
-                viewModel::filterBooks
+                { viewModel.filterBooks(it) }
         )
     }
 
