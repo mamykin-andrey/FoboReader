@@ -5,7 +5,7 @@ import ru.mamykin.foboreader.core.domain.model.BookInfo
 import ru.mamykin.foboreader.read_book.data.TranslateRepository
 import ru.mamykin.foboreader.read_book.domain.entity.BookContent
 
-class ReadBookInteractor constructor(
+class ReadBookInteractor(
         private val bookInfoRepository: BookInfoRepository,
         private val translateRepository: TranslateRepository,
         private val textToSpeechService: TextToSpeechService,
@@ -26,12 +26,15 @@ class ReadBookInteractor constructor(
 
     suspend fun getParagraphTranslation(sentence: String): String? {
         return bookContent.getTranslation(sentence)
-                ?: runCatching { translateRepository.getTextTranslation(sentence) }.getOrNull()
+                ?: getOnlineTextTranslation(sentence)
     }
 
-    suspend fun getWordTranslation(word: String): String? = runCatching {
-        translateRepository.getTextTranslation(word)
-    }.getOrNull()
+    suspend fun getWordTranslation(word: String): String? =
+            getOnlineTextTranslation(word)
+
+    private suspend fun getOnlineTextTranslation(text: String): String? =
+            runCatching { translateRepository.getTextTranslation(text) }
+                    .getOrNull()
 
     fun voiceWord(word: String) {
         textToSpeechService.voiceWord(word)

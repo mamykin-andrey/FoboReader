@@ -1,9 +1,6 @@
 package ru.mamykin.foboreader.app.ui
 
 import android.os.Bundle
-import androidx.annotation.StringRes
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
@@ -42,9 +39,5 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     private fun initTheme() {
         setTheme(R.style.AppTheme)
         enableNightTheme(settingsStorage.isNightTheme)
-    }
-
-    fun showSnackbar(@StringRes messageResId: Int) {
-        Snackbar.make(cl_main, getString(messageResId), Snackbar.LENGTH_SHORT)
     }
 }

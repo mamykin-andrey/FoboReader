@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -36,6 +37,13 @@ fun Fragment.showSnackbar(message: String, long: Boolean = false) {
             ?.let { Snackbar.make(it, message, duration) }
 }
 
+fun Context.showToast(messageResId: Int, long: Boolean = false) =
+        showToast(getString(messageResId), long)
+
+fun Context.showToast(message: String, long: Boolean = false) {
+    val length = if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+    Toast.makeText(this, message, length).show()
+}
 
 inline fun <reified T : Activity> Context.startActivity(vararg params: Pair<String, Any>) {
     val intent = Intent(this, T::class.java).apply {

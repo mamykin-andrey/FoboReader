@@ -37,10 +37,8 @@ class ReadBookViewModel constructor(
 
     fun loadBookInfo(id: Long) = launch {
         sendAction(Action.BookLoading)
-
         val info = interactor.getBookInfo(id)
         val content = interactor.getBookContent(info.filePath)
-
         sendAction(Action.BookLoaded(info, content.text))
     }
 

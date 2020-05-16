@@ -57,15 +57,11 @@ class MyBooksInteractor constructor(
     }
 
     private suspend fun updateBooks() {
-        booksChannel.send(getSortedBooks())
-    }
+        val books = searchQuery.takeIf { it.isNotEmpty() }
+                ?.let { repository.findBooks(it) }
+                ?: repository.getBooks()
 
-    private suspend fun getSortedBooks(): List<BookInfo> = repository.getBooks(searchQuery)
-            .sortedWith(Comparator { o1, o2 ->
-                when (sortOrder) {
-                    SortOrder.ByName -> o1.title.compareTo(o2.title)
-                    SortOrder.ByReaded -> o1.currentPage.compareTo(o2.currentPage)
-                    SortOrder.ByDate -> o1.date?.compareTo(o2.date) ?: 0
-                }
-            })
+        val sortedBooks = books.sortedWith(BooksComparatorFactory().create(sortOrder))
+        booksChannel.send(sortedBooks)
+    }
 }

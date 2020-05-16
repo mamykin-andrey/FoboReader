@@ -1,17 +1,30 @@
 package ru.mamykin.foboreader.store.presentation
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
 import ru.mamykin.foboreader.core.platform.Navigator
 import ru.mamykin.foboreader.store.domain.BooksStoreInteractor
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 class BooksStoreViewModel(
         private val interactor: BooksStoreInteractor,
         private val navigator: Navigator
 ) : BaseViewModel<BooksStoreViewModel.ViewState, BooksStoreViewModel.Action>(
         ViewState(isLoading = true)
 ) {
+    init {
+        launch {
+            interactor.booksFlow.collect {
+                sendAction(Action.BooksLoaded(it))
+            }
+        }
+    }
+
     override fun reduceState(action: Action): ViewState = when (action) {
         is Action.BooksLoaded -> state.copy(isLoading = false, books = action.books)
         is Action.LoadingError -> state.copy(isLoading = false, isError = true)
@@ -19,9 +32,12 @@ class BooksStoreViewModel(
     }
 
     fun loadBooks() = launch {
-        runCatching { interactor.getBooks() }
-                .onSuccess { sendAction(Action.BooksLoaded(it)) }
+        runCatching { interactor.loadBooks() }
                 .onFailure { sendAction(Action.LoadingError) }
+    }
+
+    fun filterBooks(query: String) = launch {
+        interactor.filterBooks(query)
     }
 
     fun downloadBook(book: StoreBook) = launch {

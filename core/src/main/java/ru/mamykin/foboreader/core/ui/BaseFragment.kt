@@ -8,6 +8,8 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import ru.mamykin.foboreader.core.R
 
@@ -61,5 +63,9 @@ abstract class BaseFragment(
 
     open fun onNavigationIconClicked() {
         findNavController().navigateUp()
+    }
+
+    protected fun <T> LiveData<T>.observe(observerFunc: (T) -> Unit) {
+        observe(viewLifecycleOwner, Observer { observerFunc(it) })
     }
 }
