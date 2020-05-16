@@ -1,11 +1,10 @@
 package ru.mamykin.widget.paginatedtextview.extension
 
-fun CharSequence.allWordsPositions(): List<Int> {
+fun CharSequence.allWordPositions(): List<Int> {
+    fun isWordDelimiter(char: Char) = char == ' ' || char == '\n'
     val indexes = mutableListOf<Int>()
-    for (i in 0 until this.length) {
-        if (this[i] == ' ' || this[i] == '\n') {
-            indexes.add(i)
-        }
+    for (i in this.indices) {
+        if (isWordDelimiter(this[i])) indexes.add(i)
     }
     return indexes
 }

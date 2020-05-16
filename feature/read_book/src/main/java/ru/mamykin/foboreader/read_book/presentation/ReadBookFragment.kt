@@ -25,11 +25,11 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         super.onViewCreated(view, savedInstanceState)
         tvText.setOnActionListener(object : OnActionListener {
             override fun onClick(paragraph: String) {
-                viewModel.onParagraphClicked(paragraph.trim())
+                viewModel.translateParagraph(paragraph.trim())
             }
 
             override fun onLongClick(word: String) {
-                viewModel.onWordClicked(word.trim())
+                viewModel.translateWord(word.trim())
             }
 
             override fun onPageLoaded(state: ReadState) = with(state) {
@@ -62,8 +62,11 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     private fun showBookText(text: String) {
         text.hashCode()
                 .takeIf { it != lastTextHashCode }
-                ?.also { tvText.setup(Html.fromHtml(text)) }
-                ?.also { lastTextHashCode = it }
+                ?.let {
+                    tvText.setOnClickListener(null)
+                    tvText.setup(Html.fromHtml(text))
+                    lastTextHashCode = it
+                }
     }
 
     private fun showParagraphTranslation(info: Pair<String, String>) {
@@ -71,6 +74,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         tvText.text = SpannableString(paragraph + "\n\n" + translation).apply {
             setColor(Color.RED, paragraph.length, length - 1)
         }
+        tvText.setOnClickListener { viewModel.hideParagraphTranslation() }
         lastTextHashCode = 0
     }
 

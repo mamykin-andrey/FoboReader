@@ -41,7 +41,7 @@ class SwipeableMovementMethod : LinkMovementMethod() {
         startXCoord = event.x.toDouble()
         startTime = event.eventTime
 
-        val link = getClickableSpan(event, widget, buffer)
+        val link = getClickableSpan(event, widget, buffer) ?: return
         Selection.setSelection(buffer, buffer.getSpanStart(link), buffer.getSpanEnd(link))
 
         longClickHandler.postDelayed({ link.onLongClick(widget) }, DEFAULT_LONG_CLICK_DELAY)
@@ -53,7 +53,7 @@ class SwipeableMovementMethod : LinkMovementMethod() {
 
         if (timeDiff < MAX_TIME_THRESHOLD) {
             longClickHandler.removeCallbacksAndMessages(null)
-            val link = getClickableSpan(event, widget, buffer)
+            val link = getClickableSpan(event, widget, buffer) ?: return
             when {
                 xCoordDiff > MIN_COORD_POSITIVE_THRESHOLD -> link.onSwipeLeft(widget)
                 xCoordDiff < MIN_COORD_NEGATIVE_THRESHOLD -> link.onSwipeRight(widget)
@@ -66,14 +66,13 @@ class SwipeableMovementMethod : LinkMovementMethod() {
             event: MotionEvent,
             widget: TextView,
             buffer: Spannable
-    ): SwipeableSpan {
+    ): SwipeableSpan? {
         val clickX = event.x - widget.totalPaddingLeft + widget.scrollX
         val clickY = event.y.toInt() - widget.totalPaddingTop + widget.scrollY
 
         val line = widget.layout.getLineForVertical(clickY)
         val offset = widget.layout.getOffsetForHorizontal(line, clickX)
 
-        val spans = buffer.getSpans(offset, offset, SwipeableSpan::class.java)
-        return spans[0]
+        return buffer.getSpans(offset, offset, SwipeableSpan::class.java).firstOrNull()
     }
 }

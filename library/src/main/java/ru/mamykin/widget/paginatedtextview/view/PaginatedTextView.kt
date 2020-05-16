@@ -4,13 +4,11 @@ import android.content.Context
 import android.graphics.Color
 import android.text.Spannable
 import android.text.TextPaint
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import ru.mamykin.widget.paginatedtextview.extension.allWordsPositions
+import ru.mamykin.widget.paginatedtextview.extension.allWordPositions
 import ru.mamykin.widget.paginatedtextview.pagination.PaginationController
 import ru.mamykin.widget.paginatedtextview.pagination.ReadState
 
@@ -76,7 +74,7 @@ class PaginatedTextView @JvmOverloads constructor(
     private fun setPageState(pageState: ReadState) {
         this.text = pageState.pageText
         actionListener?.onPageLoaded(pageState)
-        updateWordsSpannables()
+        updateWordSpans()
     }
 
     private fun getSelectedWord(): String {
@@ -97,9 +95,9 @@ class PaginatedTextView @JvmOverloads constructor(
         setPageState(controller.getCurrentPage())
     }
 
-    private fun updateWordsSpannables() {
+    private fun updateWordSpans() {
         val spans = text as Spannable
-        val spaceIndexes = text.trim().allWordsPositions()
+        val spaceIndexes = text.trim().allWordPositions()
         var wordStart = 0
         var wordEnd: Int
         for (i in 0..spaceIndexes.size) {
@@ -110,13 +108,10 @@ class PaginatedTextView @JvmOverloads constructor(
         }
     }
 
-    private fun getSelectedParagraph(widget: TextView): String? {
-        val text = widget.text
-        val selStart = widget.selectionStart
-        val selEnd = widget.selectionEnd
-        val parStart = findLeftLineBreak(text, selStart)
-        val parEnd = findRightLineBreak(text, selEnd)
-        return text.subSequence(parStart, parEnd).toString()
+    private fun getSelectedParagraph(): String? {
+        val paragraphStart = findLeftLineBreak(text, selectionStart)
+        val paragraphEnd = findRightLineBreak(text, selectionEnd)
+        return text.toString().substring(paragraphStart, paragraphEnd)
     }
 
     private fun findLeftLineBreak(text: CharSequence, selStart: Int): Int {
@@ -135,18 +130,14 @@ class PaginatedTextView @JvmOverloads constructor(
 
     private fun createSwipeableSpan(): SwipeableSpan = object : SwipeableSpan() {
 
-        override fun onClick(widget: View) {
-            val paragraph = getSelectedParagraph(widget as TextView)
-            if (!TextUtils.isEmpty(paragraph)) {
-                actionListener?.onClick(paragraph!!)
-            }
+        override fun onClick(view: View) {
+            getSelectedParagraph()?.takeIf { it.isNotEmpty() }
+                    ?.let { actionListener?.onClick(it) }
         }
 
         override fun onLongClick(view: View) {
-            val word = getSelectedWord()
-            if (!TextUtils.isEmpty(word)) {
-                actionListener?.onLongClick(word)
-            }
+            getSelectedWord().takeIf { it.isNotEmpty() }
+                    ?.let { actionListener?.onLongClick(it) }
         }
 
         override fun onSwipeLeft(view: View) {
