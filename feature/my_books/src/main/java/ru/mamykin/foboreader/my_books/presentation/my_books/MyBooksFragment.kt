@@ -1,15 +1,16 @@
 package ru.mamykin.foboreader.my_books.presentation.my_books
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_my_books.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.platform.Navigator
@@ -49,7 +50,15 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
     private fun initToolbar() = toolbar!!.apply {
         title = getString(R.string.my_books)
         inflateMenu(R.menu.menu_books_list)
-        setOnMenuItemClickListener(::onMenuItemClicked)
+        menu.findItem(R.id.actionSortName)
+                .clicks()
+                .onEach { viewModel.sortBooks(SortOrder.ByName) }
+        menu.findItem(R.id.actionSortReaded)
+                .clicks()
+                .onEach { viewModel.sortBooks(SortOrder.ByReaded) }
+        menu.findItem(R.id.actionSortDate)
+                .clicks()
+                .onEach { viewModel.sortBooks(SortOrder.ByDate) }
         UiUtils.setupSearchView(
                 context!!,
                 menu,
@@ -57,16 +66,6 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
                 R.string.menu_search,
                 { viewModel.filterBooks(it) }
         )
-    }
-
-    private fun onMenuItemClicked(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.actionSortName -> viewModel.sortBooks(SortOrder.ByName)
-            R.id.actionSortReaded -> viewModel.sortBooks(SortOrder.ByReaded)
-            R.id.actionSortDate -> viewModel.sortBooks(SortOrder.ByDate)
-            else -> return false
-        }
-        return true
     }
 
     private fun initViewModel() {

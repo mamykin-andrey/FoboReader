@@ -61,6 +61,8 @@ dependencies {
     api navigationFragment
     api navigationUi
 
+    api flowbinding
+
     testApi junit
     testApi mockito
     testApi mockitoKotlin

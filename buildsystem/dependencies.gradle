@@ -14,6 +14,7 @@ ext {
     junitVersion = '4.12'
     kluentVersion = '1.35'
     espressoCoreVersion = '2.2.2'
+    flowbinding_version = "0.11.1"
 
     kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -46,6 +47,8 @@ ext {
 
     navigationFragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
     navigationUi = "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    flowbinding = "io.github.reactivecircus.flowbinding:flowbinding-android:$flowbinding_version"
 
     junit = "junit:junit:$junitVersion"
     mockito = "org.mockito:mockito-core:$mockitoVersion"

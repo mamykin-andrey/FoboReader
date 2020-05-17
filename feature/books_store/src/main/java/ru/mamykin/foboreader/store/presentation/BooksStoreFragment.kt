@@ -37,7 +37,6 @@ class BooksStoreFragment : BaseFragment(R.layout.fragment_books_store) {
     private fun initToolbar() = toolbar!!.apply {
         title = getString(R.string.books_store)
         inflateMenu(R.menu.menu_books_store)
-        setOnMenuItemClickListener { true }
         UiUtils.setupSearchView(
                 context!!,
                 menu,
