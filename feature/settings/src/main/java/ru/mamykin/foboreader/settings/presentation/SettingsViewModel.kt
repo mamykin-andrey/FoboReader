@@ -1,89 +1,57 @@
 package ru.mamykin.foboreader.settings.presentation
 
-import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.data.SettingsStorage
-import ru.mamykin.foboreader.core.mvvm.BaseViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.mamykin.foboreader.core.mvvm.BaseViewModel2
+import ru.mamykin.foboreader.settings.domain.SettingsInteractor
 
-class SettingsViewModel constructor(
-        private val settings: SettingsStorage
-) : BaseViewModel<SettingsViewModel.ViewState, SettingsViewModel.Action>(
-        ViewState()
+@FlowPreview
+@ExperimentalCoroutinesApi
+class SettingsViewModel(
+    private val interactor: SettingsInteractor
+) : BaseViewModel2<ViewState, SettingsAction, SettingsEvent>(
+    ViewState()
 ) {
-    fun loadSettings() = launch {
-        sendAction(Action.SettingsLoaded(
-                nightTheme = settings.isNightTheme,
-                autoBrightness = settings.isAutoBrightness,
-                brightness = settings.brightness,
-                textSize = settings.readTextSize
-        ))
+    override suspend fun onLoadData() {
+        initSettingsFlow()
+        interactor.loadData()
     }
 
-    override fun reduceState(action: Action): ViewState = when (action) {
-        is Action.SettingsLoaded -> state.copy(
-                nightTheme = action.nightTheme,
-                autoBrightness = action.autoBrightness,
-                brightnessValue = action.brightness,
-                textSize = action.textSize
-        )
-        is Action.TextSizeChanged -> state.copy(
-                textSize = action.textSize
-        )
-        is Action.AutoBrightnessChanged -> state.copy(
-                autoBrightness = action.autoBrightness
-        )
-        is Action.NightThemeChanged -> state.copy(
-                nightTheme = action.nightTheme
-        )
-        is Action.BrightnessChanged -> state.copy(
-                brightnessValue = action.brightness
+    private fun initSettingsFlow() {
+        interactor.settingsFlow
+            .onEach { sendAction(SettingsAction.SettingsLoaded(it)) }
+            .launchIn(viewModelScope)
+    }
+
+    override fun onAction(action: SettingsAction): ViewState = when (action) {
+        is SettingsAction.SettingsLoaded -> state.copy(
+            isNightTheme = action.settings.isNightTheme,
+            isAutoBrightness = action.settings.isAutoBrightness,
+            brightness = action.settings.brightness,
+            contentTextSize = action.settings.contentTextSize
         )
     }
 
-    fun increaseTextSize() = changeTextSize(settings.readTextSize + 1)
-
-    fun decreaseTextSize() = changeTextSize(settings.readTextSize - 1)
-
-    private fun changeTextSize(newSize: Int) {
-        newSize.takeIf { it in 10..30 }
-                ?.let {
-                    settings.readTextSize = it
-                    sendAction(Action.TextSizeChanged(it))
-                }
+    override suspend fun onEvent(event: SettingsEvent) {
+        when (event) {
+            is SettingsEvent.BrightnessChanged -> {
+                interactor.changeBrightness(event.brightness)
+            }
+            is SettingsEvent.NightThemeChanged -> {
+                interactor.enableNightTheme(event.nightTheme)
+            }
+            is SettingsEvent.AutoBrightnessChanged -> {
+                interactor.enableAutoBrightness(event.autoBrightness)
+            }
+            is SettingsEvent.IncreaseTextSizeClicked -> {
+                interactor.increaseTextSize()
+            }
+            is SettingsEvent.DecreaseTextSizeClicked -> {
+                interactor.decreaseTextSize()
+            }
+        }
     }
-
-    fun enableAutoBrightness(enabled: Boolean) {
-        settings.isAutoBrightness = enabled
-        sendAction(Action.AutoBrightnessChanged(enabled))
-    }
-
-    fun enableNightTheme(enabled: Boolean) {
-        settings.isNightTheme = enabled
-        sendAction(Action.NightThemeChanged(enabled))
-    }
-
-    fun changeBrightness(value: Int) {
-        settings.brightness = value
-        sendAction(Action.BrightnessChanged(value))
-    }
-
-    sealed class Action {
-        data class SettingsLoaded(
-                val nightTheme: Boolean,
-                val autoBrightness: Boolean,
-                val brightness: Int,
-                val textSize: Int
-        ) : Action()
-
-        data class TextSizeChanged(val textSize: Int) : Action()
-        data class AutoBrightnessChanged(val autoBrightness: Boolean) : Action()
-        data class NightThemeChanged(val nightTheme: Boolean) : Action()
-        data class BrightnessChanged(val brightness: Int) : Action()
-    }
-
-    data class ViewState(
-            val nightTheme: Boolean = false,
-            val autoBrightness: Boolean = false,
-            val brightnessValue: Int = 0,
-            val textSize: Int = 0
-    )
 }

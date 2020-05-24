@@ -7,7 +7,7 @@ import org.koin.dsl.module
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.app.navigation.NavigatorImpl
 import ru.mamykin.foboreader.core.data.SettingsStorage
-import ru.mamykin.foboreader.core.extension.enableNightTheme
+import ru.mamykin.foboreader.core.extension.nightMode
 import ru.mamykin.foboreader.core.platform.Navigator
 import ru.mamykin.foboreader.core.ui.BaseActivity
 
@@ -23,11 +23,11 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
 
     fun openMyBooksScreen() {
         supportFragmentManager.findFragmentById(R.id.fr_main_nav_host)
-                ?.childFragmentManager
-                ?.fragments
-                ?.firstOrNull()
-                ?.let { it as? TabsFragment }
-                ?.openMyBooksTab()
+            ?.childFragmentManager
+            ?.fragments
+            ?.firstOrNull()
+            ?.let { it as? TabsFragment }
+            ?.openMyBooksTab()
     }
 
     private fun initNavigator() {
@@ -38,6 +38,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
 
     private fun initTheme() {
         setTheme(R.style.AppTheme)
-        enableNightTheme(settingsStorage.isNightTheme)
+        nightMode = settingsStorage.isNightTheme
     }
 }

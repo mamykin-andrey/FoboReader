@@ -24,7 +24,7 @@ fun Activity.showSnackbar(@StringRes messageRes: Int, long: Boolean = false) {
 fun Activity.showSnackbar(message: String, long: Boolean = false) {
     val duration = if (long) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT
     findViewById<View>(android.R.id.content)
-            ?.let { Snackbar.make(it, message, duration) }
+        ?.let { Snackbar.make(it, message, duration) }
 }
 
 fun Fragment.showSnackbar(@StringRes messageRes: Int, long: Boolean = false) {
@@ -34,11 +34,11 @@ fun Fragment.showSnackbar(@StringRes messageRes: Int, long: Boolean = false) {
 fun Fragment.showSnackbar(message: String, long: Boolean = false) {
     val duration = if (long) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT
     activity?.findViewById<View>(android.R.id.content)
-            ?.let { Snackbar.make(it, message, duration) }
+        ?.let { Snackbar.make(it, message, duration) }
 }
 
 fun Context.showToast(messageResId: Int, long: Boolean = false) =
-        showToast(getString(messageResId), long)
+    showToast(getString(messageResId), long)
 
 fun Context.showToast(message: String, long: Boolean = false) {
     val length = if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
@@ -75,12 +75,13 @@ fun Context.getExternalMediaDir(): File? = if (Build.VERSION.SDK_INT >= Build.VE
 
 val Fragment.appCompatActivity: AppCompatActivity
     get() = activity as? AppCompatActivity
-            ?: throw IllegalStateException("Fragment activity is not instance of AppCompatActivity!")
+        ?: throw IllegalStateException("Activity is not instance of AppCompatActivity!")
 
-fun AppCompatActivity?.enableNightTheme(enable: Boolean) {
-    val newValue = if (enable) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-    val value = AppCompatDelegate.getDefaultNightMode()
-    newValue.takeIf { it != value }
-            ?.let(AppCompatDelegate::setDefaultNightMode)
+var AppCompatActivity?.nightMode: Boolean
+    get() = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+    set(value) {
+        value.takeIf { it != nightMode }
+            ?.let { if (it) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO }
+            ?.let { AppCompatDelegate.setDefaultNightMode(it) }
             ?.also { this?.takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate() }
-}
+    }
