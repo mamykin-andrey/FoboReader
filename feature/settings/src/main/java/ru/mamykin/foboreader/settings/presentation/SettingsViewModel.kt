@@ -12,7 +12,7 @@ import ru.mamykin.foboreader.settings.domain.SettingsInteractor
 @ExperimentalCoroutinesApi
 class SettingsViewModel(
     private val interactor: SettingsInteractor
-) : BaseViewModel2<ViewState, SettingsAction, SettingsEvent>(
+) : BaseViewModel2<ViewState, SettingsAction, SettingsEvent, SettingsEffect>(
     ViewState()
 ) {
     override suspend fun onLoadData() {
@@ -51,6 +51,9 @@ class SettingsViewModel(
             }
             is SettingsEvent.DecreaseTextSizeClicked -> {
                 interactor.decreaseTextSize()
+            }
+            is SettingsEvent.SelectReadColorClicked -> {
+                sendEffect(SettingsEffect.OpenSelectReadColorScreen)
             }
         }
     }

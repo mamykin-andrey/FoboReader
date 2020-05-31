@@ -8,32 +8,32 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.properties.Delegates
 
-abstract class BaseViewModel2<ViewState, Action, Event>(
+abstract class BaseViewModel2<ViewState, Action, Event, Effect>(
     initialState: ViewState
 ) : ViewModel(), CoroutineScope {
 
-    // TODO: check exception in child coroutine
-    private val parentJob = Job()
+    private val parentJob = SupervisorJob()
     private val exceptionHandler = CoroutineExceptionHandler { _, th -> th.printStackTrace() }
-    private val stateDebugger = ViewModelStateDebugger<Event, ViewState>()
+    private val stateDebugger = ViewModelDebugger<Event, ViewState, Effect>()
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + parentJob + exceptionHandler
 
     protected var state: ViewState by Delegates.observable(initialState) { _, _, new ->
         _stateLiveData.value = new
-        stateDebugger.onStateChanged(new)
+        stateDebugger.onSetState(new)
     }
     private val _stateLiveData = MutableLiveData<ViewState>()
+    val stateLiveData: LiveData<ViewState> get() = _stateLiveData
 
-    val stateLiveData: LiveData<ViewState>
-        get() = _stateLiveData
+    private val _effectLiveData = SingleLiveEvent<Effect>()
+    val effectLiveData: LiveData<Effect> get() = _effectLiveData
 
     init {
         state = initialState
     }
 
-    fun sendAction(action: Action) {
+    protected fun sendAction(action: Action) {
         state = onAction(action)
     }
 
@@ -45,6 +45,11 @@ abstract class BaseViewModel2<ViewState, Action, Event>(
     }
 
     open suspend fun onEvent(event: Event) {}
+
+    fun sendEffect(effect: Effect) {
+        _effectLiveData.setValue(effect)
+        stateDebugger.onEffect(effect)
+    }
 
     fun loadData() {
         launch { onLoadData() }

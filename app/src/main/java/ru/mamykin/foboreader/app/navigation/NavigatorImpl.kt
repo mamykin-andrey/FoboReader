@@ -9,7 +9,7 @@ import ru.mamykin.foboreader.app.ui.TabsFragmentDirections
 import ru.mamykin.foboreader.core.platform.Navigator
 
 class NavigatorImpl(
-        private val activity: MainActivity
+    private val activity: MainActivity
 ) : Navigator {
 
     private val navController by lazy { activity.findNavController(R.id.fr_main_nav_host) }
@@ -24,13 +24,13 @@ class NavigatorImpl(
 
     override fun openBook(id: Long) {
         val action = TabsFragmentDirections.tabsToReadBook()
-                .setBookId(id)
+            .setBookId(id)
         navController.navigate(action)
     }
 
     override fun openBookDetails(id: Long, sharedImage: ImageView) {
         val action = TabsFragmentDirections.tabsToBookDetails()
-                .setBookId(id)
+            .setBookId(id)
         val extras = FragmentNavigatorExtras(sharedImage to id.toString())
         navController.navigate(action, extras)
     }

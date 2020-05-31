@@ -19,7 +19,7 @@ import ru.mamykin.foboreader.settings.R
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SettingsFragment : BaseFragment2<SettingsViewModel, ViewState>(
+class SettingsFragment : BaseFragment2<SettingsViewModel, ViewState, SettingsEffect>(
     R.layout.fragment_settings
 ) {
     override val viewModel: SettingsViewModel by viewModel()
@@ -50,6 +50,9 @@ class SettingsFragment : BaseFragment2<SettingsViewModel, ViewState>(
         btnTextSizePlus.clicks()
             .onEach { viewModel.sendEvent(SettingsEvent.IncreaseTextSizeClicked) }
             .launchIn(lifecycleScope)
+        clTranslationColor.clicks()
+            .onEach { viewModel.sendEvent(SettingsEvent.SelectReadColorClicked) }
+            .launchIn(lifecycleScope)
     }
 
     override fun showState(state: ViewState) {
@@ -67,5 +70,12 @@ class SettingsFragment : BaseFragment2<SettingsViewModel, ViewState>(
     private fun showTheme(nightTheme: Boolean) {
         switchNightTheme.isChecked = nightTheme
         appCompatActivity.nightMode = nightTheme
+    }
+
+    override fun takeEffect(effect: SettingsEffect) {
+        when (effect) {
+            is SettingsEffect.OpenSelectReadColorScreen ->
+                ColorPickerFragment().show(activity!!.supportFragmentManager, null)
+        }
     }
 }

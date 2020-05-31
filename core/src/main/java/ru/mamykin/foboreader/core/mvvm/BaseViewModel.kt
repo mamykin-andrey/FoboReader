@@ -15,14 +15,14 @@ abstract class BaseViewModel<ViewState, Action>(
 ) : ViewModel(), CoroutineScope {
 
     private val parentJob = Job()
-    private val stateDebugger = ViewModelStateDebugger<Action, ViewState>()
+    private val stateDebugger = ViewModelDebugger<Action, ViewState, Any>()
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + parentJob
 
     protected var state: ViewState by Delegates.observable(initialState) { _, _, new ->
         _stateLiveData.value = new
-        stateDebugger.onStateChanged(new)
+        stateDebugger.onSetState(new)
     }
     private val _stateLiveData = MutableLiveData<ViewState>()
 

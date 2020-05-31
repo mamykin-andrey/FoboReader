@@ -8,6 +8,11 @@ sealed class SettingsEvent {
     data class AutoBrightnessChanged(val autoBrightness: Boolean) : SettingsEvent()
     object IncreaseTextSizeClicked : SettingsEvent()
     object DecreaseTextSizeClicked : SettingsEvent()
+    object SelectReadColorClicked : SettingsEvent()
+}
+
+sealed class SettingsEffect {
+    object OpenSelectReadColorScreen : SettingsEffect()
 }
 
 sealed class SettingsAction {

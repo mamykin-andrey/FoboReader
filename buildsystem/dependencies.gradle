@@ -19,7 +19,7 @@ ext {
     kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     coreKtx = 'androidx.core:core-ktx:1.0.2'
-    recyclerView = "androidx.recyclerview:recyclerview:1.0.0"
+    recyclerView = "androidx.recyclerview:recyclerview:1.2.0-alpha03"
 
     coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"

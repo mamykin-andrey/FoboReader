@@ -13,9 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import ru.mamykin.foboreader.core.R
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel2
+import ru.mamykin.foboreader.core.mvvm.SingleLiveEvent
 
-abstract class BaseFragment2<VM : BaseViewModel2<ViewState, out Any, out Any>, ViewState>(
-        @LayoutRes private val layoutId: Int
+abstract class BaseFragment2<VM : BaseViewModel2<ViewState, out Any, out Any, Effect>, ViewState, Effect>(
+    @LayoutRes private val layoutId: Int
 ) : Fragment() {
 
     protected open val sharedElements: List<Pair<View, String>> = emptyList()
@@ -26,22 +27,22 @@ abstract class BaseFragment2<VM : BaseViewModel2<ViewState, out Any, out Any>, V
     private var dataLoaded = false
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflater.inflate(layoutId, container, false)
-            .apply { initToolbar(this) }
+        .apply { initToolbar(this) }
 
     private fun initToolbar(
-            view: View,
-            showNavigationIcon: Boolean = false,
-            navigationIconClicked: () -> Unit = { findNavController().navigateUp() }
+        view: View,
+        showNavigationIcon: Boolean = false,
+        navigationIconClicked: () -> Unit = { findNavController().navigateUp() }
     ) {
         view.findViewById<Toolbar>(R.id.toolbar)
-                .also { toolbar = it }
-                ?.takeIf { showNavigationIcon }
-                ?.setNavigationOnClickListener { navigationIconClicked() }
-                ?: run { toolbar?.navigationIcon = null }
+            .also { toolbar = it }
+            ?.takeIf { showNavigationIcon }
+            ?.setNavigationOnClickListener { navigationIconClicked() }
+            ?: run { toolbar?.navigationIcon = null }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,13 +53,16 @@ abstract class BaseFragment2<VM : BaseViewModel2<ViewState, out Any, out Any>, V
 
     private fun initViewModel() {
         viewModel.stateLiveData.observe(::showState)
+        viewModel.effectLiveData.observe(this::takeEffect)
         if (!dataLoaded) {
             viewModel.loadData()
             dataLoaded = true
         }
     }
 
-    protected open fun showState(state: ViewState) {}
+    protected abstract fun showState(state: ViewState)
+
+    protected abstract fun takeEffect(effect: Effect)
 
     private fun initSharedTransition() {
         sharedElements.forEach { (view, name) ->
@@ -67,6 +71,10 @@ abstract class BaseFragment2<VM : BaseViewModel2<ViewState, out Any, out Any>, V
     }
 
     private fun <T> LiveData<T>.observe(observerFunc: (T) -> Unit) {
+        observe(viewLifecycleOwner, Observer { observerFunc(it) })
+    }
+
+    private fun <T> SingleLiveEvent<T>.observe(observerFunc: (T) -> Unit) {
         observe(viewLifecycleOwner, Observer { observerFunc(it) })
     }
 }

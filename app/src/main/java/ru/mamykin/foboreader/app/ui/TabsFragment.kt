@@ -7,7 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.fragment_tabs.*
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.app.navigation.KeepStateNavigator
+import ru.mamykin.foboreader.core.navigation.KeepStateNavigator
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.my_books.presentation.my_books.MyBooksFragment
 
@@ -34,9 +34,9 @@ class TabsFragment : BaseFragment(R.layout.fragment_tabs) {
 
     private fun initBottomNavigationView() {
         val navigator = KeepStateNavigator(
-                context!!,
-                navHostFragment!!.childFragmentManager,
-                R.id.fr_tabs_host
+            context!!,
+            navHostFragment!!.childFragmentManager,
+            R.id.fr_tabs_host
         )
         navController.navigatorProvider.addNavigator(navigator)
         navController.setGraph(R.navigation.tabs)

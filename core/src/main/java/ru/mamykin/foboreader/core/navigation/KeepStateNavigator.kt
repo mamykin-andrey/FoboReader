@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.app.navigation
+package ru.mamykin.foboreader.core.navigation
 
 import android.content.Context
 import android.os.Bundle
