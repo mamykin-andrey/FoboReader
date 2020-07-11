@@ -63,7 +63,6 @@
     <string name="grant_permissions">Разрешить</string>
     <string name="book_price_format">"%1$s ₽"</string>
     <string name="book_details_load_info_error">Ошибка загрузки информации о книге</string>
-    <string name="books_store_load_error">Ошибка загрузки списка книг</string>
     <string name="error_book_open">Ошибка открытия книги</string>
     <string name="error_book_remove">Ошибка открытия книги</string>
     <string name="error_book_list_loading">Не удалось загрузить список книг</string>

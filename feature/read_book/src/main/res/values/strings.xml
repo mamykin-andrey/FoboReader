@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="translation_download_error">Не удалось загрузить перевод</string>
+</resources>

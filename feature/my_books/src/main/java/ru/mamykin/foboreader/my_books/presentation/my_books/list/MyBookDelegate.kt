@@ -13,9 +13,9 @@ import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.foboreader.my_books.R
 
 class MyBookDelegate(
-        private val onBookClicked: (Long) -> Unit,
-        private val onAboutClicked: (Long, ImageView) -> Unit,
-        private val onRemoveClicked: (Long) -> Unit
+    private val onBookClicked: (Long) -> Unit,
+    private val onAboutClicked: (Long, ImageView) -> Unit,
+    private val onRemoveClicked: (Long) -> Unit
 ) : AdapterDelegate<BookInfo>() {
 
     override fun isForViewType(item: BookInfo): Boolean = true
@@ -23,10 +23,10 @@ class MyBookDelegate(
     override fun getLayoutId(): Int = R.layout.item_book
 
     override fun createViewHolder(itemView: View) = BookViewHolder(
-            itemView,
-            onBookClicked,
-            onAboutClicked,
-            onRemoveClicked
+        itemView,
+        onBookClicked,
+        onAboutClicked,
+        onRemoveClicked
     )
 
     override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: BookInfo) {
@@ -35,10 +35,10 @@ class MyBookDelegate(
 }
 
 class BookViewHolder(
-        override val containerView: View,
-        private val onBookClicked: (Long) -> Unit,
-        private val onAboutClicked: (Long, ImageView) -> Unit,
-        private val onRemoveClicked: (Long) -> Unit
+    override val containerView: View,
+    private val onBookClicked: (Long) -> Unit,
+    private val onAboutClicked: (Long, ImageView) -> Unit,
+    private val onRemoveClicked: (Long) -> Unit
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(book: BookInfo) = with(itemView) {
@@ -47,17 +47,17 @@ class BookViewHolder(
         bindBookCover(book)
         tvBookTitle.text = book.title
         tvAuthor.text = book.author
-        // pvProgress.setPercentage(book.readPercent)
-        // tvBooksPages.text = book.pagesCountString
+//        pvProgress.setPercentage(book.readPercent)
+        tvBooksPages.text = book.currentPage.toString()
         tvFileInfo.text = "${book.getFormat()}, ${book.getSize()}"
     }
 
     private fun bindBookMenu(book: BookInfo) = with(containerView) {
         btnMenu.setOnClickListener {
             btnMenu.showPopupMenu(
-                    R.menu.menu_book_item,
-                    R.id.menu_about_book to { onAboutClicked(book.id, ivBookCover) },
-                    R.id.menu_remove_book to { onRemoveClicked(book.id) }
+                R.menu.menu_book_item,
+                R.id.menu_about_book to { onAboutClicked(book.id, ivBookCover) },
+                R.id.menu_remove_book to { onRemoveClicked(book.id) }
             )
         }
     }
@@ -66,8 +66,8 @@ class BookViewHolder(
         ViewCompat.setTransitionName(ivBookCover, book.id.toString())
         book.coverUrl?.takeIf { it.isNotEmpty() }
         Picasso.with(context)
-                .load(book.coverUrl)
-                .error(R.drawable.img_no_image)
-                .into(ivBookCover)
+            .load(book.coverUrl)
+            .error(R.drawable.img_no_image)
+            .into(ivBookCover)
     }
 }

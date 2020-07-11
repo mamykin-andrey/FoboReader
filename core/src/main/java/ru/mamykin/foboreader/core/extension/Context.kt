@@ -75,13 +75,15 @@ fun Context.getExternalMediaDir(): File? = if (Build.VERSION.SDK_INT >= Build.VE
 
 val Fragment.appCompatActivity: AppCompatActivity
     get() = activity as? AppCompatActivity
-        ?: throw IllegalStateException("Activity is not instance of AppCompatActivity!")
+        ?: throw IllegalStateException("Activity isn't an instance of AppCompatActivity!")
 
 var AppCompatActivity?.nightMode: Boolean
     get() = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
     set(value) {
-        value.takeIf { it != nightMode }
-            ?.let { if (it) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO }
-            ?.let { AppCompatDelegate.setDefaultNightMode(it) }
-            ?.also { this?.takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate() }
+        this ?: return
+        if (value != nightMode) {
+            val newMode = if (value) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            AppCompatDelegate.setDefaultNightMode(newMode)
+            this.takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate()
+        }
     }

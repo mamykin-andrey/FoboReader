@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/appbar" />
+        <include layout="@layout/view_toolbar" />
 
         <RelativeLayout
             android:id="@+id/rlBookMainInfo"

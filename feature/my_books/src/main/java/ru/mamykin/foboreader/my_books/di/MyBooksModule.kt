@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.my_books.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import ru.mamykin.foboreader.core.data.BookInfoRepository
+import ru.mamykin.foboreader.core.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.my_books.domain.book_details.BookDetailsInteractor
 import ru.mamykin.foboreader.my_books.domain.my_books.BookFilesScanner
 import ru.mamykin.foboreader.my_books.domain.my_books.BookInfoParser
@@ -21,5 +21,5 @@ val myBooksModule = module {
     viewModel { MyBooksViewModel(get()) }
 
     factory { BookDetailsInteractor(get()) }
-    viewModel { BookDetailsViewModel(get(), get()) }
+    viewModel { (bookId: Long) -> BookDetailsViewModel(bookId, get(), get()) }
 }

@@ -11,8 +11,8 @@ import ru.mamykin.foboreader.store.domain.model.StoreBook
 @ExperimentalCoroutinesApi
 @FlowPreview
 class BooksStoreInteractor constructor(
-        private val repository: BooksStoreRepository,
-        private val fileDownloader: FileDownloader
+    private val repository: BooksStoreRepository,
+    private val fileDownloader: FileDownloader
 ) {
     private val booksChannel = BroadcastChannel<List<StoreBook>>(1)
     val booksFlow = booksChannel.asFlow()

@@ -4,7 +4,10 @@ import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.dsl.module
+import ru.mamykin.foboreader.app.navigation.NavigatorImpl
 import ru.mamykin.foboreader.core.di.coreModule
+import ru.mamykin.foboreader.core.platform.Navigator
 import ru.mamykin.foboreader.core.platform.NotificationUtils
 import ru.mamykin.foboreader.my_books.di.myBooksModule
 import ru.mamykin.foboreader.read_book.di.readBookModule
@@ -25,11 +28,12 @@ class ReaderApp : Application() {
             androidLogger()
             androidContext(applicationContext)
             modules(listOf(
-                    coreModule,
-                    myBooksModule,
-                    booksStoreModule,
-                    settingsModule,
-                    readBookModule
+                module { single<Navigator> { NavigatorImpl() } },
+                coreModule,
+                myBooksModule,
+                booksStoreModule,
+                settingsModule,
+                readBookModule
             ))
         }
     }

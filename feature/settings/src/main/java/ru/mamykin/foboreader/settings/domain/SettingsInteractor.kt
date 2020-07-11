@@ -4,7 +4,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
-import ru.mamykin.foboreader.core.data.SettingsStorage
+import ru.mamykin.foboreader.core.data.storage.SettingsStorage
 import ru.mamykin.foboreader.settings.domain.entity.Settings
 
 @ExperimentalCoroutinesApi
@@ -13,7 +13,7 @@ class SettingsInteractor(
     private val settings: SettingsStorage
 ) {
     private val settingsChannel = BroadcastChannel<Settings>(1)
-    val settingsFlow = settingsChannel.asFlow()
+    val settingsFlow get() = settingsChannel.asFlow()
 
     suspend fun loadData() {
         updateSettings()

@@ -2,26 +2,24 @@ package ru.mamykin.foboreader.settings.presentation
 
 import ru.mamykin.foboreader.settings.domain.entity.Settings
 
-sealed class SettingsEvent {
-    data class BrightnessChanged(val brightness: Int) : SettingsEvent()
-    data class NightThemeChanged(val nightTheme: Boolean) : SettingsEvent()
-    data class AutoBrightnessChanged(val autoBrightness: Boolean) : SettingsEvent()
-    object IncreaseTextSizeClicked : SettingsEvent()
-    object DecreaseTextSizeClicked : SettingsEvent()
-    object SelectReadColorClicked : SettingsEvent()
+sealed class Event {
+    data class BrightnessChanged(val brightness: Int) : Event()
+    data class NightThemeChanged(val nightTheme: Boolean) : Event()
+    data class AutoBrightnessChanged(val autoBrightness: Boolean) : Event()
+    object IncreaseTextSizeClicked : Event()
+    object DecreaseTextSizeClicked : Event()
+    object SelectReadColorClicked : Event()
 }
 
-sealed class SettingsEffect {
-    object OpenSelectReadColorScreen : SettingsEffect()
+sealed class Effect {
+    object OpenSelectReadColorScreen : Effect()
 }
 
-sealed class SettingsAction {
-    data class SettingsLoaded(val settings: Settings) : SettingsAction()
+sealed class Action {
+    data class SettingsLoaded(val settings: Settings) : Action()
 }
 
 data class ViewState(
-    val isNightTheme: Boolean = false,
-    val isAutoBrightness: Boolean = false,
-    val brightness: Int = 0,
-    val contentTextSize: Int = 0
+    val isLoading: Boolean = false,
+    val settings: Settings? = null
 )

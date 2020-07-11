@@ -1,99 +1,74 @@
 package ru.mamykin.foboreader.read_book.presentation
 
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.domain.model.BookInfo
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
+import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.domain.ReadBookInteractor
 
 class ReadBookViewModel constructor(
-        private val interactor: ReadBookInteractor
-) : BaseViewModel<ReadBookViewModel.ViewState, ReadBookViewModel.Action>(
-        ViewState(isBookLoading = true)
+    private val bookId: Long,
+    private val interactor: ReadBookInteractor
+) : BaseViewModel<ViewState, Action, Event, Effect>(
+    ViewState(isBookLoading = true)
 ) {
-    override fun reduceState(action: Action): ViewState = when (action) {
-        is Action.BookLoading -> state.copy(isBookLoading = true)
-        is Action.BookLoaded -> state.copy(
-                isBookLoading = false,
-                text = action.text,
-                title = action.info.title,
-                currentPage = action.info.currentPage
-        )
-        is Action.TranslationLoading -> state.copy(isTranslationLoading = true)
-        is Action.TranslationError -> state.copy(
-                isTranslationLoading = false,
-                error = "Не удалось загрузить перевод"
-        )
-        is Action.ParagraphTranslationLoaded -> state.copy(
-                isTranslationLoading = false,
-                paragraphTranslation = action.source to action.translation
-        )
-        is Action.ParagraphTranslationHided -> state.copy(paragraphTranslation = null)
-        is Action.WordTranslationLoaded -> state.copy(
-                isTranslationLoading = false,
-                wordTranslation = action.source to action.translation
-        )
-        is Action.WordTranslationHided -> state.copy(wordTranslation = null)
+    override fun loadData() {
+        loadBookInfo()
     }
 
-    fun loadBookInfo(id: Long) = launch {
+    private fun loadBookInfo() = launch {
         sendAction(Action.BookLoading)
-        val info = interactor.getBookInfo(id)
+        val info = interactor.getBookInfo(bookId)
         val content = interactor.getBookContent(info.filePath)
         sendAction(Action.BookLoaded(info, content.text))
     }
 
-    fun translateParagraph(paragraph: String) = launch {
-        sendAction(Action.TranslationLoading)
-        interactor.getParagraphTranslation(paragraph)
-                ?.let { Action.ParagraphTranslationLoaded(paragraph, it) }
-                ?.let { sendAction(it) }
-                ?: sendAction(Action.TranslationError)
+    override fun onAction(action: Action): ViewState = when (action) {
+        is Action.BookLoading -> state.copy(isBookLoading = true)
+        is Action.BookLoaded -> state.copy(
+            isBookLoading = false,
+            text = action.text,
+            title = action.info.title,
+            currentPage = action.info.currentPage
+        )
+        is Action.TranslationLoading -> state.copy(isTranslationLoading = true)
+        is Action.ParagraphTranslationLoaded -> state.copy(
+            isTranslationLoading = false,
+            paragraphTranslation = action.source to action.translation
+        )
+        is Action.ParagraphTranslationHided -> state.copy(paragraphTranslation = null)
+        is Action.WordTranslationLoaded -> state.copy(
+            isTranslationLoading = false,
+            wordTranslation = action.source to action.translation
+        )
+        is Action.WordTranslationHided -> state.copy(wordTranslation = null)
     }
 
-    fun hideParagraphTranslation() = launch {
+    override suspend fun onEvent(event: Event) {
+        when (event) {
+            is Event.TranslateParagraph -> translateParagraph(event.paragraph)
+            is Event.HideParagraphTranslation -> hideParagraphTranslation()
+            is Event.TranslateWord -> translateWord(event.word)
+            is Event.PageOpened -> interactor.saveCurrentPage(bookId, event.pageNumber)
+        }
+    }
+
+    private fun translateParagraph(paragraph: String) = launch {
+        sendAction(Action.TranslationLoading)
+        interactor.getParagraphTranslation(paragraph)
+            ?.let { Action.ParagraphTranslationLoaded(paragraph, it) }
+            ?.let { sendAction(it) }
+            ?: sendEffect(Effect.ShowSnackbar(R.string.translation_download_error))
+    }
+
+    private fun hideParagraphTranslation() = launch {
         sendAction(Action.ParagraphTranslationHided)
     }
 
-    fun translateWord(word: String) = launch {
+    private fun translateWord(word: String) = launch {
         sendAction(Action.TranslationLoading)
 
         interactor.getWordTranslation(word)
-                ?.let { sendAction(Action.WordTranslationLoaded(word, it)) }
-                ?: sendAction(Action.TranslationError)
+            ?.let { sendAction(Action.WordTranslationLoaded(word, it)) }
+            ?: sendEffect(Effect.ShowSnackbar(R.string.translation_download_error))
     }
-
-    sealed class Action {
-        object TranslationLoading : Action()
-        object TranslationError : Action()
-
-        data class ParagraphTranslationLoaded(
-                val source: String,
-                val translation: String
-        ) : Action()
-
-        object ParagraphTranslationHided : Action()
-
-        data class WordTranslationLoaded(
-                val source: String,
-                val translation: String
-        ) : Action()
-
-        object WordTranslationHided : Action()
-
-        object BookLoading : Action()
-        data class BookLoaded(val info: BookInfo, val text: String) : Action()
-    }
-
-    data class ViewState(
-            val isBookLoading: Boolean = false,
-            val isTranslationLoading: Boolean = false,
-            val title: String = "",
-            val text: String = "",
-            val currentPage: Int = 0,
-            val totalPages: Int = 0,
-            val readPercent: Float = 0f,
-            val wordTranslation: Pair<String, String>? = null,
-            val paragraphTranslation: Pair<String, String>? = null,
-            val error: String? = null
-    )
 }

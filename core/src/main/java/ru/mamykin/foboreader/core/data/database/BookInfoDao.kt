@@ -26,4 +26,7 @@ interface BookInfoDao {
 
     @Query("SELECT * FROM bookinfomodel WHERE id = :id LIMIT 1")
     suspend fun getBook(id: Long): BookInfoModel?
+
+    @Query("UPDATE bookinfomodel SET currentPage = :currentPage WHERE id = :bookId")
+    suspend fun updateCurrentPage(bookId: Long, currentPage: Int)
 }

@@ -15,5 +15,5 @@ val readBookModule = module {
     factory { TextToSpeechService(androidContext()) }
     factory { BookTextParser() }
     factory { ReadBookInteractor(get(), get(), get(), get()) }
-    viewModel { ReadBookViewModel(get()) }
+    viewModel { (bookId: Long) -> ReadBookViewModel(bookId, get()) }
 }

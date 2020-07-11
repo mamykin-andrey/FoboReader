@@ -6,66 +6,57 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import ru.mamykin.foboreader.core.R
+import ru.mamykin.foboreader.core.mvvm.BaseViewModel
+import ru.mamykin.foboreader.core.mvvm.SingleLiveEvent
 
-abstract class BaseFragment(
-        @LayoutRes private val layoutId: Int
+abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effect>, ViewState, Effect>(
+    @LayoutRes private val layoutId: Int
 ) : Fragment() {
 
-    protected open val sharedElements: List<Pair<View, String>> = emptyList()
-
-    protected var toolbar: Toolbar? = null
-    protected open val showNavigationIcon: Boolean
-        get() = false
+    protected abstract val viewModel: VM
+    protected val toolbar: Toolbar
+        get() = view!!.findViewById(R.id.toolbar)
+            ?: throw IllegalStateException("Couldn't find the toolbar in layout!")
+    protected val progressView: ContentLoadingProgressBar
+        get() = view!!.findViewById(R.id.cpb_content_loading)
+            ?: throw IllegalStateException("Couldn't find the progress view in layout!")
 
     private var dataLoaded = false
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflater.inflate(layoutId, container, false)
-            .apply { initToolbar(this) }
-
-    private fun initToolbar(view: View) {
-        view.findViewById<Toolbar>(R.id.toolbar)
-                .also { toolbar = it }
-                ?.takeIf { showNavigationIcon }
-                ?.setNavigationOnClickListener { onNavigationIconClicked() }
-                ?: run { toolbar?.navigationIcon = null }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initLoadData()
-        initSharedTransition()
+        initViewModel()
     }
 
-    private fun initLoadData() {
+    private fun initViewModel() {
+        viewModel.stateLiveData.observe(::showState)
+        viewModel.effectLiveData.observe(this::takeEffect)
         if (!dataLoaded) {
-            loadData()
+            viewModel.loadData()
             dataLoaded = true
         }
     }
 
-    private fun initSharedTransition() {
-        sharedElements.forEach { (view, name) ->
-            ViewCompat.setTransitionName(view, name)
-        }
+    protected open fun showState(state: ViewState) {}
+
+    protected open fun takeEffect(effect: Effect) {}
+
+    private fun <T> LiveData<T>.observe(observerFunc: (T) -> Unit) {
+        observe(viewLifecycleOwner, Observer { observerFunc(it) })
     }
 
-    open fun loadData() {}
-
-    open fun onNavigationIconClicked() {
-        findNavController().navigateUp()
-    }
-
-    protected fun <T> LiveData<T>.observe(observerFunc: (T) -> Unit) {
+    private fun <T> SingleLiveEvent<T>.observe(observerFunc: (T) -> Unit) {
         observe(viewLifecycleOwner, Observer { observerFunc(it) })
     }
 }

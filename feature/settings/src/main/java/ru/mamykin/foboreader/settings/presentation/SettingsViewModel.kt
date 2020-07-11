@@ -1,59 +1,56 @@
 package ru.mamykin.foboreader.settings.presentation
 
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import ru.mamykin.foboreader.core.mvvm.BaseViewModel2
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.core.mvvm.BaseViewModel
 import ru.mamykin.foboreader.settings.domain.SettingsInteractor
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 class SettingsViewModel(
     private val interactor: SettingsInteractor
-) : BaseViewModel2<ViewState, SettingsAction, SettingsEvent, SettingsEffect>(
-    ViewState()
+) : BaseViewModel<ViewState, Action, Event, Effect>(
+    ViewState(isLoading = true)
 ) {
-    override suspend fun onLoadData() {
+    override fun loadData() {
         initSettingsFlow()
-        interactor.loadData()
+        launch { interactor.loadData() }
     }
 
-    private fun initSettingsFlow() {
-        interactor.settingsFlow
-            .onEach { sendAction(SettingsAction.SettingsLoaded(it)) }
-            .launchIn(viewModelScope)
+    private fun initSettingsFlow() = launch {
+        interactor.settingsFlow.collect {
+            sendAction(Action.SettingsLoaded(it))
+        }
     }
 
-    override fun onAction(action: SettingsAction): ViewState = when (action) {
-        is SettingsAction.SettingsLoaded -> state.copy(
-            isNightTheme = action.settings.isNightTheme,
-            isAutoBrightness = action.settings.isAutoBrightness,
-            brightness = action.settings.brightness,
-            contentTextSize = action.settings.contentTextSize
+    override fun onAction(action: Action): ViewState = when (action) {
+        is Action.SettingsLoaded -> state.copy(
+            isLoading = false,
+            settings = action.settings
         )
     }
 
-    override suspend fun onEvent(event: SettingsEvent) {
+    override suspend fun onEvent(event: Event) {
         when (event) {
-            is SettingsEvent.BrightnessChanged -> {
+            is Event.BrightnessChanged -> {
                 interactor.changeBrightness(event.brightness)
             }
-            is SettingsEvent.NightThemeChanged -> {
+            is Event.NightThemeChanged -> {
                 interactor.enableNightTheme(event.nightTheme)
             }
-            is SettingsEvent.AutoBrightnessChanged -> {
+            is Event.AutoBrightnessChanged -> {
                 interactor.enableAutoBrightness(event.autoBrightness)
             }
-            is SettingsEvent.IncreaseTextSizeClicked -> {
+            is Event.IncreaseTextSizeClicked -> {
                 interactor.increaseTextSize()
             }
-            is SettingsEvent.DecreaseTextSizeClicked -> {
+            is Event.DecreaseTextSizeClicked -> {
                 interactor.decreaseTextSize()
             }
-            is SettingsEvent.SelectReadColorClicked -> {
-                sendEffect(SettingsEffect.OpenSelectReadColorScreen)
+            is Event.SelectReadColorClicked -> {
+                sendEffect(Effect.OpenSelectReadColorScreen)
             }
         }
     }

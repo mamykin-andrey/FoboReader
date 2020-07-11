@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.data
+package ru.mamykin.foboreader.core.data.storage
 
 class SettingsStorage constructor(
         private val prefManager: PreferencesManager

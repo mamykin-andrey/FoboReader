@@ -4,15 +4,15 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
-import ru.mamykin.foboreader.core.data.BookInfoRepository
+import ru.mamykin.foboreader.core.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.core.domain.model.BookInfo
 import java.io.File
 
 @ExperimentalCoroutinesApi
 @FlowPreview
 class MyBooksInteractor constructor(
-        private val repository: BookInfoRepository,
-        private val booksScanner: BookFilesScanner
+    private val repository: BookInfoRepository,
+    private val booksScanner: BookFilesScanner
 ) {
     private val booksChannel = BroadcastChannel<List<BookInfo>>(1)
     val booksFlow get() = booksChannel.asFlow()
