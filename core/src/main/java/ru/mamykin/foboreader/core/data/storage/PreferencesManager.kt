@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.data
+package ru.mamykin.foboreader.core.data.storage
 
 import android.content.Context
 import android.content.SharedPreferences

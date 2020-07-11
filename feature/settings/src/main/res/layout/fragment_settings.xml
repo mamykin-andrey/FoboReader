@@ -6,9 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ru.mamykin.settings.presentation.SettingsFragment">
+    tools:context="ru.mamykin.foboreader.settings.presentation.SettingsFragment">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/view_toolbar" />
+
+    <include layout="@layout/view_content_progress" />
 
     <ScrollView
         android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -23,7 +24,7 @@ fun Activity.showSnackbar(@StringRes messageRes: Int, long: Boolean = false) {
 fun Activity.showSnackbar(message: String, long: Boolean = false) {
     val duration = if (long) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT
     findViewById<View>(android.R.id.content)
-            ?.let { Snackbar.make(it, message, duration) }
+        ?.let { Snackbar.make(it, message, duration) }
 }
 
 fun Fragment.showSnackbar(@StringRes messageRes: Int, long: Boolean = false) {
@@ -33,9 +34,16 @@ fun Fragment.showSnackbar(@StringRes messageRes: Int, long: Boolean = false) {
 fun Fragment.showSnackbar(message: String, long: Boolean = false) {
     val duration = if (long) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT
     activity?.findViewById<View>(android.R.id.content)
-            ?.let { Snackbar.make(it, message, duration) }
+        ?.let { Snackbar.make(it, message, duration) }
 }
 
+fun Context.showToast(messageResId: Int, long: Boolean = false) =
+    showToast(getString(messageResId), long)
+
+fun Context.showToast(message: String, long: Boolean = false) {
+    val length = if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+    Toast.makeText(this, message, length).show()
+}
 
 inline fun <reified T : Activity> Context.startActivity(vararg params: Pair<String, Any>) {
     val intent = Intent(this, T::class.java).apply {
@@ -65,10 +73,17 @@ fun Context.getExternalMediaDir(): File? = if (Build.VERSION.SDK_INT >= Build.VE
     getExternalFilesDir(null)
 }
 
-fun AppCompatActivity?.enableNightTheme(enable: Boolean) {
-    val newValue = if (enable) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-    val value = AppCompatDelegate.getDefaultNightMode()
-    newValue.takeIf { it != value }
-            ?.let(AppCompatDelegate::setDefaultNightMode)
-            ?.also { this?.takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate() }
-}
+val Fragment.appCompatActivity: AppCompatActivity
+    get() = activity as? AppCompatActivity
+        ?: throw IllegalStateException("Activity isn't an instance of AppCompatActivity!")
+
+var AppCompatActivity?.nightMode: Boolean
+    get() = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+    set(value) {
+        this ?: return
+        if (value != nightMode) {
+            val newMode = if (value) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            AppCompatDelegate.setDefaultNightMode(newMode)
+            this.takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate()
+        }
+    }

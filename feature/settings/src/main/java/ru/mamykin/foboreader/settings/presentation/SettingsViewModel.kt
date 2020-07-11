@@ -1,72 +1,57 @@
 package ru.mamykin.foboreader.settings.presentation
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.data.SettingsStorage
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
+import ru.mamykin.foboreader.settings.domain.SettingsInteractor
 
-class SettingsViewModel constructor(
-        private val settings: SettingsStorage
-) : BaseViewModel<SettingsViewModel.ViewState, SettingsViewModel.Action>(
-        ViewState()
+@FlowPreview
+@ExperimentalCoroutinesApi
+class SettingsViewModel(
+    private val interactor: SettingsInteractor
+) : BaseViewModel<ViewState, Action, Event, Effect>(
+    ViewState(isLoading = true)
 ) {
-    fun loadSettings() = launch {
-        sendAction(Action.SettingsLoaded(
-                nightTheme = settings.isNightTheme,
-                brightness = settings.brightness,
-                textSize = settings.readTextSize
-        ))
+    override fun loadData() {
+        initSettingsFlow()
+        launch { interactor.loadData() }
     }
 
-    override fun reduceState(action: Action): ViewState = when (action) {
+    private fun initSettingsFlow() = launch {
+        interactor.settingsFlow.collect {
+            sendAction(Action.SettingsLoaded(it))
+        }
+    }
+
+    override fun onAction(action: Action): ViewState = when (action) {
         is Action.SettingsLoaded -> state.copy(
-                nightTheme = action.nightTheme,
-                manualBrightness = action.brightness == null,
-                brightness = action.brightness ?: 100,
-                textSize = action.textSize
+            isLoading = false,
+            settings = action.settings
         )
     }
 
-    fun increaseTextSize() {
-        changeTextSize(settings.readTextSize + 1)
+    override suspend fun onEvent(event: Event) {
+        when (event) {
+            is Event.BrightnessChanged -> {
+                interactor.changeBrightness(event.brightness)
+            }
+            is Event.NightThemeChanged -> {
+                interactor.enableNightTheme(event.nightTheme)
+            }
+            is Event.AutoBrightnessChanged -> {
+                interactor.enableAutoBrightness(event.autoBrightness)
+            }
+            is Event.IncreaseTextSizeClicked -> {
+                interactor.increaseTextSize()
+            }
+            is Event.DecreaseTextSizeClicked -> {
+                interactor.decreaseTextSize()
+            }
+            is Event.SelectReadColorClicked -> {
+                sendEffect(Effect.OpenSelectReadColorScreen)
+            }
+        }
     }
-
-    fun decreaseTextSize() {
-        changeTextSize(settings.readTextSize - 1)
-    }
-
-    private fun changeTextSize(newSize: Int) {
-        newSize.takeIf { it in 10..30 }
-                ?.let { settings.readTextSize = it }
-                ?.also { loadSettings() }
-    }
-
-    fun switchAutoBrightness(value: Boolean) {
-        value.takeIf { it }?.let { settings.brightness = null }
-        loadSettings()
-    }
-
-    fun changeTheme(value: Boolean) {
-        settings.isNightTheme = value
-        loadSettings()
-    }
-
-    fun changeBrightness(value: Int) {
-        settings.brightness = value
-        loadSettings()
-    }
-
-    sealed class Action {
-        data class SettingsLoaded(
-                val nightTheme: Boolean,
-                val brightness: Int?,
-                val textSize: Int
-        ) : Action()
-    }
-
-    data class ViewState(
-            val nightTheme: Boolean = false,
-            val manualBrightness: Boolean = false,
-            val brightness: Int = 0,
-            val textSize: Int = 0
-    )
 }

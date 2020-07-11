@@ -63,7 +63,6 @@
     <string name="grant_permissions">Разрешить</string>
     <string name="book_price_format">"%1$s ₽"</string>
     <string name="book_details_load_info_error">Ошибка загрузки информации о книге</string>
-    <string name="books_store_load_error">Ошибка загрузки списка книг</string>
     <string name="error_book_open">Ошибка открытия книги</string>
     <string name="error_book_remove">Ошибка открытия книги</string>
     <string name="error_book_list_loading">Не удалось загрузить список книг</string>
@@ -75,4 +74,5 @@
     <string name="downloading_book">Загрузка книги</string>
     <string name="error_insufficient_space">Недостаточно памяти</string>
     <string name="download_file_common_error">Не удалось скачать файл</string>
+    <string name="format_book_read_amount">%1$d/%2$d</string>
 </resources>

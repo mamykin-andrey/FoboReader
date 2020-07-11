@@ -9,6 +9,7 @@ import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 
+@Deprecated("Remove")
 object UiUtils {
 
     fun setupSearchView(

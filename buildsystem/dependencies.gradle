@@ -14,11 +14,12 @@ ext {
     junitVersion = '4.12'
     kluentVersion = '1.35'
     espressoCoreVersion = '2.2.2'
+    flowbinding_version = "0.11.1"
 
     kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     coreKtx = 'androidx.core:core-ktx:1.0.2'
-    recyclerView = "androidx.recyclerview:recyclerview:1.0.0"
+    recyclerView = "androidx.recyclerview:recyclerview:1.2.0-alpha03"
 
     coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -44,10 +45,10 @@ ext {
     retrofitLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:4.3.0"
     picasso = "com.squareup.picasso:picasso:$picassoVersion"
 
-    paginatedTextView = 'ru.mamykin.widget:paginatedtextview:0.1.0'
-
     navigationFragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
     navigationUi = "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    flowbinding = "io.github.reactivecircus.flowbinding:flowbinding-android:$flowbinding_version"
 
     junit = "junit:junit:$junitVersion"
     mockito = "org.mockito:mockito-core:$mockitoVersion"

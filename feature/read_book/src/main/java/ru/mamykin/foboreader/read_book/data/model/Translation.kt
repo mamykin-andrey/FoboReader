@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.read_book.domain.entity
+package ru.mamykin.foboreader.read_book.data.model
 
 import com.google.gson.annotations.SerializedName
 

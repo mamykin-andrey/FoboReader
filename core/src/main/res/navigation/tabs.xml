@@ -2,19 +2,15 @@
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_tabs"
-    app:startDestination="@id/myBooksFragment">
+    app:startDestination="@id/myBooksFragment"
+    tools:ignore="UnusedNavigation">
 
     <keep_state_fragment
         android:id="@+id/myBooksFragment"
         android:name="ru.mamykin.foboreader.my_books.presentation.my_books.MyBooksFragment"
-        android:label="MyBooksFragment">
-
-        <action
-            android:id="@+id/action_myBooksFragment_to_booksStoreFragment"
-            app:destination="@id/booksStoreFragment" />
-
-    </keep_state_fragment>
+        android:label="MyBooksFragment" />
 
     <keep_state_fragment
         android:id="@+id/booksStoreFragment"
@@ -24,6 +20,15 @@
     <keep_state_fragment
         android:id="@+id/settingsFragment"
         android:name="ru.mamykin.foboreader.settings.presentation.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="SettingsFragment">
+        <action
+            android:id="@+id/action_settingsFragment_to_colorPickerDialog"
+            app:destination="@id/colorPickerDialog" />
+    </keep_state_fragment>
+
+    <dialog
+        android:id="@+id/colorPickerDialog"
+        android:name="ru.mamykin.foboreader.settings.presentation.ColorPickerFragment"
+        android:label="ColorPickerDialog" />
 
 </navigation>

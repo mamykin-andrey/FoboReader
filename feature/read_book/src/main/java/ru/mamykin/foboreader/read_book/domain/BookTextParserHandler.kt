@@ -3,15 +3,17 @@ package ru.mamykin.foboreader.read_book.domain
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
+import ru.mamykin.foboreader.read_book.domain.entity.BookContent
 
 class BookTextParserHandler(
-        private val successFunc: (List<String>, List<String>) -> Unit
+        private val successFunc: (BookContent) -> Unit
 ) : DefaultHandler2() {
 
     private var currentElement: ElementType = ElementType.Unknown
     private var currentTag: String = ""
+    private var lastSentence: String = ""
     private val sentences = mutableListOf<String>()
-    private val translations = mutableListOf<String>()
+    private val translationsMap = HashMap<String, String>()
 
     override fun startElement(
             uri: String,
@@ -28,10 +30,15 @@ class BookTextParserHandler(
         super.characters(ch, start, length)
         val str = String(ch, start, length)
         when (currentElement) {
-            ElementType.Paragraph -> sentences.add("$currentTag${str.trim()}/$currentTag")
-            ElementType.Translation -> translations.add(str.trim())
+            ElementType.Paragraph -> str.trim()
+                    .also { lastSentence = it }
+                    .wrapWithTag(currentTag)
+                    .let { sentences.add(it) }
+            ElementType.Translation -> translationsMap[lastSentence] = str.trim()
         }
     }
+
+    private fun String.wrapWithTag(tag: String) = "<$tag>$this</$tag>"
 
     override fun endElement(uri: String?, localName: String?, qName: String?) {
         super.endElement(uri, localName, qName)
@@ -42,7 +49,12 @@ class BookTextParserHandler(
     @Throws(SAXException::class)
     override fun endDocument() {
         super.endDocument()
-        successFunc.invoke(sentences, translations)
+        successFunc.invoke(
+                BookContent(
+                        sentences.joinToString(""),
+                        translationsMap.takeIf { it.isNotEmpty() }
+                )
+        )
     }
 
     sealed class ElementType {

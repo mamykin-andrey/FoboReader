@@ -21,9 +21,12 @@ interface BookInfoDao {
     @Query("SELECT * FROM bookinfomodel")
     suspend fun getBooks(): List<BookInfoModel>
 
-    @Query("SELECT * FROM bookinfomodel WHERE title LIKE :query")
+    @Query("SELECT * FROM bookinfomodel WHERE title LIKE '%' || :query || '%'")
     suspend fun findBooks(query: String): List<BookInfoModel>
 
     @Query("SELECT * FROM bookinfomodel WHERE id = :id LIMIT 1")
     suspend fun getBook(id: Long): BookInfoModel?
+
+    @Query("UPDATE bookinfomodel SET currentPage = :currentPage WHERE id = :bookId")
+    suspend fun updateCurrentPage(bookId: Long, currentPage: Int)
 }

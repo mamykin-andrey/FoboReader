@@ -7,6 +7,13 @@ import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.SwitchCompat
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import reactivecircus.flowbinding.android.widget.SeekBarChangeEvent
+import reactivecircus.flowbinding.android.widget.changeEvents
+import reactivecircus.flowbinding.android.widget.checkedChanges
 
 var View.isVisible: Boolean
     set(value) {
@@ -15,19 +22,7 @@ var View.isVisible: Boolean
     get() = this.visibility == View.VISIBLE
 
 fun ViewGroup.inflateView(@LayoutRes resId: Int, attach: Boolean = false) =
-        LayoutInflater.from(this.context).inflate(resId, this, attach)
-
-fun SeekBar.setOnSeekBarChangeListener(callback: (Int) -> Unit) {
-    setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            if (fromUser) callback(progress)
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-    })
-}
+    LayoutInflater.from(this.context).inflate(resId, this, attach)
 
 fun View.showPopupMenu(@MenuRes menuRes: Int, vararg clicks: Pair<Int, () -> Unit>) {
     PopupMenu(context, this).apply {
@@ -39,3 +34,12 @@ fun View.showPopupMenu(@MenuRes menuRes: Int, vararg clicks: Pair<Int, () -> Uni
         show()
     }
 }
+
+fun SeekBar.changeProgressEvents(emitImmediately: Boolean = false): Flow<Int> =
+    changeEvents(emitImmediately)
+        .filter { it is SeekBarChangeEvent.ProgressChanged && it.fromUser }
+        .map { it.view.progress }
+
+fun SwitchCompat.manualCheckedChanges(): Flow<Boolean> =
+    checkedChanges()
+        .filter { this.isPressed }

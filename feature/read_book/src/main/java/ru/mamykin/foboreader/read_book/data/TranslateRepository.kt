@@ -1,5 +1,7 @@
 package ru.mamykin.foboreader.read_book.data
 
+import ru.mamykin.foboreader.read_book.data.network.YandexTranslateService
+
 class TranslateRepository constructor(
         private val translateService: YandexTranslateService
 ) {
