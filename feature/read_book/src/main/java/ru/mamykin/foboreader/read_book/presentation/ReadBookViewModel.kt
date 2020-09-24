@@ -57,7 +57,7 @@ class ReadBookViewModel constructor(
         interactor.getParagraphTranslation(paragraph)
             ?.let { Action.ParagraphTranslationLoaded(paragraph, it) }
             ?.let { sendAction(it) }
-            ?: sendEffect(Effect.ShowSnackbar(R.string.translation_download_error))
+            ?: sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error))
     }
 
     private fun hideParagraphTranslation() = launch {
@@ -69,6 +69,6 @@ class ReadBookViewModel constructor(
 
         interactor.getWordTranslation(word)
             ?.let { sendAction(Action.WordTranslationLoaded(word, it)) }
-            ?: sendEffect(Effect.ShowSnackbar(R.string.translation_download_error))
+            ?: sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error))
     }
 }

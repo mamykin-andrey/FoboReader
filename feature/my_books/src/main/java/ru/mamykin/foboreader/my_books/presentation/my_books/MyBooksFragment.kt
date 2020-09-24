@@ -44,7 +44,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(
     }
 
     private fun initToolbar() = toolbar.apply {
-        title = getString(R.string.my_books)
+        title = getString(R.string.my_books_screen_title)
         navigationIcon = null
         inflateMenu(R.menu.menu_books_list)
         menu.findItem(R.id.actionSortName)
@@ -60,7 +60,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(
     }
 
     private fun initSearchView(menu: Menu) = menu.getSearchView(R.id.action_search).apply {
-        queryHint = getString(R.string.menu_search)
+        queryHint = getString(R.string.my_books_menu_search)
         queryChanges()
             .filterNotNull()
             .onEach { viewModel.sendEvent(Event.FilterBooks(it)) }

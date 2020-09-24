@@ -17,15 +17,11 @@ data class BookInfo(
 ) {
     private val file by lazy { File(filePath) }
 
-    fun getFormat(): String = file.extension.toUpperCase()
+    fun getFormat(): String {
+        return file.extension.toUpperCase(Locale.getDefault())
+    }
 
-    fun getSize(): String {
-        var size = file.length() / 1024
-        var unit = "KB"
-        if (size > 1000) {
-            size /= 1024
-            unit = "MB"
-        }
-        return "$size $unit"
+    fun getFileSizeKb(): Long {
+        return file.length() / 1024
     }
 }

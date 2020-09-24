@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="books_store_title">Магазин</string>
+    <string name="books_store_menu_search">Поиск</string>
+    <string name="books_store_download_progress">Файл загружается</string>
+    <string name="books_store_download_completed">Загрузка завершена</string>
+    <string name="books_store_download_failed">Не удалось загрузить файл</string>
+</resources>

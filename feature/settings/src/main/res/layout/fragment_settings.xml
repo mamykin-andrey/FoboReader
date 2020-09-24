@@ -25,7 +25,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="18dp"
-                android:text="@string/night_theme"
+                android:text="@string/settings_night_theme"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="@string/brightness_auto"
+                android:text="@string/settings_brightness_auto"
                 app:layout_constraintTop_toBottomOf="@id/switchNightTheme" />
 
             <ImageView
@@ -77,7 +77,7 @@
                     style="@style/SettingsTextItemStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/translate_color"
+                    android:text="@string/settings_translate_color_title"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/ivTranslationColor"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -88,7 +88,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@string/translate_color_description"
+                    android:text="@string/settings_translate_color_description"
                     app:layout_constraintLeft_toLeftOf="@id/tvTranslationColorTitle"
                     app:layout_constraintRight_toRightOf="@id/tvTranslationColorTitle"
                     app:layout_constraintTop_toBottomOf="@id/tvTranslationColorTitle" />
@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="@string/text_size"
+                android:text="@string/settings_text_size"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/barrierTextSize" />
 

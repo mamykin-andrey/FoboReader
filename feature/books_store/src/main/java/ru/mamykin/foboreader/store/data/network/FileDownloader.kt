@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.network
+package ru.mamykin.foboreader.store.data.network
 
 import android.content.Context
 import androidx.core.app.NotificationCompat
@@ -9,10 +9,10 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.buffer
 import okio.sink
-import ru.mamykin.foboreader.core.R
 import ru.mamykin.foboreader.core.extension.getExternalMediaDir
 import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.core.platform.NotificationUtils
+import ru.mamykin.foboreader.store.R
 import java.io.File
 
 class FileDownloader(
@@ -22,7 +22,7 @@ class FileDownloader(
     private val notificationManager by lazy { NotificationManagerCompat.from(context) }
 
     /**
-     * Downloading file by it's [url] into folder media/app_name/[fileName]
+     * Download file by its [url] into media/app_name/[fileName] folder
      */
     @Throws(DownloadFileException::class)
     suspend fun download(
@@ -69,9 +69,9 @@ class FileDownloader(
 
     private fun showNotification(fileName: String, event: NotificationEvent) {
         val title = when (event) {
-            NotificationEvent.Start -> "Файл загружается"
-            NotificationEvent.Finish -> "Загрузка завершена"
-            NotificationEvent.Error -> "Не удалось загрузить файл"
+            NotificationEvent.Start -> context.getString(R.string.books_store_download_progress)
+            NotificationEvent.Finish -> context.getString(R.string.books_store_download_completed)
+            NotificationEvent.Error -> context.getString(R.string.books_store_download_failed)
         }
         val notification = NotificationCompat.Builder(context, NotificationUtils.GENERAL_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_download)

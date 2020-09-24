@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/no_books"
+                android:text="@string/my_books_no_books"
                 android:textSize="17sp"
                 android:visibility="gone" />
 

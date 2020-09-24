@@ -37,8 +37,8 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(
 
             override fun onPageLoaded(state: ReadState) = with(state) {
                 viewModel.sendEvent(Event.PageOpened(state.currentIndex))
-                tvReadPercent.text = getString(R.string.read_percent_string, readPercent)
-                tvRead.text = getString(R.string.read_pages_format, currentIndex, pagesCount)
+                tvReadPercent.text = getString(R.string.read_book_user_read_percent, readPercent)
+                tvRead.text = getString(R.string.read_book_user_read_pages, currentIndex, pagesCount)
             }
         })
     }
@@ -49,8 +49,11 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(
         state.wordTranslation?.let(::showWordTranslation)
         state.paragraphTranslation?.let(::showParagraphTranslation)
         tvName.text = state.title
-        tvRead.text =
-            getString(R.string.format_book_read_amount, state.currentPage, state.totalPages)
+        tvRead.text = getString(
+            R.string.read_book_user_read_pages,
+            state.currentPage,
+            state.totalPages
+        )
         tvReadPercent.text = state.readPercent.toString()
     }
 
@@ -74,7 +77,8 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(
     }
 
     private fun showWordTranslation(info: Pair<String, String>) {
-        val (word, translation) = info
+        // TODO
+//        val (word, translation) = info
     }
 
     override fun takeEffect(effect: Effect) {

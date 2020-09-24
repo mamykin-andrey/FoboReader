@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.store.domain
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import ru.mamykin.foboreader.core.network.FileDownloader
+import ru.mamykin.foboreader.store.data.network.FileDownloader
 import ru.mamykin.foboreader.store.data.BooksStoreRepository
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 

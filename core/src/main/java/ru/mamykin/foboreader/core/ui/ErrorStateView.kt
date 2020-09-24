@@ -45,7 +45,7 @@ class ErrorStateView @JvmOverloads constructor(
                 LayoutParams.WRAP_CONTENT
             )
             gravity = Gravity.CENTER_HORIZONTAL
-            setText(R.string.error_description)
+            setText(R.string.core_error_retry_description)
         })
         addView(Button(context).apply {
             val params = LayoutParams(
@@ -58,7 +58,7 @@ class ErrorStateView @JvmOverloads constructor(
             }
             layoutParams = params
             background = null
-            setText(R.string.error_retry)
+            setText(R.string.core_error_retry_title)
             setTextColor(ContextCompat.getColor(context, R.color.retry_button_text))
             setOnClickListener { onRetryClicked() }
         })

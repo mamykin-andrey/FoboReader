@@ -3,13 +3,13 @@
     <item
         android:id="@+id/myBooksFragment"
         android:icon="@drawable/ic_book"
-        android:title="@string/my_books" />
+        android:title="@string/app_my_books_tab" />
     <item
         android:id="@+id/booksStoreFragment"
         android:icon="@drawable/ic_store"
-        android:title="@string/books_store" />
+        android:title="@string/app_books_store_tab" />
     <item
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_settings"
-        android:title="@string/settings" />
+        android:title="@string/app_settings_tab" />
 </menu>

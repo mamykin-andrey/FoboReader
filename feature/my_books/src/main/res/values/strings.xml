@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_books_menu_search">Поиск</string>
+    <string name="my_books_menu_sort">Сортировка</string>
+    <string name="my_books_screen_title">Мои книги</string>
+    <string name="my_books_no_books">Книги отсутствуют</string>
+    <string name="my_books_sort_by_name">По названию</string>
+    <string name="my_books_sort_by_readed">По прочитанному</string>
+    <string name="my_books_sort_by_date">По дате</string>
+    <string name="my_books_menu_delete">Удалить</string>
+    <string name="my_books_about_book">О книге</string>
+    <string name="my_books_book_info_title">Информация о книге</string>
+    <string name="my_books_bookmarks">Закладки</string>
+    <string name="my_books_no_bookmarks">Закладки отсутствуют</string>
+    <string name="my_books_book_path">Файл:</string>
+    <string name="my_books_current_page">Текущая страница:</string>
+    <string name="my_books_book_genre">Жанр:</string>
+    <string name="my_books_original_language">Оригинальный язык:</string>
+    <string name="my_books_created_date">Дата создания:</string>
+    <string name="my_books_book_info_description_title">"%1$s, %2$s"</string>
+</resources>

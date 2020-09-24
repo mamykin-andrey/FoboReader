@@ -42,7 +42,7 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
 
     private fun initToolbar() {
         toolbar.apply {
-            title = getString(R.string.books_store)
+            title = getString(R.string.books_store_title)
             navigationIcon = null
             inflateMenu(R.menu.menu_books_store)
             initSearchView(menu)
@@ -50,7 +50,7 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
     }
 
     private fun initSearchView(menu: Menu) = menu.getSearchView(R.id.action_search).apply {
-        queryHint = getString(R.string.menu_search)
+        queryHint = getString(R.string.books_store_menu_search)
         queryChanges()
             .filterNotNull()
             .onEach { viewModel.sendEvent(Event.FilterBooks(it)) }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Настройки</string>
+    <string name="settings_night_theme">Ночная тема</string>
+    <string name="settings_translate_color_title">Цвет перевода</string>
+    <string name="settings_translate_color_description">Цвет параграфа с переводом</string>
+    <string name="settings_text_size">Размер текста</string>
+    <string name="settings_brightness_auto">Яркость по-умолчанию</string>
+</resources>

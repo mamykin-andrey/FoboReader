@@ -49,7 +49,7 @@ class BookViewHolder(
         tvAuthor.text = book.author
 //        pvProgress.setPercentage(book.readPercent)
         tvBooksPages.text = book.currentPage.toString()
-        tvFileInfo.text = "${book.getFormat()}, ${book.getSize()}"
+        bindFileInfo(book)
     }
 
     private fun bindBookMenu(book: BookInfo) = with(containerView) {
@@ -64,10 +64,27 @@ class BookViewHolder(
 
     private fun bindBookCover(book: BookInfo) = with(containerView) {
         ViewCompat.setTransitionName(ivBookCover, book.id.toString())
-        book.coverUrl?.takeIf { it.isNotEmpty() }
-        Picasso.with(context)
-            .load(book.coverUrl)
-            .error(R.drawable.img_no_image)
-            .into(ivBookCover)
+        book.coverUrl?.takeIf { it.isNotEmpty() }?.let {
+            Picasso.with(context)
+                .load(it)
+                .error(R.drawable.img_no_image)
+                .into(ivBookCover)
+        }
+    }
+
+    private fun bindFileInfo(book: BookInfo) = containerView.apply {
+        tvFileInfo.text = context.getString(
+            R.string.my_books_book_info_description_title,
+            book.getFormat(),
+            getFileSizeDescription(book.getFileSizeKb())
+        )
+    }
+
+    private fun getFileSizeDescription(fileSizeKb: Long): String {
+        return if (fileSizeKb > 1024) {
+            "${fileSizeKb / 1024}MB"
+        } else {
+            "${fileSizeKb}KB"
+        }
     }
 }
