@@ -38,6 +38,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation kotlinStdLib
+    implementation multidex
 
     implementation project(":core")
     implementation project(":feature:books_store")

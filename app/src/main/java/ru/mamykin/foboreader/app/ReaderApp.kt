@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.app
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -15,7 +15,7 @@ import ru.mamykin.foboreader.settings.di.settingsModule
 import ru.mamykin.foboreader.store.di.booksStoreModule
 
 @Suppress("unused")
-class ReaderApp : Application() {
+class ReaderApp : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()

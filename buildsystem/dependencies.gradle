@@ -15,6 +15,7 @@ ext {
     kluentVersion = '1.35'
     espressoCoreVersion = '2.2.2'
     flowbinding_version = "0.11.1"
+    multidexVersion = "2.0.1"
 
     kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -56,4 +57,6 @@ ext {
     kluent = "org.amshove.kluent:kluent:$kluentVersion"
 
     espressoCore = 'androidx.test.espresso:espresso-core:3.1.1'
+
+    multidex = "androidx.multidex:multidex:$multidexVersion"
 }

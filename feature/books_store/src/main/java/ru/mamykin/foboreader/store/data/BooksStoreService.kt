@@ -7,7 +7,7 @@ import ru.mamykin.foboreader.store.data.model.StoreBooksModel
 interface BooksStoreService {
 
     companion object {
-        const val BASE_URL = "https://demo2817206.mockable.io"
+        const val BASE_URL = "https://fobo-reader-backend.herokuapp.com"
     }
 
     @GET("books")
