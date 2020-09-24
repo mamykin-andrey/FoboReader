@@ -49,11 +49,13 @@ class SettingsInteractor(
     }
 
     private suspend fun updateSettings() {
-        settingsChannel.send(Settings(
-            settings.isNightTheme,
-            settings.isAutoBrightness,
-            settings.brightness,
-            settings.readTextSize
-        ))
+        settingsChannel.send(
+            Settings(
+                settings.isNightTheme,
+                settings.isAutoBrightness,
+                settings.brightness,
+                settings.readTextSize
+            )
+        )
     }
 }

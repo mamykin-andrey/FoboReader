@@ -1,8 +1,8 @@
 package ru.mamykin.foboreader.core.ui.adapterdelegates
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
 class AdapterDelegatesManager<T> {
 
@@ -14,7 +14,8 @@ class AdapterDelegatesManager<T> {
 
     fun createViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val delegate = getDelegateForViewType(viewType)
-        val itemView = LayoutInflater.from(parent.context).inflate(delegate.getLayoutId(), parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(delegate.getLayoutId(), parent, false)
         return delegate.createViewHolder(itemView)
     }
 
@@ -25,12 +26,12 @@ class AdapterDelegatesManager<T> {
 
     fun getItemViewType(items: List<T>, position: Int): Int {
         return delegates.entries.find { it.value.isForViewType(items[position]) }?.key
-                ?: throw IllegalStateException("Unknown viewType for position: $position!")
+            ?: throw IllegalStateException("Unknown viewType for position: $position!")
 
     }
 
     private fun getDelegateForViewType(viewType: Int): AdapterDelegate<T> {
         return delegates[viewType]
-                ?: throw IllegalStateException("No viewType was found: $viewType!")
+            ?: throw IllegalStateException("No viewType was found: $viewType!")
     }
 }

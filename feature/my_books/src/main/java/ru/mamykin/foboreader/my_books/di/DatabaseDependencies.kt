@@ -9,7 +9,7 @@ object DatabaseDependencies {
 
     fun dao(context: Context): BookInfoDao {
         return Room.databaseBuilder(context, BookInfoDatabase::class.java, "book_info")
-                .build()
-                .getBookInfoDao()
+            .build()
+            .getBookInfoDao()
     }
 }

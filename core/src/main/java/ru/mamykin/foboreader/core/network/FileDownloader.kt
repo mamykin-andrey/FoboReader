@@ -16,8 +16,8 @@ import ru.mamykin.foboreader.core.platform.NotificationUtils
 import java.io.File
 
 class FileDownloader(
-        private val context: Context,
-        private val client: OkHttpClient
+    private val context: Context,
+    private val client: OkHttpClient
 ) {
     private val notificationManager by lazy { NotificationManagerCompat.from(context) }
 
@@ -26,9 +26,9 @@ class FileDownloader(
      */
     @Throws(DownloadFileException::class)
     suspend fun download(
-            url: String,
-            fileName: String,
-            showNotification: Boolean = true
+        url: String,
+        fileName: String,
+        showNotification: Boolean = true
     ) {
         val showNotificationFun = if (showNotification) this::showNotification else null
 
@@ -36,19 +36,19 @@ class FileDownloader(
 
         val newFile = createFile(fileName)
         runCatching { downloadFile(url, newFile) }
-                .onSuccess {
-                    showNotificationFun?.invoke(fileName, NotificationEvent.Finish)
-                    Log.debug("File downloaded to ${newFile.absolutePath}")
-                }
-                .onFailure {
-                    showNotificationFun?.invoke(fileName, NotificationEvent.Error)
-                    throw it
-                }
+            .onSuccess {
+                showNotificationFun?.invoke(fileName, NotificationEvent.Finish)
+                Log.debug("File downloaded to ${newFile.absolutePath}")
+            }
+            .onFailure {
+                showNotificationFun?.invoke(fileName, NotificationEvent.Error)
+                throw it
+            }
     }
 
     private fun createFile(fileName: String): File {
         val downloadsDir = context.getExternalMediaDir()
-                ?: throw DownloadFileException()
+            ?: throw DownloadFileException()
 
         return File(downloadsDir, fileName).also {
             it.takeIf { it.exists() }?.delete()
@@ -59,8 +59,8 @@ class FileDownloader(
         val request = Request.Builder().url(url).build()
 
         val response = client.newCall(request).execute()
-                .takeIf { it.isSuccessful }
-                ?: throw DownloadFileException()
+            .takeIf { it.isSuccessful }
+            ?: throw DownloadFileException()
 
         bookFile.sink().buffer().use {
             it.writeAll(response.body!!.source())
@@ -74,10 +74,10 @@ class FileDownloader(
             NotificationEvent.Error -> "Не удалось загрузить файл"
         }
         val notification = NotificationCompat.Builder(context, NotificationUtils.GENERAL_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_download)
-                .setContentTitle(title)
-                .setContentText(fileName)
-                .build()
+            .setSmallIcon(R.drawable.ic_download)
+            .setContentTitle(title)
+            .setContentText(fileName)
+            .build()
 
         notificationManager.notify(NotificationUtils.FILE_DOWNLOAD_NOTIFICATION_ID, notification)
     }

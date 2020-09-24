@@ -40,9 +40,9 @@ class MyBooksInteractor constructor(
 
     suspend fun removeBook(id: Long) {
         val bookInfo = repository.getBookInfo(id)
-                ?: throw IllegalArgumentException("Can't find books with id to delete: $id!")
+            ?: throw IllegalArgumentException("Can't find books with id to delete: $id!")
         repository.removeBook(bookInfo.id)
-                .also { File(bookInfo.filePath).delete() }
+            .also { File(bookInfo.filePath).delete() }
         updateBooks()
     }
 
@@ -58,8 +58,8 @@ class MyBooksInteractor constructor(
 
     private suspend fun updateBooks() {
         val books = searchQuery.takeIf { it.isNotEmpty() }
-                ?.let { repository.findBooks(it) }
-                ?: repository.getBooks()
+            ?.let { repository.findBooks(it) }
+            ?: repository.getBooks()
 
         val sortedBooks = books.sortedWith(BooksComparatorFactory().create(sortOrder))
         booksChannel.send(sortedBooks)

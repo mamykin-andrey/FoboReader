@@ -10,6 +10,6 @@ class DateTimestampConverter {
 
     @TypeConverter
     fun timestampToDate(timestamp: Long): Date? = timestamp
-            .takeIf { it != 0L }
-            ?.let { Date(it) }
+        .takeIf { it != 0L }
+        ?.let { Date(it) }
 }

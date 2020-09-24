@@ -11,11 +11,11 @@ internal object NetworkDependencies {
 
     fun service(): YandexTranslateService {
         val retrofit = Retrofit.Builder()
-                .baseUrl(YandexTranslateService.BASE_URL)
-                .client(client())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                .build()
+            .baseUrl(YandexTranslateService.BASE_URL)
+            .client(client())
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .build()
 
         return retrofit.create(YandexTranslateService::class.java)
     }

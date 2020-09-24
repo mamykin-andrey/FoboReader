@@ -6,7 +6,7 @@ import org.xml.sax.ext.DefaultHandler2
 import ru.mamykin.foboreader.read_book.domain.entity.BookContent
 
 class BookTextParserHandler(
-        private val successFunc: (BookContent) -> Unit
+    private val successFunc: (BookContent) -> Unit
 ) : DefaultHandler2() {
 
     private var currentElement: ElementType = ElementType.Unknown
@@ -16,10 +16,10 @@ class BookTextParserHandler(
     private val translationsMap = HashMap<String, String>()
 
     override fun startElement(
-            uri: String,
-            localName: String,
-            elemName: String,
-            attributes: Attributes
+        uri: String,
+        localName: String,
+        elemName: String,
+        attributes: Attributes
     ) {
         super.startElement(uri, localName, elemName, attributes)
         currentTag = elemName
@@ -31,9 +31,9 @@ class BookTextParserHandler(
         val str = String(ch, start, length)
         when (currentElement) {
             ElementType.Paragraph -> str.trim()
-                    .also { lastSentence = it }
-                    .wrapWithTag(currentTag)
-                    .let { sentences.add(it) }
+                .also { lastSentence = it }
+                .wrapWithTag(currentTag)
+                .let { sentences.add(it) }
             ElementType.Translation -> translationsMap[lastSentence] = str.trim()
         }
     }
@@ -50,10 +50,10 @@ class BookTextParserHandler(
     override fun endDocument() {
         super.endDocument()
         successFunc.invoke(
-                BookContent(
-                        sentences.joinToString(""),
-                        translationsMap.takeIf { it.isNotEmpty() }
-                )
+            BookContent(
+                sentences.joinToString(""),
+                translationsMap.takeIf { it.isNotEmpty() }
+            )
         )
     }
 

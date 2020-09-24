@@ -6,7 +6,7 @@ import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegatesManager
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 
 class BooksStoreRecyclerAdapter(
-        onBookClicked: (StoreBook) -> Unit
+    onBookClicked: (StoreBook) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<Any> = listOf()
@@ -18,7 +18,7 @@ class BooksStoreRecyclerAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            delegatesManager.createViewHolder(parent, viewType)
+        delegatesManager.createViewHolder(parent, viewType)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         delegatesManager.bindViewHolder(items, holder, position)
@@ -27,7 +27,7 @@ class BooksStoreRecyclerAdapter(
     override fun getItemCount(): Int = items.count()
 
     override fun getItemViewType(position: Int): Int =
-            delegatesManager.getItemViewType(items, position)
+        delegatesManager.getItemViewType(items, position)
 
     fun changeItems(items: List<Any>) {
         this.items = items

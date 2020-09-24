@@ -67,11 +67,12 @@ fun List<Pair<String, Any>>.toBundle(): Bundle = Bundle().apply {
     }
 }
 
-fun Context.getExternalMediaDir(): File? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-    externalMediaDirs.first()
-} else {
-    getExternalFilesDir(null)
-}
+fun Context.getExternalMediaDir(): File? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        externalMediaDirs.first()
+    } else {
+        getExternalFilesDir(null)
+    }
 
 val Fragment.appCompatActivity: AppCompatActivity
     get() = activity as? AppCompatActivity
@@ -82,7 +83,8 @@ var AppCompatActivity?.nightMode: Boolean
     set(value) {
         this ?: return
         if (value != nightMode) {
-            val newMode = if (value) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            val newMode =
+                if (value) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
             AppCompatDelegate.setDefaultNightMode(newMode)
             this.takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate()
         }

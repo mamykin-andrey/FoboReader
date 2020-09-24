@@ -16,9 +16,9 @@ import ru.mamykin.widget.paginatedtextview.pagination.ReadState
  * An extended TextView, which support pagination, clicks by paragraphs and long clicks by words
  */
 class PaginatedTextView @JvmOverloads constructor(
-        context: Context? = null,
-        attrs: AttributeSet? = null,
-        defStyle: Int = 0
+    context: Context? = null,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
 ) : AppCompatTextView(context, attrs, defStyle) {
 
     private val textPaint = TextPaint(paint)
@@ -41,7 +41,8 @@ class PaginatedTextView @JvmOverloads constructor(
         if (isMeasured) {
             loadFirstPage(text)
         } else {
-            viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            viewTreeObserver.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
                     isMeasured = true
                     viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -85,12 +86,12 @@ class PaginatedTextView @JvmOverloads constructor(
         val effectWidth = width - (paddingLeft + paddingRight)
         val effectHeight = height - (paddingTop + paddingBottom)
         controller = PaginationController(
-                text,
-                effectWidth,
-                effectHeight,
-                textPaint,
-                lineSpacingMultiplier,
-                lineSpacingExtra
+            text,
+            effectWidth,
+            effectHeight,
+            textPaint,
+            lineSpacingMultiplier,
+            lineSpacingExtra
         )
         setPageState(controller.getCurrentPage())
     }
@@ -132,12 +133,12 @@ class PaginatedTextView @JvmOverloads constructor(
 
         override fun onClick(view: View) {
             getSelectedParagraph()?.takeIf { it.isNotEmpty() }
-                    ?.let { actionListener?.onClick(it) }
+                ?.let { actionListener?.onClick(it) }
         }
 
         override fun onLongClick(view: View) {
             getSelectedWord().takeIf { it.isNotEmpty() }
-                    ?.let { actionListener?.onLongClick(it) }
+                ?.let { actionListener?.onLongClick(it) }
         }
 
         override fun onSwipeLeft(view: View) {

@@ -49,7 +49,8 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(
         state.wordTranslation?.let(::showWordTranslation)
         state.paragraphTranslation?.let(::showParagraphTranslation)
         tvName.text = state.title
-        tvRead.text = getString(R.string.format_book_read_amount, state.currentPage, state.totalPages)
+        tvRead.text =
+            getString(R.string.format_book_read_amount, state.currentPage, state.totalPages)
         tvReadPercent.text = state.readPercent.toString()
     }
 

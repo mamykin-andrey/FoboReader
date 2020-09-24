@@ -13,10 +13,10 @@ interface YandexTranslateService {
 
     @GET("api/v1.5/tr.json/translate")
     fun translateAsync(
-            @Query("key") key: String,
-            @Query("text") text: String,
-            @Query("lang") lang: String,
-            @Query("format") format: String,
-            @Query("options") options: String
+        @Query("key") key: String,
+        @Query("text") text: String,
+        @Query("lang") lang: String,
+        @Query("format") format: String,
+        @Query("options") options: String
     ): Deferred<Translation>
 }

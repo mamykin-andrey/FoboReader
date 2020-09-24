@@ -27,14 +27,16 @@ class ReaderApp : MultiDexApplication() {
         startKoin {
             androidLogger()
             androidContext(applicationContext)
-            modules(listOf(
-                module { single<Navigator> { NavigatorImpl() } },
-                coreModule,
-                myBooksModule,
-                booksStoreModule,
-                settingsModule,
-                readBookModule
-            ))
+            modules(
+                listOf(
+                    module { single<Navigator> { NavigatorImpl() } },
+                    coreModule,
+                    myBooksModule,
+                    booksStoreModule,
+                    settingsModule,
+                    readBookModule
+                )
+            )
         }
     }
 }

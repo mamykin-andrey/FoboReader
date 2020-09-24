@@ -16,11 +16,13 @@ class MyBooksRecyclerAdapter(
     private val delegatesManager = AdapterDelegatesManager<BookInfo>()
 
     init {
-        delegatesManager.addDelegate(MyBookDelegate(
-            onBookClicked,
-            onAboutClicked,
-            onRemoveClicked
-        ))
+        delegatesManager.addDelegate(
+            MyBookDelegate(
+                onBookClicked,
+                onAboutClicked,
+                onRemoveClicked
+            )
+        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =

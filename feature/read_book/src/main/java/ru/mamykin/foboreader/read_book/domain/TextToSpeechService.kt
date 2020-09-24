@@ -6,7 +6,7 @@ import android.speech.tts.TextToSpeech
 import java.util.*
 
 class TextToSpeechService constructor(
-        context: Context
+    context: Context
 ) : TextToSpeech.OnInitListener {
 
     private val textToSpeech = TextToSpeech(context, this)

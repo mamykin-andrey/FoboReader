@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.core.ui.adapterdelegates
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 
 abstract class AdapterDelegate<T> {
 

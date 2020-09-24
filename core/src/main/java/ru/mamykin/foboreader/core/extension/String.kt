@@ -11,15 +11,11 @@ fun String.toDate(): Date? {
     return runCatching { format.parse(this) }.getOrNull()
 }
 
-fun String.transliterate(): String {
-    return StringTransliterator.transliterate(this)
-}
-
 fun SpannableString.setColor(color: Int, start: Int, end: Int) {
     setSpan(
-            ForegroundColorSpan(color),
-            start,
-            end,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        ForegroundColorSpan(color),
+        start,
+        end,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
     )
 }

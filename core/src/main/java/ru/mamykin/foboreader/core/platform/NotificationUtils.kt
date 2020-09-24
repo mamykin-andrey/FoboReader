@@ -21,13 +21,13 @@ object NotificationUtils {
     @TargetApi(Build.VERSION_CODES.O)
     private fun initGeneralChannel(context: Context) {
         val notificationManager = context.getSystemService(
-                Context.NOTIFICATION_SERVICE
+            Context.NOTIFICATION_SERVICE
         ) as NotificationManager
 
         val channel = NotificationChannel(
-                GENERAL_CHANNEL_ID,
-                "Общие уведомления",
-                NotificationManager.IMPORTANCE_DEFAULT
+            GENERAL_CHANNEL_ID,
+            "Общие уведомления",
+            NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
             description = "Общие уведомления от приложения"
             enableLights(true)

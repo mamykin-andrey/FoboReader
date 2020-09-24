@@ -33,7 +33,13 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        UiUtils.setupRecyclerView(context!!, rvMyBooks, adapter, LinearLayoutManager(context), false)
+        UiUtils.setupRecyclerView(
+            context!!,
+            rvMyBooks,
+            adapter,
+            LinearLayoutManager(context),
+            false
+        )
         srlScanBooks.isEnabled = false
     }
 

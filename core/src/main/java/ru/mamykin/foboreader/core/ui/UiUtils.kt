@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 object UiUtils {
 
     fun setupSearchView(
-            context: Context,
-            menu: Menu,
-            @IdRes menuRes: Int,
-            @StringRes hint: Int,
-            onQueryChanged: (String) -> Unit = {},
-            onQuerySubmit: (String) -> Unit = {}
+        context: Context,
+        menu: Menu,
+        @IdRes menuRes: Int,
+        @StringRes hint: Int,
+        onQueryChanged: (String) -> Unit = {},
+        onQuerySubmit: (String) -> Unit = {}
     ) {
         val searchItem = menu.findItem(menuRes)
         val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
@@ -36,16 +36,19 @@ object UiUtils {
         })
     }
 
-    fun setupRecyclerView(context: Context,
-                          recyclerView: RecyclerView,
-                          adapter: RecyclerView.Adapter<*>,
-                          manager: RecyclerView.LayoutManager,
-                          useDivider: Boolean = false) {
+    fun setupRecyclerView(
+        context: Context,
+        recyclerView: RecyclerView,
+        adapter: RecyclerView.Adapter<*>,
+        manager: RecyclerView.LayoutManager,
+        useDivider: Boolean = false
+    ) {
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
         if (useDivider) {
             val itemDecorator = DividerItemDecoration(
-                    context, DividerItemDecoration.VERTICAL)
+                context, DividerItemDecoration.VERTICAL
+            )
             recyclerView.addItemDecoration(itemDecorator)
         }
     }

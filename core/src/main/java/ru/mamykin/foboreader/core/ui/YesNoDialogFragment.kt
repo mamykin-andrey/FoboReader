@@ -16,10 +16,12 @@ class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickLi
         private const val TITLE_EXTRA = "title_extra"
         private const val MESSAGE_EXTRA = "message_extra"
 
-        fun newInstance(title: String,
-                        message: String,
-                        positiveClickFunc: () -> Unit,
-                        negativeClickFunc: (() -> Unit)?): YesNoDialogFragment = YesNoDialogFragment().apply {
+        fun newInstance(
+            title: String,
+            message: String,
+            positiveClickFunc: () -> Unit,
+            negativeClickFunc: (() -> Unit)?
+        ): YesNoDialogFragment = YesNoDialogFragment().apply {
             this.arguments = Bundle().apply {
                 putString(TITLE_EXTRA, title)
                 putString(MESSAGE_EXTRA, message)
@@ -35,11 +37,11 @@ class YesNoDialogFragment : AppCompatDialogFragment(), DialogInterface.OnClickLi
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val args = savedInstanceState ?: arguments
         return AlertDialog.Builder(context)
-                .setTitle(args!!.getString(TITLE_EXTRA))
-                .setPositiveButton(android.R.string.yes, this)
-                .setNegativeButton(android.R.string.no, this)
-                .setMessage(args.getString(MESSAGE_EXTRA))
-                .create()
+            .setTitle(args!!.getString(TITLE_EXTRA))
+            .setPositiveButton(android.R.string.yes, this)
+            .setNegativeButton(android.R.string.no, this)
+            .setMessage(args.getString(MESSAGE_EXTRA))
+            .create()
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {

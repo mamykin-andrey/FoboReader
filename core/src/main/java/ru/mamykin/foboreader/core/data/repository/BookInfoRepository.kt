@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.core.data.repository
 
 import ru.mamykin.foboreader.core.data.database.BookInfoDao
-import ru.mamykin.foboreader.core.data.model.toDatabaseModel
 import ru.mamykin.foboreader.core.domain.model.BookInfo
 
 class BookInfoRepository constructor(

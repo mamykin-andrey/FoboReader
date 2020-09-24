@@ -8,8 +8,8 @@ import ru.mamykin.foboreader.core.extension.toDate
 import java.util.*
 
 class BookInfoParserHandler(
-        private val filePath: String,
-        private val successFunc: (BookInfo) -> Unit
+    private val filePath: String,
+    private val successFunc: (BookInfo) -> Unit
 ) : DefaultHandler2() {
 
     private var currentElement: ElementType = ElementType.Unknown
@@ -22,10 +22,10 @@ class BookInfoParserHandler(
     private var coverUrl = ""
 
     override fun startElement(
-            uri: String,
-            localName: String,
-            elemName: String,
-            attributes: Attributes
+        uri: String,
+        localName: String,
+        elemName: String,
+        attributes: Attributes
     ) {
         super.startElement(uri, localName, elemName, attributes)
         currentElement = ElementType.parse(elemName)
@@ -55,18 +55,18 @@ class BookInfoParserHandler(
         super.endDocument()
         val author = "$firstName $middleName $lastName"
         successFunc.invoke(
-                BookInfo(
-                        id = 0,
-                        filePath = filePath,
-                        genre = genre,
-                        coverUrl = coverUrl,
-                        author = author,
-                        title = title,
-                        languages = listOf(),
-                        date = date,
-                        currentPage = 0,
-                        lastOpen = System.currentTimeMillis()
-                )
+            BookInfo(
+                id = 0,
+                filePath = filePath,
+                genre = genre,
+                coverUrl = coverUrl,
+                author = author,
+                title = title,
+                languages = listOf(),
+                date = date,
+                currentPage = 0,
+                lastOpen = System.currentTimeMillis()
+            )
         )
     }
 

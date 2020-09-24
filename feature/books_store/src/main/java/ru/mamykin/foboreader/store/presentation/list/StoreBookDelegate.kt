@@ -9,7 +9,7 @@ import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 
 class StoreBookDelegate(
-        private val onBookClicked: (StoreBook) -> Unit
+    private val onBookClicked: (StoreBook) -> Unit
 ) : AdapterDelegate<Any>() {
 
     override fun isForViewType(item: Any): Boolean = item is StoreBook
@@ -17,7 +17,7 @@ class StoreBookDelegate(
     override fun getLayoutId(): Int = R.layout.item_store_book
 
     override fun createViewHolder(itemView: View) =
-            StoreCategoryViewHolder(itemView, onBookClicked)
+        StoreCategoryViewHolder(itemView, onBookClicked)
 
     override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
         (holder as StoreCategoryViewHolder).bind(item as StoreBook)
@@ -25,8 +25,8 @@ class StoreBookDelegate(
 }
 
 class StoreCategoryViewHolder(
-        containerView: View,
-        private val onBookClicked: (StoreBook) -> Unit
+    containerView: View,
+    private val onBookClicked: (StoreBook) -> Unit
 ) : RecyclerView.ViewHolder(containerView) {
 
     fun bind(book: StoreBook) = with(itemView) {

@@ -7,7 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import ru.mamykin.foboreader.core.R
 
 abstract class BaseActivity(
-        @LayoutRes private val layoutId: Int
+    @LayoutRes private val layoutId: Int
 ) : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -11,11 +11,11 @@ internal object NetworkDependencies {
 
     fun service(client: OkHttpClient): BooksStoreService {
         val retrofit = Retrofit.Builder()
-                .baseUrl(BooksStoreService.BASE_URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                .build()
+            .baseUrl(BooksStoreService.BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .build()
 
         return retrofit.create(BooksStoreService::class.java)
     }
