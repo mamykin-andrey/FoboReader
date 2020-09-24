@@ -57,11 +57,14 @@ dependencies {
     api retrofitLoggingInterceptor
     api picasso
     api okio
+    api okHttp
 
     api navigationFragment
     api navigationUi
 
     api flowbinding
+
+    api multidex
 
     testApi junit
     testApi mockito

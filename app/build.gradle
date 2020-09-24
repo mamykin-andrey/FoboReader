@@ -23,13 +23,11 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix '.dev'
-            versionNameSuffix 'd'
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -37,8 +35,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation kotlinStdLib
-    implementation multidex
 
     implementation project(":core")
     implementation project(":feature:books_store")

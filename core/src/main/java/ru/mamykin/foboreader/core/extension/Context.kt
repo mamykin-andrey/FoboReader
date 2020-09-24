@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -89,3 +90,11 @@ var AppCompatActivity?.nightMode: Boolean
             this.takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate()
         }
     }
+
+fun Context.dpToPx(value: Int): Float {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        value.toFloat(),
+        resources.displayMetrics
+    )
+}

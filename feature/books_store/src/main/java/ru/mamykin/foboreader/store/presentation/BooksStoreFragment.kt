@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.core.extension.getSearchView
+import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.platform.Navigator
@@ -30,9 +31,13 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        srlRefresh.setOnRefreshListener { viewModel.sendEvent(Event.LoadBooks) }
+        initErrorView()
         rvBooks.adapter = adapter
         initToolbar()
+    }
+
+    private fun initErrorView() {
+        v_error.setOnRetryClickListener { viewModel.sendEvent(Event.RetryBooksLoading) }
     }
 
     private fun initToolbar() {
@@ -52,7 +57,8 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
     }
 
     override fun showState(state: ViewState) {
-        srlRefresh.isRefreshing = state.isLoading
+        progressView.isVisible = state.isLoading
+        v_error.isVisible = state.isError
         adapter.changeItems(state.books)
     }
 

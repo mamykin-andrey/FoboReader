@@ -7,6 +7,7 @@ ext {
     rxAndroidVersion = '1.2.1'
     coroutinesVersion = '1.3.2'
     retrofitVersion = '2.3.0'
+    okHttpVersion = '4.9.0'
     converterGsonVersion = '2.1.0'
     picassoVersion = '2.5.2'
     mockitoVersion = '2.13.0'
@@ -48,6 +49,8 @@ ext {
 
     retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
     okio = "com.squareup.okio:okio:$retrofitVersion"
+    okHttp = "com.squareup.okio:okio:$retrofitVersion"
+    okHttp = "com.squareup.okhttp3:okhttp:$okHttpVersion"
     retrofitGsonConverter = "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     retrofitCoroutinesAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$retrofitCoroutinesAdapterVersion"
     retrofitLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:$retrofitLoggingInterceptorVersion"

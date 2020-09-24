@@ -75,4 +75,6 @@
     <string name="error_insufficient_space">Недостаточно памяти</string>
     <string name="download_file_common_error">Не удалось скачать файл</string>
     <string name="format_book_read_amount">%1$d/%2$d</string>
+    <string name="error_retry">Повторить</string>
+    <string name="error_description">Не удалось загрузить данные</string>
 </resources>

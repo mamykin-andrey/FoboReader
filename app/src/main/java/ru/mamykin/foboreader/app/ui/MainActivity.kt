@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
     private val navigator by inject<Navigator>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        initTheme()
         super.onCreate(savedInstanceState)
+        initTheme()
         setContentView(R.layout.activity_main)
         navigator.setActivity(this)
     }

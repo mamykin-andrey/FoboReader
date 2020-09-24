@@ -1,9 +1,7 @@
 package ru.mamykin.foboreader.core.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.ContentLoadingProgressBar
@@ -16,7 +14,7 @@ import ru.mamykin.foboreader.core.mvvm.SingleLiveEvent
 
 abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effect>, ViewState, Effect>(
     @LayoutRes private val layoutId: Int
-) : Fragment() {
+) : Fragment(layoutId) {
 
     protected abstract val viewModel: VM
 
@@ -29,12 +27,6 @@ abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effe
             ?: throw IllegalStateException("Couldn't find progress view in layout!")
 
     private var dataLoaded = false
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(layoutId, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

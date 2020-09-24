@@ -1,13 +1,9 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.ContentLoadingProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/cpb_content_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        tools:visibility="gone" />
-
-</merge>
+    android:id="@+id/cpb_content_loading"
+    style="@android:style/Widget.Material.ProgressBar"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:visibility="gone"
+    tools:visibility="gone" />
