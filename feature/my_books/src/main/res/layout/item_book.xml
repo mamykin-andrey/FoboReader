@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     app:cardElevation="3dp"
     app:cardPreventCornerOverlap="false"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    tools:context="presentation.my_books.list.BookViewHolder">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
