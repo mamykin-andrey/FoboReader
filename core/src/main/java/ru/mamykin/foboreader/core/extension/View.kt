@@ -1,16 +1,19 @@
 package ru.mamykin.foboreader.core.extension
 
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.annotation.CheckResult
+import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
 import reactivecircus.flowbinding.android.widget.SeekBarChangeEvent
 import reactivecircus.flowbinding.android.widget.changeEvents
 import reactivecircus.flowbinding.android.widget.checkedChanges
@@ -43,3 +46,23 @@ fun SeekBar.changeProgressEvents(emitImmediately: Boolean = false): Flow<Int> =
 fun SwitchCompat.manualCheckedChanges(): Flow<Boolean> =
     checkedChanges()
         .filter { this.isPressed }
+
+fun Menu.getSearchView(@IdRes itemId: Int): SearchView {
+    val searchItem = findItem(itemId)
+    return searchItem.actionView as SearchView
+}
+
+@CheckResult
+fun SearchView.queryChanges(): Flow<String?> = callbackFlow {
+    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            offer(newText)
+            return true
+        }
+    })
+    awaitClose { setOnQueryTextListener(null) }
+}.conflate()

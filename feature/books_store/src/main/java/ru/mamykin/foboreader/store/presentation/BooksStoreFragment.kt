@@ -1,17 +1,20 @@
 package ru.mamykin.foboreader.store.presentation
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_books_store.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.mamykin.foboreader.core.extension.getSearchView
+import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.platform.Navigator
 import ru.mamykin.foboreader.core.ui.BaseFragment
-import ru.mamykin.foboreader.core.ui.UiUtils
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.presentation.list.BooksStoreRecyclerAdapter
 
@@ -27,9 +30,8 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         srlRefresh.setOnRefreshListener { viewModel.sendEvent(Event.LoadBooks) }
-        UiUtils.setupRecyclerView(context!!, rvBooks, adapter, LinearLayoutManager(context))
+        rvBooks.adapter = adapter
         initToolbar()
     }
 
@@ -38,14 +40,15 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
             title = getString(R.string.books_store)
             navigationIcon = null
             inflateMenu(R.menu.menu_books_store)
-            UiUtils.setupSearchView(
-                context!!,
-                menu,
-                R.id.action_search,
-                R.string.menu_search,
-                { viewModel.sendEvent(Event.FilterBooks(it)) }
-            )
+            initSearchView(menu)
         }
+    }
+
+    private fun initSearchView(menu: Menu) = menu.getSearchView(R.id.action_search).apply {
+        queryHint = getString(R.string.menu_search)
+        queryChanges()
+            .filterNotNull()
+            .onEach { viewModel.sendEvent(Event.FilterBooks(it)) }
     }
 
     override fun showState(state: ViewState) {

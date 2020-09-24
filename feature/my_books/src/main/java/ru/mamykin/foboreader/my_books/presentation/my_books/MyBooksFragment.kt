@@ -1,19 +1,21 @@
 package ru.mamykin.foboreader.my_books.presentation.my_books
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_my_books.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import reactivecircus.flowbinding.android.view.clicks
+import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.isVisible
+import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.platform.Navigator
 import ru.mamykin.foboreader.core.ui.BaseFragment
-import ru.mamykin.foboreader.core.ui.UiUtils
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.domain.my_books.SortOrder
 import ru.mamykin.foboreader.my_books.presentation.my_books.list.MyBooksRecyclerAdapter
@@ -33,13 +35,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        UiUtils.setupRecyclerView(
-            context!!,
-            rvMyBooks,
-            adapter,
-            LinearLayoutManager(context),
-            false
-        )
+        rvMyBooks.adapter = adapter
         srlScanBooks.isEnabled = false
     }
 
@@ -60,13 +56,14 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(
         menu.findItem(R.id.actionSortDate)
             .clicks()
             .onEach { viewModel.sendEvent(Event.SortBooks(SortOrder.ByDate)) }
-        UiUtils.setupSearchView(
-            context!!,
-            menu,
-            R.id.action_search,
-            R.string.menu_search,
-            { viewModel.sendEvent(Event.FilterBooks(it)) }
-        )
+        initSearchView(menu)
+    }
+
+    private fun initSearchView(menu: Menu) = menu.getSearchView(R.id.action_search).apply {
+        queryHint = getString(R.string.menu_search)
+        queryChanges()
+            .filterNotNull()
+            .onEach { viewModel.sendEvent(Event.FilterBooks(it)) }
     }
 
     override fun showState(state: ViewState) {
