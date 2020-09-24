@@ -49,6 +49,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(
 
     private fun initToolbar() = toolbar.apply {
         title = getString(R.string.my_books)
+        navigationIcon = null
         inflateMenu(R.menu.menu_books_list)
         menu.findItem(R.id.actionSortName)
             .clicks()

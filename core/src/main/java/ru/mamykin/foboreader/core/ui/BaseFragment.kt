@@ -19,12 +19,14 @@ abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effe
 ) : Fragment() {
 
     protected abstract val viewModel: VM
+
     protected val toolbar: Toolbar
         get() = view!!.findViewById(R.id.toolbar)
-            ?: throw IllegalStateException("Couldn't find the toolbar in layout!")
+            ?: throw IllegalStateException("Couldn't find toolbar in layout!")
+
     protected val progressView: ContentLoadingProgressBar
         get() = view!!.findViewById(R.id.cpb_content_loading)
-            ?: throw IllegalStateException("Couldn't find the progress view in layout!")
+            ?: throw IllegalStateException("Couldn't find progress view in layout!")
 
     private var dataLoaded = false
 

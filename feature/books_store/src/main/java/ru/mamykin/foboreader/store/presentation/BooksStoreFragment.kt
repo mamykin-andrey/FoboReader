@@ -36,6 +36,7 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
     private fun initToolbar() {
         toolbar.apply {
             title = getString(R.string.books_store)
+            navigationIcon = null
             inflateMenu(R.menu.menu_books_store)
             UiUtils.setupSearchView(
                 context!!,

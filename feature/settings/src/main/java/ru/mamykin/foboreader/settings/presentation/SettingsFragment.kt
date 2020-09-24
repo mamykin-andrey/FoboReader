@@ -29,6 +29,7 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(
 
     private fun initToolbar() = toolbar.apply {
         setTitle(R.string.settings_screen)
+        navigationIcon = null
     }
 
     private fun initViews() {
