@@ -2,6 +2,7 @@ package ru.mamykin.foboreader.app.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import org.koin.android.ext.android.inject
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.data.storage.SettingsStorage
@@ -17,12 +18,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initTheme()
         setContentView(R.layout.activity_main)
-        navigator.setActivity(this)
+        navigator.bind(findNavController(R.id.fr_main_nav_host))
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        navigator.clearActivity()
+        navigator.unbind()
     }
 
     private fun initTheme() {

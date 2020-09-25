@@ -8,7 +8,7 @@ import ru.mamykin.foboreader.my_books.domain.book_details.BookDetailsInteractor
 class BookDetailsViewModel(
     private var bookId: Long,
     private val interactor: BookDetailsInteractor,
-    private val navigator: Navigator
+    private val navigator: BookDetailsNavigator
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isLoading = true)
 ) {

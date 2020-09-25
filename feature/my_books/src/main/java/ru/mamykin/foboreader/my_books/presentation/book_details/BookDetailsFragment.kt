@@ -15,25 +15,18 @@ import ru.mamykin.foboreader.my_books.R
 class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect>(
     R.layout.fragment_book_detail
 ) {
-    override val viewModel: BookDetailsViewModel by viewModel {
-        parametersOf(BookDetailsFragmentArgs.fromBundle(arguments!!).bookId)
+    companion object {
+
+        private const val EXTRA_BOOK_ID = "BOOK_ID"
+
+        fun bundle(bookId: Long) = Bundle().apply {
+            putLong(EXTRA_BOOK_ID, bookId)
+        }
     }
 
-//    override val showNavigationIcon = true
-//    override val sharedElements: List<Pair<View, String>>
-//        get() = listOf(ivBookCover to bookId.toString())
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        postponeEnterTransition()
-//        initSharedTransition()
-//    }
-//
-//    private fun initSharedTransition() {
-//        val transition = TransitionInflater.from(context).inflateTransition(R.transition.move)
-//        sharedElementEnterTransition = transition
-//        sharedElementReturnTransition = transition
-//    }
+    override val viewModel: BookDetailsViewModel by viewModel {
+        parametersOf(arguments?.getLong(EXTRA_BOOK_ID) ?: throw IllegalStateException("No book ID!"))
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

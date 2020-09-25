@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.my_books.presentation.my_books.list
 
 import android.view.View
-import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -14,7 +13,7 @@ import ru.mamykin.foboreader.my_books.R
 
 class MyBookDelegate(
     private val onBookClicked: (Long) -> Unit,
-    private val onAboutClicked: (Long, ImageView) -> Unit,
+    private val onAboutClicked: (Long) -> Unit,
     private val onRemoveClicked: (Long) -> Unit
 ) : AdapterDelegate<BookInfo>() {
 
@@ -37,7 +36,7 @@ class MyBookDelegate(
 class BookViewHolder(
     override val containerView: View,
     private val onBookClicked: (Long) -> Unit,
-    private val onAboutClicked: (Long, ImageView) -> Unit,
+    private val onAboutClicked: (Long) -> Unit,
     private val onRemoveClicked: (Long) -> Unit
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
@@ -56,7 +55,7 @@ class BookViewHolder(
         btnMenu.setOnClickListener {
             btnMenu.showPopupMenu(
                 R.menu.menu_book_item,
-                R.id.menu_about_book to { onAboutClicked(book.id, ivBookCover) },
+                R.id.menu_about_book to { onAboutClicked(book.id) },
                 R.id.menu_remove_book to { onRemoveClicked(book.id) }
             )
         }

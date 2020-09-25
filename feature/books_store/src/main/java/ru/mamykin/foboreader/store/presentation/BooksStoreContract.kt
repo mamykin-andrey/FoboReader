@@ -16,7 +16,6 @@ sealed class Event {
 
 sealed class Effect {
     data class ShowSnackbar(val message: String) : Effect()
-    object OpenMyBooksScreen : Effect()
 }
 
 // TODO: downloadBookError

@@ -19,8 +19,17 @@ import ru.mamykin.widget.paginatedtextview.view.OnActionListener
 class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(
     R.layout.fragment_read_book
 ) {
+    companion object {
+
+        private const val EXTRA_BOOK_ID = "BOOK_ID"
+
+        fun bundle(bookId: Long) = Bundle().apply {
+            putLong(EXTRA_BOOK_ID, bookId)
+        }
+    }
+
     override val viewModel: ReadBookViewModel by viewModel {
-        parametersOf(ReadBookFragmentArgs.fromBundle(arguments!!).bookId)
+        parametersOf(arguments?.getLong(EXTRA_BOOK_ID) ?: throw IllegalStateException("No book ID!"))
     }
     private var lastTextHashCode: Int = 0
 
@@ -37,8 +46,15 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(
 
             override fun onPageLoaded(state: ReadState) = with(state) {
                 viewModel.sendEvent(Event.PageOpened(state.currentIndex))
-                tvReadPercent.text = getString(R.string.read_book_user_read_percent, readPercent)
-                tvRead.text = getString(R.string.read_book_user_read_pages, currentIndex, pagesCount)
+                tvReadPercent.text = getString(
+                    R.string.read_book_user_read_percent,
+                    readPercent
+                )
+                tvRead.text = getString(
+                    R.string.read_book_user_read_pages,
+                    currentIndex,
+                    pagesCount
+                )
             }
         })
     }

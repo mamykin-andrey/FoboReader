@@ -10,7 +10,8 @@ import ru.mamykin.foboreader.store.domain.model.StoreBook
 @FlowPreview
 @ExperimentalCoroutinesApi
 class BooksStoreViewModel(
-    private val interactor: BooksStoreInteractor
+    private val interactor: BooksStoreInteractor,
+    private val navigator: BooksStoreNavigator
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isLoading = true)
 ) {
@@ -58,7 +59,7 @@ class BooksStoreViewModel(
 
     private fun downloadBook(book: StoreBook) = launch {
         runCatching { interactor.downloadBook(book) }
-            .onSuccess { sendEffect(Effect.OpenMyBooksScreen) }
+            .onSuccess { navigator.openMyBooksScreen() }
             .onFailure { sendEffect(Effect.ShowSnackbar(it.message!!)) }
     }
 }

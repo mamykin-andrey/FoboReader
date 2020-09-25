@@ -14,7 +14,6 @@ import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.extension.queryChanges
-import ru.mamykin.foboreader.core.platform.Navigator
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.domain.my_books.SortOrder
@@ -26,7 +25,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(
     R.layout.fragment_my_books
 ) {
     override val viewModel: MyBooksViewModel by viewModel()
-    private val navigator: Navigator by inject()
+    private val navigator: MyBooksNavigator by inject()
     private val adapter = MyBooksRecyclerAdapter(
         navigator::openBook,
         navigator::openBookDetails
