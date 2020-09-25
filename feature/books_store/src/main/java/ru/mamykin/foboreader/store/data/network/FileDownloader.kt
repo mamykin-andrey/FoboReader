@@ -20,28 +20,25 @@ class FileDownloader(
     private val client: OkHttpClient
 ) {
     private val notificationManager by lazy { NotificationManagerCompat.from(context) }
+    private val notificationStartTitle by lazy { context.getString(R.string.books_store_download_progress) }
+    private val notificationFinishTitle by lazy { context.getString(R.string.books_store_download_completed) }
+    private val notificationErrorTitle by lazy { context.getString(R.string.books_store_download_failed) }
 
     /**
      * Download file by its [url] into media/app_name/[fileName] folder
      */
     @Throws(DownloadFileException::class)
-    suspend fun download(
-        url: String,
-        fileName: String,
-        showNotification: Boolean = true
-    ) {
-        val showNotificationFun = if (showNotification) this::showNotification else null
-
-        showNotificationFun?.invoke(fileName, NotificationEvent.Start)
+    suspend fun download(url: String, fileName: String) {
+        showNotification(fileName, notificationStartTitle)
 
         val newFile = createFile(fileName)
         runCatching { downloadFile(url, newFile) }
             .onSuccess {
-                showNotificationFun?.invoke(fileName, NotificationEvent.Finish)
+                showNotification(fileName, notificationFinishTitle)
                 Log.debug("File downloaded to ${newFile.absolutePath}")
             }
             .onFailure {
-                showNotificationFun?.invoke(fileName, NotificationEvent.Error)
+                showNotification(fileName, notificationErrorTitle)
                 throw it
             }
     }
@@ -67,12 +64,7 @@ class FileDownloader(
         }
     }
 
-    private fun showNotification(fileName: String, event: NotificationEvent) {
-        val title = when (event) {
-            NotificationEvent.Start -> context.getString(R.string.books_store_download_progress)
-            NotificationEvent.Finish -> context.getString(R.string.books_store_download_completed)
-            NotificationEvent.Error -> context.getString(R.string.books_store_download_failed)
-        }
+    private fun showNotification(fileName: String, title: String) {
         val notification = NotificationCompat.Builder(context, NotificationUtils.GENERAL_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_download)
             .setContentTitle(title)
@@ -80,11 +72,5 @@ class FileDownloader(
             .build()
 
         notificationManager.notify(NotificationUtils.FILE_DOWNLOAD_NOTIFICATION_ID, notification)
-    }
-
-    private sealed class NotificationEvent {
-        object Start : NotificationEvent()
-        object Finish : NotificationEvent()
-        object Error : NotificationEvent()
     }
 }

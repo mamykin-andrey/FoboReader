@@ -4,8 +4,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
-import ru.mamykin.foboreader.core.data.repository.BookInfoRepository
-import ru.mamykin.foboreader.core.domain.model.BookInfo
+import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
+import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import java.io.File
 
 @ExperimentalCoroutinesApi

@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.data.database.converter
+package ru.mamykin.foboreader.common_book_info.data.database.converter
 
 import androidx.room.TypeConverter
 import java.util.*

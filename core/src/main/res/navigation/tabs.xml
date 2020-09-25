@@ -19,15 +19,6 @@
     <keep_state_fragment
         android:id="@+id/settingsFragment"
         android:name="ru.mamykin.foboreader.settings.presentation.SettingsFragment"
-        android:label="SettingsFragment">
-        <action
-            android:id="@+id/action_settingsFragment_to_colorPickerDialog"
-            app:destination="@id/colorPickerDialog" />
-    </keep_state_fragment>
-
-    <dialog
-        android:id="@+id/colorPickerDialog"
-        android:name="ru.mamykin.foboreader.settings.presentation.ColorPickerFragment"
-        android:label="ColorPickerDialog" />
+        android:label="SettingsFragment" />
 
 </navigation>

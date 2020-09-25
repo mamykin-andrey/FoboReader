@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply from: "$rootDir/buildsystem/dependencies.gradle"
 apply from: "$rootDir/buildsystem/project.gradle"
@@ -15,7 +16,7 @@ android {
         versionName version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -27,7 +28,6 @@ android {
 }
 
 dependencies {
-    implementation project(':core')
-    implementation project(':library')
-    implementation project(':feature:common_book_info')
+    implementation project(":core")
+    kapt roomCompiler
 }

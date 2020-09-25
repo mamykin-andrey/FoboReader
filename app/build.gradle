@@ -37,6 +37,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(":core")
+    implementation project(":feature:common_book_info")
     implementation project(":feature:books_store")
     implementation project(":feature:read_book")
     implementation project(":feature:settings")

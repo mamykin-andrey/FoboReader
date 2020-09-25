@@ -1,8 +1,8 @@
 package ru.mamykin.foboreader.my_books.domain.my_books
 
 import android.content.Context
-import ru.mamykin.foboreader.core.data.database.BookInfoDao
-import ru.mamykin.foboreader.core.data.model.toDatabaseModel
+import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
+import ru.mamykin.foboreader.common_book_info.data.model.toDatabaseModel
 import ru.mamykin.foboreader.core.extension.getExternalMediaDir
 import ru.mamykin.foboreader.core.extension.isFictionBook
 import ru.mamykin.foboreader.core.platform.Log

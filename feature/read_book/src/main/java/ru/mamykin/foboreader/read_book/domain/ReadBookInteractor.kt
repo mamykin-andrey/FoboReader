@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.read_book.domain
 
-import ru.mamykin.foboreader.core.data.repository.BookInfoRepository
-import ru.mamykin.foboreader.core.domain.model.BookInfo
+import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
+import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.read_book.data.TranslateRepository
 import ru.mamykin.foboreader.read_book.domain.entity.BookContent
 

@@ -49,7 +49,6 @@ ext {
 
     retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
     okio = "com.squareup.okio:okio:$retrofitVersion"
-    okHttp = "com.squareup.okio:okio:$retrofitVersion"
     okHttp = "com.squareup.okhttp3:okhttp:$okHttpVersion"
     retrofitGsonConverter = "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     retrofitCoroutinesAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$retrofitCoroutinesAdapterVersion"

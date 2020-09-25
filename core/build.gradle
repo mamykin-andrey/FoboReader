@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs"
 apply from: '../buildsystem/dependencies.gradle'
 apply from: '../buildsystem/project.gradle'
@@ -42,7 +41,6 @@ dependencies {
 
     api roomRuntime
     api roomKtx
-    kapt roomCompiler
 
     api cardView
     api materialLib

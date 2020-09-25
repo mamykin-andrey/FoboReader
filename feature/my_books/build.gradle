@@ -28,5 +28,6 @@ android {
 }
 
 dependencies {
+    implementation project(":feature:common_book_info")
     implementation project(":core")
 }

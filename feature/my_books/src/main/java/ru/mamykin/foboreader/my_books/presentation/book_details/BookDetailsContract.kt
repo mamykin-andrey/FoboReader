@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.my_books.presentation.book_details
 
-import ru.mamykin.foboreader.core.domain.model.BookInfo
+import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 
 sealed class Event {
     object ReadBookClicked : Event()

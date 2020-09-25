@@ -36,12 +36,14 @@ val Fragment.appCompatActivity: AppCompatActivity
 var AppCompatActivity?.nightMode: Boolean
     get() = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
     set(value) {
-        this ?: return
-        if (value != nightMode) {
-            val newMode =
-                if (value) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        if (this != null && value != nightMode) {
+            val newMode = if (value)
+                AppCompatDelegate.MODE_NIGHT_YES
+            else
+                AppCompatDelegate.MODE_NIGHT_NO
+
             AppCompatDelegate.setDefaultNightMode(newMode)
-            this.takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate()
+            takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate()
         }
     }
 

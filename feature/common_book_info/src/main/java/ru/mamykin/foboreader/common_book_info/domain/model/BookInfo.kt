@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.domain.model
+package ru.mamykin.foboreader.common_book_info.domain.model
 
 import java.io.File
 import java.util.*

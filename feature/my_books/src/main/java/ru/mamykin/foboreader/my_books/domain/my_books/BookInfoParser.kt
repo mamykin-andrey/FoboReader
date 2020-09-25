@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.my_books.domain.my_books
 
-import ru.mamykin.foboreader.core.domain.model.BookInfo
+import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import java.io.File
 import javax.xml.parsers.SAXParserFactory
 import kotlin.coroutines.resumeWithException

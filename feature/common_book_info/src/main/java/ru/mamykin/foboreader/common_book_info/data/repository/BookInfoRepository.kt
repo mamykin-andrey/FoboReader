@@ -1,7 +1,7 @@
-package ru.mamykin.foboreader.core.data.repository
+package ru.mamykin.foboreader.common_book_info.data.repository
 
-import ru.mamykin.foboreader.core.data.database.BookInfoDao
-import ru.mamykin.foboreader.core.domain.model.BookInfo
+import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
+import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 
 class BookInfoRepository constructor(
     private val bookInfoDao: BookInfoDao
