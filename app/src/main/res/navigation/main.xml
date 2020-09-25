@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/bookDetailsFragment"
-        android:name="ru.mamykin.foboreader.my_books.presentation.book_details.BookDetailsFragment"
+        android:name="ru.mamykin.foboreader.book_details.presentation.BookDetailsFragment"
         android:label="BookDetailsFragment"
         tools:layout="@layout/fragment_book_detail">
 

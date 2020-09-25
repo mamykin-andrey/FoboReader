@@ -9,7 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.fragment_tabs.*
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.navigation.KeepStateNavigator
-import ru.mamykin.foboreader.my_books.presentation.my_books.MyBooksFragment
+import ru.mamykin.foboreader.my_books.presentation.MyBooksFragment
 
 class TabsFragment : Fragment(R.layout.fragment_tabs) {
 

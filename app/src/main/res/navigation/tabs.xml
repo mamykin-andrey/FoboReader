@@ -8,7 +8,7 @@
 
     <keep_state_fragment
         android:id="@+id/myBooksFragment"
-        android:name="ru.mamykin.foboreader.my_books.presentation.my_books.MyBooksFragment"
+        android:name="ru.mamykin.foboreader.my_books.presentation.MyBooksFragment"
         android:label="MyBooksFragment" />
 
     <keep_state_fragment

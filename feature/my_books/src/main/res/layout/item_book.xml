@@ -7,7 +7,7 @@
     app:cardElevation="3dp"
     app:cardPreventCornerOverlap="false"
     app:cardUseCompatPadding="true"
-    tools:context="presentation.my_books.list.BookViewHolder">
+    tools:context=".presentation.list.BookViewHolder">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -75,7 +75,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvFileInfo"
             tools:text="@tools:sample/lorem/random" />
 
-        <ru.mamykin.foboreader.my_books.presentation.my_books.PercentProgressView
+        <ru.mamykin.foboreader.my_books.presentation.PercentProgressView
             android:id="@+id/pvProgress"
             android:layout_width="0dp"
             android:layout_height="2dp"

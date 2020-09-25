@@ -3,13 +3,12 @@ package ru.mamykin.foboreader.app.navigation
 import androidx.navigation.NavController
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.platform.Navigator
-import ru.mamykin.foboreader.my_books.presentation.book_details.BookDetailsFragment
-import ru.mamykin.foboreader.my_books.presentation.book_details.BookDetailsNavigator
-import ru.mamykin.foboreader.my_books.presentation.my_books.MyBooksNavigator
+import ru.mamykin.foboreader.my_books.presentation.MyBooksNavigator
 import ru.mamykin.foboreader.read_book.presentation.ReadBookFragment
 import ru.mamykin.foboreader.store.presentation.BooksStoreNavigator
 
-class NavigatorImpl : Navigator, BooksStoreNavigator, BookDetailsNavigator, MyBooksNavigator {
+class NavigatorImpl : Navigator, BooksStoreNavigator,
+    ru.mamykin.foboreader.book_details.presentation.BookDetailsNavigator, MyBooksNavigator {
 
     private var navController: NavController? = null
 
@@ -36,6 +35,6 @@ class NavigatorImpl : Navigator, BooksStoreNavigator, BookDetailsNavigator, MyBo
     }
 
     override fun openBookDetails(bookId: Long) {
-        navController?.navigate(R.id.tabs_to_book_details, BookDetailsFragment.bundle(bookId))
+        navController?.navigate(R.id.tabs_to_book_details, ru.mamykin.foboreader.book_details.presentation.BookDetailsFragment.bundle(bookId))
     }
 }

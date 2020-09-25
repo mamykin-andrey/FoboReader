@@ -9,7 +9,6 @@
     <string name="my_books_sort_by_date">По дате</string>
     <string name="my_books_menu_delete">Удалить</string>
     <string name="my_books_about_book">О книге</string>
-    <string name="my_books_book_info_title">Информация о книге</string>
     <string name="my_books_bookmarks">Закладки</string>
     <string name="my_books_no_bookmarks">Закладки отсутствуют</string>
     <string name="my_books_book_path">Файл:</string>

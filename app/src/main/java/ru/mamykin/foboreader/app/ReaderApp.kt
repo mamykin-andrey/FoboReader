@@ -6,6 +6,7 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import ru.mamykin.foboreader.app.navigation.NavigatorImpl
+import ru.mamykin.foboreader.book_details.di.bookDetailsModule
 import ru.mamykin.foboreader.common_book_info.di.commonBookInfoModule
 import ru.mamykin.foboreader.core.di.coreModule
 import ru.mamykin.foboreader.core.platform.NotificationUtils
@@ -33,6 +34,7 @@ class ReaderApp : MultiDexApplication() {
                     coreModule,
                     commonBookInfoModule,
                     myBooksModule,
+                    bookDetailsModule,
                     booksStoreModule,
                     settingsModule,
                     readBookModule
