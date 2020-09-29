@@ -29,5 +29,5 @@ android {
 
 dependencies {
     implementation project(":core")
-    kapt roomCompiler
+    kapt deps.roomCompiler
 }

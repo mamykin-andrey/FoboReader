@@ -27,46 +27,46 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api kotlinStdLib
+    api deps.kotlinStdLib
 
-    api coreKtx
-    api recyclerView
+    api deps.coreKtx
+    api deps.recyclerView
 
-    api coroutinesCore
-    api coroutinesAndroid
+    api deps.coroutinesCore
+    api deps.coroutinesAndroid
 
-    api koinScope
-    api koinViewModel
+    api deps.koinScope
+    api deps.koinViewModel
 
-    api roomRuntime
-    api roomKtx
+    api deps.roomRuntime
+    api deps.roomKtx
 
-    api cardView
-    api materialLib
-    api constraintLayout
+    api deps.cardView
+    api deps.materialLib
+    api deps.constraintLayout
 
-    api lifecycleExtensions
-    api lifecycleViewModel
+    api deps.lifecycleExtensions
+    api deps.lifecycleViewModel
 
-    api retrofit
-    api retrofitGsonConverter
-    api retrofitCoroutinesAdapter
-    api retrofitLoggingInterceptor
-    api picasso
-    api okio
-    api okHttp
+    api deps.retrofit
+    api deps.retrofitGsonConverter
+    api deps.retrofitCoroutinesAdapter
+    api deps.retrofitLoggingInterceptor
+    api deps.picasso
+    api deps.okio
+    api deps.okHttp
 
-    api navigationFragment
-    api navigationUi
+    api deps.navigationFragment
+    api deps.navigationUi
 
-    api flowbinding
+    api deps.flowbinding
 
-    api multidex
+    api deps.multidex
 
-    testApi junit
-    testApi mockito
-    testApi mockitoKotlin
-    testApi kluent
+    testApi deps.junit
+    testApi deps.mockito
+    testApi deps.mockitoKotlin
+    testApi deps.kluent
 
-    androidTestApi espressoCore
+    androidTestApi deps.espressoCore
 }
