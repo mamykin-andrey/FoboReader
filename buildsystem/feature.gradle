@@ -1,0 +1,6 @@
+apply from: "$rootDir/buildsystem/module.gradle"
+apply from: "$rootDir/buildsystem/dependencies.gradle"
+
+dependencies {
+    implementation project(":core")
+}
