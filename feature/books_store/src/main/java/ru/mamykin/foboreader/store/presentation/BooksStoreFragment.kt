@@ -1,8 +1,10 @@
 package ru.mamykin.foboreader.store.presentation
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_books_store.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -15,17 +17,23 @@ import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.store.R
+import ru.mamykin.foboreader.store.databinding.FragmentBooksStoreBinding
 import ru.mamykin.foboreader.store.presentation.list.BooksStoreRecyclerAdapter
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
-    R.layout.fragment_books_store
-) {
+class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>() {
+
     override val viewModel: BooksStoreViewModel by viewModel()
 
     private val adapter = BooksStoreRecyclerAdapter { viewModel.sendEvent(Event.DownloadBook(it)) }
 
+    private lateinit var binding: FragmentBooksStoreBinding
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentBooksStoreBinding.inflate(inflater)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

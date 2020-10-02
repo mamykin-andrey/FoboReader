@@ -4,7 +4,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
 import android.text.SpannableString
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_read_book.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -13,12 +15,11 @@ import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.read_book.R
+import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
 import ru.mamykin.widget.paginatedtextview.pagination.ReadState
 import ru.mamykin.widget.paginatedtextview.view.OnActionListener
 
-class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(
-    R.layout.fragment_read_book
-) {
+class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>() {
     companion object {
 
         private const val EXTRA_BOOK_ID = "BOOK_ID"
@@ -31,7 +32,15 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(
     override val viewModel: ReadBookViewModel by viewModel {
         parametersOf(arguments?.getLong(EXTRA_BOOK_ID) ?: throw IllegalStateException("No book ID!"))
     }
+
+    private lateinit var binding: FragmentReadBookBinding
+
     private var lastTextHashCode: Int = 0
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentReadBookBinding.inflate(inflater)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -1,8 +1,10 @@
 package ru.mamykin.foboreader.my_books.presentation
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_my_books.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -16,20 +18,27 @@ import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.my_books.R
+import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
 import ru.mamykin.foboreader.my_books.domain.SortOrder
 import ru.mamykin.foboreader.my_books.presentation.list.MyBooksRecyclerAdapter
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(
-    R.layout.fragment_my_books
-) {
+class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
+
     override val viewModel: MyBooksViewModel by viewModel()
     private val navigator: MyBooksNavigator by inject()
     private val adapter = MyBooksRecyclerAdapter(
         navigator::openBook,
         navigator::openBookDetails
     ) { viewModel.sendEvent(Event.RemoveBook(it)) }
+
+    private lateinit var binding: FragmentMyBooksBinding
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentMyBooksBinding.inflate(inflater)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
