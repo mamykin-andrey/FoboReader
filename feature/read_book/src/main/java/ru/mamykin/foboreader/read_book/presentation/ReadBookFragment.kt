@@ -60,7 +60,7 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>() {
     }
 
     override fun showState(state: ViewState) {
-        binding.pbLoading.isVisible = state.isTranslationLoading
+        progressView.isVisible = state.isTranslationLoading
         showBookText(state.text)
         state.wordTranslation?.let(::showWordTranslation)
         state.paragraphTranslation?.let(::showParagraphTranslation)

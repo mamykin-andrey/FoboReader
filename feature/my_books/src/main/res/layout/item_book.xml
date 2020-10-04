@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,7 +16,7 @@
         android:background="?android:selectableItemBackground">
 
         <ImageView
-            android:id="@+id/ivBookCover"
+            android:id="@+id/iv_book_cover"
             android:layout_width="100dp"
             android:layout_height="120dp"
             android:contentDescription="@null"
@@ -25,74 +26,72 @@
             tools:src="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tvBookTitle"
+            android:id="@+id/tv_book_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="@dimen/margin_padding_size_medium"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/textColor"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@id/btnMenu"
-            app:layout_constraintLeft_toRightOf="@id/ivBookCover"
-            app:layout_constraintRight_toLeftOf="@id/btnMenu"
-            app:layout_constraintTop_toTopOf="@id/btnMenu"
+            android:textSize="@dimen/text_size_medium"
+            app:layout_constraintBottom_toBottomOf="@id/btn_menu"
+            app:layout_constraintLeft_toRightOf="@id/iv_book_cover"
+            app:layout_constraintRight_toLeftOf="@id/btn_menu"
+            app:layout_constraintTop_toTopOf="@id/btn_menu"
             tools:text="@tools:sample/lorem/random" />
 
         <ImageButton
-            android:id="@+id/btnMenu"
+            android:id="@+id/btn_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="?android:selectableItemBackground"
             android:contentDescription="@null"
-            android:padding="10dp"
+            android:padding="@dimen/margin_padding_size_small"
             android:src="@drawable/ic_dots"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvFileInfo"
+            android:id="@+id/tv_file_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            app:layout_constraintLeft_toLeftOf="@id/tvBookTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvBookTitle"
+            android:layout_marginTop="@dimen/margin_padding_size_micro"
+            app:layout_constraintLeft_toLeftOf="@id/tv_book_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_book_title"
             tools:ignore="SmallSp"
             tools:text="FB2, 112 KB" />
 
         <TextView
-            android:id="@+id/tvAuthor"
+            android:id="@+id/tv_author"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/margin_padding_size_micro"
             android:ellipsize="end"
             android:maxLines="1"
-            app:layout_constraintLeft_toLeftOf="@id/tvBookTitle"
+            app:layout_constraintLeft_toLeftOf="@id/tv_book_title"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvFileInfo"
+            app:layout_constraintTop_toBottomOf="@id/tv_file_info"
             tools:text="@tools:sample/lorem/random" />
 
         <ru.mamykin.foboreader.my_books.presentation.PercentProgressView
-            android:id="@+id/pvProgress"
+            android:id="@+id/pv_progress"
             android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginRight="12dp"
-            app:layout_constraintBottom_toTopOf="@id/tvBooksPages"
-            app:layout_constraintLeft_toLeftOf="@id/tvBooksPages"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_padding_size_medium"
+            app:layout_constraintBottom_toTopOf="@id/tv_books_pages"
+            app:layout_constraintLeft_toLeftOf="@id/tv_books_pages"
             app:layout_constraintRight_toRightOf="parent"
             tools:background="@android:color/darker_gray" />
 
         <TextView
-            android:id="@+id/tvBooksPages"
+            android:id="@+id/tv_books_pages"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="@dimen/margin_padding_size_micro"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@id/tvBookTitle"
+            app:layout_constraintLeft_toLeftOf="@id/tv_book_title"
             tools:text="16 страниц из 27" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

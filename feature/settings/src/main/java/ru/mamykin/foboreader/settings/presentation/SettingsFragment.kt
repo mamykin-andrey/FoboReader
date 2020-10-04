@@ -42,13 +42,13 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>() {
     }
 
     private fun initViews() {
-        binding.seekbarBright.changeProgressEvents()
+        binding.seekBright.changeProgressEvents()
             .onEach { viewModel.sendEvent(Event.BrightnessChanged(it)) }
             .launchIn(lifecycleScope)
-        binding.switchNightTheme.manualCheckedChanges()
+        binding.swNightTheme.manualCheckedChanges()
             .onEach { viewModel.sendEvent(Event.NightThemeChanged(it)) }
             .launchIn(lifecycleScope)
-        binding.switchBrightAuto.manualCheckedChanges()
+        binding.swBrightAuto.manualCheckedChanges()
             .onEach { viewModel.sendEvent(Event.AutoBrightnessChanged(it)) }
             .launchIn(lifecycleScope)
         binding.btnTextSizeMinus.clicks()
@@ -67,19 +67,19 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>() {
         state.settings?.let {
             showTheme(it.isNightTheme)
             showBrightness(it.isAutoBrightness, it.brightness)
-            binding.switchBrightAuto.isChecked = it.isAutoBrightness
+            binding.swBrightAuto.isChecked = it.isAutoBrightness
             binding.tvTextSize.text = it.contentTextSize.toString()
         }
     }
 
     private fun showTheme(nightTheme: Boolean) {
-        binding.switchNightTheme.isChecked = nightTheme
+        binding.swNightTheme.isChecked = nightTheme
         appCompatActivity.nightMode = nightTheme
     }
 
     private fun showBrightness(autoBrightness: Boolean, brightnessValue: Int) {
-        binding.seekbarBright.isEnabled = !autoBrightness
-        binding.seekbarBright.progress = brightnessValue
+        binding.seekBright.isEnabled = !autoBrightness
+        binding.seekBright.progress = brightnessValue
     }
 
     override fun takeEffect(effect: Effect) {

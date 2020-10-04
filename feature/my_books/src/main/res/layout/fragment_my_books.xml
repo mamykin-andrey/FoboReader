@@ -13,7 +13,7 @@
     <include layout="@layout/view_content_progress" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMyBooks"
+        android:id="@+id/rv_my_books"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

@@ -16,10 +16,10 @@
         android:background="?selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:padding="16dp">
+        android:padding="@dimen/margin_padding_size_medium">
 
         <ImageView
-            android:id="@+id/ivBookCover"
+            android:id="@+id/iv_book_cover"
             android:layout_width="80dp"
             android:layout_height="0dp"
             android:contentDescription="@null"
@@ -30,36 +30,35 @@
             tools:src="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tvBookName"
+            android:id="@+id/tv_book_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="@dimen/margin_padding_size_medium"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
-            app:layout_constraintLeft_toRightOf="@id/ivBookCover"
+            android:textSize="@dimen/text_size_medium"
+            app:layout_constraintLeft_toRightOf="@id/iv_book_cover"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Метро 2033" />
 
         <TextView
-            android:id="@+id/tvBookAuthor"
+            android:id="@+id/tv_book_author"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            app:layout_constraintLeft_toLeftOf="@id/tvBookName"
+            android:layout_marginTop="@dimen/margin_padding_size_micro"
+            app:layout_constraintLeft_toLeftOf="@id/tv_book_name"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvBookName"
+            app:layout_constraintTop_toBottomOf="@id/tv_book_name"
             tools:text="Дмитрий Глуховский" />
 
         <TextView
-            android:id="@+id/tvBookGenre"
+            android:id="@+id/tv_book_genre"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            app:layout_constraintLeft_toLeftOf="@id/tvBookName"
+            android:layout_marginTop="@dimen/margin_padding_size_micro"
+            app:layout_constraintLeft_toLeftOf="@id/tv_book_name"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvBookAuthor"
+            app:layout_constraintTop_toBottomOf="@id/tv_book_author"
             tools:text="Фантастика" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
