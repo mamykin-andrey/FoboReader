@@ -1,6 +1,7 @@
 apply from: '../buildsystem/dependencies.gradle'
 apply from: '../buildsystem/project.gradle'
 apply from: '../buildsystem/module.gradle'
+apply plugin: "androidx.navigation.safeargs"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

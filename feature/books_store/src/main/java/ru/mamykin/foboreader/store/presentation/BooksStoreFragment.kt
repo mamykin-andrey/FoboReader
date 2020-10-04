@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_books_store.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.filterNotNull
@@ -38,12 +37,12 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initErrorView()
-        rvBooks.adapter = adapter
+        binding.rvBooks.adapter = adapter
         initToolbar()
     }
 
     private fun initErrorView() {
-        v_error.setOnRetryClickListener { viewModel.sendEvent(Event.RetryBooksLoading) }
+        binding.vError.setOnRetryClickListener { viewModel.sendEvent(Event.RetryBooksLoading) }
     }
 
     private fun initToolbar() {
@@ -64,7 +63,7 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
 
     override fun showState(state: ViewState) {
         progressView.isVisible = state.isLoading
-        v_error.isVisible = state.isError
+        binding.vError.isVisible = state.isError
         adapter.changeItems(state.books)
     }
 

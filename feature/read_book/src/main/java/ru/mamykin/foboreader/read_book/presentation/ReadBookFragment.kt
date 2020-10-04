@@ -7,10 +7,9 @@ import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_read_book.*
+import androidx.core.view.isVisible
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
@@ -44,7 +43,7 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tvText.setOnActionListener(object : OnActionListener {
+        binding.tvText.setOnActionListener(object : OnActionListener {
             override fun onClick(paragraph: String) {
                 viewModel.sendEvent(Event.TranslateParagraph(paragraph.trim()))
             }
@@ -55,11 +54,11 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>() {
 
             override fun onPageLoaded(state: ReadState) = with(state) {
                 viewModel.sendEvent(Event.PageOpened(state.currentIndex))
-                tvReadPercent.text = getString(
+                binding.tvReadPercent.text = getString(
                     R.string.read_book_user_read_percent,
                     readPercent
                 )
-                tvRead.text = getString(
+                binding.tvRead.text = getString(
                     R.string.read_book_user_read_pages,
                     currentIndex,
                     pagesCount
@@ -69,35 +68,35 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>() {
     }
 
     override fun showState(state: ViewState) {
-        pbLoading.isVisible = state.isTranslationLoading
+        binding.pbLoading.isVisible = state.isTranslationLoading
         showBookText(state.text)
         state.wordTranslation?.let(::showWordTranslation)
         state.paragraphTranslation?.let(::showParagraphTranslation)
-        tvName.text = state.title
-        tvRead.text = getString(
+        binding.tvName.text = state.title
+        binding.tvRead.text = getString(
             R.string.read_book_user_read_pages,
             state.currentPage,
             state.totalPages
         )
-        tvReadPercent.text = state.readPercent.toString()
+        binding.tvReadPercent.text = state.readPercent.toString()
     }
 
     private fun showBookText(text: String) {
         text.hashCode()
             .takeIf { it != lastTextHashCode }
             ?.let {
-                tvText.setOnClickListener(null)
-                tvText.setup(Html.fromHtml(text))
+                binding.tvText.setOnClickListener(null)
+                binding.tvText.setup(Html.fromHtml(text))
                 lastTextHashCode = it
             }
     }
 
     private fun showParagraphTranslation(info: Pair<String, String>) {
         val (paragraph, translation) = info
-        tvText.text = SpannableString(paragraph + "\n\n" + translation).apply {
+        binding.tvText.text = SpannableString(paragraph + "\n\n" + translation).apply {
             setColor(Color.RED, paragraph.length, length - 1)
         }
-        tvText.setOnClickListener { viewModel.sendEvent(Event.HideParagraphTranslation) }
+        binding.tvText.setOnClickListener { viewModel.sendEvent(Event.HideParagraphTranslation) }
         lastTextHashCode = 0
     }
 

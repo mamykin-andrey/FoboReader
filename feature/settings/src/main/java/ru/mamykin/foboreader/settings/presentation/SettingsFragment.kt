@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
@@ -42,22 +41,22 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>() {
     }
 
     private fun initViews() {
-        seekbarBright.changeProgressEvents()
+        binding.seekbarBright.changeProgressEvents()
             .onEach { viewModel.sendEvent(Event.BrightnessChanged(it)) }
             .launchIn(lifecycleScope)
-        switchNightTheme.manualCheckedChanges()
+        binding.switchNightTheme.manualCheckedChanges()
             .onEach { viewModel.sendEvent(Event.NightThemeChanged(it)) }
             .launchIn(lifecycleScope)
-        switchBrightAuto.manualCheckedChanges()
+        binding.switchBrightAuto.manualCheckedChanges()
             .onEach { viewModel.sendEvent(Event.AutoBrightnessChanged(it)) }
             .launchIn(lifecycleScope)
-        btnTextSizeMinus.clicks()
+        binding.btnTextSizeMinus.clicks()
             .onEach { viewModel.sendEvent(Event.DecreaseTextSizeClicked) }
             .launchIn(lifecycleScope)
-        btnTextSizePlus.clicks()
+        binding.btnTextSizePlus.clicks()
             .onEach { viewModel.sendEvent(Event.IncreaseTextSizeClicked) }
             .launchIn(lifecycleScope)
-        clTranslationColor.clicks()
+        binding.clTranslationColor.clicks()
             .onEach { viewModel.sendEvent(Event.SelectReadColorClicked) }
             .launchIn(lifecycleScope)
     }
@@ -67,19 +66,19 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>() {
         state.settings?.let {
             showTheme(it.isNightTheme)
             showBrightness(it.isAutoBrightness, it.brightness)
-            switchBrightAuto.isChecked = it.isAutoBrightness
-            tvTextSize.text = it.contentTextSize.toString()
+            binding.switchBrightAuto.isChecked = it.isAutoBrightness
+            binding.tvTextSize.text = it.contentTextSize.toString()
         }
     }
 
     private fun showTheme(nightTheme: Boolean) {
-        switchNightTheme.isChecked = nightTheme
+        binding.switchNightTheme.isChecked = nightTheme
         appCompatActivity.nightMode = nightTheme
     }
 
     private fun showBrightness(autoBrightness: Boolean, brightnessValue: Int) {
-        seekbarBright.isEnabled = !autoBrightness
-        seekbarBright.progress = brightnessValue
+        binding.seekbarBright.isEnabled = !autoBrightness
+        binding.seekbarBright.progress = brightnessValue
     }
 
     override fun takeEffect(effect: Effect) {

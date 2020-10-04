@@ -1,15 +1,15 @@
 package ru.mamykin.foboreader.my_books.presentation.list
 
+import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_book.view.*
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.showPopupMenu
 import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.foboreader.my_books.R
+import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
 
 class MyBookDelegate(
     private val onBookClicked: (Long) -> Unit,
@@ -22,7 +22,7 @@ class MyBookDelegate(
     override fun getLayoutId(): Int = R.layout.item_book
 
     override fun createViewHolder(itemView: View) = BookViewHolder(
-        itemView,
+        ItemBookBinding.inflate(LayoutInflater.from(itemView.context)),
         onBookClicked,
         onAboutClicked,
         onRemoveClicked
@@ -34,14 +34,14 @@ class MyBookDelegate(
 }
 
 class BookViewHolder(
-    override val containerView: View,
+    private val binding: ItemBookBinding,
     private val onBookClicked: (Long) -> Unit,
     private val onAboutClicked: (Long) -> Unit,
     private val onRemoveClicked: (Long) -> Unit
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(book: BookInfo) = with(itemView) {
-        setOnClickListener { onBookClicked(book.id) }
+    fun bind(book: BookInfo) = binding.apply {
+        itemView.setOnClickListener { onBookClicked(book.id) }
         bindBookMenu(book)
         bindBookCover(book)
         tvBookTitle.text = book.title
@@ -51,7 +51,7 @@ class BookViewHolder(
         bindFileInfo(book)
     }
 
-    private fun bindBookMenu(book: BookInfo) = with(containerView) {
+    private fun bindBookMenu(book: BookInfo) = binding.apply {
         btnMenu.setOnClickListener {
             btnMenu.showPopupMenu(
                 R.menu.menu_book_item,
@@ -61,18 +61,18 @@ class BookViewHolder(
         }
     }
 
-    private fun bindBookCover(book: BookInfo) = with(containerView) {
+    private fun bindBookCover(book: BookInfo) = binding.apply {
         ViewCompat.setTransitionName(ivBookCover, book.id.toString())
         book.coverUrl?.takeIf { it.isNotEmpty() }?.let {
-            Picasso.with(context)
+            Picasso.with(itemView.context)
                 .load(it)
                 .error(R.drawable.img_no_image)
                 .into(ivBookCover)
         }
     }
 
-    private fun bindFileInfo(book: BookInfo) = containerView.apply {
-        tvFileInfo.text = context.getString(
+    private fun bindFileInfo(book: BookInfo) = binding.apply {
+        tvFileInfo.text = itemView.context.getString(
             R.string.my_books_book_info_description_title,
             book.getFormat(),
             getFileSizeDescription(book.getFileSizeKb())

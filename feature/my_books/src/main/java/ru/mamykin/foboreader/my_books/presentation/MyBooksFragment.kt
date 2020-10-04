@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_my_books.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.filterNotNull
@@ -43,8 +42,8 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        rvMyBooks.adapter = adapter
-        srlScanBooks.isEnabled = false
+        binding.rvMyBooks.adapter = adapter
+        binding.srlScanBooks.isEnabled = false
     }
 
     fun scanBooks() {
@@ -75,13 +74,13 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
     }
 
     override fun showState(state: ViewState) {
-        srlScanBooks.isRefreshing = state.isLoading
+        binding.srlScanBooks.isRefreshing = state.isLoading
         adapter.changeData(state.books)
         showEmptyState(state.books.isEmpty())
     }
 
     private fun showEmptyState(show: Boolean) {
-        vNoMyBooks.isVisible = show
-        rvMyBooks.isVisible = !show
+        binding.vNoMyBooks.isVisible = show
+        binding.rvMyBooks.isVisible = !show
     }
 }

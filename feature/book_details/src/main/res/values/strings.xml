@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="my_books_book_info_title">Информация о книге</string>
+    <string name="my_books_bookmarks">Закладки</string>
+    <string name="my_books_no_bookmarks">Закладки отсутствуют</string>
+    <string name="my_books_book_path">Файл:</string>
+    <string name="my_books_current_page">Текущая страница:</string>
+    <string name="my_books_book_genre">Жанр:</string>
+    <string name="my_books_original_language">Оригинальный язык:</string>
+    <string name="my_books_created_date">Дата создания:</string>
 </resources>
