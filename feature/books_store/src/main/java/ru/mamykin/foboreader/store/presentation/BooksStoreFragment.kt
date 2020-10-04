@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.core.extension.getSearchView
-import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
@@ -42,14 +42,8 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initErrorView()
-        binding.rvBooks.setup {
-            withDataSource(booksSource)
-            withItem<StoreBook, StoreBookViewHolder>(R.layout.item_store_book) {
-                onBind({ StoreBookViewHolder(ItemStoreBookBinding.bind(it)) }) { _, item -> bind(item) }
-                onClick { viewModel.sendEvent(Event.DownloadBook(item)) }
-            }
-        }
         initToolbar()
+        initBooksList()
     }
 
     private fun initErrorView() {
@@ -62,6 +56,16 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
             navigationIcon = null
             inflateMenu(R.menu.menu_books_store)
             initSearchView(menu)
+        }
+    }
+
+    private fun initBooksList() {
+        binding.rvBooks.setup {
+            withDataSource(booksSource)
+            withItem<StoreBook, StoreBookViewHolder>(R.layout.item_store_book) {
+                onBind({ StoreBookViewHolder(ItemStoreBookBinding.bind(it)) }) { _, item -> bind(item) }
+                onClick { viewModel.sendEvent(Event.DownloadBook(item)) }
+            }
         }
     }
 

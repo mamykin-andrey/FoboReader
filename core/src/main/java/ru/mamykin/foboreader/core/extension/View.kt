@@ -15,12 +15,6 @@ import reactivecircus.flowbinding.android.widget.SeekBarChangeEvent
 import reactivecircus.flowbinding.android.widget.changeEvents
 import reactivecircus.flowbinding.android.widget.checkedChanges
 
-var View.isVisible: Boolean
-    set(value) {
-        this.visibility = if (value) View.VISIBLE else View.GONE
-    }
-    get() = this.visibility == View.VISIBLE
-
 fun View.showPopupMenu(@MenuRes menuRes: Int, vararg clicks: Pair<Int, () -> Unit>) {
     PopupMenu(context, this).apply {
         setOnMenuItemClickListener {

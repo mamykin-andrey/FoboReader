@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
@@ -17,7 +18,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.getSearchView
-import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.my_books.R
@@ -45,19 +45,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        binding.rvMyBooks.setup {
-            withDataSource(booksSource)
-            withItem<BookInfo, BookViewHolder>(R.layout.item_book) {
-                onBind({
-                    BookViewHolder(
-                        ItemBookBinding.bind(it),
-                        navigator::myBooksToBookDetails
-                    ) { viewModel.sendEvent(Event.RemoveBook(it)) }
-                }) { _, item -> bind(item) }
-                onClick { navigator.myBooksToReadBook(item.id) }
-            }
-        }
-        binding.srlScanBooks.isEnabled = false
+        initBooksList(view)
     }
 
     private fun initToolbar() = toolbar.apply {
@@ -83,14 +71,25 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
             .onEach { viewModel.sendEvent(Event.FilterBooks(it)) }
     }
 
-    override fun showState(state: ViewState) {
-        binding.srlScanBooks.isRefreshing = state.isLoading
-        booksSource.set(state.books)
-        showEmptyState(state.books.isEmpty())
+    private fun initBooksList(view: View) {
+        val emptyView by lazy { LayoutInflater.from(context).inflate(R.layout.view_no_books, view as ViewGroup, false) }
+        binding.rvMyBooks.setup {
+            withEmptyView(emptyView)
+            withDataSource(booksSource)
+            withItem<BookInfo, BookViewHolder>(R.layout.item_book) {
+                onBind({
+                    BookViewHolder(
+                        ItemBookBinding.bind(it),
+                        navigator::myBooksToBookDetails
+                    ) { viewModel.sendEvent(Event.RemoveBook(it)) }
+                }) { _, item -> bind(item) }
+                onClick { navigator.myBooksToReadBook(item.id) }
+            }
+        }
     }
 
-    private fun showEmptyState(show: Boolean) {
-        binding.vNoMyBooks.isVisible = show
-        binding.rvMyBooks.isVisible = !show
+    override fun showState(state: ViewState) {
+        progressView.isVisible = state.isLoading
+        booksSource.set(state.books)
     }
 }
