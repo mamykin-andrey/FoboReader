@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main"
     app:startDestination="@id/tabsFragment">
 
     <fragment
         android:id="@+id/tabsFragment"
         android:name="ru.mamykin.foboreader.app.ui.TabsFragment"
-        android:label="TabsFragment"
-        tools:layout="@layout/fragment_tabs">
+        android:label="TabsFragment">
 
         <action
             android:id="@+id/tabs_to_book_details"
@@ -24,8 +22,7 @@
     <fragment
         android:id="@+id/bookDetailsFragment"
         android:name="ru.mamykin.foboreader.book_details.presentation.BookDetailsFragment"
-        android:label="BookDetailsFragment"
-        tools:layout="@layout/fragment_book_detail">
+        android:label="BookDetailsFragment">
 
         <argument
             android:name="bookId"
@@ -41,8 +38,7 @@
     <fragment
         android:id="@+id/readBookFragment"
         android:name="ru.mamykin.foboreader.read_book.presentation.ReadBookFragment"
-        android:label="ReadBookFragment"
-        tools:layout="@layout/fragment_read_book">
+        android:label="ReadBookFragment">
 
         <argument
             android:name="bookId"

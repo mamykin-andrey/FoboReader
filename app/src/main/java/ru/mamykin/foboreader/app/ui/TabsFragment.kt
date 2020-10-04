@@ -23,15 +23,6 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
         view.doOnPreDraw { startPostponedEnterTransition() } // for correct transition in nested fragments
     }
 
-    fun openMyBooksTab() {
-        bnv_tabs.selectedItemId = R.id.myBooksFragment
-        navHostFragment!!.childFragmentManager
-            .fragments
-            .firstOrNull()
-            ?.let { it as? MyBooksFragment }
-            ?.scanBooks()
-    }
-
     private fun initBottomNavigationView() {
         val navigator = KeepStateNavigator(
             context!!,

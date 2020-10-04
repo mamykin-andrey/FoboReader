@@ -59,7 +59,7 @@ class BooksStoreViewModel(
 
     private fun downloadBook(book: StoreBook) = launch {
         runCatching { interactor.downloadBook(book) }
-            .onSuccess { navigator.openMyBooksScreen() }
+            .onSuccess { navigator.booksStoreToMyBooksScreen() }
             .onFailure { sendEffect(Effect.ShowSnackbar(it.message!!)) }
     }
 }

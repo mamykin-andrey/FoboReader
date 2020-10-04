@@ -28,7 +28,7 @@ class BookDetailsViewModel(
 
     override suspend fun onEvent(event: Event) {
         when (event) {
-            is Event.ReadBookClicked -> navigator.openBook(bookId)
+            is Event.ReadBookClicked -> navigator.bookDetailsToReadBook(bookId)
         }
     }
 }

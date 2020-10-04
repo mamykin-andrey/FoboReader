@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.my_books.presentation
 
 interface MyBooksNavigator {
 
-    fun openBook(bookId: Long)
+    fun myBooksToReadBook(bookId: Long)
 
-    fun openBookDetails(bookId: Long)
+    fun myBooksToBookDetails(bookId: Long)
 }

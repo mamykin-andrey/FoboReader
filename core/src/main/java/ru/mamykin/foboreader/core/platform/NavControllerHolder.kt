@@ -2,9 +2,7 @@ package ru.mamykin.foboreader.core.platform
 
 import androidx.navigation.NavController
 
-interface Navigator {
+interface NavControllerHolder {
 
-    fun bind(controller: NavController)
-
-    fun unbind()
+    var navController: NavController?
 }

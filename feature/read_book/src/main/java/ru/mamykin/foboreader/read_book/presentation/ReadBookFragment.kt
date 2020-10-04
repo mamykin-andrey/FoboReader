@@ -19,17 +19,9 @@ import ru.mamykin.widget.paginatedtextview.pagination.ReadState
 import ru.mamykin.widget.paginatedtextview.view.OnActionListener
 
 class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>() {
-    companion object {
-
-        private const val EXTRA_BOOK_ID = "BOOK_ID"
-
-        fun bundle(bookId: Long) = Bundle().apply {
-            putLong(EXTRA_BOOK_ID, bookId)
-        }
-    }
 
     override val viewModel: ReadBookViewModel by viewModel {
-        parametersOf(arguments?.getLong(EXTRA_BOOK_ID) ?: throw IllegalStateException("No book ID!"))
+        parametersOf(ReadBookFragmentArgs.fromBundle(arguments!!).bookId)
     }
 
     private lateinit var binding: FragmentReadBookBinding

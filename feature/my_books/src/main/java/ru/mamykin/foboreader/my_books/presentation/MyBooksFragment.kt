@@ -28,8 +28,8 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
     override val viewModel: MyBooksViewModel by viewModel()
     private val navigator: MyBooksNavigator by inject()
     private val adapter = MyBooksRecyclerAdapter(
-        navigator::openBook,
-        navigator::openBookDetails
+        navigator::myBooksToReadBook,
+        navigator::myBooksToBookDetails
     ) { viewModel.sendEvent(Event.RemoveBook(it)) }
 
     private lateinit var binding: FragmentMyBooksBinding

@@ -18,17 +18,8 @@ import ru.mamykin.foboreader.core.ui.BaseFragment
 
 class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect>() {
 
-    companion object {
-
-        private const val EXTRA_BOOK_ID = "BOOK_ID"
-
-        fun bundle(bookId: Long) = Bundle().apply {
-            putLong(EXTRA_BOOK_ID, bookId)
-        }
-    }
-
     override val viewModel: BookDetailsViewModel by viewModel {
-        parametersOf(arguments?.getLong(EXTRA_BOOK_ID) ?: throw IllegalStateException("No book ID!"))
+        parametersOf(BookDetailsFragmentArgs.fromBundle(arguments!!).bookId)
     }
 
     private val bookInfoAdapter = BookInfoAdapter()
