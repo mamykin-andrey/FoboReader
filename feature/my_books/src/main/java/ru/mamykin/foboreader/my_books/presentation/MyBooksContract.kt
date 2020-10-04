@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.my_books.presentation
 
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
-import ru.mamykin.foboreader.my_books.domain.SortOrder
+import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 
 sealed class Action {
     object Loading : Action()

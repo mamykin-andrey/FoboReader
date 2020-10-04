@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.book_details.presentation
 
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.book_details.domain.BookDetailsInteractor
+import ru.mamykin.foboreader.book_details.domain.interactor.BookDetailsInteractor
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
 
 class BookDetailsViewModel(

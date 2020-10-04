@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.my_books.domain
+package ru.mamykin.foboreader.my_books.domain.helper
 
 import android.content.Context
 import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao

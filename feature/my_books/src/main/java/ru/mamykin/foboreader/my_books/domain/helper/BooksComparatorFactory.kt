@@ -1,6 +1,7 @@
-package ru.mamykin.foboreader.my_books.domain
+package ru.mamykin.foboreader.my_books.domain.helper
 
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 
 class BooksComparatorFactory {
 

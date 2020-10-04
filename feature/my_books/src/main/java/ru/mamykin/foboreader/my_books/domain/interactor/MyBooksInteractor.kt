@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.my_books.domain
+package ru.mamykin.foboreader.my_books.domain.interactor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -6,6 +6,9 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.my_books.domain.helper.BookFilesScanner
+import ru.mamykin.foboreader.my_books.domain.helper.BooksComparatorFactory
+import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 import java.io.File
 
 @ExperimentalCoroutinesApi

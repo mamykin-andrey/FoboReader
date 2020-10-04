@@ -1,18 +1,18 @@
-package ru.mamykin.foboreader.read_book.domain
+package ru.mamykin.foboreader.my_books.domain.helper
 
-import ru.mamykin.foboreader.read_book.domain.entity.BookContent
+import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import java.io.File
 import javax.xml.parsers.SAXParserFactory
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class BookTextParser {
+class BookInfoParser {
 
-    suspend fun parse(filePath: String): BookContent = suspendCoroutine { cont ->
+    suspend fun parse(filePath: String): BookInfo = suspendCoroutine { cont ->
         runCatching {
             val parser = SAXParserFactory.newInstance().newSAXParser()
-            val parseHandler = BookTextParserHandler {
-                cont.resumeWith(Result.success(it))
+            val parseHandler = BookInfoParserHandler(filePath) { bookInfo ->
+                cont.resumeWith(Result.success(bookInfo))
             }
             parser.parse(File(filePath), parseHandler)
         }.getOrElse {

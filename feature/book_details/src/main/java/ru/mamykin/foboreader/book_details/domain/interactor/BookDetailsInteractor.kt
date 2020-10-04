@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.book_details.domain
+package ru.mamykin.foboreader.book_details.domain.interactor
 
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo

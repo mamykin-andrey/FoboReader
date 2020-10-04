@@ -5,7 +5,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
-import ru.mamykin.foboreader.my_books.domain.MyBooksInteractor
+import ru.mamykin.foboreader.my_books.domain.interactor.MyBooksInteractor
 
 @FlowPreview
 @ExperimentalCoroutinesApi

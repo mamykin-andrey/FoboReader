@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.my_books.domain
+package ru.mamykin.foboreader.my_books.domain.helper
 
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException

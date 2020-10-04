@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.settings.presentation
 
-import ru.mamykin.foboreader.settings.domain.entity.Settings
+import ru.mamykin.foboreader.settings.domain.model.Settings
 
 sealed class Event {
     data class BrightnessChanged(val brightness: Int) : Event()

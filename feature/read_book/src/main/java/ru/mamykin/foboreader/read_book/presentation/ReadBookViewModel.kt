@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.read_book.presentation
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
 import ru.mamykin.foboreader.read_book.R
-import ru.mamykin.foboreader.read_book.domain.ReadBookInteractor
+import ru.mamykin.foboreader.read_book.domain.interactor.ReadBookInteractor
 
 class ReadBookViewModel constructor(
     private val bookId: Long,

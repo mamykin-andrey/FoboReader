@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.domain
+package ru.mamykin.foboreader.store.domain.interactor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

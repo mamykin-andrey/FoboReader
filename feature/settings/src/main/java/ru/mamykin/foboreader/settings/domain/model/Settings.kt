@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.domain.entity
+package ru.mamykin.foboreader.settings.domain.model
 
 data class Settings(
     val isNightTheme: Boolean,

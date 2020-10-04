@@ -23,7 +23,7 @@ import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
 import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
-import ru.mamykin.foboreader.my_books.domain.SortOrder
+import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 import ru.mamykin.foboreader.my_books.presentation.list.BookViewHolder
 
 @ExperimentalCoroutinesApi

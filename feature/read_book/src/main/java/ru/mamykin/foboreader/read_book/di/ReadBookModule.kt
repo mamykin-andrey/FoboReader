@@ -4,9 +4,9 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.mamykin.foboreader.read_book.data.TranslateRepository
-import ru.mamykin.foboreader.read_book.domain.BookTextParser
-import ru.mamykin.foboreader.read_book.domain.ReadBookInteractor
-import ru.mamykin.foboreader.read_book.domain.TextToSpeechService
+import ru.mamykin.foboreader.read_book.domain.helper.BookTextParser
+import ru.mamykin.foboreader.read_book.domain.interactor.ReadBookInteractor
+import ru.mamykin.foboreader.read_book.domain.helper.TextToSpeechService
 import ru.mamykin.foboreader.read_book.presentation.ReadBookViewModel
 
 val readBookModule = module {

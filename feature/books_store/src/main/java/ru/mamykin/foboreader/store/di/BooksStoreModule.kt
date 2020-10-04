@@ -5,7 +5,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.mamykin.foboreader.store.data.network.FileDownloader
 import ru.mamykin.foboreader.store.data.BooksStoreRepository
-import ru.mamykin.foboreader.store.domain.BooksStoreInteractor
+import ru.mamykin.foboreader.store.domain.interactor.BooksStoreInteractor
 import ru.mamykin.foboreader.store.presentation.BooksStoreViewModel
 
 val booksStoreModule = module {

@@ -1,11 +1,11 @@
-package ru.mamykin.foboreader.settings.domain
+package ru.mamykin.foboreader.settings.domain.interactor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import ru.mamykin.foboreader.core.data.storage.SettingsStorage
-import ru.mamykin.foboreader.settings.domain.entity.Settings
+import ru.mamykin.foboreader.settings.domain.model.Settings
 
 @ExperimentalCoroutinesApi
 @FlowPreview
