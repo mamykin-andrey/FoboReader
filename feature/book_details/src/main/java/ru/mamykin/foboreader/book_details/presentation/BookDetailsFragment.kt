@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.afollestad.recyclical.datasource.dataSourceTypedOf
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.withItem
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.mamykin.foboreader.book_details.R
 import ru.mamykin.foboreader.book_details.databinding.FragmentBookDetailsBinding
-import ru.mamykin.foboreader.book_details.presentation.list.BookInfoAdapter
+import ru.mamykin.foboreader.book_details.databinding.ItemBookInfoBinding
+import ru.mamykin.foboreader.book_details.presentation.list.BookInfoViewHolder
 import ru.mamykin.foboreader.book_details.presentation.model.BookInfoItem
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.showSnackbar
@@ -22,8 +26,8 @@ class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect
         parametersOf(BookDetailsFragmentArgs.fromBundle(arguments!!).bookId)
     }
 
-    private val bookInfoAdapter = BookInfoAdapter()
     private lateinit var binding: FragmentBookDetailsBinding
+    private val bookInfoDataSource = dataSourceTypedOf<BookInfoItem>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentBookDetailsBinding.inflate(inflater)
@@ -36,7 +40,14 @@ class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect
         binding.fabRead.setOnClickListener {
             viewModel.sendEvent(Event.ReadBookClicked)
         }
-        binding.rvBookInfo.adapter = bookInfoAdapter
+        binding.rvBookInfo.setup {
+            withDataSource(bookInfoDataSource)
+            withItem<BookInfoItem, BookInfoViewHolder>(R.layout.item_book_info) {
+                onBind({ BookInfoViewHolder(ItemBookInfoBinding.bind(it)) }) { _, item ->
+                    bind(item)
+                }
+            }
+        }
     }
 
     override fun showState(state: ViewState) {
@@ -46,7 +57,7 @@ class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect
     private fun showBookInfo(book: BookInfo) = binding.apply {
         tvBookName.text = book.title
         tvBookAuthor.text = book.author
-        bookInfoAdapter.changeData(
+        bookInfoDataSource.set(
             listOf(
                 BookInfoItem(
                     getString(R.string.my_books_bookmarks),

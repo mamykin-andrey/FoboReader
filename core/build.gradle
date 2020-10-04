@@ -41,6 +41,8 @@ dependencies {
 
     api deps.multidex
 
+    api deps.recyclical
+
     testApi deps.junit
     testApi deps.mockito
     testApi deps.mockitoKotlin

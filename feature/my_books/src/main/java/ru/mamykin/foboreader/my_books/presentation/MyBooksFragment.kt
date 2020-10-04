@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import com.afollestad.recyclical.datasource.dataSourceTypedOf
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.withItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.filterNotNull
@@ -12,14 +15,16 @@ import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import reactivecircus.flowbinding.android.view.clicks
+import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.isVisible
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
+import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
 import ru.mamykin.foboreader.my_books.domain.SortOrder
-import ru.mamykin.foboreader.my_books.presentation.list.MyBooksRecyclerAdapter
+import ru.mamykin.foboreader.my_books.presentation.list.BookViewHolder
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -27,10 +32,8 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
 
     override val viewModel: MyBooksViewModel by viewModel()
     private val navigator: MyBooksNavigator by inject()
-    private val adapter = MyBooksRecyclerAdapter(
-        navigator::myBooksToReadBook,
-        navigator::myBooksToBookDetails
-    ) { viewModel.sendEvent(Event.RemoveBook(it)) }
+
+    private val booksSource = dataSourceTypedOf<BookInfo>()
 
     private lateinit var binding: FragmentMyBooksBinding
 
@@ -42,12 +45,19 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        binding.rvMyBooks.adapter = adapter
+        binding.rvMyBooks.setup {
+            withDataSource(booksSource)
+            withItem<BookInfo, BookViewHolder>(R.layout.item_book) {
+                onBind({
+                    BookViewHolder(
+                        ItemBookBinding.bind(it),
+                        navigator::myBooksToBookDetails
+                    ) { viewModel.sendEvent(Event.RemoveBook(it)) }
+                }) { _, item -> bind(item) }
+                onClick { navigator.myBooksToReadBook(item.id) }
+            }
+        }
         binding.srlScanBooks.isEnabled = false
-    }
-
-    fun scanBooks() {
-        viewModel.sendEvent(Event.ScanBooks)
     }
 
     private fun initToolbar() = toolbar.apply {
@@ -75,7 +85,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
 
     override fun showState(state: ViewState) {
         binding.srlScanBooks.isRefreshing = state.isLoading
-        adapter.changeData(state.books)
+        booksSource.set(state.books)
         showEmptyState(state.books.isEmpty())
     }
 

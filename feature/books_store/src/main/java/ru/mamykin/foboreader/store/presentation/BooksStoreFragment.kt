@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import com.afollestad.recyclical.datasource.dataSourceTypedOf
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.withItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.filterNotNull
@@ -17,7 +20,9 @@ import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBooksStoreBinding
-import ru.mamykin.foboreader.store.presentation.list.BooksStoreRecyclerAdapter
+import ru.mamykin.foboreader.store.databinding.ItemStoreBookBinding
+import ru.mamykin.foboreader.store.domain.model.StoreBook
+import ru.mamykin.foboreader.store.presentation.list.StoreBookViewHolder
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -25,7 +30,7 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
 
     override val viewModel: BooksStoreViewModel by viewModel()
 
-    private val adapter = BooksStoreRecyclerAdapter { viewModel.sendEvent(Event.DownloadBook(it)) }
+    private val booksSource = dataSourceTypedOf<StoreBook>()
 
     private lateinit var binding: FragmentBooksStoreBinding
 
@@ -37,7 +42,13 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initErrorView()
-        binding.rvBooks.adapter = adapter
+        binding.rvBooks.setup {
+            withDataSource(booksSource)
+            withItem<StoreBook, StoreBookViewHolder>(R.layout.item_store_book) {
+                onBind({ StoreBookViewHolder(ItemStoreBookBinding.bind(it)) }) { _, item -> bind(item) }
+                onClick { viewModel.sendEvent(Event.DownloadBook(item)) }
+            }
+        }
         initToolbar()
     }
 
@@ -64,7 +75,7 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
     override fun showState(state: ViewState) {
         progressView.isVisible = state.isLoading
         binding.vError.isVisible = state.isError
-        adapter.changeItems(state.books)
+        booksSource.set(state.books)
     }
 
     override fun takeEffect(effect: Effect) {

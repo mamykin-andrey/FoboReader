@@ -1,47 +1,20 @@
 package ru.mamykin.foboreader.my_books.presentation.list
 
-import android.view.LayoutInflater
-import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.showPopupMenu
-import ru.mamykin.foboreader.core.ui.adapterdelegates.AdapterDelegate
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
 
-class MyBookDelegate(
-    private val onBookClicked: (Long) -> Unit,
-    private val onAboutClicked: (Long) -> Unit,
-    private val onRemoveClicked: (Long) -> Unit
-) : AdapterDelegate<BookInfo>() {
-
-    override fun isForViewType(item: BookInfo): Boolean = true
-
-    override fun getLayoutId(): Int = R.layout.item_book
-
-    override fun createViewHolder(itemView: View) = BookViewHolder(
-        ItemBookBinding.inflate(LayoutInflater.from(itemView.context)),
-        onBookClicked,
-        onAboutClicked,
-        onRemoveClicked
-    )
-
-    override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: BookInfo) {
-        (holder as BookViewHolder).bind(item)
-    }
-}
-
 class BookViewHolder(
     private val binding: ItemBookBinding,
-    private val onBookClicked: (Long) -> Unit,
     private val onAboutClicked: (Long) -> Unit,
     private val onRemoveClicked: (Long) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(book: BookInfo) = binding.apply {
-        itemView.setOnClickListener { onBookClicked(book.id) }
         bindBookMenu(book)
         bindBookCover(book)
         tvBookTitle.text = book.title
