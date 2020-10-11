@@ -12,6 +12,14 @@
 
     <include layout="@layout/view_content_progress" />
 
+    <TextView
+        android:id="@+id/v_no_books"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/my_books_no_books"
+        android:textSize="@dimen/text_size_medium" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_my_books"
         android:layout_width="match_parent"

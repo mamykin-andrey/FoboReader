@@ -1,10 +1,8 @@
 package ru.mamykin.foboreader.my_books.presentation
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
@@ -20,6 +18,7 @@ import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.ui.BaseFragment
+import ru.mamykin.foboreader.core.ui.viewBinding
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
 import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
@@ -28,24 +27,18 @@ import ru.mamykin.foboreader.my_books.presentation.list.BookViewHolder
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
+class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layout.fragment_my_books) {
 
     override val viewModel: MyBooksViewModel by viewModel()
+
     private val navigator: MyBooksNavigator by inject()
-
     private val booksSource = dataSourceTypedOf<BookInfo>()
-
-    private lateinit var binding: FragmentMyBooksBinding
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentMyBooksBinding.inflate(inflater)
-        return binding.root
-    }
+    private val binding by viewBinding { FragmentMyBooksBinding.bind(view!!) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        initBooksList(view)
+        initBooksList()
     }
 
     private fun initToolbar() = toolbar.apply {
@@ -71,10 +64,9 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>() {
             .onEach { viewModel.sendEvent(Event.FilterBooks(it)) }
     }
 
-    private fun initBooksList(view: View) {
-        val emptyView by lazy { LayoutInflater.from(context).inflate(R.layout.view_no_books, view as ViewGroup, false) }
+    private fun initBooksList() {
         binding.rvMyBooks.setup {
-            withEmptyView(emptyView)
+            withEmptyView(binding.vNoBooks)
             withDataSource(booksSource)
             withItem<BookInfo, BookViewHolder>(R.layout.item_book) {
                 onBind({

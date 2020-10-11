@@ -4,34 +4,27 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
 import android.text.SpannableString
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
+import ru.mamykin.foboreader.core.ui.viewBinding
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
 import ru.mamykin.widget.paginatedtextview.pagination.ReadState
 import ru.mamykin.widget.paginatedtextview.view.OnActionListener
 
-class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>() {
+class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.layout.fragment_read_book) {
 
     override val viewModel: ReadBookViewModel by viewModel {
         parametersOf(ReadBookFragmentArgs.fromBundle(arguments!!).bookId)
     }
 
-    private lateinit var binding: FragmentReadBookBinding
-
+    private val binding by viewBinding { FragmentReadBookBinding.bind(view!!) }
     private var lastTextHashCode: Int = 0
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentReadBookBinding.inflate(inflater)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

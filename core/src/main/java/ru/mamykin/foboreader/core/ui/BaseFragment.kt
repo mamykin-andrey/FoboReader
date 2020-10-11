@@ -2,8 +2,9 @@ package ru.mamykin.foboreader.core.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
+import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
-import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -11,7 +12,9 @@ import ru.mamykin.foboreader.core.R
 import ru.mamykin.foboreader.core.mvvm.BaseViewModel
 import ru.mamykin.foboreader.core.mvvm.SingleLiveEvent
 
-abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effect>, ViewState, Effect> : Fragment() {
+abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effect>, ViewState, Effect>(
+    @LayoutRes layoutRes: Int
+) : Fragment(layoutRes) {
 
     protected abstract val viewModel: VM
 
@@ -19,8 +22,8 @@ abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effe
         get() = view!!.findViewById(R.id.toolbar)
             ?: throw IllegalStateException("Couldn't find toolbar in layout!")
 
-    protected val progressView: ContentLoadingProgressBar
-        get() = view!!.findViewById(R.id.cpb_content_loading)
+    protected val progressView: FrameLayout
+        get() = view!!.findViewById(R.id.fl_content_loading)
             ?: throw IllegalStateException("Couldn't find progress view in layout!")
 
     private var dataLoaded = false

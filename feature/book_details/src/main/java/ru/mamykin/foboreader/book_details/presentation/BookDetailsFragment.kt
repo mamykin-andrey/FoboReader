@@ -1,9 +1,7 @@
 package ru.mamykin.foboreader.book_details.presentation
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
@@ -19,20 +17,16 @@ import ru.mamykin.foboreader.book_details.presentation.model.BookInfoItem
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
+import ru.mamykin.foboreader.core.ui.viewBinding
 
-class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect>() {
+class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect>(R.layout.fragment_book_details) {
 
     override val viewModel: BookDetailsViewModel by viewModel {
         parametersOf(BookDetailsFragmentArgs.fromBundle(arguments!!).bookId)
     }
 
-    private lateinit var binding: FragmentBookDetailsBinding
+    private val binding by viewBinding { FragmentBookDetailsBinding.bind(view!!) }
     private val bookInfoDataSource = dataSourceTypedOf<BookInfoItem>()
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentBookDetailsBinding.inflate(inflater)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

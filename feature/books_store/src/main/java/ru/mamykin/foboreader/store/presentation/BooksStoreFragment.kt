@@ -1,10 +1,8 @@
 package ru.mamykin.foboreader.store.presentation
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
@@ -18,6 +16,7 @@ import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.ui.BaseFragment
+import ru.mamykin.foboreader.core.ui.viewBinding
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBooksStoreBinding
 import ru.mamykin.foboreader.store.databinding.ItemStoreBookBinding
@@ -26,18 +25,12 @@ import ru.mamykin.foboreader.store.presentation.list.StoreBookViewHolder
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>() {
+class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(R.layout.fragment_books_store) {
 
     override val viewModel: BooksStoreViewModel by viewModel()
 
     private val booksSource = dataSourceTypedOf<StoreBook>()
-
-    private lateinit var binding: FragmentBooksStoreBinding
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentBooksStoreBinding.inflate(inflater)
-        return binding.root
-    }
+    private val binding by viewBinding { FragmentBooksStoreBinding.bind(view!!) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
