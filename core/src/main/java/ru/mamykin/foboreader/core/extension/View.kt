@@ -41,7 +41,7 @@ fun Menu.getSearchView(@IdRes itemId: Int): SearchView {
 }
 
 @CheckResult
-fun SearchView.queryChanges(): Flow<String?> = callbackFlow {
+fun SearchView.queryChanges(): Flow<String?> = callbackFlow<String?> {
     setOnQueryTextListener(object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             return true

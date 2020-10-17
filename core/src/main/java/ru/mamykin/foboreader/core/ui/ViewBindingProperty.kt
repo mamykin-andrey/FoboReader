@@ -25,7 +25,7 @@ class ViewBindingProperty<T>(
         return binding ?: run {
             newBinding()
                 .also { binding = it }
-                .also { thisRef.lifecycle.addObserver(this) }
+                .also { thisRef.viewLifecycleOwner.lifecycle.addObserver(this) }
         }
     }
 }

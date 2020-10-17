@@ -30,7 +30,7 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
     override val viewModel: BooksStoreViewModel by viewModel()
 
     private val booksSource = dataSourceTypedOf<StoreBook>()
-    private val binding by viewBinding { FragmentBooksStoreBinding.bind(view!!) }
+    private val binding by viewBinding { FragmentBooksStoreBinding.bind(requireView()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

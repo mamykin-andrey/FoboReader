@@ -4,14 +4,14 @@
     android:id="@+id/fl_content_loading"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:windowBackground">
+    android:background="?android:windowBackground"
+    android:visibility="gone"
+    tools:visibility="visible">
 
     <androidx.core.widget.ContentLoadingProgressBar
         style="@android:style/Widget.Material.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:layout_gravity="center" />
 
 </FrameLayout>
