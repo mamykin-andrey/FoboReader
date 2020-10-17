@@ -1,1 +1,2 @@
 apply from: "$rootDir/buildsystem/feature.gradle"
+apply plugin: "androidx.navigation.safeargs.kotlin"

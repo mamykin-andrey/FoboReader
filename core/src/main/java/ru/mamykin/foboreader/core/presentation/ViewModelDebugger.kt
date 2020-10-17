@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.mvvm
+package ru.mamykin.foboreader.core.presentation
 
 import ru.mamykin.foboreader.core.platform.Log
 

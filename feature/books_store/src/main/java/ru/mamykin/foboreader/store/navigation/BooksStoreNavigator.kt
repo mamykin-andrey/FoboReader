@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.presentation
+package ru.mamykin.foboreader.store.navigation
 
 interface BooksStoreNavigator {
 

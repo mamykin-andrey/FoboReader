@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.ui
+package ru.mamykin.foboreader.core.presentation
 
 import android.content.Context
 import android.util.AttributeSet

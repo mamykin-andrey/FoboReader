@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.mvvm
+package ru.mamykin.foboreader.core.presentation
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

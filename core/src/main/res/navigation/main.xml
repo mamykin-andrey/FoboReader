@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/tabsFragment"
-        android:name="ru.mamykin.foboreader.app.ui.TabsFragment"
+        android:name="ru.mamykin.foboreader.app.presentation.TabsFragment"
         android:label="TabsFragment">
 
         <action

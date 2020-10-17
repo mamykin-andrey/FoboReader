@@ -1,12 +1,12 @@
 package ru.mamykin.foboreader.app.navigation
 
 import androidx.navigation.NavController
-import ru.mamykin.foboreader.app.ui.TabsFragmentDirections
+import ru.mamykin.foboreader.app.presentation.TabsFragmentDirections
 import ru.mamykin.foboreader.book_details.presentation.BookDetailsFragmentDirections
-import ru.mamykin.foboreader.book_details.presentation.BookDetailsNavigator
+import ru.mamykin.foboreader.book_details.navigation.BookDetailsNavigator
 import ru.mamykin.foboreader.core.platform.NavControllerHolder
-import ru.mamykin.foboreader.my_books.presentation.MyBooksNavigator
-import ru.mamykin.foboreader.store.presentation.BooksStoreNavigator
+import ru.mamykin.foboreader.my_books.navigation.MyBooksNavigator
+import ru.mamykin.foboreader.store.navigation.BooksStoreNavigator
 
 /**
  * App navigator, which implements feature navigation

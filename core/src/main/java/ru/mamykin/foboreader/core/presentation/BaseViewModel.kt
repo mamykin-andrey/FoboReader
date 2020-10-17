@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.mvvm
+package ru.mamykin.foboreader.core.presentation
 
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData

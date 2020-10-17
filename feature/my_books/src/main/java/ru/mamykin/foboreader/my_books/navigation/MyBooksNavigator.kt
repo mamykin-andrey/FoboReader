@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.my_books.presentation
+package ru.mamykin.foboreader.my_books.navigation
 
 interface MyBooksNavigator {
 

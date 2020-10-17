@@ -4,13 +4,15 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.mvvm.BaseViewModel
+import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.settings.domain.interactor.SettingsInteractor
+import ru.mamykin.foboreader.settings.navigation.LocalSettingsNavigator
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 class SettingsViewModel(
-    private val interactor: SettingsInteractor
+    private val interactor: SettingsInteractor,
+    private val localNavigator: LocalSettingsNavigator
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isLoading = true)
 ) {
@@ -50,7 +52,7 @@ class SettingsViewModel(
                 interactor.decreaseTextSize()
             }
             is Event.SelectReadColorClicked -> {
-                sendEffect(Effect.OpenSelectReadColorScreen)
+                localNavigator.settingsToColorPicker()
             }
         }
     }

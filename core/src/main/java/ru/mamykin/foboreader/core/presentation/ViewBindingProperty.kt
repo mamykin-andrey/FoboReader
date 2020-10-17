@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.ui
+package ru.mamykin.foboreader.core.presentation
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle

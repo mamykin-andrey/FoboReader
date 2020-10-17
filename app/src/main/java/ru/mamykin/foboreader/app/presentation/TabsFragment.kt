@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.app.ui
+package ru.mamykin.foboreader.app.presentation
 
 import android.os.Bundle
 import android.view.View

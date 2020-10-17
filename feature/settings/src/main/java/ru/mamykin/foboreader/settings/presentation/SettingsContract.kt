@@ -11,9 +11,7 @@ sealed class Event {
     object SelectReadColorClicked : Event()
 }
 
-sealed class Effect {
-    object OpenSelectReadColorScreen : Effect()
-}
+sealed class Effect
 
 sealed class Action {
     data class SettingsLoaded(val settings: Settings) : Action()

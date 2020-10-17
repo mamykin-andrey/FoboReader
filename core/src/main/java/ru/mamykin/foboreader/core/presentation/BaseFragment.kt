@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.ui
+package ru.mamykin.foboreader.core.presentation
 
 import android.os.Bundle
 import android.view.View
@@ -9,8 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import ru.mamykin.foboreader.core.R
-import ru.mamykin.foboreader.core.mvvm.BaseViewModel
-import ru.mamykin.foboreader.core.mvvm.SingleLiveEvent
 
 abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effect>, ViewState, Effect>(
     @LayoutRes layoutRes: Int

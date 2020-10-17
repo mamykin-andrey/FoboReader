@@ -11,7 +11,7 @@
 
     <include layout="@layout/view_content_progress" />
 
-    <ru.mamykin.foboreader.core.ui.ErrorStateView
+    <ru.mamykin.foboreader.core.presentation.ErrorStateView
         android:id="@+id/v_error"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

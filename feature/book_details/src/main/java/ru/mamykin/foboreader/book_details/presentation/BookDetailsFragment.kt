@@ -16,8 +16,8 @@ import ru.mamykin.foboreader.book_details.presentation.list.BookInfoViewHolder
 import ru.mamykin.foboreader.book_details.presentation.model.BookInfoItem
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.showSnackbar
-import ru.mamykin.foboreader.core.ui.BaseFragment
-import ru.mamykin.foboreader.core.ui.viewBinding
+import ru.mamykin.foboreader.core.presentation.BaseFragment
+import ru.mamykin.foboreader.core.presentation.viewBinding
 
 class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect>(R.layout.fragment_book_details) {
 

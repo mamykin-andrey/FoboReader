@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.book_details.presentation
+package ru.mamykin.foboreader.book_details.navigation
 
 interface BookDetailsNavigator {
 

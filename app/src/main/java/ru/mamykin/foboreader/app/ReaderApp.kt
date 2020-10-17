@@ -9,17 +9,17 @@ import org.koin.dsl.binds
 import org.koin.dsl.module
 import ru.mamykin.foboreader.app.navigation.AppNavigator
 import ru.mamykin.foboreader.book_details.di.bookDetailsModule
-import ru.mamykin.foboreader.book_details.presentation.BookDetailsNavigator
+import ru.mamykin.foboreader.book_details.navigation.BookDetailsNavigator
 import ru.mamykin.foboreader.common_book_info.di.commonBookInfoModule
 import ru.mamykin.foboreader.core.di.coreModule
 import ru.mamykin.foboreader.core.platform.NavControllerHolder
 import ru.mamykin.foboreader.core.platform.NotificationUtils
 import ru.mamykin.foboreader.my_books.di.myBooksModule
-import ru.mamykin.foboreader.my_books.presentation.MyBooksNavigator
+import ru.mamykin.foboreader.my_books.navigation.MyBooksNavigator
 import ru.mamykin.foboreader.read_book.di.readBookModule
 import ru.mamykin.foboreader.settings.di.settingsModule
 import ru.mamykin.foboreader.store.di.booksStoreModule
-import ru.mamykin.foboreader.store.presentation.BooksStoreNavigator
+import ru.mamykin.foboreader.store.navigation.BooksStoreNavigator
 
 @Suppress("unused")
 class ReaderApp : MultiDexApplication() {

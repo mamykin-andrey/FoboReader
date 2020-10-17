@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="app.ui.TabsFragment">
+    tools:context="app.presentation.TabsFragment">
 
     <fragment
         android:id="@+id/fr_tabs_host"

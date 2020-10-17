@@ -4,20 +4,23 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.core.extension.appCompatActivity
 import ru.mamykin.foboreader.core.extension.changeProgressEvents
 import ru.mamykin.foboreader.core.extension.manualCheckedChanges
 import ru.mamykin.foboreader.core.extension.nightMode
-import ru.mamykin.foboreader.core.ui.BaseFragment
-import ru.mamykin.foboreader.core.ui.viewBinding
+import ru.mamykin.foboreader.core.presentation.BaseFragment
+import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.FragmentSettingsBinding
+import ru.mamykin.foboreader.settings.navigation.LocalSettingsNavigator
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -25,7 +28,13 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(R.la
 
     override val viewModel: SettingsViewModel by viewModel()
 
-    private val binding by viewBinding { FragmentSettingsBinding.bind(view!!) }
+    private val binding by viewBinding { FragmentSettingsBinding.bind(requireView()) }
+    private val navigator: LocalSettingsNavigator by inject()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        navigator.navController = findNavController()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,10 +88,8 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(R.la
         binding.seekBright.progress = brightnessValue
     }
 
-    override fun takeEffect(effect: Effect) {
-        when (effect) {
-            is Effect.OpenSelectReadColorScreen ->
-                ColorPickerFragment().show(activity!!.supportFragmentManager, null)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        navigator.navController = null
     }
 }

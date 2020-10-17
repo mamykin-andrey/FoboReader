@@ -17,12 +17,13 @@ import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
-import ru.mamykin.foboreader.core.ui.BaseFragment
-import ru.mamykin.foboreader.core.ui.viewBinding
+import ru.mamykin.foboreader.core.presentation.BaseFragment
+import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
 import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
+import ru.mamykin.foboreader.my_books.navigation.MyBooksNavigator
 import ru.mamykin.foboreader.my_books.presentation.list.BookViewHolder
 
 @ExperimentalCoroutinesApi
