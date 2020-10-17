@@ -5,9 +5,9 @@ apply plugin: "androidx.navigation.safeargs"
 apply from: "$rootDir/buildsystem/dependencies.gradle"
 apply from: "$rootDir/buildsystem/project.gradle"
 
-def propertiesFile = rootProject.file('local.properties')
-def properties = new Properties()
-properties.load(new FileInputStream(propertiesFile))
+//def propertiesFile = rootProject.file('local.properties')
+//def properties = new Properties()
+//properties.load(new FileInputStream(propertiesFile))
 
 android {
     compileSdkVersion compile_sdk_version
@@ -43,4 +43,6 @@ dependencies {
     implementation project(":feature:settings")
     implementation project(":feature:my_books")
     implementation project(":feature:book_details")
+
+    implementation deps.leakcanary
 }

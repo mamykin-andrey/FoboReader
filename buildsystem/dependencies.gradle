@@ -19,6 +19,7 @@ def retrofitCoroutinesAdapterVersion = '0.9.2'
 def retrofitLoggingInterceptorVersion = '4.3.0'
 def espressoCoreVersion = '3.1.1'
 def recyclicalVersion = '1.1.1'
+def leakcanaryVersion = '2.5'
 
 ext.deps = [
         kotlinStdLib              : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
@@ -52,5 +53,6 @@ ext.deps = [
         kluent                    : "org.amshove.kluent:kluent:$kluentVersion",
         espressoCore              : "androidx.test.espresso:espresso-core:$espressoCoreVersion",
         multidex                  : "androidx.multidex:multidex:$multidexVersion",
-        recyclical                : "com.afollestad:recyclical:$recyclicalVersion"
+        recyclical                : "com.afollestad:recyclical:$recyclicalVersion",
+        leakcanary                : "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
 ]
