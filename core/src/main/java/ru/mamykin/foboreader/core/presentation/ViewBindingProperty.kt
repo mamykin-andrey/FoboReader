@@ -14,10 +14,13 @@ class ViewBindingProperty<T>(
 ) : ReadOnlyProperty<Fragment, T>, LifecycleObserver {
 
     private var binding: T? = null
+    private var lifecycle: Lifecycle? = null
 
     @Suppress("unused")
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
+        lifecycle?.removeObserver(this)
+        lifecycle = null
         binding = null
     }
 
@@ -25,7 +28,8 @@ class ViewBindingProperty<T>(
         return binding ?: run {
             newBinding()
                 .also { binding = it }
-                .also { thisRef.viewLifecycleOwner.lifecycle.addObserver(this) }
+                .also { lifecycle = thisRef.viewLifecycleOwner.lifecycle }
+                .also { lifecycle?.addObserver(this) }
         }
     }
 }

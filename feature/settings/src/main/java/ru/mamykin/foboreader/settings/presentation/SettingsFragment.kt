@@ -31,15 +31,11 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(R.la
     private val binding by viewBinding { FragmentSettingsBinding.bind(requireView()) }
     private val navigator: LocalSettingsNavigator by inject()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        navigator.navController = findNavController()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initViews()
+        navigator.navController = findNavController()
     }
 
     private fun initToolbar() = toolbar.apply {
@@ -50,22 +46,22 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(R.la
     private fun initViews() {
         binding.seekBright.changeProgressEvents()
             .onEach { viewModel.sendEvent(Event.BrightnessChanged(it)) }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
         binding.swNightTheme.manualCheckedChanges()
             .onEach { viewModel.sendEvent(Event.NightThemeChanged(it)) }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
         binding.swBrightAuto.manualCheckedChanges()
             .onEach { viewModel.sendEvent(Event.AutoBrightnessChanged(it)) }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
         binding.btnTextSizeMinus.clicks()
             .onEach { viewModel.sendEvent(Event.DecreaseTextSizeClicked) }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
         binding.btnTextSizePlus.clicks()
             .onEach { viewModel.sendEvent(Event.IncreaseTextSizeClicked) }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
         binding.clTranslationColor.clicks()
             .onEach { viewModel.sendEvent(Event.SelectReadColorClicked) }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun showState(state: ViewState) {
@@ -88,8 +84,8 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(R.la
         binding.seekBright.progress = brightnessValue
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         navigator.navController = null
     }
 }
