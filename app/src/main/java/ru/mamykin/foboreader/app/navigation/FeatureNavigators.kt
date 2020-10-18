@@ -5,6 +5,7 @@ import ru.mamykin.foboreader.my_books.navigation.MyBooksNavigator
 import ru.mamykin.foboreader.store.navigation.BooksStoreNavigator
 
 internal val featureNavigators = arrayOf(
+    AppNavigator::class,
     BooksStoreNavigator::class,
     BookDetailsNavigator::class,
     MyBooksNavigator::class

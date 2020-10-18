@@ -13,7 +13,6 @@ import ru.mamykin.foboreader.app.navigation.featureNavigators
 import ru.mamykin.foboreader.book_details.di.bookDetailsModule
 import ru.mamykin.foboreader.common_book_info.di.commonBookInfoModule
 import ru.mamykin.foboreader.core.di.coreModule
-import ru.mamykin.foboreader.core.platform.NavControllerHolder
 import ru.mamykin.foboreader.core.platform.NotificationUtils
 import ru.mamykin.foboreader.my_books.di.myBooksModule
 import ru.mamykin.foboreader.read_book.di.readBookModule
@@ -36,7 +35,7 @@ class ReaderApp : MultiDexApplication() {
             androidContext(applicationContext)
             modules(
                 listOf(
-                    module { single { AppNavigator() }.binds(featureNavigators + NavControllerHolder::class) },
+                    module { single { AppNavigator() }.binds(featureNavigators) },
                     coreModule,
                     commonBookInfoModule,
                     myBooksModule,
