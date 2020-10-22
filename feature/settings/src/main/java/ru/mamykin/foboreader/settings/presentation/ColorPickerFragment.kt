@@ -8,7 +8,7 @@ import androidx.fragment.app.DialogFragment
 class ColorPickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(context!!)
+        return AlertDialog.Builder(requireContext())
             .setTitle("Title")
             .setMessage("Message")
             .create()

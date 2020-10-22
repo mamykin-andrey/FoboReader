@@ -20,10 +20,10 @@ import ru.mamykin.widget.paginatedtextview.view.OnActionListener
 class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.layout.fragment_read_book) {
 
     override val viewModel: ReadBookViewModel by viewModel {
-        parametersOf(ReadBookFragmentArgs.fromBundle(arguments!!).bookId)
+        parametersOf(ReadBookFragmentArgs.fromBundle(requireArguments()).bookId)
     }
 
-    private val binding by viewBinding { FragmentReadBookBinding.bind(view!!) }
+    private val binding by viewBinding { FragmentReadBookBinding.bind(requireView()) }
     private var lastTextHashCode: Int = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

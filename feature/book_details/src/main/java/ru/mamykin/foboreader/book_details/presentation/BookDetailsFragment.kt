@@ -22,10 +22,10 @@ import ru.mamykin.foboreader.core.presentation.viewBinding
 class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect>(R.layout.fragment_book_details) {
 
     override val viewModel: BookDetailsViewModel by viewModel {
-        parametersOf(BookDetailsFragmentArgs.fromBundle(arguments!!).bookId)
+        parametersOf(BookDetailsFragmentArgs.fromBundle(requireArguments()).bookId)
     }
 
-    private val binding by viewBinding { FragmentBookDetailsBinding.bind(view!!) }
+    private val binding by viewBinding { FragmentBookDetailsBinding.bind(requireView()) }
     private val bookInfoDataSource = dataSourceTypedOf<BookInfoItem>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -17,11 +17,11 @@ abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effe
     protected abstract val viewModel: VM
 
     protected val toolbar: Toolbar
-        get() = view!!.findViewById(R.id.toolbar)
+        get() = requireView().findViewById(R.id.toolbar)
             ?: throw IllegalStateException("Couldn't find toolbar in layout!")
 
     protected val progressView: FrameLayout
-        get() = view!!.findViewById(R.id.fl_content_loading)
+        get() = requireView().findViewById(R.id.fl_content_loading)
             ?: throw IllegalStateException("Couldn't find progress view in layout!")
 
     private var dataLoaded = false
