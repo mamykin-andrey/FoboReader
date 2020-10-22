@@ -34,25 +34,25 @@ class SettingsViewModel(
         )
     }
 
-    override suspend fun onEvent(event: Event) {
+    override fun onEvent(event: Event) {
         when (event) {
             is Event.BrightnessChanged -> {
-                interactor.changeBrightness(event.brightness)
+                launch { interactor.changeBrightness(event.brightness) }
             }
             is Event.NightThemeChanged -> {
-                interactor.enableNightTheme(event.nightTheme)
+                launch { interactor.enableNightTheme(event.nightTheme) }
             }
             is Event.AutoBrightnessChanged -> {
-                interactor.enableAutoBrightness(event.autoBrightness)
+                launch { interactor.enableAutoBrightness(event.autoBrightness) }
             }
             is Event.IncreaseTextSizeClicked -> {
-                interactor.increaseTextSize()
+                launch { interactor.increaseTextSize() }
             }
             is Event.DecreaseTextSizeClicked -> {
-                interactor.decreaseTextSize()
+                launch { interactor.decreaseTextSize() }
             }
             is Event.SelectReadColorClicked -> {
-                localNavigator.settingsToColorPicker()
+                launch { localNavigator.settingsToColorPicker() }
             }
         }
     }

@@ -27,7 +27,7 @@ class BookDetailsViewModel(
         is Action.LoadingError -> state.copy(isLoading = false, error = true)
     }
 
-    override suspend fun onEvent(event: Event) {
+    override fun onEvent(event: Event) {
         when (event) {
             is Event.ReadBookClicked -> navigator.bookDetailsToReadBook(bookId)
         }

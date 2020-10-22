@@ -4,7 +4,10 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlin.coroutines.CoroutineContext
 import kotlin.properties.Delegates
 
@@ -40,11 +43,11 @@ abstract class BaseViewModel<ViewState, Action, Event, Effect>(
     abstract fun onAction(action: Action): ViewState
 
     fun sendEvent(event: Event) {
-        launch { onEvent(event) }
+        onEvent(event)
         stateDebugger.onEvent(event)
     }
 
-    protected open suspend fun onEvent(event: Event) {}
+    protected open fun onEvent(event: Event) {}
 
     fun sendEffect(effect: Effect) {
         _effectLiveData.setValue(effect)

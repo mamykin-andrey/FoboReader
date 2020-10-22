@@ -30,17 +30,17 @@ class MyBooksViewModel constructor(
         is Action.BooksLoaded -> state.copy(isLoading = false, books = action.books)
     }
 
-    override suspend fun onEvent(event: Event) {
+    override fun onEvent(event: Event) {
         when (event) {
             is Event.ScanBooks -> scanBooks()
-            is Event.LoadBooks -> interactor.loadBooks()
-            is Event.RemoveBook -> interactor.removeBook(event.id)
-            is Event.SortBooks -> interactor.sortBooks(event.sortOrder)
-            is Event.FilterBooks -> interactor.filterByQuery(event.query)
+            is Event.LoadBooks -> launch { interactor.loadBooks() }
+            is Event.RemoveBook -> launch { interactor.removeBook(event.id) }
+            is Event.SortBooks -> launch { interactor.sortBooks(event.sortOrder) }
+            is Event.FilterBooks -> launch { interactor.filterByQuery(event.query) }
         }
     }
 
-    private suspend fun scanBooks() {
+    private fun scanBooks() = launch {
         sendAction(Action.Loading)
         interactor.scanBooks()
     }

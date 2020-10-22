@@ -38,7 +38,7 @@ class BooksStoreViewModel(
         )
     }
 
-    override suspend fun onEvent(event: Event) {
+    override fun onEvent(event: Event) {
         when (event) {
             is Event.FilterBooks -> filterBooks(event.query)
             is Event.DownloadBook -> downloadBook(event.book)
@@ -46,7 +46,7 @@ class BooksStoreViewModel(
         }
     }
 
-    private suspend fun filterBooks(query: String) {
+    private fun filterBooks(query: String) = launch {
         val books = interactor.filterBooks(query)
         sendAction(Action.BooksLoaded(books))
     }

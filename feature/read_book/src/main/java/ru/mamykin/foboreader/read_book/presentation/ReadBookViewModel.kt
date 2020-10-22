@@ -43,12 +43,12 @@ class ReadBookViewModel constructor(
         is Action.WordTranslationHided -> state.copy(wordTranslation = null)
     }
 
-    override suspend fun onEvent(event: Event) {
+    override fun onEvent(event: Event) {
         when (event) {
             is Event.TranslateParagraph -> translateParagraph(event.paragraph)
             is Event.HideParagraphTranslation -> hideParagraphTranslation()
             is Event.TranslateWord -> translateWord(event.word)
-            is Event.PageOpened -> interactor.saveCurrentPage(bookId, event.pageNumber)
+            is Event.PageOpened -> launch { interactor.saveCurrentPage(bookId, event.pageNumber) }
         }
     }
 
