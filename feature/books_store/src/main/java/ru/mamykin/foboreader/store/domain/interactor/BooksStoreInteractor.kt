@@ -2,8 +2,9 @@ package ru.mamykin.foboreader.store.domain.interactor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import ru.mamykin.foboreader.store.data.network.FileDownloader
 import ru.mamykin.foboreader.store.data.BooksStoreRepository
+import ru.mamykin.foboreader.store.data.network.DownloadFileException
+import ru.mamykin.foboreader.store.data.network.FileDownloader
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 
 @ExperimentalCoroutinesApi
@@ -20,6 +21,7 @@ class BooksStoreInteractor constructor(
         return repository.getBooks(query)
     }
 
+    @Throws(DownloadFileException::class)
     suspend fun downloadBook(book: StoreBook) {
         fileDownloader.download(book.link, book.getFileName())
     }

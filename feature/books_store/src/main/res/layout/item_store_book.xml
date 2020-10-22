@@ -5,6 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
@@ -13,9 +16,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
         android:padding="@dimen/margin_padding_size_medium">
 
         <ImageView

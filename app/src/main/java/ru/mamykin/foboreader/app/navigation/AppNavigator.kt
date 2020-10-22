@@ -1,9 +1,11 @@
 package ru.mamykin.foboreader.app.navigation
 
 import androidx.navigation.NavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.app.presentation.TabsFragmentDirections
-import ru.mamykin.foboreader.book_details.presentation.BookDetailsFragmentDirections
 import ru.mamykin.foboreader.book_details.navigation.BookDetailsNavigator
+import ru.mamykin.foboreader.book_details.presentation.BookDetailsFragmentDirections
 import ru.mamykin.foboreader.core.platform.NavControllerHolder
 import ru.mamykin.foboreader.my_books.navigation.MyBooksNavigator
 import ru.mamykin.foboreader.store.navigation.BooksStoreNavigator
@@ -15,6 +17,7 @@ import ru.mamykin.foboreader.store.navigation.BooksStoreNavigator
 class AppNavigator : NavControllerHolder, BooksStoreNavigator, BookDetailsNavigator, MyBooksNavigator {
 
     override var navController: NavController? = null
+    var tabsNavigationView: BottomNavigationView? = null
 
     override fun bookDetailsToReadBook(bookId: Long) {
         navController?.navigate(
@@ -24,14 +27,7 @@ class AppNavigator : NavControllerHolder, BooksStoreNavigator, BookDetailsNaviga
     }
 
     override fun booksStoreToMyBooksScreen() {
-        // TODO: Tabs navcontroller?
-//        navController.mActivity?.supportFragmentManager
-//            ?.findFragmentById(R.id.fr_main_nav_host)
-//            ?.childFragmentManager
-//            ?.fragments
-//            ?.firstOrNull()
-//            ?.let { it as? TabsFragment }
-//            ?.openMyBooksTab()
+        tabsNavigationView?.selectedItemId = R.id.my_books
     }
 
     override fun myBooksToReadBook(bookId: Long) {

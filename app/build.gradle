@@ -1,17 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs"
 apply from: "$rootDir/buildsystem/dependencies.gradle"
-apply from: "$rootDir/buildsystem/project.gradle"
-
-//def propertiesFile = rootProject.file('local.properties')
-//def properties = new Properties()
-//properties.load(new FileInputStream(propertiesFile))
+apply from: "$rootDir/buildsystem/projfect.gradle"
 
 android {
     compileSdkVersion compile_sdk_version
     buildToolsVersion build_tools_version
+
     defaultConfig {
         multiDexEnabled true
         applicationId "ru.mamykin.foboreader"
@@ -21,6 +17,7 @@ android {
         versionName version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         debug {
             minifyEnabled false
@@ -30,6 +27,10 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 

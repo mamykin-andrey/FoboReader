@@ -34,7 +34,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layo
 
     private val navigator: MyBooksNavigator by inject()
     private val booksSource = dataSourceTypedOf<BookInfo>()
-    private val binding by viewBinding { FragmentMyBooksBinding.bind(view!!) }
+    private val binding by viewBinding { FragmentMyBooksBinding.bind(requireView()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
