@@ -38,7 +38,7 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(R.la
         navigator.navController = findNavController()
     }
 
-    private fun initToolbar() = toolbar.apply {
+    private fun initToolbar() = toolbar!!.apply {
         setTitle(R.string.settings_title)
         navigationIcon = null
     }

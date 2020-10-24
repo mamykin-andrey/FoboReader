@@ -30,7 +30,7 @@ class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.title = getString(R.string.my_books_book_info_title)
+        toolbar!!.title = getString(R.string.my_books_book_info_title)
         binding.fabRead.setOnClickListener { viewModel.sendEvent(Event.ReadBookClicked) }
         initBookInfoList()
     }

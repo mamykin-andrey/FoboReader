@@ -44,7 +44,7 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
     }
 
     private fun initToolbar() {
-        toolbar.apply {
+        toolbar!!.apply {
             title = getString(R.string.books_store_title)
             navigationIcon = null
             inflateMenu(R.menu.menu_books_store)

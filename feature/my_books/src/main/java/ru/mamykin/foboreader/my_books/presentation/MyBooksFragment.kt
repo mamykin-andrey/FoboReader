@@ -42,7 +42,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layo
         initBooksList()
     }
 
-    private fun initToolbar() = toolbar.apply {
+    private fun initToolbar() = toolbar!!.apply {
         title = getString(R.string.my_books_screen_title)
         navigationIcon = null
         inflateMenu(R.menu.menu_books_list)

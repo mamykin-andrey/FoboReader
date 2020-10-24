@@ -7,7 +7,6 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import ru.mamykin.foboreader.core.R
 
 abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effect>, ViewState, Effect>(
@@ -16,9 +15,8 @@ abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effe
 
     protected abstract val viewModel: VM
 
-    protected val toolbar: Toolbar
+    protected val toolbar: Toolbar?
         get() = requireView().findViewById(R.id.toolbar)
-            ?: throw IllegalStateException("Couldn't find toolbar in layout!")
 
     protected val progressView: FrameLayout
         get() = requireView().findViewById(R.id.fl_content_loading)
@@ -28,6 +26,7 @@ abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolbar?.setNavigationOnClickListener { requireActivity().onBackPressed() }
         initViewModel()
     }
 
@@ -45,10 +44,10 @@ abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effe
     protected open fun takeEffect(effect: Effect) {}
 
     private fun <T> LiveData<T>.observe(observerFunc: (T) -> Unit) {
-        observe(viewLifecycleOwner, Observer { observerFunc(it) })
+        observe(viewLifecycleOwner, { observerFunc(it) })
     }
 
     private fun <T> SingleLiveEvent<T>.observe(observerFunc: (T) -> Unit) {
-        observe(viewLifecycleOwner, Observer { observerFunc(it) })
+        observe(viewLifecycleOwner, { observerFunc(it) })
     }
 }
