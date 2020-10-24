@@ -5,14 +5,11 @@ import ru.mamykin.foboreader.store.domain.model.StoreBook
 class BooksStoreRepository constructor(
     private val service: BooksStoreService
 ) {
-    private var booksCache: List<StoreBook>? = null
-
     suspend fun getBooks(query: String? = null): List<StoreBook> {
-        val books = booksCache ?: service.getBooksAsync()
+        val books = service.getBooksAsync()
             .await()
             .books
             .map { it.toDomainModel() }
-            .also { booksCache = it }
 
         return books.filterBooksByQuery(query)
     }

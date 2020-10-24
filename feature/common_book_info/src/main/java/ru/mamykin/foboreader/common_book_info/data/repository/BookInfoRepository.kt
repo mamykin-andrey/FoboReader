@@ -6,24 +6,19 @@ import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 class BookInfoRepository constructor(
     private val bookInfoDao: BookInfoDao
 ) {
-    private val booksCache = BooksCache()
-
     suspend fun getBooks(): List<BookInfo> {
-        return booksCache.getBooks() ?: bookInfoDao.getBooks()
+        return bookInfoDao.getBooks()
             .map { it.toDomainModel() }
-            .also(booksCache::setCache)
     }
 
     suspend fun findBooks(query: String): List<BookInfo> {
-        return booksCache.findBooks(query)
-            ?: bookInfoDao.findBooks(query)
-                .map { it.toDomainModel() }
+        return bookInfoDao.findBooks(query)
+            .map { it.toDomainModel() }
     }
 
     suspend fun getBookInfo(id: Long): BookInfo? {
-        return booksCache.getBookInfo(id)
-            ?: bookInfoDao.getBook(id)
-                ?.toDomainModel()
+        return bookInfoDao.getBook(id)
+            ?.toDomainModel()
     }
 
     suspend fun removeBook(id: Long) {
