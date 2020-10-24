@@ -26,14 +26,14 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
 
     private fun initBottomNavigationView() {
         binding.bnvTabs.setupWithNavController(
-            navGraphIds = listOf(
+            this,
+            listOf(
                 R.navigation.my_books,
                 R.navigation.books_store,
                 R.navigation.settings
             ),
-            fragmentManager = childFragmentManager,
-            containerId = R.id.fr_tabs_host,
-            intent = requireActivity().intent
+            R.id.fr_tabs_host,
+            requireActivity().intent
         )
     }
 

@@ -20,6 +20,7 @@ import android.content.Intent
 import android.util.SparseArray
 import androidx.core.util.forEach
 import androidx.core.util.set
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -33,11 +34,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
  * This sample is a workaround until the Navigation Component supports multiple back stacks.
  */
 fun BottomNavigationView.setupWithNavController(
+    fragment: Fragment,
     navGraphIds: List<Int>,
-    fragmentManager: FragmentManager,
     containerId: Int,
     intent: Intent
 ): LiveData<NavController> {
+    val fragmentManager = fragment.childFragmentManager
     // Map of tags
     val graphIdToTagMap = SparseArray<String>()
     // Result. Mutable live data with the selected controlled
@@ -133,12 +135,10 @@ fun BottomNavigationView.setupWithNavController(
     // Handle deep link
     setupDeepLinks(navGraphIds, fragmentManager, containerId, intent)
 
-    // Finally, ensure that we update our BottomNavigationView when the back stack changes
-    fragmentManager.addOnBackStackChangedListener {
+    val listener = FragmentManager.OnBackStackChangedListener {
         if (!isOnFirstFragment && !fragmentManager.isOnBackStack(firstFragmentTag)) {
-            this.selectedItemId = firstFragmentGraphId
+            selectedItemId = firstFragmentGraphId
         }
-
         // Reset the graph if the currentDestination is not valid (happens when the back
         // stack is popped after using the back button).
         selectedNavController.value?.let { controller ->
@@ -147,6 +147,11 @@ fun BottomNavigationView.setupWithNavController(
             }
         }
     }
+    // Finally, ensure that we update our BottomNavigationView when the back stack changes
+    fragmentManager.addOnBackStackChangedListener(listener)
+    // Clear reference to the fragment to prevent memory leak
+    fragment.doOnDestroyView { fragmentManager.removeOnBackStackChangedListener(listener) }
+
     return selectedNavController
 }
 
