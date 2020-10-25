@@ -19,7 +19,7 @@ class BookViewHolder(
         bindBookCover(book)
         tvBookTitle.text = book.title
         tvAuthor.text = book.author
-//        pvProgress.setPercentage(book.readPercent)
+        pvProgress.progress = book.getReadPercent()
         tvBooksPages.text = book.currentPage.toString()
         bindFileInfo(book)
     }

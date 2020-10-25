@@ -18,14 +18,19 @@ class BookInfoRepository constructor(
 
     suspend fun getBookInfo(id: Long): BookInfo? {
         return bookInfoDao.getBook(id)
-            ?.toDomainModel()
+            .toDomainModel()
     }
 
     suspend fun removeBook(id: Long) {
         bookInfoDao.remove(id)
     }
 
-    suspend fun updateCurrentPage(bookId: Long, currentPage: Int) {
-        bookInfoDao.updateCurrentPage(bookId, currentPage)
+    suspend fun updateBookInfo(bookId: Long, currentPage: Int, totalPages: Int) {
+        val bookInfo = bookInfoDao.getBook(bookId)
+        val updatedBookInfo = bookInfo.copy(
+            currentPage = currentPage,
+            totalPages = totalPages
+        )
+        bookInfoDao.update(updatedBookInfo)
     }
 }

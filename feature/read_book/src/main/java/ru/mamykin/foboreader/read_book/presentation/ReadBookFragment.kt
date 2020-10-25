@@ -38,7 +38,7 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
             }
 
             override fun onPageLoaded(state: ReadState) = with(state) {
-                viewModel.sendEvent(Event.PageOpened(state.currentIndex))
+                viewModel.sendEvent(Event.PageLoaded(state.currentIndex, state.pagesCount))
                 binding.tvReadPercent.text = getString(
                     R.string.read_book_user_read_percent,
                     readPercent

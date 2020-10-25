@@ -13,8 +13,8 @@ data class BookInfo(
     val languages: List<String>,
     val date: Date?,
     val currentPage: Int,
-    val lastOpen: Long,
-    val totalPages: Int
+    val totalPages: Int? = null,
+    val lastOpen: Long
 ) {
     private val file by lazy { File(filePath) }
 
@@ -27,6 +27,10 @@ data class BookInfo(
     }
 
     fun getReadPercent(): Int {
-        return currentPage
+        return totalPages?.takeIf { it > 0 }
+            ?.toDouble()
+            ?.let { currentPage / it * 100 }
+            ?.toInt()
+            ?: 0
     }
 }

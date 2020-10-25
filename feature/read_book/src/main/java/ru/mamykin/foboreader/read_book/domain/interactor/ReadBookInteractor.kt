@@ -42,7 +42,7 @@ class ReadBookInteractor(
         textToSpeechService.voiceWord(word)
     }
 
-    suspend fun saveCurrentPage(bookId: Long, currentPage: Int) {
-        bookInfoRepository.updateCurrentPage(bookId, currentPage)
+    suspend fun updateBookInfo(bookId: Long, currentPage: Int, totalPages: Int) {
+        bookInfoRepository.updateBookInfo(bookId, currentPage, totalPages)
     }
 }

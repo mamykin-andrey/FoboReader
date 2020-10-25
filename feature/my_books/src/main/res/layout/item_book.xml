@@ -77,15 +77,18 @@
             app:layout_constraintTop_toBottomOf="@id/tv_file_info"
             tools:text="@tools:sample/lorem/random" />
 
-        <ru.mamykin.foboreader.my_books.presentation.PercentProgressView
+        <ProgressBar
             android:id="@+id/pv_progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="3dp"
             android:layout_marginEnd="@dimen/margin_padding_size_medium"
+            android:indeterminate="false"
+            android:max="100"
             app:layout_constraintBottom_toTopOf="@id/tv_books_pages"
             app:layout_constraintLeft_toLeftOf="@id/tv_books_pages"
             app:layout_constraintRight_toRightOf="parent"
-            tools:background="@android:color/darker_gray" />
+            tools:progress="50" />
 
         <TextView
             android:id="@+id/tv_books_pages"

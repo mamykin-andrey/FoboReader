@@ -46,9 +46,9 @@ class ReadBookViewModel constructor(
     override fun onEvent(event: Event) {
         when (event) {
             is Event.TranslateParagraph -> translateParagraph(event.paragraph)
-            is Event.HideParagraphTranslation -> hideParagraphTranslation()
+            is Event.HideParagraphTranslation -> sendAction(Action.ParagraphTranslationHided)
             is Event.TranslateWord -> translateWord(event.word)
-            is Event.PageOpened -> launch { interactor.saveCurrentPage(bookId, event.pageNumber) }
+            is Event.PageLoaded -> launch { interactor.updateBookInfo(bookId, event.currentPage, event.totalPages) }
         }
     }
 
@@ -58,10 +58,6 @@ class ReadBookViewModel constructor(
             ?.let { Action.ParagraphTranslationLoaded(paragraph, it) }
             ?.let { sendAction(it) }
             ?: sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error))
-    }
-
-    private fun hideParagraphTranslation() = launch {
-        sendAction(Action.ParagraphTranslationHided)
     }
 
     private fun translateWord(word: String) = launch {

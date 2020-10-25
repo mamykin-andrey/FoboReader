@@ -49,7 +49,7 @@ abstract class BaseViewModel<ViewState, Action, Event, Effect>(
 
     protected open fun onEvent(event: Event) {}
 
-    fun sendEffect(effect: Effect) {
+    protected fun sendEffect(effect: Effect) {
         _effectLiveData.setValue(effect)
         stateDebugger.onEffect(effect)
     }
