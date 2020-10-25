@@ -2,8 +2,8 @@ package ru.mamykin.foboreader.my_books.presentation.list
 
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.core.extension.loadImage
 import ru.mamykin.foboreader.core.extension.showPopupMenu
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
@@ -20,11 +20,7 @@ class BookViewHolder(
         tvBookTitle.text = book.title
         tvAuthor.text = book.author
         pvProgress.progress = book.getReadPercent()
-        tvBooksPages.text = itemView.context.getString(
-            R.string.book_pages_info,
-            book.currentPage,
-            book.totalPages
-        )
+        bindBookPagesInfo(book)
         bindFileInfo(book)
     }
 
@@ -40,12 +36,15 @@ class BookViewHolder(
 
     private fun bindBookCover(book: BookInfo) = binding.apply {
         ViewCompat.setTransitionName(ivBookCover, book.id.toString())
-        book.coverUrl?.takeIf { it.isNotEmpty() }?.let {
-            Picasso.with(itemView.context)
-                .load(it)
-                .error(R.drawable.img_no_image)
-                .into(ivBookCover)
-        }
+        ivBookCover.loadImage(book.coverUrl, R.drawable.img_no_image)
+    }
+
+    private fun bindBookPagesInfo(book: BookInfo) = binding.apply {
+        tvBooksPages.text = itemView.context.getString(
+            R.string.book_pages_info,
+            book.currentPage,
+            book.totalPages
+        )
     }
 
     private fun bindFileInfo(book: BookInfo) = binding.apply {
