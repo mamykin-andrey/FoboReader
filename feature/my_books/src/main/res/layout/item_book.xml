@@ -81,22 +81,24 @@
             android:id="@+id/pv_progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
             android:layout_marginEnd="@dimen/margin_padding_size_medium"
             android:indeterminate="false"
             android:max="100"
-            app:layout_constraintBottom_toTopOf="@id/tv_books_pages"
             app:layout_constraintLeft_toLeftOf="@id/tv_books_pages"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_author"
             tools:progress="50" />
 
         <TextView
             android:id="@+id/tv_books_pages"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_micro"
             android:layout_marginBottom="@dimen/margin_padding_size_small"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/tv_book_title"
+            app:layout_constraintTop_toBottomOf="@id/pv_progress"
             tools:text="16 страниц из 27" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

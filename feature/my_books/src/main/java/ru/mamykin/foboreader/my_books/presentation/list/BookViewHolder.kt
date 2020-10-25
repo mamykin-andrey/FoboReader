@@ -20,7 +20,11 @@ class BookViewHolder(
         tvBookTitle.text = book.title
         tvAuthor.text = book.author
         pvProgress.progress = book.getReadPercent()
-        tvBooksPages.text = book.currentPage.toString()
+        tvBooksPages.text = itemView.context.getString(
+            R.string.book_pages_info,
+            book.currentPage,
+            book.totalPages
+        )
         bindFileInfo(book)
     }
 
