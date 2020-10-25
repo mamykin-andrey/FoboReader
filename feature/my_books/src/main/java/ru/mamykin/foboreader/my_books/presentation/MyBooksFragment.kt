@@ -3,13 +3,16 @@ package ru.mamykin.foboreader.my_books.presentation
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import androidx.annotation.IdRes
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -47,16 +50,17 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layo
         title = getString(R.string.my_books_screen_title)
         navigationIcon = null
         inflateMenu(R.menu.menu_books_list)
-        menu.findItem(R.id.actionSortName)
-            .clicks()
-            .onEach { viewModel.sendEvent(Event.SortBooks(SortOrder.ByName)) }
-        menu.findItem(R.id.actionSortReaded)
-            .clicks()
-            .onEach { viewModel.sendEvent(Event.SortBooks(SortOrder.ByReaded)) }
-        menu.findItem(R.id.actionSortDate)
-            .clicks()
-            .onEach { viewModel.sendEvent(Event.SortBooks(SortOrder.ByDate)) }
+        bindItemClick(menu, R.id.actionSortName, SortOrder.ByName)
+        bindItemClick(menu, R.id.actionSortReaded, SortOrder.ByReaded)
+        bindItemClick(menu, R.id.actionSortDate, SortOrder.ByDate)
         initSearchView(menu)
+    }
+
+    private fun bindItemClick(menu: Menu, @IdRes itemId: Int, sortOrder: SortOrder) {
+        menu.findItem(itemId)
+            .clicks()
+            .onEach { viewModel.sendEvent(Event.SortBooks(sortOrder)) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun initSearchView(menu: Menu) = menu.getSearchView(R.id.action_search).apply {
@@ -64,6 +68,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layo
         queryChanges()
             .filterNotNull()
             .onEach { viewModel.sendEvent(Event.FilterBooks(it)) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun initBooksList() {

@@ -5,7 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.mamykin.foboreader.store.data.BooksStoreService
+import ru.mamykin.foboreader.store.data.network.BooksStoreService
 
 internal object NetworkDependencies {
 

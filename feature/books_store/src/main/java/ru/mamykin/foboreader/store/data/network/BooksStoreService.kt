@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.data
+package ru.mamykin.foboreader.store.data.network
 
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET

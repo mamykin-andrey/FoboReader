@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.core.extension.getSearchView
@@ -67,6 +69,7 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
         queryChanges()
             .filterNotNull()
             .onEach { viewModel.sendEvent(Event.FilterBooks(it)) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun showState(state: ViewState) {
