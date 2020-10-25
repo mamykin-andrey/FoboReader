@@ -6,12 +6,12 @@ import javax.xml.parsers.SAXParserFactory
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class BookTextParser {
+class BookContentParser {
 
     suspend fun parse(filePath: String): BookContent = suspendCoroutine { cont ->
         runCatching {
             val parser = SAXParserFactory.newInstance().newSAXParser()
-            val parseHandler = BookTextParserHandler {
+            val parseHandler = BookContentParserHandler {
                 cont.resumeWith(Result.success(it))
             }
             parser.parse(File(filePath), parseHandler)

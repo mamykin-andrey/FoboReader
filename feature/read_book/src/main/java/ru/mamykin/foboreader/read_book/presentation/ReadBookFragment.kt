@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.read_book.presentation
 
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Html
 import android.text.SpannableString
 import android.view.View
 import androidx.core.view.isVisible
@@ -10,6 +9,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.showSnackbar
+import ru.mamykin.foboreader.core.extension.toHtml
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.read_book.R
@@ -54,7 +54,7 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
 
     override fun showState(state: ViewState) {
         progressView.isVisible = state.isTranslationLoading
-        showBookText(state.text)
+        showBookText(state.text, state.currentPage)
         state.wordTranslation?.let(::showWordTranslation)
         state.paragraphTranslation?.let(::showParagraphTranslation)
         binding.tvName.text = state.title
@@ -66,12 +66,12 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
         binding.tvReadPercent.text = state.readPercent.toString()
     }
 
-    private fun showBookText(text: String) {
+    private fun showBookText(text: String, page: Int) {
         text.hashCode()
             .takeIf { it != lastTextHashCode }
             ?.let {
-                binding.tvText.setOnClickListener(null)
-                binding.tvText.setup(Html.fromHtml(text))
+//                binding.tvText.setOnClickListener(null)
+                binding.tvText.setup(text.toHtml(), page)
                 lastTextHashCode = it
             }
     }

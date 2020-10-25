@@ -15,12 +15,16 @@ class PaginationController(
 ) {
     private val paginator = Paginator(text, width, height, paint, spacingMult, spacingExtra)
 
+    fun setCurrentPage(page: Int) {
+        paginator.currentIndex = page
+    }
+
     /**
      * Get current page state
      * @return current page state
      */
     fun getCurrentPage() = ReadState(
-        paginator.currentIndex + 1,
+        paginator.currentIndex,
         paginator.pagesCount,
         getReadPercent(),
         paginator.getCurrentPage()

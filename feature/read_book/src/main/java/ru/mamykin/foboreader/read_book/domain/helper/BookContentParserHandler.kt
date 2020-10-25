@@ -5,7 +5,7 @@ import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
 import ru.mamykin.foboreader.read_book.domain.model.BookContent
 
-class BookTextParserHandler(
+class BookContentParserHandler(
     private val successFunc: (BookContent) -> Unit
 ) : DefaultHandler2() {
 

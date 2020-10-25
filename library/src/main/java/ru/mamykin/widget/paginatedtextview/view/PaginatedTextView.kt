@@ -33,20 +33,16 @@ class PaginatedTextView @JvmOverloads constructor(
 
     override fun scrollTo(x: Int, y: Int) {}
 
-    /**
-     * Setup the TextView
-     * @param text text to set
-     */
-    fun setup(text: CharSequence) {
+    fun setup(text: CharSequence, currentPage: Int = 0) {
         if (isMeasured) {
-            loadFirstPage(text)
+            loadCurrentPage(text, currentPage)
         } else {
             viewTreeObserver.addOnGlobalLayoutListener(object :
                 ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
                     isMeasured = true
                     viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    loadFirstPage(text)
+                    loadCurrentPage(text, currentPage)
                 }
             })
         }
@@ -82,7 +78,7 @@ class PaginatedTextView @JvmOverloads constructor(
         return text.subSequence(selectionStart, selectionEnd).trim(' ').toString()
     }
 
-    private fun loadFirstPage(text: CharSequence) {
+    private fun loadCurrentPage(text: CharSequence, currentPage: Int) {
         val effectWidth = width - (paddingLeft + paddingRight)
         val effectHeight = height - (paddingTop + paddingBottom)
         controller = PaginationController(
@@ -93,6 +89,7 @@ class PaginatedTextView @JvmOverloads constructor(
             lineSpacingMultiplier,
             lineSpacingExtra
         )
+        controller.setCurrentPage(currentPage)
         setPageState(controller.getCurrentPage())
     }
 

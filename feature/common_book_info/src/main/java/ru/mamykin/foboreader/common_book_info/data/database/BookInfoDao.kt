@@ -7,9 +7,6 @@ import ru.mamykin.foboreader.common_book_info.data.model.BookInfoModel
 interface BookInfoDao {
 
     @Insert
-    suspend fun insert(book: BookInfoModel)
-
-    @Insert
     suspend fun insertAll(books: List<BookInfoModel>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
