@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.view.View
 import androidx.core.view.isVisible
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import ru.mamykin.foboreader.core.data.storage.SettingsStorage
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.extension.toHtml
@@ -23,11 +25,13 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
         parametersOf(ReadBookFragmentArgs.fromBundle(requireArguments()).bookId)
     }
 
+    private val settingsStorage: SettingsStorage by inject()
     private val binding by viewBinding { FragmentReadBookBinding.bind(requireView()) }
     private var lastTextHashCode: Int = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.tvText.textSize = settingsStorage.readTextSize.toFloat()
         binding.tvText.setOnActionListener(object : OnActionListener {
             override fun onClick(paragraph: String) {
                 viewModel.sendEvent(Event.TranslateParagraph(paragraph.trim()))
@@ -67,13 +71,12 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
     }
 
     private fun showBookText(text: String, page: Int) {
-        text.hashCode()
-            .takeIf { it != lastTextHashCode }
-            ?.let {
-//                binding.tvText.setOnClickListener(null)
-                binding.tvText.setup(text.toHtml(), page)
-                lastTextHashCode = it
-            }
+        val hashCode = text.hashCode()
+        text.takeIf { hashCode != lastTextHashCode }
+            ?.toHtml()
+            ?.let { binding.tvText.setup(it, page) }
+            ?.also { lastTextHashCode = hashCode }
+        // binding.tvText.setOnClickListener(null)
     }
 
     private fun showParagraphTranslation(info: Pair<String, String>) {

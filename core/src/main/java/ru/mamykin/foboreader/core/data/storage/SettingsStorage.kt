@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.core.data.storage
 
-class SettingsStorage constructor(
+class SettingsStorage(
     private val prefManager: PreferencesManager
 ) {
     companion object {

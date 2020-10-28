@@ -21,7 +21,6 @@ class PaginatedTextView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : AppCompatTextView(context, attrs, defStyle) {
 
-    private val textPaint = TextPaint(paint)
     private var swipeListener: OnSwipeListener? = null
     private var actionListener: OnActionListener? = null
     private lateinit var controller: PaginationController
@@ -85,7 +84,7 @@ class PaginatedTextView @JvmOverloads constructor(
             text,
             effectWidth,
             effectHeight,
-            textPaint,
+            TextPaint(paint),
             lineSpacingMultiplier,
             lineSpacingExtra
         )
