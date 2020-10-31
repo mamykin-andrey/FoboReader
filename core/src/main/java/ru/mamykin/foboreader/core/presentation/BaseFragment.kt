@@ -32,7 +32,7 @@ abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effe
 
     private fun initViewModel() {
         viewModel.stateLiveData.observe(::showState)
-        viewModel.effectLiveData.observe(this::takeEffect)
+        viewModel.effectLiveData.observe(::takeEffect)
         if (!dataLoaded) {
             viewModel.loadData()
             dataLoaded = true
