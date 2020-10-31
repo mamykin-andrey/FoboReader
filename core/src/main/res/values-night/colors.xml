@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="textColor">#EEEEEE</color>
-    <color name="colorBackground">@android:color/black</color>
-    <color name="negativeTextColor">#AAAAAA</color>
-    <color name="negativeColorBackgroundDark">#555555</color>
-    <color name="darkGrey">#999</color>
+    <color name="colorPrimary">#222222</color>
+    <color name="colorPrimaryLight">#2C2C2C</color>
+    <color name="colorPrimaryDark">#1E1E1E</color>
+    <color name="colorAccent">#af4448</color>
+    <color name="colorAccentLight">#C64F53</color>
+    <color name="colorAccentDark">#91393C</color>
+    <color name="textOnBackground">#FFFFFF</color>
+    <color name="textOnBackgroundLight">#DDDDDD</color>
+    <color name="textOnPrimary">#FFFFFF</color>
+    <color name="textOnAccent">#FFFFFF</color>
 </resources>

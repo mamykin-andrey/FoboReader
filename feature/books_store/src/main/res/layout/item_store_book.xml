@@ -34,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_padding_size_medium"
-            android:textColor="@android:color/black"
+            android:textColor="@color/textOnBackground"
             android:textSize="@dimen/text_size_medium"
             app:layout_constraintLeft_toRightOf="@id/iv_book_cover"
             app:layout_constraintRight_toRightOf="parent"

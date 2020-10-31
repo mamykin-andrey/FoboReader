@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="readTextColor">#999999</color>
+    <color name="readColorBottomPanelBackground">#505050</color>
+    <color name="readColorOnBottomPanelBackground">#999999</color>
 </resources>
