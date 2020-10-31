@@ -8,7 +8,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 
@@ -41,9 +40,7 @@ var AppCompatActivity?.nightMode: Boolean
                 AppCompatDelegate.MODE_NIGHT_YES
             else
                 AppCompatDelegate.MODE_NIGHT_NO
-
             AppCompatDelegate.setDefaultNightMode(newMode)
-            takeIf { lifecycle.currentState > Lifecycle.State.CREATED }?.recreate()
         }
     }
 
