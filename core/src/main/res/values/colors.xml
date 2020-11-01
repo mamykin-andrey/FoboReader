@@ -7,7 +7,7 @@
     <color name="colorAccentLight">#ffa4a2</color>
     <color name="colorAccentDark">#af4448</color>
     <color name="textOnBackground">#000000</color>
-    <color name="textOnBackgroundLight">#222222</color>
+    <color name="textOnBackgroundLight">#333333</color>
     <color name="textOnPrimary">#000000</color>
     <color name="textOnAccent">#000000</color>
 </resources>

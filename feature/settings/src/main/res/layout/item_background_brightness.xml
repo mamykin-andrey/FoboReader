@@ -8,10 +8,10 @@
 
     <TextView
         android:id="@+id/tv_bright_title"
-        style="@style/SettingsTextItemStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/background_brightness"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

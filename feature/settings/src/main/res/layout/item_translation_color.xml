@@ -12,21 +12,23 @@
 
     <TextView
         android:id="@+id/tv_translation_color_title"
-        style="@style/SettingsTextItemStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/settings_translate_color_title"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:textColor="@color/textOnBackground"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/iv_translation_color"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_translation_color_subtitle"
-        style="@style/SettingsTextSubItemStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_padding_size_micro"
         android:text="@string/settings_translate_color_description"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textColor="@color/textOnBackgroundLight"
         app:layout_constraintLeft_toLeftOf="@id/tv_translation_color_title"
         app:layout_constraintRight_toRightOf="@id/tv_translation_color_title"
         app:layout_constraintTop_toBottomOf="@id/tv_translation_color_title" />

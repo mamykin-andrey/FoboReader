@@ -11,9 +11,8 @@
         android:id="@+id/tv_book_info_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/textOnBackgroundLight"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:textColor="@color/textOnBackground"
         tools:text="Закладки" />
 
     <TextView
@@ -21,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_padding_size_micro"
-        android:textColor="@color/textOnBackground"
-        android:textSize="@dimen/text_size_medium"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textColor="@color/textOnBackgroundLight"
         tools:text="Отсутствуют" />
 
 </LinearLayout>

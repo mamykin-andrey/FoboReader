@@ -42,9 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/readColorOnBottomPanelBackground"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold"
             tools:text="Молодой великан" />
 
         <TextView
@@ -52,9 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/readColorOnBottomPanelBackground"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold"
             tools:text="1/17" />
 
         <TextView
@@ -63,9 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/margin_padding_size_small"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/readColorOnBottomPanelBackground"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold"
             tools:text="0.0%" />
 
     </LinearLayout>

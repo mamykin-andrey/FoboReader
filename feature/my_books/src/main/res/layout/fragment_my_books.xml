@@ -18,7 +18,9 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/my_books_no_books"
-        android:textSize="@dimen/text_size_medium" />
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_my_books"

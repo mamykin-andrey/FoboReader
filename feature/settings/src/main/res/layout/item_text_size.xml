@@ -9,10 +9,10 @@
 
     <TextView
         android:id="@+id/tv_text_size_title"
-        style="@style/SettingsTextItemStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/settings_text_size"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_text_size_minus"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,10 +33,10 @@
 
     <TextView
         android:id="@+id/tv_text_size"
-        style="@style/SettingsTextItemStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_padding_size_small"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_text_size_plus"
         app:layout_constraintTop_toTopOf="parent"
