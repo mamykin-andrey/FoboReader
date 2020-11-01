@@ -3,12 +3,12 @@ package ru.mamykin.foboreader.core.extension
 import android.view.Menu
 import android.view.View
 import android.widget.SeekBar
+import android.widget.Switch
 import androidx.annotation.CheckResult
 import androidx.annotation.IdRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.SwitchCompat
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import reactivecircus.flowbinding.android.widget.SeekBarChangeEvent
@@ -31,7 +31,7 @@ fun SeekBar.changeProgressEvents(emitImmediately: Boolean = false): Flow<Int> =
         .filter { it is SeekBarChangeEvent.ProgressChanged && it.fromUser }
         .map { it.view.progress }
 
-fun SwitchCompat.manualCheckedChanges(): Flow<Boolean> =
+fun Switch.manualCheckedChanges(): Flow<Boolean> =
     checkedChanges()
         .filter { this.isPressed }
 

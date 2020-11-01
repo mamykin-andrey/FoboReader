@@ -5,22 +5,25 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.afollestad.recyclical.datasource.dataSourceTypedOf
+import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.withItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.core.extension.appCompatActivity
-import ru.mamykin.foboreader.core.extension.changeProgressEvents
-import ru.mamykin.foboreader.core.extension.manualCheckedChanges
 import ru.mamykin.foboreader.core.extension.nightMode
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.databinding.FragmentSettingsBinding
+import ru.mamykin.foboreader.settings.databinding.*
+import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import ru.mamykin.foboreader.settings.navigation.LocalSettingsNavigator
+import ru.mamykin.foboreader.settings.presentation.list.BrightnessHolder
+import ru.mamykin.foboreader.settings.presentation.list.NightThemeHolder
+import ru.mamykin.foboreader.settings.presentation.list.TextSizeHolder
+import ru.mamykin.foboreader.settings.presentation.list.TranslationColorHolder
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -30,11 +33,12 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(R.la
 
     private val binding by viewBinding { FragmentSettingsBinding.bind(requireView()) }
     private val navigator: LocalSettingsNavigator by inject()
+    private val settingsSource = dataSourceTypedOf<SettingsItem>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        initViews()
+        initSettingsList()
         navigator.navController = findNavController()
     }
 
@@ -43,45 +47,57 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(R.la
         navigationIcon = null
     }
 
-    private fun initViews() {
-        binding.seekBright.changeProgressEvents()
-            .onEach { viewModel.sendEvent(Event.BrightnessChanged(it)) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        binding.swNightTheme.manualCheckedChanges()
-            .onEach { viewModel.sendEvent(Event.NightThemeChanged(it)) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        binding.swBrightAuto.manualCheckedChanges()
-            .onEach { viewModel.sendEvent(Event.AutoBrightnessChanged(it)) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        binding.btnTextSizeMinus.clicks()
-            .onEach { viewModel.sendEvent(Event.DecreaseTextSizeClicked) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        binding.btnTextSizePlus.clicks()
-            .onEach { viewModel.sendEvent(Event.IncreaseTextSizeClicked) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        binding.clTranslationColor.clicks()
-            .onEach { viewModel.sendEvent(Event.SelectReadColorClicked) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+    private fun initSettingsList() {
+        binding.rvSettings.setup {
+            withDataSource(settingsSource)
+            withItem<SettingsItem.NightTheme, NightThemeHolder>(R.layout.item_night_theme) {
+                onBind({
+                    NightThemeHolder(
+                        ItemNightThemeBinding.bind(it),
+                        viewModel::sendEvent,
+                        viewLifecycleOwner.lifecycleScope
+                    )
+                }) { _, item -> bind(item) }
+            }
+            withItem<SettingsItem.Brightness, BrightnessHolder>(R.layout.item_background_brightness) {
+                onBind({
+                    BrightnessHolder(
+                        ItemBackgroundBrightnessBinding.bind(it),
+                        viewModel::sendEvent,
+                        viewLifecycleOwner.lifecycleScope
+                    )
+                }) { _, item -> bind(item) }
+            }
+            withItem<SettingsItem.ReadTextSize, TextSizeHolder>(R.layout.item_text_size) {
+                onBind({
+                    TextSizeHolder(
+                        ItemTextSizeBinding.bind(it),
+                        viewModel::sendEvent,
+                        viewLifecycleOwner.lifecycleScope
+                    )
+                }) { _, item -> bind(item) }
+            }
+            withItem<SettingsItem.TranslationColor, TranslationColorHolder>(R.layout.item_translation_color) {
+                onBind({
+                    TranslationColorHolder(
+                        ItemTranslationColorBinding.bind(it),
+                        viewModel::sendEvent,
+                        viewLifecycleOwner.lifecycleScope
+                    )
+                }) { _, item -> bind(item) }
+            }
+        }
     }
 
     override fun showState(state: ViewState) {
         progressView.isVisible = state.isLoading
-        state.settings?.let {
-            showTheme(it.isNightTheme)
-            showBrightness(it.isAutoBrightness, it.brightness)
-            binding.swBrightAuto.isChecked = it.isAutoBrightness
-            binding.tvTextSize.text = it.contentTextSize.toString()
+        state.settings?.let(settingsSource::set)
+    }
+
+    override fun takeEffect(effect: Effect) {
+        when (effect) {
+            is Effect.NightThemeChanged -> appCompatActivity.nightMode = effect.isEnabled
         }
-    }
-
-    private fun showTheme(nightTheme: Boolean) {
-        binding.swNightTheme.isChecked = nightTheme
-        appCompatActivity.nightMode = nightTheme
-    }
-
-    private fun showBrightness(autoBrightness: Boolean, brightnessValue: Int) {
-        binding.seekBright.isEnabled = !autoBrightness
-        binding.seekBright.progress = brightnessValue
     }
 
     override fun onDestroyView() {

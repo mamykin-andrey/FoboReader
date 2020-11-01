@@ -40,7 +40,7 @@ class SettingsViewModel(
                 launch { interactor.changeBrightness(event.brightness) }
             }
             is Event.NightThemeChanged -> {
-                launch { interactor.enableNightTheme(event.nightTheme) }
+                changeNightTheme(event)
             }
             is Event.AutoBrightnessChanged -> {
                 launch { interactor.enableAutoBrightness(event.autoBrightness) }
@@ -55,5 +55,10 @@ class SettingsViewModel(
                 launch { localNavigator.settingsToColorPicker() }
             }
         }
+    }
+
+    private fun changeNightTheme(event: Event.NightThemeChanged) = launch {
+        interactor.enableNightTheme(event.isEnabled)
+        sendEffect(Effect.NightThemeChanged(event.isEnabled))
     }
 }

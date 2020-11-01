@@ -5,14 +5,14 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import ru.mamykin.foboreader.core.data.storage.SettingsStorage
-import ru.mamykin.foboreader.settings.domain.model.Settings
+import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 
 @ExperimentalCoroutinesApi
 @FlowPreview
 class SettingsInteractor(
     private val settings: SettingsStorage
 ) {
-    private val settingsChannel = BroadcastChannel<Settings>(1)
+    private val settingsChannel = BroadcastChannel<List<SettingsItem>>(1)
     val settingsFlow get() = settingsChannel.asFlow()
 
     suspend fun loadData() {
@@ -50,11 +50,11 @@ class SettingsInteractor(
 
     private suspend fun updateSettings() {
         settingsChannel.send(
-            Settings(
-                settings.isNightTheme,
-                settings.isAutoBrightness,
-                settings.brightness,
-                settings.readTextSize
+            listOf(
+                SettingsItem.NightTheme(settings.isNightTheme),
+                SettingsItem.Brightness(settings.brightness),
+                SettingsItem.ReadTextSize(settings.readTextSize),
+                SettingsItem.TranslationColor(0)
             )
         )
     }

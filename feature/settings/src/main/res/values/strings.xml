@@ -5,5 +5,5 @@
     <string name="settings_translate_color_title">Цвет перевода</string>
     <string name="settings_translate_color_description">Цвет параграфа с переводом</string>
     <string name="settings_text_size">Размер текста</string>
-    <string name="settings_brightness_auto">Яркость по-умолчанию</string>
+    <string name="background_brightness">Яркость фона</string>
 </resources>
