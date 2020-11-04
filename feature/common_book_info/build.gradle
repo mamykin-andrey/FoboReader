@@ -1,6 +1,0 @@
-apply from: "$rootDir/buildsystem/feature.gradle"
-apply plugin: 'kotlin-kapt'
-
-dependencies {
-    kapt deps.roomCompiler
-}

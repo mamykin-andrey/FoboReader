@@ -1,7 +1,0 @@
-apply from: "$rootDir/buildsystem/feature.gradle"
-apply plugin: "androidx.navigation.safeargs.kotlin"
-
-dependencies {
-    implementation project(':library')
-    implementation project(':feature:common_book_info')
-}
