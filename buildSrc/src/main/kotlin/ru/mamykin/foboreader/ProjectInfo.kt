@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader
 
-object Project {
+object ProjectInfo {
     const val compileSdkVersion = 29
     const val buildToolsVersion = "29.0.2"
     const val minSdkVersion = 21

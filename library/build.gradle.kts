@@ -1,6 +1,6 @@
 import com.android.builder.core.DefaultApiVersion
 import com.android.builder.model.ApiVersion
-import ru.mamykin.foboreader.Project
+import ru.mamykin.foboreader.ProjectInfo
 
 val kotlinVersion: String by project
 
@@ -10,14 +10,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion(Project.compileSdkVersion)
-    buildToolsVersion(Project.buildToolsVersion)
+    compileSdkVersion(ProjectInfo.compileSdkVersion)
+    buildToolsVersion(ProjectInfo.buildToolsVersion)
 
     defaultConfig {
-        minSdkVersion = Project.minSdkVersion.asApiVersion()
-        targetSdkVersion = Project.targetSdkVersion.asApiVersion()
-        versionCode = Project.versionCode
-        versionName = Project.versionName
+        minSdkVersion = ProjectInfo.minSdkVersion.asApiVersion()
+        targetSdkVersion = ProjectInfo.targetSdkVersion.asApiVersion()
+        versionCode = ProjectInfo.versionCode
+        versionName = ProjectInfo.versionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
