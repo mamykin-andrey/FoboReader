@@ -7,6 +7,7 @@ import androidx.lifecycle.OnLifecycleEvent
 
 fun Fragment.doOnDestroyView(block: () -> Unit) {
     viewLifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
+        @Suppress("unused")
         @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         fun onDestroyView() {
             block()

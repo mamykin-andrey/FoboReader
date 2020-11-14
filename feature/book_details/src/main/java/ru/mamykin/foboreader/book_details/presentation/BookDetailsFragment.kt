@@ -5,7 +5,6 @@ import android.view.View
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -80,15 +79,7 @@ class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect
         Picasso.with(context)
             .load(coverUrl)
             .error(R.drawable.img_no_image)
-            .into(binding.ivBookCover, object : Callback {
-                override fun onSuccess() {
-                    startPostponedEnterTransition()
-                }
-
-                override fun onError() {
-                    startPostponedEnterTransition()
-                }
-            })
+            .into(binding.ivBookCover)
     }
 
     override fun takeEffect(effect: Effect) {

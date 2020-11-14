@@ -26,7 +26,7 @@ class ReaderApp : MultiDexApplication() {
         super.onCreate()
         initDi()
         NotificationUtils.initNotificationChannels(this)
-        initLeakCanary()
+//        initLeakCanary()
     }
 
     private fun initDi() {

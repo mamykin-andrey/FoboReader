@@ -9,50 +9,42 @@ class BookContentParserHandler(
     private val successFunc: (BookContent) -> Unit
 ) : DefaultHandler2() {
 
-    private var currentElement: ElementType = ElementType.Unknown
-    private var currentTag: String = ""
-    private var lastSentence: String = ""
-    private val sentences = mutableListOf<String>()
-    private val translationsMap = HashMap<String, String>()
+    private val paragraphs = mutableListOf<String>()
+    private val translations = HashMap<String, String>()
 
-    override fun startElement(
-        uri: String,
-        localName: String,
-        elemName: String,
-        attributes: Attributes
-    ) {
-        super.startElement(uri, localName, elemName, attributes)
-        currentTag = elemName
-        currentElement = ElementType.parse(elemName)
+    private var elementType: ElementType = ElementType.Unknown
+    private var lastSentence: String = ""
+
+    override fun startElement(uri: String, localName: String, elemName: String, attributes: Attributes) {
+        elementType = ElementType.parse(elemName)
     }
 
     override fun characters(ch: CharArray, start: Int, length: Int) {
-        super.characters(ch, start, length)
-        val str = String(ch, start, length)
-        when (currentElement) {
-            ElementType.Paragraph -> str.trim()
-                .also { lastSentence = it }
-                .wrapWithTag(currentTag)
-                .let { sentences.add(it) }
-            ElementType.Translation -> translationsMap[lastSentence] = str.trim()
+        val elementStr = String(ch, start, length).trim()
+        when (elementType) {
+            ElementType.Paragraph -> {
+                lastSentence += elementStr
+            }
+            ElementType.Translation -> {
+                paragraphs.add(lastSentence.asParagraph())
+                translations[lastSentence] = elementStr
+                lastSentence = ""
+            }
         }
     }
 
-    private fun String.wrapWithTag(tag: String) = "<$tag>$this</$tag>"
+    private fun String.asParagraph() = "<p>$this</p>"
 
     override fun endElement(uri: String?, localName: String?, qName: String?) {
-        super.endElement(uri, localName, qName)
-        currentTag = ""
-        currentElement = ElementType.Unknown
+        elementType = ElementType.Unknown
     }
 
     @Throws(SAXException::class)
     override fun endDocument() {
-        super.endDocument()
         successFunc.invoke(
             BookContent(
-                sentences.joinToString(""),
-                translationsMap.takeIf { it.isNotEmpty() }
+                paragraphs.joinToString(""),
+                translations.takeIf { it.isNotEmpty() }
             )
         )
     }
