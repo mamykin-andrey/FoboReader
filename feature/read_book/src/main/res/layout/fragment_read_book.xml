@@ -17,7 +17,6 @@
         android:layout_margin="@dimen/margin_padding_size_small"
         android:layout_weight="1"
         android:textColor="@color/readTextColor"
-        android:textColorHighlight="@color/textOnBackground"
         android:textSize="@dimen/text_size_medium"
         app:layout_constraintBottom_toTopOf="@id/ll_bottom_panel"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -7,6 +7,7 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewTreeObserver
+import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatTextView
 import ru.mamykin.widget.paginatedtextview.extension.allWordPositions
 import ru.mamykin.widget.paginatedtextview.pagination.PaginationController
@@ -25,12 +26,18 @@ class PaginatedTextView @JvmOverloads constructor(
     private var actionListener: OnActionListener? = null
     private lateinit var controller: PaginationController
     private var isMeasured = false
+    @ColorInt
+    private var userTextColor: Int = currentTextColor
 
     init {
         initPaginatedTextView()
     }
 
     override fun scrollTo(x: Int, y: Int) {}
+
+    fun setUserTextColor(@ColorInt textColor: Int) {
+        this.userTextColor = textColor
+    }
 
     fun setup(text: CharSequence, currentPage: Int = 0) {
         if (isMeasured) {
@@ -125,7 +132,7 @@ class PaginatedTextView @JvmOverloads constructor(
         return text.length - 1
     }
 
-    private fun createSwipeableSpan(): SwipeableSpan = object : SwipeableSpan() {
+    private fun createSwipeableSpan(): SwipeableSpan = object : SwipeableSpan(userTextColor) {
 
         override fun onClick(view: View) {
             getSelectedParagraph()?.takeIf { it.isNotEmpty() }

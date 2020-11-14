@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.app
 
 import androidx.multidex.MultiDexApplication
-import leakcanary.LeakCanary
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -45,10 +44,10 @@ class ReaderApp : MultiDexApplication() {
         }
     }
 
-    private fun initLeakCanary() {
-        val newConfig = LeakCanary.config.copy(
-            retainedVisibleThreshold = 2
-        )
-        LeakCanary.config = newConfig
-    }
+//    private fun initLeakCanary() {
+//        val newConfig = LeakCanary.config.copy(
+//            retainedVisibleThreshold = 2
+//        )
+//        LeakCanary.config = newConfig
+//    }
 }
