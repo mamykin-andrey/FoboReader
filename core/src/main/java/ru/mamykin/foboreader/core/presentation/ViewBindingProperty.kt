@@ -1,5 +1,7 @@
 package ru.mamykin.foboreader.core.presentation
 
+import android.os.Handler
+import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -20,10 +22,13 @@ class ViewBindingProperty<T>(
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
         lifecycle?.removeObserver(this)
-        lifecycle = null
-        binding = null
+        Handler().post {
+            lifecycle = null
+            binding = null
+        }
     }
 
+    @MainThread
     override fun getValue(thisRef: Fragment, property: KProperty<*>): T {
         return binding ?: run {
             newBinding()
