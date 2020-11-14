@@ -6,10 +6,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
-import org.koin.dsl.binds
-import org.koin.dsl.module
-import ru.mamykin.foboreader.app.navigation.AppNavigator
-import ru.mamykin.foboreader.app.navigation.featureNavigators
+import ru.mamykin.foboreader.app.di.appModule
 import ru.mamykin.foboreader.book_details.di.bookDetailsModule
 import ru.mamykin.foboreader.common_book_info.di.commonBookInfoModule
 import ru.mamykin.foboreader.core.di.coreModule
@@ -35,7 +32,7 @@ class ReaderApp : MultiDexApplication() {
             androidContext(applicationContext)
             modules(
                 listOf(
-                    module { single { AppNavigator() }.binds(featureNavigators) },
+                    appModule,
                     coreModule,
                     commonBookInfoModule,
                     myBooksModule,
