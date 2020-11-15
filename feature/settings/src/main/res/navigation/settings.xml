@@ -17,7 +17,7 @@
 
     <dialog
         android:id="@+id/colorPickerFragment"
-        android:name="ru.mamykin.foboreader.settings.presentation.ColorPickerFragment"
+        android:name="ru.mamykin.foboreader.settings.presentation.ColorPickerDialog"
         android:label="ColorPickerFragment" />
 
 </navigation>

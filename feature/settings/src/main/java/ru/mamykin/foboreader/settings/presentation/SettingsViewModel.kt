@@ -18,9 +18,14 @@ class SettingsViewModel(
 ) {
     override fun loadData() {
         initSettingsFlow()
-        launch { interactor.loadData() }
+        loadSettings()
     }
 
+    private fun loadSettings() = launch {
+        interactor.loadData()
+    }
+
+    // TODO: detect changes in settings, and update settings state
     private fun initSettingsFlow() = launch {
         interactor.settingsFlow.collect {
             sendAction(Action.SettingsLoaded(it))
@@ -36,24 +41,12 @@ class SettingsViewModel(
 
     override fun onEvent(event: Event) {
         when (event) {
-            is Event.BrightnessChanged -> {
-                launch { interactor.changeBrightness(event.brightness) }
-            }
-            is Event.NightThemeChanged -> {
-                changeNightTheme(event)
-            }
-            is Event.AutoBrightnessChanged -> {
-                launch { interactor.enableAutoBrightness(event.autoBrightness) }
-            }
-            is Event.IncreaseTextSizeClicked -> {
-                launch { interactor.increaseTextSize() }
-            }
-            is Event.DecreaseTextSizeClicked -> {
-                launch { interactor.decreaseTextSize() }
-            }
-            is Event.SelectReadColorClicked -> {
-                launch { localNavigator.settingsToColorPicker() }
-            }
+            is Event.BrightnessChanged -> launch { interactor.changeBrightness(event.brightness) }
+            is Event.NightThemeChanged -> changeNightTheme(event)
+            is Event.AutoBrightnessChanged -> launch { interactor.enableAutoBrightness(event.autoBrightness) }
+            is Event.IncreaseTextSizeClicked -> launch { interactor.increaseTextSize() }
+            is Event.DecreaseTextSizeClicked -> launch { interactor.decreaseTextSize() }
+            is Event.SelectReadColorClicked -> launch { localNavigator.settingsToColorPicker() }
         }
     }
 

@@ -1,4 +1,4 @@
-import ru.mamykin.foboreader.Dependencies
+//import ru.mamykin.foboreader.Dependencies
 
 plugins {
     id("com.android.application")

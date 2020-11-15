@@ -54,7 +54,7 @@ class SettingsInteractor(
                 SettingsItem.NightTheme(settings.isNightTheme),
                 SettingsItem.Brightness(settings.brightness),
                 SettingsItem.ReadTextSize(settings.readTextSize),
-                SettingsItem.TranslationColor(0)
+                SettingsItem.TranslationColor(settings.translationColorCode ?: "#000000")
             )
         )
     }

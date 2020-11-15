@@ -61,10 +61,9 @@ class ReadBookViewModel constructor(
     }
 
     private fun translateWord(word: String) = launch {
-        sendAction(Action.TranslationLoading)
-
-        interactor.getWordTranslation(word)
-            ?.let { sendAction(Action.WordTranslationLoaded(word, it)) }
-            ?: sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error))
+//        sendAction(Action.TranslationLoading)
+//        interactor.getWordTranslation(word)
+//            ?.let { sendAction(Action.WordTranslationLoaded(word, it)) }
+//            ?: sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error))
     }
 }

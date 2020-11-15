@@ -28,4 +28,12 @@ class PreferencesManager constructor(
 
     fun getInt(key: String): Int? = sharedPreferences.getInt(key, -1)
         .takeIf { it != -1 }
+
+    fun putString(key: String, value: String?) {
+        sharedPreferences.edit {
+            putString(key, value)
+        }
+    }
+
+    fun getString(key: String): String? = sharedPreferences.getString(key, null)
 }

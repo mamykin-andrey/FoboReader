@@ -34,12 +34,13 @@ class ReadBookInteractor(
             ?: getOnlineTextTranslation(sentence)
     }
 
-    suspend fun getWordTranslation(word: String): String? =
-        getOnlineTextTranslation(word)
+    suspend fun getWordTranslation(word: String): String? {
+        return getOnlineTextTranslation(word)
+    }
 
-    private suspend fun getOnlineTextTranslation(text: String): String? =
-        runCatching { translateRepository.getTextTranslation(text) }
-            .getOrNull()
+    private suspend fun getOnlineTextTranslation(text: String): String? = runCatching {
+        translateRepository.getTextTranslation(text)
+    }.getOrNull()
 
     fun voiceWord(word: String) {
         textToSpeechService.voiceWord(word)

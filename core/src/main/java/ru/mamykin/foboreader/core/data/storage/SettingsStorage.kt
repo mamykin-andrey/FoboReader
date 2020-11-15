@@ -9,6 +9,7 @@ class SettingsStorage(
         private const val AUTO_BRIGHTNESS_ENABLED = "auto_brightness_enabled"
         private const val BRIGHTNESS = "brightness"
         private const val READ_TEXT_SIZE = "read_text_size"
+        private const val TRANSLATION_COLOR = "translation_color"
     }
 
     var isNightTheme: Boolean
@@ -26,4 +27,8 @@ class SettingsStorage(
     var readTextSize: Int
         get() = prefManager.getInt(READ_TEXT_SIZE) ?: 16
         set(value) = prefManager.putInt(READ_TEXT_SIZE, value)
+
+    var translationColorCode: String?
+        get() = prefManager.getString(TRANSLATION_COLOR)
+        set(value) = prefManager.putString(TRANSLATION_COLOR, value)
 }

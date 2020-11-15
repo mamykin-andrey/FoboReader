@@ -82,7 +82,11 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
     private fun showParagraphTranslation(info: Pair<String, String>) {
         val (paragraph, translation) = info
         binding.tvText.text = SpannableString(paragraph + "\n\n" + translation).apply {
-            setColor(Color.RED, paragraph.length, length - 1)
+            setColor(
+                settingsStorage.translationColorCode?.let { Color.parseColor(it) } ?: Color.RED,
+                paragraph.length,
+                length - 1
+            )
         }
         binding.tvText.setOnClickListener { viewModel.sendEvent(Event.HideParagraphTranslation) }
         lastTextHashCode = 0
