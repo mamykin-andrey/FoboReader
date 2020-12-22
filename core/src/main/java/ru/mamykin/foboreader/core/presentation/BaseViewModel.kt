@@ -19,6 +19,7 @@ abstract class BaseViewModel<ViewState, Action, Event, Effect>(
     private val exceptionHandler = CoroutineExceptionHandler { _, th -> th.printStackTrace() }
     private val stateDebugger = ViewModelDebugger<Event, ViewState, Effect>()
 
+    // TODO: remove this shit
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + parentJob + exceptionHandler
 

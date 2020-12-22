@@ -6,12 +6,10 @@ import androidx.navigation.findNavController
 import org.koin.android.ext.android.inject
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.app.navigation.AppNavigator
-import ru.mamykin.foboreader.core.data.storage.SettingsStorage
-import ru.mamykin.foboreader.core.extension.nightMode
 
 class MainActivity : AppCompatActivity() {
 
-    private val settingsStorage: SettingsStorage by inject()
+    private val nightThemeDelegate = NightThemeDelegate(this)
     private val navigator by inject<AppNavigator>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initTheme() {
         setTheme(R.style.AppTheme)
-        nightMode = settingsStorage.isNightTheme
+        nightThemeDelegate.init()
     }
 }

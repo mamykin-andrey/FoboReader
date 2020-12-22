@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import ru.mamykin.foboreader.core.data.storage.SettingsStorage
+import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.extension.toHtml
@@ -25,20 +25,19 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
         parametersOf(ReadBookFragmentArgs.fromBundle(requireArguments()).bookId)
     }
 
-    private val settingsStorage: SettingsStorage by inject()
+    private val appSettingsStorage: AppSettingsStorage by inject()
     private val binding by viewBinding { FragmentReadBookBinding.bind(requireView()) }
     private var lastTextHashCode: Int = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvText.textSize = settingsStorage.readTextSize.toFloat()
+        binding.tvText.textSize = appSettingsStorage.readTextSizeField.get().toFloat()
         binding.tvText.setOnActionListener(object : OnActionListener {
             override fun onClick(paragraph: String) {
                 viewModel.sendEvent(Event.TranslateParagraph(paragraph.trim()))
             }
 
             override fun onLongClick(word: String) {
-                viewModel.sendEvent(Event.TranslateWord(word.trim()))
             }
 
             override fun onPageLoaded(state: ReadState) = with(state) {
@@ -83,7 +82,7 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
         val (paragraph, translation) = info
         binding.tvText.text = SpannableString(paragraph + "\n\n" + translation).apply {
             setColor(
-                settingsStorage.translationColorCode?.let { Color.parseColor(it) } ?: Color.RED,
+                appSettingsStorage.translationColorCodeField.get().let { Color.parseColor(it) },
                 paragraph.length,
                 length - 1
             )

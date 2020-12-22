@@ -1,35 +1,33 @@
 package ru.mamykin.foboreader.settings.presentation
 
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
-import ru.mamykin.foboreader.settings.domain.interactor.SettingsInteractor
+import ru.mamykin.foboreader.settings.domain.usecase.GetSettings
+import ru.mamykin.foboreader.settings.domain.usecase.SetBrightness
+import ru.mamykin.foboreader.settings.domain.usecase.SetNightTheme
+import ru.mamykin.foboreader.settings.domain.usecase.SetTextSize
 import ru.mamykin.foboreader.settings.navigation.LocalSettingsNavigator
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 class SettingsViewModel(
-    private val interactor: SettingsInteractor,
+    private val getSettings: GetSettings,
+    private val setBrightness: SetBrightness,
+    private val setTextSize: SetTextSize,
+    private val setNightTheme: SetNightTheme,
     private val localNavigator: LocalSettingsNavigator
-) : BaseViewModel<ViewState, Action, Event, Effect>(
+) : BaseViewModel<ViewState, Action, Event, Nothing>(
     ViewState(isLoading = true)
 ) {
     override fun loadData() {
-        initSettingsFlow()
-        loadSettings()
-    }
-
-    private fun loadSettings() = launch {
-        interactor.loadData()
-    }
-
-    // TODO: detect changes in settings, and update settings state
-    private fun initSettingsFlow() = launch {
-        interactor.settingsFlow.collect {
-            sendAction(Action.SettingsLoaded(it))
-        }
+        getSettings()
+            .onEach { sendAction(Action.SettingsLoaded(it)) }
+            .launchIn(viewModelScope)
     }
 
     override fun onAction(action: Action): ViewState = when (action) {
@@ -40,18 +38,14 @@ class SettingsViewModel(
     }
 
     override fun onEvent(event: Event) {
-        when (event) {
-            is Event.BrightnessChanged -> launch { interactor.changeBrightness(event.brightness) }
-            is Event.NightThemeChanged -> changeNightTheme(event)
-            is Event.AutoBrightnessChanged -> launch { interactor.enableAutoBrightness(event.autoBrightness) }
-            is Event.IncreaseTextSizeClicked -> launch { interactor.increaseTextSize() }
-            is Event.DecreaseTextSizeClicked -> launch { interactor.decreaseTextSize() }
-            is Event.SelectReadColorClicked -> launch { localNavigator.settingsToColorPicker() }
+        viewModelScope.launch {
+            when (event) {
+                is Event.BrightnessChanged -> setBrightness(event.brightness)
+                is Event.NightThemeChanged -> setNightTheme(event.isEnabled)
+                is Event.IncreaseTextSizeClicked -> setTextSize(SetTextSize.Action.Increase)
+                is Event.DecreaseTextSizeClicked -> setTextSize(SetTextSize.Action.Decrease)
+                is Event.SelectReadColorClicked -> localNavigator.settingsToColorPicker()
+            }
         }
-    }
-
-    private fun changeNightTheme(event: Event.NightThemeChanged) = launch {
-        interactor.enableNightTheme(event.isEnabled)
-        sendEffect(Effect.NightThemeChanged(event.isEnabled))
     }
 }

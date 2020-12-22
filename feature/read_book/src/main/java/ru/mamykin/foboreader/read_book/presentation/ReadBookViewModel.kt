@@ -3,11 +3,17 @@ package ru.mamykin.foboreader.read_book.presentation
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.read_book.R
-import ru.mamykin.foboreader.read_book.domain.interactor.ReadBookInteractor
+import ru.mamykin.foboreader.read_book.domain.usecase.GetBookContent
+import ru.mamykin.foboreader.read_book.domain.usecase.GetBookInfo
+import ru.mamykin.foboreader.read_book.domain.usecase.GetParagraphTranslation
+import ru.mamykin.foboreader.read_book.domain.usecase.UpdateBookInfo
 
-class ReadBookViewModel constructor(
+class ReadBookViewModel(
     private val bookId: Long,
-    private val interactor: ReadBookInteractor
+    private val getBookContent: GetBookContent,
+    private val getParagraphTranslation: GetParagraphTranslation,
+    private val getBookInfo: GetBookInfo,
+    private val updateBookInfo: UpdateBookInfo
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isBookLoading = true)
 ) {
@@ -17,8 +23,8 @@ class ReadBookViewModel constructor(
 
     private fun loadBookInfo() = launch {
         sendAction(Action.BookLoading)
-        val info = interactor.getBookInfo(bookId)
-        val content = interactor.getBookContent(info.filePath)
+        val info = getBookInfo.execute(bookId)
+        val content = getBookContent.execute(info.filePath)
         sendAction(Action.BookLoaded(info, content.text))
     }
 
@@ -44,26 +50,20 @@ class ReadBookViewModel constructor(
     }
 
     override fun onEvent(event: Event) {
-        when (event) {
-            is Event.TranslateParagraph -> translateParagraph(event.paragraph)
-            is Event.HideParagraphTranslation -> sendAction(Action.ParagraphTranslationHided)
-            is Event.TranslateWord -> translateWord(event.word)
-            is Event.PageLoaded -> launch { interactor.updateBookInfo(bookId, event.currentPage, event.totalPages) }
+        launch {
+            when (event) {
+                is Event.TranslateParagraph -> translateParagraph(event.paragraph)
+                is Event.HideParagraphTranslation -> sendAction(Action.ParagraphTranslationHided)
+                is Event.PageLoaded -> updateBookInfo.execute(bookId, event.currentPage, event.totalPages)
+            }
         }
     }
 
-    private fun translateParagraph(paragraph: String) = launch {
+    private fun translateParagraph(paragraph: String) {
         sendAction(Action.TranslationLoading)
-        interactor.getParagraphTranslation(paragraph)
+        getParagraphTranslation.execute(paragraph)
             ?.let { Action.ParagraphTranslationLoaded(paragraph, it) }
             ?.let { sendAction(it) }
             ?: sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error))
-    }
-
-    private fun translateWord(word: String) = launch {
-//        sendAction(Action.TranslationLoading)
-//        interactor.getWordTranslation(word)
-//            ?.let { sendAction(Action.WordTranslationLoaded(word, it)) }
-//            ?: sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error))
     }
 }

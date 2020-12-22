@@ -25,6 +25,7 @@ class BookFilesScanner(
             ?.map { it.absolutePath }
             ?.filterNot { addedFiles.contains(it) }
             ?.map { bookInfoParser.parse(it).toDatabaseModel() }
+            ?.also { bookInfoDao.removeAll() }
             ?.let { bookInfoDao.insertAll(it) }
     }
 }

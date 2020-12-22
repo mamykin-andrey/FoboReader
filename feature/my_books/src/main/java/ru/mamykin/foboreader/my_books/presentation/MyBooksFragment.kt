@@ -43,7 +43,6 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layo
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initBooksList()
-        viewModel.sendEvent(Event.ScanBooks)
     }
 
     private fun initToolbar() = toolbar!!.apply {

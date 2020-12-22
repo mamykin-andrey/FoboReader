@@ -14,8 +14,6 @@ data class ViewState(
 )
 
 sealed class Event {
-    object ScanBooks : Event()
-    object LoadBooks : Event()
     data class RemoveBook(val id: Long) : Event()
     data class SortBooks(val sortOrder: SortOrder) : Event()
     data class FilterBooks(val query: String) : Event()

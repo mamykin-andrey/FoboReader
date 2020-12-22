@@ -2,27 +2,30 @@ package ru.mamykin.foboreader.my_books.presentation
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
-import ru.mamykin.foboreader.my_books.domain.interactor.MyBooksInteractor
+import ru.mamykin.foboreader.my_books.domain.usecase.*
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class MyBooksViewModel constructor(
-    private val interactor: MyBooksInteractor
+class MyBooksViewModel(
+    private val scanBooks: ScanBooks,
+    private val getMyBooks: GetMyBooks,
+    private val sortMyBooks: SortMyBooks,
+    private val filterMyBooks: FilterMyBooks,
+    private val removeBook: RemoveBook
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isLoading = true)
 ) {
     override fun loadData() {
-        initBooksFlow()
-        launch { interactor.loadBooks() }
-    }
-
-    private fun initBooksFlow() = launch {
-        interactor.booksFlow.collect {
-            sendAction(Action.BooksLoaded(it))
-        }
+        launch { scanBooks() }
+        getMyBooks()
+            .map { Action.BooksLoaded(it) }
+            .onEach { sendAction(it) }
+            .launchIn(this)
     }
 
     override fun onAction(action: Action): ViewState = when (action) {
@@ -31,17 +34,12 @@ class MyBooksViewModel constructor(
     }
 
     override fun onEvent(event: Event) {
-        when (event) {
-            is Event.ScanBooks -> scanBooks()
-            is Event.LoadBooks -> launch { interactor.loadBooks() }
-            is Event.RemoveBook -> launch { interactor.removeBook(event.id) }
-            is Event.SortBooks -> launch { interactor.sortBooks(event.sortOrder) }
-            is Event.FilterBooks -> launch { interactor.filterByQuery(event.query) }
+        launch {
+            when (event) {
+                is Event.RemoveBook -> removeBook(event.id)
+                is Event.SortBooks -> sortMyBooks(event.sortOrder)
+                is Event.FilterBooks -> filterMyBooks(event.query)
+            }
         }
-    }
-
-    private fun scanBooks() = launch {
-        sendAction(Action.Loading)
-        interactor.scanBooks()
     }
 }

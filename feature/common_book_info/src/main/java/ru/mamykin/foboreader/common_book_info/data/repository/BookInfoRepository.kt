@@ -11,12 +11,7 @@ class BookInfoRepository constructor(
             .map { it.toDomainModel() }
     }
 
-    suspend fun findBooks(query: String): List<BookInfo> {
-        return bookInfoDao.findBooks(query)
-            .map { it.toDomainModel() }
-    }
-
-    suspend fun getBookInfo(id: Long): BookInfo? {
+    suspend fun getBookInfo(id: Long): BookInfo {
         return bookInfoDao.getBook(id)
             .toDomainModel()
     }

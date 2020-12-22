@@ -15,6 +15,9 @@ interface BookInfoDao {
     @Query("DELETE FROM bookinfomodel WHERE id = :bookId")
     suspend fun remove(bookId: Long)
 
+    @Query("DELETE FROM bookinfomodel")
+    suspend fun removeAll()
+
     @Query("SELECT * FROM bookinfomodel")
     suspend fun getBooks(): List<BookInfoModel>
 

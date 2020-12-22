@@ -2,21 +2,35 @@ package ru.mamykin.foboreader.store.presentation
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
-import ru.mamykin.foboreader.store.domain.interactor.BooksStoreInteractor
+import ru.mamykin.foboreader.store.domain.usecase.DownloadBook
+import ru.mamykin.foboreader.store.domain.usecase.FilterStoreBooks
+import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
+import ru.mamykin.foboreader.store.domain.usecase.LoadStoreBooks
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.navigation.BooksStoreNavigator
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 class BooksStoreViewModel(
-    private val interactor: BooksStoreInteractor,
+    private val downloadBook: DownloadBook,
+    private val getStoreBooks: GetStoreBooks,
+    private val loadStoreBooks: LoadStoreBooks,
+    private val filterStoreBooks: FilterStoreBooks,
     private val navigator: BooksStoreNavigator
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isLoading = true)
 ) {
     override fun loadData() {
+        sendAction(Action.BooksLoading)
+        getStoreBooks.execute()
+            .map { Action.BooksLoaded(it) }
+            .onEach { sendAction(it) }
+            .launchIn(this)
         loadBooks()
     }
 
@@ -39,27 +53,23 @@ class BooksStoreViewModel(
     }
 
     override fun onEvent(event: Event) {
-        when (event) {
-            is Event.FilterBooks -> filterBooks(event.query)
-            is Event.DownloadBook -> downloadBook(event.book)
-            is Event.RetryBooksLoading -> loadBooks()
+        launch {
+            when (event) {
+                is Event.FilterBooks -> filterStoreBooks.execute(event.query)
+                is Event.DownloadBook -> downloadBook(event.book)
+                is Event.RetryBooksLoading -> loadBooks()
+            }
         }
-    }
-
-    private fun filterBooks(query: String) = launch {
-        val books = interactor.filterBooks(query)
-        sendAction(Action.BooksLoaded(books))
     }
 
     private fun loadBooks() = launch {
         sendAction(Action.BooksLoading)
-        runCatching { interactor.loadBooks() }
-            .onSuccess { sendAction(Action.BooksLoaded(it)) }
+        runCatching { loadStoreBooks.execute() }
             .onFailure { sendAction(Action.BooksLoadingFailed) }
     }
 
     private fun downloadBook(book: StoreBook) = launch {
-        runCatching { interactor.downloadBook(book) }
+        runCatching { downloadBook.execute(book) }
             .onSuccess { navigator.booksStoreToMyBooksScreen() }
             .onFailure { sendEffect(Effect.ShowSnackbar(it.message!!)) }
     }

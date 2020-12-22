@@ -5,7 +5,6 @@ import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 sealed class Event {
     data class TranslateParagraph(val paragraph: String) : Event()
     object HideParagraphTranslation : Event()
-    data class TranslateWord(val word: String) : Event()
     data class PageLoaded(val currentPage: Int, val totalPages: Int) : Event()
 }
 

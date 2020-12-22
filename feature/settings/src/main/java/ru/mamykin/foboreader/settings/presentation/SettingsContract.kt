@@ -5,14 +5,9 @@ import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 sealed class Event {
     data class BrightnessChanged(val brightness: Int) : Event()
     data class NightThemeChanged(val isEnabled: Boolean) : Event()
-    data class AutoBrightnessChanged(val autoBrightness: Boolean) : Event()
     object IncreaseTextSizeClicked : Event()
     object DecreaseTextSizeClicked : Event()
     object SelectReadColorClicked : Event()
-}
-
-sealed class Effect {
-    data class NightThemeChanged(val isEnabled: Boolean) : Effect()
 }
 
 sealed class Action {

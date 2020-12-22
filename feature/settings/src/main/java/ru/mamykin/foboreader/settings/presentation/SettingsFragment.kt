@@ -12,8 +12,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.mamykin.foboreader.core.extension.appCompatActivity
-import ru.mamykin.foboreader.core.extension.nightMode
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.settings.R
@@ -27,7 +25,7 @@ import ru.mamykin.foboreader.settings.presentation.list.TranslationColorHolder
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(R.layout.fragment_settings) {
+class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Nothing>(R.layout.fragment_settings) {
 
     override val viewModel: SettingsViewModel by viewModel()
 
@@ -92,12 +90,6 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Effect>(R.la
     override fun showState(state: ViewState) {
         progressView.isVisible = state.isLoading
         state.settings?.let(settingsSource::set)
-    }
-
-    override fun takeEffect(effect: Effect) {
-        when (effect) {
-            is Effect.NightThemeChanged -> appCompatActivity.nightMode = effect.isEnabled
-        }
     }
 
     override fun onDestroyView() {

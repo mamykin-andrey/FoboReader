@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.core.data
 
+// TODO: add filtration
 class InMemoryCache<T> {
 
     private var data: T? = null

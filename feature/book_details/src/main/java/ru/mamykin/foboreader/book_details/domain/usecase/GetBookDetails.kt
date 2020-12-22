@@ -1,12 +1,12 @@
-package ru.mamykin.foboreader.book_details.domain.interactor
+package ru.mamykin.foboreader.book_details.domain.usecase
 
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 
-class BookDetailsInteractor constructor(
+class GetBookDetails(
     private val repository: BookInfoRepository
 ) {
-    suspend fun getBookInfo(id: Long): BookInfo? {
+    suspend operator fun invoke(id: Long): BookInfo? {
         return repository.getBookInfo(id)
     }
 }
