@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.book_details.presentation
 
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.book_details.domain.usecase.GetBookDetails
 import ru.mamykin.foboreader.book_details.navigation.BookDetailsNavigator
@@ -13,13 +14,11 @@ class BookDetailsViewModel(
     ViewState(isLoading = true)
 ) {
     override fun loadData() {
-        loadBookInfo()
-    }
-
-    private fun loadBookInfo() = launch {
-        getBookDetails(bookId)
-            ?.let { sendAction(Action.BookLoaded(it)) }
-            ?: sendAction(Action.LoadingError)
+        viewModelScope.launch {
+            getBookDetails(bookId)
+                ?.let { sendAction(Action.BookLoaded(it)) }
+                ?: sendAction(Action.LoadingError)
+        }
     }
 
     override fun onAction(action: Action): ViewState = when (action) {

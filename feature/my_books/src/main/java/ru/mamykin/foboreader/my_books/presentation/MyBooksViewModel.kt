@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.my_books.presentation
 
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
@@ -21,11 +22,11 @@ class MyBooksViewModel(
     ViewState(isLoading = true)
 ) {
     override fun loadData() {
-        launch { scanBooks() }
+        viewModelScope.launch { scanBooks() }
         getMyBooks()
             .map { Action.BooksLoaded(it) }
             .onEach { sendAction(it) }
-            .launchIn(this)
+            .launchIn(viewModelScope)
     }
 
     override fun onAction(action: Action): ViewState = when (action) {
@@ -34,7 +35,7 @@ class MyBooksViewModel(
     }
 
     override fun onEvent(event: Event) {
-        launch {
+        viewModelScope.launch {
             when (event) {
                 is Event.RemoveBook -> removeBook(event.id)
                 is Event.SortBooks -> sortMyBooks(event.sortOrder)

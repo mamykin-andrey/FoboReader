@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.read_book.presentation
 
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.read_book.R
@@ -21,7 +22,7 @@ class ReadBookViewModel(
         loadBookInfo()
     }
 
-    private fun loadBookInfo() = launch {
+    private fun loadBookInfo() = viewModelScope.launch {
         sendAction(Action.BookLoading)
         val info = getBookInfo.execute(bookId)
         val content = getBookContent.execute(info.filePath)
@@ -50,7 +51,7 @@ class ReadBookViewModel(
     }
 
     override fun onEvent(event: Event) {
-        launch {
+        viewModelScope.launch {
             when (event) {
                 is Event.TranslateParagraph -> translateParagraph(event.paragraph)
                 is Event.HideParagraphTranslation -> sendAction(Action.ParagraphTranslationHided)

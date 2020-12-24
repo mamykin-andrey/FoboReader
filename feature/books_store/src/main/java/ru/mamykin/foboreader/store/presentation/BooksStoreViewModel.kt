@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.store.presentation
 
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
@@ -7,11 +8,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
+import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.domain.usecase.DownloadBook
 import ru.mamykin.foboreader.store.domain.usecase.FilterStoreBooks
 import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
 import ru.mamykin.foboreader.store.domain.usecase.LoadStoreBooks
-import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.navigation.BooksStoreNavigator
 
 @FlowPreview
@@ -30,8 +31,8 @@ class BooksStoreViewModel(
         getStoreBooks.execute()
             .map { Action.BooksLoaded(it) }
             .onEach { sendAction(it) }
-            .launchIn(this)
-        loadBooks()
+            .launchIn(viewModelScope)
+        viewModelScope.launch { loadBooks() }
     }
 
     override fun onAction(action: Action): ViewState = when (action) {
@@ -53,7 +54,7 @@ class BooksStoreViewModel(
     }
 
     override fun onEvent(event: Event) {
-        launch {
+        viewModelScope.launch {
             when (event) {
                 is Event.FilterBooks -> filterStoreBooks.execute(event.query)
                 is Event.DownloadBook -> downloadBook(event.book)
@@ -62,13 +63,13 @@ class BooksStoreViewModel(
         }
     }
 
-    private fun loadBooks() = launch {
+    private suspend fun loadBooks() {
         sendAction(Action.BooksLoading)
         runCatching { loadStoreBooks.execute() }
             .onFailure { sendAction(Action.BooksLoadingFailed) }
     }
 
-    private fun downloadBook(book: StoreBook) = launch {
+    private suspend fun downloadBook(book: StoreBook) {
         runCatching { downloadBook.execute(book) }
             .onSuccess { navigator.booksStoreToMyBooksScreen() }
             .onFailure { sendEffect(Effect.ShowSnackbar(it.message!!)) }
