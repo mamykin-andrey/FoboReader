@@ -1,15 +1,13 @@
 package ru.mamykin.foboreader.store.domain.usecase
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import ru.mamykin.foboreader.core.domain.SuspendUseCase
 import ru.mamykin.foboreader.store.data.BooksStoreRepository
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 class LoadStoreBooks(
     private val repository: BooksStoreRepository
-) {
-    suspend fun execute() {
-        return repository.loadBooks()
+) : SuspendUseCase<Unit, Unit>() {
+
+    override suspend fun execute(param: Unit) {
+        repository.loadBooks()
     }
 }

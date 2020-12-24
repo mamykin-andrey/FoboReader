@@ -2,8 +2,6 @@ package ru.mamykin.foboreader.my_books.data
 
 import android.content.Context
 import android.os.FileObserver
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
@@ -17,8 +15,6 @@ import ru.mamykin.foboreader.my_books.domain.helper.BooksComparatorFactory
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 import kotlin.properties.Delegates
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 class MyBooksRepository(
     private val repository: BookInfoRepository,
     private val booksScanner: BookFilesScanner,

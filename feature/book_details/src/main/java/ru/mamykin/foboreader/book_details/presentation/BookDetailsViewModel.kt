@@ -16,8 +16,8 @@ class BookDetailsViewModel(
     override fun loadData() {
         viewModelScope.launch {
             getBookDetails(bookId)
-                ?.let { sendAction(Action.BookLoaded(it)) }
-                ?: sendAction(Action.LoadingError)
+                .doOnSuccess { sendAction(Action.BookLoaded(it)) }
+                .doOnError { sendAction(Action.LoadingError) }
         }
     }
 

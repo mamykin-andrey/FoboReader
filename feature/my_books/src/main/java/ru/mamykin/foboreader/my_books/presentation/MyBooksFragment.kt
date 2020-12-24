@@ -9,8 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -29,8 +27,6 @@ import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 import ru.mamykin.foboreader.my_books.navigation.MyBooksNavigator
 import ru.mamykin.foboreader.my_books.presentation.list.BookViewHolder
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layout.fragment_my_books) {
 
     override val viewModel: MyBooksViewModel by viewModel()

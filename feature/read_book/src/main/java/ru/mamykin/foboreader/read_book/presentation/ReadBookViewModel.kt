@@ -24,8 +24,8 @@ class ReadBookViewModel(
 
     private fun loadBookInfo() = viewModelScope.launch {
         sendAction(Action.BookLoading)
-        val info = getBookInfo.execute(bookId)
-        val content = getBookContent.execute(info.filePath)
+        val info = getBookInfo(bookId).getOrThrow()
+        val content = getBookContent(info.filePath).getOrThrow()
         sendAction(Action.BookLoaded(info, content.text))
     }
 
@@ -55,16 +55,15 @@ class ReadBookViewModel(
             when (event) {
                 is Event.TranslateParagraph -> translateParagraph(event.paragraph)
                 is Event.HideParagraphTranslation -> sendAction(Action.ParagraphTranslationHided)
-                is Event.PageLoaded -> updateBookInfo.execute(bookId, event.currentPage, event.totalPages)
+                is Event.PageLoaded -> updateBookInfo(UpdateBookInfo.Param(bookId, event.currentPage, event.totalPages))
             }
         }
     }
 
     private fun translateParagraph(paragraph: String) {
         sendAction(Action.TranslationLoading)
-        getParagraphTranslation.execute(paragraph)
-            ?.let { Action.ParagraphTranslationLoaded(paragraph, it) }
-            ?.let { sendAction(it) }
-            ?: sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error))
+        getParagraphTranslation(paragraph)
+            .doOnSuccess { it?.let { sendAction(Action.ParagraphTranslationLoaded(paragraph, it)) } }
+            .doOnError { sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error)) }
     }
 }

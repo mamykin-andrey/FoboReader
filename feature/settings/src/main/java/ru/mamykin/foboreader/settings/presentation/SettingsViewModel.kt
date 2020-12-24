@@ -1,9 +1,8 @@
 package ru.mamykin.foboreader.settings.presentation
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
@@ -13,8 +12,6 @@ import ru.mamykin.foboreader.settings.domain.usecase.SetNightTheme
 import ru.mamykin.foboreader.settings.domain.usecase.SetTextSize
 import ru.mamykin.foboreader.settings.navigation.LocalSettingsNavigator
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 class SettingsViewModel(
     private val getSettings: GetSettings,
     private val setBrightness: SetBrightness,
@@ -26,6 +23,7 @@ class SettingsViewModel(
 ) {
     override fun loadData() {
         getSettings()
+            .map { it.getOrThrow() }
             .onEach { sendAction(Action.SettingsLoaded(it)) }
             .launchIn(viewModelScope)
     }

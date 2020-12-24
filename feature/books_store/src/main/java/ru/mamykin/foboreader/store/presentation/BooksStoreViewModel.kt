@@ -1,8 +1,6 @@
 package ru.mamykin.foboreader.store.presentation
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -15,10 +13,8 @@ import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
 import ru.mamykin.foboreader.store.domain.usecase.LoadStoreBooks
 import ru.mamykin.foboreader.store.navigation.BooksStoreNavigator
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 class BooksStoreViewModel(
-    private val downloadBook: DownloadBook,
+    private val downloadStoreBook: DownloadBook,
     private val getStoreBooks: GetStoreBooks,
     private val loadStoreBooks: LoadStoreBooks,
     private val filterStoreBooks: FilterStoreBooks,
@@ -28,8 +24,8 @@ class BooksStoreViewModel(
 ) {
     override fun loadData() {
         sendAction(Action.BooksLoading)
-        getStoreBooks.execute()
-            .map { Action.BooksLoaded(it) }
+        getStoreBooks()
+            .map { Action.BooksLoaded(it.getOrThrow()) }
             .onEach { sendAction(it) }
             .launchIn(viewModelScope)
         viewModelScope.launch { loadBooks() }
@@ -56,7 +52,7 @@ class BooksStoreViewModel(
     override fun onEvent(event: Event) {
         viewModelScope.launch {
             when (event) {
-                is Event.FilterBooks -> filterStoreBooks.execute(event.query)
+                is Event.FilterBooks -> filterStoreBooks(event.query)
                 is Event.DownloadBook -> downloadBook(event.book)
                 is Event.RetryBooksLoading -> loadBooks()
             }
@@ -65,13 +61,13 @@ class BooksStoreViewModel(
 
     private suspend fun loadBooks() {
         sendAction(Action.BooksLoading)
-        runCatching { loadStoreBooks.execute() }
-            .onFailure { sendAction(Action.BooksLoadingFailed) }
+        loadStoreBooks(Unit)
+            .doOnError { sendAction(Action.BooksLoadingFailed) }
     }
 
     private suspend fun downloadBook(book: StoreBook) {
-        runCatching { downloadBook.execute(book) }
-            .onSuccess { navigator.booksStoreToMyBooksScreen() }
-            .onFailure { sendEffect(Effect.ShowSnackbar(it.message!!)) }
+        downloadStoreBook(book)
+            .doOnSuccess { navigator.booksStoreToMyBooksScreen() }
+            .doOnError { sendEffect(Effect.ShowSnackbar(it.message!!)) }
     }
 }

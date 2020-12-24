@@ -1,8 +1,6 @@
 package ru.mamykin.foboreader.my_books.presentation
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -10,8 +8,6 @@ import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.my_books.domain.usecase.*
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 class MyBooksViewModel(
     private val scanBooks: ScanBooks,
     private val getMyBooks: GetMyBooks,
@@ -22,10 +18,9 @@ class MyBooksViewModel(
     ViewState(isLoading = true)
 ) {
     override fun loadData() {
-        viewModelScope.launch { scanBooks() }
+        viewModelScope.launch { scanBooks(Unit) }
         getMyBooks()
-            .map { Action.BooksLoaded(it) }
-            .onEach { sendAction(it) }
+            .onEach { sendAction(Action.BooksLoaded(it.getOrThrow())) }
             .launchIn(viewModelScope)
     }
 

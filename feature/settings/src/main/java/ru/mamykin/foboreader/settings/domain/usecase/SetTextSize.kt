@@ -1,12 +1,14 @@
 package ru.mamykin.foboreader.settings.domain.usecase
 
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.domain.UseCase
 
 class SetTextSize(
     private val appSettings: AppSettingsStorage
-) {
-    operator fun invoke(action: Action) {
-        val newSize = when (action) {
+) : UseCase<SetTextSize.Action, Unit>() {
+
+    override fun execute(param: Action) {
+        val newSize = when (param) {
             is Action.Increase -> appSettings.readTextSizeField.get() + 1
             is Action.Decrease -> appSettings.readTextSizeField.get() - 1
         }

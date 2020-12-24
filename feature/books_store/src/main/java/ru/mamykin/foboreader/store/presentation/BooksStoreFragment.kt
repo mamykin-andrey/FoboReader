@@ -8,8 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,8 +23,6 @@ import ru.mamykin.foboreader.store.databinding.ItemStoreBookBinding
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.presentation.list.StoreBookViewHolder
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(R.layout.fragment_books_store) {
 
     override val viewModel: BooksStoreViewModel by viewModel()

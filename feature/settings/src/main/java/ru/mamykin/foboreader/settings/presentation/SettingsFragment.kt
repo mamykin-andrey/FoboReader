@@ -8,8 +8,6 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.core.presentation.BaseFragment
@@ -23,8 +21,6 @@ import ru.mamykin.foboreader.settings.presentation.list.NightThemeHolder
 import ru.mamykin.foboreader.settings.presentation.list.TextSizeHolder
 import ru.mamykin.foboreader.settings.presentation.list.TranslationColorHolder
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Nothing>(R.layout.fragment_settings) {
 
     override val viewModel: SettingsViewModel by viewModel()

@@ -1,15 +1,11 @@
 package ru.mamykin.foboreader.store.data
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import ru.mamykin.foboreader.store.data.network.BooksStoreService
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 import kotlin.properties.Delegates
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 class BooksStoreRepository(
     private val service: BooksStoreService
 ) {
