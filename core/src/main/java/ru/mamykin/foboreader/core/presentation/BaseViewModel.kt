@@ -42,6 +42,4 @@ abstract class BaseViewModel<ViewState, Action, Event, Effect>(
         _effectLiveData.setValue(effect)
         stateDebugger.onEffect(effect)
     }
-
-    open fun loadData() {}
 }

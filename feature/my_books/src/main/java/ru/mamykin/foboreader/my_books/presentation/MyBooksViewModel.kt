@@ -10,14 +10,14 @@ import ru.mamykin.foboreader.my_books.domain.usecase.*
 
 class MyBooksViewModel(
     private val scanBooks: ScanBooks,
-    private val getMyBooks: GetMyBooks,
+    getMyBooks: GetMyBooks,
     private val sortMyBooks: SortMyBooks,
     private val filterMyBooks: FilterMyBooks,
     private val removeBook: RemoveBook
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isLoading = true)
 ) {
-    override fun loadData() {
+    init {
         viewModelScope.launch { scanBooks(Unit) }
         getMyBooks()
             .onEach { sendAction(Action.BooksLoaded(it.getOrThrow())) }

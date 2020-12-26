@@ -13,7 +13,7 @@ import ru.mamykin.foboreader.settings.domain.usecase.SetTextSize
 import ru.mamykin.foboreader.settings.navigation.LocalSettingsNavigator
 
 class SettingsViewModel(
-    private val getSettings: GetSettings,
+    getSettings: GetSettings,
     private val setBrightness: SetBrightness,
     private val setTextSize: SetTextSize,
     private val setNightTheme: SetNightTheme,
@@ -21,7 +21,7 @@ class SettingsViewModel(
 ) : BaseViewModel<ViewState, Action, Event, Nothing>(
     ViewState(isLoading = true)
 ) {
-    override fun loadData() {
+    init {
         getSettings()
             .map { it.getOrThrow() }
             .onEach { sendAction(Action.SettingsLoaded(it)) }

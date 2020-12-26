@@ -18,7 +18,7 @@ class ReadBookViewModel(
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isBookLoading = true)
 ) {
-    override fun loadData() {
+    init {
         loadBookInfo()
     }
 

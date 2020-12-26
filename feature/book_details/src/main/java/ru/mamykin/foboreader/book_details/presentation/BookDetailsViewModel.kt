@@ -13,7 +13,7 @@ class BookDetailsViewModel(
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isLoading = true)
 ) {
-    override fun loadData() {
+    init {
         viewModelScope.launch {
             getBookDetails(bookId)
                 .doOnSuccess { sendAction(Action.BookLoaded(it)) }

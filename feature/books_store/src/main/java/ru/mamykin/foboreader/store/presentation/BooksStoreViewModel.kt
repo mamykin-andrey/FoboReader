@@ -15,14 +15,14 @@ import ru.mamykin.foboreader.store.navigation.BooksStoreNavigator
 
 class BooksStoreViewModel(
     private val downloadStoreBook: DownloadBook,
-    private val getStoreBooks: GetStoreBooks,
+    getStoreBooks: GetStoreBooks,
     private val loadStoreBooks: LoadStoreBooks,
     private val filterStoreBooks: FilterStoreBooks,
     private val navigator: BooksStoreNavigator
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isLoading = true)
 ) {
-    override fun loadData() {
+    init {
         sendAction(Action.BooksLoading)
         getStoreBooks()
             .map { Action.BooksLoaded(it.getOrThrow()) }

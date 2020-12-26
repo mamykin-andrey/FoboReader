@@ -22,8 +22,6 @@ abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effe
         get() = requireView().findViewById(R.id.fl_content_loading)
             ?: throw IllegalStateException("Couldn't find progress view in layout!")
 
-    private var dataLoaded = false
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar?.setNavigationOnClickListener { requireActivity().onBackPressed() }
@@ -33,10 +31,6 @@ abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effe
     private fun initViewModel() {
         viewModel.stateLiveData.observe(::showState)
         viewModel.effectLiveData.observe(::takeEffect)
-        if (!dataLoaded) {
-            viewModel.loadData()
-            dataLoaded = true
-        }
     }
 
     protected open fun showState(state: ViewState) {}
