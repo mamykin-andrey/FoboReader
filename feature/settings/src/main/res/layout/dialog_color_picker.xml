@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_padding_size_medium"
+        android:overScrollMode="never"
         android:layout_marginTop="@dimen/margin_padding_size_small"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="5"
