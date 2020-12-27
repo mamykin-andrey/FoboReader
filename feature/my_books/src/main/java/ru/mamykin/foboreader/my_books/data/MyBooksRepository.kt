@@ -21,19 +21,25 @@ class MyBooksRepository(
     private val context: Context
 ) {
     private var allBooks = emptyList<BookInfo>()
-    private val booksStateChannel = ConflatedBroadcastChannel(BooksState(scanned = false))
+    private val booksStateChannel = ConflatedBroadcastChannel(BooksState(loadNew = true))
 
     fun getBooks(): Flow<List<BookInfo>> = flow {
         booksStateChannel.consumeEach { state ->
-            if (!state.scanned) {
+            if (state.loadNew) {
                 booksScanner.scan()
                 allBooks = repository.getBooks()
             }
-            emit(
-                allBooks.filter { it.containsText(state.searchQuery) }
-                    .sortedWith(BooksComparatorFactory().create(state.sortOrder))
-            )
+            emit(getSortedAndFilteredBooks(allBooks, state.searchQuery, state.sortOrder))
         }
+    }
+
+    private fun getSortedAndFilteredBooks(
+        books: List<BookInfo>,
+        searchQuery: String,
+        sortOrder: SortOrder
+    ): List<BookInfo> {
+        return books.filter { it.containsText(searchQuery) }
+            .sortedWith(BooksComparatorFactory().create(sortOrder))
     }
 
     private fun updateState(createNew: (BooksState) -> BooksState) {
@@ -42,20 +48,20 @@ class MyBooksRepository(
 
     fun sort(sortOrder: SortOrder) {
         updateState {
-            it.copy(sortOrder = sortOrder)
+            it.copy(sortOrder = sortOrder, loadNew = false)
         }
     }
 
     fun filter(searchQuery: String) {
         updateState {
-            it.copy(searchQuery = searchQuery)
+            it.copy(searchQuery = searchQuery, loadNew = false)
         }
     }
 
     suspend fun scanBooks() {
         fileChangesFlow().collect {
             updateState {
-                it.copy(scanned = false)
+                it.copy(loadNew = true)
             }
         }
     }
@@ -65,9 +71,8 @@ class MyBooksRepository(
             Log.error("Can't open media directory!")
             return@callbackFlow
         }
-        val changesMask = FileObserver.CREATE or FileObserver.DELETE or FileObserver.DELETE_SELF
 
-        val fileObserver = object : FileObserver(externalMediaDir, changesMask) {
+        val fileObserver = object : FileObserver(externalMediaDir, CREATE or DELETE) {
             override fun onEvent(event: Int, file: String?) {
                 sendBlocking(Unit)
             }
@@ -77,7 +82,7 @@ class MyBooksRepository(
     }
 
     data class BooksState(
-        val scanned: Boolean = false,
+        val loadNew: Boolean = true,
         val sortOrder: SortOrder = SortOrder.ByName,
         val searchQuery: String = ""
     )
