@@ -10,6 +10,6 @@ class GetStoreBooks(
 ) : FlowUseCase<Unit, List<StoreBook>>() {
 
     override fun execute(): Flow<List<StoreBook>> {
-        return repository.booksFlow
+        return repository.getBooks()
     }
 }

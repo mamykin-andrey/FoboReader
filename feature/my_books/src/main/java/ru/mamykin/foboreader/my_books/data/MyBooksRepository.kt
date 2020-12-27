@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.FileObserver
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.*
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
@@ -13,54 +14,50 @@ import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.my_books.domain.helper.BookFilesScanner
 import ru.mamykin.foboreader.my_books.domain.helper.BooksComparatorFactory
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
-import kotlin.properties.Delegates
 
 class MyBooksRepository(
     private val repository: BookInfoRepository,
     private val booksScanner: BookFilesScanner,
     private val context: Context
 ) {
-    private var searchQuery: String = ""
-    private var sortOrder: SortOrder = SortOrder.ByName
-
-    private val booksChannel = ConflatedBroadcastChannel<List<BookInfo>>()
-    val booksFlow = booksChannel.asFlow()
-
-    private var books by Delegates.observable(emptyList<BookInfo>()) { _, _, new ->
-        booksChannel.offer(new)
-    }
     private var allBooks = emptyList<BookInfo>()
+    private val booksStateChannel = ConflatedBroadcastChannel(BooksState(scanned = false))
 
-    suspend fun sort(sortOrder: SortOrder) {
-        this.sortOrder = sortOrder
-        updateBooks()
+    fun getBooks(): Flow<List<BookInfo>> = flow {
+        booksStateChannel.consumeEach { state ->
+            if (!state.scanned) {
+                booksScanner.scan()
+                allBooks = repository.getBooks()
+            }
+            emit(
+                allBooks.filter { it.containsText(state.searchQuery) }
+                    .sortedWith(BooksComparatorFactory().create(state.sortOrder))
+            )
+        }
     }
 
-    suspend fun filter(query: String) {
-        this.searchQuery = query
-        updateBooks()
+    private fun updateState(createNew: (BooksState) -> BooksState) {
+        booksStateChannel.offer(createNew(booksStateChannel.value))
     }
 
-    private suspend fun updateBooks() {
-        this.allBooks = repository.getBooks()
-        this.books = allBooks
-            .filter { it.title.contains(searchQuery) } // TODO: real filter
-            .sortedWith(BooksComparatorFactory().create(sortOrder))
+    fun sort(sortOrder: SortOrder) {
+        updateState {
+            it.copy(sortOrder = sortOrder)
+        }
+    }
+
+    fun filter(searchQuery: String) {
+        updateState {
+            it.copy(searchQuery = searchQuery)
+        }
     }
 
     suspend fun scanBooks() {
-        fileChangesFlow()
-            .onStart { emit(Unit) }
-            .collect { loadNewBooks() }
-    }
-
-    suspend fun getBooks(): Flow<List<BookInfo>> {
-        return booksFlow
-    }
-
-    private suspend fun loadNewBooks() {
-        booksScanner.scan()
-        updateBooks()
+        fileChangesFlow().collect {
+            updateState {
+                it.copy(scanned = false)
+            }
+        }
     }
 
     private fun fileChangesFlow(): Flow<Unit> = callbackFlow {
@@ -78,4 +75,10 @@ class MyBooksRepository(
         fileObserver.startWatching()
         awaitClose { fileObserver.stopWatching() }
     }
+
+    data class BooksState(
+        val scanned: Boolean = false,
+        val sortOrder: SortOrder = SortOrder.ByName,
+        val searchQuery: String = ""
+    )
 }

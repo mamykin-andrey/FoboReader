@@ -33,4 +33,8 @@ data class BookInfo(
             ?.toInt()
             ?: 0
     }
+
+    fun containsText(text: String): Boolean {
+        return title.contains(text, ignoreCase = true) || author.contains(text, ignoreCase = true)
+    }
 }

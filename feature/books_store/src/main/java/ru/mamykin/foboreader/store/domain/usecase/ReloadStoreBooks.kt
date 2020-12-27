@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.store.domain.usecase
 import ru.mamykin.foboreader.core.domain.SuspendUseCase
 import ru.mamykin.foboreader.store.data.BooksStoreRepository
 
-class LoadStoreBooks(
+class ReloadStoreBooks(
     private val repository: BooksStoreRepository
 ) : SuspendUseCase<Unit, Unit>() {
 

@@ -15,4 +15,8 @@ data class StoreBook(
         val translitName = StringTransliterator.transliterate(title)
         return "$translitName.$format"
     }
+
+    fun containsText(text: String): Boolean {
+        return title.contains(text, ignoreCase = true) || author.contains(text, ignoreCase = true)
+    }
 }

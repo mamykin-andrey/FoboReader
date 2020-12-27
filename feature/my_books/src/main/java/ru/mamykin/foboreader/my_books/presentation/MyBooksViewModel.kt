@@ -9,8 +9,8 @@ import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.my_books.domain.usecase.*
 
 class MyBooksViewModel(
-    private val scanBooks: ScanBooks,
     getMyBooks: GetMyBooks,
+    scanBooks: ScanBooks,
     private val sortMyBooks: SortMyBooks,
     private val filterMyBooks: FilterMyBooks,
     private val removeBook: RemoveBook
@@ -18,15 +18,21 @@ class MyBooksViewModel(
     ViewState(isLoading = true)
 ) {
     init {
-        viewModelScope.launch { scanBooks(Unit) }
         getMyBooks()
-            .onEach { sendAction(Action.BooksLoaded(it.getOrThrow())) }
+            .map { Action.BooksLoaded(it.getOrThrow()) }
+            .onEach { sendAction(it) }
             .launchIn(viewModelScope)
+        viewModelScope.launch { scanBooks(Unit) }
     }
 
     override fun onAction(action: Action): ViewState = when (action) {
-        is Action.Loading -> state.copy(isLoading = true)
-        is Action.BooksLoaded -> state.copy(isLoading = false, books = action.books)
+        is Action.Loading -> state.copy(
+            isLoading = true
+        )
+        is Action.BooksLoaded -> state.copy(
+            isLoading = false,
+            books = action.books
+        )
     }
 
     override fun onEvent(event: Event) {

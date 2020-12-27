@@ -10,25 +10,23 @@ import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.domain.usecase.DownloadBook
 import ru.mamykin.foboreader.store.domain.usecase.FilterStoreBooks
 import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
-import ru.mamykin.foboreader.store.domain.usecase.LoadStoreBooks
+import ru.mamykin.foboreader.store.domain.usecase.ReloadStoreBooks
 import ru.mamykin.foboreader.store.navigation.BooksStoreNavigator
 
 class BooksStoreViewModel(
     private val downloadStoreBook: DownloadBook,
     getStoreBooks: GetStoreBooks,
-    private val loadStoreBooks: LoadStoreBooks,
+    private val reloadStoreBooks: ReloadStoreBooks,
     private val filterStoreBooks: FilterStoreBooks,
     private val navigator: BooksStoreNavigator
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isLoading = true)
 ) {
     init {
-        sendAction(Action.BooksLoading)
         getStoreBooks()
             .map { Action.BooksLoaded(it.getOrThrow()) }
             .onEach { sendAction(it) }
             .launchIn(viewModelScope)
-        viewModelScope.launch { loadBooks() }
     }
 
     override fun onAction(action: Action): ViewState = when (action) {
@@ -54,14 +52,14 @@ class BooksStoreViewModel(
             when (event) {
                 is Event.FilterBooks -> filterStoreBooks(event.query)
                 is Event.DownloadBook -> downloadBook(event.book)
-                is Event.RetryBooksLoading -> loadBooks()
+                is Event.RetryBooksLoading -> reloadBooks()
             }
         }
     }
 
-    private suspend fun loadBooks() {
+    private suspend fun reloadBooks() {
         sendAction(Action.BooksLoading)
-        loadStoreBooks(Unit)
+        reloadStoreBooks(Unit)
             .doOnError { sendAction(Action.BooksLoadingFailed) }
     }
 
