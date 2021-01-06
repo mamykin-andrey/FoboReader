@@ -31,3 +31,8 @@ fun String.toHtml(): Spanned {
         Html.fromHtml(this)
     }
 }
+
+fun String.trimSpecialCharacters(): String {
+    // TODO: do not trim the whole text, trim only left and right sides
+    return this.replace("[^a-zA-ZА-ЯЁа-яё0-9]".toRegex(), "")
+}

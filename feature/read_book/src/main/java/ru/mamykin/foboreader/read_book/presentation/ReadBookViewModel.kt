@@ -4,15 +4,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.read_book.R
-import ru.mamykin.foboreader.read_book.domain.usecase.GetBookContent
-import ru.mamykin.foboreader.read_book.domain.usecase.GetBookInfo
-import ru.mamykin.foboreader.read_book.domain.usecase.GetParagraphTranslation
-import ru.mamykin.foboreader.read_book.domain.usecase.UpdateBookInfo
+import ru.mamykin.foboreader.read_book.domain.usecase.*
 
 class ReadBookViewModel(
     private val bookId: Long,
     private val getBookContent: GetBookContent,
     private val getParagraphTranslation: GetParagraphTranslation,
+    private val getWordTranslation: GetWordTranslation,
     private val getBookInfo: GetBookInfo,
     private val updateBookInfo: UpdateBookInfo
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
@@ -45,7 +43,7 @@ class ReadBookViewModel(
         is Action.ParagraphTranslationHided -> state.copy(paragraphTranslation = null)
         is Action.WordTranslationLoaded -> state.copy(
             isTranslationLoading = false,
-            wordTranslation = action.source to action.translation
+            wordTranslation = action.translation
         )
         is Action.WordTranslationHided -> state.copy(wordTranslation = null)
     }
@@ -54,16 +52,24 @@ class ReadBookViewModel(
         viewModelScope.launch {
             when (event) {
                 is Event.TranslateParagraph -> translateParagraph(event.paragraph)
+                is Event.TranslateWord -> translateWord(event.word)
                 is Event.HideParagraphTranslation -> sendAction(Action.ParagraphTranslationHided)
+                is Event.HideWordTranslation -> sendAction(Action.WordTranslationHided)
                 is Event.PageLoaded -> updateBookInfo(UpdateBookInfo.Param(bookId, event.currentPage, event.totalPages))
             }
         }
     }
 
     private fun translateParagraph(paragraph: String) {
-        sendAction(Action.TranslationLoading)
         getParagraphTranslation(paragraph)
             .doOnSuccess { it?.let { sendAction(Action.ParagraphTranslationLoaded(paragraph, it)) } }
+            .doOnError { sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error)) }
+    }
+
+    private fun translateWord(word: String) = viewModelScope.launch {
+        sendAction(Action.TranslationLoading)
+        getWordTranslation(word)
+            .doOnSuccess { sendAction(Action.WordTranslationLoaded(it)) }
             .doOnError { sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error)) }
     }
 }

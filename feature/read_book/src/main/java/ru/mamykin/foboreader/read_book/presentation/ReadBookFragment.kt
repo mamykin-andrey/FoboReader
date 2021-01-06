@@ -1,9 +1,14 @@
 package ru.mamykin.foboreader.read_book.presentation
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -12,10 +17,14 @@ import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.extension.toHtml
+import ru.mamykin.foboreader.core.extension.trimSpecialCharacters
+import ru.mamykin.foboreader.core.platform.VibratorHelper
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
+import ru.mamykin.foboreader.read_book.databinding.LayoutWordPopupBinding
+import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
 import ru.mamykin.widget.paginatedtextview.pagination.ReadState
 import ru.mamykin.widget.paginatedtextview.view.OnActionListener
 
@@ -25,19 +34,24 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
         parametersOf(ReadBookFragmentArgs.fromBundle(requireArguments()).bookId)
     }
 
+    private val vibratorHelper: VibratorHelper by inject()
     private val appSettingsStorage: AppSettingsStorage by inject()
     private val binding by viewBinding { FragmentReadBookBinding.bind(requireView()) }
     private var lastTextHashCode: Int = 0
+    private var popupWindow: PopupWindow? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvText.textSize = appSettingsStorage.readTextSizeField.get().toFloat()
         binding.tvText.setOnActionListener(object : OnActionListener {
             override fun onClick(paragraph: String) {
+                vibratorHelper.shortVibrate()
                 viewModel.sendEvent(Event.TranslateParagraph(paragraph.trim()))
             }
 
             override fun onLongClick(word: String) {
+                vibratorHelper.shortVibrate()
+                viewModel.sendEvent(Event.TranslateWord(word.trimSpecialCharacters()))
             }
 
             override fun onPageLoaded(state: ReadState) = with(state) {
@@ -58,7 +72,7 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
     override fun showState(state: ViewState) {
         progressView.isVisible = state.isTranslationLoading
         showBookText(state.text, state.currentPage)
-        state.wordTranslation?.let(::showWordTranslation)
+        state.wordTranslation?.let(::showWordTranslation) ?: popupWindow?.dismiss()
         state.paragraphTranslation?.let(::showParagraphTranslation)
         binding.tvName.text = state.title
         binding.tvRead.text = getString(
@@ -91,9 +105,30 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
         lastTextHashCode = 0
     }
 
-    private fun showWordTranslation(info: Pair<String, String>) {
-        // TODO
-//        val (word, translation) = info
+    @SuppressLint("InflateParams", "ClickableViewAccessibility")
+    private fun showWordTranslation(translation: TranslationEntity) {
+        val inflater = LayoutInflater.from(context)
+        val popupView = inflater.inflate(R.layout.layout_word_popup, null)
+        val popupBinding = LayoutWordPopupBinding.bind(popupView)
+
+        popupBinding.tvSource.text = translation.source
+        popupBinding.tvTranslated.text = translation.getMostLikelyTranslation()
+
+        val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val focusable = true // lets taps outside the popup also dismiss it
+
+        popupWindow = PopupWindow(popupView, width, height, focusable)
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+        // dismiss the popup window when touched
+        popupView.setOnTouchListener { v, event ->
+            viewModel.sendEvent(Event.HideWordTranslation)
+            true
+        }
     }
 
     override fun takeEffect(effect: Effect) {

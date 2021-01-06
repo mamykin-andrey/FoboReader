@@ -1,10 +1,13 @@
 package ru.mamykin.foboreader.read_book.presentation
 
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
 
 sealed class Event {
     data class TranslateParagraph(val paragraph: String) : Event()
+    data class TranslateWord(val word: String) : Event()
     object HideParagraphTranslation : Event()
+    object HideWordTranslation : Event()
     data class PageLoaded(val currentPage: Int, val totalPages: Int) : Event()
 }
 
@@ -23,8 +26,7 @@ sealed class Action {
     object ParagraphTranslationHided : Action()
 
     data class WordTranslationLoaded(
-        val source: String,
-        val translation: String
+        val translation: TranslationEntity
     ) : Action()
 
     object WordTranslationHided : Action()
@@ -41,6 +43,6 @@ data class ViewState(
     val currentPage: Int = 0,
     val totalPages: Int = 0,
     val readPercent: Float = 0f,
-    val wordTranslation: Pair<String, String>? = null,
+    val wordTranslation: TranslationEntity? = null,
     val paragraphTranslation: Pair<String, String>? = null
 )

@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.read_book.data
 
 import ru.mamykin.foboreader.read_book.domain.helper.BookContentParser
-import ru.mamykin.foboreader.read_book.domain.model.BookContent
+import ru.mamykin.foboreader.read_book.domain.entity.BookContent
 
 class BookContentRepository(
     private val bookContentParser: BookContentParser

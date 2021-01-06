@@ -38,6 +38,11 @@ open class ConfigurePlugin : Plugin<Project> {
                 isMinifyEnabled = false
                 isDebuggable = true
             }
+
+            buildTypes.forEach {
+                it.buildConfigField("String", "googleApiKey", project.properties["googleApiKey"] as String)
+                it.buildConfigField("String", "googleApiHost", project.properties["googleApiHost"] as String)
+            }
         }
 
         buildFeatures.viewBinding = true

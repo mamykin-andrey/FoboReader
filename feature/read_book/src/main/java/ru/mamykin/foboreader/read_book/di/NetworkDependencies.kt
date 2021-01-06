@@ -5,19 +5,19 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.mamykin.foboreader.read_book.data.network.YandexTranslateService
+import ru.mamykin.foboreader.read_book.data.network.GoogleTranslateService
 
 internal object NetworkDependencies {
 
-    fun service(): YandexTranslateService {
+    fun service(): GoogleTranslateService {
         val retrofit = Retrofit.Builder()
-            .baseUrl(YandexTranslateService.BASE_URL)
+            .baseUrl(GoogleTranslateService.BASE_URL)
             .client(client())
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
 
-        return retrofit.create(YandexTranslateService::class.java)
+        return retrofit.create(GoogleTranslateService::class.java)
     }
 
     private fun client(): OkHttpClient {

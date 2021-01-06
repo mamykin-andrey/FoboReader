@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#90a4ae</color>
+    <color name="colorPrimaryInversed">#222222</color>
     <color name="colorPrimaryLight">#c1d5e0</color>
     <color name="colorPrimaryDark">#62757f</color>
     <color name="colorAccent">#e57373</color>
@@ -9,5 +10,6 @@
     <color name="textOnBackground">#000000</color>
     <color name="textOnBackgroundLight">#333333</color>
     <color name="textOnPrimary">#000000</color>
+    <color name="textOnPrimaryInversed">#FFFFFF</color>
     <color name="textOnAccent">#000000</color>
 </resources>
