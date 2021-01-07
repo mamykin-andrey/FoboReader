@@ -16,10 +16,7 @@ import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.*
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import ru.mamykin.foboreader.settings.navigation.LocalSettingsNavigator
-import ru.mamykin.foboreader.settings.presentation.list.BrightnessHolder
-import ru.mamykin.foboreader.settings.presentation.list.NightThemeHolder
-import ru.mamykin.foboreader.settings.presentation.list.TextSizeHolder
-import ru.mamykin.foboreader.settings.presentation.list.TranslationColorHolder
+import ru.mamykin.foboreader.settings.presentation.list.*
 
 class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Nothing>(R.layout.fragment_settings) {
 
@@ -75,6 +72,15 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Nothing>(R.l
                 onBind({
                     TranslationColorHolder(
                         ItemTranslationColorBinding.bind(it),
+                        viewModel::sendEvent,
+                        viewLifecycleOwner.lifecycleScope
+                    )
+                }) { _, item -> bind(item) }
+            }
+            withItem<SettingsItem.AppLanguage, AppLanguageHolder>(R.layout.item_app_language) {
+                onBind({
+                    AppLanguageHolder(
+                        ItemAppLanguageBinding.bind(it),
                         viewModel::sendEvent,
                         viewLifecycleOwner.lifecycleScope
                     )

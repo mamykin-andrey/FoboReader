@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_books_menu_search">Search</string>
+    <string name="my_books_menu_sort">Sort</string>
+    <string name="my_books_screen_title">My books</string>
+    <string name="my_books_no_books">No books</string>
+    <string name="my_books_sort_by_name">By name</string>
+    <string name="my_books_sort_by_readed">By readed</string>
+    <string name="my_books_sort_by_date">By date</string>
+    <string name="my_books_menu_delete">Remove</string>
+    <string name="my_books_about_book">About</string>
+    <string name="my_books_book_info_description_title">"%1$s, %2$s"</string>
+    <string name="book_pages_info">%1$d from %2$d</string>
+</resources>

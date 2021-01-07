@@ -8,6 +8,7 @@ sealed class Event {
     object IncreaseTextSizeClicked : Event()
     object DecreaseTextSizeClicked : Event()
     object SelectReadColorClicked : Event()
+    object SelectAppLanguage : Event()
 }
 
 sealed class Action {

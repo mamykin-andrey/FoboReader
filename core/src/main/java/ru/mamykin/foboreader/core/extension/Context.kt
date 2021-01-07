@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.core.extension
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.util.TypedValue
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
+import java.util.*
+
 
 fun Fragment.showSnackbar(@StringRes messageRes: Int, long: Boolean = false) {
     showSnackbar(getString(messageRes), long)
@@ -28,10 +31,6 @@ fun Context.getExternalMediaDir(): File? =
         getExternalFilesDir(null)
     }
 
-val Fragment.appCompatActivity: AppCompatActivity
-    get() = activity as? AppCompatActivity
-        ?: throw IllegalStateException("Activity isn't an instance of AppCompatActivity!")
-
 var AppCompatActivity?.nightMode: Boolean
     get() = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
     set(value) {
@@ -44,10 +43,28 @@ var AppCompatActivity?.nightMode: Boolean
         }
     }
 
+fun Activity.setCurrentLocale(languageCode: String) {
+    if (resources.configuration.locale.language == languageCode) return
+    resources.apply {
+        configuration.setLocale(Locale(languageCode))
+        updateConfiguration(configuration, displayMetrics)
+    }
+    recreate()
+}
+
 fun Context.dpToPx(value: Int): Float {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         value.toFloat(),
         resources.displayMetrics
     )
+}
+
+@Suppress("deprecation")
+fun Context.getCurrentLocaleName(): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        resources.configuration.locales[0].displayLanguage
+    } else {
+        resources.configuration.locale.displayLanguage
+    }
 }

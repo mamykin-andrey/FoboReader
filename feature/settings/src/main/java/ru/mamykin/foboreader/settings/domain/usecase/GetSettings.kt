@@ -16,13 +16,15 @@ class GetSettings(
             settingsStorage.nightThemeField.flow,
             settingsStorage.brightnessField.flow.map { it!! },
             settingsStorage.readTextSizeField.flow,
-            settingsStorage.translationColorCodeField.flow
-        ) { nightTheme, brightness, textSize, translationColor ->
+            settingsStorage.translationColorCodeField.flow,
+            settingsStorage.appLanguageField.flow
+        ) { nightTheme, brightness, textSize, translationColor, appLanguageCode ->
             listOf(
                 SettingsItem.NightTheme(nightTheme),
                 SettingsItem.Brightness(brightness),
                 SettingsItem.ReadTextSize(textSize),
                 SettingsItem.TranslationColor(translationColor),
+                SettingsItem.AppLanguage(appLanguageCode)
             )
         }
     }

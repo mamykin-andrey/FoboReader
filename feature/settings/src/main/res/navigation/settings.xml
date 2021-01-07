@@ -13,11 +13,20 @@
             android:id="@+id/settings_to_color_picker"
             app:destination="@id/colorPickerFragment" />
 
+        <action
+            android:id="@+id/settings_to_select_app_language"
+            app:destination="@id/selectAppLanguage" />
+
     </fragment>
 
     <dialog
         android:id="@+id/colorPickerFragment"
         android:name="ru.mamykin.foboreader.settings.presentation.ColorPickerDialog"
         android:label="ColorPickerFragment" />
+
+    <dialog
+        android:id="@+id/selectAppLanguage"
+        android:name="ru.mamykin.foboreader.settings.presentation.SelectAppLanguageDialog"
+        android:label="SelectAppLanguageDialog" />
 
 </navigation>

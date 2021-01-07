@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="books_store_title">Store</string>
+    <string name="books_store_menu_search">Search</string>
+    <string name="books_store_download_progress">File is loading</string>
+    <string name="books_store_download_completed">Loading completed</string>
+    <string name="books_store_download_failed">Unable to load file</string>
+</resources>

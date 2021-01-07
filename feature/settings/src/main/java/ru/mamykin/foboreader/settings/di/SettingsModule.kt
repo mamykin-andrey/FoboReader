@@ -12,7 +12,10 @@ val settingsModule = module {
     factory { SetBrightness(get()) }
     factory { SetNightTheme(get()) }
     factory { SetTextSize(get()) }
+    factory { SetAppLanguage(get()) }
     factory { GetTranslationColors(get()) }
     factory { SetTranslationColor(get()) }
+    factory { GetAppLanguages() }
+    factory { GetSelectedLanguage(get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get(), get()) }
 }

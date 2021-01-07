@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.core.data.storage
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
+import java.util.*
 
 class AppSettingsStorage(
     private val prefManager: PreferencesManager
@@ -10,10 +11,10 @@ class AppSettingsStorage(
     companion object {
 
         private const val NIGHT_THEME_ENABLED = "night_theme_enabled"
-        private const val AUTO_BRIGHTNESS_ENABLED = "auto_brightness_enabled"
         private const val BRIGHTNESS = "brightness"
         private const val READ_TEXT_SIZE = "read_text_size"
         private const val TRANSLATION_COLOR = "translation_color"
+        private const val APP_LANGUAGE_CODE = "app_language"
     }
 
     abstract class ObservableField<T> {
@@ -71,6 +72,17 @@ class AppSettingsStorage(
 
         override fun set(value: String) {
             prefManager.putString(TRANSLATION_COLOR, value)
+            super.set(value)
+        }
+    }
+
+    val appLanguageField = object : ObservableField<String>() {
+        override fun get(): String {
+            return prefManager.getString(APP_LANGUAGE_CODE) ?: Locale.getDefault().language
+        }
+
+        override fun set(value: String) {
+            prefManager.putString(APP_LANGUAGE_CODE, value)
             super.set(value)
         }
     }

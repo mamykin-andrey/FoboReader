@@ -10,6 +10,7 @@ import ru.mamykin.foboreader.app.navigation.AppNavigator
 class MainActivity : AppCompatActivity() {
 
     private val nightThemeDelegate = NightThemeDelegate(this)
+    private val appLanguageDelegate = AppLanguageDelegate(this)
     private val navigator by inject<AppNavigator>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,5 +28,6 @@ class MainActivity : AppCompatActivity() {
     private fun initTheme() {
         setTheme(R.style.AppTheme)
         nightThemeDelegate.init()
+        appLanguageDelegate.init()
     }
 }

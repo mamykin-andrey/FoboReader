@@ -13,4 +13,10 @@ class LocalSettingsNavigator : NavControllerHolder {
             SettingsFragmentDirections.settingsToColorPicker()
         )
     }
+
+    fun settingsToSelectAppLanguage() {
+        navController?.navigate(
+            SettingsFragmentDirections.settingsToSelectAppLanguage()
+        )
+    }
 }

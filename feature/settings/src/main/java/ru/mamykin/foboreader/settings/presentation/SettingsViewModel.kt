@@ -43,6 +43,7 @@ class SettingsViewModel(
                 is Event.IncreaseTextSizeClicked -> setTextSize(SetTextSize.Action.Increase)
                 is Event.DecreaseTextSizeClicked -> setTextSize(SetTextSize.Action.Decrease)
                 is Event.SelectReadColorClicked -> localNavigator.settingsToColorPicker()
+                is Event.SelectAppLanguage -> localNavigator.settingsToSelectAppLanguage()
             }
         }
     }
