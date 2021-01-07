@@ -25,8 +25,7 @@ import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
 import ru.mamykin.foboreader.read_book.databinding.LayoutWordPopupBinding
 import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
-import ru.mamykin.widget.paginatedtextview.pagination.ReadState
-import ru.mamykin.widget.paginatedtextview.view.OnActionListener
+import ru.mamykin.foboreader.read_book.presentation.view.ClickableTextView
 
 class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.layout.fragment_read_book) {
 
@@ -43,7 +42,7 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvText.textSize = appSettingsStorage.readTextSizeField.get().toFloat()
-        binding.tvText.setOnActionListener(object : OnActionListener {
+        binding.tvText.setOnActionListener(object : ClickableTextView.OnActionListener {
             override fun onClick(paragraph: String) {
                 vibratorHelper.shortVibrate()
                 viewModel.sendEvent(Event.TranslateParagraph(paragraph.trim()))
@@ -53,25 +52,12 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
                 vibratorHelper.shortVibrate()
                 viewModel.sendEvent(Event.TranslateWord(word.trimSpecialCharacters()))
             }
-
-            override fun onPageLoaded(state: ReadState) = with(state) {
-                viewModel.sendEvent(Event.PageLoaded(state.currentIndex, state.pagesCount))
-                binding.tvReadPercent.text = getString(
-                    R.string.read_book_user_read_percent,
-                    readPercent
-                )
-                binding.tvRead.text = getString(
-                    R.string.read_book_user_read_pages,
-                    currentIndex,
-                    pagesCount
-                )
-            }
         })
     }
 
     override fun showState(state: ViewState) {
         progressView.isVisible = state.isTranslationLoading
-        showBookText(state.text, state.currentPage)
+        showBookText(state.text)
         state.wordTranslation?.let(::showWordTranslation) ?: popupWindow?.dismiss()
         state.paragraphTranslation?.let(::showParagraphTranslation)
         binding.tvName.text = state.title
@@ -83,11 +69,11 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
         binding.tvReadPercent.text = state.readPercent.toString()
     }
 
-    private fun showBookText(text: String, page: Int) {
+    private fun showBookText(text: String) {
         val hashCode = text.hashCode()
         text.takeIf { hashCode != lastTextHashCode }
             ?.toHtml()
-            ?.let { binding.tvText.setup(it, page) }
+            ?.let { binding.tvText.setup(it) }
             ?.also { lastTextHashCode = hashCode }
         // binding.tvText.setOnClickListener(null)
     }
@@ -116,16 +102,11 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
 
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
-        val focusable = true // lets taps outside the popup also dismiss it
 
-        popupWindow = PopupWindow(popupView, width, height, focusable)
-
-        // show the popup window
-        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow = PopupWindow(popupView, width, height, true)
         popupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
 
-        // dismiss the popup window when touched
-        popupView.setOnTouchListener { v, event ->
+        popupView.setOnTouchListener { v, _ ->
             viewModel.sendEvent(Event.HideWordTranslation)
             true
         }

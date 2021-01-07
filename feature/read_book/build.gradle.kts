@@ -7,6 +7,5 @@ plugins {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":library"))
     implementation(project(":feature:common_book_info"))
 }

@@ -8,7 +8,6 @@ sealed class Event {
     data class TranslateWord(val word: String) : Event()
     object HideParagraphTranslation : Event()
     object HideWordTranslation : Event()
-    data class PageLoaded(val currentPage: Int, val totalPages: Int) : Event()
 }
 
 sealed class Effect {

@@ -55,7 +55,7 @@ class ReadBookViewModel(
                 is Event.TranslateWord -> translateWord(event.word)
                 is Event.HideParagraphTranslation -> sendAction(Action.ParagraphTranslationHided)
                 is Event.HideWordTranslation -> sendAction(Action.WordTranslationHided)
-                is Event.PageLoaded -> updateBookInfo(UpdateBookInfo.Param(bookId, event.currentPage, event.totalPages))
+                // TODO: is Event.PageLoaded -> updateBookInfo(UpdateBookInfo.Param(bookId, event.currentPage, event.totalPages))
             }
         }
     }

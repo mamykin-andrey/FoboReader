@@ -1,7 +1,6 @@
 include(
     ":core",
     ":app",
-    ":library",
     ":feature:common_book_info",
     ":feature:settings",
     ":feature:read_book",

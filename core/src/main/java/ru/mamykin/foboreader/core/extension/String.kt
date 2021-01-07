@@ -36,3 +36,12 @@ fun String.trimSpecialCharacters(): String {
     // TODO: do not trim the whole text, trim only left and right sides
     return this.replace("[^a-zA-ZА-ЯЁа-яё0-9]".toRegex(), "")
 }
+
+fun CharSequence.allWordPositions(): List<Int> {
+    fun isWordDelimiter(char: Char) = char == ' ' || char == '\n'
+    val indexes = mutableListOf<Int>()
+    for (i in this.indices) {
+        if (isWordDelimiter(this[i])) indexes.add(i)
+    }
+    return indexes
+}
