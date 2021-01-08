@@ -44,12 +44,12 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
         binding.tvText.textSize = appSettingsStorage.readTextSizeField.get().toFloat()
         binding.tvText.setOnActionListener(object : ClickableTextView.OnActionListener {
             override fun onClick(paragraph: String) {
-                vibratorHelper.shortVibrate()
+                vibratorHelper.clickVibrate()
                 viewModel.sendEvent(Event.TranslateParagraph(paragraph.trim()))
             }
 
             override fun onLongClick(word: String) {
-                vibratorHelper.shortVibrate()
+                vibratorHelper.clickVibrate()
                 viewModel.sendEvent(Event.TranslateWord(word.trimSpecialCharacters()))
             }
         })

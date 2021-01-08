@@ -1,13 +1,13 @@
 package ru.mamykin.foboreader.settings.domain.usecase
 
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
-import ru.mamykin.foboreader.core.domain.UseCase
+import ru.mamykin.foboreader.core.domain.usecase.base.UseCase
 
 class SetBrightness(
     private val appSettings: AppSettingsStorage
-) : UseCase<Int?, Unit>() {
+) : UseCase<Int, Unit>() {
 
-    override fun execute(param: Int?) {
+    override fun execute(param: Int) {
         appSettings.brightnessField.set(param)
     }
 }

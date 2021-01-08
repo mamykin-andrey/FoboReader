@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.read_book.domain.usecase
 
-import ru.mamykin.foboreader.core.domain.SuspendUseCase
+import ru.mamykin.foboreader.core.domain.usecase.base.SuspendUseCase
 import ru.mamykin.foboreader.read_book.data.TranslationRepository
 import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
 

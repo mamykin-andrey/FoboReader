@@ -9,4 +9,6 @@
     <string name="select_color">Select color</string>
     <string name="select_app_language">Select app language</string>
     <string name="app_language_title">App language</string>
+    <string name="use_vibration_option_name">Use vibration when translate</string>
+    <string name="use_vibration_option_description">When pressed on sentence/word</string>
 </resources>

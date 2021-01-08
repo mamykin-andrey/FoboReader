@@ -86,12 +86,23 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Nothing>(R.l
                     )
                 }) { _, item -> bind(item) }
             }
+            withItem<SettingsItem.UseVibration, UseVibrationHolder>(R.layout.item_use_vibration) {
+                onBind({
+                    UseVibrationHolder(
+                        ItemUseVibrationBinding.bind(it),
+                        viewModel::sendEvent,
+                        viewLifecycleOwner.lifecycleScope
+                    )
+                }) { _, item -> bind(item) }
+            }
         }
     }
 
     override fun showState(state: ViewState) {
         progressView.isVisible = state.isLoading
-        state.settings?.let(settingsSource::set)
+        binding.rvSettings.post {
+            state.settings?.let(settingsSource::set)
+        }
     }
 
     override fun onDestroyView() {

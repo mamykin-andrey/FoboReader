@@ -15,7 +15,8 @@ val settingsModule = module {
     factory { SetAppLanguage(get()) }
     factory { GetTranslationColors(get()) }
     factory { SetTranslationColor(get()) }
+    factory { SetUseVibration(get()) }
     factory { GetAppLanguages() }
     factory { GetSelectedLanguage(get()) }
-    viewModel { SettingsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get(), get(), get()) }
 }

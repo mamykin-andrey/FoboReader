@@ -15,6 +15,7 @@ class AppSettingsStorage(
         private const val READ_TEXT_SIZE = "read_text_size"
         private const val TRANSLATION_COLOR = "translation_color"
         private const val APP_LANGUAGE_CODE = "app_language"
+        private const val USE_VIBRATION = "use_vibration"
     }
 
     abstract class ObservableField<T> {
@@ -40,14 +41,13 @@ class AppSettingsStorage(
         }
     }
 
-    val brightnessField = object : ObservableField<Int?>() {
+    val brightnessField = object : ObservableField<Int>() {
         override fun get(): Int {
             return prefManager.getInt(BRIGHTNESS) ?: 100
         }
 
-        override fun set(value: Int?) {
-            val newValue = value ?: 100
-            prefManager.putInt(BRIGHTNESS, newValue)
+        override fun set(value: Int) {
+            prefManager.putInt(BRIGHTNESS, value)
             super.set(value)
         }
     }
@@ -83,6 +83,17 @@ class AppSettingsStorage(
 
         override fun set(value: String) {
             prefManager.putString(APP_LANGUAGE_CODE, value)
+            super.set(value)
+        }
+    }
+
+    val useVibrationField = object : ObservableField<Boolean>() {
+        override fun get(): Boolean {
+            return prefManager.getBoolean(USE_VIBRATION, true)
+        }
+
+        override fun set(value: Boolean) {
+            prefManager.putBoolean(USE_VIBRATION, value)
             super.set(value)
         }
     }

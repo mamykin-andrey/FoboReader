@@ -9,6 +9,7 @@ sealed class Event {
     object DecreaseTextSizeClicked : Event()
     object SelectReadColorClicked : Event()
     object SelectAppLanguage : Event()
+    data class UseVibrationChanged(val enabled: Boolean) : Event()
 }
 
 sealed class Action {

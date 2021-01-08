@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.read_book.domain.usecase
 
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
-import ru.mamykin.foboreader.core.domain.SuspendUseCase
+import ru.mamykin.foboreader.core.domain.usecase.base.SuspendUseCase
 
 class GetBookInfo(
     private val bookInfoRepository: BookInfoRepository

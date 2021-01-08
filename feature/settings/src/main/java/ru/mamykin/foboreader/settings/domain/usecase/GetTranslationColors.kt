@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.settings.domain.usecase
 
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
-import ru.mamykin.foboreader.core.domain.UseCase
+import ru.mamykin.foboreader.core.domain.usecase.base.UseCase
 import ru.mamykin.foboreader.settings.domain.model.ColorItem
 
 class GetTranslationColors(

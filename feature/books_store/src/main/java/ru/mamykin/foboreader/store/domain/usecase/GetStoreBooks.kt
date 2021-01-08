@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.store.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
-import ru.mamykin.foboreader.core.domain.FlowUseCase
+import ru.mamykin.foboreader.core.domain.usecase.base.FlowUseCase
 import ru.mamykin.foboreader.store.data.BooksStoreRepository
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 

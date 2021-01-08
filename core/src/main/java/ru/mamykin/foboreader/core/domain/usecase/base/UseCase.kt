@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.domain
+package ru.mamykin.foboreader.core.domain.usecase.base
 
 abstract class UseCase<in P, out R> {
 

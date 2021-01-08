@@ -6,10 +6,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
-import ru.mamykin.foboreader.settings.domain.usecase.GetSettings
-import ru.mamykin.foboreader.settings.domain.usecase.SetBrightness
-import ru.mamykin.foboreader.settings.domain.usecase.SetNightTheme
-import ru.mamykin.foboreader.settings.domain.usecase.SetTextSize
+import ru.mamykin.foboreader.settings.domain.usecase.*
 import ru.mamykin.foboreader.settings.navigation.LocalSettingsNavigator
 
 class SettingsViewModel(
@@ -17,6 +14,7 @@ class SettingsViewModel(
     private val setBrightness: SetBrightness,
     private val setTextSize: SetTextSize,
     private val setNightTheme: SetNightTheme,
+    private val setUseVibration: SetUseVibration,
     private val localNavigator: LocalSettingsNavigator
 ) : BaseViewModel<ViewState, Action, Event, Nothing>(
     ViewState(isLoading = true)
@@ -44,6 +42,7 @@ class SettingsViewModel(
                 is Event.DecreaseTextSizeClicked -> setTextSize(SetTextSize.Action.Decrease)
                 is Event.SelectReadColorClicked -> localNavigator.settingsToColorPicker()
                 is Event.SelectAppLanguage -> localNavigator.settingsToSelectAppLanguage()
+                is Event.UseVibrationChanged -> setUseVibration(event.enabled)
             }
         }
     }
