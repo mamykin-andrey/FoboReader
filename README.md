@@ -5,5 +5,3 @@ Features:
 * books store.
 
 **[Demonstration video](https://www.youtube.com/watch?v=vn6THQxQK-s)**
-
-<img src="/screens/reader-main.png" width="250" />    <img src="/screens/reader-read.png" width="250" />    <img src="/screens/reader-device.png" width="250" />
