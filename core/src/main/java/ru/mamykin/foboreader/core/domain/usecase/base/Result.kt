@@ -28,4 +28,11 @@ sealed class Result<out T> {
         onError(data)
         return this
     }
+
+    inline fun <M> catchMap(onSuccess: (T) -> M, onError: (Throwable) -> M): M {
+        return when (this) {
+            is Success<T> -> onSuccess(data)
+            is Error -> onError(exception)
+        }
+    }
 }

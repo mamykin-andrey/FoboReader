@@ -1,13 +1,14 @@
 package ru.mamykin.foboreader.store.domain.usecase
 
-import ru.mamykin.foboreader.core.domain.usecase.base.UseCase
+import ru.mamykin.foboreader.core.domain.usecase.base.SuspendUseCase
 import ru.mamykin.foboreader.store.data.BooksStoreRepository
+import ru.mamykin.foboreader.store.domain.model.StoreBook
 
 class FilterStoreBooks(
     private val repository: BooksStoreRepository
-) : UseCase<String, Unit>() {
+) : SuspendUseCase<String, List<StoreBook>>() {
 
-    override fun execute(param: String) {
-        repository.filter(param)
+    override suspend fun execute(param: String): List<StoreBook> {
+        return repository.getBooks(param)
     }
 }

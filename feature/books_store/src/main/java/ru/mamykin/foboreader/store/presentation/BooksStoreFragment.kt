@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
-import ru.mamykin.foboreader.core.presentation.BaseFragment
+import ru.mamykin.foboreader.core.presentation.NewBaseFragment
 import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBooksStoreBinding
@@ -23,10 +23,9 @@ import ru.mamykin.foboreader.store.databinding.ItemStoreBookBinding
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.presentation.list.StoreBookViewHolder
 
-class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(R.layout.fragment_books_store) {
+class BooksStoreFragment : NewBaseFragment(R.layout.fragment_books_store) {
 
-    override val viewModel: BooksStoreViewModel by viewModel()
-
+    private val feature: BooksStoreFeature by viewModel()
     private val booksSource = dataSourceTypedOf<StoreBook>()
     private val binding by viewBinding { FragmentBooksStoreBinding.bind(requireView()) }
 
@@ -35,10 +34,14 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
         initErrorView()
         initToolbar()
         initBooksList()
+        feature.stateData.observe(viewLifecycleOwner, ::showState)
+        feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 
     private fun initErrorView() {
-        binding.vError.setOnRetryClickListener { viewModel.sendEvent(Event.RetryBooksLoading) }
+        binding.vError.setOnRetryClickListener {
+            feature.sendEvent(BooksStore.Event.RetryBooksClicked)
+        }
     }
 
     private fun initToolbar() {
@@ -54,8 +57,14 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
         binding.rvBooks.setup {
             withDataSource(booksSource)
             withItem<StoreBook, StoreBookViewHolder>(R.layout.item_store_book) {
-                onBind({ StoreBookViewHolder(ItemStoreBookBinding.bind(it)) }) { _, item -> bind(item) }
-                onClick { viewModel.sendEvent(Event.DownloadBook(item)) }
+                onBind({
+                    StoreBookViewHolder(ItemStoreBookBinding.bind(it))
+                }) { _, item ->
+                    bind(item)
+                }
+                onClick {
+                    feature.sendEvent(BooksStore.Event.DownloadBookClicked(item))
+                }
             }
         }
     }
@@ -64,19 +73,19 @@ class BooksStoreFragment : BaseFragment<BooksStoreViewModel, ViewState, Effect>(
         queryHint = getString(R.string.books_store_menu_search)
         queryChanges()
             .filterNotNull()
-            .onEach { viewModel.sendEvent(Event.FilterBooks(it)) }
+            .onEach { feature.sendEvent(BooksStore.Event.FilterQueryChanged(it)) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    override fun showState(state: ViewState) {
+    private fun showState(state: BooksStore.ViewState) {
         progressView.isVisible = state.isLoading
         binding.vError.isVisible = state.isError
         booksSource.set(state.books)
     }
 
-    override fun takeEffect(effect: Effect) {
+    private fun takeEffect(effect: BooksStore.Effect) {
         when (effect) {
-            is Effect.ShowSnackbar -> showSnackbar(effect.message)
+            is BooksStore.Effect.ShowSnackbar -> showSnackbar(effect.message)
         }
     }
 }

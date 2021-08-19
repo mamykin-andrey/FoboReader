@@ -2,25 +2,38 @@ package ru.mamykin.foboreader.store.presentation
 
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 
-sealed class Action {
-    object BooksLoading : Action()
-    data class BooksLoaded(val books: List<StoreBook>) : Action()
-    object BooksLoadingFailed : Action()
-}
+object BooksStore {
 
-sealed class Event {
-    data class FilterBooks(val query: String) : Event()
-    data class DownloadBook(val book: StoreBook) : Event()
-    object RetryBooksLoading : Event()
-}
+    sealed class Event {
+        class FilterQueryChanged(val query: String) : Event()
+        class DownloadBookClicked(val book: StoreBook) : Event()
+        object RetryBooksClicked : Event()
+    }
 
-sealed class Effect {
-    data class ShowSnackbar(val message: String) : Effect()
-}
+    sealed class Intent {
+        object LoadBooks : Intent()
+        class FilterBooks(val query: String) : Intent()
+        class DownloadBook(val book: StoreBook) : Intent()
+    }
 
-// TODO: downloadBookError
-data class ViewState(
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
-    val books: List<StoreBook> = emptyList()
-)
+    sealed class Action {
+        object BooksLoading : Action()
+        class BooksLoaded(val books: List<StoreBook>) : Action()
+        class BooksLoadingError(val message: String) : Action()
+        object DownloadBookStarted : Action()
+        object BookDownloaded : Action()
+        class BookDownloadError(val message: String) : Action()
+    }
+
+    sealed class Effect {
+        class ShowSnackbar(val message: String) : Effect()
+        object NavigateToMyBooks : Effect()
+    }
+
+    // TODO: downloadBookError
+    data class ViewState(
+        val isLoading: Boolean = true,
+        val isError: Boolean = false,
+        val books: List<StoreBook> = emptyList()
+    )
+}

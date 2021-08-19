@@ -8,17 +8,19 @@ import ru.mamykin.foboreader.store.data.network.FileDownloader
 import ru.mamykin.foboreader.store.domain.usecase.DownloadBook
 import ru.mamykin.foboreader.store.domain.usecase.FilterStoreBooks
 import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
-import ru.mamykin.foboreader.store.domain.usecase.ReloadStoreBooks
-import ru.mamykin.foboreader.store.presentation.BooksStoreViewModel
+import ru.mamykin.foboreader.store.presentation.BooksStoreActor
+import ru.mamykin.foboreader.store.presentation.BooksStoreFeature
+import ru.mamykin.foboreader.store.presentation.BooksStoreReducer
 
 val booksStoreModule = module {
     single { NetworkDependencies.client() }
     single { NetworkDependencies.service(get()) }
     single { BooksStoreRepository(get()) }
     factory { FileDownloader(androidContext(), get()) }
-    factory { ReloadStoreBooks(get()) }
     factory { FilterStoreBooks(get()) }
     factory { GetStoreBooks(get()) }
     factory { DownloadBook(get()) }
-    viewModel { BooksStoreViewModel(get(), get(), get(), get(), get()) }
+    factory { BooksStoreReducer() }
+    factory { BooksStoreActor(get(), get(), get()) }
+    viewModel { BooksStoreFeature(get(), get()) }
 }
