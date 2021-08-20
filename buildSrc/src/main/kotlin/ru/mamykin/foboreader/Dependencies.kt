@@ -25,6 +25,7 @@ object Versions {
     const val leakcanaryVersion = "2.5"
     const val kotlin_version = "1.4.10"
     const val nav_version = "2.2.2"
+    const val daggerVersion = "2.38.1"
 }
 
 object Dependencies {
@@ -63,4 +64,6 @@ object Dependencies {
     const val multidex = "androidx.multidex:multidex:${Versions.multidexVersion}"
     const val recyclical = "com.afollestad:recyclical:${Versions.recyclicalVersion}"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanaryVersion}"
+    const val dagger = "com.google.dagger:dagger:${Versions.daggerVersion}"
+    const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.daggerVersion}"
 }

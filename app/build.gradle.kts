@@ -1,8 +1,9 @@
-//import ru.mamykin.foboreader.Dependencies
+import ru.mamykin.foboreader.Dependencies
 
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
     id("androidx.navigation.safeargs")
     id("ru.mamykin.foboreader")
 }
@@ -16,5 +17,6 @@ dependencies {
     implementation(project(":feature:settings"))
     implementation(project(":feature:my_books"))
     implementation(project(":feature:book_details"))
+    kapt(Dependencies.daggerCompiler)
 //    implementation(Dependencies.leakcanary)
 }

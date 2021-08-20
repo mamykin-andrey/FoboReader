@@ -46,6 +46,7 @@ dependencies {
     api(Dependencies.multidex)
 
     api(Dependencies.recyclical)
+    api(Dependencies.dagger)
 
     testApi(Dependencies.junit)
     testApi(Dependencies.mockito)
