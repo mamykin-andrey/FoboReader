@@ -18,5 +18,5 @@ dependencies {
     implementation(project(":feature:my_books"))
     implementation(project(":feature:book_details"))
     kapt(Dependencies.daggerCompiler)
-//    implementation(Dependencies.leakcanary)
+    implementation(Dependencies.leakcanary)
 }

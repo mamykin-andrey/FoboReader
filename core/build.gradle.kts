@@ -48,6 +48,8 @@ dependencies {
     api(Dependencies.recyclical)
     api(Dependencies.dagger)
 
+    api(Dependencies.cicerone)
+
     testApi(Dependencies.junit)
     testApi(Dependencies.mockito)
     testApi(Dependencies.mockitoKotlin)

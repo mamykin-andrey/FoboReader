@@ -26,6 +26,7 @@ object Versions {
     const val kotlin_version = "1.4.10"
     const val nav_version = "2.2.2"
     const val daggerVersion = "2.38.1"
+    const val ciceroneVersion = "7.1"
 }
 
 object Dependencies {
@@ -66,4 +67,5 @@ object Dependencies {
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanaryVersion}"
     const val dagger = "com.google.dagger:dagger:${Versions.daggerVersion}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.daggerVersion}"
+    const val cicerone = "com.github.terrakok:cicerone:${Versions.ciceroneVersion}"
 }
