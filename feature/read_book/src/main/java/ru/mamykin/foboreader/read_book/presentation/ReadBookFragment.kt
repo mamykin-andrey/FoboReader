@@ -12,7 +12,6 @@ import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.showSnackbar
@@ -29,9 +28,8 @@ import ru.mamykin.foboreader.read_book.presentation.view.ClickableTextView
 
 class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.layout.fragment_read_book) {
 
-    override val viewModel: ReadBookViewModel by viewModel {
-        parametersOf(ReadBookFragmentArgs.fromBundle(requireArguments()).bookId)
-    }
+    override val viewModel: ReadBookViewModel by viewModel()
+//        parametersOf(ReadBookFragmentArgs.fromBundle(requireArguments()).bookId)
 
     private val vibratorHelper: VibratorHelper by inject()
     private val appSettingsStorage: AppSettingsStorage by inject()

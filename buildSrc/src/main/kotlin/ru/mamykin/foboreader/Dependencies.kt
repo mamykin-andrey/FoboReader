@@ -24,9 +24,9 @@ object Versions {
     const val recyclicalVersion = "1.1.1"
     const val leakcanaryVersion = "2.5"
     const val kotlin_version = "1.4.10"
-    const val nav_version = "2.2.2"
     const val daggerVersion = "2.38.1"
     const val ciceroneVersion = "7.1"
+    const val lifecycleVersion = "2.3.1"
 }
 
 object Dependencies {
@@ -54,8 +54,6 @@ object Dependencies {
     const val retrofitLoggingInterceptor =
         "com.squareup.okhttp3:logging-interceptor:${Versions.retrofitLoggingInterceptorVersion}"
     const val picasso = "com.squareup.picasso:picasso:${Versions.picassoVersion}"
-    const val navigationFragment = "androidx.navigation:navigation-fragment-ktx:${Versions.nav_version}"
-    const val navigationUi = "androidx.navigation:navigation-ui-ktx:${Versions.nav_version}"
     const val flowbinding = "io.github.reactivecircus.flowbinding:flowbinding-android:${Versions.flowbindingVersion}"
     const val junit = "junit:junit:${Versions.junitVersion}"
     const val mockito = "org.mockito:mockito-core:${Versions.mockitoVersion}"
@@ -68,4 +66,7 @@ object Dependencies {
     const val dagger = "com.google.dagger:dagger:${Versions.daggerVersion}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.daggerVersion}"
     const val cicerone = "com.github.terrakok:cicerone:${Versions.ciceroneVersion}"
+    const val liveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycleVersion}"
+    const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}"
+    const val lifecycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleVersion}"
 }

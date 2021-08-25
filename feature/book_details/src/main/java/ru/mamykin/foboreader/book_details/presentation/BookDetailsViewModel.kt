@@ -1,15 +1,16 @@
 package ru.mamykin.foboreader.book_details.presentation
 
 import androidx.lifecycle.viewModelScope
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.book_details.domain.usecase.GetBookDetails
-import ru.mamykin.foboreader.book_details.navigation.BookDetailsNavigator
+import ru.mamykin.foboreader.core.navigation.screen.ReadBookScreen
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 
 class BookDetailsViewModel(
     private var bookId: Long,
     private val getBookDetails: GetBookDetails,
-    private val navigator: BookDetailsNavigator
+    private val router: Router
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isLoading = true)
 ) {
@@ -28,7 +29,9 @@ class BookDetailsViewModel(
 
     override fun onEvent(event: Event) {
         when (event) {
-            is Event.ReadBookClicked -> navigator.bookDetailsToReadBook(bookId)
+            is Event.ReadBookClicked -> {
+                router.navigateTo(ReadBookScreen())
+            }
         }
     }
 }

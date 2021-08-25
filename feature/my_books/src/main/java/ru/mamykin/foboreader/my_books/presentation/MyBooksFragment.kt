@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -24,14 +25,13 @@ import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
 import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
-import ru.mamykin.foboreader.my_books.navigation.MyBooksNavigator
 import ru.mamykin.foboreader.my_books.presentation.list.BookViewHolder
 
 class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layout.fragment_my_books) {
 
     override val viewModel: MyBooksViewModel by viewModel()
 
-    private val navigator: MyBooksNavigator by inject()
+    private val router: Router by inject()
     private val booksSource = dataSourceTypedOf<BookInfo>()
     private val binding by viewBinding { FragmentMyBooksBinding.bind(requireView()) }
 
@@ -74,10 +74,10 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layo
                 onBind({
                     BookViewHolder(
                         ItemBookBinding.bind(it),
-                        navigator::myBooksToBookDetails
+                        { TODO("Not implemented") }
                     ) { viewModel.sendEvent(Event.RemoveBook(it)) }
                 }) { _, item -> bind(item) }
-                onClick { navigator.myBooksToReadBook(item.id) }
+                onClick { TODO("Not implemented") }
             }
         }
     }

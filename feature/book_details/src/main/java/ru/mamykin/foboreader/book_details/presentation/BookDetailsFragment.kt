@@ -7,7 +7,6 @@ import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import ru.mamykin.foboreader.book_details.R
 import ru.mamykin.foboreader.book_details.databinding.FragmentBookDetailsBinding
 import ru.mamykin.foboreader.book_details.databinding.ItemBookInfoBinding
@@ -20,9 +19,8 @@ import ru.mamykin.foboreader.core.presentation.viewBinding
 
 class BookDetailsFragment : BaseFragment<BookDetailsViewModel, ViewState, Effect>(R.layout.fragment_book_details) {
 
-    override val viewModel: BookDetailsViewModel by viewModel {
-        parametersOf(BookDetailsFragmentArgs.fromBundle(requireArguments()).bookId)
-    }
+    override val viewModel: BookDetailsViewModel by viewModel()
+//        parametersOf(BookDetailsFragmentArgs.fromBundle(requireArguments()).bookId)
 
     private val binding by viewBinding { FragmentBookDetailsBinding.bind(requireView()) }
     private val bookInfoDataSource = dataSourceTypedOf<BookInfoItem>()

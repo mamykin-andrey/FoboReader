@@ -3,7 +3,6 @@ import ru.mamykin.foboreader.Dependencies
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("androidx.navigation.safeargs")
     id("ru.mamykin.foboreader")
 }
 
@@ -29,6 +28,9 @@ dependencies {
 
     api(Dependencies.lifecycleExtensions)
     api(Dependencies.lifecycleViewModel)
+    api(Dependencies.lifecycleRuntimeKtx)
+    api(Dependencies.liveDataKtx)
+    api(Dependencies.viewModelKtx)
 
     api(Dependencies.retrofit)
     api(Dependencies.retrofitGsonConverter)
@@ -37,9 +39,6 @@ dependencies {
     api(Dependencies.picasso)
     api(Dependencies.okio)
     api(Dependencies.okHttp)
-
-    api(Dependencies.navigationFragment)
-    api(Dependencies.navigationUi)
 
     api(Dependencies.flowbinding)
 
