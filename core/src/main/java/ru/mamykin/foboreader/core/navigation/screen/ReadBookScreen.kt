@@ -6,9 +6,11 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import ru.mamykin.foboreader.core.navigation.FragmentProvider
 
-class ReadBookScreen : FragmentScreen, KoinComponent {
+class ReadBookScreen(
+    private val bookId: Long
+) : FragmentScreen, KoinComponent {
 
     private val fragmentProvider: FragmentProvider by inject()
 
-    override fun createFragment(factory: FragmentFactory) = fragmentProvider.readBookFragment()
+    override fun createFragment(factory: FragmentFactory) = fragmentProvider.readBookFragment(bookId)
 }

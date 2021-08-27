@@ -10,7 +10,7 @@ import ru.mamykin.foboreader.store.presentation.BooksStoreFragment
 
 class FragmentProviderImpl : FragmentProvider {
 
-    override fun readBookFragment() = ReadBookFragment()
+    override fun readBookFragment(bookId: Long) = ReadBookFragment.newInstance(bookId)
 
     override fun bookDetailsFragment() = BookDetailsFragment()
 

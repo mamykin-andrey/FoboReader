@@ -9,14 +9,17 @@ import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
+import ru.mamykin.foboreader.core.navigation.screen.ReadBookScreen
 import ru.mamykin.foboreader.core.presentation.NewBaseFragment
 import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.my_books.R
@@ -28,9 +31,9 @@ import ru.mamykin.foboreader.my_books.presentation.list.BookViewHolder
 class MyBooksFragment : NewBaseFragment(R.layout.fragment_my_books) {
 
     private val viewModel: MyBooksViewModel by viewModel()
-//    private val router: Router by inject()
     private val booksSource = dataSourceTypedOf<BookInfo>()
     private val binding by viewBinding { FragmentMyBooksBinding.bind(requireView()) }
+    private val router: Router by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,6 +71,7 @@ class MyBooksFragment : NewBaseFragment(R.layout.fragment_my_books) {
         binding.rvMyBooks.setup {
             withEmptyView(binding.vNoBooks)
             withDataSource(booksSource)
+            // TODO: move routing to ViewModel
             withItem<BookInfo, BookViewHolder>(R.layout.item_book) {
                 onBind({
                     BookViewHolder(
@@ -75,7 +79,7 @@ class MyBooksFragment : NewBaseFragment(R.layout.fragment_my_books) {
                         { TODO("Not implemented") }
                     ) { viewModel.sendEvent(Event.RemoveBook(it)) }
                 }) { _, item -> bind(item) }
-                onClick { TODO("Not implemented") }
+                onClick { router.navigateTo(ReadBookScreen(item.id)) }
             }
         }
     }

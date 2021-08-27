@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 
 interface FragmentProvider {
 
-    fun readBookFragment(): Fragment
+    fun readBookFragment(bookId: Long): Fragment
 
     fun bookDetailsFragment(): Fragment
 

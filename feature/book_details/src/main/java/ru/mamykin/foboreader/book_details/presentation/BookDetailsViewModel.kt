@@ -8,7 +8,7 @@ import ru.mamykin.foboreader.core.navigation.screen.ReadBookScreen
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 
 class BookDetailsViewModel(
-    private var bookId: Long,
+    private val bookId: Long,
     private val getBookDetails: GetBookDetails,
     private val router: Router
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
@@ -30,7 +30,7 @@ class BookDetailsViewModel(
     override fun onEvent(event: Event) {
         when (event) {
             is Event.ReadBookClicked -> {
-                router.navigateTo(ReadBookScreen())
+                router.navigateTo(ReadBookScreen(bookId))
             }
         }
     }
