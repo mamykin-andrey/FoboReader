@@ -8,17 +8,16 @@ import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.mamykin.foboreader.core.presentation.BaseFragment
+import ru.mamykin.foboreader.core.presentation.NewBaseFragment
 import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.*
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import ru.mamykin.foboreader.settings.presentation.list.*
 
-class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Nothing>(R.layout.fragment_settings) {
+class SettingsFragment : NewBaseFragment(R.layout.fragment_settings) {
 
-    override val viewModel: SettingsViewModel by viewModel()
-
+    private val viewModel: SettingsViewModel by viewModel()
     private val binding by viewBinding { FragmentSettingsBinding.bind(requireView()) }
     private val settingsSource = dataSourceTypedOf<SettingsItem>()
 
@@ -26,6 +25,7 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Nothing>(R.l
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initSettingsList()
+        initViewModel()
     }
 
     private fun initToolbar() = toolbar!!.apply {
@@ -93,7 +93,11 @@ class SettingsFragment : BaseFragment<SettingsViewModel, ViewState, Nothing>(R.l
         }
     }
 
-    override fun showState(state: ViewState) {
+    private fun initViewModel() {
+        viewModel.stateLiveData.observe(viewLifecycleOwner, ::showState)
+    }
+
+    private fun showState(state: ViewState) {
         progressView.isVisible = state.isLoading
         binding.rvSettings.post {
             state.settings?.let(settingsSource::set)

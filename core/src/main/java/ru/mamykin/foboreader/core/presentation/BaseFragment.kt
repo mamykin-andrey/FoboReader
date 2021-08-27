@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import ru.mamykin.foboreader.core.R
 
+@Deprecated("Use common extensions instead")
 abstract class BaseFragment<VM : BaseViewModel<ViewState, out Any, out Any, Effect>, ViewState, Effect>(
     @LayoutRes layoutRes: Int
 ) : Fragment(layoutRes) {

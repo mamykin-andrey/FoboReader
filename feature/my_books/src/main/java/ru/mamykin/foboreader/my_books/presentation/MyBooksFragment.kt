@@ -9,17 +9,15 @@ import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
-import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
-import ru.mamykin.foboreader.core.presentation.BaseFragment
+import ru.mamykin.foboreader.core.presentation.NewBaseFragment
 import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
@@ -27,11 +25,10 @@ import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 import ru.mamykin.foboreader.my_books.presentation.list.BookViewHolder
 
-class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layout.fragment_my_books) {
+class MyBooksFragment : NewBaseFragment(R.layout.fragment_my_books) {
 
-    override val viewModel: MyBooksViewModel by viewModel()
-
-    private val router: Router by inject()
+    private val viewModel: MyBooksViewModel by viewModel()
+//    private val router: Router by inject()
     private val booksSource = dataSourceTypedOf<BookInfo>()
     private val binding by viewBinding { FragmentMyBooksBinding.bind(requireView()) }
 
@@ -39,6 +36,7 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layo
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initBooksList()
+        initViewModel()
     }
 
     private fun initToolbar() = toolbar!!.apply {
@@ -82,7 +80,11 @@ class MyBooksFragment : BaseFragment<MyBooksViewModel, ViewState, Effect>(R.layo
         }
     }
 
-    override fun showState(state: ViewState) {
+    private fun initViewModel() {
+        viewModel.stateLiveData.observe(viewLifecycleOwner, ::showState)
+    }
+
+    private fun showState(state: ViewState) {
         progressView.isVisible = state.isLoading
         booksSource.set(state.books)
     }
