@@ -20,5 +20,5 @@ class FragmentProviderImpl : FragmentProvider {
 
     override fun settingsFragment() = SettingsFragment()
 
-    override fun mainFragment() = TabsFragment()
+    override fun tabsFragment() = TabsFragment()
 }

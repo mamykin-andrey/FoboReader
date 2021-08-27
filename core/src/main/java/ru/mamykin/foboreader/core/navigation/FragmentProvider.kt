@@ -14,5 +14,5 @@ interface FragmentProvider {
 
     fun settingsFragment(): Fragment
 
-    fun mainFragment(): Fragment
+    fun tabsFragment(): Fragment
 }

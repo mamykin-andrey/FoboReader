@@ -7,7 +7,7 @@ import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import org.koin.android.ext.android.inject
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.navigation.screen.MainScreen
+import ru.mamykin.foboreader.core.navigation.screen.TabsScreen
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -19,12 +19,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initTheme()
-        navigatorHolder.setNavigator(AppNavigator(this, R.id.fcv_root))
-        router.navigateTo(MainScreen())
+        router.newRootChain(TabsScreen())
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        navigatorHolder.setNavigator(AppNavigator(this, R.id.fcv_root))
+    }
+
+    override fun onStop() {
+        super.onStop()
         navigatorHolder.removeNavigator()
     }
 

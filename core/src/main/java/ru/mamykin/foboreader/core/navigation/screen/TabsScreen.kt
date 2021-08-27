@@ -6,9 +6,9 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import ru.mamykin.foboreader.core.navigation.FragmentProvider
 
-class MainScreen : FragmentScreen, KoinComponent {
+class TabsScreen : FragmentScreen, KoinComponent {
 
     private val fragmentProvider: FragmentProvider by inject()
 
-    override fun createFragment(factory: FragmentFactory) = fragmentProvider.mainFragment()
+    override fun createFragment(factory: FragmentFactory) = fragmentProvider.tabsFragment()
 }
