@@ -7,7 +7,7 @@ import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import org.koin.android.ext.android.inject
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.navigation.screen.TabsScreen
+import ru.mamykin.foboreader.core.navigation.ScreenProvider
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -15,11 +15,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val appLanguageDelegate = AppLanguageDelegate(this)
     private val navigatorHolder: NavigatorHolder by inject()
     private val router: Router by inject()
+    private val screenProvider: ScreenProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initTheme()
-        router.newRootChain(TabsScreen())
+        router.newRootChain(screenProvider.tabsScreen())
     }
 
     override fun onResumeFragments() {

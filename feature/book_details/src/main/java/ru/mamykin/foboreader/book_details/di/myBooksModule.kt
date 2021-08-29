@@ -11,6 +11,7 @@ val bookDetailsModule = module {
         BookDetailsViewModel(
             bookId,
             get(),
+            get(),
             get()
         )
     }
