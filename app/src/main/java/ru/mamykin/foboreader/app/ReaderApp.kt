@@ -14,7 +14,6 @@ import org.koin.dsl.module
 import ru.mamykin.foboreader.app.di.appModule
 import ru.mamykin.foboreader.book_details.di.bookDetailsModule
 import ru.mamykin.foboreader.common_book_info.di.commonBookInfoModule
-import ru.mamykin.foboreader.core.di.coreModule
 import ru.mamykin.foboreader.core.platform.NotificationUtils
 import ru.mamykin.foboreader.my_books.di.myBooksModule
 import ru.mamykin.foboreader.read_book.di.readBookModule
@@ -44,7 +43,6 @@ class ReaderApp : MultiDexApplication() {
                         single { cicerone.router }.bind(Router::class)
                     },
                     appModule,
-                    coreModule,
                     commonBookInfoModule,
                     myBooksModule,
                     bookDetailsModule,
