@@ -9,13 +9,13 @@ import androidx.lifecycle.OnLifecycleEvent
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-fun <T> viewBinding(newBinding: () -> T) = ViewBindingProperty(newBinding)
+fun <T> Fragment.autoCleanedValue(initializer: () -> T) = AutoCleanedProperty(initializer)
 
-class ViewBindingProperty<T>(
-    val newBinding: () -> T
+class AutoCleanedProperty<T>(
+    val initializer: () -> T
 ) : ReadOnlyProperty<Fragment, T>, LifecycleObserver {
 
-    private var binding: T? = null
+    private var value: T? = null
     private var lifecycle: Lifecycle? = null
 
     @Suppress("unused")
@@ -24,15 +24,15 @@ class ViewBindingProperty<T>(
         lifecycle?.removeObserver(this)
         Handler().post {
             lifecycle = null
-            binding = null
+            value = null
         }
     }
 
     @MainThread
     override fun getValue(thisRef: Fragment, property: KProperty<*>): T {
-        return binding ?: run {
-            newBinding()
-                .also { binding = it }
+        return value ?: run {
+            initializer()
+                .also { value = it }
                 .also { lifecycle = thisRef.viewLifecycleOwner.lifecycle }
                 .also { lifecycle?.addObserver(this) }
         }

@@ -7,7 +7,6 @@ import androidx.annotation.IdRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.ListAdapter
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
@@ -15,23 +14,27 @@ import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import reactivecircus.flowbinding.android.view.clicks
-import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.navigation.screen.ReadBookScreen
-import ru.mamykin.foboreader.core.presentation.viewBinding
+import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 import ru.mamykin.foboreader.my_books.presentation.list.BookAdapter
-import ru.mamykin.foboreader.my_books.presentation.list.BookViewHolder
 
 class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
 
     private val viewModel: MyBooksViewModel by viewModel()
-    private val binding by viewBinding { FragmentMyBooksBinding.bind(requireView()) }
+    private val binding by autoCleanedValue { FragmentMyBooksBinding.bind(requireView()) }
     private val router: Router by inject()
-    private var adapter: ListAdapter<BookInfo, BookViewHolder>? = null
+    private val adapter by autoCleanedValue {
+        BookAdapter(
+            { router.navigateTo(ReadBookScreen(it)) },
+            { TODO("Not implemented") },
+            { TODO("Not implemented") }
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,11 +69,6 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
     }
 
     private fun initBooksList() {
-        adapter = BookAdapter(
-            { router.navigateTo(ReadBookScreen(it)) },
-            { TODO("Not implemented") },
-            { TODO("Not implemented") }
-        )
         binding.rvMyBooks.adapter = adapter
     }
 
@@ -94,7 +92,7 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
             }
             is ViewState.Success -> {
                 rvMyBooks.isVisible = true
-                adapter?.submitList(state.books)
+                adapter.submitList(state.books)
 
                 vProgress.root.isVisible = false
                 vNoBooks.isVisible = false
@@ -105,6 +103,5 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
     override fun onDestroyView() {
         super.onDestroyView()
         binding.rvMyBooks.adapter = null
-        adapter = null
     }
 }

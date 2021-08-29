@@ -16,7 +16,7 @@ import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.NewBaseFragment
-import ru.mamykin.foboreader.core.presentation.viewBinding
+import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBooksStoreBinding
 import ru.mamykin.foboreader.store.databinding.ItemStoreBookBinding
@@ -27,7 +27,7 @@ class BooksStoreFragment : NewBaseFragment(R.layout.fragment_books_store) {
 
     private val feature: BooksStoreFeature by viewModel()
     private val booksSource = dataSourceTypedOf<StoreBook>()
-    private val binding by viewBinding { FragmentBooksStoreBinding.bind(requireView()) }
+    private val binding by autoCleanedValue { FragmentBooksStoreBinding.bind(requireView()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

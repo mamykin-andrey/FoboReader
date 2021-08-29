@@ -20,7 +20,7 @@ import ru.mamykin.foboreader.core.extension.toHtml
 import ru.mamykin.foboreader.core.extension.trimSpecialCharacters
 import ru.mamykin.foboreader.core.platform.VibratorHelper
 import ru.mamykin.foboreader.core.presentation.BaseFragment
-import ru.mamykin.foboreader.core.presentation.viewBinding
+import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
 import ru.mamykin.foboreader.read_book.databinding.LayoutWordPopupBinding
@@ -46,7 +46,7 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
 
     private val vibratorHelper: VibratorHelper by inject()
     private val appSettingsStorage: AppSettingsStorage by inject()
-    private val binding by viewBinding { FragmentReadBookBinding.bind(requireView()) }
+    private val binding by autoCleanedValue { FragmentReadBookBinding.bind(requireView()) }
     private var lastTextHashCode: Int = 0
     private var popupWindow: PopupWindow? = null
 

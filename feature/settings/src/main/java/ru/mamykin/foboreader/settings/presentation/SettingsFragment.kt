@@ -9,7 +9,7 @@ import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.core.presentation.NewBaseFragment
-import ru.mamykin.foboreader.core.presentation.viewBinding
+import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.*
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
@@ -18,7 +18,7 @@ import ru.mamykin.foboreader.settings.presentation.list.*
 class SettingsFragment : NewBaseFragment(R.layout.fragment_settings) {
 
     private val viewModel: SettingsViewModel by viewModel()
-    private val binding by viewBinding { FragmentSettingsBinding.bind(requireView()) }
+    private val binding by autoCleanedValue { FragmentSettingsBinding.bind(requireView()) }
     private val settingsSource = dataSourceTypedOf<SettingsItem>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

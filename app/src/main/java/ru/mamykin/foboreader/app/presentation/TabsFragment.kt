@@ -5,12 +5,12 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.presentation.viewBinding
+import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.databinding.FragmentTabsBinding
 
 class TabsFragment : Fragment(R.layout.fragment_tabs) {
 
-    private val binding by viewBinding { FragmentTabsBinding.bind(requireView()) }
+    private val binding by autoCleanedValue { FragmentTabsBinding.bind(requireView()) }
     private val viewModel: TabsViewModel by viewModel()
     private val currentTabFragment: Fragment?
         get() = childFragmentManager.fragments.firstOrNull { !it.isHidden }
