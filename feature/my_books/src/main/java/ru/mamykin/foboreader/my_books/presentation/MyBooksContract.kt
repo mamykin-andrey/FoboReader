@@ -8,10 +8,15 @@ sealed class Action {
     data class BooksLoaded(val books: List<BookInfo>) : Action()
 }
 
-data class ViewState(
-    val isLoading: Boolean = false,
-    val books: List<BookInfo> = emptyList()
-)
+sealed class ViewState {
+    object Loading : ViewState()
+
+    object Empty : ViewState()
+
+    class Success(
+        val books: List<BookInfo>
+    ) : ViewState()
+}
 
 sealed class Event {
     data class RemoveBook(val id: Long) : Event()

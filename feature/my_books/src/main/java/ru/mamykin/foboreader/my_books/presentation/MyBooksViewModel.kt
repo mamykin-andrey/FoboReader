@@ -15,7 +15,7 @@ class MyBooksViewModel(
     private val filterMyBooks: FilterMyBooks,
     private val removeBook: RemoveBook
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
-    ViewState(isLoading = true)
+    ViewState.Loading
 ) {
     init {
         getMyBooks()
@@ -26,13 +26,8 @@ class MyBooksViewModel(
     }
 
     override fun onAction(action: Action): ViewState = when (action) {
-        is Action.Loading -> state.copy(
-            isLoading = true
-        )
-        is Action.BooksLoaded -> state.copy(
-            isLoading = false,
-            books = action.books
-        )
+        is Action.Loading -> ViewState.Loading
+        is Action.BooksLoaded -> ViewState.Success(action.books)
     }
 
     override fun onEvent(event: Event) {

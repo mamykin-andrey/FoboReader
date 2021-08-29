@@ -10,12 +10,19 @@ import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
 
 class BookViewHolder(
     private val binding: ItemBookBinding,
-    private val onAboutClicked: (Long) -> Unit,
-    private val onRemoveClicked: (Long) -> Unit
+    private val onBookClicked: (Int) -> Unit,
+    private val onAboutClicked: (Int) -> Unit,
+    private val onRemoveClicked: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    init {
+        binding.root.setOnClickListener {
+            onBookClicked(adapterPosition)
+        }
+    }
+
     fun bind(book: BookInfo) = binding.apply {
-        bindBookMenu(book)
+        bindBookMenu()
         bindBookCover(book)
         tvBookTitle.text = book.title
         tvAuthor.text = book.author
@@ -24,12 +31,12 @@ class BookViewHolder(
         bindFileInfo(book)
     }
 
-    private fun bindBookMenu(book: BookInfo) = binding.apply {
-        btnMenu.setOnClickListener {
-            btnMenu.showPopupMenu(
+    private fun bindBookMenu() = binding.btnMenu.apply {
+        setOnClickListener {
+            showPopupMenu(
                 R.menu.menu_book_item,
-                R.id.menu_about_book to { onAboutClicked(book.id) },
-                R.id.menu_remove_book to { onRemoveClicked(book.id) }
+                R.id.menu_about_book to { onAboutClicked(adapterPosition) },
+                R.id.menu_remove_book to { onRemoveClicked(adapterPosition) }
             )
         }
     }
@@ -55,6 +62,7 @@ class BookViewHolder(
         )
     }
 
+    // TODO: Refactor
     private fun getFileSizeDescription(fileSizeKb: Long): String {
         return if (fileSizeKb > 1024) {
             "${fileSizeKb / 1024}MB"

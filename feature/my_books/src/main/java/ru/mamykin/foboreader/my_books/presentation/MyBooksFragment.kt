@@ -5,10 +5,9 @@ import android.view.Menu
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.afollestad.recyclical.datasource.dataSourceTypedOf
-import com.afollestad.recyclical.setup
-import com.afollestad.recyclical.withItem
+import androidx.recyclerview.widget.ListAdapter
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
@@ -20,20 +19,19 @@ import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.navigation.screen.ReadBookScreen
-import ru.mamykin.foboreader.core.presentation.NewBaseFragment
 import ru.mamykin.foboreader.core.presentation.viewBinding
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
-import ru.mamykin.foboreader.my_books.databinding.ItemBookBinding
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
+import ru.mamykin.foboreader.my_books.presentation.list.BookAdapter
 import ru.mamykin.foboreader.my_books.presentation.list.BookViewHolder
 
-class MyBooksFragment : NewBaseFragment(R.layout.fragment_my_books) {
+class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
 
     private val viewModel: MyBooksViewModel by viewModel()
-    private val booksSource = dataSourceTypedOf<BookInfo>()
     private val binding by viewBinding { FragmentMyBooksBinding.bind(requireView()) }
     private val router: Router by inject()
+    private var adapter: ListAdapter<BookInfo, BookViewHolder>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,7 +40,7 @@ class MyBooksFragment : NewBaseFragment(R.layout.fragment_my_books) {
         initViewModel()
     }
 
-    private fun initToolbar() = toolbar!!.apply {
+    private fun initToolbar() = binding.vToolbar.toolbar.apply {
         title = getString(R.string.my_books_screen_title)
         navigationIcon = null
         inflateMenu(R.menu.menu_books_list)
@@ -68,28 +66,45 @@ class MyBooksFragment : NewBaseFragment(R.layout.fragment_my_books) {
     }
 
     private fun initBooksList() {
-        binding.rvMyBooks.setup {
-            withEmptyView(binding.vNoBooks)
-            withDataSource(booksSource)
-            // TODO: move routing to ViewModel
-            withItem<BookInfo, BookViewHolder>(R.layout.item_book) {
-                onBind({
-                    BookViewHolder(
-                        ItemBookBinding.bind(it),
-                        { TODO("Not implemented") }
-                    ) { viewModel.sendEvent(Event.RemoveBook(it)) }
-                }) { _, item -> bind(item) }
-                onClick { router.navigateTo(ReadBookScreen(item.id)) }
-            }
-        }
+        adapter = BookAdapter(
+            { router.navigateTo(ReadBookScreen(it)) },
+            { TODO("Not implemented") },
+            { TODO("Not implemented") }
+        )
+        binding.rvMyBooks.adapter = adapter
     }
 
     private fun initViewModel() {
         viewModel.stateLiveData.observe(viewLifecycleOwner, ::showState)
     }
 
-    private fun showState(state: ViewState) {
-        progressView.isVisible = state.isLoading
-        booksSource.set(state.books)
+    private fun showState(state: ViewState) = with(binding) {
+        when (state) {
+            is ViewState.Loading -> {
+                vProgress.root.isVisible = true
+
+                vNoBooks.isVisible = false
+                rvMyBooks.isVisible = false
+            }
+            is ViewState.Empty -> {
+                vNoBooks.isVisible = true
+
+                vProgress.root.isVisible = false
+                rvMyBooks.isVisible = false
+            }
+            is ViewState.Success -> {
+                rvMyBooks.isVisible = true
+                adapter?.submitList(state.books)
+
+                vProgress.root.isVisible = false
+                vNoBooks.isVisible = false
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvMyBooks.adapter = null
+        adapter = null
     }
 }
