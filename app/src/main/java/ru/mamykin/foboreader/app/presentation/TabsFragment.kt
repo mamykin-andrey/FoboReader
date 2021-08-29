@@ -1,10 +1,13 @@
 package ru.mamykin.foboreader.app.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.core.navigation.BackPressedListener
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.databinding.FragmentTabsBinding
 
@@ -40,32 +43,43 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
         }
     }
 
+    // TODO: onTabReselected???
+
     private fun selectTab(tab: Tab) {
-        val currentFragment = currentTabFragment
-        val newFragment = childFragmentManager.findFragmentByTag(tab.tag)
-
-        if (currentFragment != null && newFragment != null && currentFragment == newFragment) return
-
-        childFragmentManager.beginTransaction().apply {
-            if (newFragment == null) add(R.id.fr_tabs_host, createTabFragment(tab), tab.tag)
-
-            currentFragment?.let {
-                hide(it)
-                it.userVisibleHint = false
+        val fm = childFragmentManager // TODO: ???
+        var currentFragment: Fragment? = null
+        val fragments = fm.fragments
+        for (f in fragments) {
+            if (f.isVisible) {
+                currentFragment = f
+                break
             }
-            newFragment?.let {
-                show(it)
-                it.userVisibleHint = true
-            }
-        }.commitNow()
+        }
+        val newFragment = fm.findFragmentByTag(tab.tag)
+        if (currentFragment != null && newFragment != null && currentFragment === newFragment) return
+        val transaction = fm.beginTransaction()
+        if (newFragment == null) {
+            transaction.add(
+                R.id.fr_tabs_host,
+                tab.newFragment(), tab.tag
+            )
+        }
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+        if (newFragment != null) {
+            transaction.show(newFragment)
+        }
+        transaction.commitNow()
     }
 
-    private fun createTabFragment(tab: Tab) = tab.newFragment()
-
-    // TODO:
-//    override fun onBackPressed() {
-//        val currentFragment = (supportFragmentManager.findFragmentByTag(currentTab) as TabNavigationFragment)
-//        if (!currentFragment.onBackPressed())
-//            finish()
-//    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (currentTabFragment as BackPressedListener).onBackPressed()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
 }
