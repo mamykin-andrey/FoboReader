@@ -6,8 +6,9 @@ import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.store.domain.usecase.DownloadBook
 import ru.mamykin.foboreader.store.domain.usecase.FilterStoreBooks
 import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
+import javax.inject.Inject
 
-class BooksStoreActor(
+class BooksStoreActor @Inject constructor(
     private val downloadStoreBook: DownloadBook,
     private val getStoreBooks: GetStoreBooks,
     private val filterStoreBooks: FilterStoreBooks

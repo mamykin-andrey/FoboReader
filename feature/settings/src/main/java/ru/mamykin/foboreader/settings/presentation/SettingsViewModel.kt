@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.settings.domain.usecase.*
+import javax.inject.Inject
 
-class SettingsViewModel(
+class SettingsViewModel @Inject constructor(
     getSettings: GetSettings,
     private val setBrightness: SetBrightness,
     private val setTextSize: SetTextSize,

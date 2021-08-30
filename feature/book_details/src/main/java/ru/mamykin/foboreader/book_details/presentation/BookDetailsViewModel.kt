@@ -6,9 +6,11 @@ import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.book_details.domain.usecase.GetBookDetails
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
+import javax.inject.Inject
+import javax.inject.Named
 
-class BookDetailsViewModel(
-    private val bookId: Long,
+class BookDetailsViewModel @Inject constructor(
+    @Named("bookId") private val bookId: Long,
     private val getBookDetails: GetBookDetails,
     private val router: Router,
     private val screenProvider: ScreenProvider

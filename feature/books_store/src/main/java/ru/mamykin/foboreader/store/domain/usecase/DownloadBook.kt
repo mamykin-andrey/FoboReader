@@ -4,8 +4,9 @@ import ru.mamykin.foboreader.core.domain.usecase.base.SuspendUseCase
 import ru.mamykin.foboreader.store.data.network.DownloadFileException
 import ru.mamykin.foboreader.store.data.network.FileDownloader
 import ru.mamykin.foboreader.store.domain.model.StoreBook
+import javax.inject.Inject
 
-class DownloadBook(
+class DownloadBook @Inject constructor(
     private val fileDownloader: FileDownloader
 ) : SuspendUseCase<StoreBook, Unit>() {
 

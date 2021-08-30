@@ -6,8 +6,9 @@ import kotlinx.coroutines.flow.map
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.domain.usecase.base.FlowUseCase
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
+import javax.inject.Inject
 
-class GetSettings(
+class GetSettings @Inject constructor(
     private val settingsStorage: AppSettingsStorage
 ) : FlowUseCase<Unit, List<SettingsItem>>() {
 

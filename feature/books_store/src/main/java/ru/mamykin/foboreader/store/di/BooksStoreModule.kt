@@ -1,26 +1,19 @@
 package ru.mamykin.foboreader.store.di
 
-import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.dsl.module
-import ru.mamykin.foboreader.store.data.BooksStoreRepository
-import ru.mamykin.foboreader.store.data.network.FileDownloader
-import ru.mamykin.foboreader.store.domain.usecase.DownloadBook
-import ru.mamykin.foboreader.store.domain.usecase.FilterStoreBooks
-import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
-import ru.mamykin.foboreader.store.presentation.BooksStoreActor
-import ru.mamykin.foboreader.store.presentation.BooksStoreFeature
-import ru.mamykin.foboreader.store.presentation.BooksStoreReducer
+import dagger.Module
+import dagger.Provides
+import okhttp3.OkHttpClient
+import ru.mamykin.foboreader.core.data.RetrofitServiceFactory
+import ru.mamykin.foboreader.core.di.qualifier.CommonClient
+import ru.mamykin.foboreader.store.data.network.BooksStoreService
 
-val booksStoreModule = module {
-    single { NetworkDependencies.client() }
-    single { NetworkDependencies.service(get()) }
-    single { BooksStoreRepository(get()) }
-    factory { FileDownloader(androidContext(), get()) }
-    factory { FilterStoreBooks(get()) }
-    factory { GetStoreBooks(get()) }
-    factory { DownloadBook(get()) }
-    factory { BooksStoreReducer() }
-    factory { BooksStoreActor(get(), get(), get()) }
-    viewModel { BooksStoreFeature(get(), get()) }
+@Module
+class BooksStoreModule {
+
+    @Provides
+    fun provideBooksStoreService(@CommonClient client: OkHttpClient): BooksStoreService =
+        RetrofitServiceFactory.create(
+            client,
+            BooksStoreService.BASE_URL
+        )
 }

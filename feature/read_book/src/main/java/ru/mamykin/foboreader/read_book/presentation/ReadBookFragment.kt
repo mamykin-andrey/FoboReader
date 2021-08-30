@@ -10,24 +10,23 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.extension.toHtml
 import ru.mamykin.foboreader.core.extension.trimSpecialCharacters
 import ru.mamykin.foboreader.core.platform.VibratorHelper
-import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
 import ru.mamykin.foboreader.read_book.databinding.LayoutWordPopupBinding
+import ru.mamykin.foboreader.read_book.di.ReadBookComponentHolder
 import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
 import ru.mamykin.foboreader.read_book.presentation.view.ClickableTextView
+import javax.inject.Inject
 
-class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.layout.fragment_read_book) {
+class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
 
     companion object {
 
@@ -40,15 +39,24 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
         }
     }
 
-    override val viewModel: ReadBookViewModel by viewModel {
-        parametersOf(requireArguments().getLong(EXTRA_BOOK_ID))
-    }
+    @Inject
+    lateinit var viewModel: ReadBookViewModel
 
-    private val vibratorHelper: VibratorHelper by inject()
-    private val appSettingsStorage: AppSettingsStorage by inject()
+    @Inject
+    lateinit var vibratorHelper: VibratorHelper
+
+    @Inject
+    lateinit var appSettingsStorage: AppSettingsStorage
+
     private val binding by autoCleanedValue { FragmentReadBookBinding.bind(requireView()) }
     private var lastTextHashCode: Int = 0
     private var popupWindow: PopupWindow? = null
+    private val bookId: Long by lazy { requireArguments().getLong(EXTRA_BOOK_ID) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (requireActivity().application as ReadBookComponentHolder).readBookComponent(bookId).inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,20 +72,22 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
                 viewModel.sendEvent(Event.TranslateWord(word.trimSpecialCharacters()))
             }
         })
+        viewModel.stateLiveData.observe(viewLifecycleOwner, ::showState)
+        viewModel.effectLiveData.observe(viewLifecycleOwner, ::takeEffect)
     }
 
-    override fun showState(state: ViewState) {
-        progressView.isVisible = state.isTranslationLoading
+    private fun showState(state: ViewState) = with(binding) {
+        vProgress.flContentLoading.isVisible = state.isTranslationLoading
         showBookText(state.text)
         state.wordTranslation?.let(::showWordTranslation) ?: popupWindow?.dismiss()
         state.paragraphTranslation?.let(::showParagraphTranslation)
-        binding.tvName.text = state.title
-        binding.tvRead.text = getString(
+        tvName.text = state.title
+        tvRead.text = getString(
             R.string.read_book_user_read_pages,
             state.currentPage,
             state.totalPages
         )
-        binding.tvReadPercent.text = state.readPercent.toString()
+        tvReadPercent.text = state.readPercent.toString()
     }
 
     private fun showBookText(text: String) {
@@ -123,7 +133,7 @@ class ReadBookFragment : BaseFragment<ReadBookViewModel, ViewState, Effect>(R.la
         }
     }
 
-    override fun takeEffect(effect: Effect) {
+    private fun takeEffect(effect: Effect) {
         when (effect) {
             is Effect.ShowSnackbar -> showSnackbar(effect.messageId)
         }

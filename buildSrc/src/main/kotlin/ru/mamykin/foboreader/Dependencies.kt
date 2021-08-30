@@ -2,7 +2,6 @@ package ru.mamykin.foboreader
 
 object Versions {
     const val viewModelVersion = "1.1.0"
-    const val koinVersion = "2.0.1"
     const val roomVersion = "2.2.1"
     const val coroutinesVersion = "1.3.2"
     const val retrofitVersion = "2.3.0"
@@ -35,8 +34,6 @@ object Dependencies {
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerViewVersion}"
     const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutinesVersion}"
     const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutinesVersion}"
-    const val koinScope = "org.koin:koin-androidx-scope:${Versions.koinVersion}"
-    const val koinViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koinVersion}"
     const val roomRuntime = "androidx.room:room-runtime:${Versions.roomVersion}"
     const val roomKtx = "androidx.room:room-ktx:${Versions.roomVersion}"
     const val roomCompiler = "androidx.room:room-compiler:${Versions.roomVersion}"

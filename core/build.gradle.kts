@@ -16,9 +16,6 @@ dependencies {
     api(Dependencies.coroutinesCore)
     api(Dependencies.coroutinesAndroid)
 
-    api(Dependencies.koinScope)
-    api(Dependencies.koinViewModel)
-
     api(Dependencies.roomRuntime)
     api(Dependencies.roomKtx)
 

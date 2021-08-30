@@ -8,7 +8,9 @@
     android:orientation="vertical"
     tools:context="presentation.ReadBookFragment">
 
-    <include layout="@layout/view_content_progress" />
+    <include
+        android:id="@+id/v_progress"
+        layout="@layout/view_content_progress" />
 
     <ru.mamykin.foboreader.read_book.presentation.view.ClickableTextView
         android:id="@+id/tv_text"

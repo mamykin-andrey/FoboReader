@@ -2,23 +2,31 @@ package ru.mamykin.foboreader.app.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import org.koin.android.ext.android.inject
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.app.di.MainComponentHolder
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val nightThemeDelegate = NightThemeDelegate(this)
     private val appLanguageDelegate = AppLanguageDelegate(this)
-    private val navigatorHolder: NavigatorHolder by inject()
-    private val router: Router by inject()
-    private val screenProvider: ScreenProvider by inject()
+
+    @Inject
+    lateinit var cicerone: Cicerone<Router>
+
+    @Inject
+    lateinit var screenProvider: ScreenProvider
+
+    private val router by lazy { cicerone.router }
+    private val navigatorHolder by lazy { cicerone.getNavigatorHolder() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (application as MainComponentHolder).mainComponent().inject(this)
         initTheme()
         router.newRootChain(screenProvider.tabsScreen())
     }

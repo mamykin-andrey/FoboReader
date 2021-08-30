@@ -8,9 +8,13 @@
     android:orientation="vertical"
     tools:context="presentation.SettingsFragment">
 
-    <include layout="@layout/view_toolbar" />
+    <include
+        android:id="@+id/v_toolbar"
+        layout="@layout/view_toolbar" />
 
-    <include layout="@layout/view_content_progress" />
+    <include
+        android:id="@+id/v_progress"
+        layout="@layout/view_content_progress" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_settings"

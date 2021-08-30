@@ -9,15 +9,17 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.buffer
 import okio.sink
+import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.core.extension.getExternalMediaDir
 import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.core.platform.NotificationUtils
 import ru.mamykin.foboreader.store.R
 import java.io.File
+import javax.inject.Inject
 
-class FileDownloader(
+class FileDownloader @Inject constructor(
     private val context: Context,
-    private val client: OkHttpClient
+    @CommonClient private val client: OkHttpClient
 ) {
     private val notificationManager by lazy { NotificationManagerCompat.from(context) }
     private val notificationStartTitle by lazy { context.getString(R.string.books_store_download_progress) }

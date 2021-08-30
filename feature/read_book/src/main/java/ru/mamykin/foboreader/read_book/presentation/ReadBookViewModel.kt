@@ -5,9 +5,11 @@ import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.domain.usecase.*
+import javax.inject.Inject
+import javax.inject.Named
 
-class ReadBookViewModel(
-    private val bookId: Long,
+class ReadBookViewModel @Inject constructor(
+    @Named("bookId") private val bookId: Long,
     private val getBookContent: GetBookContent,
     private val getParagraphTranslation: GetParagraphTranslation,
     private val getWordTranslation: GetWordTranslation,

@@ -2,11 +2,12 @@ package ru.mamykin.foboreader.my_books.domain.helper
 
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import java.io.File
+import javax.inject.Inject
 import javax.xml.parsers.SAXParserFactory
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class BookInfoParser {
+class BookInfoParser @Inject constructor() {
 
     suspend fun parse(filePath: String): BookInfo = suspendCoroutine { cont ->
         runCatching {

@@ -2,8 +2,9 @@ package ru.mamykin.foboreader.common_book_info.data.repository
 
 import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import javax.inject.Inject
 
-class BookInfoRepository constructor(
+class BookInfoRepository @Inject constructor(
     private val bookInfoDao: BookInfoDao
 ) {
     suspend fun getBooks(): List<BookInfo> {

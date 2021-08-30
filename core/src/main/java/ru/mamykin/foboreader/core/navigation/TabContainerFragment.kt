@@ -9,8 +9,8 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import org.koin.android.ext.android.inject
 import ru.mamykin.foboreader.core.R
+import javax.inject.Inject
 
 /**
  * Created by terrakok 25.11.16
@@ -23,7 +23,8 @@ abstract class TabContainerFragment(
         AppNavigator(requireActivity(), R.id.ftc_container, childFragmentManager)
     }
 
-    private val ciceroneHolder: LocalCiceroneHolder by inject()
+    @Inject
+    lateinit var ciceroneHolder: LocalCiceroneHolder
 
     override val router: Router
         get() = cicerone.router

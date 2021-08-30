@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.my_books.domain.usecase.*
+import javax.inject.Inject
 
-class MyBooksViewModel(
+class MyBooksViewModel @Inject constructor(
     getMyBooks: GetMyBooks,
     scanBooks: ScanBooks,
     private val sortMyBooks: SortMyBooks,

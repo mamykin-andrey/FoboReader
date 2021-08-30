@@ -4,8 +4,11 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AppSettingsStorage(
+@Singleton
+class AppSettingsStorage @Inject constructor(
     private val prefManager: PreferencesManager
 ) {
     companion object {

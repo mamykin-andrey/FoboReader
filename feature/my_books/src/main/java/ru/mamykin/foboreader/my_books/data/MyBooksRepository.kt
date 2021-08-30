@@ -14,8 +14,9 @@ import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.my_books.domain.helper.BookFilesScanner
 import ru.mamykin.foboreader.my_books.domain.helper.BooksComparatorFactory
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
+import javax.inject.Inject
 
-class MyBooksRepository(
+class MyBooksRepository @Inject constructor(
     private val repository: BookInfoRepository,
     private val booksScanner: BookFilesScanner,
     private val context: Context

@@ -1,14 +1,21 @@
-package ru.mamykin.foboreader.app.presentation
+package ru.mamykin.foboreader.app.presentation.tabs
 
 import android.os.Bundle
-import org.koin.android.ext.android.inject
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.app.di.MainComponentHolder
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.navigation.TabContainerFragment
+import javax.inject.Inject
 
 class SettingsTabFragment : TabContainerFragment(Tab.SettingsTab.tag) {
 
-    private val screenProvider: ScreenProvider by inject()
+    @Inject
+    lateinit var screenProvider: ScreenProvider
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (requireActivity().application as MainComponentHolder).mainComponent().inject(this)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

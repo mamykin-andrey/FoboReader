@@ -1,8 +1,9 @@
 package ru.mamykin.foboreader.store.presentation
 
 import ru.mamykin.foboreader.core.presentation.Reducer
+import javax.inject.Inject
 
-class BooksStoreReducer : Reducer<BooksStore.ViewState, BooksStore.Action, BooksStore.Effect> {
+class BooksStoreReducer @Inject constructor() : Reducer<BooksStore.ViewState, BooksStore.Action, BooksStore.Effect> {
 
     override operator fun invoke(state: BooksStore.ViewState, action: BooksStore.Action) = when (action) {
         is BooksStore.Action.BooksLoading -> {

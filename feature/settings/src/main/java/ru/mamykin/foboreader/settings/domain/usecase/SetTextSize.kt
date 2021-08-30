@@ -2,8 +2,9 @@ package ru.mamykin.foboreader.settings.domain.usecase
 
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.domain.usecase.base.UseCase
+import javax.inject.Inject
 
-class SetTextSize(
+class SetTextSize @Inject constructor(
     private val appSettings: AppSettingsStorage
 ) : UseCase<SetTextSize.Action, Unit>() {
 

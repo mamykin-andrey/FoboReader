@@ -2,27 +2,33 @@ package ru.mamykin.foboreader.app
 
 import androidx.multidex.MultiDexApplication
 import com.github.terrakok.cicerone.Cicerone
-import com.github.terrakok.cicerone.NavigatorHolder
-import com.github.terrakok.cicerone.Router
 import leakcanary.LeakCanary
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
-import org.koin.dsl.bind
-import org.koin.dsl.module
-import ru.mamykin.foboreader.app.di.appModule
-import ru.mamykin.foboreader.book_details.di.bookDetailsModule
-import ru.mamykin.foboreader.common_book_info.di.commonBookInfoModule
+import ru.mamykin.foboreader.app.di.AppComponent
+import ru.mamykin.foboreader.app.di.DaggerAppComponent
+import ru.mamykin.foboreader.app.di.MainComponent
+import ru.mamykin.foboreader.app.di.MainComponentHolder
+import ru.mamykin.foboreader.book_details.di.BookDetailsComponent
+import ru.mamykin.foboreader.book_details.di.BookDetailsComponentHolder
 import ru.mamykin.foboreader.core.platform.NotificationUtils
-import ru.mamykin.foboreader.my_books.di.myBooksModule
-import ru.mamykin.foboreader.read_book.di.readBookModule
-import ru.mamykin.foboreader.settings.di.settingsModule
-import ru.mamykin.foboreader.store.di.booksStoreModule
+import ru.mamykin.foboreader.my_books.di.MyBooksComponent
+import ru.mamykin.foboreader.my_books.di.MyBooksComponentHolder
+import ru.mamykin.foboreader.read_book.di.ReadBookComponent
+import ru.mamykin.foboreader.read_book.di.ReadBookComponentHolder
+import ru.mamykin.foboreader.settings.di.SettingsComponent
+import ru.mamykin.foboreader.settings.di.SettingsComponentHolder
+import ru.mamykin.foboreader.store.di.BooksStoreComponent
+import ru.mamykin.foboreader.store.di.BooksStoreComponentHolder
 
 @Suppress("unused")
-class ReaderApp : MultiDexApplication() {
+class ReaderApp : MultiDexApplication(),
+    MainComponentHolder,
+    BooksStoreComponentHolder,
+    SettingsComponentHolder,
+    BookDetailsComponentHolder,
+    MyBooksComponentHolder,
+    ReadBookComponentHolder {
 
+    private lateinit var appComponent: AppComponent
     private val cicerone = Cicerone.create()
 
     override fun onCreate() {
@@ -33,25 +39,7 @@ class ReaderApp : MultiDexApplication() {
     }
 
     private fun initDi() {
-        startKoin {
-            androidLogger(Level.DEBUG)
-            androidContext(applicationContext)
-            modules(
-                listOf(
-                    module {
-                        single { cicerone.getNavigatorHolder() }.bind(NavigatorHolder::class)
-                        single { cicerone.router }.bind(Router::class)
-                    },
-                    appModule,
-                    commonBookInfoModule,
-                    myBooksModule,
-                    bookDetailsModule,
-                    booksStoreModule,
-                    settingsModule,
-                    readBookModule
-                )
-            )
-        }
+        appComponent = DaggerAppComponent.factory().create(this, cicerone)
     }
 
     private fun initLeakCanary() {
@@ -59,5 +47,23 @@ class ReaderApp : MultiDexApplication() {
             retainedVisibleThreshold = 2
         )
         LeakCanary.config = newConfig
+    }
+
+    override fun mainComponent(): MainComponent = appComponent.mainComponent()
+
+    override fun booksStoreComponent(): BooksStoreComponent = appComponent.booksStoreComponent()
+
+    override fun settingsComponent(): SettingsComponent = appComponent.settingsComponent()
+
+    override fun bookDetailsComponent(bookId: Long): BookDetailsComponent {
+        return appComponent.bookDetailsComponentFactory()
+            .create(bookId)
+    }
+
+    override fun myBooksComponent(): MyBooksComponent = appComponent.myBooksComponent()
+
+    override fun readBookComponent(bookId: Long): ReadBookComponent {
+        return appComponent.readBookComponentFactory()
+            .create(bookId)
     }
 }

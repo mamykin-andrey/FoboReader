@@ -1,24 +1,45 @@
 package ru.mamykin.foboreader.app.di
 
-import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.dsl.bind
-import org.koin.dsl.module
+import android.content.Context
+import com.github.terrakok.cicerone.Cicerone
+import com.github.terrakok.cicerone.Router
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import okhttp3.OkHttpClient
 import ru.mamykin.foboreader.app.navigation.ScreenProviderImpl
-import ru.mamykin.foboreader.app.presentation.TabsViewModel
-import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
-import ru.mamykin.foboreader.core.data.storage.PreferencesManager
-import ru.mamykin.foboreader.core.domain.usecase.GetVibrationEnabled
-import ru.mamykin.foboreader.core.navigation.LocalCiceroneHolder
+import ru.mamykin.foboreader.app.presentation.tabs.TabsViewModel
+import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
+import ru.mamykin.foboreader.common_book_info.di.BookInfoDaoFactory
+import ru.mamykin.foboreader.core.data.OkHttpFactory
+import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
-import ru.mamykin.foboreader.core.platform.VibratorHelper
+import javax.inject.Singleton
 
-val appModule = module {
-    viewModel { TabsViewModel() }
-    single { ScreenProviderImpl() }.bind(ScreenProvider::class)
-    single { LocalCiceroneHolder() }.bind(LocalCiceroneHolder::class)
-    single { PreferencesManager(get()) }
-    single { AppSettingsStorage(get()) }
-    factory { GetVibrationEnabled(get()) }
-    single { VibratorHelper(androidContext(), get()) }
+@Module(includes = [AppModule.BindsModule::class])
+class AppModule {
+
+    @Provides
+    fun provideTabsViewModel() = TabsViewModel()
+
+    @Provides
+    @Singleton
+    @CommonClient
+    fun provideCommonClient(): OkHttpClient = OkHttpFactory.create(true)
+
+    @Provides
+    @Singleton
+    fun provideBookInfoDao(context: Context): BookInfoDao = BookInfoDaoFactory.create(context)
+
+    @Provides
+    @Singleton
+    fun provideRouter(cicerone: Cicerone<Router>): Router = cicerone.router
+
+    @Module
+    interface BindsModule {
+
+        @Binds
+        @Singleton
+        fun bindScreenProvider(impl: ScreenProviderImpl): ScreenProvider
+    }
 }

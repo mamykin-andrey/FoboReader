@@ -6,8 +6,9 @@ import ru.mamykin.foboreader.common_book_info.data.model.toDatabaseModel
 import ru.mamykin.foboreader.core.extension.getExternalMediaDir
 import ru.mamykin.foboreader.core.extension.isFictionBook
 import ru.mamykin.foboreader.core.platform.Log
+import javax.inject.Inject
 
-class BookFilesScanner(
+class BookFilesScanner @Inject constructor(
     private val context: Context,
     private val bookInfoDao: BookInfoDao,
     private val bookInfoParser: BookInfoParser

@@ -3,23 +3,31 @@ package ru.mamykin.foboreader.settings.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.mamykin.foboreader.core.presentation.NewBaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.*
+import ru.mamykin.foboreader.settings.di.SettingsComponentHolder
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import ru.mamykin.foboreader.settings.presentation.list.*
+import javax.inject.Inject
 
-class SettingsFragment : NewBaseFragment(R.layout.fragment_settings) {
+class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
-    private val viewModel: SettingsViewModel by viewModel()
+    @Inject
+    lateinit var viewModel: SettingsViewModel
+
     private val binding by autoCleanedValue { FragmentSettingsBinding.bind(requireView()) }
     private val settingsSource = dataSourceTypedOf<SettingsItem>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (requireActivity().application as SettingsComponentHolder).settingsComponent().inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,9 +36,11 @@ class SettingsFragment : NewBaseFragment(R.layout.fragment_settings) {
         initViewModel()
     }
 
-    private fun initToolbar() = toolbar!!.apply {
-        setTitle(R.string.settings_title)
-        navigationIcon = null
+    private fun initToolbar() {
+        binding.vToolbar.toolbar.apply {
+            setTitle(R.string.settings_title)
+            navigationIcon = null
+        }
     }
 
     private fun initSettingsList() {
@@ -98,7 +108,7 @@ class SettingsFragment : NewBaseFragment(R.layout.fragment_settings) {
     }
 
     private fun showState(state: ViewState) {
-        progressView.isVisible = state.isLoading
+        binding.vProgress.flContentLoading.isVisible = state.isLoading
         binding.rvSettings.post {
             state.settings?.let(settingsSource::set)
         }

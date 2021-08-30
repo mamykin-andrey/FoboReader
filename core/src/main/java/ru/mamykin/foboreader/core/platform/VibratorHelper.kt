@@ -5,8 +5,11 @@ import android.content.Context
 import android.os.VibrationEffect
 import android.os.Vibrator
 import ru.mamykin.foboreader.core.domain.usecase.GetVibrationEnabled
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class VibratorHelper(
+@Singleton
+class VibratorHelper @Inject constructor(
     context: Context,
     private val getVibrationEnabled: GetVibrationEnabled
 ) {

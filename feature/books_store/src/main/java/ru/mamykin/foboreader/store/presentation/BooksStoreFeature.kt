@@ -1,8 +1,9 @@
 package ru.mamykin.foboreader.store.presentation
 
 import ru.mamykin.foboreader.core.presentation.Feature
+import javax.inject.Inject
 
-class BooksStoreFeature(
+class BooksStoreFeature @Inject constructor(
     reducer: BooksStoreReducer,
     actor: BooksStoreActor
 ) : Feature<BooksStore.ViewState, BooksStore.Intent, BooksStore.Effect, BooksStore.Action, Nothing>(

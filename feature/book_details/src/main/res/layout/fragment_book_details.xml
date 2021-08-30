@@ -8,7 +8,9 @@
     android:orientation="vertical"
     tools:context="ru.mamykin.foboreader.book_details.presentation.BookDetailsFragment">
 
-    <include layout="@layout/view_toolbar" />
+    <include
+        android:id="@+id/v_toolbar"
+        layout="@layout/view_toolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

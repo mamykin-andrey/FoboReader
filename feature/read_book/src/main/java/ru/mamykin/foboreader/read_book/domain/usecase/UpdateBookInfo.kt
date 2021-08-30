@@ -2,8 +2,9 @@ package ru.mamykin.foboreader.read_book.domain.usecase
 
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.core.domain.usecase.base.SuspendUseCase
+import javax.inject.Inject
 
-class UpdateBookInfo(
+class UpdateBookInfo @Inject constructor(
     private val bookInfoRepository: BookInfoRepository
 ) : SuspendUseCase<UpdateBookInfo.Param, Unit>() {
 

@@ -3,8 +3,11 @@ package ru.mamykin.foboreader.core.data.storage
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PreferencesManager constructor(
+@Singleton
+class PreferencesManager @Inject constructor(
     context: Context
 ) {
     private val sharedPreferences: SharedPreferences = context

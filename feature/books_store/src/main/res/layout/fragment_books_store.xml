@@ -8,9 +8,13 @@
     android:orientation="vertical"
     tools:context="presentation.BooksStoreFragment">
 
-    <include layout="@layout/view_toolbar" />
+    <include
+        android:id="@+id/v_toolbar"
+        layout="@layout/view_toolbar" />
 
-    <include layout="@layout/view_content_progress" />
+    <include
+        android:id="@+id/v_progress"
+        layout="@layout/view_content_progress" />
 
     <ru.mamykin.foboreader.core.presentation.ErrorStateView
         android:id="@+id/v_error"

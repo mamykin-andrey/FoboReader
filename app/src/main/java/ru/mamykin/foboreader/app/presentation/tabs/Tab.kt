@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.app.presentation
+package ru.mamykin.foboreader.app.presentation.tabs
 
 import androidx.fragment.app.Fragment
 

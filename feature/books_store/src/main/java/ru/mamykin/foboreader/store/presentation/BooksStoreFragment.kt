@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
@@ -11,23 +12,30 @@ import com.afollestad.recyclical.withItem
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
-import ru.mamykin.foboreader.core.presentation.NewBaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBooksStoreBinding
 import ru.mamykin.foboreader.store.databinding.ItemStoreBookBinding
+import ru.mamykin.foboreader.store.di.BooksStoreComponentHolder
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.presentation.list.StoreBookViewHolder
+import javax.inject.Inject
 
-class BooksStoreFragment : NewBaseFragment(R.layout.fragment_books_store) {
+class BooksStoreFragment : Fragment(R.layout.fragment_books_store) {
 
-    private val feature: BooksStoreFeature by viewModel()
+    @Inject
+    lateinit var feature: BooksStoreFeature
+
     private val booksSource = dataSourceTypedOf<StoreBook>()
     private val binding by autoCleanedValue { FragmentBooksStoreBinding.bind(requireView()) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (requireActivity().application as BooksStoreComponentHolder).booksStoreComponent().inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,7 +53,7 @@ class BooksStoreFragment : NewBaseFragment(R.layout.fragment_books_store) {
     }
 
     private fun initToolbar() {
-        toolbar!!.apply {
+        binding.vToolbar.toolbar.apply {
             title = getString(R.string.books_store_title)
             navigationIcon = null
             inflateMenu(R.menu.menu_books_store)
@@ -78,7 +86,7 @@ class BooksStoreFragment : NewBaseFragment(R.layout.fragment_books_store) {
     }
 
     private fun showState(state: BooksStore.ViewState) {
-        progressView.isVisible = state.isLoading
+        binding.vProgress.flContentLoading.isVisible = state.isLoading
         binding.vError.isVisible = state.isError
         booksSource.set(state.books)
     }

@@ -1,20 +1,23 @@
-package ru.mamykin.foboreader.app.presentation
+package ru.mamykin.foboreader.app.presentation.tabs
 
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.navigation.BackPressedListener
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.databinding.FragmentTabsBinding
+import javax.inject.Inject
 
 class TabsFragment : Fragment(R.layout.fragment_tabs) {
 
     private val binding by autoCleanedValue { FragmentTabsBinding.bind(requireView()) }
-    private val viewModel: TabsViewModel by viewModel()
+
+    @Inject
+    lateinit var viewModel: TabsViewModel
+
     private val currentTabFragment: Fragment?
         get() = childFragmentManager.fragments.firstOrNull { !it.isHidden }
 
@@ -43,10 +46,8 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
         }
     }
 
-    // TODO: onTabReselected???
-
     private fun selectTab(tab: Tab) {
-        val fm = childFragmentManager // TODO: ???
+        val fm = childFragmentManager
         var currentFragment: Fragment? = null
         val fragments = fm.fragments
         for (f in fragments) {

@@ -5,18 +5,24 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import org.koin.android.ext.android.inject
 import ru.mamykin.foboreader.settings.R
+import ru.mamykin.foboreader.settings.di.SettingsComponentHolder
 import ru.mamykin.foboreader.settings.domain.usecase.GetAppLanguages
 import ru.mamykin.foboreader.settings.domain.usecase.SetAppLanguage
+import javax.inject.Inject
 
 class SelectAppLanguageDialog : DialogFragment() {
 
-    private val getAppLanguages: GetAppLanguages by inject()
-    private val setAppLanguage: SetAppLanguage by inject()
+    @Inject
+    lateinit var getAppLanguages: GetAppLanguages
+
+    @Inject
+    lateinit var setAppLanguage: SetAppLanguage
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        (requireActivity().application as SettingsComponentHolder).settingsComponent().inject(this)
+
         val supportedLanguages = getAppLanguages(Unit)
             .getOrThrow()
         val supportedLanguagesNames = supportedLanguages.map { it.first }.toTypedArray()

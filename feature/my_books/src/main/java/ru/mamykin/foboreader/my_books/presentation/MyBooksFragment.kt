@@ -10,8 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
@@ -20,13 +18,19 @@ import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
+import ru.mamykin.foboreader.my_books.di.MyBooksComponentHolder
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 import ru.mamykin.foboreader.my_books.presentation.list.BookAdapter
+import javax.inject.Inject
 
 class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
 
-    private val screenProvider: ScreenProvider by inject()
-    private val viewModel: MyBooksViewModel by viewModel()
+    @Inject
+    lateinit var screenProvider: ScreenProvider
+
+    @Inject
+    lateinit var viewModel: MyBooksViewModel
+
     private val binding by autoCleanedValue { FragmentMyBooksBinding.bind(requireView()) }
     private val router by autoCleanedValue { (parentFragment as RouterProvider).router }
     private val adapter by autoCleanedValue {
@@ -35,6 +39,11 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
             { TODO("Not implemented") },
             { TODO("Not implemented") }
         )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (requireActivity().application as MyBooksComponentHolder).myBooksComponent().inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

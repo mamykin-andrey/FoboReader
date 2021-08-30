@@ -4,8 +4,9 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import ru.mamykin.foboreader.store.data.network.BooksStoreService
 import ru.mamykin.foboreader.store.domain.model.StoreBook
+import javax.inject.Inject
 
-class BooksStoreRepository(
+class BooksStoreRepository @Inject constructor(
     private val service: BooksStoreService
 ) {
     private var allBooks: List<StoreBook>? = null
