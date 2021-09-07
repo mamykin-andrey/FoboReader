@@ -5,8 +5,9 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.di.SettingsComponentHolder
+import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.domain.usecase.GetAppLanguages
 import ru.mamykin.foboreader.settings.domain.usecase.SetAppLanguage
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class SelectAppLanguageDialog : DialogFragment() {
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        (requireActivity().application as SettingsComponentHolder).settingsComponent().inject(this)
+        DaggerSettingsComponent.factory().create(apiHolder().commonApi(), apiHolder().settingsApi()).inject(this)
 
         val supportedLanguages = getAppLanguages(Unit)
             .getOrThrow()

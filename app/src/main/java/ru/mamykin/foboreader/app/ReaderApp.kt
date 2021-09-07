@@ -14,12 +14,9 @@ import ru.mamykin.foboreader.my_books.di.MyBooksComponent
 import ru.mamykin.foboreader.my_books.di.MyBooksComponentHolder
 import ru.mamykin.foboreader.read_book.di.ReadBookComponent
 import ru.mamykin.foboreader.read_book.di.ReadBookComponentHolder
-import ru.mamykin.foboreader.settings.di.SettingsComponent
-import ru.mamykin.foboreader.settings.di.SettingsComponentHolder
 
 @Suppress("unused")
 class ReaderApp : MultiDexApplication(),
-    SettingsComponentHolder,
     BookDetailsComponentHolder,
     MyBooksComponentHolder,
     ReadBookComponentHolder,
@@ -47,8 +44,6 @@ class ReaderApp : MultiDexApplication(),
         )
         LeakCanary.config = newConfig
     }
-
-    override fun settingsComponent(): SettingsComponent = appComponent.settingsComponent()
 
     override fun bookDetailsComponent(bookId: Long): BookDetailsComponent {
         return appComponent.bookDetailsComponentFactory()

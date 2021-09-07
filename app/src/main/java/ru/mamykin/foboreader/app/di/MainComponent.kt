@@ -7,6 +7,7 @@ import ru.mamykin.foboreader.app.presentation.tabs.MyBooksTabFragment
 import ru.mamykin.foboreader.app.presentation.tabs.SettingsTabFragment
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 
+// TODO: STORE IT SOMEWHERE
 @MainScope
 @Component(dependencies = [NavigationApi::class])
 interface MainComponent {

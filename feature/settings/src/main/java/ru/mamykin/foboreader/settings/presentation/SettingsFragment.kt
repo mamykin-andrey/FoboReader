@@ -8,10 +8,11 @@ import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
+import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.*
-import ru.mamykin.foboreader.settings.di.SettingsComponentHolder
+import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import ru.mamykin.foboreader.settings.presentation.list.*
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as SettingsComponentHolder).settingsComponent().inject(this)
+        DaggerSettingsComponent.factory().create(apiHolder().commonApi(), apiHolder().settingsApi()).inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

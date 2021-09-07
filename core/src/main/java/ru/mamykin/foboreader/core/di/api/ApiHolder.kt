@@ -7,4 +7,6 @@ interface ApiHolder {
     fun networkApi(): NetworkApi
 
     fun commonApi(): CommonApi
+
+    fun settingsApi(): SettingsApi
 }

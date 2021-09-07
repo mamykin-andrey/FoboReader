@@ -8,10 +8,11 @@ import androidx.fragment.app.DialogFragment
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
+import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.DialogColorPickerBinding
 import ru.mamykin.foboreader.settings.databinding.ItemColorBinding
-import ru.mamykin.foboreader.settings.di.SettingsComponentHolder
+import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.domain.model.ColorItem
 import ru.mamykin.foboreader.settings.domain.usecase.GetTranslationColors
 import ru.mamykin.foboreader.settings.domain.usecase.SetTranslationColor
@@ -30,7 +31,7 @@ class ColorPickerDialogFragment : DialogFragment() {
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        (requireActivity().application as SettingsComponentHolder).settingsComponent().inject(this)
+        DaggerSettingsComponent.factory().create(apiHolder().commonApi(), apiHolder().settingsApi()).inject(this)
 
         val inflater = requireActivity().layoutInflater
         val view = inflater.inflate(R.layout.dialog_color_picker, null)
