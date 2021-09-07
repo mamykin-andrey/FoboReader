@@ -12,6 +12,7 @@ import com.afollestad.recyclical.withItem
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
@@ -19,7 +20,7 @@ import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBooksStoreBinding
 import ru.mamykin.foboreader.store.databinding.ItemStoreBookBinding
-import ru.mamykin.foboreader.store.di.BooksStoreComponentHolder
+import ru.mamykin.foboreader.store.di.DaggerBooksStoreComponent
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.presentation.list.StoreBookViewHolder
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class BooksStoreFragment : Fragment(R.layout.fragment_books_store) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as BooksStoreComponentHolder).booksStoreComponent().inject(this)
+        DaggerBooksStoreComponent.factory().create(apiHolder().commonApi(), apiHolder().networkApi()).inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
