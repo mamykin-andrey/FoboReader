@@ -2,7 +2,8 @@ package ru.mamykin.foboreader.app.presentation.tabs
 
 import android.os.Bundle
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.app.di.MainComponentHolder
+import ru.mamykin.foboreader.app.di.DaggerMainComponent
+import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.navigation.TabContainerFragment
 import javax.inject.Inject
@@ -14,7 +15,7 @@ class BooksStoreTabFragment : TabContainerFragment(Tab.BooksStoreTab.tag) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as MainComponentHolder).mainComponent().inject(this)
+        DaggerMainComponent.factory().create(apiHolder().navigationApi()).inject(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
