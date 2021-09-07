@@ -18,6 +18,8 @@ class MyBooksViewModel @Inject constructor(
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState.Loading
 ) {
+    private val reducer = MyBooksReducer()
+
     init {
         getMyBooks()
             .map { Action.BooksLoaded(it.getOrThrow()) }
@@ -26,10 +28,7 @@ class MyBooksViewModel @Inject constructor(
         viewModelScope.launch { scanBooks(Unit) }
     }
 
-    override fun onAction(action: Action): ViewState = when (action) {
-        is Action.Loading -> ViewState.Loading
-        is Action.BooksLoaded -> ViewState.Success(action.books)
-    }
+    override fun onAction(action: Action): ViewState = reducer.invoke(action)
 
     override fun onEvent(event: Event) {
         viewModelScope.launch {
@@ -37,6 +36,19 @@ class MyBooksViewModel @Inject constructor(
                 is Event.RemoveBook -> removeBook(event.id)
                 is Event.SortBooks -> sortMyBooks(event.sortOrder)
                 is Event.FilterBooks -> filterMyBooks(event.query)
+            }
+        }
+    }
+
+    private class MyBooksReducer : (Action) -> ViewState {
+
+        override operator fun invoke(action: Action): ViewState = when (action) {
+            is Action.Loading -> ViewState.Loading
+            is Action.BooksLoaded -> {
+                if (action.books.isEmpty())
+                    ViewState.Empty
+                else
+                    ViewState.Success(action.books)
             }
         }
     }

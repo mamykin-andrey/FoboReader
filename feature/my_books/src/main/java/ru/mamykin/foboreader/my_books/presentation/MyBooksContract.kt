@@ -13,7 +13,7 @@ sealed class ViewState {
 
     object Empty : ViewState()
 
-    class Success(
+    data class Success(
         val books: List<BookInfo>
     ) : ViewState()
 }
