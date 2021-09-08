@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.app.di
 
-import android.content.Context
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 import dagger.Binds
@@ -9,8 +8,6 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import ru.mamykin.foboreader.app.navigation.ScreenProviderImpl
 import ru.mamykin.foboreader.app.presentation.tabs.TabsViewModel
-import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
-import ru.mamykin.foboreader.common_book_info.di.BookInfoDaoFactory
 import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
@@ -26,10 +23,6 @@ class AppModule {
     @Singleton
     @CommonClient
     fun provideCommonClient(): OkHttpClient = OkHttpFactory.create(true)
-
-    @Provides
-    @Singleton
-    fun provideBookInfoDao(context: Context): BookInfoDao = BookInfoDaoFactory.create(context)
 
     @Provides
     @Singleton

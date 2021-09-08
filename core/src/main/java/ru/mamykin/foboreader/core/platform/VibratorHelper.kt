@@ -6,14 +6,13 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import ru.mamykin.foboreader.core.domain.usecase.GetVibrationEnabled
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class VibratorHelper @Inject constructor(
     context: Context,
     private val getVibrationEnabled: GetVibrationEnabled
 ) {
     private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
     private val clickVibrationEnabled: Boolean
         get() = getVibrationEnabled(Unit).getOrThrow()
 

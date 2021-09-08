@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
+import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.navigation.RouterProvider
@@ -18,7 +19,7 @@ import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.databinding.FragmentMyBooksBinding
-import ru.mamykin.foboreader.my_books.di.MyBooksComponentHolder
+import ru.mamykin.foboreader.my_books.di.DaggerMyBooksComponent
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 import ru.mamykin.foboreader.my_books.presentation.list.BookAdapter
 import javax.inject.Inject
@@ -43,7 +44,7 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as MyBooksComponentHolder).myBooksComponent().inject(this)
+        DaggerMyBooksComponent.factory().create(apiHolder().navigationApi(), apiHolder().commonApi()).inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

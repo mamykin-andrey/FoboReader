@@ -6,21 +6,11 @@ import leakcanary.LeakCanary
 import ru.mamykin.foboreader.app.di.ApiHolderImpl
 import ru.mamykin.foboreader.app.di.AppComponent
 import ru.mamykin.foboreader.app.di.DaggerAppComponent
-import ru.mamykin.foboreader.book_details.di.BookDetailsComponent
-import ru.mamykin.foboreader.book_details.di.BookDetailsComponentHolder
 import ru.mamykin.foboreader.core.di.api.ApiHolderProvider
 import ru.mamykin.foboreader.core.platform.NotificationUtils
-import ru.mamykin.foboreader.my_books.di.MyBooksComponent
-import ru.mamykin.foboreader.my_books.di.MyBooksComponentHolder
-import ru.mamykin.foboreader.read_book.di.ReadBookComponent
-import ru.mamykin.foboreader.read_book.di.ReadBookComponentHolder
 
 @Suppress("unused")
-class ReaderApp : MultiDexApplication(),
-    BookDetailsComponentHolder,
-    MyBooksComponentHolder,
-    ReadBookComponentHolder,
-    ApiHolderProvider {
+class ReaderApp : MultiDexApplication(), ApiHolderProvider {
 
     private lateinit var appComponent: AppComponent
     private val cicerone = Cicerone.create()
@@ -43,17 +33,5 @@ class ReaderApp : MultiDexApplication(),
             retainedVisibleThreshold = 2
         )
         LeakCanary.config = newConfig
-    }
-
-    override fun bookDetailsComponent(bookId: Long): BookDetailsComponent {
-        return appComponent.bookDetailsComponentFactory()
-            .create(bookId)
-    }
-
-    override fun myBooksComponent(): MyBooksComponent = appComponent.myBooksComponent()
-
-    override fun readBookComponent(bookId: Long): ReadBookComponent {
-        return appComponent.readBookComponentFactory()
-            .create(bookId)
     }
 }

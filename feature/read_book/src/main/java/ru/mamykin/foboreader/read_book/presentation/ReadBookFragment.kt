@@ -12,16 +12,13 @@ import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
-import ru.mamykin.foboreader.core.extension.setColor
-import ru.mamykin.foboreader.core.extension.showSnackbar
-import ru.mamykin.foboreader.core.extension.toHtml
-import ru.mamykin.foboreader.core.extension.trimSpecialCharacters
+import ru.mamykin.foboreader.core.extension.*
 import ru.mamykin.foboreader.core.platform.VibratorHelper
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
 import ru.mamykin.foboreader.read_book.databinding.LayoutWordPopupBinding
-import ru.mamykin.foboreader.read_book.di.ReadBookComponentHolder
+import ru.mamykin.foboreader.read_book.di.DaggerReadBookComponent
 import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
 import ru.mamykin.foboreader.read_book.presentation.view.ClickableTextView
 import javax.inject.Inject
@@ -55,7 +52,13 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as ReadBookComponentHolder).readBookComponent(bookId).inject(this)
+        DaggerReadBookComponent.factory().create(
+            bookId,
+            apiHolder().networkApi(),
+            apiHolder().navigationApi(),
+            apiHolder().commonApi(),
+            apiHolder().settingsApi()
+        ).inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

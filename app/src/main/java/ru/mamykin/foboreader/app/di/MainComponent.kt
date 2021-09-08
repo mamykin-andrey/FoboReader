@@ -6,6 +6,12 @@ import ru.mamykin.foboreader.app.presentation.tabs.BooksStoreTabFragment
 import ru.mamykin.foboreader.app.presentation.tabs.MyBooksTabFragment
 import ru.mamykin.foboreader.app.presentation.tabs.SettingsTabFragment
 import ru.mamykin.foboreader.core.di.api.NavigationApi
+import javax.inject.Scope
+
+@Scope
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class MainScope
 
 // TODO: STORE IT SOMEWHERE
 @MainScope

@@ -10,20 +10,43 @@ import com.squareup.picasso.Picasso
 import ru.mamykin.foboreader.book_details.R
 import ru.mamykin.foboreader.book_details.databinding.FragmentBookDetailsBinding
 import ru.mamykin.foboreader.book_details.databinding.ItemBookInfoBinding
+import ru.mamykin.foboreader.book_details.di.DaggerBookDetailsComponent
 import ru.mamykin.foboreader.book_details.presentation.list.BookInfoViewHolder
 import ru.mamykin.foboreader.book_details.presentation.model.BookInfoItem
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import javax.inject.Inject
 
 class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
 
+    companion object {
+
+        private const val EXTRA_BOOK_ID = "extra_book_id"
+
+        fun newInstance(bookId: Long): Fragment = BookDetailsFragment().apply {
+            arguments = Bundle(1).apply {
+                putLong(EXTRA_BOOK_ID, bookId)
+            }
+        }
+    }
+
     @Inject
     lateinit var viewModel: BookDetailsViewModel
 
     private val binding by autoCleanedValue { FragmentBookDetailsBinding.bind(requireView()) }
     private val bookInfoDataSource = dataSourceTypedOf<BookInfoItem>()
+    private val bookId by lazy { requireArguments().getLong(EXTRA_BOOK_ID) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        DaggerBookDetailsComponent.factory().create(
+            bookId,
+            apiHolder().navigationApi(),
+            apiHolder().commonApi()
+        ).inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)

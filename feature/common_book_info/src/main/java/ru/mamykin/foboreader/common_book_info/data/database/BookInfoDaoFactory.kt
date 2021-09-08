@@ -1,9 +1,7 @@
-package ru.mamykin.foboreader.common_book_info.di
+package ru.mamykin.foboreader.common_book_info.data.database
 
 import android.content.Context
 import androidx.room.Room
-import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
-import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDatabase
 
 object BookInfoDaoFactory {
 
