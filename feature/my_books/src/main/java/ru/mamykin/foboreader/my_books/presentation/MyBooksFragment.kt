@@ -37,7 +37,7 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
     private val adapter by autoCleanedValue {
         BookAdapter(
             { router.navigateTo(screenProvider.readBookScreen(it)) },
-            { TODO("Not implemented") },
+            { router.navigateTo(screenProvider.bookDetailsScreen(it)) },
             { TODO("Not implemented") }
         )
     }

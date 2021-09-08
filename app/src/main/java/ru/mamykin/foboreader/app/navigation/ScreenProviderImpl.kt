@@ -21,9 +21,9 @@ class ScreenProviderImpl @Inject constructor() : ScreenProvider {
         override fun createFragment(factory: FragmentFactory) = ReadBookFragment.newInstance(bookId)
     }
 
-    override fun bookDetailsScreen() = object : FragmentScreen {
+    override fun bookDetailsScreen(bookId: Long) = object : FragmentScreen {
 
-        override fun createFragment(factory: FragmentFactory) = BookDetailsFragment()
+        override fun createFragment(factory: FragmentFactory) = BookDetailsFragment.newInstance(bookId)
     }
 
     override fun booksStoreScreen() = object : FragmentScreen {

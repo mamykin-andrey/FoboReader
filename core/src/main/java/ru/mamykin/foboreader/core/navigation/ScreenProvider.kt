@@ -6,7 +6,7 @@ interface ScreenProvider {
 
     fun readBookScreen(bookId: Long): Screen
 
-    fun bookDetailsScreen(): Screen
+    fun bookDetailsScreen(bookId: Long): Screen
 
     fun booksStoreScreen(): Screen
 
