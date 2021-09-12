@@ -87,7 +87,7 @@ class BooksStoreFragment : Fragment(R.layout.fragment_books_store) {
     }
 
     private fun showState(state: BooksStore.ViewState) {
-        binding.vProgress.flContentLoading.isVisible = state.isLoading
+        binding.pbLoadingBooks.isVisible = state.isLoading
         binding.vError.isVisible = state.isError
         booksSource.set(state.books)
     }

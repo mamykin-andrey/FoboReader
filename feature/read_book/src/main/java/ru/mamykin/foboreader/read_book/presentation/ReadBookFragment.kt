@@ -80,7 +80,7 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
     }
 
     private fun showState(state: ViewState) = with(binding) {
-        vProgress.flContentLoading.isVisible = state.isTranslationLoading
+        pbLoadingBook.isVisible = state.isTranslationLoading
         showBookText(state.text)
         state.wordTranslation?.let(::showWordTranslation) ?: popupWindow?.dismiss()
         state.paragraphTranslation?.let(::showParagraphTranslation)

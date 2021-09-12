@@ -6,5 +6,6 @@ include(
     ":feature:read_book",
     ":feature:books_store",
     ":feature:my_books",
-    ":feature:book_details"
+    ":feature:book_details",
+    ":widgets:progress_bar"
 )

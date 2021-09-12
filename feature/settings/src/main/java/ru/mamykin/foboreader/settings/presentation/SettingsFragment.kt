@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.settings.presentation
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
@@ -109,7 +108,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun showState(state: ViewState) {
-        binding.vProgress.flContentLoading.isVisible = state.isLoading
         binding.rvSettings.post {
             state.settings?.let(settingsSource::set)
         }

@@ -10,5 +10,6 @@ plugins {
 dependencies {
     implementation(project(":core"))
     implementation(project(":feature:common_book_info"))
+    implementation(project(":widgets:progress_bar"))
     kapt(Dependencies.daggerCompiler)
 }

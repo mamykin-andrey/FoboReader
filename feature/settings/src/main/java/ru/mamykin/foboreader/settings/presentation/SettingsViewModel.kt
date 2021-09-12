@@ -17,7 +17,7 @@ class SettingsViewModel @Inject constructor(
     private val setUseVibration: SetUseVibration,
 //    private val router: Router
 ) : BaseViewModel<ViewState, Action, Event, Nothing>(
-    ViewState(isLoading = true)
+    ViewState()
 ) {
     init {
         getSettings()
@@ -28,7 +28,6 @@ class SettingsViewModel @Inject constructor(
 
     override fun onAction(action: Action): ViewState = when (action) {
         is Action.SettingsLoaded -> state.copy(
-            isLoading = false,
             settings = action.settings
         )
     }

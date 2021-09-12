@@ -92,7 +92,7 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
     private fun showState(state: ViewState) = with(binding) {
         when (state) {
             is ViewState.Loading -> {
-                vProgress.root.isVisible = true
+                pbLoadingBooks.isVisible = true
 
                 vNoBooks.isVisible = false
                 rvMyBooks.isVisible = false
@@ -100,14 +100,14 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
             is ViewState.Empty -> {
                 vNoBooks.isVisible = true
 
-                vProgress.root.isVisible = false
+                pbLoadingBooks.isVisible = false
                 rvMyBooks.isVisible = false
             }
             is ViewState.Success -> {
                 rvMyBooks.isVisible = true
                 adapter.submitList(state.books)
 
-                vProgress.root.isVisible = false
+                pbLoadingBooks.isVisible = false
                 vNoBooks.isVisible = false
             }
         }

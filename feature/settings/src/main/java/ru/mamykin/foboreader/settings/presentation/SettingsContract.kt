@@ -17,6 +17,5 @@ sealed class Action {
 }
 
 data class ViewState(
-    val isLoading: Boolean = false,
     val settings: List<SettingsItem>? = null
 )

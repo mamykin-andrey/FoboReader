@@ -12,9 +12,11 @@
         android:id="@+id/v_toolbar"
         layout="@layout/view_toolbar" />
 
-    <include
-        android:id="@+id/v_progress"
-        layout="@layout/view_content_progress" />
+    <ru.mamykin.foboreader.progress_bar.ProgressBarWidget
+        android:id="@+id/pb_loading_books"
+        android:layout_width="@dimen/progress_bar_default_size"
+        android:layout_height="@dimen/progress_bar_default_size"
+        android:layout_gravity="center" />
 
     <TextView
         android:id="@+id/v_no_books"
