@@ -16,6 +16,8 @@ class SelectAppLanguageDialogFragment : DialogFragment() {
 
     companion object {
 
+        const val TAG = "SelectAppLanguageDialogFragment"
+
         fun newInstance() = SelectAppLanguageDialogFragment()
     }
 
@@ -33,13 +35,13 @@ class SelectAppLanguageDialogFragment : DialogFragment() {
             apiHolder().navigationApi()
         ).inject(this)
 
-        val supportedLanguages = getAppLanguages(Unit)
-            .getOrThrow()
+        val supportedLanguages = getAppLanguages(Unit).getOrThrow()
         val supportedLanguagesNames = supportedLanguages.map { it.first }.toTypedArray()
 
         return AlertDialog.Builder(requireContext())
             .setTitle(R.string.select_app_language)
             .setItems(supportedLanguagesNames) { _, index ->
+                dismiss()
                 supportedLanguages.getOrNull(index)
                     ?.second
                     ?.let(setAppLanguage::invoke)

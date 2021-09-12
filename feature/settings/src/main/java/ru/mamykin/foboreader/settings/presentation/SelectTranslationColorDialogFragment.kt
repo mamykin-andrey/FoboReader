@@ -19,11 +19,13 @@ import ru.mamykin.foboreader.settings.domain.usecase.SetTranslationColor
 import ru.mamykin.foboreader.settings.presentation.list.ColorItemViewHolder
 import javax.inject.Inject
 
-class ColorPickerDialogFragment : DialogFragment() {
+class SelectTranslationColorDialogFragment : DialogFragment() {
 
     companion object {
 
-        fun newInstance(): DialogFragment = ColorPickerDialogFragment()
+        const val TAG = "ColorPickerDialogFragment"
+
+        fun newInstance(): DialogFragment = SelectTranslationColorDialogFragment()
     }
 
     private val colorsDataSource = dataSourceTypedOf<ColorItem>()

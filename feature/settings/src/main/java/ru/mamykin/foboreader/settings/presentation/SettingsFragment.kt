@@ -13,6 +13,7 @@ import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.*
 import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
+import ru.mamykin.foboreader.settings.navigation.DialogNavigator
 import ru.mamykin.foboreader.settings.presentation.list.*
 import javax.inject.Inject
 
@@ -109,11 +110,24 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun initViewModel() {
         viewModel.stateLiveData.observe(viewLifecycleOwner, ::showState)
+        viewModel.navigateData.observe(viewLifecycleOwner, ::showDialog)
     }
 
     private fun showState(state: ViewState) {
         binding.rvSettings.post {
             state.settings?.let(settingsSource::set)
         }
+    }
+
+    private fun showDialog(dialog: DialogNavigator.Dialog) {
+        val (fragment, tag) = when (dialog) {
+            is DialogNavigator.Dialog.SelectAppLanguage -> {
+                SelectAppLanguageDialogFragment.newInstance() to SelectAppLanguageDialogFragment.TAG
+            }
+            is DialogNavigator.Dialog.SelectTranslationColor -> {
+                SelectTranslationColorDialogFragment.newInstance() to SelectTranslationColorDialogFragment.TAG
+            }
+        }
+        fragment.show(childFragmentManager, tag)
     }
 }

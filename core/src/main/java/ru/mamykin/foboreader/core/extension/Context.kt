@@ -1,8 +1,6 @@
 package ru.mamykin.foboreader.core.extension
 
 import android.content.Context
-import android.os.Build
-import android.util.TypedValue
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
@@ -19,12 +17,8 @@ fun Fragment.showSnackbar(message: String, long: Boolean = false) {
         ?.let { Snackbar.make(it, message, duration) }
 }
 
-fun Context.getExternalMediaDir(): File? =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        externalMediaDirs.first()
-    } else {
-        getExternalFilesDir(null)
-    }
+@Deprecated("Use externalMediaDirs.first() direcly")
+fun Context.getExternalMediaDir(): File? = externalMediaDirs.first()
 
 //var AppCompatActivity?.nightMode: Boolean
 //    get() = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
@@ -38,22 +32,13 @@ fun Context.getExternalMediaDir(): File? =
 //        }
 //    }
 
-//fun Activity.setCurrentLocale(languageCode: String) {
-//    if (resources.configuration.locale.language == languageCode) return
-//    resources.apply {
-//        configuration.setLocale(Locale(languageCode))
-//        updateConfiguration(configuration, displayMetrics)
-//    }
-//    recreate()
+//fun Context.dpToPx(value: Int): Float {
+//    return TypedValue.applyDimension(
+//        TypedValue.COMPLEX_UNIT_DIP,
+//        value.toFloat(),
+//        resources.displayMetrics
+//    )
 //}
-
-fun Context.dpToPx(value: Int): Float {
-    return TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        value.toFloat(),
-        resources.displayMetrics
-    )
-}
 
 //@Suppress("deprecation")
 //fun Context.getCurrentLocaleName(): String {

@@ -1,15 +1,13 @@
 package ru.mamykin.foboreader.settings.presentation
 
 import androidx.lifecycle.viewModelScope
-import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.settings.domain.usecase.*
-import ru.mamykin.foboreader.settings.navigation.SelectAppLanguageScreen
-import ru.mamykin.foboreader.settings.navigation.SelectTranslationColorScreen
+import ru.mamykin.foboreader.settings.navigation.DialogNavigator
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
@@ -17,11 +15,14 @@ class SettingsViewModel @Inject constructor(
     private val setBrightness: SetBrightness,
     private val setTextSize: SetTextSize,
     private val setNightTheme: SetNightTheme,
-    private val setUseVibration: SetUseVibration,
-    private val router: Router
+    private val setUseVibration: SetUseVibration
 ) : BaseViewModel<ViewState, Action, Event, Nothing>(
     ViewState()
 ) {
+    private val dialogNavigator = DialogNavigator()
+
+    val navigateData = dialogNavigator.navigateData
+
     init {
         getSettings()
             .map { it.getOrThrow() }
@@ -42,8 +43,8 @@ class SettingsViewModel @Inject constructor(
                 is Event.NightThemeChanged -> setNightTheme(event.isEnabled)
                 is Event.IncreaseTextSizeClicked -> setTextSize(SetTextSize.Action.Increase)
                 is Event.DecreaseTextSizeClicked -> setTextSize(SetTextSize.Action.Decrease)
-                is Event.SelectReadColorClicked -> router.navigateTo(SelectTranslationColorScreen())
-                is Event.SelectAppLanguage -> router.navigateTo(SelectAppLanguageScreen())
+                is Event.SelectReadColorClicked -> dialogNavigator.showSelectTranslationColorDialog()
+                is Event.SelectAppLanguage -> dialogNavigator.showSelectLanguageDialog()
                 is Event.UseVibrationChanged -> setUseVibration(event.enabled)
             }
         }

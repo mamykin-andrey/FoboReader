@@ -4,7 +4,7 @@ import dagger.Component
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
-import ru.mamykin.foboreader.settings.presentation.ColorPickerDialogFragment
+import ru.mamykin.foboreader.settings.presentation.SelectTranslationColorDialogFragment
 import ru.mamykin.foboreader.settings.presentation.SelectAppLanguageDialogFragment
 import ru.mamykin.foboreader.settings.presentation.SettingsFragment
 import javax.inject.Scope
@@ -20,7 +20,7 @@ interface SettingsComponent {
 
     fun inject(fragment: SettingsFragment)
 
-    fun inject(fragment: ColorPickerDialogFragment)
+    fun inject(fragment: SelectTranslationColorDialogFragment)
 
     fun inject(fragment: SelectAppLanguageDialogFragment)
 
