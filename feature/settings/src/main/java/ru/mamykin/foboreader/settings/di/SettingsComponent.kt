@@ -2,9 +2,10 @@ package ru.mamykin.foboreader.settings.di
 
 import dagger.Component
 import ru.mamykin.foboreader.core.di.api.CommonApi
+import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.settings.presentation.ColorPickerDialogFragment
-import ru.mamykin.foboreader.settings.presentation.SelectAppLanguageDialog
+import ru.mamykin.foboreader.settings.presentation.SelectAppLanguageDialogFragment
 import ru.mamykin.foboreader.settings.presentation.SettingsFragment
 import javax.inject.Scope
 
@@ -13,23 +14,23 @@ import javax.inject.Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class SettingsScope
 
-// TODO: STORE IT SOMEWHERE
 @SettingsScope
-@Component(dependencies = [CommonApi::class, SettingsApi::class])
+@Component(dependencies = [CommonApi::class, SettingsApi::class, NavigationApi::class])
 interface SettingsComponent {
 
     fun inject(fragment: SettingsFragment)
 
     fun inject(fragment: ColorPickerDialogFragment)
 
-    fun inject(fragment: SelectAppLanguageDialog)
+    fun inject(fragment: SelectAppLanguageDialogFragment)
 
     @Component.Factory
     interface Factory {
 
         fun create(
             commonApi: CommonApi,
-            settingsApi: SettingsApi
+            settingsApi: SettingsApi,
+            navigationApi: NavigationApi
         ): SettingsComponent
     }
 }

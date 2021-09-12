@@ -12,7 +12,12 @@ import ru.mamykin.foboreader.settings.domain.usecase.GetAppLanguages
 import ru.mamykin.foboreader.settings.domain.usecase.SetAppLanguage
 import javax.inject.Inject
 
-class SelectAppLanguageDialog : DialogFragment() {
+class SelectAppLanguageDialogFragment : DialogFragment() {
+
+    companion object {
+
+        fun newInstance() = SelectAppLanguageDialogFragment()
+    }
 
     @Inject
     lateinit var getAppLanguages: GetAppLanguages
@@ -22,7 +27,11 @@ class SelectAppLanguageDialog : DialogFragment() {
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        DaggerSettingsComponent.factory().create(apiHolder().commonApi(), apiHolder().settingsApi()).inject(this)
+        DaggerSettingsComponent.factory().create(
+            apiHolder().commonApi(),
+            apiHolder().settingsApi(),
+            apiHolder().navigationApi()
+        ).inject(this)
 
         val supportedLanguages = getAppLanguages(Unit)
             .getOrThrow()

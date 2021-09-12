@@ -10,7 +10,6 @@ class GetSelectedLanguage @Inject constructor(
 ) : UseCase<Unit, Pair<String, String>>() {
 
     override fun execute(param: Unit): Pair<String, String> {
-        // TODO: refactor this piece of shit
         val selectedLanguageCode = appSettings.appLanguageField.get()
         return supportedAppLanguages.find { it.second == selectedLanguageCode } ?: supportedAppLanguages.first()
     }

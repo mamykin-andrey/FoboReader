@@ -62,7 +62,6 @@ class BookViewHolder(
         )
     }
 
-    // TODO: Refactor
     private fun getFileSizeDescription(fileSizeKb: Long): String {
         return if (fileSizeKb > 1024) {
             "${fileSizeKb / 1024}MB"

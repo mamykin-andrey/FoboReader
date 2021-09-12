@@ -26,7 +26,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerSettingsComponent.factory().create(apiHolder().commonApi(), apiHolder().settingsApi()).inject(this)
+        DaggerSettingsComponent.factory().create(
+            apiHolder().commonApi(),
+            apiHolder().settingsApi(),
+            apiHolder().navigationApi()
+        ).inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -30,7 +30,6 @@ object BooksStore {
         object NavigateToMyBooks : Effect()
     }
 
-    // TODO: downloadBookError
     data class ViewState(
         val isLoading: Boolean = true,
         val isError: Boolean = false,

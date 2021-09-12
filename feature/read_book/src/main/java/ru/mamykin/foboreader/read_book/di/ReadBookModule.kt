@@ -11,8 +11,7 @@ import ru.mamykin.foboreader.core.data.RetrofitServiceFactory
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.read_book.BuildConfig
 import ru.mamykin.foboreader.read_book.data.network.GoogleTranslateService
-import ru.mamykin.foboreader.read_book.di.qualifier.GoogleTranslateApiHost
-import ru.mamykin.foboreader.read_book.di.qualifier.GoogleTranslateApiKey
+import javax.inject.Named
 
 @Module
 class ReadBookModule {
@@ -25,12 +24,12 @@ class ReadBookModule {
             GoogleTranslateService.BASE_URL
         )
 
-    @GoogleTranslateApiKey
+    @Named("ApiKey")
     @Provides
     @ReadBookScope
     fun provideGoogleApiKey() = BuildConfig.googleApiKey
 
-    @GoogleTranslateApiHost
+    @Named("ApiHost")
     @Provides
     @ReadBookScope
     fun provideGoogleApiHost() = BuildConfig.googleApiHost

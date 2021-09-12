@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.settings.domain.model
 
-// TODO: move to presentation
 sealed class SettingsItem {
     data class NightTheme(val isEnabled: Boolean) : SettingsItem()
     data class Brightness(val brightness: Int) : SettingsItem()

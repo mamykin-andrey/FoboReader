@@ -1,12 +1,15 @@
 package ru.mamykin.foboreader.settings.presentation
 
 import androidx.lifecycle.viewModelScope
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.settings.domain.usecase.*
+import ru.mamykin.foboreader.settings.navigation.SelectAppLanguageScreen
+import ru.mamykin.foboreader.settings.navigation.SelectTranslationColorScreen
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
@@ -15,7 +18,7 @@ class SettingsViewModel @Inject constructor(
     private val setTextSize: SetTextSize,
     private val setNightTheme: SetNightTheme,
     private val setUseVibration: SetUseVibration,
-//    private val router: Router
+    private val router: Router
 ) : BaseViewModel<ViewState, Action, Event, Nothing>(
     ViewState()
 ) {
@@ -39,12 +42,8 @@ class SettingsViewModel @Inject constructor(
                 is Event.NightThemeChanged -> setNightTheme(event.isEnabled)
                 is Event.IncreaseTextSizeClicked -> setTextSize(SetTextSize.Action.Increase)
                 is Event.DecreaseTextSizeClicked -> setTextSize(SetTextSize.Action.Decrease)
-                is Event.SelectReadColorClicked -> {
-                    TODO("Not implemented")
-                }
-                is Event.SelectAppLanguage -> {
-                    TODO("Not implemented")
-                }
+                is Event.SelectReadColorClicked -> router.navigateTo(SelectTranslationColorScreen())
+                is Event.SelectAppLanguage -> router.navigateTo(SelectAppLanguageScreen())
                 is Event.UseVibrationChanged -> setUseVibration(event.enabled)
             }
         }

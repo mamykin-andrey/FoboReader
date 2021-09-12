@@ -21,6 +21,11 @@ import javax.inject.Inject
 
 class ColorPickerDialogFragment : DialogFragment() {
 
+    companion object {
+
+        fun newInstance(): DialogFragment = ColorPickerDialogFragment()
+    }
+
     private val colorsDataSource = dataSourceTypedOf<ColorItem>()
 
     @Inject
@@ -31,7 +36,11 @@ class ColorPickerDialogFragment : DialogFragment() {
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        DaggerSettingsComponent.factory().create(apiHolder().commonApi(), apiHolder().settingsApi()).inject(this)
+        DaggerSettingsComponent.factory().create(
+            apiHolder().commonApi(),
+            apiHolder().settingsApi(),
+            apiHolder().navigationApi()
+        ).inject(this)
 
         val inflater = requireActivity().layoutInflater
         val view = inflater.inflate(R.layout.dialog_color_picker, null)

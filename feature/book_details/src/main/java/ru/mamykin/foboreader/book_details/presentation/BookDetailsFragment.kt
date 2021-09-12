@@ -99,10 +99,12 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
     }
 
     private fun showBookCover(coverUrl: String?) {
-        Picasso.with(context)
-            .load(coverUrl)
-            .error(R.drawable.img_no_image)
-            .into(binding.ivBookCover)
+        coverUrl?.takeIf { it.isNotEmpty() }?.let {
+            Picasso.with(context)
+                .load(it)
+                .error(R.drawable.img_no_image)
+                .into(binding.ivBookCover)
+        }
     }
 
     private fun takeEffect(effect: Effect) {

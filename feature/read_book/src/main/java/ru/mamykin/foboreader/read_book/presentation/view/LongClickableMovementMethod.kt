@@ -30,7 +30,6 @@ class LongClickableMovementMethod : LinkMovementMethod() {
     private var clickedSpanEnd: Int = 0
 
     override fun onTouchEvent(widget: TextView, buffer: Spannable, event: MotionEvent): Boolean {
-        // TODO: check for swipes with helper
         when (event.action) {
             MotionEvent.ACTION_CANCEL -> handleCancelAction()
             MotionEvent.ACTION_DOWN -> handleDownAction(event, buffer, widget)
@@ -60,7 +59,10 @@ class LongClickableMovementMethod : LinkMovementMethod() {
         clickedSpanEnd = buffer.getSpanEnd(link)
 //        Selection.setSelection(buffer, buffer.getSpanStart(link), buffer.getSpanEnd(link))
 
-        longClickHandler.postDelayed({ link.onLongClick(widget, clickedSpanStart, clickedSpanEnd) }, DEFAULT_LONG_CLICK_DELAY)
+        longClickHandler.postDelayed(
+            { link.onLongClick(widget, clickedSpanStart, clickedSpanEnd) },
+            DEFAULT_LONG_CLICK_DELAY
+        )
     }
 
     private fun handleUpAction(event: MotionEvent, buffer: Spannable, widget: TextView) {

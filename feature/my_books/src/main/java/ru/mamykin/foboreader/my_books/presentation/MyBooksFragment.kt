@@ -40,7 +40,7 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
         BookAdapter(
             { router.navigateTo(screenProvider.readBookScreen(it)) },
             { router.navigateTo(screenProvider.bookDetailsScreen(it)) },
-            { TODO("Not implemented") }
+            { viewModel.sendEvent(Event.RemoveBook(it)) }
         )
     }
 

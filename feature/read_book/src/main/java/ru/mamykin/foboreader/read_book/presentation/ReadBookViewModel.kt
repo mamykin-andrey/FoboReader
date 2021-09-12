@@ -4,7 +4,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.read_book.R
-import ru.mamykin.foboreader.read_book.domain.usecase.*
+import ru.mamykin.foboreader.read_book.domain.usecase.GetBookContent
+import ru.mamykin.foboreader.read_book.domain.usecase.GetBookInfo
+import ru.mamykin.foboreader.read_book.domain.usecase.GetParagraphTranslation
+import ru.mamykin.foboreader.read_book.domain.usecase.GetWordTranslation
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -13,8 +16,7 @@ class ReadBookViewModel @Inject constructor(
     private val getBookContent: GetBookContent,
     private val getParagraphTranslation: GetParagraphTranslation,
     private val getWordTranslation: GetWordTranslation,
-    private val getBookInfo: GetBookInfo,
-    private val updateBookInfo: UpdateBookInfo
+    private val getBookInfo: GetBookInfo
 ) : BaseViewModel<ViewState, Action, Event, Effect>(
     ViewState(isBookLoading = true)
 ) {
@@ -57,7 +59,6 @@ class ReadBookViewModel @Inject constructor(
                 is Event.TranslateWord -> translateWord(event.word)
                 is Event.HideParagraphTranslation -> sendAction(Action.ParagraphTranslationHided)
                 is Event.HideWordTranslation -> sendAction(Action.WordTranslationHided)
-                // TODO: is Event.PageLoaded -> updateBookInfo(UpdateBookInfo.Param(bookId, event.currentPage, event.totalPages))
             }
         }
     }

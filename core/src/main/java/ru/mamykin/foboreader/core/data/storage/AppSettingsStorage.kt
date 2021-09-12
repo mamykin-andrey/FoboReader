@@ -7,7 +7,6 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// TODO: REFACTOR IT
 @Singleton
 class AppSettingsStorage @Inject constructor(
     private val prefManager: PreferencesManager
