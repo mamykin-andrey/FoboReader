@@ -7,6 +7,7 @@ import androidx.annotation.IdRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -14,7 +15,6 @@ import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
-import ru.mamykin.foboreader.core.navigation.RouterProvider
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.my_books.R
@@ -32,8 +32,10 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
     @Inject
     lateinit var viewModel: MyBooksViewModel
 
+    @Inject
+    lateinit var router: Router
+
     private val binding by autoCleanedValue { FragmentMyBooksBinding.bind(requireView()) }
-    private val router by autoCleanedValue { (parentFragment as RouterProvider).router }
     private val adapter by autoCleanedValue {
         BookAdapter(
             { router.navigateTo(screenProvider.readBookScreen(it)) },
