@@ -3,9 +3,9 @@ package ru.mamykin.foboreader.app.presentation.tabs
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.R
+import ru.mamykin.foboreader.core.extension.addBackPressedDispatcher
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.databinding.FragmentTabsBinding
 
@@ -23,15 +23,13 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (childFragmentManager.popBackStackImmediate()) {
-                    binding.bnvTabs.selectedItemId = getSelectedNavId()
-                } else {
-                    requireActivity().finish()
-                }
+        addBackPressedDispatcher {
+            if (childFragmentManager.popBackStackImmediate()) {
+                binding.bnvTabs.selectedItemId = getSelectedNavId()
+            } else {
+                requireActivity().finish()
             }
-        })
+        }
     }
 
     private fun getSelectedNavId(): Int {
