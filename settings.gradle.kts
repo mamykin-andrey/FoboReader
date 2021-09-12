@@ -9,3 +9,4 @@ include(
     ":feature:book_details",
     ":widgets:progress_bar"
 )
+include(":widgets:error_stub")

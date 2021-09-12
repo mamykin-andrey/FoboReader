@@ -18,7 +18,7 @@
         android:layout_height="@dimen/progress_bar_default_size"
         android:layout_gravity="center" />
 
-    <ru.mamykin.foboreader.core.presentation.ErrorStateView
+    <ru.mamykin.foboreader.error_stub.ErrorStubWidget
         android:id="@+id/v_error"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

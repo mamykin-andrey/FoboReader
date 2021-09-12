@@ -10,5 +10,6 @@ plugins {
 dependencies {
     implementation(project(":core"))
     implementation(project(":widgets:progress_bar"))
+    implementation(project(":widgets:error_stub"))
     kapt(Dependencies.daggerCompiler)
 }

@@ -48,7 +48,7 @@ class BooksStoreFragment : Fragment(R.layout.fragment_books_store) {
     }
 
     private fun initErrorView() {
-        binding.vError.setOnRetryClickListener {
+        binding.vError.setRetryClickListener {
             feature.sendEvent(BooksStore.Event.RetryBooksClicked)
         }
     }
