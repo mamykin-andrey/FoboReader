@@ -6,27 +6,46 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.core.navigation.BackPressedListener
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.databinding.FragmentTabsBinding
 
 class TabsFragment : Fragment(R.layout.fragment_tabs) {
 
+    private val navIdsToTabs = mapOf(
+        R.id.my_books to Tab.MyBooks,
+        R.id.books_store to Tab.BooksStore,
+        R.id.settings to Tab.Settings
+    )
     private val binding by autoCleanedValue { FragmentTabsBinding.bind(requireView()) }
 
     private val currentTabFragment: Fragment?
         get() = childFragmentManager.fragments.firstOrNull { it.isVisible }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (childFragmentManager.popBackStackImmediate()) {
+                    binding.bnvTabs.selectedItemId = getSelectedNavId()
+                } else {
+                    requireActivity().finish()
+                }
+            }
+        })
+    }
+
+    private fun getSelectedNavId(): Int {
+        val tag = currentTabFragment!!.tag!!
+        return navIdsToTabs.toList().find { it.second.tag == tag }!!.first
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupNavigationBar()
 
-        val tab = when (currentTabFragment?.tag) {
-            Tab.BooksStore.tag -> Tab.BooksStore
-            Tab.Settings.tag -> Tab.Settings
-            else -> Tab.MyBooks
+        if (savedInstanceState == null) {
+            selectTab(Tab.MyBooks, addToBackStack = false)
         }
-        selectTab(tab)
     }
 
     private fun setupNavigationBar() {
@@ -40,13 +59,13 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
         }
     }
 
-    private fun selectTab(tab: Tab) {
+    private fun selectTab(tab: Tab, addToBackStack: Boolean = true) {
         val currentFragment = currentTabFragment
         val fragmentToShow = childFragmentManager.findFragmentByTag(tab.tag)
         if (currentFragment != null && currentFragment == fragmentToShow) return
 
         val transaction = childFragmentManager.beginTransaction()
-        fragmentToShow ?: run {
+        if (fragmentToShow == null) {
             transaction.add(
                 R.id.fr_tabs_host,
                 tab.newFragment(),
@@ -55,16 +74,9 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
         }
         currentFragment?.let(transaction::hide)
         fragmentToShow?.let(transaction::show)
-        transaction.commitNow()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                (currentTabFragment as BackPressedListener).onBackPressed()
-            }
+        if (addToBackStack) {
+            transaction.addToBackStack(null)
         }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+        transaction.commit()
     }
 }
