@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.navigation.BackPressedListener
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
@@ -15,63 +14,47 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
 
     private val binding by autoCleanedValue { FragmentTabsBinding.bind(requireView()) }
 
-    private val viewModel: TabsViewModel by lazy {
-        ViewModelProviders.of(this).get(TabsViewModel::class.java)
-    }
-
     private val currentTabFragment: Fragment?
-        get() = childFragmentManager.fragments.firstOrNull { !it.isHidden }
+        get() = childFragmentManager.fragments.firstOrNull { it.isVisible }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupNavigationBar()
 
-        if (savedInstanceState == null) {
-            binding.bnvTabs.selectedItemId = R.id.my_books
+        val tab = when (currentTabFragment?.tag) {
+            Tab.BooksStore.tag -> Tab.BooksStore
+            Tab.Settings.tag -> Tab.Settings
+            else -> Tab.MyBooks
         }
-    }
-
-    override fun onDestroyView() {
-        viewModel.selectedItemIdData.value = binding.bnvTabs.selectedItemId
-        super.onDestroyView()
+        selectTab(tab)
     }
 
     private fun setupNavigationBar() {
         binding.bnvTabs.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.my_books -> selectTab(Tab.MyBooksTab)
-                R.id.books_store -> selectTab(Tab.BooksStoreTab)
-                R.id.settings -> selectTab(Tab.SettingsTab)
+                R.id.my_books -> selectTab(Tab.MyBooks)
+                R.id.books_store -> selectTab(Tab.BooksStore)
+                R.id.settings -> selectTab(Tab.Settings)
             }
             true
         }
     }
 
     private fun selectTab(tab: Tab) {
-        val fm = childFragmentManager
-        var currentFragment: Fragment? = null
-        val fragments = fm.fragments
-        for (f in fragments) {
-            if (f.isVisible) {
-                currentFragment = f
-                break
-            }
-        }
-        val newFragment = fm.findFragmentByTag(tab.tag)
-        if (currentFragment != null && newFragment != null && currentFragment === newFragment) return
-        val transaction = fm.beginTransaction()
-        if (newFragment == null) {
+        val currentFragment = currentTabFragment
+        val fragmentToShow = childFragmentManager.findFragmentByTag(tab.tag)
+        if (currentFragment != null && currentFragment == fragmentToShow) return
+
+        val transaction = childFragmentManager.beginTransaction()
+        fragmentToShow ?: run {
             transaction.add(
                 R.id.fr_tabs_host,
-                tab.newFragment(), tab.tag
+                tab.newFragment(),
+                tab.tag
             )
         }
-        if (currentFragment != null) {
-            transaction.hide(currentFragment)
-        }
-        if (newFragment != null) {
-            transaction.show(newFragment)
-        }
+        currentFragment?.let(transaction::hide)
+        fragmentToShow?.let(transaction::show)
         transaction.commitNow()
     }
 

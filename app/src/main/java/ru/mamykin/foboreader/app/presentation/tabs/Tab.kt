@@ -13,17 +13,17 @@ sealed class Tab(
 
     abstract fun newFragment(): Fragment
 
-    object MyBooksTab : Tab(MY_BOOKS_FRAGMENT) {
+    object MyBooks : Tab(MY_BOOKS_FRAGMENT) {
 
         override fun newFragment(): Fragment = MyBooksTabFragment()
     }
 
-    object BooksStoreTab : Tab(BOOKS_STORE_FRAGMENT) {
+    object BooksStore : Tab(BOOKS_STORE_FRAGMENT) {
 
         override fun newFragment(): Fragment = BooksStoreTabFragment()
     }
 
-    object SettingsTab : Tab(SETTINGS_FRAGMENT) {
+    object Settings : Tab(SETTINGS_FRAGMENT) {
 
         override fun newFragment(): Fragment = SettingsTabFragment()
     }

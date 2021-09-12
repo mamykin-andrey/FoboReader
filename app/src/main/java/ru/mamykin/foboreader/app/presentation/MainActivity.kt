@@ -29,7 +29,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
         DaggerMainComponent.factory().create(apiHolder().navigationApi()).inject(this)
         initTheme()
-        router.newRootChain(screenProvider.tabsScreen())
+        if (savedInstanceState == null) {
+            router.newRootChain(screenProvider.tabsScreen())
+        }
     }
 
     override fun onResumeFragments() {

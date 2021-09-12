@@ -8,7 +8,7 @@ import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.navigation.TabContainerFragment
 import javax.inject.Inject
 
-class SettingsTabFragment : TabContainerFragment(Tab.SettingsTab.tag) {
+class SettingsTabFragment : TabContainerFragment(Tab.Settings.tag) {
 
     @Inject
     lateinit var screenProvider: ScreenProvider

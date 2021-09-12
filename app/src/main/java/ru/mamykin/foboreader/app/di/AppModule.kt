@@ -7,7 +7,6 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import ru.mamykin.foboreader.app.navigation.ScreenProviderImpl
-import ru.mamykin.foboreader.app.presentation.tabs.TabsViewModel
 import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
@@ -15,9 +14,6 @@ import javax.inject.Singleton
 
 @Module(includes = [AppModule.BindsModule::class])
 class AppModule {
-
-    @Provides
-    fun provideTabsViewModel() = TabsViewModel()
 
     @Provides
     @Singleton
