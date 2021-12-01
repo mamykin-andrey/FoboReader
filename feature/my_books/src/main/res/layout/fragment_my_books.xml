@@ -12,10 +12,13 @@
         android:id="@+id/v_toolbar"
         layout="@layout/view_toolbar" />
 
-    <ru.mamykin.foboreader.progress_bar.ProgressBarWidget
+    <!--    TODO: Replace with ProgressBarWidget-->
+    <!--    android:layout_width="@dimen/progress_bar_default_size"-->
+    <!--    android:layout_height="@dimen/progress_bar_default_size"-->
+    <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/pb_loading_books"
-        android:layout_width="@dimen/progress_bar_default_size"
-        android:layout_height="@dimen/progress_bar_default_size"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="center" />
 
     <TextView

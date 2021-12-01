@@ -10,21 +10,13 @@ class ApiHolderImpl(
     private val cicerone: Cicerone<Router>
 ) : ApiHolder {
 
-    private val apiMap = HashMap<Any, Any>()
+    private val appComponent: AppComponent by lazy { DaggerAppComponent.factory().create(context, cicerone) }
 
-    private fun createOrGetAppComponent(): AppComponent {
-        return apiMap[AppComponent::class] as? AppComponent ?: run {
-            DaggerAppComponent.factory().create(context, cicerone).also {
-                apiMap[AppComponent::class] = it
-            }
-        }
-    }
+    override fun navigationApi(): NavigationApi = appComponent
 
-    override fun navigationApi(): NavigationApi = createOrGetAppComponent()
+    override fun networkApi(): NetworkApi = appComponent
 
-    override fun networkApi(): NetworkApi = createOrGetAppComponent()
+    override fun commonApi(): CommonApi = appComponent
 
-    override fun commonApi(): CommonApi = createOrGetAppComponent()
-
-    override fun settingsApi(): SettingsApi = createOrGetAppComponent()
+    override fun settingsApi(): SettingsApi = appComponent
 }

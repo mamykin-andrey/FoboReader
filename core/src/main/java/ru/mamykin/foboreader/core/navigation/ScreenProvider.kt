@@ -8,11 +8,5 @@ interface ScreenProvider {
 
     fun bookDetailsScreen(bookId: Long): Screen
 
-    fun booksStoreScreen(): Screen
-
-    fun myBookScreen(): Screen
-
-    fun settingsScreen(): Screen
-
     fun tabsScreen(): Screen
 }

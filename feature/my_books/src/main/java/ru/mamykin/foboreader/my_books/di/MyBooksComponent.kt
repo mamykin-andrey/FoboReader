@@ -12,7 +12,10 @@ import javax.inject.Scope
 annotation class MyBooksScope
 
 @MyBooksScope
-@Component(dependencies = [NavigationApi::class, CommonApi::class], modules = [DatabaseModule::class])
+@Component(
+    dependencies = [NavigationApi::class, CommonApi::class],
+    modules = [DatabaseModule::class]
+)
 interface MyBooksComponent {
 
     fun inject(fragment: MyBooksFragment)

@@ -7,6 +7,6 @@ include(
     ":feature:books_store",
     ":feature:my_books",
     ":feature:book_details",
-    ":widgets:progress_bar"
+    ":widgets:progress_bar",
+    ":widgets:error_stub"
 )
-include(":widgets:error_stub")

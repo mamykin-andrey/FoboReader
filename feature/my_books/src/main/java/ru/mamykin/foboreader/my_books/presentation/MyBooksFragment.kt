@@ -27,13 +27,13 @@ import javax.inject.Inject
 class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
 
     @Inject
-    lateinit var screenProvider: ScreenProvider
+    internal lateinit var viewModel: MyBooksViewModel
 
     @Inject
-    lateinit var viewModel: MyBooksViewModel
+    internal lateinit var router: Router
 
     @Inject
-    lateinit var router: Router
+    internal lateinit var screenProvider: ScreenProvider
 
     private val binding by autoCleanedValue { FragmentMyBooksBinding.bind(requireView()) }
     private val adapter by autoCleanedValue {
@@ -46,7 +46,10 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerMyBooksComponent.factory().create(apiHolder().navigationApi(), apiHolder().commonApi()).inject(this)
+        DaggerMyBooksComponent.factory().create(
+            apiHolder().navigationApi(),
+            apiHolder().commonApi()
+        ).inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
