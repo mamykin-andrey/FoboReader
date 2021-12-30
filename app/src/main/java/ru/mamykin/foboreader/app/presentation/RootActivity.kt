@@ -36,7 +36,7 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
         ).inject(this)
         initTheme()
         if (savedInstanceState == null) {
-            router.newRootChain(screenProvider.tabsScreen())
+            router.newRootChain(screenProvider.mainScreen())
         }
     }
 

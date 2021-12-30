@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.tabs
+package ru.mamykin.foboreader.main
 
 import android.content.Context
 import android.os.Bundle
@@ -7,21 +7,21 @@ import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.extension.addBackPressedDispatcher
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
-import ru.mamykin.foboreader.tabs.databinding.FragmentTabsBinding
+import ru.mamykin.foboreader.main.databinding.FragmentMainBinding
 
-class TabsFragment : Fragment(R.layout.fragment_tabs) {
+class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val navIdsToTabs = mapOf(
         R.id.my_books to Tab.MyBooks,
         R.id.books_store to Tab.BooksStore,
         R.id.settings to Tab.Settings
     )
-    private val binding by autoCleanedValue { FragmentTabsBinding.bind(requireView()) }
+    private val binding by autoCleanedValue { FragmentMainBinding.bind(requireView()) }
 
     private val currentTabFragment: Fragment?
         get() = childFragmentManager.fragments.firstOrNull { it.isVisible }
 
-    private val tabFragmentProvider by lazy { apiHolder().tabsApi().tabFragmentProvider() }
+    private val tabFragmentProvider by lazy { apiHolder().mainApi().tabFragmentProvider() }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

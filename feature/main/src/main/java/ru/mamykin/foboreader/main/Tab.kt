@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.tabs
+package ru.mamykin.foboreader.main
 
 sealed class Tab {
     companion object {

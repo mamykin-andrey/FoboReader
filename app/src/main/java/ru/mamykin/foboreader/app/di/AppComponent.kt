@@ -16,7 +16,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class])
-interface AppComponent : NavigationApi, NetworkApi, CommonApi, SettingsApi, TabsApi {
+interface AppComponent : NavigationApi, NetworkApi, CommonApi, SettingsApi, MainApi {
 
     @Component.Factory
     interface Factory {

@@ -10,5 +10,5 @@ interface ApiHolder {
 
     fun settingsApi(): SettingsApi
 
-    fun tabsApi(): TabsApi
+    fun mainApi(): MainApi
 }

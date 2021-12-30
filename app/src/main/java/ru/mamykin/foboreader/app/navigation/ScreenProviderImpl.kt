@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.app.navigation
 
 import androidx.fragment.app.FragmentFactory
 import com.github.terrakok.cicerone.androidx.FragmentScreen
-import ru.mamykin.foboreader.tabs.TabsFragment
+import ru.mamykin.foboreader.main.MainFragment
 import ru.mamykin.foboreader.book_details.presentation.BookDetailsFragment
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.read_book.presentation.ReadBookFragment
@@ -22,8 +22,8 @@ class ScreenProviderImpl @Inject constructor() : ScreenProvider {
         override fun createFragment(factory: FragmentFactory) = BookDetailsFragment.newInstance(bookId)
     }
 
-    override fun tabsScreen() = object : FragmentScreen {
+    override fun mainScreen() = object : FragmentScreen {
 
-        override fun createFragment(factory: FragmentFactory) = TabsFragment()
+        override fun createFragment(factory: FragmentFactory) = MainFragment()
     }
 }
