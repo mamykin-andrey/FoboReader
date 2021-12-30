@@ -19,4 +19,6 @@ class ApiHolderImpl(
     override fun commonApi(): CommonApi = appComponent
 
     override fun settingsApi(): SettingsApi = appComponent
+
+    override fun tabsApi(): TabsApi = appComponent
 }

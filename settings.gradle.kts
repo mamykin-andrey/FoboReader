@@ -10,3 +10,4 @@ include(
     ":widgets:progress_bar",
     ":widgets:error_stub"
 )
+include(":feature:tabs")

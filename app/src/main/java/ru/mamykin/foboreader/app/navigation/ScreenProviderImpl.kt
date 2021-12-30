@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.app.navigation
 
 import androidx.fragment.app.FragmentFactory
 import com.github.terrakok.cicerone.androidx.FragmentScreen
-import ru.mamykin.foboreader.app.presentation.tabs.TabsFragment
+import ru.mamykin.foboreader.tabs.TabsFragment
 import ru.mamykin.foboreader.book_details.presentation.BookDetailsFragment
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.read_book.presentation.ReadBookFragment

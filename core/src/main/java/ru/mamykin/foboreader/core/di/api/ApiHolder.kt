@@ -9,4 +9,6 @@ interface ApiHolder {
     fun commonApi(): CommonApi
 
     fun settingsApi(): SettingsApi
+
+    fun tabsApi(): TabsApi
 }

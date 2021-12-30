@@ -1,13 +1,13 @@
-package ru.mamykin.foboreader.app.presentation.tabs
+package ru.mamykin.foboreader.tabs
 
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.extension.addBackPressedDispatcher
+import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
-import ru.mamykin.foboreader.databinding.FragmentTabsBinding
+import ru.mamykin.foboreader.tabs.databinding.FragmentTabsBinding
 
 class TabsFragment : Fragment(R.layout.fragment_tabs) {
 
@@ -20,6 +20,8 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
 
     private val currentTabFragment: Fragment?
         get() = childFragmentManager.fragments.firstOrNull { it.isVisible }
+
+    private val tabFragmentProvider by lazy { apiHolder().tabsApi().tabFragmentProvider() }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -66,8 +68,8 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
         if (fragmentToShow == null) {
             transaction.add(
                 R.id.fr_tabs_host,
-                tab.newFragment(),
-                tab.tag
+                createFragment(tab),
+                "hello"
             )
         }
         currentFragment?.let(transaction::hide)
@@ -76,5 +78,12 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
             transaction.addToBackStack(null)
         }
         transaction.commit()
+    }
+
+    // TODO: refactor it, if it'll work
+    private fun createFragment(tab: Tab): Fragment = when (tab) {
+        Tab.MyBooks -> tabFragmentProvider.newMyBooksFragment()
+        Tab.BooksStore -> tabFragmentProvider.newMyBooksFragment()
+        Tab.Settings -> tabFragmentProvider.newSettingsFragment()
     }
 }

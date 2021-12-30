@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":feature:settings"))
     implementation(project(":feature:my_books"))
     implementation(project(":feature:book_details"))
+    implementation(project(":feature:tabs"))
     kapt(Dependencies.daggerCompiler)
     implementation(Dependencies.leakcanary)
 }
