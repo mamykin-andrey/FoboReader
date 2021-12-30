@@ -9,7 +9,7 @@ import ru.mamykin.foboreader.core.extension.setCurrentLocale
 
 class AppLanguageDelegate(
     private val activity: AppCompatActivity,
-    private val appSettingsStorage: AppSettingsStorage
+    private val appSettingsStorage: AppSettingsStorage,
 ) {
     fun init() {
         appSettingsStorage.appLanguageField.flow

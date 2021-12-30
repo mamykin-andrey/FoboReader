@@ -11,15 +11,12 @@ import ru.mamykin.foboreader.main.databinding.FragmentMainBinding
 
 class MainFragment : Fragment(R.layout.fragment_main) {
 
-    private val navIdsToTabs = mapOf(
-        R.id.my_books to Tab.MyBooks,
-        R.id.books_store to Tab.BooksStore,
-        R.id.settings to Tab.Settings
+    private val tagsToNavIdsMap = mapOf(
+        Tab.MyBooks.tag to R.id.my_books,
+        Tab.BooksStore.tag to R.id.books_store,
+        Tab.Settings.tag to R.id.settings,
     )
     private val binding by autoCleanedValue { FragmentMainBinding.bind(requireView()) }
-
-    private val currentTabFragment: Fragment?
-        get() = childFragmentManager.fragments.firstOrNull { it.isVisible }
 
     private val tabFragmentProvider by lazy { apiHolder().mainApi().tabFragmentProvider() }
 
@@ -35,8 +32,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun getSelectedNavId(): Int {
-        val tag = currentTabFragment!!.tag!!
-        return navIdsToTabs.toList().find { it.second.tag == tag }!!.first
+        val currentTabFragment = getCurrentTabFragment()
+            ?: throw NullPointerException("No visible fragment found!")
+        val currentTabFragmentTag = currentTabFragment.tag
+            ?: throw NullPointerException("Current fragment doesn't have tag!")
+
+        return tagsToNavIdsMap[currentTabFragmentTag]
+            ?: throw NullPointerException("")
+    }
+
+    private fun getCurrentTabFragment(): Fragment? {
+        return childFragmentManager.fragments.firstOrNull { it.isVisible }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,7 +66,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun selectTab(tab: Tab, addToBackStack: Boolean = true) {
-        val currentFragment = currentTabFragment
+        val currentFragment = getCurrentTabFragment()
         val fragmentToShow = childFragmentManager.findFragmentByTag(tab.tag)
         if (currentFragment != null && currentFragment == fragmentToShow) return
 
@@ -69,7 +75,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             transaction.add(
                 R.id.fr_tabs_host,
                 createFragment(tab),
-                "hello"
+                tab.tag
             )
         }
         currentFragment?.let(transaction::hide)
@@ -83,7 +89,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     // TODO: refactor it, if it'll work
     private fun createFragment(tab: Tab): Fragment = when (tab) {
         Tab.MyBooks -> tabFragmentProvider.newMyBooksFragment()
-        Tab.BooksStore -> tabFragmentProvider.newMyBooksFragment()
+        Tab.BooksStore -> tabFragmentProvider.newBooksStoreFragment()
         Tab.Settings -> tabFragmentProvider.newSettingsFragment()
     }
 }

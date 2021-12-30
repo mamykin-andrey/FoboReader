@@ -14,8 +14,6 @@ import javax.inject.Inject
 
 class RootActivity : AppCompatActivity(R.layout.activity_root) {
 
-    private val nightThemeDelegate = NightThemeDelegate(this)
-
     @Inject
     lateinit var appSettingsStorage: AppSettingsStorage
 
@@ -52,7 +50,7 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
 
     private fun initTheme() {
         setTheme(R.style.AppTheme)
-        nightThemeDelegate.init()
+        NightThemeDelegate(this, appSettingsStorage).init()
         AppLanguageDelegate(this, appSettingsStorage).init()
     }
 }

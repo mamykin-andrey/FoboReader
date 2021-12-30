@@ -3,6 +3,8 @@ package ru.mamykin.foboreader.core.extension
 import android.content.Context
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
@@ -20,17 +22,17 @@ fun Fragment.showSnackbar(message: String, long: Boolean = false) {
 @Deprecated("Use externalMediaDirs.first() direcly")
 fun Context.getExternalMediaDir(): File? = externalMediaDirs.first()
 
-//var AppCompatActivity?.nightMode: Boolean
-//    get() = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
-//    set(value) {
-//        if (this != null && value != nightMode) {
-//            val newMode = if (value)
-//                AppCompatDelegate.MODE_NIGHT_YES
-//            else
-//                AppCompatDelegate.MODE_NIGHT_NO
-//            AppCompatDelegate.setDefaultNightMode(newMode)
-//        }
-//    }
+fun AppCompatActivity.isNightModeEnabled(): Boolean {
+    return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+}
+
+fun AppCompatActivity.setNightModeEnabled(enabled: Boolean) {
+    val oldEnabled = isNightModeEnabled()
+    if (enabled != oldEnabled) {
+        val newMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        AppCompatDelegate.setDefaultNightMode(newMode)
+    }
+}
 
 //fun Context.dpToPx(value: Int): Float {
 //    return TypedValue.applyDimension(
