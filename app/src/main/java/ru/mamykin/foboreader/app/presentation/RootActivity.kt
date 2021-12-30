@@ -6,13 +6,13 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import ru.mamykin.foboreader.R
-import ru.mamykin.foboreader.app.di.DaggerMainComponent
+import ru.mamykin.foboreader.app.di.DaggerRootComponent
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class RootActivity : AppCompatActivity(R.layout.activity_root) {
 
     private val nightThemeDelegate = NightThemeDelegate(this)
 
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerMainComponent.factory().create(
+        DaggerRootComponent.factory().create(
             apiHolder().navigationApi(),
             apiHolder().settingsApi()
         ).inject(this)

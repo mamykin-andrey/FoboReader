@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.app.di
 
 import dagger.Component
-import ru.mamykin.foboreader.app.presentation.MainActivity
+import ru.mamykin.foboreader.app.presentation.RootActivity
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import javax.inject.Scope
@@ -9,13 +9,13 @@ import javax.inject.Scope
 @Scope
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-annotation class MainScope
+annotation class RootScope
 
-@MainScope
+@RootScope
 @Component(dependencies = [NavigationApi::class, SettingsApi::class])
-interface MainComponent {
+interface RootComponent {
 
-    fun inject(activity: MainActivity)
+    fun inject(activity: RootActivity)
 
     @Component.Factory
     interface Factory {
@@ -23,6 +23,6 @@ interface MainComponent {
         fun create(
             navigationApi: NavigationApi,
             settingsApi: SettingsApi
-        ): MainComponent
+        ): RootComponent
     }
 }

@@ -20,7 +20,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="ru.mamykin.foboreader.app.presentation.MainActivity"
+            android:name="ru.mamykin.foboreader.app.presentation.RootActivity"
             android:theme="@style/Splash"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
 
