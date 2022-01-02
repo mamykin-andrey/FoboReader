@@ -1,10 +1,12 @@
 package ru.mamykin.foboreader.store.di
 
+import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
+import ru.mamykin.foboreader.store.presentation.BooksListFeature
 import ru.mamykin.foboreader.store.presentation.BooksListFragment
 
 @Component(
@@ -28,6 +30,7 @@ internal interface BookListComponent {
             commonApi: CommonApi,
             networkApi: NetworkApi,
             navigationApi: NavigationApi,
+            @BindsInstance params: BooksListFeature.BookCategoriesParams,
         ): BookListComponent
     }
 }

@@ -7,9 +7,9 @@ import javax.inject.Inject
 
 class GetStoreBooks @Inject constructor(
     private val repository: BooksStoreRepository
-) : SuspendUseCase<Unit, List<StoreBook>>() {
+) : SuspendUseCase<String, List<StoreBook>>() {
 
-    override suspend fun execute(param: Unit): List<StoreBook> {
-        return repository.getBooks("")
+    override suspend fun execute(categoryId: String): List<StoreBook> {
+        return repository.newGetBooks(categoryId)
     }
 }

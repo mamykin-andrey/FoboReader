@@ -13,7 +13,7 @@ import javax.inject.Inject
 internal class BooksListFeature @Inject constructor(
     reducer: BooksListReducer,
     actor: BooksListActor,
-    private val uiEventTransformer: UiEventTransformer
+    private val uiEventTransformer: UiEventTransformer,
 ) : Feature<BooksList.ViewState, BooksList.Intent, BooksList.Effect, BooksList.Action, Nothing>(
     BooksList.ViewState(),
     actor,
@@ -27,17 +27,22 @@ internal class BooksListFeature @Inject constructor(
         sendIntent(uiEventTransformer.invoke(event))
     }
 
+    internal class BookCategoriesParams(
+        val categoryId: String,
+    )
+
     internal class BooksListActor @Inject constructor(
         private val downloadStoreBook: DownloadBook,
         private val getStoreBooks: GetStoreBooks,
-        private val filterStoreBooks: FilterStoreBooks
+        private val filterStoreBooks: FilterStoreBooks,
+        private val params: BookCategoriesParams,
     ) : Actor<BooksList.Intent, BooksList.Action> {
 
         override operator fun invoke(intent: BooksList.Intent): Flow<BooksList.Action> = flow {
             when (intent) {
                 is BooksList.Intent.LoadBooks -> {
                     emit(BooksList.Action.BooksLoading)
-                    getStoreBooks(Unit).catchMap(
+                    getStoreBooks(params.categoryId).catchMap(
                         { emit(BooksList.Action.BooksLoaded(it)) },
                         { emit(BooksList.Action.BooksLoadingError(it.message.orEmpty())) }
                     )

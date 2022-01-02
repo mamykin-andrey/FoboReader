@@ -29,7 +29,13 @@ class BooksListFragment : Fragment(R.layout.fragment_books_list) {
 
     companion object {
 
-        fun newInstance(categoryId: String): Fragment = BooksListFragment()
+        private const val EXTRA_CATEGORY_ID = "extra_category_id"
+
+        fun newInstance(categoryId: String): Fragment = BooksListFragment().apply {
+            arguments = Bundle().apply {
+                putString(EXTRA_CATEGORY_ID, categoryId)
+            }
+        }
     }
 
     @Inject
@@ -37,13 +43,16 @@ class BooksListFragment : Fragment(R.layout.fragment_books_list) {
 
     private val booksSource = dataSourceTypedOf<StoreBook>()
     private val binding by autoCleanedValue { FragmentBooksListBinding.bind(requireView()) }
+    private val categoryId by lazy { requireArguments().getString(EXTRA_CATEGORY_ID)!! }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val params = BooksListFeature.BookCategoriesParams(categoryId)
         DaggerBookListComponent.factory().create(
             apiHolder().commonApi(),
             apiHolder().networkApi(),
-            apiHolder().navigationApi()
+            apiHolder().navigationApi(),
+            params,
         ).inject(this)
     }
 

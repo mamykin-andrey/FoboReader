@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.store.data
 
+import android.util.Log
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -39,6 +40,12 @@ class BooksStoreRepository @Inject constructor(
         )
     }
 
+    suspend fun newGetBooks(categoryId: String): List<StoreBook> {
+        Log.e("this", "get books for category: $categoryId")
+        return loadBooks()
+    }
+
+    @Deprecated("Use newGetBooks instead")
     suspend fun getBooks(query: String): List<StoreBook> {
         val allBooks = this.allBooks ?: loadBooks()
         return filter(allBooks, query)
