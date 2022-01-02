@@ -18,20 +18,20 @@ import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
-import ru.mamykin.foboreader.store.databinding.FragmentBooksStoreBinding
+import ru.mamykin.foboreader.store.databinding.FragmentBooksListBinding
 import ru.mamykin.foboreader.store.databinding.ItemStoreBookBinding
 import ru.mamykin.foboreader.store.di.DaggerBooksStoreComponent
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.presentation.list.StoreBookViewHolder
 import javax.inject.Inject
 
-class BooksStoreFragment : Fragment(R.layout.fragment_books_store) {
+class BooksListFragment : Fragment(R.layout.fragment_books_list) {
 
     @Inject
-    lateinit var feature: BooksStoreFeature
+    internal lateinit var feature: BooksListFeature
 
     private val booksSource = dataSourceTypedOf<StoreBook>()
-    private val binding by autoCleanedValue { FragmentBooksStoreBinding.bind(requireView()) }
+    private val binding by autoCleanedValue { FragmentBooksListBinding.bind(requireView()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,7 @@ class BooksStoreFragment : Fragment(R.layout.fragment_books_store) {
 
     private fun initErrorView() {
         binding.vError.setRetryClickListener {
-            feature.sendEvent(BooksStore.Event.RetryBooksClicked)
+            feature.sendEvent(BooksList.Event.RetryBooksClicked)
         }
     }
 
@@ -72,7 +72,7 @@ class BooksStoreFragment : Fragment(R.layout.fragment_books_store) {
                     bind(item)
                 }
                 onClick {
-                    feature.sendEvent(BooksStore.Event.DownloadBookClicked(item))
+                    feature.sendEvent(BooksList.Event.DownloadBookClicked(item))
                 }
             }
         }
@@ -82,19 +82,19 @@ class BooksStoreFragment : Fragment(R.layout.fragment_books_store) {
         queryHint = getString(R.string.books_store_menu_search)
         queryChanges()
             .filterNotNull()
-            .onEach { feature.sendEvent(BooksStore.Event.FilterQueryChanged(it)) }
+            .onEach { feature.sendEvent(BooksList.Event.FilterQueryChanged(it)) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun showState(state: BooksStore.ViewState) {
+    private fun showState(state: BooksList.ViewState) {
         binding.pbLoadingBooks.isVisible = state.isLoading
         binding.vError.isVisible = state.isError
         booksSource.set(state.books)
     }
 
-    private fun takeEffect(effect: BooksStore.Effect) {
+    private fun takeEffect(effect: BooksList.Effect) {
         when (effect) {
-            is BooksStore.Effect.ShowSnackbar -> showSnackbar(effect.message)
+            is BooksList.Effect.ShowSnackbar -> showSnackbar(effect.message)
         }
     }
 }

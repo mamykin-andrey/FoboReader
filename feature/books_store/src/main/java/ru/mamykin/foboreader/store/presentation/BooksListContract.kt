@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.store.presentation
 
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 
-object BooksStore {
+object BooksList {
 
     sealed class Event {
         class FilterQueryChanged(val query: String) : Event()

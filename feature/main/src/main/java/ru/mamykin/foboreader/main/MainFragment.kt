@@ -74,8 +74,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         if (fragmentToShow == null) {
             transaction.add(
                 R.id.fr_tabs_host,
-                createFragment(tab),
-                tab.tag
+                tab.newFragment(tabFragmentProvider),
+                tab.tag,
             )
         }
         currentFragment?.let(transaction::hide)
@@ -84,12 +84,5 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             transaction.addToBackStack(null)
         }
         transaction.commit()
-    }
-
-    // TODO: refactor it, if it'll work
-    private fun createFragment(tab: Tab): Fragment = when (tab) {
-        Tab.MyBooks -> tabFragmentProvider.newMyBooksFragment()
-        Tab.BooksStore -> tabFragmentProvider.newBooksStoreFragment()
-        Tab.Settings -> tabFragmentProvider.newSettingsFragment()
     }
 }
