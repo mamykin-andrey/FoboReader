@@ -4,11 +4,13 @@ import android.view.Menu
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Switch
+import android.widget.TextView
 import androidx.annotation.CheckResult
 import androidx.annotation.IdRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import reactivecircus.flowbinding.android.widget.SeekBarChangeEvent
@@ -54,3 +56,15 @@ fun SearchView.queryChanges(): Flow<String?> = callbackFlow<String?> {
     })
     awaitClose { setOnQueryTextListener(null) }
 }.conflate()
+
+/**
+ * Set text to the textview, or set gone, if text null or blank
+ */
+fun TextView.setTextOrGone(text: String?) {
+    if (!text.isNullOrBlank()) {
+        isVisible = true
+        this.text = text
+    } else {
+        isVisible = false
+    }
+}

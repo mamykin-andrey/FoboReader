@@ -27,6 +27,11 @@ import javax.inject.Inject
 
 class BooksListFragment : Fragment(R.layout.fragment_books_list) {
 
+    companion object {
+
+        fun newInstance(categoryId: String): Fragment = BooksListFragment()
+    }
+
     @Inject
     internal lateinit var feature: BooksListFeature
 
@@ -35,7 +40,11 @@ class BooksListFragment : Fragment(R.layout.fragment_books_list) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerBooksStoreComponent.factory().create(apiHolder().commonApi(), apiHolder().networkApi()).inject(this)
+        DaggerBooksStoreComponent.factory().create(
+            apiHolder().commonApi(),
+            apiHolder().networkApi(),
+            apiHolder().navigationApi()
+        ).inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
