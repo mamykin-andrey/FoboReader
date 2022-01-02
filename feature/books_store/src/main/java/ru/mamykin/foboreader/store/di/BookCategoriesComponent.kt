@@ -5,11 +5,11 @@ import dagger.Module
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
-import ru.mamykin.foboreader.store.presentation.BooksListFragment
+import ru.mamykin.foboreader.store.presentation.BookCategoriesFragment
 
 @Component(
     modules = [
-        BooksStoreModule::class,
+        BookCategoriesModule::class,
     ],
     dependencies = [
         NetworkApi::class,
@@ -17,9 +17,9 @@ import ru.mamykin.foboreader.store.presentation.BooksListFragment
         NavigationApi::class,
     ]
 )
-internal interface BookListComponent {
+internal interface BookCategoriesComponent {
 
-    fun inject(fragment: BooksListFragment)
+    fun inject(fragment: BookCategoriesFragment)
 
     @Component.Factory
     interface Factory {
@@ -28,9 +28,9 @@ internal interface BookListComponent {
             commonApi: CommonApi,
             networkApi: NetworkApi,
             navigationApi: NavigationApi,
-        ): BookListComponent
+        ): BookCategoriesComponent
     }
 }
 
 @Module(includes = [BooksStoreApiServiceModule::class])
-internal class BooksStoreModule
+internal class BookCategoriesModule

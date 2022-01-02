@@ -13,7 +13,7 @@ import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBookCategoriesBinding
 import ru.mamykin.foboreader.store.databinding.ItemCategoryBinding
-import ru.mamykin.foboreader.store.di.DaggerBooksStoreComponent
+import ru.mamykin.foboreader.store.di.DaggerBookCategoriesComponent
 import ru.mamykin.foboreader.store.domain.model.StoreBookCategory
 import ru.mamykin.foboreader.store.presentation.list.CategoryViewHolder
 import javax.inject.Inject
@@ -33,7 +33,7 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerBooksStoreComponent.factory().create(
+        DaggerBookCategoriesComponent.factory().create(
             apiHolder().commonApi(),
             apiHolder().networkApi(),
             apiHolder().navigationApi(),
