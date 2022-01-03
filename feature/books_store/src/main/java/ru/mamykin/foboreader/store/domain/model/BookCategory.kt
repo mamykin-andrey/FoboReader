@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.store.domain.model
 
-data class StoreBookCategory(
+class BookCategory(
     val id: String,
     val name: String,
     val description: String?,

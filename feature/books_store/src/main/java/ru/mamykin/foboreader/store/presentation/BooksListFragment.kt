@@ -52,6 +52,7 @@ class BooksListFragment : Fragment(R.layout.fragment_books_list) {
             apiHolder().commonApi(),
             apiHolder().networkApi(),
             apiHolder().navigationApi(),
+            apiHolder().settingsApi(),
             params,
         ).inject(this)
     }

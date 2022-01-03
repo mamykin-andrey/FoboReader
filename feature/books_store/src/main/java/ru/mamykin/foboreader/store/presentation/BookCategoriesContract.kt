@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.store.presentation
 
-import ru.mamykin.foboreader.store.domain.model.StoreBookCategory
+import ru.mamykin.foboreader.store.domain.model.BookCategory
 
 object BookCategories {
 
@@ -16,7 +16,7 @@ object BookCategories {
 
     sealed class Action {
         object Loading : Action()
-        class LoadingSuccess(val categories: List<StoreBookCategory>) : Action()
+        class LoadingSuccess(val categories: List<BookCategory>) : Action()
         class LoadingError(val message: String) : Action()
     }
 
@@ -27,6 +27,6 @@ object BookCategories {
     data class ViewState(
         val isLoading: Boolean = true,
         val isError: Boolean = false,
-        val categories: List<StoreBookCategory>? = null
+        val categories: List<BookCategory>? = null
     )
 }

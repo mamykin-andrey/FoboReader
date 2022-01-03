@@ -14,7 +14,7 @@ import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBookCategoriesBinding
 import ru.mamykin.foboreader.store.databinding.ItemCategoryBinding
 import ru.mamykin.foboreader.store.di.DaggerBookCategoriesComponent
-import ru.mamykin.foboreader.store.domain.model.StoreBookCategory
+import ru.mamykin.foboreader.store.domain.model.BookCategory
 import ru.mamykin.foboreader.store.presentation.list.CategoryViewHolder
 import javax.inject.Inject
 
@@ -28,7 +28,7 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
     @Inject
     internal lateinit var feature: BookCategoriesFeature
 
-    private val categoriesSource = dataSourceTypedOf<StoreBookCategory>()
+    private val categoriesSource = dataSourceTypedOf<BookCategory>()
     private val binding by autoCleanedValue { FragmentBookCategoriesBinding.bind(requireView()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +37,7 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
             apiHolder().commonApi(),
             apiHolder().networkApi(),
             apiHolder().navigationApi(),
+            apiHolder().settingsApi(),
         ).inject(this)
     }
 
@@ -65,7 +66,7 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
     private fun initCategoriesList() {
         binding.rvCategories.setup {
             withDataSource(categoriesSource)
-            withItem<StoreBookCategory, CategoryViewHolder>(R.layout.item_category) {
+            withItem<BookCategory, CategoryViewHolder>(R.layout.item_category) {
                 onBind({
                     CategoryViewHolder(ItemCategoryBinding.bind(it))
                 }) { _, item ->

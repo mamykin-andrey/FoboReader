@@ -6,6 +6,7 @@ import dagger.Module
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
+import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.store.presentation.BooksListFeature
 import ru.mamykin.foboreader.store.presentation.BooksListFragment
 
@@ -17,6 +18,7 @@ import ru.mamykin.foboreader.store.presentation.BooksListFragment
         NetworkApi::class,
         CommonApi::class,
         NavigationApi::class,
+        SettingsApi::class,
     ]
 )
 internal interface BookListComponent {
@@ -30,6 +32,7 @@ internal interface BookListComponent {
             commonApi: CommonApi,
             networkApi: NetworkApi,
             navigationApi: NavigationApi,
+            settingsApi: SettingsApi,
             @BindsInstance params: BooksListFeature.BookCategoriesParams,
         ): BookListComponent
     }

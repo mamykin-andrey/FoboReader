@@ -5,6 +5,7 @@ import dagger.Module
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
+import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.store.presentation.BookCategoriesFragment
 
 @Component(
@@ -15,6 +16,7 @@ import ru.mamykin.foboreader.store.presentation.BookCategoriesFragment
         NetworkApi::class,
         CommonApi::class,
         NavigationApi::class,
+        SettingsApi::class,
     ]
 )
 internal interface BookCategoriesComponent {
@@ -28,6 +30,7 @@ internal interface BookCategoriesComponent {
             commonApi: CommonApi,
             networkApi: NetworkApi,
             navigationApi: NavigationApi,
+            settingsApi: SettingsApi,
         ): BookCategoriesComponent
     }
 }

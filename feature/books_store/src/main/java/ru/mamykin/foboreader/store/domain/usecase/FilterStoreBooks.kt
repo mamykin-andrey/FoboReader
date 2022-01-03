@@ -5,11 +5,11 @@ import ru.mamykin.foboreader.store.data.BooksStoreRepository
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 import javax.inject.Inject
 
-class FilterStoreBooks @Inject constructor(
+internal class FilterStoreBooks @Inject constructor(
     private val repository: BooksStoreRepository
 ) : SuspendUseCase<String, List<StoreBook>>() {
 
-    override suspend fun execute(param: String): List<StoreBook> {
-        return repository.getBooks(param)
+    override suspend fun execute(searchQuery: String): List<StoreBook> {
+        return repository.getBooks(searchQuery)
     }
 }

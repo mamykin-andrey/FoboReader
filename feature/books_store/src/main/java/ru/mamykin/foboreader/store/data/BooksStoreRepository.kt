@@ -1,66 +1,47 @@
 package ru.mamykin.foboreader.store.data
 
-import android.util.Log
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import ru.mamykin.foboreader.store.data.network.BooksStoreService
+import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.store.data.network.TestBooksStoreService
+import ru.mamykin.foboreader.store.domain.model.BookCategory
 import ru.mamykin.foboreader.store.domain.model.StoreBook
-import ru.mamykin.foboreader.store.domain.model.StoreBookCategory
 import javax.inject.Inject
 
-class BooksStoreRepository @Inject constructor(
-    private val service: BooksStoreService
+internal class BooksStoreRepository @Inject constructor(
+    private val service: TestBooksStoreService,
+    private val appSettingsStorage: AppSettingsStorage,
 ) {
-    private var allBooks: List<StoreBook>? = null
-    private var books: List<StoreBook> = emptyList()
-    private val loadBooksMutex = Mutex()
+    private var categoryBooks: List<StoreBook>? = null
+    private val locale: String
+        get() = appSettingsStorage.appLanguageField.get()
 
-    suspend fun getCategories(): List<StoreBookCategory> {
-        delay(1_000)
-        return listOf(
-            StoreBookCategory(
-                id = "1",
-                name = "Фантастика",
-                description = null,
-                booksCount = 4
-            ),
-            StoreBookCategory(
-                id = "2",
-                name = "Сказки",
-                description = null,
-                booksCount = 5
-            ),
-            StoreBookCategory(
-                id = "1",
-                name = "Учебная",
-                description = null,
-                booksCount = 2
-            ),
-        )
+    suspend fun getCategories(): List<BookCategory> {
+        return service.getCategories(locale)
+            .categories
+            .map { it.toDomainModel() }
     }
 
-    suspend fun newGetBooks(categoryId: String): List<StoreBook> {
-        Log.e("this", "get books for category: $categoryId")
-        return loadBooks()
+    suspend fun getBooks(
+        categoryId: String,
+        searchQuery: String? = null,
+    ): List<StoreBook> {
+        val categoryBooks = this.categoryBooks
+            ?: getBooksRemote(categoryId).also { categoryBooks = it }
+        return filterBooks(categoryBooks, searchQuery)
     }
 
-    @Deprecated("Use newGetBooks instead")
-    suspend fun getBooks(query: String): List<StoreBook> {
-        val allBooks = this.allBooks ?: loadBooks()
-        return filter(allBooks, query)
-            .also { this.books = it }
-    }
-
-    private suspend fun loadBooks(): List<StoreBook> = loadBooksMutex.withLock {
-        return service.getBooksAsync()
-            .await()
+    private suspend fun getBooksRemote(
+        categoryId: String,
+    ): List<StoreBook> {
+        return service.getBooks(locale, categoryId)
             .books
             .map { it.toDomainModel() }
-            .also { allBooks = it }
     }
 
-    private fun filter(allBooks: List<StoreBook>, query: String): List<StoreBook> {
-        return allBooks.filter { it.containsText(query) }
+    private fun filterBooks(
+        books: List<StoreBook>,
+        searchQuery: String?
+    ): List<StoreBook> {
+        searchQuery ?: return books
+        return books.filter { it.containsText(searchQuery) }
     }
 }

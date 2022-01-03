@@ -2,14 +2,14 @@ package ru.mamykin.foboreader.store.data.network
 
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
-import ru.mamykin.foboreader.store.data.model.StoreBooksModel
+import ru.mamykin.foboreader.store.data.model.BookListResponse
 
-interface BooksStoreService {
+internal interface BooksStoreService {
 
     companion object {
         const val BASE_URL = "https://fobo-reader-backend.herokuapp.com"
     }
 
     @GET("books")
-    fun getBooksAsync(): Deferred<StoreBooksModel>
+    fun getBooksAsync(): Deferred<BookListResponse>
 }
