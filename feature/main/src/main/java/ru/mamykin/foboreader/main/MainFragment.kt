@@ -18,6 +18,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     )
     private val binding by autoCleanedValue { FragmentMainBinding.bind(requireView()) }
     private val tabFragmentProvider by lazy { apiHolder().mainApi().tabFragmentProvider() }
+    private var isFirstLaunch = true
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -48,7 +49,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         setupNavigationBar()
 
-        if (savedInstanceState == null) {
+        if (isFirstLaunch) {
+            isFirstLaunch = false
             selectTab(Tab.MyBooks, addToBackStack = false)
         }
     }
