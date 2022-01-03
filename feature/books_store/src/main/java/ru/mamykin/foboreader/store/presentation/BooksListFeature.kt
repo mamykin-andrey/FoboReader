@@ -50,7 +50,7 @@ internal class BooksListFeature @Inject constructor(
                 is BooksList.Intent.FilterBooks -> {
                     emit(
                         BooksList.Action.BooksLoaded(
-                            filterStoreBooks(intent.query).getOrThrow()
+                            filterStoreBooks(params.categoryId to intent.query).getOrThrow()
                         )
                     )
                 }

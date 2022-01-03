@@ -7,9 +7,10 @@ import javax.inject.Inject
 
 internal class FilterStoreBooks @Inject constructor(
     private val repository: BooksStoreRepository
-) : SuspendUseCase<String, List<StoreBook>>() {
+) : SuspendUseCase<Pair<String, String>, List<StoreBook>>() {
 
-    override suspend fun execute(searchQuery: String): List<StoreBook> {
-        return repository.getBooks(searchQuery)
+    override suspend fun execute(param: Pair<String, String>): List<StoreBook> {
+        val (categoryId, searchQuery) = param
+        return repository.getBooks(categoryId, searchQuery)
     }
 }
