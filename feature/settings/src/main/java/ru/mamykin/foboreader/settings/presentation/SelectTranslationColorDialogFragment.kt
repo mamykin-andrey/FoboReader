@@ -31,10 +31,10 @@ class SelectTranslationColorDialogFragment : DialogFragment() {
     private val colorsDataSource = dataSourceTypedOf<ColorItem>()
 
     @Inject
-    lateinit var getTranslationColors: GetTranslationColors
+    internal lateinit var getTranslationColors: GetTranslationColors
 
     @Inject
-    lateinit var setTranslationColor: SetTranslationColor
+    internal lateinit var setTranslationColor: SetTranslationColor
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -64,11 +64,11 @@ class SelectTranslationColorDialogFragment : DialogFragment() {
             withItem<ColorItem, ColorItemViewHolder>(R.layout.item_color) {
                 onBind({ ColorItemViewHolder(ItemColorBinding.bind(it)) }) { _, item -> bind(item) }
                 onClick {
-                    setTranslationColor(item.colorCode)
+                    setTranslationColor.execute(item.colorCode)
                     dismiss()
                 }
             }
         }
-        colorsDataSource.set(getTranslationColors(Unit).getOrThrow())
+        colorsDataSource.set(getTranslationColors.execute().getOrThrow())
     }
 }

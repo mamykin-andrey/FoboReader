@@ -19,7 +19,7 @@ class BookDetailsViewModel @Inject constructor(
 ) {
     init {
         viewModelScope.launch {
-            getBookDetails(bookId)
+            getBookDetails.execute(bookId)
                 .doOnSuccess { sendAction(Action.BookLoaded(it)) }
                 .doOnError { sendAction(Action.LoadingError) }
         }

@@ -1,24 +1,25 @@
 package ru.mamykin.foboreader.read_book.domain.usecase
 
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
-import ru.mamykin.foboreader.core.domain.usecase.base.SuspendUseCase
+import ru.mamykin.foboreader.core.domain.usecase.base.Result
 import javax.inject.Inject
 
 class UpdateBookInfo @Inject constructor(
     private val bookInfoRepository: BookInfoRepository
-) : SuspendUseCase<UpdateBookInfo.Param, Unit>() {
-
-    override suspend fun execute(param: Param) {
-        bookInfoRepository.updateBookInfo(
-            param.bookId,
-            param.currentPage,
-            param.totalPages
-        )
+) {
+    suspend fun execute(
+        bookId: Long,
+        currentPage: Int,
+        totalPages: Int,
+    ): Result<Unit> {
+        return runCatching {
+            Result.success(
+                bookInfoRepository.updateBookInfo(
+                    bookId,
+                    currentPage,
+                    totalPages
+                )
+            )
+        }.getOrElse { Result.error(it) }
     }
-
-    data class Param(
-        val bookId: Long,
-        val currentPage: Int,
-        val totalPages: Int
-    )
 }

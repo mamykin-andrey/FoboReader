@@ -4,15 +4,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
-import ru.mamykin.foboreader.core.domain.usecase.base.FlowUseCase
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import javax.inject.Inject
 
 class GetSettings @Inject constructor(
     private val settingsStorage: AppSettingsStorage
-) : FlowUseCase<Unit, List<SettingsItem>>() {
-
-    override fun execute(): Flow<List<SettingsItem>> {
+) {
+    fun execute(): Flow<List<SettingsItem>> {
         return with(settingsStorage) {
             combine(
                 nightThemeField.flow.map { SettingsItem.NightTheme(it) },

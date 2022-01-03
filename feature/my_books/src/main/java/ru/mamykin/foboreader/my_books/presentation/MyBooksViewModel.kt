@@ -21,11 +21,11 @@ class MyBooksViewModel @Inject constructor(
     private val reducer = MyBooksReducer()
 
     init {
-        getMyBooks()
-            .map { Action.BooksLoaded(it.getOrThrow()) }
+        getMyBooks.execute()
+            .map { Action.BooksLoaded(it) }
             .onEach { sendAction(it) }
             .launchIn(viewModelScope)
-        viewModelScope.launch { scanBooks(Unit) }
+        viewModelScope.launch { scanBooks.execute() }
     }
 
     override fun onAction(action: Action): ViewState = reducer.invoke(action)
@@ -33,9 +33,9 @@ class MyBooksViewModel @Inject constructor(
     override fun onEvent(event: Event) {
         viewModelScope.launch {
             when (event) {
-                is Event.RemoveBook -> removeBook(event.id)
-                is Event.SortBooks -> sortMyBooks(event.sortOrder)
-                is Event.FilterBooks -> filterMyBooks(event.query)
+                is Event.RemoveBook -> removeBook.execute(event.id)
+                is Event.SortBooks -> sortMyBooks.execute(event.sortOrder)
+                is Event.FilterBooks -> filterMyBooks.execute(event.query)
             }
         }
     }

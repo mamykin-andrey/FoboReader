@@ -13,17 +13,18 @@ class VibratorHelper @Inject constructor(
 ) {
     private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-    private val clickVibrationEnabled: Boolean
-        get() = getVibrationEnabled(Unit).getOrThrow()
-
     @SuppressLint("MissingPermission")
     fun clickVibrate() {
-        if (!clickVibrationEnabled) return
+        if (!isClickVibrationEnabled()) return
 
         if (OsHelper.isQ()) {
             vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
             vibrator.vibrate(20)
         }
+    }
+
+    private fun isClickVibrationEnabled(): Boolean {
+        return getVibrationEnabled.execute().getOrThrow()
     }
 }

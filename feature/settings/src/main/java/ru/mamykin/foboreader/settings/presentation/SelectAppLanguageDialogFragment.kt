@@ -35,7 +35,7 @@ class SelectAppLanguageDialogFragment : DialogFragment() {
             apiHolder().navigationApi()
         ).inject(this)
 
-        val supportedLanguages = getAppLanguages(Unit).getOrThrow()
+        val supportedLanguages = getAppLanguages.execute().getOrThrow()
         val supportedLanguagesNames = supportedLanguages.map { it.first }.toTypedArray()
 
         return AlertDialog.Builder(requireContext())
@@ -44,7 +44,7 @@ class SelectAppLanguageDialogFragment : DialogFragment() {
                 dismiss()
                 supportedLanguages.getOrNull(index)
                     ?.second
-                    ?.let(setAppLanguage::invoke)
+                    ?.let(setAppLanguage::execute)
             }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .create()

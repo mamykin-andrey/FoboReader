@@ -42,7 +42,7 @@ internal class BooksListFeature @Inject constructor(
             when (intent) {
                 is BooksList.Intent.LoadBooks -> {
                     emit(BooksList.Action.BooksLoading)
-                    getStoreBooks(params.categoryId).catchMap(
+                    getStoreBooks.execute(params.categoryId).catchMap(
                         { emit(BooksList.Action.BooksLoaded(it)) },
                         { emit(BooksList.Action.BooksLoadingError(it.message.orEmpty())) }
                     )
@@ -50,13 +50,13 @@ internal class BooksListFeature @Inject constructor(
                 is BooksList.Intent.FilterBooks -> {
                     emit(
                         BooksList.Action.BooksLoaded(
-                            filterStoreBooks(params.categoryId to intent.query).getOrThrow()
+                            filterStoreBooks.execute(params.categoryId, intent.query).getOrThrow()
                         )
                     )
                 }
                 is BooksList.Intent.DownloadBook -> {
                     emit(BooksList.Action.DownloadBookStarted)
-                    downloadStoreBook(intent.book).catchMap(
+                    downloadStoreBook.execute(intent.book).catchMap(
                         { emit(BooksList.Action.BookDownloaded) },
                         { emit(BooksList.Action.BookDownloadError(it.message.orEmpty())) }
                     )

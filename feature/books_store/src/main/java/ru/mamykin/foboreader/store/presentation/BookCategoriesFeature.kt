@@ -36,7 +36,7 @@ internal class BookCategoriesFeature @Inject constructor(
             when (intent) {
                 is BookCategories.Intent.LoadCategories -> {
                     emit(BookCategories.Action.Loading)
-                    getBookCategories(Unit).catchMap(
+                    getBookCategories.execute().catchMap(
                         { emit(BookCategories.Action.LoadingSuccess(it)) },
                         { emit(BookCategories.Action.LoadingError(it.message.orEmpty())) }
                     )

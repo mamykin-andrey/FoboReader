@@ -1,14 +1,15 @@
 package ru.mamykin.foboreader.my_books.domain.usecase
 
-import ru.mamykin.foboreader.core.domain.usecase.base.UseCase
+import ru.mamykin.foboreader.core.domain.usecase.base.Result
 import ru.mamykin.foboreader.my_books.data.MyBooksRepository
 import javax.inject.Inject
 
 class FilterMyBooks @Inject constructor(
     private val repository: MyBooksRepository
-) : UseCase<String, Unit>() {
-
-    override fun execute(param: String) {
-        repository.filter(param)
+) {
+    fun execute(searchQuery: String): Result<Unit> {
+        return runCatching {
+            Result.success(repository.filter(searchQuery))
+        }.getOrElse { Result.error(it) }
     }
 }
