@@ -17,7 +17,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         Tab.Settings.tag to R.id.settings,
     )
     private val binding by autoCleanedValue { FragmentMainBinding.bind(requireView()) }
-
     private val tabFragmentProvider by lazy { apiHolder().mainApi().tabFragmentProvider() }
 
     override fun onAttach(context: Context) {
@@ -38,7 +37,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             ?: throw NullPointerException("Current fragment doesn't have tag!")
 
         return tagsToNavIdsMap[currentTabFragmentTag]
-            ?: throw NullPointerException("")
+            ?: throw NullPointerException("Unknown fragment tag: $currentTabFragmentTag!")
     }
 
     private fun getCurrentTabFragment(): Fragment? {
