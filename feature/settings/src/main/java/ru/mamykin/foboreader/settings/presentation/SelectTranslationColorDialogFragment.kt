@@ -69,6 +69,6 @@ class SelectTranslationColorDialogFragment : DialogFragment() {
                 }
             }
         }
-        colorsDataSource.set(getTranslationColors.execute().getOrThrow())
+        colorsDataSource.set(getTranslationColors.execute())
     }
 }

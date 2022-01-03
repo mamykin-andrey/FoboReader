@@ -19,9 +19,10 @@ class BookDetailsViewModel @Inject constructor(
 ) {
     init {
         viewModelScope.launch {
-            getBookDetails.execute(bookId)
-                .doOnSuccess { sendAction(Action.BookLoaded(it)) }
-                .doOnError { sendAction(Action.LoadingError) }
+            getBookDetails.execute(bookId).fold(
+                { sendAction(Action.BookLoaded(it)) },
+                { sendAction(Action.LoadingError) }
+            )
         }
     }
 

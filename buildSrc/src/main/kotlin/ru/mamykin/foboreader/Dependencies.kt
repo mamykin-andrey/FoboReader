@@ -2,7 +2,7 @@ package ru.mamykin.foboreader
 
 object Versions {
     const val viewModelVersion = "1.1.0"
-    const val roomVersion = "2.2.1"
+    const val roomVersion = "2.4.0"
     const val coroutinesVersion = "1.3.2"
     const val retrofitVersion = "2.3.0"
     const val okHttpVersion = "4.9.0"

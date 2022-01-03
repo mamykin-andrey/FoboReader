@@ -35,7 +35,7 @@ class SelectAppLanguageDialogFragment : DialogFragment() {
             apiHolder().navigationApi()
         ).inject(this)
 
-        val supportedLanguages = getAppLanguages.execute().getOrThrow()
+        val supportedLanguages = getAppLanguages.execute()
         val supportedLanguagesNames = supportedLanguages.map { it.first }.toTypedArray()
 
         return AlertDialog.Builder(requireContext())

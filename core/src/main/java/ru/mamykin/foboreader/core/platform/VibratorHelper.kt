@@ -25,6 +25,6 @@ class VibratorHelper @Inject constructor(
     }
 
     private fun isClickVibrationEnabled(): Boolean {
-        return getVibrationEnabled.execute().getOrThrow()
+        return getVibrationEnabled.execute()
     }
 }

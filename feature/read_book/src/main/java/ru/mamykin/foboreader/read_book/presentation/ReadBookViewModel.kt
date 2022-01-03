@@ -26,7 +26,7 @@ class ReadBookViewModel @Inject constructor(
 
     private fun loadBookInfo() = viewModelScope.launch {
         sendAction(Action.BookLoading)
-        val info = getBookInfo.execute(bookId).getOrThrow()
+        val info = getBookInfo.execute(bookId)
         val content = getBookContent.execute(info.filePath).getOrThrow()
         sendAction(Action.BookLoaded(info, content.text))
     }
@@ -65,14 +65,15 @@ class ReadBookViewModel @Inject constructor(
 
     private fun translateParagraph(paragraph: String) {
         getParagraphTranslation.execute(paragraph)
-            .doOnSuccess { it?.let { sendAction(Action.ParagraphTranslationLoaded(paragraph, it)) } }
-            .doOnError { sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error)) }
+            ?.let { sendAction(Action.ParagraphTranslationLoaded(paragraph, it)) }
+            ?: sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error))
     }
 
     private fun translateWord(word: String) = viewModelScope.launch {
         sendAction(Action.TranslationLoading)
-        getWordTranslation.execute(word)
-            .doOnSuccess { sendAction(Action.WordTranslationLoaded(it)) }
-            .doOnError { sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error)) }
+        getWordTranslation.execute(word).fold(
+            { sendAction(Action.WordTranslationLoaded(it)) },
+            { sendEffect(Effect.ShowSnackbar(R.string.read_book_translation_download_error)) }
+        )
     }
 }
