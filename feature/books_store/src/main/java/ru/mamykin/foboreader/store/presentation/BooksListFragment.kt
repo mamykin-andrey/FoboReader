@@ -73,11 +73,15 @@ class BooksListFragment : Fragment(R.layout.fragment_books_list) {
     }
 
     private fun initToolbar() {
+        val rawIconBackDrawable = requireContext().getDrawable(R.drawable.ic_back)!!
+        val iconBackDrawable = rawIconBackDrawable.mutate()
+        iconBackDrawable.setTint(resources.getColor(R.color.colorSecondary))
         binding.vToolbar.toolbar.apply {
             title = getString(R.string.books_store_title)
-            navigationIcon = null
+            navigationIcon = iconBackDrawable
             inflateMenu(R.menu.menu_books_store)
             initSearchView(menu)
+            setNavigationOnClickListener { requireActivity().onBackPressed() }
         }
     }
 
