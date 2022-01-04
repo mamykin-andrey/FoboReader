@@ -1,25 +1,22 @@
 package ru.mamykin.foboreader.settings.domain.usecase
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import javax.inject.Inject
 
 class GetSettings @Inject constructor(
-    private val settingsStorage: AppSettingsStorage
+    private val settingsStorage: AppSettingsStorage,
 ) {
-    fun execute(): Flow<List<SettingsItem>> {
+    fun execute(): List<SettingsItem> {
         return with(settingsStorage) {
-            combine(
-                nightThemeField.flow.map { SettingsItem.NightTheme(it) },
-                brightnessField.flow.map { SettingsItem.Brightness(it) },
-                readTextSizeField.flow.map { SettingsItem.ReadTextSize(it) },
-                translationColorCodeField.flow.map { SettingsItem.TranslationColor(it) },
-                appLanguageField.flow.map { SettingsItem.AppLanguage(it) },
-                useVibrationField.flow.map { SettingsItem.UseVibration(it) }
-            ) { it.toList() }
+            listOf(
+                SettingsItem.NightTheme(nightThemeField.get()),
+                SettingsItem.Brightness(brightnessField.get()),
+                SettingsItem.ReadTextSize(readTextSizeField.get()),
+                SettingsItem.TranslationColor(translationColorCodeField.get()),
+                SettingsItem.AppLanguage(appLanguageField.get()),
+                SettingsItem.UseVibration(useVibrationField.get()),
+            )
         }
     }
 }

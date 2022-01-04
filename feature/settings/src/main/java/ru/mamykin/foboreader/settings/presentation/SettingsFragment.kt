@@ -13,14 +13,13 @@ import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.*
 import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
-import ru.mamykin.foboreader.settings.navigation.DialogNavigator
 import ru.mamykin.foboreader.settings.presentation.list.*
 import javax.inject.Inject
 
-class SettingsFragment : Fragment(R.layout.fragment_settings) {
+class SettingsFragment : Fragment(R.layout.fragment_settings), DialogDismissedListener {
 
     @Inject
-    lateinit var viewModel: SettingsViewModel
+    internal lateinit var feature: SettingsFeature
 
     private val binding by autoCleanedValue { FragmentSettingsBinding.bind(requireView()) }
     private val settingsSource = dataSourceTypedOf<SettingsItem>()
@@ -30,7 +29,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         DaggerSettingsComponent.factory().create(
             apiHolder().commonApi(),
             apiHolder().settingsApi(),
-            apiHolder().navigationApi()
+            apiHolder().navigationApi(),
         ).inject(this)
     }
 
@@ -38,7 +37,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initSettingsList()
-        initViewModel()
+        initFeature()
+    }
+
+    override fun onDismiss() {
+        feature.sendEvent(Settings.Event.DialogDismissed)
     }
 
     private fun initToolbar() {
@@ -55,7 +58,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 onBind({
                     NightThemeHolder(
                         ItemNightThemeBinding.bind(it),
-                        viewModel::sendEvent,
+                        feature::sendEvent,
                         viewLifecycleOwner.lifecycleScope
                     )
                 }) { _, item -> bind(item) }
@@ -64,7 +67,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 onBind({
                     BrightnessHolder(
                         ItemBackgroundBrightnessBinding.bind(it),
-                        viewModel::sendEvent,
+                        feature::sendEvent,
                         viewLifecycleOwner.lifecycleScope
                     )
                 }) { _, item -> bind(item) }
@@ -73,7 +76,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 onBind({
                     TextSizeHolder(
                         ItemTextSizeBinding.bind(it),
-                        viewModel::sendEvent,
+                        feature::sendEvent,
                         viewLifecycleOwner.lifecycleScope
                     )
                 }) { _, item -> bind(item) }
@@ -82,7 +85,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 onBind({
                     TranslationColorHolder(
                         ItemTranslationColorBinding.bind(it),
-                        viewModel::sendEvent,
+                        feature::sendEvent,
                         viewLifecycleOwner.lifecycleScope
                     )
                 }) { _, item -> bind(item) }
@@ -91,7 +94,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 onBind({
                     AppLanguageHolder(
                         ItemAppLanguageBinding.bind(it),
-                        viewModel::sendEvent,
+                        feature::sendEvent,
                         viewLifecycleOwner.lifecycleScope
                     )
                 }) { _, item -> bind(item) }
@@ -100,7 +103,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 onBind({
                     UseVibrationHolder(
                         ItemUseVibrationBinding.bind(it),
-                        viewModel::sendEvent,
+                        feature::sendEvent,
                         viewLifecycleOwner.lifecycleScope
                     )
                 }) { _, item -> bind(item) }
@@ -108,26 +111,29 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
     }
 
-    private fun initViewModel() {
-        viewModel.stateLiveData.observe(viewLifecycleOwner, ::showState)
-        viewModel.navigateData.observe(viewLifecycleOwner, ::showDialog)
+    private fun initFeature() {
+        feature.stateData.observe(viewLifecycleOwner, ::showState)
+        feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 
-    private fun showState(state: ViewState) {
-        binding.rvSettings.post {
-            state.settings?.let(settingsSource::set)
-        }
+    private fun showState(state: Settings.ViewState) {
+        state.settings?.let(settingsSource::set)
     }
 
-    private fun showDialog(dialog: DialogNavigator.Dialog) {
-        val (fragment, tag) = when (dialog) {
-            is DialogNavigator.Dialog.SelectAppLanguage -> {
-                SelectAppLanguageDialogFragment.newInstance() to SelectAppLanguageDialogFragment.TAG
+    private fun takeEffect(effect: Settings.Effect) {
+        when (effect) {
+            is Settings.Effect.SelectReadColor -> {
+                SelectTranslationColorDialogFragment.newInstance().show(
+                    childFragmentManager,
+                    SelectTranslationColorDialogFragment.TAG
+                )
             }
-            is DialogNavigator.Dialog.SelectTranslationColor -> {
-                SelectTranslationColorDialogFragment.newInstance() to SelectTranslationColorDialogFragment.TAG
+            is Settings.Effect.SelectAppLanguage -> {
+                SelectAppLanguageDialogFragment.newInstance().show(
+                    childFragmentManager,
+                    SelectAppLanguageDialogFragment.TAG
+                )
             }
         }
-        fragment.show(childFragmentManager, tag)
     }
 }

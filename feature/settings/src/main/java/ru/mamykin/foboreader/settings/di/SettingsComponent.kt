@@ -30,7 +30,7 @@ interface SettingsComponent {
         fun create(
             commonApi: CommonApi,
             settingsApi: SettingsApi,
-            navigationApi: NavigationApi
+            navigationApi: NavigationApi,
         ): SettingsComponent
     }
 }

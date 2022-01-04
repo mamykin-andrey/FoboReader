@@ -2,6 +2,7 @@ package ru.mamykin.foboreader.settings.presentation
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -32,7 +33,7 @@ class SelectAppLanguageDialogFragment : DialogFragment() {
         DaggerSettingsComponent.factory().create(
             apiHolder().commonApi(),
             apiHolder().settingsApi(),
-            apiHolder().navigationApi()
+            apiHolder().navigationApi(),
         ).inject(this)
 
         val supportedLanguages = getAppLanguages.execute()
@@ -48,5 +49,12 @@ class SelectAppLanguageDialogFragment : DialogFragment() {
             }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .create()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        if (parentFragment is DialogDismissedListener) {
+            (parentFragment as DialogDismissedListener).onDismiss()
+        }
     }
 }

@@ -6,17 +6,17 @@ import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.settings.databinding.ItemAppLanguageBinding
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
-import ru.mamykin.foboreader.settings.presentation.Event
+import ru.mamykin.foboreader.settings.presentation.Settings
 
 class AppLanguageHolder(
     private val binding: ItemAppLanguageBinding,
-    private val onEvent: (Event) -> Unit,
+    private val onEvent: (Settings.Event) -> Unit,
     lifecycleScope: CoroutineScope
 ) : SettingsItemHolder<SettingsItem.AppLanguage>(binding.root) {
 
     init {
         binding.clRoot.clicks()
-            .onEach { onEvent(Event.SelectAppLanguage) }
+            .onEach { onEvent(Settings.Event.SelectAppLanguage) }
             .launchIn(lifecycleScope)
     }
 

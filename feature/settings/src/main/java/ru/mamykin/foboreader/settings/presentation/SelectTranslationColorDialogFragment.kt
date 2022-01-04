@@ -2,6 +2,7 @@ package ru.mamykin.foboreader.settings.presentation
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -41,7 +42,7 @@ class SelectTranslationColorDialogFragment : DialogFragment() {
         DaggerSettingsComponent.factory().create(
             apiHolder().commonApi(),
             apiHolder().settingsApi(),
-            apiHolder().navigationApi()
+            apiHolder().navigationApi(),
         ).inject(this)
 
         val inflater = requireActivity().layoutInflater
@@ -56,6 +57,13 @@ class SelectTranslationColorDialogFragment : DialogFragment() {
         initColorsList(DialogColorPickerBinding.bind(view))
 
         return dialog
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        if (parentFragment is DialogDismissedListener) {
+            (parentFragment as DialogDismissedListener).onDismiss()
+        }
     }
 
     private fun initColorsList(binding: DialogColorPickerBinding) = binding.apply {
