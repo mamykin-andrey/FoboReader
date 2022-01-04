@@ -45,6 +45,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         return childFragmentManager.fragments.firstOrNull { it.isVisible }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isFirstLaunch = savedInstanceState == null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupNavigationBar()
