@@ -4,11 +4,11 @@ import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.settings.domain.model.ColorItem
 import javax.inject.Inject
 
-class GetTranslationColors @Inject constructor(
+internal class GetTranslationColors @Inject constructor(
     private val appSettingsStorage: AppSettingsStorage
 ) {
     fun execute(): List<ColorItem> {
-        val selectedColorCode = appSettingsStorage.translationColorCodeField.get()
+        val selectedColorCode = appSettingsStorage.translationColor
         return createColors(selectedColorCode)
     }
 

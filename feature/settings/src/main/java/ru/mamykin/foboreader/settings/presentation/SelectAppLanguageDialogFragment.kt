@@ -13,7 +13,7 @@ import ru.mamykin.foboreader.settings.domain.usecase.GetAppLanguages
 import ru.mamykin.foboreader.settings.domain.usecase.SetAppLanguage
 import javax.inject.Inject
 
-class SelectAppLanguageDialogFragment : DialogFragment() {
+internal class SelectAppLanguageDialogFragment : DialogFragment() {
 
     companion object {
 

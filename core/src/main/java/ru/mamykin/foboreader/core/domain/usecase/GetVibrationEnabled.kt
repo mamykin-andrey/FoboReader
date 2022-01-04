@@ -7,6 +7,6 @@ class GetVibrationEnabled @Inject constructor(
     private val settingsStorage: AppSettingsStorage
 ) {
     fun execute(): Boolean {
-        return settingsStorage.useVibrationField.get()
+        return settingsStorage.useVibration
     }
 }

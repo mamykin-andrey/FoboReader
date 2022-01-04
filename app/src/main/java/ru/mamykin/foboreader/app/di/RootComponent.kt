@@ -13,7 +13,7 @@ annotation class RootScope
 
 @RootScope
 @Component(dependencies = [NavigationApi::class, SettingsApi::class])
-interface RootComponent {
+internal interface RootComponent {
 
     fun inject(activity: RootActivity)
 

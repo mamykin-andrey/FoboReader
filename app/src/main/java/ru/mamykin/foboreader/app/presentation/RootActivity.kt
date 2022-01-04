@@ -12,16 +12,16 @@ import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import javax.inject.Inject
 
-class RootActivity : AppCompatActivity(R.layout.activity_root) {
+internal class RootActivity : AppCompatActivity(R.layout.activity_root) {
 
     @Inject
-    lateinit var appSettingsStorage: AppSettingsStorage
+    internal lateinit var appSettingsStorage: AppSettingsStorage
 
     @Inject
-    lateinit var cicerone: Cicerone<Router>
+    internal lateinit var cicerone: Cicerone<Router>
 
     @Inject
-    lateinit var screenProvider: ScreenProvider
+    internal lateinit var screenProvider: ScreenProvider
 
     private val router by lazy { cicerone.router }
     private val navigatorHolder by lazy { cicerone.getNavigatorHolder() }

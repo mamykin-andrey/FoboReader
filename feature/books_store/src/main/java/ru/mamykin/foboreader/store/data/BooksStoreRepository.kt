@@ -12,7 +12,7 @@ internal class BooksStoreRepository @Inject constructor(
 ) {
     private var categoryBooks: List<StoreBook>? = null
     private val locale: String
-        get() = appSettingsStorage.appLanguageField.get()
+        get() = appSettingsStorage.appLanguageCode
 
     suspend fun getCategories(): List<BookCategory> {
         return service.getCategories(locale)

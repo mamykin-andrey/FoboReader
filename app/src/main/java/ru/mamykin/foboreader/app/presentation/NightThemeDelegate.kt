@@ -12,7 +12,7 @@ class NightThemeDelegate(
     private val appSettingsStorage: AppSettingsStorage,
 ) {
     fun init() {
-        appSettingsStorage.nightThemeField.flow
+        appSettingsStorage.nightThemeFlow()
             .onEach { activity.setNightModeEnabled(it) }
             .launchIn(activity.lifecycleScope)
     }

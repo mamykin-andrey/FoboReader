@@ -4,11 +4,11 @@ import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.settings.domain.model.supportedAppLanguages
 import javax.inject.Inject
 
-class GetSelectedLanguage @Inject constructor(
+internal class GetSelectedLanguage @Inject constructor(
     private val appSettings: AppSettingsStorage
 ) {
     fun execute(): Pair<String, String> {
-        val selectedLanguageCode = appSettings.appLanguageField.get()
+        val selectedLanguageCode = appSettings.appLanguageCode
         return supportedAppLanguages.find { it.second == selectedLanguageCode }
             ?: supportedAppLanguages.first()
     }

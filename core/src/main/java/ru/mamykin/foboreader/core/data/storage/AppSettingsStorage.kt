@@ -1,15 +1,12 @@
 package ru.mamykin.foboreader.core.data.storage
 
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AppSettingsStorage @Inject constructor(
-    private val prefManager: PreferencesManager
+    private val prefManager: PreferencesManager,
 ) {
     companion object {
 
@@ -21,83 +18,45 @@ class AppSettingsStorage @Inject constructor(
         private const val USE_VIBRATION = "use_vibration"
     }
 
-    abstract class ObservableField<T> {
+    fun nightThemeFlow() = prefManager.observeBooleanChanges(NIGHT_THEME_ENABLED)
 
-        private val channel = ConflatedBroadcastChannel(get())
-        val flow: Flow<T> = channel.asFlow()
+    fun appLanguageFlow() = prefManager.observeStringChanges(APP_LANGUAGE_CODE)
 
-        abstract fun get(): T
-
-        open fun set(value: T) {
-            channel.offer(value)
-        }
-    }
-
-    val nightThemeField = object : ObservableField<Boolean>() {
-        override fun get(): Boolean {
-            return prefManager.getBoolean(NIGHT_THEME_ENABLED, false)
-        }
-
-        override fun set(value: Boolean) {
+    var nightThemeEnabled: Boolean
+        get() = prefManager.getBoolean(NIGHT_THEME_ENABLED, false)
+        set(value) {
             prefManager.putBoolean(NIGHT_THEME_ENABLED, value)
-            super.set(value)
-        }
-    }
-
-    val brightnessField = object : ObservableField<Int>() {
-        override fun get(): Int {
-            return prefManager.getInt(BRIGHTNESS) ?: 100
         }
 
-        override fun set(value: Int) {
+    var brightness: Int
+        get() = prefManager.getInt(BRIGHTNESS) ?: 100
+        set(value) {
             prefManager.putInt(BRIGHTNESS, value)
-            super.set(value)
-        }
-    }
-
-    val readTextSizeField = object : ObservableField<Int>() {
-        override fun get(): Int {
-            return prefManager.getInt(READ_TEXT_SIZE) ?: 16
         }
 
-        override fun set(value: Int) {
+    var readTextSize: Int
+        get() = prefManager.getInt(READ_TEXT_SIZE) ?: 16
+        set(value) {
             value.takeIf { it in 10..30 }?.let {
                 prefManager.putInt(READ_TEXT_SIZE, value)
             }
-            super.set(value)
-        }
-    }
-
-    val translationColorCodeField = object : ObservableField<String>() {
-        override fun get(): String {
-            return prefManager.getString(TRANSLATION_COLOR) ?: "#000000"
         }
 
-        override fun set(value: String) {
+    var translationColor: String
+        get() = prefManager.getString(TRANSLATION_COLOR) ?: "#000000"
+        set(value) {
             prefManager.putString(TRANSLATION_COLOR, value)
-            super.set(value)
-        }
-    }
-
-    val appLanguageField = object : ObservableField<String>() {
-        override fun get(): String {
-            return prefManager.getString(APP_LANGUAGE_CODE) ?: Locale.getDefault().language
         }
 
-        override fun set(value: String) {
+    var appLanguageCode: String
+        get() = prefManager.getString(APP_LANGUAGE_CODE) ?: Locale.getDefault().language
+        set(value) {
             prefManager.putString(APP_LANGUAGE_CODE, value)
-            super.set(value)
-        }
-    }
-
-    val useVibrationField = object : ObservableField<Boolean>() {
-        override fun get(): Boolean {
-            return prefManager.getBoolean(USE_VIBRATION, true)
         }
 
-        override fun set(value: Boolean) {
+    var useVibration: Boolean
+        get() = prefManager.getBoolean(USE_VIBRATION, true)
+        set(value) {
             prefManager.putBoolean(USE_VIBRATION, value)
-            super.set(value)
         }
-    }
 }

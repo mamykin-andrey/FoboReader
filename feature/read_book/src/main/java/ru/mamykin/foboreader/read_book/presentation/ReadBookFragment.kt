@@ -63,7 +63,7 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvText.textSize = appSettingsStorage.readTextSizeField.get().toFloat()
+        binding.tvText.textSize = appSettingsStorage.readTextSize.toFloat()
         binding.tvText.setOnActionListener(object : ClickableTextView.OnActionListener {
             override fun onClick(paragraph: String) {
                 vibratorHelper.clickVibrate()
@@ -106,7 +106,7 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
         val (paragraph, translation) = info
         binding.tvText.text = SpannableString(paragraph + "\n\n" + translation).apply {
             setColor(
-                appSettingsStorage.translationColorCodeField.get().let { Color.parseColor(it) },
+                Color.parseColor(appSettingsStorage.translationColor),
                 paragraph.length,
                 length - 1
             )

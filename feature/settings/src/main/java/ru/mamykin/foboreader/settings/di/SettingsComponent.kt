@@ -16,7 +16,7 @@ annotation class SettingsScope
 
 @SettingsScope
 @Component(dependencies = [CommonApi::class, SettingsApi::class, NavigationApi::class])
-interface SettingsComponent {
+internal interface SettingsComponent {
 
     fun inject(fragment: SettingsFragment)
 

@@ -12,7 +12,7 @@ class AppLanguageDelegate(
     private val appSettingsStorage: AppSettingsStorage,
 ) {
     fun init() {
-        appSettingsStorage.appLanguageField.flow
+        appSettingsStorage.appLanguageFlow()
             .onEach { activity.setCurrentLocale(it) }
             .launchIn(activity.lifecycleScope)
     }
