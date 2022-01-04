@@ -1,51 +1,39 @@
 package ru.mamykin.foboreader.my_books.data
 
-import android.content.Context
-import android.os.FileObserver
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.channels.sendBlocking
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
-import ru.mamykin.foboreader.core.extension.getExternalMediaDir
 import ru.mamykin.foboreader.my_books.domain.helper.BookFilesScanner
 import ru.mamykin.foboreader.my_books.domain.helper.BooksComparatorFactory
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 import javax.inject.Inject
 
-class MyBooksRepository @Inject constructor(
+internal class MyBooksRepository @Inject constructor(
     private val repository: BookInfoRepository,
     private val booksScanner: BookFilesScanner,
-    private val context: Context,
 ) {
-    private var allBooks = emptyList<BookInfo>()
-    private val booksStateChannel = ConflatedBroadcastChannel(BooksState(loadNew = true))
+    private var allBooks: List<BookInfo>? = null
+    private var sortOrder: SortOrder = SortOrder.ByName
+    private var searchQuery: String = ""
 
-    suspend fun newGetBooks(): List<BookInfo> {
-        return getSortedAndFilteredBooks(
-            repository.getBooks(),
-            "",
-            SortOrder.ByName
+    suspend fun getBooks(): List<BookInfo> {
+        return sortAndFilter(
+            books = getAllBooks(),
+            searchQuery = searchQuery,
+            sortOrder = sortOrder
         )
     }
 
-    @Deprecated("")
-    fun getBooks(): Flow<List<BookInfo>> = flow {
-        booksStateChannel.consumeEach { state ->
-            if (state.loadNew) {
-                booksScanner.scan()
-                allBooks = repository.getBooks()
-            }
-            emit(getSortedAndFilteredBooks(allBooks, state.searchQuery, state.sortOrder))
-        }
+    private suspend fun getAllBooks(): List<BookInfo> {
+        return allBooks ?: loadBooks()
+            .also { allBooks = it }
     }
 
-    private fun getSortedAndFilteredBooks(
+    private suspend fun loadBooks(): List<BookInfo> {
+        booksScanner.scan()
+        return repository.getBooks()
+    }
+
+    private fun sortAndFilter(
         books: List<BookInfo>,
         searchQuery: String,
         sortOrder: SortOrder
@@ -54,46 +42,13 @@ class MyBooksRepository @Inject constructor(
             .sortedWith(BooksComparatorFactory().create(sortOrder))
     }
 
-    private fun updateState(createNew: (BooksState) -> BooksState) {
-        booksStateChannel.offer(createNew(booksStateChannel.value))
+    suspend fun sortBooks(sortOrder: SortOrder): List<BookInfo> {
+        this.sortOrder = sortOrder
+        return getBooks()
     }
 
-    fun sort(sortOrder: SortOrder) {
-        updateState {
-            it.copy(sortOrder = sortOrder, loadNew = false)
-        }
+    suspend fun filterBooks(searchQuery: String): List<BookInfo> {
+        this.searchQuery = searchQuery
+        return getBooks()
     }
-
-    fun filter(searchQuery: String) {
-        updateState {
-            it.copy(searchQuery = searchQuery, loadNew = false)
-        }
-    }
-
-    suspend fun scanBooks() {
-        fileChangesFlow().collect {
-            updateState {
-                it.copy(loadNew = true)
-            }
-        }
-    }
-
-    private fun fileChangesFlow(): Flow<Unit> = callbackFlow {
-        val externalMediaDir = context.getExternalMediaDir()
-            ?: throw IllegalStateException("Unable to open media directory!")
-
-        val fileObserver = object : FileObserver(externalMediaDir, CREATE or DELETE) {
-            override fun onEvent(event: Int, file: String?) {
-                sendBlocking(Unit)
-            }
-        }
-        fileObserver.startWatching()
-        awaitClose { fileObserver.stopWatching() }
-    }
-
-    data class BooksState(
-        val loadNew: Boolean = true,
-        val sortOrder: SortOrder = SortOrder.ByName,
-        val searchQuery: String = ""
-    )
 }

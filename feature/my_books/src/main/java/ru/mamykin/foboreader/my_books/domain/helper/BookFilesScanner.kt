@@ -5,19 +5,15 @@ import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
 import ru.mamykin.foboreader.common_book_info.data.model.toDatabaseModel
 import ru.mamykin.foboreader.core.extension.getExternalMediaDir
 import ru.mamykin.foboreader.core.extension.isFictionBook
-import ru.mamykin.foboreader.core.platform.Log
 import javax.inject.Inject
 
-class BookFilesScanner @Inject constructor(
+internal class BookFilesScanner @Inject constructor(
     private val context: Context,
     private val bookInfoDao: BookInfoDao,
-    private val bookInfoParser: BookInfoParser
+    private val bookInfoParser: BookInfoParser,
 ) {
     suspend fun scan() {
-        val dir = context.getExternalMediaDir() ?: run {
-            Log.error("Can't open media directory!")
-            return
-        }
+        val dir = context.getExternalMediaDir() ?: throw IllegalStateException("Can't open media directory!")
 
         val addedFiles = bookInfoDao.getBooks().map { it.filePath }
 

@@ -8,7 +8,10 @@ import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.core.presentation.ReducerResult
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
-import ru.mamykin.foboreader.my_books.domain.usecase.*
+import ru.mamykin.foboreader.my_books.domain.usecase.FilterMyBooks
+import ru.mamykin.foboreader.my_books.domain.usecase.GetMyBooks
+import ru.mamykin.foboreader.my_books.domain.usecase.RemoveBook
+import ru.mamykin.foboreader.my_books.domain.usecase.SortMyBooks
 import javax.inject.Inject
 
 internal class MyBooksFeature @Inject constructor(
@@ -39,7 +42,6 @@ internal class MyBooksFeature @Inject constructor(
 
     internal class MyBooksActor @Inject constructor(
         private val getMyBooks: GetMyBooks,
-        private val scanBooks: ScanBooks,
         private val sortMyBooks: SortMyBooks,
         private val filterMyBooks: FilterMyBooks,
         private val removeBook: RemoveBook,
@@ -48,22 +50,17 @@ internal class MyBooksFeature @Inject constructor(
         override fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
                 is Intent.ScanBooks -> {
-                    scanBooks.execute().fold(
-                        { emit(Action.BooksLoaded(getMyBooks.execute())) },
-                        { throw it }
-                    )
+                    emit(Action.BooksLoaded(getMyBooks.execute()))
                 }
                 is Intent.RemoveBook -> {
                     removeBook.execute(intent.id)
                     emit(Action.BooksLoaded(getMyBooks.execute()))
                 }
                 is Intent.SortBooks -> {
-                    sortMyBooks.execute(intent.sortOrder)
-                    emit(Action.BooksLoaded(getMyBooks.execute()))
+                    emit(Action.BooksLoaded(sortMyBooks.execute(intent.sortOrder)))
                 }
                 is Intent.FilterBooks -> {
-                    filterMyBooks.execute(intent.query)
-                    emit(Action.BooksLoaded(getMyBooks.execute()))
+                    emit(Action.BooksLoaded(filterMyBooks.execute(intent.query)))
                 }
             }
         }
