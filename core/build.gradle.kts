@@ -23,11 +23,8 @@ dependencies {
     api(Dependencies.materialLib)
     api(Dependencies.constraintLayout)
 
-    api(Dependencies.lifecycleExtensions)
-    api(Dependencies.lifecycleViewModel)
     api(Dependencies.lifecycleRuntimeKtx)
     api(Dependencies.liveDataKtx)
-    api(Dependencies.viewModelKtx)
 
     api(Dependencies.retrofit)
     api(Dependencies.retrofitGsonConverter)

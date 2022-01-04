@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader
 
 object Versions {
-    const val viewModelVersion = "1.1.0"
     const val roomVersion = "2.4.0"
     const val coroutinesVersion = "1.3.2"
     const val retrofitVersion = "2.3.0"
@@ -40,8 +39,6 @@ object Dependencies {
     const val cardView = "androidx.cardview:cardview:${Versions.materialLibVersion}"
     const val materialLib = "com.google.android.material:material:${Versions.materialLibVersion}"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayoutVersion}"
-    const val lifecycleExtensions = "android.arch.lifecycle:extensions:${Versions.viewModelVersion}"
-    const val lifecycleViewModel = "android.arch.lifecycle:viewmodel:${Versions.viewModelVersion}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofitVersion}"
     const val okio = "com.squareup.okio:okio:${Versions.retrofitVersion}"
     const val okHttp = "com.squareup.okhttp3:okhttp:${Versions.okHttpVersion}"
@@ -64,6 +61,5 @@ object Dependencies {
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.daggerVersion}"
     const val cicerone = "com.github.terrakok:cicerone:${Versions.ciceroneVersion}"
     const val liveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycleVersion}"
-    const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}"
     const val lifecycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleVersion}"
 }

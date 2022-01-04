@@ -6,10 +6,12 @@ import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
+import ru.mamykin.foboreader.store.di.BookCategoriesScope
 import ru.mamykin.foboreader.store.domain.usecase.GetBookCategories
 import ru.mamykin.foboreader.store.navigation.BooksListScreen
 import javax.inject.Inject
 
+@BookCategoriesScope
 internal class BookCategoriesFeature @Inject constructor(
     reducer: BookCategoriesReducer,
     actor: BookCategoriesActor,
