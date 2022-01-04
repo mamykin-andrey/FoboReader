@@ -27,7 +27,7 @@ import javax.inject.Inject
 class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
 
     @Inject
-    internal lateinit var viewModel: MyBooksViewModel
+    internal lateinit var feature: MyBooksFeature
 
     @Inject
     internal lateinit var router: Router
@@ -40,7 +40,7 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
         BookAdapter(
             { router.navigateTo(screenProvider.readBookScreen(it)) },
             { router.navigateTo(screenProvider.bookDetailsScreen(it)) },
-            { viewModel.sendEvent(Event.RemoveBook(it)) }
+            { feature.sendEvent(MyBooksFeature.Event.RemoveBookClicked(it)) }
         )
     }
 
@@ -48,7 +48,7 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
         super.onCreate(savedInstanceState)
         DaggerMyBooksComponent.factory().create(
             apiHolder().navigationApi(),
-            apiHolder().commonApi()
+            apiHolder().commonApi(),
         ).inject(this)
     }
 
@@ -57,6 +57,11 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
         initToolbar()
         initBooksList()
         initViewModel()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvMyBooks.adapter = null
     }
 
     private fun initToolbar() = binding.vToolbar.toolbar.apply {
@@ -72,7 +77,7 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
     private fun bindItemClick(menu: Menu, @IdRes itemId: Int, sortOrder: SortOrder) {
         menu.findItem(itemId)
             .clicks()
-            .onEach { viewModel.sendEvent(Event.SortBooks(sortOrder)) }
+            .onEach { feature.sendEvent(MyBooksFeature.Event.SortOrderChanged(sortOrder)) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -80,7 +85,7 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
         queryHint = getString(R.string.my_books_menu_search)
         queryChanges()
             .filterNotNull()
-            .onEach { viewModel.sendEvent(Event.FilterBooks(it)) }
+            .onEach { feature.sendEvent(MyBooksFeature.Event.FilterTextChanged(it)) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -89,35 +94,20 @@ class MyBooksFragment : Fragment(R.layout.fragment_my_books) {
     }
 
     private fun initViewModel() {
-        viewModel.stateLiveData.observe(viewLifecycleOwner, ::showState)
+        feature.stateData.observe(viewLifecycleOwner, ::showState)
+        feature.effectData.observe(viewLifecycleOwner, ::showState)
     }
 
-    private fun showState(state: ViewState) = with(binding) {
-        when (state) {
-            is ViewState.Loading -> {
-                pbLoadingBooks.isVisible = true
-
-                vNoBooks.isVisible = false
-                rvMyBooks.isVisible = false
-            }
-            is ViewState.Empty -> {
-                vNoBooks.isVisible = true
-
-                pbLoadingBooks.isVisible = false
-                rvMyBooks.isVisible = false
-            }
-            is ViewState.Success -> {
-                rvMyBooks.isVisible = true
-                adapter.submitList(state.books)
-
-                pbLoadingBooks.isVisible = false
-                vNoBooks.isVisible = false
-            }
+    private fun showState(state: MyBooksFeature.State) = with(binding) {
+        pbLoadingBooks.isVisible = state.isLoading
+        state.books?.let {
+            adapter.submitList(it)
+            showNoBooks(it.isEmpty())
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding.rvMyBooks.adapter = null
+    private fun showNoBooks(noBooks: Boolean) = with(binding) {
+        vNoBooks.isVisible = noBooks
+        rvMyBooks.isVisible = !noBooks
     }
 }

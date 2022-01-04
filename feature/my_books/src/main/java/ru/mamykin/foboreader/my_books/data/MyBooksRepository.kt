@@ -6,11 +6,13 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.sendBlocking
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.getExternalMediaDir
-import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.my_books.domain.helper.BookFilesScanner
 import ru.mamykin.foboreader.my_books.domain.helper.BooksComparatorFactory
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
@@ -19,11 +21,20 @@ import javax.inject.Inject
 class MyBooksRepository @Inject constructor(
     private val repository: BookInfoRepository,
     private val booksScanner: BookFilesScanner,
-    private val context: Context
+    private val context: Context,
 ) {
     private var allBooks = emptyList<BookInfo>()
     private val booksStateChannel = ConflatedBroadcastChannel(BooksState(loadNew = true))
 
+    suspend fun newGetBooks(): List<BookInfo> {
+        return getSortedAndFilteredBooks(
+            repository.getBooks(),
+            "",
+            SortOrder.ByName
+        )
+    }
+
+    @Deprecated("")
     fun getBooks(): Flow<List<BookInfo>> = flow {
         booksStateChannel.consumeEach { state ->
             if (state.loadNew) {
@@ -68,10 +79,8 @@ class MyBooksRepository @Inject constructor(
     }
 
     private fun fileChangesFlow(): Flow<Unit> = callbackFlow {
-        val externalMediaDir = context.getExternalMediaDir() ?: run {
-            Log.error("Can't open media directory!")
-            return@callbackFlow
-        }
+        val externalMediaDir = context.getExternalMediaDir()
+            ?: throw IllegalStateException("Unable to open media directory!")
 
         val fileObserver = object : FileObserver(externalMediaDir, CREATE or DELETE) {
             override fun onEvent(event: Int, file: String?) {
