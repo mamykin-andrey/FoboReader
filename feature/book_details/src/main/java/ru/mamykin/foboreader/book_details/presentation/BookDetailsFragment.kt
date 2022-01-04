@@ -15,7 +15,6 @@ import ru.mamykin.foboreader.book_details.presentation.list.BookInfoViewHolder
 import ru.mamykin.foboreader.book_details.presentation.model.BookInfoItem
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import javax.inject.Inject
 
@@ -33,7 +32,7 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
     }
 
     @Inject
-    lateinit var viewModel: BookDetailsViewModel
+    internal lateinit var feature: BookDetailsFeature
 
     private val binding by autoCleanedValue { FragmentBookDetailsBinding.bind(requireView()) }
     private val bookInfoDataSource = dataSourceTypedOf<BookInfoItem>()
@@ -44,17 +43,16 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
         DaggerBookDetailsComponent.factory().create(
             bookId,
             apiHolder().navigationApi(),
-            apiHolder().commonApi()
+            apiHolder().commonApi(),
         ).inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
         vToolbar.toolbar.title = getString(R.string.my_books_book_info_title)
-        fabRead.setOnClickListener { viewModel.sendEvent(Event.ReadBookClicked) }
+        fabRead.setOnClickListener { feature.sendEvent(BookDetailsFeature.Event.ReadBookClicked) }
         initBookInfoList()
-        viewModel.stateLiveData.observe(viewLifecycleOwner, ::showState)
-        viewModel.effectLiveData.observe(viewLifecycleOwner, ::takeEffect)
+        feature.stateData.observe(viewLifecycleOwner, ::showState)
     }
 
     private fun initBookInfoList() {
@@ -68,7 +66,7 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
         }
     }
 
-    private fun showState(state: ViewState) {
+    private fun showState(state: BookDetailsFeature.State) {
         state.bookInfo?.let(::showBookInfo)
     }
 
@@ -104,12 +102,6 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
                 .load(it)
                 .error(R.drawable.img_no_image)
                 .into(binding.ivBookCover)
-        }
-    }
-
-    private fun takeEffect(effect: Effect) {
-        when (effect) {
-            is Effect.ShowSnackbar -> showSnackbar(effect.message)
         }
     }
 }

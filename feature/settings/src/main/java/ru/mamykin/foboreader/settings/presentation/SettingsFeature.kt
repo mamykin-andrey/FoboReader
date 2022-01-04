@@ -13,7 +13,7 @@ internal class SettingsFeature @Inject constructor(
     reducer: SettingsReducer,
     actor: SettingsActor,
     private val uiEventTransformer: UiEventTransformer,
-) : Feature<Settings.ViewState, Settings.Intent, Settings.Effect, Settings.Action, Nothing>(
+) : Feature<Settings.ViewState, Settings.Intent, Settings.Effect, Settings.Action>(
     Settings.ViewState(),
     actor,
     reducer

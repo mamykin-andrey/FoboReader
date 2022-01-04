@@ -14,7 +14,7 @@ internal class BooksListFeature @Inject constructor(
     reducer: BooksListReducer,
     actor: BooksListActor,
     private val uiEventTransformer: UiEventTransformer,
-) : Feature<BooksList.ViewState, BooksList.Intent, BooksList.Effect, BooksList.Action, Nothing>(
+) : Feature<BooksList.ViewState, BooksList.Intent, BooksList.Effect, BooksList.Action>(
     BooksList.ViewState(),
     actor,
     reducer

@@ -15,7 +15,7 @@ typealias Actor<Intent, Action> = (intent: Intent) -> Flow<Action>
 
 typealias Reducer<State, Action, Effect> = (state: State, action: Action) -> ReducerResult<State, Effect>
 
-abstract class Feature<State, Intent, Effect, Action, SideEffect>(
+abstract class Feature<State, Intent, Effect, Action>(
     initialState: State,
     private val actor: Actor<Intent, Action>,
     private val reducer: Reducer<State, Action, Effect>

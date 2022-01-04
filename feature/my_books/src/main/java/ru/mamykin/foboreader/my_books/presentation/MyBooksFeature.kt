@@ -18,7 +18,7 @@ internal class MyBooksFeature @Inject constructor(
     actor: MyBooksActor,
     reducer: MyBooksReducer,
     private val uiTransformer: MyBooksUiTransformer,
-) : Feature<MyBooksFeature.State, MyBooksFeature.Intent, Nothing, MyBooksFeature.Action, Nothing>(
+) : Feature<MyBooksFeature.State, MyBooksFeature.Intent, Nothing, MyBooksFeature.Action>(
     State(isLoading = true, books = null),
     actor,
     reducer,

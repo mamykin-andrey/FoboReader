@@ -14,7 +14,7 @@ internal class BookCategoriesFeature @Inject constructor(
     reducer: BookCategoriesReducer,
     actor: BookCategoriesActor,
     private val uiEventTransformer: UiEventTransformer
-) : Feature<BookCategories.ViewState, BookCategories.Intent, BookCategories.Effect, BookCategories.Action, Nothing>(
+) : Feature<BookCategories.ViewState, BookCategories.Intent, BookCategories.Effect, BookCategories.Action>(
     BookCategories.ViewState(),
     actor,
     reducer

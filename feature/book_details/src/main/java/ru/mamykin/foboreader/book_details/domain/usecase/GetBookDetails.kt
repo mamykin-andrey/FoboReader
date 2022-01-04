@@ -7,9 +7,7 @@ import javax.inject.Inject
 class GetBookDetails @Inject constructor(
     private val repository: BookInfoRepository
 ) {
-    suspend fun execute(param: Long): Result<BookInfo> {
-        return runCatching {
-            repository.getBookInfo(param)
-        }
+    suspend fun execute(param: Long): BookInfo {
+        return repository.getBookInfo(param)
     }
 }
