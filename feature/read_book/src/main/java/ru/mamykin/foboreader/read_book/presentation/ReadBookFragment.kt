@@ -37,13 +37,13 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
     }
 
     @Inject
-    lateinit var viewModel: ReadBookViewModel
+    internal lateinit var viewModel: ReadBookFeature
 
     @Inject
-    lateinit var vibratorHelper: VibratorHelper
+    internal lateinit var vibratorHelper: VibratorHelper
 
     @Inject
-    lateinit var appSettingsStorage: AppSettingsStorage
+    internal lateinit var appSettingsStorage: AppSettingsStorage
 
     private val binding by autoCleanedValue { FragmentReadBookBinding.bind(requireView()) }
     private var lastTextHashCode: Int = 0
@@ -67,19 +67,19 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
         binding.tvText.setOnActionListener(object : ClickableTextView.OnActionListener {
             override fun onClick(paragraph: String) {
                 vibratorHelper.clickVibrate()
-                viewModel.sendEvent(Event.TranslateParagraph(paragraph.trim()))
+                viewModel.sendEvent(ReadBookFeature.Event.TranslateParagraphClicked(paragraph.trim()))
             }
 
             override fun onLongClick(word: String) {
                 vibratorHelper.clickVibrate()
-                viewModel.sendEvent(Event.TranslateWord(word.trimSpecialCharacters()))
+                viewModel.sendEvent(ReadBookFeature.Event.TranslateWordClicked(word.trimSpecialCharacters()))
             }
         })
-        viewModel.stateLiveData.observe(viewLifecycleOwner, ::showState)
-        viewModel.effectLiveData.observe(viewLifecycleOwner, ::takeEffect)
+        viewModel.stateData.observe(viewLifecycleOwner, ::showState)
+        viewModel.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 
-    private fun showState(state: ViewState) = with(binding) {
+    private fun showState(state: ReadBookFeature.State) = with(binding) {
         pbLoadingBook.isVisible = state.isTranslationLoading
         showBookText(state.text)
         state.wordTranslation?.let(::showWordTranslation) ?: popupWindow?.dismiss()
@@ -111,7 +111,7 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
                 length - 1
             )
         }
-        binding.tvText.setOnClickListener { viewModel.sendEvent(Event.HideParagraphTranslation) }
+        binding.tvText.setOnClickListener { viewModel.sendEvent(ReadBookFeature.Event.HideParagraphTranslationClicked) }
         lastTextHashCode = 0
     }
 
@@ -131,14 +131,14 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
         popupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
 
         popupView.setOnTouchListener { v, _ ->
-            viewModel.sendEvent(Event.HideWordTranslation)
+            viewModel.sendEvent(ReadBookFeature.Event.HideWordTranslationClicked)
             true
         }
     }
 
-    private fun takeEffect(effect: Effect) {
+    private fun takeEffect(effect: ReadBookFeature.Effect) {
         when (effect) {
-            is Effect.ShowSnackbar -> showSnackbar(effect.messageId)
+            is ReadBookFeature.Effect.ShowSnackbar -> showSnackbar(effect.messageId)
         }
     }
 }

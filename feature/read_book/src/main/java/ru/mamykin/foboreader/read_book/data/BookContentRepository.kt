@@ -4,7 +4,7 @@ import ru.mamykin.foboreader.read_book.domain.helper.BookContentParser
 import ru.mamykin.foboreader.read_book.domain.entity.BookContent
 import javax.inject.Inject
 
-class BookContentRepository @Inject constructor(
+internal class BookContentRepository @Inject constructor(
     private val bookContentParser: BookContentParser
 ) {
     private lateinit var bookContent: BookContent

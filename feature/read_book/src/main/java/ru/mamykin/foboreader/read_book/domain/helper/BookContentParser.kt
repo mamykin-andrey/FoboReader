@@ -7,7 +7,7 @@ import javax.xml.parsers.SAXParserFactory
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class BookContentParser @Inject constructor() {
+internal class BookContentParser @Inject constructor() {
 
     suspend fun parse(filePath: String): BookContent = suspendCoroutine { cont ->
         runCatching {
