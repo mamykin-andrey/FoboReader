@@ -12,10 +12,12 @@ import com.afollestad.recyclical.withItem
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.getSearchView
 import ru.mamykin.foboreader.core.extension.queryChanges
 import ru.mamykin.foboreader.core.extension.showSnackbar
+import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBooksListBinding
@@ -25,7 +27,7 @@ import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.presentation.list.StoreBookViewHolder
 import javax.inject.Inject
 
-class BooksListFragment : Fragment(R.layout.fragment_books_list) {
+class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
 
     companion object {
 
@@ -38,6 +40,8 @@ class BooksListFragment : Fragment(R.layout.fragment_books_list) {
         }
     }
 
+    override val featureName: String = "books_list"
+
     @Inject
     internal lateinit var feature: BooksListFeature
 
@@ -47,14 +51,24 @@ class BooksListFragment : Fragment(R.layout.fragment_books_list) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val params = BooksListFeature.BookCategoriesParams(categoryId)
-        DaggerBookListComponent.factory().create(
-            apiHolder().commonApi(),
-            apiHolder().networkApi(),
-            apiHolder().navigationApi(),
-            apiHolder().settingsApi(),
-            params,
-        ).inject(this)
+        initDi()
+    }
+
+    private fun initDi() {
+        ComponentHolder.getOrCreateComponent(featureName) {
+            val params = BooksListFeature.BookCategoriesParams(categoryId)
+            DaggerBookListComponent.factory().create(
+                apiHolder().commonApi(),
+                apiHolder().networkApi(),
+                apiHolder().navigationApi(),
+                apiHolder().settingsApi(),
+                params,
+            )
+        }.inject(this)
+    }
+
+    override fun onCleared() {
+        feature.onCleared()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -10,10 +10,11 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.*
 import ru.mamykin.foboreader.core.platform.VibratorHelper
+import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
@@ -23,7 +24,7 @@ import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
 import ru.mamykin.foboreader.read_book.presentation.view.ClickableTextView
 import javax.inject.Inject
 
-class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
+class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
 
     companion object {
 
@@ -36,8 +37,10 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
         }
     }
 
+    override val featureName: String = "read_book"
+
     @Inject
-    internal lateinit var viewModel: ReadBookFeature
+    internal lateinit var feature: ReadBookFeature
 
     @Inject
     internal lateinit var vibratorHelper: VibratorHelper
@@ -52,13 +55,23 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerReadBookComponent.factory().create(
-            bookId,
-            apiHolder().networkApi(),
-            apiHolder().navigationApi(),
-            apiHolder().commonApi(),
-            apiHolder().settingsApi()
-        ).inject(this)
+        initDi()
+    }
+
+    private fun initDi() {
+        ComponentHolder.getOrCreateComponent(featureName) {
+            DaggerReadBookComponent.factory().create(
+                bookId,
+                apiHolder().networkApi(),
+                apiHolder().navigationApi(),
+                apiHolder().commonApi(),
+                apiHolder().settingsApi()
+            )
+        }.inject(this)
+    }
+
+    override fun onCleared() {
+        feature.onCleared()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,16 +80,16 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
         binding.tvText.setOnActionListener(object : ClickableTextView.OnActionListener {
             override fun onClick(paragraph: String) {
                 vibratorHelper.clickVibrate()
-                viewModel.sendEvent(ReadBookFeature.Event.TranslateParagraphClicked(paragraph.trim()))
+                feature.sendEvent(ReadBookFeature.Event.TranslateParagraphClicked(paragraph.trim()))
             }
 
             override fun onLongClick(word: String) {
                 vibratorHelper.clickVibrate()
-                viewModel.sendEvent(ReadBookFeature.Event.TranslateWordClicked(word.trimSpecialCharacters()))
+                feature.sendEvent(ReadBookFeature.Event.TranslateWordClicked(word.trimSpecialCharacters()))
             }
         })
-        viewModel.stateData.observe(viewLifecycleOwner, ::showState)
-        viewModel.effectData.observe(viewLifecycleOwner, ::takeEffect)
+        feature.stateData.observe(viewLifecycleOwner, ::showState)
+        feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 
     private fun showState(state: ReadBookFeature.State) = with(binding) {
@@ -111,7 +124,7 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
                 length - 1
             )
         }
-        binding.tvText.setOnClickListener { viewModel.sendEvent(ReadBookFeature.Event.HideParagraphTranslationClicked) }
+        binding.tvText.setOnClickListener { feature.sendEvent(ReadBookFeature.Event.HideParagraphTranslationClicked) }
         lastTextHashCode = 0
     }
 
@@ -131,7 +144,7 @@ class ReadBookFragment : Fragment(R.layout.fragment_read_book) {
         popupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
 
         popupView.setOnTouchListener { v, _ ->
-            viewModel.sendEvent(ReadBookFeature.Event.HideWordTranslationClicked)
+            feature.sendEvent(ReadBookFeature.Event.HideWordTranslationClicked)
             true
         }
     }

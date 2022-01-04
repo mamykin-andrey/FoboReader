@@ -2,8 +2,10 @@ package ru.mamykin.foboreader.core.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -19,8 +21,7 @@ abstract class Feature<State, Intent, Effect, Action>(
     initialState: State,
     private val actor: Actor<Intent, Action>,
     private val reducer: Reducer<State, Action, Effect>
-) : ViewModel() {
-
+) {
     companion object {
         private const val TAG = "Feature"
     }
@@ -34,6 +35,8 @@ abstract class Feature<State, Intent, Effect, Action>(
     protected val state: State
         get() = _stateData.value!!
 
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
     protected fun sendIntent(intent: Intent) {
         Log.debug("intent: $intent", TAG)
         actor.invoke(intent).onEach {
@@ -45,6 +48,10 @@ abstract class Feature<State, Intent, Effect, Action>(
 
             Log.debug("effects: $effects", TAG)
             effects.forEach(_effectData::setValue)
-        }.launchIn(viewModelScope)
+        }.launchIn(scope)
+    }
+
+    fun onCleared() {
+        scope.cancel()
     }
 }

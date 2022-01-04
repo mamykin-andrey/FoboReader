@@ -7,7 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
+import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.*
@@ -16,7 +18,13 @@ import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import ru.mamykin.foboreader.settings.presentation.list.*
 import javax.inject.Inject
 
-class SettingsFragment : Fragment(R.layout.fragment_settings), DialogDismissedListener {
+class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismissedListener {
+
+    companion object {
+        fun newInstance(): Fragment = SettingsFragment()
+    }
+
+    override val featureName: String = "settings"
 
     @Inject
     internal lateinit var feature: SettingsFeature
@@ -26,11 +34,21 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), DialogDismissedLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerSettingsComponent.factory().create(
-            apiHolder().commonApi(),
-            apiHolder().settingsApi(),
-            apiHolder().navigationApi(),
-        ).inject(this)
+        initDi()
+    }
+
+    private fun initDi() {
+        ComponentHolder.getOrCreateComponent(featureName) {
+            DaggerSettingsComponent.factory().create(
+                apiHolder().commonApi(),
+                apiHolder().settingsApi(),
+                apiHolder().navigationApi(),
+            )
+        }.inject(this)
+    }
+
+    override fun onCleared() {
+        feature.onCleared()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

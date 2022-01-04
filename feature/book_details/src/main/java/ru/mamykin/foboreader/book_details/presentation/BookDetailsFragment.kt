@@ -14,11 +14,13 @@ import ru.mamykin.foboreader.book_details.di.DaggerBookDetailsComponent
 import ru.mamykin.foboreader.book_details.presentation.list.BookInfoViewHolder
 import ru.mamykin.foboreader.book_details.presentation.model.BookInfoItem
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import javax.inject.Inject
 
-class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
+class BookDetailsFragment : BaseFragment(R.layout.fragment_book_details) {
 
     companion object {
 
@@ -31,6 +33,8 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
         }
     }
 
+    override val featureName: String = "book_details"
+
     @Inject
     internal lateinit var feature: BookDetailsFeature
 
@@ -40,11 +44,21 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerBookDetailsComponent.factory().create(
-            bookId,
-            apiHolder().navigationApi(),
-            apiHolder().commonApi(),
-        ).inject(this)
+        initDi()
+    }
+
+    private fun initDi() {
+        ComponentHolder.getOrCreateComponent(featureName) {
+            DaggerBookDetailsComponent.factory().create(
+                bookId,
+                apiHolder().navigationApi(),
+                apiHolder().commonApi(),
+            )
+        }.inject(this)
+    }
+
+    override fun onCleared() {
+        feature.onCleared()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {

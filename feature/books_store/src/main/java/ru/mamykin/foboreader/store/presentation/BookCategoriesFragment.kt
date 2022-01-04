@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.afollestad.recyclical.datasource.dataSourceTypedOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
+import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
@@ -22,6 +23,8 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
 
     companion object {
 
+        private const val FEATURE_NAME = "book_categories"
+
         fun newInstance(): Fragment = BookCategoriesFragment()
     }
 
@@ -33,12 +36,26 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerBookCategoriesComponent.factory().create(
-            apiHolder().commonApi(),
-            apiHolder().networkApi(),
-            apiHolder().navigationApi(),
-            apiHolder().settingsApi(),
-        ).inject(this)
+        initDi()
+    }
+
+    private fun initDi() {
+        ComponentHolder.getOrCreateComponent(FEATURE_NAME) {
+            DaggerBookCategoriesComponent.factory().create(
+                apiHolder().commonApi(),
+                apiHolder().networkApi(),
+                apiHolder().navigationApi(),
+                apiHolder().settingsApi(),
+            )
+        }.inject(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (requireActivity().isFinishing) {
+            ComponentHolder.clearComponent(FEATURE_NAME)
+            feature.onCleared()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

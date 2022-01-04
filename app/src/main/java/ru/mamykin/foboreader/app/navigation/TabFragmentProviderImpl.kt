@@ -9,9 +9,9 @@ import javax.inject.Inject
 
 class TabFragmentProviderImpl @Inject constructor() : TabFragmentProvider {
 
-    override fun newMyBooksFragment(): Fragment = MyBooksFragment()
+    override fun newMyBooksFragment(): Fragment = MyBooksFragment.newInstance()
 
     override fun newBooksStoreFragment(): Fragment = BookCategoriesFragment.newInstance()
 
-    override fun newSettingsFragment(): Fragment = SettingsFragment()
+    override fun newSettingsFragment(): Fragment = SettingsFragment.newInstance()
 }

@@ -7,7 +7,14 @@ import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.store.presentation.BookCategoriesFragment
+import javax.inject.Scope
 
+@Scope
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class BookCategoriesScope
+
+@BookCategoriesScope
 @Component(
     modules = [
         BookCategoriesModule::class,
