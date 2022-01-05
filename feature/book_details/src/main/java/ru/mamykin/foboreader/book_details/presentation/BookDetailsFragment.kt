@@ -8,8 +8,6 @@ import ru.mamykin.foboreader.book_details.R
 import ru.mamykin.foboreader.book_details.databinding.FragmentBookDetailsBinding
 import ru.mamykin.foboreader.book_details.di.DaggerBookDetailsComponent
 import ru.mamykin.foboreader.book_details.presentation.list.BookInfoListAdapter
-import ru.mamykin.foboreader.book_details.presentation.model.BookInfoItem
-import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.presentation.BaseFragment
@@ -75,34 +73,12 @@ class BookDetailsFragment : BaseFragment(R.layout.fragment_book_details) {
     }
 
     private fun showState(state: BookDetailsFeature.State) {
-        state.bookInfo?.let(::showBookInfo)
-    }
-
-    private fun showBookInfo(book: BookInfo) = binding.apply {
-        tvBookName.text = book.title
-        tvBookAuthor.text = book.author
-        // TODO: Move it to Feature
-        adapter.submitList(
-            listOf(
-                BookInfoItem(
-                    getString(R.string.my_books_bookmarks),
-                    getString(R.string.my_books_no_bookmarks)
-                ),
-                BookInfoItem(
-                    getString(R.string.my_books_book_path),
-                    book.filePath
-                ),
-                BookInfoItem(
-                    getString(R.string.my_books_current_page),
-                    book.currentPage.toString()
-                ),
-                BookInfoItem(
-                    getString(R.string.my_books_book_genre),
-                    book.genre
-                )
-            )
-        )
-        showBookCover(book.coverUrl)
+        state.bookDetails?.let {
+            binding.tvBookName.text = it.title
+            binding.tvBookAuthor.text = it.author
+            adapter.submitList(state.items)
+            showBookCover(it.coverUrl)
+        }
     }
 
     private fun showBookCover(coverUrl: String?) {

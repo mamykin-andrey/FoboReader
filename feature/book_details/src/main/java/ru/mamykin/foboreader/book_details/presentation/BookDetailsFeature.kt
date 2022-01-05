@@ -3,9 +3,12 @@ package ru.mamykin.foboreader.book_details.presentation
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import ru.mamykin.foboreader.book_details.R
+import ru.mamykin.foboreader.book_details.domain.model.BookDetails
 import ru.mamykin.foboreader.book_details.domain.usecase.GetBookDetails
-import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.book_details.presentation.model.BookInfoViewItem
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
+import ru.mamykin.foboreader.core.platform.ResourceManager
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
@@ -56,12 +59,40 @@ internal class BookDetailsFeature @Inject constructor(
         }
     }
 
-    internal class BookDetailsReducer @Inject constructor() : Reducer<State, Action, Nothing> {
+    internal class BookDetailsReducer @Inject constructor(
+        private val resourceManager: ResourceManager,
+    ) : Reducer<State, Action, Nothing> {
 
         override fun invoke(state: State, action: Action): ReducerResult<State, Nothing> = when (action) {
-            is Action.BookLoaded -> state.copy(isLoading = false, bookInfo = action.bookInfo) to emptySet()
-            is Action.LoadingError -> state.copy(isLoading = false, isError = true) to emptySet()
+            is Action.BookLoaded -> state.copy(
+                isLoading = false,
+                bookDetails = action.bookDetails,
+                items = createInfoItems(action.bookDetails)
+            ) to emptySet()
+            is Action.LoadingError -> state.copy(
+                isLoading = false,
+                isError = true,
+            ) to emptySet()
         }
+
+        private fun createInfoItems(bookDetails: BookDetails) = listOf(
+            BookInfoViewItem(
+                resourceManager.getString(R.string.my_books_bookmarks),
+                resourceManager.getString(R.string.my_books_no_bookmarks)
+            ),
+            BookInfoViewItem(
+                resourceManager.getString(R.string.my_books_book_path),
+                bookDetails.filePath
+            ),
+            BookInfoViewItem(
+                resourceManager.getString(R.string.my_books_current_page),
+                bookDetails.currentPage.toString()
+            ),
+            BookInfoViewItem(
+                resourceManager.getString(R.string.my_books_book_genre),
+                bookDetails.genre
+            )
+        )
     }
 
     sealed class Event {
@@ -74,13 +105,14 @@ internal class BookDetailsFeature @Inject constructor(
     }
 
     sealed class Action {
-        class BookLoaded(val bookInfo: BookInfo) : Action()
+        class BookLoaded(val bookDetails: BookDetails) : Action()
         object LoadingError : Action()
     }
 
     data class State(
         val isLoading: Boolean = true,
-        val bookInfo: BookInfo? = null,
-        val isError: Boolean = false
+        val bookDetails: BookDetails? = null,
+        val items: List<BookInfoViewItem>? = null,
+        val isError: Boolean = false,
     )
 }

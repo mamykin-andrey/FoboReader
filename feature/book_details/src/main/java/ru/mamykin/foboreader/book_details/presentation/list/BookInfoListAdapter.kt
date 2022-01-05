@@ -4,11 +4,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.mamykin.foboreader.book_details.databinding.ItemBookInfoBinding
-import ru.mamykin.foboreader.book_details.presentation.model.BookInfoItem
+import ru.mamykin.foboreader.book_details.presentation.model.BookInfoViewItem
 import ru.mamykin.foboreader.core.extension.getLayoutInflater
 import ru.mamykin.foboreader.core.presentation.list.SimpleDiffUtil
 
-internal class BookInfoListAdapter : ListAdapter<BookInfoItem, BookInfoListAdapter.BookInfoViewHolder>(
+internal class BookInfoListAdapter : ListAdapter<BookInfoViewItem, BookInfoListAdapter.BookInfoViewHolder>(
     SimpleDiffUtil.equalsCallback { it.title }
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BookInfoViewHolder(
@@ -23,7 +23,7 @@ internal class BookInfoListAdapter : ListAdapter<BookInfoItem, BookInfoListAdapt
         private val binding: ItemBookInfoBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: BookInfoItem) = binding.apply {
+        fun bind(item: BookInfoViewItem) = binding.apply {
             tvBookInfoTitle.text = item.title
             tvBookInfoValue.text = item.value
         }

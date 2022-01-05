@@ -7,16 +7,18 @@ import dagger.*
 import okhttp3.OkHttpClient
 import ru.mamykin.foboreader.app.navigation.ScreenProviderImpl
 import ru.mamykin.foboreader.app.navigation.TabFragmentProviderImpl
+import ru.mamykin.foboreader.app.platform.ResourceManagerImpl
 import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.di.api.*
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.navigation.TabFragmentProvider
+import ru.mamykin.foboreader.core.platform.ResourceManager
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class])
-interface AppComponent : NavigationApi, NetworkApi, CommonApi, SettingsApi, MainApi {
+internal interface AppComponent : NavigationApi, NetworkApi, CommonApi, SettingsApi, MainApi {
 
     @Component.Factory
     interface Factory {
@@ -29,7 +31,7 @@ interface AppComponent : NavigationApi, NetworkApi, CommonApi, SettingsApi, Main
 }
 
 @Module(includes = [AppModule.BindsModule::class])
-class AppModule {
+internal class AppModule {
 
     @Provides
     @Singleton
@@ -48,6 +50,11 @@ class AppModule {
         fun bindScreenProvider(impl: ScreenProviderImpl): ScreenProvider
 
         @Binds
+        @Singleton
         fun bindFragmentProvider(impl: TabFragmentProviderImpl): TabFragmentProvider
+
+        @Binds
+        @Singleton
+        fun bindResourceManager(impl: ResourceManagerImpl): ResourceManager
     }
 }
