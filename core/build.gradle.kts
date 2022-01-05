@@ -38,7 +38,6 @@ dependencies {
 
     api(Dependencies.multidex)
 
-    api(Dependencies.recyclical)
     api(Dependencies.dagger)
 
     api(Dependencies.cicerone)
