@@ -1,4 +1,4 @@
-Android application for reading English books with parallel translation.
+Android application for reading English books with translation.
 Features:
 * paragraph translation (Yandex.Translate API);
 * word translation, voice word  (Yandex.Translate API/Android Speech API);
