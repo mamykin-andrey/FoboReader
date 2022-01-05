@@ -9,6 +9,7 @@ internal class BookListResponse(
 ) {
     @Keep
     internal class BookResponse(
+        val id: String,
         val genre: String,
         val author: String,
         val title: String,
@@ -18,6 +19,7 @@ internal class BookListResponse(
         val link: String
     ) {
         fun toDomainModel() = StoreBook(
+            id = id,
             genre = genre,
             author = author,
             title = title,

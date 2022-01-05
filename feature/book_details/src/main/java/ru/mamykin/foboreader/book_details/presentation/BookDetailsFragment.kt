@@ -3,15 +3,11 @@ package ru.mamykin.foboreader.book_details.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.afollestad.recyclical.datasource.dataSourceTypedOf
-import com.afollestad.recyclical.setup
-import com.afollestad.recyclical.withItem
 import com.squareup.picasso.Picasso
 import ru.mamykin.foboreader.book_details.R
 import ru.mamykin.foboreader.book_details.databinding.FragmentBookDetailsBinding
-import ru.mamykin.foboreader.book_details.databinding.ItemBookInfoBinding
 import ru.mamykin.foboreader.book_details.di.DaggerBookDetailsComponent
-import ru.mamykin.foboreader.book_details.presentation.list.BookInfoViewHolder
+import ru.mamykin.foboreader.book_details.presentation.list.BookInfoListAdapter
 import ru.mamykin.foboreader.book_details.presentation.model.BookInfoItem
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.di.ComponentHolder
@@ -39,7 +35,7 @@ class BookDetailsFragment : BaseFragment(R.layout.fragment_book_details) {
     internal lateinit var feature: BookDetailsFeature
 
     private val binding by autoCleanedValue { FragmentBookDetailsBinding.bind(requireView()) }
-    private val bookInfoDataSource = dataSourceTypedOf<BookInfoItem>()
+    private val adapter by autoCleanedValue { BookInfoListAdapter() }
     private val bookId by lazy { requireArguments().getLong(EXTRA_BOOK_ID) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,14 +66,7 @@ class BookDetailsFragment : BaseFragment(R.layout.fragment_book_details) {
     }
 
     private fun initBookInfoList() {
-        binding.rvBookInfo.setup {
-            withDataSource(bookInfoDataSource)
-            withItem<BookInfoItem, BookInfoViewHolder>(R.layout.item_book_info) {
-                onBind({ BookInfoViewHolder(ItemBookInfoBinding.bind(it)) }) { _, item ->
-                    bind(item)
-                }
-            }
-        }
+        binding.rvBookInfo.adapter = adapter
     }
 
     private fun showState(state: BookDetailsFeature.State) {
@@ -87,7 +76,8 @@ class BookDetailsFragment : BaseFragment(R.layout.fragment_book_details) {
     private fun showBookInfo(book: BookInfo) = binding.apply {
         tvBookName.text = book.title
         tvBookAuthor.text = book.author
-        bookInfoDataSource.set(
+        // TODO: Move it to Feature
+        adapter.submitList(
             listOf(
                 BookInfoItem(
                     getString(R.string.my_books_bookmarks),

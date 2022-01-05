@@ -57,6 +57,7 @@ internal class TestBooksStoreService @Inject constructor() {
         private val ruFantasticBooks = BookListResponse(
             books = listOf(
                 BookListResponse.BookResponse(
+                    id = "0",
                     genre = "Фантастика",
                     author = "Герберт Джордж Уэллс",
                     title = "Человек-невидимка",
@@ -66,6 +67,7 @@ internal class TestBooksStoreService @Inject constructor() {
                     link = "https://fobo-reader-backend.herokuapp.com/books/1",
                 ),
                 BookListResponse.BookResponse(
+                    id = "1",
                     genre = "Фантастика",
                     author = "Джон Эскотт",
                     title = "Остров мертвеца",
@@ -80,6 +82,7 @@ internal class TestBooksStoreService @Inject constructor() {
         private val enFantasticBooks = BookListResponse(
             books = listOf(
                 BookListResponse.BookResponse(
+                    id = "0",
                     genre = "Fantastic",
                     author = "Herbert George Wells",
                     title = "The invisible man",
@@ -89,6 +92,7 @@ internal class TestBooksStoreService @Inject constructor() {
                     link = "https://fobo-reader-backend.herokuapp.com/books/1",
                 ),
                 BookListResponse.BookResponse(
+                    id = "1",
                     genre = "Fantastic",
                     author = "John Escot",
                     title = "Dead island",
@@ -103,6 +107,7 @@ internal class TestBooksStoreService @Inject constructor() {
         private val ruFairytaleBooks = BookListResponse(
             books = listOf(
                 BookListResponse.BookResponse(
+                    id = "2",
                     genre = "Сказки",
                     author = "Братья Гримм",
                     title = "Юный великан",
@@ -117,6 +122,7 @@ internal class TestBooksStoreService @Inject constructor() {
         private val enFairytaleBooks = BookListResponse(
             books = listOf(
                 BookListResponse.BookResponse(
+                    id = "2",
                     genre = "Fairytale",
                     author = "Brothers Grimm",
                     title = "The young giant",
@@ -131,6 +137,7 @@ internal class TestBooksStoreService @Inject constructor() {
         private val ruAdventureBooks = BookListResponse(
             books = listOf(
                 BookListResponse.BookResponse(
+                    id = "3",
                     genre = "Приключения",
                     author = "Агата Кристи",
                     title = "Убийство в Месопотамии",
@@ -145,6 +152,7 @@ internal class TestBooksStoreService @Inject constructor() {
         private val enAdventureBooks = BookListResponse(
             books = listOf(
                 BookListResponse.BookResponse(
+                    id = "3",
                     genre = "Adventure",
                     author = "Agatha Christie",
                     title = "Murder in Mesopotamia",

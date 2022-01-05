@@ -6,21 +6,16 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import com.afollestad.recyclical.datasource.dataSourceTypedOf
-import com.afollestad.recyclical.setup
-import com.afollestad.recyclical.withItem
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.DialogColorPickerBinding
-import ru.mamykin.foboreader.settings.databinding.ItemColorBinding
 import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
-import ru.mamykin.foboreader.settings.domain.model.ColorItem
 import ru.mamykin.foboreader.settings.domain.usecase.GetTranslationColors
 import ru.mamykin.foboreader.settings.domain.usecase.SetTranslationColor
-import ru.mamykin.foboreader.settings.presentation.list.ColorItemViewHolder
+import ru.mamykin.foboreader.settings.presentation.list.ColorListAdapter
 import javax.inject.Inject
 
-class SelectTranslationColorDialogFragment : DialogFragment() {
+internal class SelectTranslationColorDialogFragment : DialogFragment() {
 
     companion object {
 
@@ -29,7 +24,12 @@ class SelectTranslationColorDialogFragment : DialogFragment() {
         fun newInstance(): DialogFragment = SelectTranslationColorDialogFragment()
     }
 
-    private val colorsDataSource = dataSourceTypedOf<ColorItem>()
+    private val adapter by lazy {
+        ColorListAdapter {
+            setTranslationColor.execute(it)
+            dismiss()
+        }
+    }
 
     @Inject
     internal lateinit var getTranslationColors: GetTranslationColors
@@ -66,17 +66,8 @@ class SelectTranslationColorDialogFragment : DialogFragment() {
         }
     }
 
-    private fun initColorsList(binding: DialogColorPickerBinding) = binding.apply {
-        rvColors.setup {
-            withDataSource(colorsDataSource)
-            withItem<ColorItem, ColorItemViewHolder>(R.layout.item_color) {
-                onBind({ ColorItemViewHolder(ItemColorBinding.bind(it)) }) { _, item -> bind(item) }
-                onClick {
-                    setTranslationColor.execute(item.colorCode)
-                    dismiss()
-                }
-            }
-        }
-        colorsDataSource.set(getTranslationColors.execute())
+    private fun initColorsList(binding: DialogColorPickerBinding) {
+        binding.rvColors.adapter = adapter
+        adapter.submitList(getTranslationColors.execute())
     }
 }

@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.store.domain.model
 import ru.mamykin.foboreader.core.extension.StringTransliterator
 
 data class StoreBook(
+    val id: String,
     val genre: String,
     val author: String,
     val title: String,

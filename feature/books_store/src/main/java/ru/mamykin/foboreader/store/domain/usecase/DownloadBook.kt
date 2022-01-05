@@ -7,9 +7,9 @@ import javax.inject.Inject
 class DownloadBook @Inject constructor(
     private val fileDownloader: FileDownloader
 ) {
-    suspend fun execute(book: StoreBook): Result<Unit> {
+    suspend fun execute(bookLink: String, fileName: String): Result<Unit> {
         return runCatching {
-            fileDownloader.download(book.link, book.getFileName())
+            fileDownloader.download(bookLink, fileName)
         }
     }
 }

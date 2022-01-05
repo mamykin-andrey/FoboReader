@@ -6,9 +6,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.afollestad.recyclical.datasource.dataSourceTypedOf
-import com.afollestad.recyclical.setup
-import com.afollestad.recyclical.withItem
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -21,13 +18,11 @@ import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBooksListBinding
-import ru.mamykin.foboreader.store.databinding.ItemStoreBookBinding
 import ru.mamykin.foboreader.store.di.DaggerBookListComponent
-import ru.mamykin.foboreader.store.domain.model.StoreBook
-import ru.mamykin.foboreader.store.presentation.list.StoreBookViewHolder
+import ru.mamykin.foboreader.store.presentation.list.BookListAdapter
 import javax.inject.Inject
 
-class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
+internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
 
     companion object {
 
@@ -45,7 +40,11 @@ class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
     @Inject
     internal lateinit var feature: BooksListFeature
 
-    private val booksSource = dataSourceTypedOf<StoreBook>()
+    private val adapter by lazy {
+        BookListAdapter { link, fileName ->
+            feature.sendEvent(BooksList.Event.DownloadBookClicked(link, fileName))
+        }
+    }
     private val binding by autoCleanedValue { FragmentBooksListBinding.bind(requireView()) }
     private val categoryId by lazy { requireArguments().getString(EXTRA_CATEGORY_ID)!! }
 
@@ -80,6 +79,11 @@ class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 
+    override fun onDestroyView() {
+        binding.rvBooks.adapter = null
+        super.onDestroyView()
+    }
+
     private fun initErrorView() {
         binding.vError.setRetryClickListener {
             feature.sendEvent(BooksList.Event.RetryBooksClicked)
@@ -100,19 +104,7 @@ class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
     }
 
     private fun initBooksList() {
-        binding.rvBooks.setup {
-            withDataSource(booksSource)
-            withItem<StoreBook, StoreBookViewHolder>(R.layout.item_store_book) {
-                onBind({
-                    StoreBookViewHolder(ItemStoreBookBinding.bind(it))
-                }) { _, item ->
-                    bind(item)
-                }
-                onClick {
-                    feature.sendEvent(BooksList.Event.DownloadBookClicked(item))
-                }
-            }
-        }
+        binding.rvBooks.adapter = adapter
     }
 
     private fun initSearchView(menu: Menu) = menu.getSearchView(R.id.action_search).apply {
@@ -126,7 +118,12 @@ class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
     private fun showState(state: BooksList.ViewState) {
         binding.pbLoadingBooks.isVisible = state.isLoading
         binding.vError.isVisible = state.isError
-        booksSource.set(state.books)
+        state.books?.let {
+            binding.rvBooks.isVisible = true
+            adapter.submitList(it)
+        } ?: run {
+            binding.rvBooks.isVisible = false
+        }
     }
 
     private fun takeEffect(effect: BooksList.Effect) {

@@ -56,7 +56,7 @@ internal class BooksListFeature @Inject constructor(
                 }
                 is BooksList.Intent.DownloadBook -> {
                     emit(BooksList.Action.DownloadBookStarted)
-                    downloadStoreBook.execute(intent.book).fold(
+                    downloadStoreBook.execute(intent.bookLink, intent.fileName).fold(
                         { emit(BooksList.Action.BookDownloaded) },
                         { emit(BooksList.Action.BookDownloadError(it.message.orEmpty())) }
                     )
@@ -117,7 +117,7 @@ internal class BooksListFeature @Inject constructor(
                 BooksList.Intent.FilterBooks(event.query)
             }
             is BooksList.Event.DownloadBookClicked -> {
-                BooksList.Intent.DownloadBook(event.book)
+                BooksList.Intent.DownloadBook(event.bookLink, event.fileName)
             }
             is BooksList.Event.RetryBooksClicked -> {
                 BooksList.Intent.LoadBooks

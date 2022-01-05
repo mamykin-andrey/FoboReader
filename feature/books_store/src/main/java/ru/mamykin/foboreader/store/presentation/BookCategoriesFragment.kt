@@ -4,34 +4,33 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.afollestad.recyclical.datasource.dataSourceTypedOf
-import com.afollestad.recyclical.setup
-import com.afollestad.recyclical.withItem
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.showSnackbar
+import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.databinding.FragmentBookCategoriesBinding
-import ru.mamykin.foboreader.store.databinding.ItemCategoryBinding
 import ru.mamykin.foboreader.store.di.DaggerBookCategoriesComponent
-import ru.mamykin.foboreader.store.domain.model.BookCategory
-import ru.mamykin.foboreader.store.presentation.list.CategoryViewHolder
+import ru.mamykin.foboreader.store.presentation.list.CategoryListAdapter
 import javax.inject.Inject
 
-class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
+class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
 
     companion object {
-
-        private const val FEATURE_NAME = "book_categories"
-
         fun newInstance(): Fragment = BookCategoriesFragment()
     }
+
+    override val featureName: String = "book_categories"
 
     @Inject
     internal lateinit var feature: BookCategoriesFeature
 
-    private val categoriesSource = dataSourceTypedOf<BookCategory>()
+    private val adapter: CategoryListAdapter by lazy {
+        CategoryListAdapter {
+            feature.sendEvent(BookCategories.Event.CategoryClicked(it))
+        }
+    }
     private val binding by autoCleanedValue { FragmentBookCategoriesBinding.bind(requireView()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +39,7 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
     }
 
     private fun initDi() {
-        ComponentHolder.getOrCreateComponent(FEATURE_NAME) {
+        ComponentHolder.getOrCreateComponent(featureName) {
             DaggerBookCategoriesComponent.factory().create(
                 apiHolder().commonApi(),
                 apiHolder().networkApi(),
@@ -50,12 +49,8 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
         }.inject(this)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (requireActivity().isFinishing) {
-            ComponentHolder.clearComponent(FEATURE_NAME)
-            feature.onCleared()
-        }
+    override fun onCleared() {
+        feature.onCleared()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,6 +60,11 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
         initCategoriesList()
         feature.stateData.observe(viewLifecycleOwner, ::showState)
         feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
+    }
+
+    override fun onDestroyView() {
+        binding.rvCategories.adapter = null
+        super.onDestroyView()
     }
 
     private fun initErrorView() {
@@ -81,25 +81,13 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
     }
 
     private fun initCategoriesList() {
-        binding.rvCategories.setup {
-            withDataSource(categoriesSource)
-            withItem<BookCategory, CategoryViewHolder>(R.layout.item_category) {
-                onBind({
-                    CategoryViewHolder(ItemCategoryBinding.bind(it))
-                }) { _, item ->
-                    bind(item)
-                }
-                onClick {
-                    feature.sendEvent(BookCategories.Event.CategoryClicked(item.id))
-                }
-            }
-        }
+        binding.rvCategories.adapter = adapter
     }
 
     private fun showState(state: BookCategories.ViewState) {
         binding.pbLoadingCategories.isVisible = state.isLoading
         binding.vError.isVisible = state.isError
-        state.categories?.let(categoriesSource::set)
+        state.categories?.let { adapter.submitList(it) }
     }
 
     private fun takeEffect(effect: BookCategories.Effect) {
