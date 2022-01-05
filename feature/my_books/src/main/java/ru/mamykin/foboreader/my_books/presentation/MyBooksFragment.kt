@@ -83,7 +83,7 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
         binding.rvMyBooks.adapter = null
     }
 
-    private fun initToolbar() = binding.vToolbar.toolbar.apply {
+    private fun initToolbar() = binding.toolbar.apply {
         title = getString(R.string.my_books_screen_title)
         navigationIcon = null
         inflateMenu(R.menu.menu_books_list)

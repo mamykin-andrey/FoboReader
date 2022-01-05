@@ -74,7 +74,7 @@ class BookCategoriesFragment : Fragment(R.layout.fragment_book_categories) {
     }
 
     private fun initToolbar() {
-        binding.vToolbar.toolbar.apply {
+        binding.toolbar.apply {
             title = getString(R.string.books_store_title)
             navigationIcon = null
         }

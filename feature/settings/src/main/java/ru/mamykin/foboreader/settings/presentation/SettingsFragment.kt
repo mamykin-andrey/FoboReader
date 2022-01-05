@@ -63,7 +63,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
     }
 
     private fun initToolbar() {
-        binding.vToolbar.toolbar.apply {
+        binding.toolbar.apply {
             setTitle(R.string.settings_title)
             navigationIcon = null
         }

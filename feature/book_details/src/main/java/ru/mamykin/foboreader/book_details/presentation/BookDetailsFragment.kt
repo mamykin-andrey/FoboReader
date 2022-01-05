@@ -63,7 +63,7 @@ class BookDetailsFragment : BaseFragment(R.layout.fragment_book_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
-        vToolbar.toolbar.title = getString(R.string.my_books_book_info_title)
+        toolbar.title = getString(R.string.my_books_book_info_title)
         fabRead.setOnClickListener { feature.sendEvent(BookDetailsFeature.Event.ReadBookClicked) }
         initBookInfoList()
         feature.stateData.observe(viewLifecycleOwner, ::showState)

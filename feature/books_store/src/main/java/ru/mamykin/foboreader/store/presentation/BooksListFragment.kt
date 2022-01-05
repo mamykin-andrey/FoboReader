@@ -90,7 +90,7 @@ class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         val rawIconBackDrawable = requireContext().getDrawable(R.drawable.ic_back)!!
         val iconBackDrawable = rawIconBackDrawable.mutate()
         iconBackDrawable.setTint(resources.getColor(R.color.colorSecondary))
-        binding.vToolbar.toolbar.apply {
+        binding.toolbar.apply {
             title = getString(R.string.books_store_title)
             navigationIcon = iconBackDrawable
             inflateMenu(R.menu.menu_books_store)

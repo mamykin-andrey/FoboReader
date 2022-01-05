@@ -1,90 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="ru.mamykin.foboreader.book_details.presentation.BookDetailsFragment">
+    tools:context="presentation.BookDetailsFragment">
 
-    <include
-        android:id="@+id/v_toolbar"
-        layout="@layout/view_toolbar" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/colorPrimaryInversed"
+        tools:layout_height="56dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:navigationIcon="?homeAsUpIndicator"
+            tools:title="Feature title" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_top_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/activity_horizontal_margin"
-            android:paddingVertical="@dimen/activity_vertical_margin"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <ImageView
-                android:id="@+id/iv_book_cover"
-                android:layout_width="120dp"
-                android:layout_height="140dp"
-                android:contentDescription="@null"
-                android:scaleType="centerCrop"
-                android:src="@drawable/img_no_image"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/iv_book_cover"
+        android:layout_width="120dp"
+        android:layout_height="140dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_no_image"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar" />
 
-            <TextView
-                android:id="@+id/tv_book_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_padding_size_medium"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                android:textColor="@color/textOnBackground"
-                app:layout_constraintLeft_toRightOf="@id/iv_book_cover"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/iv_book_cover"
-                tools:text="Harry Potter and the Goblet of Fire" />
+    <TextView
+        android:id="@+id/tv_book_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_padding_size_medium"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:textColor="@color/textOnBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_book_cover"
+        app:layout_constraintTop_toTopOf="@id/iv_book_cover"
+        tools:text="Harry Potter and the Goblet of Fire" />
 
-            <TextView
-                android:id="@+id/tv_book_author"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_padding_size_small"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                android:textColor="@color/textOnBackground"
-                app:layout_constraintLeft_toLeftOf="@id/tv_book_name"
-                app:layout_constraintRight_toRightOf="@id/tv_book_name"
-                app:layout_constraintTop_toBottomOf="@id/tv_book_name"
-                tools:text="Joanne Rowling" />
+    <TextView
+        android:id="@+id/tv_book_author"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_padding_size_medium"
+        android:layout_marginTop="@dimen/margin_padding_size_small"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:textColor="@color/textOnBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_book_cover"
+        app:layout_constraintTop_toBottomOf="@id/tv_book_name"
+        tools:text="Joanne Rowling" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/br_top_info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="iv_book_cover, tv_book_author" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_book_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_padding_size_small"
-            android:paddingHorizontal="@dimen/activity_horizontal_margin"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_top_info" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_book_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_small"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/br_top_info" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_read"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginEnd="@dimen/margin_padding_size_medium"
-            android:contentDescription="@null"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_book_read"
-            app:layout_constraintBottom_toBottomOf="@id/cl_top_info"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_top_info" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_read"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="@dimen/margin_padding_size_medium"
+        android:contentDescription="@null"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_book_read"
+        app:layout_constraintBottom_toBottomOf="@id/br_top_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/br_top_info"
+        app:layout_goneMarginEnd="@dimen/activity_horizontal_margin" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

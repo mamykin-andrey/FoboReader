@@ -1,41 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
-    android:orientation="vertical"
     tools:context=".presentation.MyBooksFragment">
 
-    <include
-        android:id="@+id/v_toolbar"
-        layout="@layout/view_toolbar" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/colorPrimaryInversed"
+        tools:layout_height="56dp">
 
-    <!--    TODO: Replace with ProgressBarWidget-->
-    <!--    android:layout_width="@dimen/progress_bar_default_size"-->
-    <!--    android:layout_height="@dimen/progress_bar_default_size"-->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:navigationIcon="?homeAsUpIndicator"
+            tools:title="Feature title" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/pb_loading_books"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_gravity="center" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        tools:visibility="gone" />
 
     <TextView
         android:id="@+id/v_no_books"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:gravity="center"
         android:text="@string/my_books_no_books"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:visibility="gone"
-        tools:visibility="visible" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_my_books"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
         tools:listitem="@layout/item_book" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
