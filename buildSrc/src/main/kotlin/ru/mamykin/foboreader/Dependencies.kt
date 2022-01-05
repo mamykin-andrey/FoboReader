@@ -16,6 +16,7 @@ object Versions {
     const val recyclerViewVersion = "1.2.0-alpha03"
     const val materialLibVersion = "1.0.0"
     const val constraintLayoutVersion = "1.1.3"
+    const val androidxVersion = "1.1.0"
     const val retrofitCoroutinesAdapterVersion = "0.9.2"
     const val retrofitLoggingInterceptorVersion = "4.3.0"
     const val espressoCoreVersion = "3.1.1"
@@ -28,6 +29,9 @@ object Versions {
 
 object Dependencies {
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin_version}"
+    const val activityX = "androidx.activity:activity:${Versions.androidxVersion}"
+    const val fragmentX = "androidx.fragment:fragment:${Versions.androidxVersion}"
+    const val appCompatX = "androidx.appcompat:appcompat:${Versions.androidxVersion}"
     const val coreKtx = "androidx.core:core-ktx:${Versions.coreKtxVersion}"
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerViewVersion}"
     const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutinesVersion}"

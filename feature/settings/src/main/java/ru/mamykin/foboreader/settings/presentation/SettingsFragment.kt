@@ -74,7 +74,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
         feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 
-    private fun showState(state: Settings.ViewState) {
+    private fun showState(state: Settings.State) {
         state.settings?.let { adapter.submitList(it) }
     }
 

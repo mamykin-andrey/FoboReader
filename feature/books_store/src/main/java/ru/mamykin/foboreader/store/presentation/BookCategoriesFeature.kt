@@ -7,6 +7,7 @@ import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.store.di.BookCategoriesScope
+import ru.mamykin.foboreader.store.domain.model.BookCategory
 import ru.mamykin.foboreader.store.domain.usecase.GetBookCategories
 import ru.mamykin.foboreader.store.navigation.BooksListScreen
 import javax.inject.Inject
@@ -16,34 +17,34 @@ internal class BookCategoriesFeature @Inject constructor(
     reducer: BookCategoriesReducer,
     actor: BookCategoriesActor,
     private val uiEventTransformer: UiEventTransformer
-) : Feature<BookCategories.ViewState, BookCategories.Intent, BookCategories.Effect, BookCategories.Action>(
-    BookCategories.ViewState(),
+) : Feature<BookCategoriesFeature.State, BookCategoriesFeature.Intent, BookCategoriesFeature.Effect, BookCategoriesFeature.Action>(
+    State(),
     actor,
     reducer
 ) {
     init {
-        sendIntent(BookCategories.Intent.LoadCategories)
+        sendIntent(Intent.LoadCategories)
     }
 
-    fun sendEvent(event: BookCategories.Event) {
+    fun sendEvent(event: Event) {
         sendIntent(uiEventTransformer.invoke(event))
     }
 
     internal class BookCategoriesActor @Inject constructor(
         private val getBookCategories: GetBookCategories,
         private val router: Router,
-    ) : Actor<BookCategories.Intent, BookCategories.Action> {
+    ) : Actor<Intent, Action> {
 
-        override operator fun invoke(intent: BookCategories.Intent): Flow<BookCategories.Action> = flow {
+        override operator fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
-                is BookCategories.Intent.LoadCategories -> {
-                    emit(BookCategories.Action.Loading)
+                is Intent.LoadCategories -> {
+                    emit(Action.Loading)
                     getBookCategories.execute().fold(
-                        { emit(BookCategories.Action.LoadingSuccess(it)) },
-                        { emit(BookCategories.Action.LoadingError(it.message.orEmpty())) }
+                        { emit(Action.LoadingSuccess(it)) },
+                        { emit(Action.LoadingError(it.message.orEmpty())) }
                     )
                 }
-                is BookCategories.Intent.OpenCategory -> {
+                is Intent.OpenCategory -> {
                     router.navigateTo(BooksListScreen(intent.id))
                 }
             }
@@ -51,30 +52,30 @@ internal class BookCategoriesFeature @Inject constructor(
     }
 
     internal class BookCategoriesReducer @Inject constructor() :
-        Reducer<BookCategories.ViewState, BookCategories.Action, BookCategories.Effect> {
+        Reducer<State, Action, Effect> {
 
-        override operator fun invoke(state: BookCategories.ViewState, action: BookCategories.Action) = when (action) {
-            is BookCategories.Action.Loading -> {
+        override operator fun invoke(state: State, action: Action) = when (action) {
+            is Action.Loading -> {
                 state.copy(
                     isLoading = true,
                     isError = false,
                     categories = emptyList()
                 ) to emptySet()
             }
-            is BookCategories.Action.LoadingSuccess -> {
+            is Action.LoadingSuccess -> {
                 state.copy(
                     isLoading = false,
                     isError = false,
                     categories = action.categories
                 ) to emptySet()
             }
-            is BookCategories.Action.LoadingError -> {
+            is Action.LoadingError -> {
                 state.copy(
                     isLoading = false,
                     isError = false,
                     categories = emptyList()
                 ) to setOf(
-                    BookCategories.Effect.ShowSnackbar(action.message)
+                    Effect.ShowSnackbar(action.message)
                 )
             }
         }
@@ -82,13 +83,39 @@ internal class BookCategoriesFeature @Inject constructor(
 
     internal class UiEventTransformer @Inject constructor() {
 
-        operator fun invoke(event: BookCategories.Event): BookCategories.Intent = when (event) {
-            is BookCategories.Event.RetryLoadClicked -> {
-                BookCategories.Intent.LoadCategories
+        operator fun invoke(event: Event): Intent = when (event) {
+            is Event.RetryLoadClicked -> {
+                Intent.LoadCategories
             }
-            is BookCategories.Event.CategoryClicked -> {
-                BookCategories.Intent.OpenCategory(event.id)
+            is Event.CategoryClicked -> {
+                Intent.OpenCategory(event.id)
             }
         }
     }
+
+    sealed class Event {
+        object RetryLoadClicked : Event()
+        class CategoryClicked(val id: String) : Event()
+    }
+
+    sealed class Intent {
+        object LoadCategories : Intent()
+        class OpenCategory(val id: String) : Intent()
+    }
+
+    sealed class Action {
+        object Loading : Action()
+        class LoadingSuccess(val categories: List<BookCategory>) : Action()
+        class LoadingError(val message: String) : Action()
+    }
+
+    sealed class Effect {
+        class ShowSnackbar(val message: String) : Effect()
+    }
+
+    data class State(
+        val isLoading: Boolean = true,
+        val isError: Boolean = false,
+        val categories: List<BookCategory>? = null
+    )
 }

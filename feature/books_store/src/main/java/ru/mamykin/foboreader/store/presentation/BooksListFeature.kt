@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
+import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.domain.usecase.DownloadBook
 import ru.mamykin.foboreader.store.domain.usecase.FilterStoreBooks
 import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
@@ -14,16 +15,16 @@ internal class BooksListFeature @Inject constructor(
     reducer: BooksListReducer,
     actor: BooksListActor,
     private val uiEventTransformer: UiEventTransformer,
-) : Feature<BooksList.ViewState, BooksList.Intent, BooksList.Effect, BooksList.Action>(
-    BooksList.ViewState(),
+) : Feature<BooksListFeature.State, BooksListFeature.Intent, BooksListFeature.Effect, BooksListFeature.Action>(
+    State(),
     actor,
     reducer
 ) {
     init {
-        sendIntent(BooksList.Intent.LoadBooks)
+        sendIntent(Intent.LoadBooks)
     }
 
-    fun sendEvent(event: BooksList.Event) {
+    fun sendEvent(event: Event) {
         sendIntent(uiEventTransformer.invoke(event))
     }
 
@@ -36,92 +37,126 @@ internal class BooksListFeature @Inject constructor(
         private val getStoreBooks: GetStoreBooks,
         private val filterStoreBooks: FilterStoreBooks,
         private val params: BookCategoriesParams,
-    ) : Actor<BooksList.Intent, BooksList.Action> {
+    ) : Actor<Intent, Action> {
 
-        override operator fun invoke(intent: BooksList.Intent): Flow<BooksList.Action> = flow {
+        override operator fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
-                is BooksList.Intent.LoadBooks -> {
-                    emit(BooksList.Action.BooksLoading)
+                is Intent.LoadBooks -> {
+                    emit(Action.BooksLoading)
                     getStoreBooks.execute(params.categoryId).fold(
-                        { emit(BooksList.Action.BooksLoaded(it)) },
-                        { emit(BooksList.Action.BooksLoadingError(it.message.orEmpty())) }
+                        { emit(Action.BooksLoaded(it)) },
+                        { emit(Action.BooksLoadingError(it.message.orEmpty())) }
                     )
                 }
-                is BooksList.Intent.FilterBooks -> {
+                is Intent.FilterBooks -> {
                     emit(
-                        BooksList.Action.BooksLoaded(
+                        Action.BooksLoaded(
                             filterStoreBooks.execute(params.categoryId, intent.query).getOrThrow()
                         )
                     )
                 }
-                is BooksList.Intent.DownloadBook -> {
-                    emit(BooksList.Action.DownloadBookStarted)
+                is Intent.DownloadBook -> {
+                    emit(Action.DownloadBookStarted)
                     downloadStoreBook.execute(intent.bookLink, intent.fileName).fold(
-                        { emit(BooksList.Action.BookDownloaded) },
-                        { emit(BooksList.Action.BookDownloadError(it.message.orEmpty())) }
+                        { emit(Action.BookDownloaded) },
+                        { emit(Action.BookDownloadError(it.message.orEmpty())) }
                     )
                 }
             }
         }
     }
 
-    internal class BooksListReducer @Inject constructor() :
-        Reducer<BooksList.ViewState, BooksList.Action, BooksList.Effect> {
+    internal class BooksListReducer @Inject constructor() : Reducer<State, Action, Effect> {
 
-        override operator fun invoke(state: BooksList.ViewState, action: BooksList.Action) = when (action) {
-            is BooksList.Action.BooksLoading -> {
-                state.copy(
-                    isLoading = true,
-                    isError = false,
-                    books = emptyList()
-                ) to emptySet()
+        override operator fun invoke(state: State, action: Action) =
+            when (action) {
+                is Action.BooksLoading -> {
+                    state.copy(
+                        isLoading = true,
+                        isError = false,
+                        books = emptyList()
+                    ) to emptySet()
+                }
+                is Action.BooksLoaded -> {
+                    state.copy(
+                        isLoading = false,
+                        isError = false,
+                        books = action.books
+                    ) to emptySet()
+                }
+                is Action.BooksLoadingError -> {
+                    state.copy(
+                        isLoading = false,
+                        isError = false,
+                        books = emptyList()
+                    ) to setOf(
+                        Effect.ShowSnackbar(action.message)
+                    )
+                }
+                is Action.DownloadBookStarted -> {
+                    state to setOf(
+                        Effect.ShowSnackbar("Загрузка началась")
+                    )
+                }
+                is Action.BookDownloaded -> {
+                    state to setOf(
+                        Effect.NavigateToMyBooks
+                    )
+                }
+                is Action.BookDownloadError -> {
+                    state to setOf(
+                        Effect.ShowSnackbar("Ошибка загрузки: ${action.message}")
+                    )
+                }
             }
-            is BooksList.Action.BooksLoaded -> {
-                state.copy(
-                    isLoading = false,
-                    isError = false,
-                    books = action.books
-                ) to emptySet()
-            }
-            is BooksList.Action.BooksLoadingError -> {
-                state.copy(
-                    isLoading = false,
-                    isError = false,
-                    books = emptyList()
-                ) to setOf(
-                    BooksList.Effect.ShowSnackbar(action.message)
-                )
-            }
-            is BooksList.Action.DownloadBookStarted -> {
-                state to setOf(
-                    BooksList.Effect.ShowSnackbar("Загрузка началась")
-                )
-            }
-            is BooksList.Action.BookDownloaded -> {
-                state to setOf(
-                    BooksList.Effect.NavigateToMyBooks
-                )
-            }
-            is BooksList.Action.BookDownloadError -> {
-                state to setOf(
-                    BooksList.Effect.ShowSnackbar("Ошибка загрузки: ${action.message}")
-                )
-            }
-        }
     }
 
     internal class UiEventTransformer @Inject constructor() {
 
-        operator fun invoke(event: BooksList.Event): BooksList.Intent = when (event) {
-            is BooksList.Event.FilterQueryChanged -> {
-                BooksList.Intent.FilterBooks(event.query)
+        operator fun invoke(event: Event): Intent = when (event) {
+            is Event.FilterQueryChanged -> {
+                Intent.FilterBooks(event.query)
             }
-            is BooksList.Event.DownloadBookClicked -> {
-                BooksList.Intent.DownloadBook(event.bookLink, event.fileName)
+            is Event.DownloadBookClicked -> {
+                Intent.DownloadBook(event.bookLink, event.fileName)
             }
-            is BooksList.Event.RetryBooksClicked -> {
-                BooksList.Intent.LoadBooks
+            is Event.RetryBooksClicked -> {
+                Intent.LoadBooks
             }
         }
     }
+
+    sealed class Event {
+        class FilterQueryChanged(val query: String) : Event()
+        class DownloadBookClicked(val bookLink: String, val fileName: String) : Event()
+        object RetryBooksClicked : Event()
+    }
+
+    sealed class Intent {
+        object LoadBooks : Intent()
+        class FilterBooks(val query: String) : Intent()
+        class DownloadBook(val bookLink: String, val fileName: String) : Intent()
+    }
+
+    sealed class Action {
+        object BooksLoading : Action()
+        class BooksLoaded(val books: List<StoreBook>) : Action()
+        class BooksLoadingError(val message: String) : Action()
+        object DownloadBookStarted : Action()
+        object BookDownloaded : Action()
+        class BookDownloadError(val message: String) : Action()
+    }
+
+    sealed class Effect {
+        class ShowSnackbar(val message: String) : Effect()
+
+        // TODO: Refactor
+        object NavigateToMyBooks : Effect()
+    }
+
+    data class State(
+        val isLoading: Boolean = true,
+        val isError: Boolean = false,
+        val books: List<StoreBook>? = null,
+    )
 }

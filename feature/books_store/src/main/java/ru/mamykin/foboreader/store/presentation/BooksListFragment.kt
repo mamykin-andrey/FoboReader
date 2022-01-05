@@ -42,7 +42,7 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
 
     private val adapter by lazy {
         BookListAdapter { link, fileName ->
-            feature.sendEvent(BooksList.Event.DownloadBookClicked(link, fileName))
+            feature.sendEvent(BooksListFeature.Event.DownloadBookClicked(link, fileName))
         }
     }
     private val binding by autoCleanedValue { FragmentBooksListBinding.bind(requireView()) }
@@ -86,7 +86,7 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
 
     private fun initErrorView() {
         binding.vError.setRetryClickListener {
-            feature.sendEvent(BooksList.Event.RetryBooksClicked)
+            feature.sendEvent(BooksListFeature.Event.RetryBooksClicked)
         }
     }
 
@@ -111,11 +111,11 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         queryHint = getString(R.string.books_store_menu_search)
         queryChanges()
             .filterNotNull()
-            .onEach { feature.sendEvent(BooksList.Event.FilterQueryChanged(it)) }
+            .onEach { feature.sendEvent(BooksListFeature.Event.FilterQueryChanged(it)) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun showState(state: BooksList.ViewState) {
+    private fun showState(state: BooksListFeature.State) {
         binding.pbLoadingBooks.isVisible = state.isLoading
         binding.vError.isVisible = state.isError
         state.books?.let {
@@ -126,9 +126,9 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         }
     }
 
-    private fun takeEffect(effect: BooksList.Effect) {
+    private fun takeEffect(effect: BooksListFeature.Effect) {
         when (effect) {
-            is BooksList.Effect.ShowSnackbar -> showSnackbar(effect.message)
+            is BooksListFeature.Effect.ShowSnackbar -> showSnackbar(effect.message)
         }
     }
 }

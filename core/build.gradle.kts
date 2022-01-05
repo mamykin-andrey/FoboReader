@@ -22,6 +22,9 @@ dependencies {
     api(Dependencies.cardView)
     api(Dependencies.materialLib)
     api(Dependencies.constraintLayout)
+    api(Dependencies.activityX)
+    api(Dependencies.fragmentX)
+    api(Dependencies.appCompatX)
 
     api(Dependencies.lifecycleRuntimeKtx)
     api(Dependencies.liveDataKtx)

@@ -13,8 +13,8 @@ internal class SettingsFeature @Inject constructor(
     reducer: SettingsReducer,
     actor: SettingsActor,
     private val uiEventTransformer: UiEventTransformer,
-) : Feature<Settings.ViewState, Settings.Intent, Settings.Effect, Settings.Action>(
-    Settings.ViewState(),
+) : Feature<Settings.State, Settings.Intent, Settings.Effect, Settings.Action>(
+    Settings.State(),
     actor,
     reducer
 ) {
@@ -70,9 +70,9 @@ internal class SettingsFeature @Inject constructor(
     }
 
     internal class SettingsReducer @Inject constructor() :
-        Reducer<Settings.ViewState, Settings.Action, Settings.Effect> {
+        Reducer<Settings.State, Settings.Action, Settings.Effect> {
 
-        override operator fun invoke(state: Settings.ViewState, action: Settings.Action) = when (action) {
+        override operator fun invoke(state: Settings.State, action: Settings.Action) = when (action) {
             is Settings.Action.SettingsLoaded -> {
                 state.copy(settings = action.settings) to emptySet()
             }
@@ -136,7 +136,7 @@ object Settings {
         object SelectAppLanguage : Effect()
     }
 
-    data class ViewState(
+    data class State(
         val settings: List<SettingsItem>? = null
     )
 }

@@ -28,7 +28,7 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
 
     private val adapter: CategoryListAdapter by lazy {
         CategoryListAdapter {
-            feature.sendEvent(BookCategories.Event.CategoryClicked(it))
+            feature.sendEvent(BookCategoriesFeature.Event.CategoryClicked(it))
         }
     }
     private val binding by autoCleanedValue { FragmentBookCategoriesBinding.bind(requireView()) }
@@ -69,7 +69,7 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
 
     private fun initErrorView() {
         binding.vError.setRetryClickListener {
-            feature.sendEvent(BookCategories.Event.RetryLoadClicked)
+            feature.sendEvent(BookCategoriesFeature.Event.RetryLoadClicked)
         }
     }
 
@@ -84,15 +84,15 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
         binding.rvCategories.adapter = adapter
     }
 
-    private fun showState(state: BookCategories.ViewState) {
+    private fun showState(state: BookCategoriesFeature.State) {
         binding.pbLoadingCategories.isVisible = state.isLoading
         binding.vError.isVisible = state.isError
         state.categories?.let { adapter.submitList(it) }
     }
 
-    private fun takeEffect(effect: BookCategories.Effect) {
+    private fun takeEffect(effect: BookCategoriesFeature.Effect) {
         when (effect) {
-            is BookCategories.Effect.ShowSnackbar -> showSnackbar(effect.message)
+            is BookCategoriesFeature.Effect.ShowSnackbar -> showSnackbar(effect.message)
         }
     }
 }
