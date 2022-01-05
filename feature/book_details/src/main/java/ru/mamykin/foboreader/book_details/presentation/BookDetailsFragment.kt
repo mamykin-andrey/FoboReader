@@ -35,7 +35,7 @@ class BookDetailsFragment : BaseFragment(R.layout.fragment_book_details) {
     internal lateinit var feature: BookDetailsFeature
 
     private val binding by autoCleanedValue { FragmentBookDetailsBinding.bind(requireView()) }
-    private val adapter by autoCleanedValue { BookInfoListAdapter() }
+    private val adapter by lazy { BookInfoListAdapter() }
     private val bookId by lazy { requireArguments().getLong(EXTRA_BOOK_ID) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +63,11 @@ class BookDetailsFragment : BaseFragment(R.layout.fragment_book_details) {
         fabRead.setOnClickListener { feature.sendEvent(BookDetailsFeature.Event.ReadBookClicked) }
         initBookInfoList()
         feature.stateData.observe(viewLifecycleOwner, ::showState)
+    }
+
+    override fun onDestroyView() {
+        binding.rvBookInfo.adapter = null
+        super.onDestroyView()
     }
 
     private fun initBookInfoList() {

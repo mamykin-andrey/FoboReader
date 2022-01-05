@@ -26,7 +26,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
     internal lateinit var feature: SettingsFeature
 
     private val binding by autoCleanedValue { FragmentSettingsBinding.bind(requireView()) }
-    private val adapter by autoCleanedValue { SettingsListAdapter(lifecycleScope, feature::sendEvent) }
+    private val adapter by lazy { SettingsListAdapter(lifecycleScope, feature::sendEvent) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +52,11 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
         initToolbar()
         initSettingsList()
         initFeature()
+    }
+
+    override fun onDestroyView() {
+        binding.rvSettings.adapter = null
+        super.onDestroyView()
     }
 
     override fun onDismiss() {

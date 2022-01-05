@@ -45,7 +45,7 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
     internal lateinit var screenProvider: ScreenProvider
 
     private val binding by autoCleanedValue { FragmentMyBooksBinding.bind(requireView()) }
-    private val adapter by autoCleanedValue {
+    private val adapter by lazy {
         BookAdapter(
             { router.navigateTo(screenProvider.readBookScreen(it)) },
             { router.navigateTo(screenProvider.bookDetailsScreen(it)) },
@@ -79,8 +79,8 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         binding.rvMyBooks.adapter = null
+        super.onDestroyView()
     }
 
     private fun initToolbar() = binding.toolbar.apply {
