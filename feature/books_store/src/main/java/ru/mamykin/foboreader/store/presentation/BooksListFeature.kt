@@ -2,15 +2,19 @@ package ru.mamykin.foboreader.store.presentation
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import ru.mamykin.foboreader.core.platform.ResourceManager
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
+import ru.mamykin.foboreader.store.R
+import ru.mamykin.foboreader.store.di.BookListScope
 import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.store.domain.usecase.DownloadBook
 import ru.mamykin.foboreader.store.domain.usecase.FilterStoreBooks
 import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
 import javax.inject.Inject
 
+@BookListScope
 internal class BooksListFeature @Inject constructor(
     reducer: BooksListReducer,
     actor: BooksListActor,
@@ -66,7 +70,9 @@ internal class BooksListFeature @Inject constructor(
         }
     }
 
-    internal class BooksListReducer @Inject constructor() : Reducer<State, Action, Effect> {
+    internal class BooksListReducer @Inject constructor(
+        private val resourceManager: ResourceManager,
+    ) : Reducer<State, Action, Effect> {
 
         override operator fun invoke(state: State, action: Action) =
             when (action) {
@@ -95,7 +101,7 @@ internal class BooksListFeature @Inject constructor(
                 }
                 is Action.DownloadBookStarted -> {
                     state to setOf(
-                        Effect.ShowSnackbar("Загрузка началась")
+                        Effect.ShowSnackbar(resourceManager.getString(R.string.books_store_download_progress))
                     )
                 }
                 is Action.BookDownloaded -> {
@@ -105,7 +111,7 @@ internal class BooksListFeature @Inject constructor(
                 }
                 is Action.BookDownloadError -> {
                     state to setOf(
-                        Effect.ShowSnackbar("Ошибка загрузки: ${action.message}")
+                        Effect.ShowSnackbar(resourceManager.getString(R.string.books_store_download_failed))
                     )
                 }
             }

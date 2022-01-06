@@ -9,7 +9,14 @@ import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.store.presentation.BooksListFeature
 import ru.mamykin.foboreader.store.presentation.BooksListFragment
+import javax.inject.Scope
 
+@Scope
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class BookListScope
+
+@BookListScope
 @Component(
     modules = [
         BooksStoreModule::class,

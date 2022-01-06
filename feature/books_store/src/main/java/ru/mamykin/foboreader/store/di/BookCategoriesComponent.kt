@@ -12,7 +12,7 @@ import javax.inject.Scope
 @Scope
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-annotation class BookCategoriesScope
+internal annotation class BookCategoriesScope
 
 @BookCategoriesScope
 @Component(
