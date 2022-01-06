@@ -9,5 +9,7 @@ plugins {
 
 dependencies {
     implementation(project(":core"))
+    implementation(Dependencies.coreKtx)
+    implementation(Dependencies.recyclerView)
     kapt(Dependencies.roomCompiler)
 }

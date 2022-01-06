@@ -11,5 +11,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":widgets:progress_bar"))
     implementation(project(":widgets:error_stub"))
+    implementation(Dependencies.coreKtx)
+    implementation(Dependencies.recyclerView)
     kapt(Dependencies.daggerCompiler)
 }

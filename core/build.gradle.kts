@@ -7,11 +7,8 @@ plugins {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    api(Dependencies.kotlinStdLib)
-
-    api(Dependencies.coreKtx)
-    api(Dependencies.recyclerView)
+    implementation(Dependencies.coreKtx)
+    implementation(Dependencies.recyclerView)
 
     api(Dependencies.coroutinesCore)
     api(Dependencies.coroutinesAndroid)
