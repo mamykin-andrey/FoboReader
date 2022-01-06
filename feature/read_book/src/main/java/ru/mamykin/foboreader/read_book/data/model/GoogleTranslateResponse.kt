@@ -1,18 +1,17 @@
 package ru.mamykin.foboreader.read_book.data.model
 
-import com.google.gson.annotations.SerializedName
+import androidx.annotation.Keep
 import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
 
-data class GoogleTranslateResponse(
-    @SerializedName("data")
+@Keep
+class GoogleTranslateResponse(
     val data: Data
 ) {
-    data class Data(
-        @SerializedName("translations")
+    class Data(
         val translations: List<Translation>
     )
-    data class Translation(
-        @SerializedName("translatedText")
+
+    class Translation(
         val translatedText: String
     )
 
