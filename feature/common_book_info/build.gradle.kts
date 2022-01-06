@@ -11,5 +11,9 @@ dependencies {
     implementation(project(":core"))
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)
+    implementation(Dependencies.coroutinesCore)
+    implementation(Dependencies.coroutinesAndroid)
+    implementation(Dependencies.roomRuntime)
+    implementation(Dependencies.roomKtx)
     kapt(Dependencies.roomCompiler)
 }

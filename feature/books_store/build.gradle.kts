@@ -13,5 +13,7 @@ dependencies {
     implementation(project(":widgets:error_stub"))
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)
+    implementation(Dependencies.coroutinesCore)
+    implementation(Dependencies.coroutinesAndroid)
     kapt(Dependencies.daggerCompiler)
 }

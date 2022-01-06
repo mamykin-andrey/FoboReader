@@ -12,5 +12,7 @@ dependencies {
     implementation(project(":feature:common_book_info"))
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)
+    implementation(Dependencies.coroutinesCore)
+    implementation(Dependencies.coroutinesAndroid)
     kapt(Dependencies.daggerCompiler)
 }

@@ -11,5 +11,7 @@ dependencies {
     implementation(project(":core"))
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)
+    implementation(Dependencies.coroutinesCore)
+    implementation(Dependencies.coroutinesAndroid)
     kapt(Dependencies.daggerCompiler)
 }

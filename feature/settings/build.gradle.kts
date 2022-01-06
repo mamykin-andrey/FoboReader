@@ -12,5 +12,7 @@ dependencies {
     implementation(project(":widgets:progress_bar"))
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)
+    implementation(Dependencies.coroutinesCore)
+    implementation(Dependencies.coroutinesAndroid)
     kapt(Dependencies.daggerCompiler)
 }

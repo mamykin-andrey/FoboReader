@@ -10,11 +10,11 @@ dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)
 
-    api(Dependencies.coroutinesCore)
-    api(Dependencies.coroutinesAndroid)
+    implementation(Dependencies.coroutinesCore)
+    implementation(Dependencies.coroutinesAndroid)
 
-    api(Dependencies.roomRuntime)
-    api(Dependencies.roomKtx)
+    implementation(Dependencies.roomRuntime)
+    implementation(Dependencies.roomKtx)
 
     api(Dependencies.cardView)
     api(Dependencies.materialLib)

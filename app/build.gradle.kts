@@ -21,5 +21,7 @@ dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)
     implementation(Dependencies.leakcanary)
+    implementation(Dependencies.coroutinesCore)
+    implementation(Dependencies.coroutinesAndroid)
     kapt(Dependencies.daggerCompiler)
 }
