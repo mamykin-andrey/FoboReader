@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.common_book_info.data.repository
 
 import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
+import ru.mamykin.foboreader.common_book_info.data.model.BookInfoModel
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 
 class BookInfoRepository(
@@ -22,10 +23,20 @@ class BookInfoRepository(
 
     suspend fun updateBookInfo(bookId: Long, currentPage: Int, totalPages: Int) {
         val bookInfo = bookInfoDao.getBook(bookId)
-        val updatedBookInfo = bookInfo.copy(
-            currentPage = currentPage,
-            totalPages = totalPages
+        bookInfoDao.update(
+            BookInfoModel(
+                id = bookInfo.id,
+                filePath = bookInfo.filePath,
+                genre = bookInfo.genre,
+                coverUrl = bookInfo.coverUrl,
+                author = bookInfo.author,
+                title = bookInfo.title,
+                languages = bookInfo.languages,
+                date = bookInfo.date,
+                currentPage = currentPage,
+                totalPages = totalPages,
+                lastOpen = bookInfo.lastOpen,
+            )
         )
-        bookInfoDao.update(updatedBookInfo)
     }
 }

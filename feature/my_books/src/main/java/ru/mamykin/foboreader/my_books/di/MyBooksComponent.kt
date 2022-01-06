@@ -9,14 +9,14 @@ import javax.inject.Scope
 @Scope
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-annotation class MyBooksScope
+internal annotation class MyBooksScope
 
 @MyBooksScope
 @Component(
     dependencies = [NavigationApi::class, CommonApi::class],
     modules = [DatabaseModule::class]
 )
-interface MyBooksComponent {
+internal interface MyBooksComponent {
 
     fun inject(fragment: MyBooksFragment)
 

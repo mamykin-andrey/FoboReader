@@ -9,7 +9,6 @@ plugins {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":widgets:progress_bar"))
 
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)

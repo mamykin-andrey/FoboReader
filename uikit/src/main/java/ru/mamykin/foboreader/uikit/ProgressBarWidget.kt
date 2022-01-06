@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.progress_bar
+package ru.mamykin.foboreader.uikit
 
 import android.content.Context
 import android.util.AttributeSet

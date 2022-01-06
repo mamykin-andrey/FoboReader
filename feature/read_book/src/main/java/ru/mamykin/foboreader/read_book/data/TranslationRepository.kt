@@ -7,7 +7,7 @@ import ru.mamykin.foboreader.read_book.domain.model.Translation
 import javax.inject.Inject
 import javax.inject.Named
 
-class TranslationRepository @Inject constructor(
+internal class TranslationRepository @Inject constructor(
     private val service: GoogleTranslateService,
     @Named("ApiKey") private val apiKey: String,
     @Named("ApiHost") private val apiHost: String

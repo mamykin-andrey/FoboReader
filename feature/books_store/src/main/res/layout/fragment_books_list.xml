@@ -25,18 +25,18 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ru.mamykin.foboreader.progress_bar.ProgressBarWidget
+    <ru.mamykin.foboreader.uikit.ProgressBarWidget
         android:id="@+id/pb_loading_books"
         style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="@dimen/progress_bar_default_size"
-        android:layout_height="@dimen/progress_bar_default_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appbar" />
 
-    <ru.mamykin.foboreader.error_stub.ErrorStubWidget
+    <ru.mamykin.foboreader.uikit.ErrorStubWidget
         android:id="@+id/v_error"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

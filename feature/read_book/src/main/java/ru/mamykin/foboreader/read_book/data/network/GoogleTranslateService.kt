@@ -7,7 +7,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import ru.mamykin.foboreader.read_book.data.model.GoogleTranslateResponse
 
-interface GoogleTranslateService {
+internal interface GoogleTranslateService {
 
     companion object {
         const val BASE_URL = "https://google-translate1.p.rapidapi.com/"

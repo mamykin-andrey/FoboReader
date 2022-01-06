@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.error_stub
+package ru.mamykin.foboreader.uikit
 
 import android.content.Context
 import android.util.AttributeSet

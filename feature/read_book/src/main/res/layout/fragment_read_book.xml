@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context="presentation.ReadBookFragment">
 
-    <ru.mamykin.foboreader.progress_bar.ProgressBarWidget
+    <ru.mamykin.foboreader.uikit.ProgressBarWidget
         android:id="@+id/pb_loading_book"
         style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="@dimen/progress_bar_default_size"
-        android:layout_height="@dimen/progress_bar_default_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

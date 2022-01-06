@@ -24,14 +24,14 @@ import javax.inject.Scope
 @Scope
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ReadBookScope
+internal annotation class ReadBookScope
 
 @ReadBookScope
 @Component(
     dependencies = [NetworkApi::class, NavigationApi::class, CommonApi::class, SettingsApi::class],
     modules = [ReadBookModule::class]
 )
-interface ReadBookComponent {
+internal interface ReadBookComponent {
 
     fun inject(fragment: ReadBookFragment)
 
@@ -49,7 +49,7 @@ interface ReadBookComponent {
 }
 
 @Module
-class ReadBookModule {
+internal class ReadBookModule {
 
     @Provides
     @ReadBookScope

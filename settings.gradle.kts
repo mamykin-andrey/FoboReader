@@ -8,6 +8,5 @@ include(
     ":feature:my_books",
     ":feature:book_details",
     ":feature:main",
-    ":widgets:progress_bar",
-    ":widgets:error_stub"
+    ":uikit"
 )

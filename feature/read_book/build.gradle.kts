@@ -9,8 +9,8 @@ plugins {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":uikit"))
     implementation(project(":feature:common_book_info"))
-    implementation(project(":widgets:progress_bar"))
 
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)
