@@ -9,6 +9,7 @@ plugins {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(Dependencies.multidex)
     implementation(project(":core"))
     implementation(project(":feature:common_book_info"))
     implementation(project(":feature:books_store"))

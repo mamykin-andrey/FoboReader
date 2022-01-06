@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.extension.setCurrentLocale
 
-class AppLanguageDelegate(
+internal class AppLanguageDelegate(
     private val activity: AppCompatActivity,
     private val appSettingsStorage: AppSettingsStorage,
 ) {

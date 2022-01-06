@@ -37,8 +37,6 @@ dependencies {
     api(Dependencies.okio)
     api(Dependencies.okHttp)
 
-    api(Dependencies.multidex)
-
     api(Dependencies.dagger)
 
     api(Dependencies.cicerone)

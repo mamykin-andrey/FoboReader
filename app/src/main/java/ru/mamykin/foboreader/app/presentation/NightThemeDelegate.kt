@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.extension.setNightModeEnabled
 
-class NightThemeDelegate(
+internal class NightThemeDelegate(
     private val activity: AppCompatActivity,
     private val appSettingsStorage: AppSettingsStorage,
 ) {
