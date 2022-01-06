@@ -14,5 +14,11 @@ dependencies {
     implementation(Dependencies.recyclerView)
     implementation(Dependencies.coroutinesCore)
     implementation(Dependencies.coroutinesAndroid)
+    implementation(Dependencies.cardView)
+    implementation(Dependencies.materialLib)
+    implementation(Dependencies.constraintLayout)
+    implementation(Dependencies.activityX)
+    implementation(Dependencies.fragmentX)
+    implementation(Dependencies.appCompatX)
     kapt(Dependencies.daggerCompiler)
 }

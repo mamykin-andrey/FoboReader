@@ -16,12 +16,12 @@ dependencies {
     implementation(Dependencies.roomRuntime)
     implementation(Dependencies.roomKtx)
 
-    api(Dependencies.cardView)
-    api(Dependencies.materialLib)
-    api(Dependencies.constraintLayout)
-    api(Dependencies.activityX)
-    api(Dependencies.fragmentX)
-    api(Dependencies.appCompatX)
+    implementation(Dependencies.cardView)
+    implementation(Dependencies.materialLib)
+    implementation(Dependencies.constraintLayout)
+    implementation(Dependencies.activityX)
+    implementation(Dependencies.fragmentX)
+    implementation(Dependencies.appCompatX)
 
     api(Dependencies.lifecycleRuntimeKtx)
     api(Dependencies.liveDataKtx)
