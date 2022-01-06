@@ -20,14 +20,12 @@ object Versions {
     const val retrofitLoggingInterceptorVersion = "4.3.0"
     const val espressoCoreVersion = "3.1.1"
     const val leakcanaryVersion = "2.5"
-    const val kotlin_version = "1.4.10"
     const val daggerVersion = "2.38.1"
     const val ciceroneVersion = "7.1"
     const val lifecycleVersion = "2.3.1"
 }
 
 object Dependencies {
-    const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin_version}"
     const val activityX = "androidx.activity:activity:${Versions.androidxVersion}"
     const val fragmentX = "androidx.fragment:fragment:${Versions.androidxVersion}"
     const val appCompatX = "androidx.appcompat:appcompat:${Versions.androidxVersion}"

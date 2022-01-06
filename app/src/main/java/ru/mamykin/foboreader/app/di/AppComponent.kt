@@ -5,10 +5,14 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 import dagger.*
 import okhttp3.OkHttpClient
+import ru.mamykin.foboreader.app.data.storage.AppSettingsStorageImpl
+import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
 import ru.mamykin.foboreader.app.navigation.ScreenProviderImpl
 import ru.mamykin.foboreader.app.navigation.TabFragmentProviderImpl
 import ru.mamykin.foboreader.app.platform.ResourceManagerImpl
 import ru.mamykin.foboreader.core.data.OkHttpFactory
+import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import ru.mamykin.foboreader.core.di.api.*
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
@@ -56,5 +60,13 @@ internal class AppModule {
         @Binds
         @Singleton
         fun bindResourceManager(impl: ResourceManagerImpl): ResourceManager
+
+        @Binds
+        @Singleton
+        fun bindPreferencesManager(impl: PreferencesManagerImpl): PreferencesManager
+
+        @Binds
+        @Singleton
+        fun bindAppSettings(impl: AppSettingsStorageImpl): AppSettingsStorage
     }
 }
