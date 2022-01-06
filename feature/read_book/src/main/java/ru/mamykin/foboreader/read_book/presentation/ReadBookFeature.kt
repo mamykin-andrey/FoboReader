@@ -8,7 +8,7 @@ import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.core.presentation.ReducerResult
 import ru.mamykin.foboreader.read_book.R
-import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
+import ru.mamykin.foboreader.read_book.domain.model.Translation
 import ru.mamykin.foboreader.read_book.domain.usecase.GetBookContent
 import ru.mamykin.foboreader.read_book.domain.usecase.GetBookInfo
 import ru.mamykin.foboreader.read_book.domain.usecase.GetParagraphTranslation
@@ -140,7 +140,7 @@ internal class ReadBookFeature @Inject constructor(
         object ParagraphTranslationHidden : Action()
 
         class WordTranslationLoaded(
-            val translation: TranslationEntity
+            val translation: Translation
         ) : Action()
 
         object WordTranslationLoadingFailed : Action()
@@ -162,7 +162,7 @@ internal class ReadBookFeature @Inject constructor(
         val currentPage: Int = 0,
         val totalPages: Int = 0,
         val readPercent: Float = 0f,
-        val wordTranslation: TranslationEntity? = null,
+        val wordTranslation: Translation? = null,
         val paragraphTranslation: Pair<String, String>? = null
     )
 }

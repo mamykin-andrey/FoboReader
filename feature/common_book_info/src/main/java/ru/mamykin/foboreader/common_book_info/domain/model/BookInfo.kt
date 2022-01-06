@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.common_book_info.domain.model
 import java.io.File
 import java.util.*
 
-data class BookInfo(
+class BookInfo(
     val id: Long,
     val filePath: String,
     val genre: String,

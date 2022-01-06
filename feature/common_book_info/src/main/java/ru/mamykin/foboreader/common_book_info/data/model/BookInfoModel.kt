@@ -6,7 +6,7 @@ import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import java.util.*
 
 @Entity
-data class BookInfoModel(
+class BookInfoModel(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val filePath: String,

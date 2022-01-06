@@ -20,7 +20,7 @@ import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
 import ru.mamykin.foboreader.read_book.databinding.LayoutWordPopupBinding
 import ru.mamykin.foboreader.read_book.di.DaggerReadBookComponent
-import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
+import ru.mamykin.foboreader.read_book.domain.model.Translation
 import ru.mamykin.foboreader.read_book.presentation.view.ClickableTextView
 import javax.inject.Inject
 
@@ -129,7 +129,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     }
 
     @SuppressLint("InflateParams", "ClickableViewAccessibility")
-    private fun showWordTranslation(translation: TranslationEntity) {
+    private fun showWordTranslation(translation: Translation) {
         val inflater = LayoutInflater.from(context)
         val popupView = inflater.inflate(R.layout.layout_word_popup, null)
         val popupBinding = LayoutWordPopupBinding.bind(popupView)

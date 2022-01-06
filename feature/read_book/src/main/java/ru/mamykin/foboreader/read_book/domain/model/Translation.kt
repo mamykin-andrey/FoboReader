@@ -1,6 +1,6 @@
-package ru.mamykin.foboreader.read_book.domain.entity
+package ru.mamykin.foboreader.read_book.domain.model
 
-data class TranslationEntity(
+data class Translation(
     val source: String,
     val translations: List<String>
 ) {

@@ -1,21 +1,21 @@
 package ru.mamykin.foboreader.read_book.data.model
 
 import androidx.annotation.Keep
-import ru.mamykin.foboreader.read_book.domain.entity.TranslationEntity
+import ru.mamykin.foboreader.read_book.domain.model.Translation
 
 @Keep
-class GoogleTranslateResponse(
-    val data: Data
+internal class GoogleTranslateResponse(
+    val data: DataResponse
 ) {
-    class Data(
-        val translations: List<Translation>
+    class DataResponse(
+        val translations: List<TranslationResponse>
     )
 
-    class Translation(
+    class TranslationResponse(
         val translatedText: String
     )
 
-    fun toEntity(source: String) = TranslationEntity(
+    fun toDomainModel(source: String) = Translation(
         source,
         data.translations.map { it.translatedText }
     )

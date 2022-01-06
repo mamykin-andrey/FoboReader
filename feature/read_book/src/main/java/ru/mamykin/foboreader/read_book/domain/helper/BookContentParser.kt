@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.read_book.domain.helper
 
-import ru.mamykin.foboreader.read_book.domain.entity.BookContent
+import ru.mamykin.foboreader.read_book.domain.model.BookContent
 import java.io.File
 import javax.inject.Inject
 import javax.xml.parsers.SAXParserFactory
