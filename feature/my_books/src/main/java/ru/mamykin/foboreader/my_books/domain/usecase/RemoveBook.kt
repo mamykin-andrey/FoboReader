@@ -7,9 +7,9 @@ import javax.inject.Inject
 class RemoveBook @Inject constructor(
     private val repository: BookInfoRepository
 ) {
-    suspend fun execute(param: Long): Result<Unit> {
+    suspend fun execute(bookId: Long): Result<Unit> {
         return runCatching {
-            val bookInfo = repository.getBookInfo(param)
+            val bookInfo = repository.getBookInfo(bookId)
             repository.removeBook(bookInfo.id)
                 .also { File(bookInfo.filePath).delete() }
         }

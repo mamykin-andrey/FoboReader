@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.book_details.domain.model
 
-class BookDetails(
+data class BookDetails(
     val author: String,
     val title: String,
     val coverUrl: String?,

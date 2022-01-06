@@ -7,8 +7,8 @@ import javax.inject.Inject
 class GetBookDetails @Inject constructor(
     private val repository: BookInfoRepository,
 ) {
-    suspend fun execute(param: Long): BookDetails {
-        val info = repository.getBookInfo(param)
+    suspend fun execute(bookId: Long): BookDetails {
+        val info = repository.getBookInfo(bookId)
         return BookDetails(
             author = info.author,
             title = info.title,

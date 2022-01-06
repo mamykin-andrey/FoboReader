@@ -33,9 +33,7 @@ dependencies {
     kapt(Dependencies.daggerCompiler)
 
     testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.mockito)
-    testImplementation(Dependencies.mockitoKotlin)
-    testImplementation(Dependencies.kluent)
+    testImplementation(Dependencies.mockk)
 
     androidTestImplementation(Dependencies.espressoCore)
 }

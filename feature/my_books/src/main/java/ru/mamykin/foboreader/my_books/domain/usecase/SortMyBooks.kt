@@ -8,7 +8,7 @@ import javax.inject.Inject
 internal class SortMyBooks @Inject constructor(
     private val repository: MyBooksRepository
 ) {
-    suspend fun execute(param: SortOrder): List<BookInfo> {
-        return repository.sortBooks(param)
+    suspend fun execute(sortOrder: SortOrder): List<BookInfo> {
+        return repository.sortBooks(sortOrder)
     }
 }

@@ -72,6 +72,7 @@ internal class BookDetailsFeature @Inject constructor(
             is Action.LoadingError -> state.copy(
                 isLoading = false,
                 isError = true,
+                items = null,
             ) to emptySet()
         }
 
@@ -105,7 +106,7 @@ internal class BookDetailsFeature @Inject constructor(
     }
 
     sealed class Action {
-        class BookLoaded(val bookDetails: BookDetails) : Action()
+        data class BookLoaded(val bookDetails: BookDetails) : Action()
         object LoadingError : Action()
     }
 
