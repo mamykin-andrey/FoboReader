@@ -37,14 +37,14 @@ internal class SelectAppLanguageDialogFragment : DialogFragment() {
         ).inject(this)
 
         val supportedLanguages = getAppLanguages.execute()
-        val supportedLanguagesNames = supportedLanguages.map { it.first }.toTypedArray()
+        val supportedLanguagesNames = supportedLanguages.map { it.name }.toTypedArray()
 
         return AlertDialog.Builder(requireContext())
             .setTitle(R.string.select_app_language)
             .setItems(supportedLanguagesNames) { _, index ->
                 dismiss()
                 supportedLanguages.getOrNull(index)
-                    ?.second
+                    ?.code
                     ?.let(setAppLanguage::execute)
             }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }

@@ -37,8 +37,6 @@ dependencies {
     api(Dependencies.okio)
     api(Dependencies.okHttp)
 
-    api(Dependencies.flowbinding)
-
     api(Dependencies.multidex)
 
     api(Dependencies.dagger)

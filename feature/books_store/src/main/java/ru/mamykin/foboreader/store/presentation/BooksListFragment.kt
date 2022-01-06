@@ -5,14 +5,10 @@ import android.view.Menu
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.getSearchView
-import ru.mamykin.foboreader.core.extension.queryChanges
+import ru.mamykin.foboreader.core.extension.setQueryChangedListener
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
@@ -107,12 +103,12 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         binding.rvBooks.adapter = adapter
     }
 
-    private fun initSearchView(menu: Menu) = menu.getSearchView(R.id.action_search).apply {
-        queryHint = getString(R.string.books_store_menu_search)
-        queryChanges()
-            .filterNotNull()
-            .onEach { feature.sendEvent(BooksListFeature.Event.FilterQueryChanged(it)) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+    private fun initSearchView(menu: Menu) {
+        val searchView = menu.getSearchView(R.id.action_search)
+        searchView.queryHint = getString(R.string.books_store_menu_search)
+        searchView.setQueryChangedListener {
+            feature.sendEvent(BooksListFeature.Event.FilterQueryChanged(it))
+        }
     }
 
     private fun showState(state: BooksListFeature.State) {

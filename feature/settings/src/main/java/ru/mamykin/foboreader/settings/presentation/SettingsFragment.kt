@@ -3,7 +3,6 @@ package ru.mamykin.foboreader.settings.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.presentation.BaseFragment
@@ -26,7 +25,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
     internal lateinit var feature: SettingsFeature
 
     private val binding by autoCleanedValue { FragmentSettingsBinding.bind(requireView()) }
-    private val adapter by lazy { SettingsListAdapter(lifecycleScope, feature::sendEvent) }
+    private val adapter by lazy { SettingsListAdapter(feature::sendEvent) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -3,7 +3,6 @@ package ru.mamykin.foboreader.settings.presentation.list
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
 import ru.mamykin.foboreader.core.extension.getLayoutInflater
 import ru.mamykin.foboreader.core.presentation.list.SimpleDiffUtil
 import ru.mamykin.foboreader.settings.R
@@ -12,7 +11,6 @@ import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import ru.mamykin.foboreader.settings.presentation.Settings
 
 internal class SettingsListAdapter(
-    private val lifecycleScope: CoroutineScope,
     private val onEvent: (Settings.Event) -> Unit,
 ) : ListAdapter<SettingsItem, RecyclerView.ViewHolder>(
     SimpleDiffUtil.equalsCallback { it::class.java }
@@ -35,7 +33,6 @@ internal class SettingsListAdapter(
                     false
                 ),
                 onEvent,
-                lifecycleScope,
             )
             R.layout.item_background_brightness -> BrightnessHolder(
                 ItemBackgroundBrightnessBinding.inflate(
@@ -44,7 +41,6 @@ internal class SettingsListAdapter(
                     false
                 ),
                 onEvent,
-                lifecycleScope,
             )
             R.layout.item_text_size -> TextSizeHolder(
                 ItemTextSizeBinding.inflate(
@@ -53,7 +49,6 @@ internal class SettingsListAdapter(
                     false
                 ),
                 onEvent,
-                lifecycleScope,
             )
             R.layout.item_translation_color -> TranslationColorHolder(
                 ItemTranslationColorBinding.inflate(
@@ -62,7 +57,6 @@ internal class SettingsListAdapter(
                     false
                 ),
                 onEvent,
-                lifecycleScope,
             )
             R.layout.item_app_language -> AppLanguageHolder(
                 ItemAppLanguageBinding.inflate(
@@ -71,7 +65,6 @@ internal class SettingsListAdapter(
                     false
                 ),
                 onEvent,
-                lifecycleScope,
             )
             R.layout.item_use_vibration -> UseVibrationHolder(
                 ItemUseVibrationBinding.inflate(
@@ -80,7 +73,6 @@ internal class SettingsListAdapter(
                     false
                 ),
                 onEvent,
-                lifecycleScope,
             )
             else -> throw IllegalArgumentException("Unknown viewType: $viewType!")
         }

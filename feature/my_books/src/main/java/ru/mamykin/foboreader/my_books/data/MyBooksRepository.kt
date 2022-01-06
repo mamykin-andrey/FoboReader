@@ -38,8 +38,8 @@ internal class MyBooksRepository @Inject constructor(
         searchQuery: String,
         sortOrder: SortOrder
     ): List<BookInfo> {
-        return books.filter { it.containsText(searchQuery) }
-            .sortedWith(BooksComparatorFactory().create(sortOrder))
+        val filteredBooks = if (searchQuery.isBlank()) books else books.filter { it.containsText(searchQuery) }
+        return filteredBooks.sortedWith(BooksComparatorFactory().create(sortOrder))
     }
 
     suspend fun sortBooks(sortOrder: SortOrder): List<BookInfo> {

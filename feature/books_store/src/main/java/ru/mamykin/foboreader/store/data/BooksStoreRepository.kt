@@ -41,7 +41,9 @@ internal class BooksStoreRepository @Inject constructor(
         books: List<StoreBook>,
         searchQuery: String?
     ): List<StoreBook> {
-        searchQuery ?: return books
+        if (searchQuery.isNullOrBlank()) {
+            return books
+        }
         return books.filter { it.containsText(searchQuery) }
     }
 }

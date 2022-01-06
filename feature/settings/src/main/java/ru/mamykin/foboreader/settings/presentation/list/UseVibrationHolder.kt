@@ -1,27 +1,21 @@
 package ru.mamykin.foboreader.settings.presentation.list
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import reactivecircus.flowbinding.android.view.clicks
 import ru.mamykin.foboreader.settings.databinding.ItemUseVibrationBinding
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import ru.mamykin.foboreader.settings.presentation.Settings
 
-class UseVibrationHolder(
+internal class UseVibrationHolder(
     private val binding: ItemUseVibrationBinding,
     private val onEvent: (Settings.Event) -> Unit,
-    lifecycleScope: CoroutineScope
 ) : SettingsItemHolder<SettingsItem.UseVibration>(binding.root) {
 
     init {
-        binding.clRoot.clicks()
-            .onEach { onEvent(Settings.Event.UseVibrationChanged(!binding.cbOptionValue.isChecked)) }
-            .launchIn(lifecycleScope)
+        binding.clRoot.setOnClickListener {
+            onEvent(Settings.Event.UseVibrationChanged(!binding.cbOptionValue.isChecked))
+        }
     }
 
     override fun bind(item: SettingsItem.UseVibration) {
-//        val vibrationEnabled = getVibrationEnabled(Unit).getOrThrow()
         binding.cbOptionValue.isChecked = item.enabled
     }
 }

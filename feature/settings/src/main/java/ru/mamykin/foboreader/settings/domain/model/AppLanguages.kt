@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.settings.domain.model
 
 val supportedAppLanguages = listOf(
-    "Русский" to "ru",
-    "English" to "en"
+    AppLanguage("ru", "Русский"),
+    AppLanguage("en", "English"),
 )

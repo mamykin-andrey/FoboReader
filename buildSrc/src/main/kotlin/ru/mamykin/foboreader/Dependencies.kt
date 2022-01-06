@@ -10,7 +10,6 @@ object Versions {
     const val mockitoKotlinVersion = "1.5.0"
     const val junitVersion = "4.12"
     const val kluentVersion = "1.35"
-    const val flowbindingVersion = "0.11.1"
     const val multidexVersion = "2.0.1"
     const val coreKtxVersion = "1.0.2"
     const val recyclerViewVersion = "1.2.0-alpha03"
@@ -51,7 +50,6 @@ object Dependencies {
     const val retrofitLoggingInterceptor =
         "com.squareup.okhttp3:logging-interceptor:${Versions.retrofitLoggingInterceptorVersion}"
     const val picasso = "com.squareup.picasso:picasso:${Versions.picassoVersion}"
-    const val flowbinding = "io.github.reactivecircus.flowbinding:flowbinding-android:${Versions.flowbindingVersion}"
     const val junit = "junit:junit:${Versions.junitVersion}"
     const val mockito = "org.mockito:mockito-core:${Versions.mockitoVersion}"
     const val mockitoKotlin = "com.nhaarman:mockito-kotlin:${Versions.mockitoKotlinVersion}"

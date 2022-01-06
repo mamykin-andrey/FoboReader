@@ -1,23 +1,15 @@
 package ru.mamykin.foboreader.core.extension
 
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
-import androidx.annotation.CheckResult
 import androidx.annotation.IdRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import reactivecircus.flowbinding.android.widget.SeekBarChangeEvent
-import reactivecircus.flowbinding.android.widget.changeEvents
-import reactivecircus.flowbinding.android.widget.checkedChanges
 
 fun View.showPopupMenu(@MenuRes menuRes: Int, vararg clicks: Pair<Int, () -> Unit>) {
     PopupMenu(context, this).apply {
@@ -30,34 +22,46 @@ fun View.showPopupMenu(@MenuRes menuRes: Int, vararg clicks: Pair<Int, () -> Uni
     }
 }
 
-fun SeekBar.changeProgressEvents(emitImmediately: Boolean = false): Flow<Int> =
-    changeEvents(emitImmediately)
-        .filter { it is SeekBarChangeEvent.ProgressChanged && it.fromUser }
-        .map { it.view.progress }
+fun SeekBar.setProgressChangedListener(listener: (Int) -> Unit) {
+    setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+            if (fromUser) {
+                listener.invoke(progress)
+            }
+        }
 
-fun Switch.manualCheckedChanges(): Flow<Boolean> =
-    checkedChanges()
-        .filter { this.isPressed }
+        override fun onStartTrackingTouch(seekBar: SeekBar) {}
+        override fun onStopTrackingTouch(seekBar: SeekBar) {}
+    })
+}
+
+fun Switch.setCheckedChangedListener(listener: (Boolean) -> Unit) {
+    setOnCheckedChangeListener { _, isChecked ->
+        listener.invoke(isChecked)
+    }
+}
 
 fun Menu.getSearchView(@IdRes itemId: Int): SearchView {
     val searchItem = findItem(itemId)
     return searchItem.actionView as SearchView
 }
 
-@CheckResult
-fun SearchView.queryChanges(): Flow<String?> = callbackFlow<String?> {
+fun SearchView.setQueryChangedListener(listener: (String) -> Unit) {
     setOnQueryTextListener(object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             return true
         }
 
         override fun onQueryTextChange(newText: String?): Boolean {
-            offer(newText)
+            listener(newText.orEmpty())
             return true
         }
     })
-    awaitClose { setOnQueryTextListener(null) }
-}.conflate()
+}
+
+fun MenuItem.setItemClickedListener(listener: () -> Boolean) {
+    setOnMenuItemClickListener { listener() }
+}
 
 /**
  * Set text to the textview, or set gone, if text null or blank
