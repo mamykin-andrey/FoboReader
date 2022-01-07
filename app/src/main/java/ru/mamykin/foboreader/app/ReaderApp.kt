@@ -3,8 +3,10 @@ package ru.mamykin.foboreader.app
 import androidx.multidex.MultiDexApplication
 import com.github.terrakok.cicerone.Cicerone
 import leakcanary.LeakCanary
+import ru.mamykin.foboreader.BuildConfig
 import ru.mamykin.foboreader.app.di.ApiHolderImpl
 import ru.mamykin.foboreader.core.di.api.ApiHolderProvider
+import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.core.platform.NotificationUtils
 
 @Suppress("unused")
@@ -18,6 +20,7 @@ class ReaderApp : MultiDexApplication(), ApiHolderProvider {
         super.onCreate()
         NotificationUtils.initNotificationChannels(this)
         initLeakCanary()
+        initLogger()
     }
 
     private fun initLeakCanary() {
@@ -25,5 +28,9 @@ class ReaderApp : MultiDexApplication(), ApiHolderProvider {
             retainedVisibleThreshold = 2
         )
         LeakCanary.config = newConfig
+    }
+
+    private fun initLogger() {
+        Log.init(BuildConfig.DEBUG)
     }
 }

@@ -9,10 +9,17 @@ import android.os.Build
 import androidx.core.content.getSystemService
 import ru.mamykin.foboreader.core.R
 
-object NotificationUtils {
+object ChannelId {
 
-    const val GENERAL_CHANNEL_ID = "general"
-    const val FILE_DOWNLOAD_NOTIFICATION_ID = 1
+    const val GENERAL = "general"
+}
+
+object NotificationId {
+
+    const val FILE_DOWNLOAD = 1
+}
+
+object NotificationUtils {
 
     fun initNotificationChannels(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
@@ -25,7 +32,7 @@ object NotificationUtils {
         val notificationManager = context.getSystemService<NotificationManager>()!!
 
         val channel = NotificationChannel(
-            GENERAL_CHANNEL_ID,
+            ChannelId.GENERAL,
             context.getString(R.string.core_error_retry_title),
             NotificationManager.IMPORTANCE_DEFAULT
         ).apply {

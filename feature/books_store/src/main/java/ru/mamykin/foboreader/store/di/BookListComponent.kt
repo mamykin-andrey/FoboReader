@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.store.di
 
+import dagger.Binds
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -7,6 +8,8 @@ import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
+import ru.mamykin.foboreader.store.data.network.FileRepository
+import ru.mamykin.foboreader.store.data.network.FileRepositoryImpl
 import ru.mamykin.foboreader.store.presentation.BooksListFeature
 import ru.mamykin.foboreader.store.presentation.BooksListFragment
 import javax.inject.Scope
@@ -46,4 +49,9 @@ internal interface BookListComponent {
 }
 
 @Module(includes = [BooksStoreApiServiceModule::class])
-internal class BooksStoreModule
+internal interface BooksStoreModule {
+
+    @Binds
+    @BookListScope
+    fun bindFileRepository(imple: FileRepositoryImpl): FileRepository
+}
