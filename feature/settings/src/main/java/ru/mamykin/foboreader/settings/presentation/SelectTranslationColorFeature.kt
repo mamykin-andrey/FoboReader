@@ -27,32 +27,29 @@ internal class SelectTranslationColorFeature @Inject constructor(
         private val setTranslationColor: SetTranslationColor,
     ) : Actor<Intent, Action> {
 
-        override operator fun invoke(intent: Intent): Flow<Action> =
-            flow {
-                when (intent) {
-                    is Intent.LoadColors -> {
-                        emit(Action.ColorsLoaded(getTranslationColors.execute()))
-                    }
-                    is Intent.SelectColor -> {
-                        setTranslationColor.execute(intent.color)
-                        emit(Action.ColorSelected)
-                    }
+        override operator fun invoke(intent: Intent): Flow<Action> = flow {
+            when (intent) {
+                is Intent.LoadColors -> {
+                    emit(Action.ColorsLoaded(getTranslationColors.execute()))
+                }
+                is Intent.SelectColor -> {
+                    setTranslationColor.execute(intent.color)
+                    emit(Action.ColorSelected)
                 }
             }
+        }
     }
 
-    internal class SelectTranslationColorReducer @Inject constructor() :
-        Reducer<State, Action, Effect> {
+    internal class SelectTranslationColorReducer @Inject constructor() : Reducer<State, Action, Effect> {
 
-        override operator fun invoke(state: State, action: Action) =
-            when (action) {
-                is Action.ColorsLoaded -> {
-                    state.copy(colors = action.colors) to emptySet()
-                }
-                is Action.ColorSelected -> {
-                    state to setOf(Effect.Dismiss)
-                }
+        override operator fun invoke(state: State, action: Action) = when (action) {
+            is Action.ColorsLoaded -> {
+                state.copy(colors = action.colors) to emptySet()
             }
+            is Action.ColorSelected -> {
+                state to setOf(Effect.Dismiss)
+            }
+        }
     }
 
     sealed class Intent {

@@ -91,9 +91,9 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
                 )
             }
             is SettingsFeature.Effect.SelectAppLanguage -> {
-                SelectAppLanguageDialogFragment.newInstance().show(
+                ChangeLanguageDialogFragment.newInstance().show(
                     childFragmentManager,
-                    SelectAppLanguageDialogFragment.TAG
+                    ChangeLanguageDialogFragment.TAG
                 )
             }
         }
