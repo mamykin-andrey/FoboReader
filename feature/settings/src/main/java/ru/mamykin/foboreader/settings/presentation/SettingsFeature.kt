@@ -12,18 +12,13 @@ import javax.inject.Inject
 internal class SettingsFeature @Inject constructor(
     reducer: SettingsReducer,
     actor: SettingsActor,
-    private val uiEventTransformer: UiEventTransformer,
-) : Feature<Settings.State, Settings.Intent, Settings.Effect, Settings.Action>(
-    Settings.State(),
+) : Feature<SettingsFeature.State, SettingsFeature.Intent, SettingsFeature.Effect, SettingsFeature.Action>(
+    State(),
     actor,
     reducer
 ) {
     init {
-        sendIntent(Settings.Intent.LoadSettings)
-    }
-
-    fun sendEvent(event: Settings.Event) {
-        sendIntent(uiEventTransformer.invoke(event))
+        sendIntent(Intent.LoadSettings)
     }
 
     internal class SettingsActor @Inject constructor(
@@ -32,86 +27,57 @@ internal class SettingsFeature @Inject constructor(
         private val setTextSize: SetTextSize,
         private val setNightTheme: SetNightTheme,
         private val setUseVibration: SetUseVibration,
-    ) : Actor<Settings.Intent, Settings.Action> {
+    ) : Actor<Intent, Action> {
 
-        override operator fun invoke(intent: Settings.Intent): Flow<Settings.Action> = flow {
+        override operator fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
-                Settings.Intent.LoadSettings -> {
-                    emit(Settings.Action.SettingsLoaded(getSettings.execute()))
+                Intent.LoadSettings -> {
+                    emit(Action.SettingsLoaded(getSettings.execute()))
                 }
-                is Settings.Intent.ChangeBrightness -> {
+                is Intent.ChangeBrightness -> {
                     setBrightness.execute(intent.brightness)
-                    emit(Settings.Action.SettingsLoaded(getSettings.execute()))
+                    emit(Action.SettingsLoaded(getSettings.execute()))
                 }
-                is Settings.Intent.ChangeNightTheme -> {
+                is Intent.ChangeNightTheme -> {
                     setNightTheme.execute(intent.isEnabled)
-                    emit(Settings.Action.SettingsLoaded(getSettings.execute()))
+                    emit(Action.SettingsLoaded(getSettings.execute()))
                 }
-                is Settings.Intent.IncreaseTextSize -> {
+                is Intent.IncreaseTextSize -> {
                     setTextSize.execute(SetTextSize.Action.Increase)
-                    emit(Settings.Action.SettingsLoaded(getSettings.execute()))
+                    emit(Action.SettingsLoaded(getSettings.execute()))
                 }
-                is Settings.Intent.DecreaseTextSize -> {
+                is Intent.DecreaseTextSize -> {
                     setTextSize.execute(SetTextSize.Action.Decrease)
-                    emit(Settings.Action.SettingsLoaded(getSettings.execute()))
+                    emit(Action.SettingsLoaded(getSettings.execute()))
                 }
-                is Settings.Intent.SelectReadColor -> {
-                    emit(Settings.Action.SelectReadColorSelected)
+                is Intent.SelectReadColor -> {
+                    emit(Action.SelectReadColorSelected)
                 }
-                is Settings.Intent.SelectAppLanguage -> {
-                    emit(Settings.Action.SelectAppLanguageSelected)
+                is Intent.SelectAppLanguage -> {
+                    emit(Action.SelectAppLanguageSelected)
                 }
-                is Settings.Intent.ChangeUseVibration -> {
+                is Intent.ChangeUseVibration -> {
                     setUseVibration.execute(intent.enabled)
-                    emit(Settings.Action.SettingsLoaded(getSettings.execute()))
+                    emit(Action.SettingsLoaded(getSettings.execute()))
                 }
             }
         }
     }
 
     internal class SettingsReducer @Inject constructor() :
-        Reducer<Settings.State, Settings.Action, Settings.Effect> {
+        Reducer<State, Action, Effect> {
 
-        override operator fun invoke(state: Settings.State, action: Settings.Action) = when (action) {
-            is Settings.Action.SettingsLoaded -> {
+        override operator fun invoke(state: State, action: Action) = when (action) {
+            is Action.SettingsLoaded -> {
                 state.copy(settings = action.settings) to emptySet()
             }
-            is Settings.Action.SelectReadColorSelected -> {
-                state to setOf(Settings.Effect.SelectReadColor)
+            is Action.SelectReadColorSelected -> {
+                state to setOf(Effect.SelectReadColor)
             }
-            is Settings.Action.SelectAppLanguageSelected -> {
-                state to setOf(Settings.Effect.SelectAppLanguage)
+            is Action.SelectAppLanguageSelected -> {
+                state to setOf(Effect.SelectAppLanguage)
             }
         }
-    }
-
-    internal class UiEventTransformer @Inject constructor() {
-
-        operator fun invoke(event: Settings.Event): Settings.Intent = when (event) {
-            is Settings.Event.DialogDismissed -> Settings.Intent.LoadSettings
-            is Settings.Event.BrightnessChanged -> Settings.Intent.ChangeBrightness(event.brightness)
-            is Settings.Event.NightThemeChanged -> Settings.Intent.ChangeNightTheme(event.isEnabled)
-            is Settings.Event.IncreaseTextSizeClicked -> Settings.Intent.IncreaseTextSize
-            is Settings.Event.DecreaseTextSizeClicked -> Settings.Intent.DecreaseTextSize
-            is Settings.Event.SelectReadColorClicked -> Settings.Intent.SelectReadColor
-            is Settings.Event.SelectAppLanguage -> Settings.Intent.SelectAppLanguage
-            is Settings.Event.UseVibrationChanged -> Settings.Intent.ChangeUseVibration(event.enabled)
-        }
-    }
-}
-
-
-object Settings {
-
-    sealed class Event {
-        object DialogDismissed : Event()
-        class BrightnessChanged(val brightness: Int) : Event()
-        class NightThemeChanged(val isEnabled: Boolean) : Event()
-        object IncreaseTextSizeClicked : Event()
-        object DecreaseTextSizeClicked : Event()
-        object SelectReadColorClicked : Event()
-        object SelectAppLanguage : Event()
-        class UseVibrationChanged(val enabled: Boolean) : Event()
     }
 
     sealed class Intent {

@@ -25,7 +25,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
     internal lateinit var feature: SettingsFeature
 
     private val binding by autoCleanedValue { FragmentSettingsBinding.bind(requireView()) }
-    private val adapter by lazy { SettingsListAdapter(feature::sendEvent) }
+    private val adapter by lazy { SettingsListAdapter(feature::sendIntent) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +59,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
     }
 
     override fun onDismiss() {
-        feature.sendEvent(Settings.Event.DialogDismissed)
+        feature.sendIntent(SettingsFeature.Intent.LoadSettings)
     }
 
     private fun initToolbar() {
@@ -78,19 +78,19 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
         feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 
-    private fun showState(state: Settings.State) {
+    private fun showState(state: SettingsFeature.State) {
         state.settings?.let { adapter.submitList(it) }
     }
 
-    private fun takeEffect(effect: Settings.Effect) {
+    private fun takeEffect(effect: SettingsFeature.Effect) {
         when (effect) {
-            is Settings.Effect.SelectReadColor -> {
+            is SettingsFeature.Effect.SelectReadColor -> {
                 SelectTranslationColorDialogFragment.newInstance().show(
                     childFragmentManager,
                     SelectTranslationColorDialogFragment.TAG
                 )
             }
-            is Settings.Effect.SelectAppLanguage -> {
+            is SettingsFeature.Effect.SelectAppLanguage -> {
                 SelectAppLanguageDialogFragment.newInstance().show(
                     childFragmentManager,
                     SelectAppLanguageDialogFragment.TAG

@@ -5,16 +5,16 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import ru.mamykin.foboreader.settings.databinding.ItemTranslationColorBinding
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
-import ru.mamykin.foboreader.settings.presentation.Settings
+import ru.mamykin.foboreader.settings.presentation.SettingsFeature
 
 internal class TranslationColorHolder(
     private val binding: ItemTranslationColorBinding,
-    private val onEvent: (Settings.Event) -> Unit,
+    private val onEvent: (SettingsFeature.Intent) -> Unit,
 ) : SettingsItemHolder<SettingsItem.TranslationColor>(binding.root) {
 
     init {
         binding.clTranslationColor.setOnClickListener {
-            onEvent(Settings.Event.SelectReadColorClicked)
+            onEvent(SettingsFeature.Intent.SelectReadColor)
         }
     }
 

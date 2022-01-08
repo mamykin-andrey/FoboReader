@@ -8,10 +8,10 @@ import ru.mamykin.foboreader.core.presentation.list.SimpleDiffUtil
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.*
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
-import ru.mamykin.foboreader.settings.presentation.Settings
+import ru.mamykin.foboreader.settings.presentation.SettingsFeature
 
 internal class SettingsListAdapter(
-    private val onEvent: (Settings.Event) -> Unit,
+    private val onEvent: (SettingsFeature.Intent) -> Unit,
 ) : ListAdapter<SettingsItem, RecyclerView.ViewHolder>(
     SimpleDiffUtil.equalsCallback { it::class.java }
 ) {

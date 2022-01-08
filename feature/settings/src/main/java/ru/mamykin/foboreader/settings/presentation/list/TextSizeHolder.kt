@@ -2,20 +2,20 @@ package ru.mamykin.foboreader.settings.presentation.list
 
 import ru.mamykin.foboreader.settings.databinding.ItemTextSizeBinding
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
-import ru.mamykin.foboreader.settings.presentation.Settings
+import ru.mamykin.foboreader.settings.presentation.SettingsFeature
 
 internal class TextSizeHolder(
     private val binding: ItemTextSizeBinding,
-    private val onEvent: (Settings.Event) -> Unit,
+    private val onEvent: (SettingsFeature.Intent) -> Unit,
 ) : SettingsItemHolder<SettingsItem.ReadTextSize>(binding.root) {
 
     init {
         binding.btnTextSizePlus.setOnClickListener {
-            onEvent(Settings.Event.DecreaseTextSizeClicked)
+            onEvent(SettingsFeature.Intent.DecreaseTextSize)
         }
 
         binding.btnTextSizeMinus.setOnClickListener {
-            onEvent(Settings.Event.IncreaseTextSizeClicked)
+            onEvent(SettingsFeature.Intent.IncreaseTextSize)
         }
     }
 
