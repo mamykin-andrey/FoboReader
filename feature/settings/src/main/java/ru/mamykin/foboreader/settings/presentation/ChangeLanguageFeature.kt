@@ -5,11 +5,13 @@ import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
+import ru.mamykin.foboreader.settings.di.SettingsScope
 import ru.mamykin.foboreader.settings.domain.model.AppLanguage
 import ru.mamykin.foboreader.settings.domain.usecase.GetAppLanguages
 import ru.mamykin.foboreader.settings.domain.usecase.SetAppLanguage
 import javax.inject.Inject
 
+@SettingsScope
 internal class ChangeLanguageFeature @Inject constructor(
     reducer: ChangeLanguageReducer,
     actor: ChangeLanguageActor,

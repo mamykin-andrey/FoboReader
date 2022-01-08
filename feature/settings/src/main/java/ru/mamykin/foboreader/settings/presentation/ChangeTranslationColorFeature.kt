@@ -5,11 +5,13 @@ import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
+import ru.mamykin.foboreader.settings.di.SettingsScope
 import ru.mamykin.foboreader.settings.domain.model.ColorItem
 import ru.mamykin.foboreader.settings.domain.usecase.GetTranslationColors
 import ru.mamykin.foboreader.settings.domain.usecase.SetTranslationColor
 import javax.inject.Inject
 
+@SettingsScope
 internal class ChangeTranslationColorFeature @Inject constructor(
     reducer: ChangeTranslationColorReducer,
     actor: ChangeTranslationColorActor,

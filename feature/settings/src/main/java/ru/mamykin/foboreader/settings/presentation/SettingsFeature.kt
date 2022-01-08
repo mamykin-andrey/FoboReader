@@ -5,10 +5,12 @@ import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
+import ru.mamykin.foboreader.settings.di.SettingsScope
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import ru.mamykin.foboreader.settings.domain.usecase.*
 import javax.inject.Inject
 
+@SettingsScope
 internal class SettingsFeature @Inject constructor(
     reducer: SettingsReducer,
     actor: SettingsActor,

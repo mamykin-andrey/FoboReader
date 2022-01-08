@@ -8,6 +8,7 @@ import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.core.presentation.ReducerResult
 import ru.mamykin.foboreader.read_book.R
+import ru.mamykin.foboreader.read_book.di.ReadBookScope
 import ru.mamykin.foboreader.read_book.domain.model.Translation
 import ru.mamykin.foboreader.read_book.domain.usecase.GetBookContent
 import ru.mamykin.foboreader.read_book.domain.usecase.GetBookInfo
@@ -16,6 +17,7 @@ import ru.mamykin.foboreader.read_book.domain.usecase.GetWordTranslation
 import javax.inject.Inject
 import javax.inject.Named
 
+@ReadBookScope
 internal class ReadBookFeature @Inject constructor(
     actor: ReadBookActor,
     reducer: ReadBookReducer,
