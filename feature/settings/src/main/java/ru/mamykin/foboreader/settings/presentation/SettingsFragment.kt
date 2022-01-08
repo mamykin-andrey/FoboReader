@@ -85,9 +85,9 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
     private fun takeEffect(effect: SettingsFeature.Effect) {
         when (effect) {
             is SettingsFeature.Effect.SelectReadColor -> {
-                SelectTranslationColorDialogFragment.newInstance().show(
+                ChangeTranslationColorDialogFragment.newInstance().show(
                     childFragmentManager,
-                    SelectTranslationColorDialogFragment.TAG
+                    ChangeTranslationColorDialogFragment.TAG
                 )
             }
             is SettingsFeature.Effect.SelectAppLanguage -> {

@@ -10,10 +10,10 @@ import ru.mamykin.foboreader.settings.domain.usecase.GetTranslationColors
 import ru.mamykin.foboreader.settings.domain.usecase.SetTranslationColor
 import javax.inject.Inject
 
-internal class SelectTranslationColorFeature @Inject constructor(
-    reducer: SelectTranslationColorReducer,
-    actor: SelectTranslationColorActor,
-) : Feature<SelectTranslationColorFeature.State, SelectTranslationColorFeature.Intent, SelectTranslationColorFeature.Effect, SelectTranslationColorFeature.Action>(
+internal class ChangeTranslationColorFeature @Inject constructor(
+    reducer: ChangeTranslationColorReducer,
+    actor: ChangeTranslationColorActor,
+) : Feature<ChangeTranslationColorFeature.State, ChangeTranslationColorFeature.Intent, ChangeTranslationColorFeature.Effect, ChangeTranslationColorFeature.Action>(
     State(),
     actor,
     reducer
@@ -22,7 +22,7 @@ internal class SelectTranslationColorFeature @Inject constructor(
         sendIntent(Intent.LoadColors)
     }
 
-    internal class SelectTranslationColorActor @Inject constructor(
+    internal class ChangeTranslationColorActor @Inject constructor(
         private val getTranslationColors: GetTranslationColors,
         private val setTranslationColor: SetTranslationColor,
     ) : Actor<Intent, Action> {
@@ -40,7 +40,7 @@ internal class SelectTranslationColorFeature @Inject constructor(
         }
     }
 
-    internal class SelectTranslationColorReducer @Inject constructor() : Reducer<State, Action, Effect> {
+    internal class ChangeTranslationColorReducer @Inject constructor() : Reducer<State, Action, Effect> {
 
         override operator fun invoke(state: State, action: Action) = when (action) {
             is Action.ColorsLoaded -> {
