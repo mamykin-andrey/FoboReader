@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:padding="8dp">
 
     <View
         android:id="@+id/v_color_item"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_margin="@dimen/margin_padding_size_micro"
         android:background="@drawable/bg_color_item"
         tools:backgroundTint="@android:color/holo_red_dark" />
 

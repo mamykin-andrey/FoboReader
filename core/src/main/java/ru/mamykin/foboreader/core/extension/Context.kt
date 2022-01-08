@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.core.extension
 
 import android.content.Context
+import android.util.TypedValue
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -34,13 +35,13 @@ fun AppCompatActivity.setNightModeEnabled(enabled: Boolean) {
     }
 }
 
-//fun Context.dpToPx(value: Int): Float {
-//    return TypedValue.applyDimension(
-//        TypedValue.COMPLEX_UNIT_DIP,
-//        value.toFloat(),
-//        resources.displayMetrics
-//    )
-//}
+fun Context.dpToPx(value: Int): Float {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        value.toFloat(),
+        resources.displayMetrics
+    )
+}
 
 //@Suppress("deprecation")
 //fun Context.getCurrentLocaleName(): String {

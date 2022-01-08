@@ -76,3 +76,13 @@ fun TextView.setTextOrGone(text: String?) {
 }
 
 fun ViewGroup.getLayoutInflater(): LayoutInflater = LayoutInflater.from(context)
+
+fun View.addGlobalLayoutListener(onGlobalLayout: (View) -> Unit) {
+    val listener = object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            viewTreeObserver.removeOnGlobalLayoutListener(this)
+            onGlobalLayout(this@addGlobalLayoutListener)
+        }
+    }
+    viewTreeObserver.addOnGlobalLayoutListener(listener)
+}

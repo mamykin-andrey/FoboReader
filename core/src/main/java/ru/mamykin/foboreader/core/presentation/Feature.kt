@@ -37,7 +37,7 @@ abstract class Feature<State, Intent, Effect, Action>(
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    protected fun sendIntent(intent: Intent) {
+    fun sendIntent(intent: Intent) {
         Log.debug("intent: $intent", TAG)
         actor.invoke(intent).onEach {
             Log.debug("action: $it", TAG)
