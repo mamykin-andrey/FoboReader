@@ -74,11 +74,11 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvText.setOnActionListener(object : ClickableTextView.OnActionListener {
             override fun onClick(paragraph: String) {
-                feature.sendEvent(ReadBookFeature.Event.TranslateParagraphClicked(paragraph))
+                feature.sendIntent(ReadBookFeature.Intent.TranslateParagraph(paragraph))
             }
 
             override fun onLongClick(word: String) {
-                feature.sendEvent(ReadBookFeature.Event.TranslateWordClicked(word))
+                feature.sendIntent(ReadBookFeature.Intent.TranslateWord(word))
             }
         })
         feature.stateData.observe(viewLifecycleOwner, ::showState)
@@ -118,7 +118,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     private fun showParagraphTranslation(translation: CharSequence) {
         binding.tvText.text = translation
         binding.tvText.setOnClickListener {
-            feature.sendEvent(ReadBookFeature.Event.HideParagraphTranslationClicked)
+            feature.sendIntent(ReadBookFeature.Intent.HideParagraphTranslation)
         }
         lastTextHashCode = 0
     }
@@ -148,7 +148,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         popupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
 
         popupBinding.root.setOnTouchListener { _, _ ->
-            feature.sendEvent(ReadBookFeature.Event.HideWordTranslationClicked)
+            feature.sendIntent(ReadBookFeature.Intent.HideWordTranslation)
             true
         }
     }

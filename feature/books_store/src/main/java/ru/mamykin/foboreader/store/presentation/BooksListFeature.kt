@@ -18,7 +18,6 @@ import javax.inject.Inject
 internal class BooksListFeature @Inject constructor(
     reducer: BooksListReducer,
     actor: BooksListActor,
-    private val uiEventTransformer: UiEventTransformer,
 ) : Feature<BooksListFeature.State, BooksListFeature.Intent, BooksListFeature.Effect, BooksListFeature.Action>(
     State(),
     actor,
@@ -26,10 +25,6 @@ internal class BooksListFeature @Inject constructor(
 ) {
     init {
         sendIntent(Intent.LoadBooks)
-    }
-
-    fun sendEvent(event: Event) {
-        sendIntent(uiEventTransformer.invoke(event))
     }
 
     internal class BookCategoriesParams(
@@ -53,10 +48,9 @@ internal class BooksListFeature @Inject constructor(
                     )
                 }
                 is Intent.FilterBooks -> {
-                    emit(
-                        Action.BooksLoaded(
-                            filterStoreBooks.execute(params.categoryId, intent.query).getOrThrow()
-                        )
+                    filterStoreBooks.execute(params.categoryId, intent.query).fold(
+                        { emit(Action.BooksLoaded(it)) },
+                        { emit(Action.BooksLoadingError(it.message.orEmpty())) }
                     )
                 }
                 is Intent.DownloadBook -> {
@@ -117,27 +111,6 @@ internal class BooksListFeature @Inject constructor(
             }
     }
 
-    internal class UiEventTransformer @Inject constructor() {
-
-        operator fun invoke(event: Event): Intent = when (event) {
-            is Event.FilterQueryChanged -> {
-                Intent.FilterBooks(event.query)
-            }
-            is Event.DownloadBookClicked -> {
-                Intent.DownloadBook(event.bookLink, event.fileName)
-            }
-            is Event.RetryBooksClicked -> {
-                Intent.LoadBooks
-            }
-        }
-    }
-
-    sealed class Event {
-        class FilterQueryChanged(val query: String) : Event()
-        class DownloadBookClicked(val bookLink: String, val fileName: String) : Event()
-        object RetryBooksClicked : Event()
-    }
-
     sealed class Intent {
         object LoadBooks : Intent()
         class FilterBooks(val query: String) : Intent()
@@ -156,7 +129,7 @@ internal class BooksListFeature @Inject constructor(
     sealed class Effect {
         class ShowSnackbar(val message: String) : Effect()
 
-        // TODO: Refactor
+        // TODO: Use navigation instead of effect?
         object NavigateToMyBooks : Effect()
     }
 

@@ -28,7 +28,7 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
 
     private val adapter: CategoryListAdapter by lazy {
         CategoryListAdapter {
-            feature.sendEvent(BookCategoriesFeature.Event.CategoryClicked(it))
+            feature.sendIntent(BookCategoriesFeature.Intent.OpenCategory(it))
         }
     }
     private val binding by autoCleanedValue { FragmentBookCategoriesBinding.bind(requireView()) }
@@ -69,7 +69,7 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
 
     private fun initErrorView() {
         binding.vError.setRetryClickListener {
-            feature.sendEvent(BookCategoriesFeature.Event.RetryLoadClicked)
+            feature.sendIntent(BookCategoriesFeature.Intent.LoadCategories)
         }
     }
 

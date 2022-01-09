@@ -26,7 +26,6 @@ import javax.inject.Named
 internal class ReadBookFeature @Inject constructor(
     actor: ReadBookActor,
     reducer: ReadBookReducer,
-    private val uiEventTransformer: UiEventTransformer,
 ) : Feature<ReadBookFeature.State, ReadBookFeature.Intent, ReadBookFeature.Effect, ReadBookFeature.Action>(
     State(),
     actor,
@@ -34,20 +33,6 @@ internal class ReadBookFeature @Inject constructor(
 ) {
     init {
         sendIntent(Intent.LoadBookInfo)
-    }
-
-    fun sendEvent(event: Event) {
-        sendIntent(uiEventTransformer.invoke(event))
-    }
-
-    internal class UiEventTransformer @Inject constructor() {
-
-        operator fun invoke(event: Event): Intent = when (event) {
-            is Event.TranslateParagraphClicked -> Intent.TranslateParagraph(event.paragraph)
-            is Event.TranslateWordClicked -> Intent.TranslateWord(event.word)
-            is Event.HideParagraphTranslationClicked -> Intent.HideParagraphTranslation
-            is Event.HideWordTranslationClicked -> Intent.HideWordTranslation
-        }
     }
 
     internal class ReadBookActor @Inject constructor(

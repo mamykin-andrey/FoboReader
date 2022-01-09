@@ -19,7 +19,6 @@ import javax.inject.Named
 internal class BookDetailsFeature @Inject constructor(
     actor: BookDetailsActor,
     reducer: BookDetailsReducer,
-    private val uiEventTransformer: BookDetailsUiEventTransformer,
 ) : Feature<BookDetailsFeature.State, BookDetailsFeature.Intent, Nothing, BookDetailsFeature.Action>(
     State(),
     actor,
@@ -27,17 +26,6 @@ internal class BookDetailsFeature @Inject constructor(
 ) {
     init {
         sendIntent(Intent.LoadBookInfo)
-    }
-
-    fun sendEvent(event: Event) {
-        sendIntent(uiEventTransformer.invoke(event))
-    }
-
-    internal class BookDetailsUiEventTransformer @Inject constructor() {
-
-        operator fun invoke(event: Event): Intent = when (event) {
-            is Event.ReadBookClicked -> Intent.OpenBook
-        }
     }
 
     internal class BookDetailsActor @Inject constructor(
@@ -94,10 +82,6 @@ internal class BookDetailsFeature @Inject constructor(
                 bookDetails.genre
             )
         )
-    }
-
-    sealed class Event {
-        object ReadBookClicked : Event()
     }
 
     sealed class Intent {

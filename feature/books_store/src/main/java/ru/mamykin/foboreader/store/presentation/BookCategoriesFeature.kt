@@ -16,7 +16,6 @@ import javax.inject.Inject
 internal class BookCategoriesFeature @Inject constructor(
     reducer: BookCategoriesReducer,
     actor: BookCategoriesActor,
-    private val uiEventTransformer: UiEventTransformer
 ) : Feature<BookCategoriesFeature.State, BookCategoriesFeature.Intent, BookCategoriesFeature.Effect, BookCategoriesFeature.Action>(
     State(),
     actor,
@@ -24,10 +23,6 @@ internal class BookCategoriesFeature @Inject constructor(
 ) {
     init {
         sendIntent(Intent.LoadCategories)
-    }
-
-    fun sendEvent(event: Event) {
-        sendIntent(uiEventTransformer.invoke(event))
     }
 
     internal class BookCategoriesActor @Inject constructor(
@@ -79,23 +74,6 @@ internal class BookCategoriesFeature @Inject constructor(
                 )
             }
         }
-    }
-
-    internal class UiEventTransformer @Inject constructor() {
-
-        operator fun invoke(event: Event): Intent = when (event) {
-            is Event.RetryLoadClicked -> {
-                Intent.LoadCategories
-            }
-            is Event.CategoryClicked -> {
-                Intent.OpenCategory(event.id)
-            }
-        }
-    }
-
-    sealed class Event {
-        object RetryLoadClicked : Event()
-        class CategoryClicked(val id: String) : Event()
     }
 
     sealed class Intent {

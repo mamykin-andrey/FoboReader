@@ -38,7 +38,7 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
 
     private val adapter by lazy {
         BookListAdapter { link, fileName ->
-            feature.sendEvent(BooksListFeature.Event.DownloadBookClicked(link, fileName))
+            feature.sendIntent(BooksListFeature.Intent.DownloadBook(link, fileName))
         }
     }
     private val binding by autoCleanedValue { FragmentBooksListBinding.bind(requireView()) }
@@ -82,7 +82,7 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
 
     private fun initErrorView() {
         binding.vError.setRetryClickListener {
-            feature.sendEvent(BooksListFeature.Event.RetryBooksClicked)
+            feature.sendIntent(BooksListFeature.Intent.LoadBooks)
         }
     }
 
@@ -107,7 +107,7 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         val searchView = menu.getSearchView(R.id.action_search)
         searchView.queryHint = getString(R.string.books_store_menu_search)
         searchView.setQueryChangedListener {
-            feature.sendEvent(BooksListFeature.Event.FilterQueryChanged(it))
+            feature.sendIntent(BooksListFeature.Intent.FilterBooks(it))
         }
     }
 
