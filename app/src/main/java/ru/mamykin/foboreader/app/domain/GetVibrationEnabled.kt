@@ -1,9 +1,9 @@
-package ru.mamykin.foboreader.core.domain.usecase
+package ru.mamykin.foboreader.app.domain
 
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import javax.inject.Inject
 
-class GetVibrationEnabled @Inject constructor(
+internal class GetVibrationEnabled @Inject constructor(
     private val settingsStorage: AppSettingsStorage
 ) {
     fun execute(): Boolean {

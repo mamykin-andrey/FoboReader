@@ -7,4 +7,8 @@ object OsHelper {
     fun isQ(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     }
+
+    fun isM(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+    }
 }

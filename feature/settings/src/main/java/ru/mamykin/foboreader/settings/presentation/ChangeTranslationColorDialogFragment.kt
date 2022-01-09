@@ -11,11 +11,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import ru.mamykin.foboreader.core.di.ComponentHolder
+import ru.mamykin.foboreader.core.extension.addGlobalLayoutListener
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.dpToPx
 import ru.mamykin.foboreader.core.presentation.BaseDialogFragment
 import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.databinding.DialogColorPickerBinding
+import ru.mamykin.foboreader.settings.databinding.DialogChangeTranslationColorBinding
 import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.presentation.list.ColorListAdapter
 import javax.inject.Inject
@@ -72,7 +73,7 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
     }
 
     private fun initView(view: View) {
-        val binding = DialogColorPickerBinding.bind(view)
+        val binding = DialogChangeTranslationColorBinding.bind(view)
         binding.rvColors.adapter = adapter
         binding.rvColors.addGlobalLayoutListener {
             val recyclerViewWidth = binding.rvColors.width - requireContext().dpToPx(16 * 2).toInt()

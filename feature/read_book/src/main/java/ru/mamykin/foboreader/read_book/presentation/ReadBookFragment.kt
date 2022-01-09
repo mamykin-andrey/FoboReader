@@ -76,16 +76,17 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // TODO: Move to feature
         binding.tvText.textSize = appSettingsStorage.readTextSize.toFloat()
         binding.tvText.setOnActionListener(object : ClickableTextView.OnActionListener {
             override fun onClick(paragraph: String) {
-                vibratorHelper.clickVibrate()
-                feature.sendEvent(ReadBookFeature.Event.TranslateParagraphClicked(paragraph.trim()))
+                vibratorHelper.vibrate(view)
+                feature.sendEvent(ReadBookFeature.Event.TranslateParagraphClicked(paragraph.trim())) // TODO: Move trim() to feature
             }
 
             override fun onLongClick(word: String) {
-                vibratorHelper.clickVibrate()
-                feature.sendEvent(ReadBookFeature.Event.TranslateWordClicked(word.trimSpecialCharacters()))
+                vibratorHelper.vibrate(view)
+                feature.sendEvent(ReadBookFeature.Event.TranslateWordClicked(word.trimSpecialCharacters())) // TODO: Move trimSpecialCharacters() to feature
             }
         })
         feature.stateData.observe(viewLifecycleOwner, ::showState)
