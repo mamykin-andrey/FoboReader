@@ -1,18 +1,17 @@
 package ru.mamykin.foboreader.read_book.presentation
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
-import android.text.SpannableString
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
-import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.extension.*
+import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.showSnackbar
+import ru.mamykin.foboreader.core.extension.toHtml
 import ru.mamykin.foboreader.core.platform.VibratorHelper
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
@@ -45,9 +44,6 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     @Inject
     internal lateinit var vibratorHelper: VibratorHelper
 
-    @Inject
-    internal lateinit var appSettingsStorage: AppSettingsStorage
-
     private val binding by autoCleanedValue { FragmentReadBookBinding.bind(requireView()) }
     private var lastTextHashCode: Int = 0
     private var popupWindow: PopupWindow? = null
@@ -76,17 +72,13 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // TODO: Move to feature
-        binding.tvText.textSize = appSettingsStorage.readTextSize.toFloat()
         binding.tvText.setOnActionListener(object : ClickableTextView.OnActionListener {
             override fun onClick(paragraph: String) {
-                vibratorHelper.vibrate(view)
-                feature.sendEvent(ReadBookFeature.Event.TranslateParagraphClicked(paragraph.trim())) // TODO: Move trim() to feature
+                feature.sendEvent(ReadBookFeature.Event.TranslateParagraphClicked(paragraph))
             }
 
             override fun onLongClick(word: String) {
-                vibratorHelper.vibrate(view)
-                feature.sendEvent(ReadBookFeature.Event.TranslateWordClicked(word.trimSpecialCharacters())) // TODO: Move trimSpecialCharacters() to feature
+                feature.sendEvent(ReadBookFeature.Event.TranslateWordClicked(word))
             }
         })
         feature.stateData.observe(viewLifecycleOwner, ::showState)
@@ -95,8 +87,9 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
 
     private fun showState(state: ReadBookFeature.State) = with(binding) {
         pbLoadingBook.isVisible = state.isTranslationLoading
+        updateBookTextSize(state.textSize)
         showBookText(state.text)
-        state.wordTranslation?.let(::showWordTranslation) ?: popupWindow?.dismiss()
+        updateWordTranslation(state.wordTranslation)
         state.paragraphTranslation?.let(::showParagraphTranslation)
         tvName.text = state.title
         tvRead.text = getString(
@@ -107,44 +100,54 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         tvReadPercent.text = state.readPercent.toString()
     }
 
+    private fun updateBookTextSize(textSize: Float?) = with(binding) {
+        textSize?.let {
+            tvText.textSize = it
+        }
+    }
+
     private fun showBookText(text: String) {
         val hashCode = text.hashCode()
         text.takeIf { hashCode != lastTextHashCode }
             ?.toHtml()
             ?.let { binding.tvText.setup(it) }
             ?.also { lastTextHashCode = hashCode }
-        // binding.tvText.setOnClickListener(null)
+        binding.tvText.setOnClickListener(null)
     }
 
-    private fun showParagraphTranslation(info: Pair<String, String>) {
-        val (paragraph, translation) = info
-        binding.tvText.text = SpannableString(paragraph + "\n\n" + translation).apply {
-            setColor(
-                Color.parseColor(appSettingsStorage.translationColor),
-                paragraph.length,
-                length - 1
-            )
+    private fun showParagraphTranslation(translation: CharSequence) {
+        binding.tvText.text = translation
+        binding.tvText.setOnClickListener {
+            feature.sendEvent(ReadBookFeature.Event.HideParagraphTranslationClicked)
         }
-        binding.tvText.setOnClickListener { feature.sendEvent(ReadBookFeature.Event.HideParagraphTranslationClicked) }
         lastTextHashCode = 0
+    }
+
+    private fun updateWordTranslation(translation: Translation?) {
+        if (translation != null) {
+            showWordTranslation(translation)
+        } else {
+            popupWindow?.dismiss()
+        }
     }
 
     @SuppressLint("InflateParams", "ClickableViewAccessibility")
     private fun showWordTranslation(translation: Translation) {
         val inflater = LayoutInflater.from(context)
-        val popupView = inflater.inflate(R.layout.layout_word_popup, null)
-        val popupBinding = LayoutWordPopupBinding.bind(popupView)
+        val popupBinding = LayoutWordPopupBinding.inflate(inflater, null, false)
 
-        popupBinding.tvSource.text = translation.source
-        popupBinding.tvTranslated.text = translation.getMostLikelyTranslation()
+        popupBinding.tvSource.text = translation.sourceText
+        popupBinding.tvTranslated.text = translation.getMostPreciseTranslation()
 
-        val width = LinearLayout.LayoutParams.WRAP_CONTENT
-        val height = LinearLayout.LayoutParams.WRAP_CONTENT
-
-        popupWindow = PopupWindow(popupView, width, height, true)
+        popupWindow = PopupWindow(
+            popupBinding.root,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            true
+        )
         popupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
 
-        popupView.setOnTouchListener { v, _ ->
+        popupBinding.root.setOnTouchListener { _, _ ->
             feature.sendEvent(ReadBookFeature.Event.HideWordTranslationClicked)
             true
         }
@@ -153,6 +156,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     private fun takeEffect(effect: ReadBookFeature.Effect) {
         when (effect) {
             is ReadBookFeature.Effect.ShowSnackbar -> showSnackbar(effect.messageId)
+            is ReadBookFeature.Effect.Vibrate -> vibratorHelper.vibrate(requireView())
         }
     }
 }

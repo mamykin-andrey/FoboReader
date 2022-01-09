@@ -15,8 +15,8 @@ internal class GoogleTranslateResponse(
         val translatedText: String
     )
 
-    fun toDomainModel(source: String) = Translation(
-        source,
+    fun toDomainModel(sourceText: String) = Translation(
+        sourceText,
         data.translations.map { it.translatedText }
     )
 }

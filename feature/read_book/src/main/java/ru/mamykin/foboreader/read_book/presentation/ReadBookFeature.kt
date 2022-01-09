@@ -1,8 +1,13 @@
 package ru.mamykin.foboreader.read_book.presentation
 
+import android.graphics.Color
+import android.text.SpannableString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.extension.setColor
+import ru.mamykin.foboreader.core.extension.trimSpecialCharacters
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
@@ -51,62 +56,104 @@ internal class ReadBookFeature @Inject constructor(
         private val getParagraphTranslation: GetParagraphTranslation,
         private val getWordTranslation: GetWordTranslation,
         private val getBookInfo: GetBookInfo,
+        private val appSettingsStorage: AppSettingsStorage,
     ) : Actor<Intent, Action> {
 
         override fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
                 is Intent.TranslateParagraph -> {
-                    val paragraph = intent.paragraph
+                    val paragraph = intent.paragraph.trim()
                     getParagraphTranslation.execute(paragraph)
                         ?.let { emit(Action.ParagraphTranslationLoaded(paragraph, it)) }
                         ?: emit(Action.ParagraphTranslationLoadingFailed)
                 }
+
                 is Intent.TranslateWord -> {
                     emit(Action.TranslationLoadingStarted)
-                    getWordTranslation.execute(intent.word).fold(
+                    val word = intent.word.trimSpecialCharacters()
+                    getWordTranslation.execute(word).fold(
                         { emit(Action.WordTranslationLoaded(it)) },
                         { emit(Action.WordTranslationLoadingFailed) }
                     )
                 }
-                is Intent.HideParagraphTranslation -> emit(Action.ParagraphTranslationHidden)
-                is Intent.HideWordTranslation -> emit(Action.WordTranslationHidden)
+
+                is Intent.HideParagraphTranslation -> {
+                    emit(Action.ParagraphTranslationHidden)
+                }
+
+                is Intent.HideWordTranslation -> {
+                    emit(Action.WordTranslationHidden)
+                }
+
                 is Intent.LoadBookInfo -> {
                     emit(Action.BookLoadingStarted)
                     val bookInfo = getBookInfo.execute(bookId)
                     val bookContent = getBookContent.execute(bookInfo.filePath)
-                    emit(Action.BookLoaded(bookInfo, bookContent.text))
+                    emit(
+                        Action.BookLoaded(
+                            info = bookInfo,
+                            text = bookContent.text,
+                            textSize = appSettingsStorage.readTextSize.toFloat(),
+                        )
+                    )
                 }
             }
         }
     }
 
-    internal class ReadBookReducer @Inject constructor() : Reducer<State, Action, Effect> {
+    internal class ReadBookReducer @Inject constructor(
+        private val appSettingsStorage: AppSettingsStorage,
+    ) : Reducer<State, Action, Effect> {
 
         override fun invoke(state: State, action: Action): ReducerResult<State, Effect> = when (action) {
             is Action.BookLoadingStarted -> state.copy(isBookLoading = true) to emptySet()
+
             is Action.BookLoaded -> state.copy(
                 isBookLoading = false,
                 text = action.text,
                 title = action.info.title,
-                currentPage = action.info.currentPage
+                currentPage = action.info.currentPage,
+                textSize = action.textSize,
             ) to emptySet()
+
             is Action.TranslationLoadingStarted -> state.copy(isTranslationLoading = true) to emptySet()
+
             is Action.ParagraphTranslationLoaded -> state.copy(
                 isTranslationLoading = false,
-                paragraphTranslation = action.source to action.translation
-            ) to emptySet()
-            is Action.ParagraphTranslationLoadingFailed -> state to setOf(
-                Effect.ShowSnackbar(R.string.read_book_translation_download_error)
+                paragraphTranslation = getParagraphTranslationText(action.paragraph, action.translatedParagraph)
+            ) to setOf(
+                Effect.Vibrate,
             )
-            is Action.ParagraphTranslationHidden -> state.copy(paragraphTranslation = null) to emptySet()
+
+            is Action.ParagraphTranslationLoadingFailed -> state to setOf(
+                Effect.ShowSnackbar(R.string.read_book_translation_download_error),
+                Effect.Vibrate,
+            )
+            is Action.ParagraphTranslationHidden -> state.copy(
+                paragraphTranslation = null
+            ) to setOf(Effect.Vibrate)
+
             is Action.WordTranslationLoaded -> state.copy(
                 isTranslationLoading = false,
                 wordTranslation = action.translation
-            ) to emptySet()
+            ) to setOf(Effect.Vibrate)
+
             is Action.WordTranslationLoadingFailed -> state to setOf(
-                Effect.ShowSnackbar(R.string.read_book_translation_download_error)
+                Effect.ShowSnackbar(R.string.read_book_translation_download_error),
+                Effect.Vibrate,
             )
+
             is Action.WordTranslationHidden -> state.copy(wordTranslation = null) to emptySet()
+        }
+
+        private fun getParagraphTranslationText(paragraph: String, translatedParagraph: String): CharSequence {
+            return SpannableString(paragraph + "\n\n" + translatedParagraph).apply {
+                setColor(
+                    color = Color.parseColor(appSettingsStorage.translationColor),
+                    start = paragraph.length,
+                    end = length - 1
+                )
+            }
         }
     }
 
@@ -127,14 +174,15 @@ internal class ReadBookFeature @Inject constructor(
 
     sealed class Effect {
         class ShowSnackbar(val messageId: Int) : Effect()
+        object Vibrate : Effect()
     }
 
     sealed class Action {
         object TranslationLoadingStarted : Action()
 
         class ParagraphTranslationLoaded(
-            val source: String,
-            val translation: String,
+            val paragraph: String,
+            val translatedParagraph: String,
         ) : Action()
 
         object ParagraphTranslationLoadingFailed : Action()
@@ -153,6 +201,7 @@ internal class ReadBookFeature @Inject constructor(
         class BookLoaded(
             val info: BookInfo,
             val text: String,
+            val textSize: Float?,
         ) : Action()
     }
 
@@ -161,10 +210,11 @@ internal class ReadBookFeature @Inject constructor(
         val isTranslationLoading: Boolean = false,
         val title: String = "",
         val text: String = "",
+        val textSize: Float? = null,
         val currentPage: Int = 0,
         val totalPages: Int = 0,
         val readPercent: Float = 0f,
         val wordTranslation: Translation? = null,
-        val paragraphTranslation: Pair<String, String>? = null
+        val paragraphTranslation: CharSequence? = null,
     )
 }
