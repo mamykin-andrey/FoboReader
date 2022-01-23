@@ -10,3 +10,4 @@ include(
     ":feature:main",
     ":uikit"
 )
+include(":core_common")
