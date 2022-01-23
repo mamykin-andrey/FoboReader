@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
@@ -41,7 +42,7 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
     private fun initDi() {
         ComponentHolder.getOrCreateComponent(featureName) {
             DaggerBookCategoriesComponent.factory().create(
-                apiHolder().commonApi(),
+                commonApi(),
                 apiHolder().networkApi(),
                 apiHolder().navigationApi(),
                 apiHolder().settingsApi(),

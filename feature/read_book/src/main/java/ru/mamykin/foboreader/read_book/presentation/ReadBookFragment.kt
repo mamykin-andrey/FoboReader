@@ -10,6 +10,7 @@ import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.extension.toHtml
 import ru.mamykin.foboreader.core.platform.VibratorHelper
@@ -60,7 +61,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
                 bookId,
                 apiHolder().networkApi(),
                 apiHolder().navigationApi(),
-                apiHolder().commonApi(),
+                commonApi(),
                 apiHolder().settingsApi()
             )
         }.inject(this)

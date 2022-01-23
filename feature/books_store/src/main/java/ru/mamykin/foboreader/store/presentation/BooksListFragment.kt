@@ -6,10 +6,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.getSearchView
-import ru.mamykin.foboreader.core.extension.setQueryChangedListener
-import ru.mamykin.foboreader.core.extension.showSnackbar
+import ru.mamykin.foboreader.core.extension.*
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
@@ -53,7 +50,7 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         ComponentHolder.getOrCreateComponent(featureName) {
             val params = BooksListFeature.BookCategoriesParams(categoryId)
             DaggerBookListComponent.factory().create(
-                apiHolder().commonApi(),
+                commonApi(),
                 apiHolder().networkApi(),
                 apiHolder().navigationApi(),
                 apiHolder().settingsApi(),

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.settings.R
@@ -35,7 +36,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
     private fun initDi() {
         ComponentHolder.getOrCreateComponent(featureName) {
             DaggerSettingsComponent.factory().create(
-                apiHolder().commonApi(),
+                commonApi(),
                 apiHolder().settingsApi(),
                 apiHolder().navigationApi(),
             )

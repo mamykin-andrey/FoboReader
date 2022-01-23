@@ -10,6 +10,7 @@ import ru.mamykin.foboreader.book_details.di.DaggerBookDetailsComponent
 import ru.mamykin.foboreader.book_details.presentation.list.BookInfoListAdapter
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import javax.inject.Inject
@@ -46,7 +47,7 @@ class BookDetailsFragment : BaseFragment(R.layout.fragment_book_details) {
             DaggerBookDetailsComponent.factory().create(
                 bookId,
                 apiHolder().navigationApi(),
-                apiHolder().commonApi(),
+                commonApi(),
             )
         }.inject(this)
     }

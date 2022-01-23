@@ -13,15 +13,10 @@ class ApiHolderImpl(
     private val appComponent: AppComponent by lazy {
         DaggerAppComponent.factory().create(context, cicerone)
     }
-    private val coreCommonComponent: CoreCommonComponent by lazy {
-        DaggerCoreCommonComponent.factory().create(context)
-    }
 
     override fun navigationApi(): NavigationApi = appComponent
 
     override fun networkApi(): NetworkApi = appComponent
-
-    override fun commonApi(): CommonApi = coreCommonComponent
 
     override fun settingsApi(): SettingsApi = appComponent
 

@@ -8,10 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.getSearchView
-import ru.mamykin.foboreader.core.extension.setItemClickedListener
-import ru.mamykin.foboreader.core.extension.setQueryChangedListener
+import ru.mamykin.foboreader.core.extension.*
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
@@ -58,7 +55,7 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
         ComponentHolder.getOrCreateComponent(featureName) {
             DaggerMyBooksComponent.factory().create(
                 apiHolder().navigationApi(),
-                apiHolder().commonApi(),
+                commonApi(),
             )
         }.inject(this)
     }

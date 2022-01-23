@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseDialogFragment
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.DialogChangeLanuageBinding
@@ -66,7 +67,7 @@ internal class ChangeLanguageDialogFragment : BaseDialogFragment() {
     private fun initDi() {
         ComponentHolder.getOrCreateComponent(featureName) {
             DaggerSettingsComponent.factory().create(
-                apiHolder().commonApi(),
+                commonApi(),
                 apiHolder().settingsApi(),
                 apiHolder().navigationApi(),
             )
