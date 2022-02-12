@@ -1,0 +1,6 @@
+incremental_build {
+    tasks = [":app:assembleDevDebug"]
+    apply-non-abi-change-to = ["app/src/main/java/ru/mamykin/foboreader/app/presentation/RootActivity.kt"]
+    warm-ups = 3
+    iterations = 3
+}

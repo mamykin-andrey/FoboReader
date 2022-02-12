@@ -1,0 +1,1 @@
+gradle-profiler --benchmark --project-dir ../ --scenario-file clean_scenario.txt
