@@ -10,6 +10,7 @@ import ru.mamykin.foboreader.core.extension.*
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
+import ru.mamykin.foboreader.core.R as coreR
 import ru.mamykin.foboreader.store.databinding.FragmentBooksListBinding
 import ru.mamykin.foboreader.store.di.DaggerBookListComponent
 import ru.mamykin.foboreader.store.presentation.list.BookListAdapter
@@ -84,9 +85,9 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
     }
 
     private fun initToolbar() {
-        val rawIconBackDrawable = requireContext().getDrawable(R.drawable.ic_back)!!
+        val rawIconBackDrawable = requireContext().getDrawable(coreR.drawable.ic_back)!!
         val iconBackDrawable = rawIconBackDrawable.mutate()
-        iconBackDrawable.setTint(resources.getColor(R.color.colorSecondary))
+        iconBackDrawable.setTint(resources.getColor(coreR.color.colorSecondary))
         binding.toolbar.apply {
             title = getString(R.string.books_store_title)
             navigationIcon = iconBackDrawable
