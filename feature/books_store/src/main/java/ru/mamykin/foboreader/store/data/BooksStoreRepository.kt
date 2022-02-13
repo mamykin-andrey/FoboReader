@@ -10,7 +10,7 @@ internal class BooksStoreRepository @Inject constructor(
     private val service: TestBooksStoreService,
     private val appSettingsStorage: AppSettingsStorage,
 ) {
-    private var categoryBooks: List<StoreBook>? = null
+    private val categoryBooks = mutableMapOf<String, List<StoreBook>>()
     private val locale: String
         get() = appSettingsStorage.appLanguageCode
 
@@ -24,8 +24,10 @@ internal class BooksStoreRepository @Inject constructor(
         categoryId: String,
         searchQuery: String? = null,
     ): List<StoreBook> {
-        val categoryBooks = this.categoryBooks
-            ?: getBooksRemote(categoryId).also { categoryBooks = it }
+        val categoryBooks = categoryBooks[categoryId]
+            ?: getBooksRemote(categoryId).also {
+                categoryBooks[categoryId] = it
+            }
         return filterBooks(categoryBooks, searchQuery)
     }
 

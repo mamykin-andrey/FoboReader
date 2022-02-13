@@ -4,4 +4,5 @@
     <string name="app_my_books_tab">My books</string>
     <string name="app_books_store_tab">Books store</string>
     <string name="app_settings_tab">Settings</string>
+    <string name="network_error_message">No connection with server, check your network connection and try again</string>
 </resources>

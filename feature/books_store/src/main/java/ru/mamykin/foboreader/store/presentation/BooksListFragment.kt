@@ -10,11 +10,11 @@ import ru.mamykin.foboreader.core.extension.*
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
-import ru.mamykin.foboreader.core.R as coreR
 import ru.mamykin.foboreader.store.databinding.FragmentBooksListBinding
 import ru.mamykin.foboreader.store.di.DaggerBookListComponent
 import ru.mamykin.foboreader.store.presentation.list.BookListAdapter
 import javax.inject.Inject
+import ru.mamykin.foboreader.core.R as coreR
 
 internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
 
@@ -109,15 +109,14 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         }
     }
 
-    private fun showState(state: BooksListFeature.State) {
-        binding.pbLoadingBooks.isVisible = state.isLoading
-        binding.vError.isVisible = state.isError
-        state.books?.let {
-            binding.rvBooks.isVisible = true
-            adapter.submitList(it)
-        } ?: run {
-            binding.rvBooks.isVisible = false
-        }
+    private fun showState(state: BooksListFeature.State) = binding.apply {
+        pbLoadingBooks.isVisible = state.isLoading
+
+        state.errorMessage?.let(vError::setMessage)
+        vError.isVisible = state.errorMessage != null
+
+        state.books?.let(adapter::submitList)
+        rvBooks.isVisible = !state.books.isNullOrEmpty()
     }
 
     private fun takeEffect(effect: BooksListFeature.Effect) {

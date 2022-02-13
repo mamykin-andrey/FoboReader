@@ -2,6 +2,7 @@ package ru.mamykin.foboreader.store.presentation
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.ResourceManager
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
@@ -44,13 +45,13 @@ internal class BooksListFeature @Inject constructor(
                     emit(Action.BooksLoading)
                     getStoreBooks.execute(params.categoryId).fold(
                         { emit(Action.BooksLoaded(it)) },
-                        { emit(Action.BooksLoadingError(it.message.orEmpty())) }
+                        { emit(Action.BooksLoadingError(it)) }
                     )
                 }
                 is Intent.FilterBooks -> {
                     filterStoreBooks.execute(params.categoryId, intent.query).fold(
                         { emit(Action.BooksLoaded(it)) },
-                        { emit(Action.BooksLoadingError(it.message.orEmpty())) }
+                        { emit(Action.BooksLoadingError(it)) }
                     )
                 }
                 is Intent.DownloadBook -> {
@@ -66,6 +67,7 @@ internal class BooksListFeature @Inject constructor(
 
     internal class BooksListReducer @Inject constructor(
         private val resourceManager: ResourceManager,
+        private val errorMessageMapper: ErrorMessageMapper,
     ) : Reducer<State, Action, Effect> {
 
         override operator fun invoke(state: State, action: Action) =
@@ -73,25 +75,23 @@ internal class BooksListFeature @Inject constructor(
                 is Action.BooksLoading -> {
                     state.copy(
                         isLoading = true,
-                        isError = false,
+                        errorMessage = null,
                         books = emptyList()
                     ) to emptySet()
                 }
                 is Action.BooksLoaded -> {
                     state.copy(
                         isLoading = false,
-                        isError = false,
+                        errorMessage = null,
                         books = action.books
                     ) to emptySet()
                 }
                 is Action.BooksLoadingError -> {
                     state.copy(
                         isLoading = false,
-                        isError = false,
+                        errorMessage = errorMessageMapper.getMessage(action.error),
                         books = emptyList()
-                    ) to setOf(
-                        Effect.ShowSnackbar(action.message)
-                    )
+                    ) to emptySet()
                 }
                 is Action.DownloadBookStarted -> {
                     state to setOf(
@@ -120,7 +120,7 @@ internal class BooksListFeature @Inject constructor(
     sealed class Action {
         object BooksLoading : Action()
         class BooksLoaded(val books: List<StoreBook>) : Action()
-        class BooksLoadingError(val message: String) : Action()
+        class BooksLoadingError(val error: Throwable) : Action()
         object DownloadBookStarted : Action()
         object BookDownloaded : Action()
         class BookDownloadError(val message: String) : Action()
@@ -135,7 +135,7 @@ internal class BooksListFeature @Inject constructor(
 
     data class State(
         val isLoading: Boolean = true,
-        val isError: Boolean = false,
+        val errorMessage: String? = null,
         val books: List<StoreBook>? = null,
     )
 }

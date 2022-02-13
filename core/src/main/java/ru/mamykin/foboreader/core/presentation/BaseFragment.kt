@@ -12,7 +12,7 @@ abstract class BaseFragment(
 
     override fun onDestroy() {
         super.onDestroy()
-        if (requireActivity().isFinishing) {
+        if (isRemoving) {
             ComponentHolder.clearComponent(featureName)
             onCleared()
         }

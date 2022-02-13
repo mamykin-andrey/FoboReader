@@ -4,6 +4,5 @@
     <string name="app_my_books_tab">Мои книги</string>
     <string name="app_books_store_tab">Магазин</string>
     <string name="app_settings_tab">Настройки</string>
-    <string name="error_title">Ошибка</string>
     <string name="network_error_message">Нет связи с сервером, проверьте подключение и повторите попытку</string>
 </resources>

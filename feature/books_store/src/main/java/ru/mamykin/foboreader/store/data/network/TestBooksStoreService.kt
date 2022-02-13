@@ -214,8 +214,8 @@ internal class TestBooksStoreService @Inject constructor(
     private fun validateInternetConnection(context: Context) {
         val connectManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectManager.activeNetworkInfo
-//        if (networkInfo == null || !networkInfo.isConnected) {
+        if (networkInfo == null || !networkInfo.isConnected) {
             throw IOException("No internet access!")
-//        }
+        }
     }
 }
