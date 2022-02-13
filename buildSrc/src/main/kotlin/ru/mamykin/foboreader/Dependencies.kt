@@ -21,6 +21,7 @@ object Versions {
     const val daggerVersion = "2.38.1"
     const val ciceroneVersion = "7.1"
     const val lifecycleVersion = "2.3.1"
+    const val lottieVersion = "4.2.2"
 }
 
 object Dependencies {
@@ -56,4 +57,5 @@ object Dependencies {
     const val cicerone = "com.github.terrakok:cicerone:${Versions.ciceroneVersion}"
     const val liveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycleVersion}"
     const val lifecycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleVersion}"
+    const val lottie = "com.airbnb.android:lottie:${Versions.lottieVersion}"
 }

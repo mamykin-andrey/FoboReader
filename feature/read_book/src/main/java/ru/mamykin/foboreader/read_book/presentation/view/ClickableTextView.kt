@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import ru.mamykin.foboreader.core.extension.allWordPositions
 
 class ClickableTextView @JvmOverloads constructor(
-    context: Context? = null,
+    context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
 ) : AppCompatTextView(context, attrs, defStyle) {
