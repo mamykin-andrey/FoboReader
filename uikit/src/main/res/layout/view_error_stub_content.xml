@@ -8,11 +8,11 @@
     android:padding="12dp">
 
     <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lav_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_gravity="center"
         android:contentDescription="@null"
-        app:lottie_autoPlay="true"
         app:lottie_rawRes="@raw/anim_loading_fail" />
 
     <TextView
@@ -28,7 +28,6 @@
         android:id="@+id/btn_retry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginTop="24dp"
         android:background="@null"
         android:text="@string/core_error_retry_title"

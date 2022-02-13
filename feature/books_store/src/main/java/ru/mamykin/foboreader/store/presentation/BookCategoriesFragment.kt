@@ -91,6 +91,7 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
         state.errorMessage?.let(vError::setMessage)
         vError.isVisible = state.errorMessage != null
 
+        rvCategories.isVisible = !state.categories.isNullOrEmpty()
         state.categories?.let { adapter.submitList(it) }
     }
 
