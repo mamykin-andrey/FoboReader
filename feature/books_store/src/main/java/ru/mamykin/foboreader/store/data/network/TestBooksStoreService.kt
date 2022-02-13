@@ -1,12 +1,16 @@
 package ru.mamykin.foboreader.store.data.network
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.net.ConnectivityManager
 import kotlinx.coroutines.delay
 import ru.mamykin.foboreader.store.data.model.BookCategoriesResponse
 import ru.mamykin.foboreader.store.data.model.BookListResponse
 import javax.inject.Inject
 
-internal class TestBooksStoreService @Inject constructor() {
-
+internal class TestBooksStoreService @Inject constructor(
+    private val context: Context
+) {
     companion object {
 
         private const val RU_LOCALE = "ru"
@@ -170,6 +174,7 @@ internal class TestBooksStoreService @Inject constructor() {
         categoryId: String,
     ): BookListResponse {
         delay(1_000)
+        validateInternetConnection(context)
         return when (locale) {
             RU_LOCALE -> {
                 when (categoryId) {
@@ -195,11 +200,21 @@ internal class TestBooksStoreService @Inject constructor() {
         locale: String,
     ): BookCategoriesResponse {
         delay(1_000)
+        validateInternetConnection(context)
         val categories = when (locale) {
             RU_LOCALE -> ruCategories
             EN_LOCALE -> enCategories
             else -> throw IllegalStateException("Unknown locale: $locale")
         }
         return BookCategoriesResponse(categories)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun validateInternetConnection(context: Context) {
+        val connectManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectManager.activeNetworkInfo
+        if (networkInfo == null || !networkInfo.isConnected) {
+            throw IllegalStateException("No internet access!")
+        }
     }
 }
