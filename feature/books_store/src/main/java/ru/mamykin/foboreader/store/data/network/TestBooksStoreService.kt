@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import kotlinx.coroutines.delay
 import ru.mamykin.foboreader.store.data.model.BookCategoriesResponse
 import ru.mamykin.foboreader.store.data.model.BookListResponse
+import java.io.IOException
 import javax.inject.Inject
 
 internal class TestBooksStoreService @Inject constructor(
@@ -213,8 +214,8 @@ internal class TestBooksStoreService @Inject constructor(
     private fun validateInternetConnection(context: Context) {
         val connectManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectManager.activeNetworkInfo
-        if (networkInfo == null || !networkInfo.isConnected) {
-            throw IllegalStateException("No internet access!")
-        }
+//        if (networkInfo == null || !networkInfo.isConnected) {
+            throw IOException("No internet access!")
+//        }
     }
 }

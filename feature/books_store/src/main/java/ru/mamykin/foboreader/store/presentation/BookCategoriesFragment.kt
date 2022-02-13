@@ -85,9 +85,12 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
         binding.rvCategories.adapter = adapter
     }
 
-    private fun showState(state: BookCategoriesFeature.State) {
-        binding.pbLoadingCategories.isVisible = state.isLoading
-        binding.vError.isVisible = state.isError
+    private fun showState(state: BookCategoriesFeature.State) = with(binding) {
+        pbLoadingCategories.isVisible = state.isLoading
+
+        state.errorMessage?.let(vError::setMessage)
+        vError.isVisible = state.errorMessage != null
+
         state.categories?.let { adapter.submitList(it) }
     }
 

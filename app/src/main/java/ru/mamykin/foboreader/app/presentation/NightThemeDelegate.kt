@@ -13,7 +13,7 @@ internal class NightThemeDelegate(
 ) {
     fun init() {
         appSettingsStorage.nightThemeFlow()
-            .onEach { activity.setNightModeEnabled(it) }
+            .onEach { setNightModeEnabled(it) }
             .launchIn(activity.lifecycleScope)
     }
 }

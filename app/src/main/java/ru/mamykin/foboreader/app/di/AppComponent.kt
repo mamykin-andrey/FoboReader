@@ -9,6 +9,7 @@ import ru.mamykin.foboreader.app.data.storage.AppSettingsStorageImpl
 import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
 import ru.mamykin.foboreader.app.navigation.ScreenProviderImpl
 import ru.mamykin.foboreader.app.navigation.TabFragmentProviderImpl
+import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
@@ -19,6 +20,7 @@ import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.navigation.TabFragmentProvider
+import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import javax.inject.Singleton
 
 @Singleton
@@ -65,5 +67,9 @@ internal class AppModule {
         @Binds
         @Singleton
         fun bindAppSettings(impl: AppSettingsStorageImpl): AppSettingsStorage
+
+        @Binds
+        @Singleton
+        fun bindErrorMapper(impl: ErrorMessageMapperImpl): ErrorMessageMapper
     }
 }

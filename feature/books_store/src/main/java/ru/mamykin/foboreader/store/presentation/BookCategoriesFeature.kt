@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.store.presentation
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
@@ -36,7 +37,7 @@ internal class BookCategoriesFeature @Inject constructor(
                     emit(Action.Loading)
                     getBookCategories.execute().fold(
                         { emit(Action.LoadingSuccess(it)) },
-                        { emit(Action.LoadingError(it.message.orEmpty())) }
+                        { emit(Action.LoadingError(it)) }
                     )
                 }
                 is Intent.OpenCategory -> {
@@ -46,32 +47,31 @@ internal class BookCategoriesFeature @Inject constructor(
         }
     }
 
-    internal class BookCategoriesReducer @Inject constructor() :
-        Reducer<State, Action, Effect> {
+    internal class BookCategoriesReducer @Inject constructor(
+        private val errorMessageMapper: ErrorMessageMapper,
+    ) : Reducer<State, Action, Effect> {
 
         override operator fun invoke(state: State, action: Action) = when (action) {
             is Action.Loading -> {
                 state.copy(
                     isLoading = true,
-                    isError = false,
+                    errorMessage = null,
                     categories = emptyList()
-                ) to emptySet()
+                ) to emptySet<Effect>()
             }
             is Action.LoadingSuccess -> {
                 state.copy(
                     isLoading = false,
-                    isError = false,
+                    errorMessage = null,
                     categories = action.categories
                 ) to emptySet()
             }
             is Action.LoadingError -> {
                 state.copy(
                     isLoading = false,
-                    isError = false,
+                    errorMessage = errorMessageMapper.getMessage(action.error),
                     categories = emptyList()
-                ) to setOf(
-                    Effect.ShowSnackbar(action.message)
-                )
+                ) to emptySet()
             }
         }
     }
@@ -84,16 +84,17 @@ internal class BookCategoriesFeature @Inject constructor(
     sealed class Action {
         object Loading : Action()
         class LoadingSuccess(val categories: List<BookCategory>) : Action()
-        class LoadingError(val message: String) : Action()
+        class LoadingError(val error: Throwable) : Action()
     }
 
     sealed class Effect {
         class ShowSnackbar(val message: String) : Effect()
     }
 
+    // TODO: Use sealed class
     data class State(
         val isLoading: Boolean = true,
-        val isError: Boolean = false,
+        val errorMessage: String? = null,
         val categories: List<BookCategory>? = null
     )
 }

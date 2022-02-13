@@ -16,23 +16,23 @@ fun Fragment.showSnackbar(@StringRes messageRes: Int, long: Boolean = false) {
 
 fun Fragment.showSnackbar(message: String, long: Boolean = false) {
     val duration = if (long) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT
-    activity?.findViewById<View>(android.R.id.content)
-        ?.let { Snackbar.make(it, message, duration) }
+    val contentView = requireActivity().findViewById<View>(android.R.id.content)
+    Snackbar.make(contentView, message, duration).show()
 }
 
 @Deprecated("Use externalMediaDirs.first() direcly")
 fun Context.getExternalMediaDir(): File? = externalMediaDirs.first()
 
-fun AppCompatActivity.isNightModeEnabled(): Boolean {
-    return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
-}
-
-fun AppCompatActivity.setNightModeEnabled(enabled: Boolean) {
+fun setNightModeEnabled(enabled: Boolean) {
     val oldEnabled = isNightModeEnabled()
     if (enabled != oldEnabled) {
         val newMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
         AppCompatDelegate.setDefaultNightMode(newMode)
     }
+}
+
+private fun isNightModeEnabled(): Boolean {
+    return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
 }
 
 fun Context.dpToPx(value: Int): Float {
@@ -42,12 +42,3 @@ fun Context.dpToPx(value: Int): Float {
         resources.displayMetrics
     )
 }
-
-//@Suppress("deprecation")
-//fun Context.getCurrentLocaleName(): String {
-//    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//        resources.configuration.locales[0].displayLanguage
-//    } else {
-//        resources.configuration.locale.displayLanguage
-//    }
-//}
