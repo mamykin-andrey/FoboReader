@@ -13,7 +13,7 @@ import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.extension.toHtml
-import ru.mamykin.foboreader.core.platform.VibratorHelper
+import ru.mamykin.foboreader.read_book.platform.VibratorHelper
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.read_book.R

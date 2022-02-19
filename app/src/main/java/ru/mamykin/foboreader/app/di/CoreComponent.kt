@@ -10,14 +10,12 @@ import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
 import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.app.platform.NotificationManagerImpl
 import ru.mamykin.foboreader.app.platform.ResourceManagerImpl
-import ru.mamykin.foboreader.app.platform.VibratorHelperImpl
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.ResourceManager
-import ru.mamykin.foboreader.core.platform.VibratorHelper
 import javax.inject.Singleton
 
 @Singleton
@@ -43,10 +41,6 @@ internal interface CoreBindsModule {
     @Binds
     @Singleton
     fun bindNotificationManager(impl: NotificationManagerImpl): NotificationManager
-
-    @Binds
-    @Singleton
-    fun bindVibratorHelper(impl: VibratorHelperImpl): VibratorHelper
 
     @Binds
     @Singleton

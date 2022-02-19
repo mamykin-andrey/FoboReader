@@ -1,10 +1,7 @@
 package ru.mamykin.foboreader.read_book.di
 
 import android.content.Context
-import dagger.BindsInstance
-import dagger.Component
-import dagger.Module
-import dagger.Provides
+import dagger.*
 import okhttp3.OkHttpClient
 import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
 import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDaoFactory
@@ -17,6 +14,8 @@ import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.read_book.BuildConfig
 import ru.mamykin.foboreader.read_book.data.network.GoogleTranslateService
+import ru.mamykin.foboreader.read_book.platform.VibratorHelper
+import ru.mamykin.foboreader.read_book.platform.VibratorHelperImpl
 import ru.mamykin.foboreader.read_book.presentation.ReadBookFragment
 import javax.inject.Named
 import javax.inject.Scope
@@ -29,7 +28,7 @@ internal annotation class ReadBookScope
 @ReadBookScope
 @Component(
     dependencies = [NetworkApi::class, NavigationApi::class, CommonApi::class, SettingsApi::class],
-    modules = [ReadBookModule::class]
+    modules = [ReadBookProvidesModule::class, ReadBookBindsModule::class]
 )
 internal interface ReadBookComponent {
 
@@ -49,7 +48,7 @@ internal interface ReadBookComponent {
 }
 
 @Module
-internal class ReadBookModule {
+internal class ReadBookProvidesModule {
 
     @Provides
     @ReadBookScope
@@ -76,4 +75,11 @@ internal class ReadBookModule {
     @Provides
     @ReadBookScope
     fun provideBookInfoDao(context: Context): BookInfoDao = BookInfoDaoFactory.create(context)
+}
+
+@Module
+internal interface ReadBookBindsModule {
+
+    @Binds
+    fun bindsVibratorHelper(impl: VibratorHelperImpl): VibratorHelper
 }

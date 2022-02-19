@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.platform
+package ru.mamykin.foboreader.read_book.platform
 
 import android.view.View
 

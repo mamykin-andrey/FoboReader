@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.app.domain
+package ru.mamykin.foboreader.read_book.domain.usecase
 
 import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
 import javax.inject.Inject

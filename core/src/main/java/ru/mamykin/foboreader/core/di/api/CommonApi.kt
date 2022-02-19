@@ -4,7 +4,6 @@ import android.content.Context
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.ResourceManager
-import ru.mamykin.foboreader.core.platform.VibratorHelper
 
 interface CommonApi {
 
@@ -13,8 +12,6 @@ interface CommonApi {
     fun resourceManager(): ResourceManager
 
     fun notificationManager(): NotificationManager
-
-    fun vibratorHelper(): VibratorHelper
 
     fun errorMessageMapper(): ErrorMessageMapper
 }
