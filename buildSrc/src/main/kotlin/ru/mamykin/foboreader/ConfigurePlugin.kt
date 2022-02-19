@@ -61,27 +61,6 @@ open class ConfigurePlugin : Plugin<Project> {
         defaultConfig {
             multiDexEnabled = true
             applicationId = "ru.mamykin.foboreader"
-
-            flavorDimensions("type")
-
-            productFlavors {
-                productFlavors {
-                    create("prod") {
-                        dimension = "type"
-                        applicationId = "ru.mamykin.foboreader"
-                    }
-                    create("dev") {
-                        dimension = "type"
-                        applicationId = "ru.mamykin.foboreader.dev"
-                    }
-                }
-            }
-
-            variantFilter {
-                if (name == "devRelease") {
-                    ignore = true
-                }
-            }
         }
     }
 
