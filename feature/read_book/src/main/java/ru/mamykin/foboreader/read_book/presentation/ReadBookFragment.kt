@@ -13,7 +13,6 @@ import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.extension.toHtml
-import ru.mamykin.foboreader.read_book.platform.VibratorHelper
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.read_book.R
@@ -21,6 +20,7 @@ import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
 import ru.mamykin.foboreader.read_book.databinding.LayoutWordPopupBinding
 import ru.mamykin.foboreader.read_book.di.DaggerReadBookComponent
 import ru.mamykin.foboreader.read_book.domain.model.Translation
+import ru.mamykin.foboreader.read_book.platform.VibrationManager
 import ru.mamykin.foboreader.read_book.presentation.view.ClickableTextView
 import javax.inject.Inject
 
@@ -43,7 +43,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     internal lateinit var feature: ReadBookFeature
 
     @Inject
-    internal lateinit var vibratorHelper: VibratorHelper
+    internal lateinit var vibrationManager: VibrationManager
 
     private val binding by autoCleanedValue { FragmentReadBookBinding.bind(requireView()) }
     private var lastTextHashCode: Int = 0
@@ -157,7 +157,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     private fun takeEffect(effect: ReadBookFeature.Effect) {
         when (effect) {
             is ReadBookFeature.Effect.ShowSnackbar -> showSnackbar(effect.messageId)
-            is ReadBookFeature.Effect.Vibrate -> vibratorHelper.vibrate(requireView())
+            is ReadBookFeature.Effect.Vibrate -> vibrationManager.vibrate(requireView())
         }
     }
 }

@@ -14,8 +14,8 @@ import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.read_book.BuildConfig
 import ru.mamykin.foboreader.read_book.data.network.GoogleTranslateService
-import ru.mamykin.foboreader.read_book.platform.VibratorHelper
-import ru.mamykin.foboreader.read_book.platform.VibratorHelperImpl
+import ru.mamykin.foboreader.read_book.platform.VibrationManager
+import ru.mamykin.foboreader.read_book.platform.VibrationManagerImpl
 import ru.mamykin.foboreader.read_book.presentation.ReadBookFragment
 import javax.inject.Named
 import javax.inject.Scope
@@ -81,5 +81,5 @@ internal class ReadBookProvidesModule {
 internal interface ReadBookBindsModule {
 
     @Binds
-    fun bindsVibratorHelper(impl: VibratorHelperImpl): VibratorHelper
+    fun bindVibrationManager(impl: VibrationManagerImpl): VibrationManager
 }

@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.read_book.platform
 
 import android.view.View
 
-interface VibratorHelper {
+interface VibrationManager {
 
     fun vibrate(view: View)
 }

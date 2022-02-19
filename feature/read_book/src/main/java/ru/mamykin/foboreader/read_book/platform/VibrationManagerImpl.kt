@@ -9,10 +9,10 @@ import ru.mamykin.foboreader.core.platform.OsHelper
 import ru.mamykin.foboreader.read_book.domain.usecase.GetVibrationEnabled
 import javax.inject.Inject
 
-internal class VibratorHelperImpl @Inject constructor(
+internal class VibrationManagerImpl @Inject constructor(
     context: Context,
     private val getVibrationEnabled: GetVibrationEnabled
-) : VibratorHelper {
+) : VibrationManager {
 
     private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
