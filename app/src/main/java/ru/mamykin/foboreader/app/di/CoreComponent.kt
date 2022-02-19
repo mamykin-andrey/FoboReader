@@ -21,20 +21,20 @@ import ru.mamykin.foboreader.core.platform.VibratorHelper
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [CoreCommonBindsModule::class])
-internal interface CoreCommonComponent : CommonApi {
+@Component(modules = [CoreBindsModule::class])
+internal interface CoreComponent : CommonApi {
 
     @Component.Factory
     interface Factory {
 
         fun create(
             @BindsInstance context: Context,
-        ): CoreCommonComponent
+        ): CoreComponent
     }
 }
 
 @Module
-internal interface CoreCommonBindsModule {
+internal interface CoreBindsModule {
 
     @Binds
     @Singleton

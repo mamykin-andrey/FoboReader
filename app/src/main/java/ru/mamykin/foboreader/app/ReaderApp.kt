@@ -5,8 +5,8 @@ import com.github.terrakok.cicerone.Cicerone
 import leakcanary.LeakCanary
 import ru.mamykin.foboreader.BuildConfig
 import ru.mamykin.foboreader.app.di.ApiHolderImpl
-import ru.mamykin.foboreader.app.di.CoreCommonComponent
-import ru.mamykin.foboreader.app.di.DaggerCoreCommonComponent
+import ru.mamykin.foboreader.app.di.CoreComponent
+import ru.mamykin.foboreader.app.di.DaggerCoreComponent
 import ru.mamykin.foboreader.core.di.api.ApiHolderProvider
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.CommonApiProvider
@@ -21,10 +21,10 @@ class ReaderApp : MultiDexApplication(), ApiHolderProvider, CommonApiProvider {
     override val apiHolder = ApiHolderImpl(this, cicerone)
 
     override val commonApi: CommonApi
-        get() = coreCommonComponent
+        get() = coreComponent
 
-    private val coreCommonComponent: CoreCommonComponent by lazy {
-        DaggerCoreCommonComponent.factory().create(this)
+    private val coreComponent: CoreComponent by lazy {
+        DaggerCoreComponent.factory().create(this)
     }
 
     override fun onCreate() {
