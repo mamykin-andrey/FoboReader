@@ -10,6 +10,6 @@ interface PreferencesManager {
     fun getInt(key: String): Int?
     fun putString(key: String, value: String?)
     fun getString(key: String): String?
-    fun observeBooleanChanges(observableKey: String): Flow<Boolean>
-    fun observeStringChanges(observableKey: String): Flow<String>
+    fun observeBooleanChanges(key: String): Flow<Boolean>
+    fun observeStringChanges(key: String): Flow<String>
 }

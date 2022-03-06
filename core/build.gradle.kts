@@ -2,7 +2,7 @@ import ru.mamykin.foboreader.Dependencies
 
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
     id("ru.mamykin.foboreader")
 }
 
