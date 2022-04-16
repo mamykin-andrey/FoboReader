@@ -44,8 +44,7 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
     }
 
     override fun getBrightness(): Int {
-        return prefManager.getInt(KEY_BRIGHTNESS)
-            ?: DEFAULT_BRIGHTNESS
+        return prefManager.getInt(KEY_BRIGHTNESS, DEFAULT_BRIGHTNESS)
     }
 
     override fun setBrightness(brightness: Int) {
@@ -53,8 +52,7 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
     }
 
     override fun getReadTextSize(): Int {
-        return prefManager.getInt(KEY_READ_TEXT_SIZE)
-            ?: DEFAULT_READ_TEXT_SIZE
+        return prefManager.getInt(KEY_READ_TEXT_SIZE, DEFAULT_READ_TEXT_SIZE)
     }
 
     override fun setReadTextSize(size: Int) {
@@ -62,8 +60,7 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
     }
 
     override fun getTranslationColor(): String {
-        return prefManager.getString(KEY_TRANSLATION_COLOR)
-            ?: DEFAULT_TRANSLATION_COLOR
+        return prefManager.getString(KEY_TRANSLATION_COLOR, DEFAULT_TRANSLATION_COLOR)
     }
 
     override fun setTranslationColor(color: String) {
@@ -71,8 +68,7 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
     }
 
     override fun getAppLanguageCode(): String {
-        return prefManager.getString(KEY_APP_LANGUAGE_CODE)
-            ?: Locale.getDefault().language
+        return prefManager.getString(KEY_APP_LANGUAGE_CODE, Locale.getDefault().language)
     }
 
     override fun setAppLanguageCode(code: String) {

@@ -154,11 +154,11 @@ internal class SettingsListAdapter(
 
         init {
             binding.btnTextSizePlus.setOnClickListener {
-                onEvent(SettingsFeature.Intent.DecreaseTextSize)
+                onEvent(SettingsFeature.Intent.IncreaseTextSize)
             }
 
             binding.btnTextSizeMinus.setOnClickListener {
-                onEvent(SettingsFeature.Intent.IncreaseTextSize)
+                onEvent(SettingsFeature.Intent.DecreaseTextSize)
             }
         }
 

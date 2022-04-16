@@ -24,27 +24,19 @@ internal class PreferencesManagerImpl @Inject constructor(
         Context.MODE_PRIVATE
     )
 
-    override fun putBoolean(key: String, value: Boolean) =
-        sharedPreferences.putValue(key, value)
+    override fun putBoolean(key: String, value: Boolean) = sharedPreferences.putValue(key, value)
 
-    override fun getBoolean(key: String, defValue: Boolean): Boolean =
-        sharedPreferences.getValue(key) ?: defValue
+    override fun getBoolean(key: String, defValue: Boolean): Boolean = sharedPreferences.getValue(key, defValue)
 
-    override fun putInt(key: String, value: Int) =
-        sharedPreferences.putValue(key, value)
+    override fun putInt(key: String, value: Int) = sharedPreferences.putValue(key, value)
 
-    override fun putString(key: String, value: String?) =
-        sharedPreferences.putValue(key, value)
+    override fun putString(key: String, value: String?) = sharedPreferences.putValue(key, value)
 
-    override fun getInt(key: String): Int? =
-        sharedPreferences.getValue(key) ?: -1
+    override fun getInt(key: String, defValue: Int): Int = sharedPreferences.getValue(key, defValue)
 
-    override fun getString(key: String): String? =
-        sharedPreferences.getValue(key)
+    override fun getString(key: String, defValue: String): String = sharedPreferences.getValue(key, defValue)
 
-    override fun observeBooleanChanges(key: String): Flow<Boolean> =
-        sharedPreferences.observeChanges(key)
+    override fun observeBooleanChanges(key: String): Flow<Boolean> = sharedPreferences.observeChanges(key)
 
-    override fun observeStringChanges(key: String): Flow<String> =
-        sharedPreferences.observeChanges(key)
+    override fun observeStringChanges(key: String): Flow<String> = sharedPreferences.observeChanges(key)
 }

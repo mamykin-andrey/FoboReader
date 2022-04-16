@@ -16,11 +16,11 @@ inline fun <reified T> SharedPreferences.putValue(key: String, value: T) {
     editor.apply()
 }
 
-inline fun <reified T> SharedPreferences.getValue(key: String): T {
+inline fun <reified T> SharedPreferences.getValue(key: String, default: T): T {
     return when (T::class) {
-        String::class -> getString(key, "") as T
-        Boolean::class -> getBoolean(key, false) as T
-        Int::class -> getInt(key, -1) as T
+        String::class -> getString(key, default as String) as T
+        Boolean::class -> getBoolean(key, default as Boolean) as T
+        Int::class -> getInt(key, default as Int) as T
         else -> throw IllegalArgumentException("Unsupported type: ${T::class}!")
     }
 }
@@ -29,7 +29,7 @@ inline fun <reified T> SharedPreferences.observeChanges(key: String): Flow<T> = 
     val listener: SharedPreferences.OnSharedPreferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { prefs, prefKey ->
             if (prefKey == key) {
-                offer(prefs.getValue(key))
+                offer(prefs.getValue(key, "") as T)
             }
         }
     registerOnSharedPreferenceChangeListener(listener)
