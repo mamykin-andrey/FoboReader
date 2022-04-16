@@ -7,7 +7,7 @@ import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.app.di.DaggerRootComponent
-import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import javax.inject.Inject
@@ -15,7 +15,7 @@ import javax.inject.Inject
 internal class RootActivity : AppCompatActivity(R.layout.activity_root) {
 
     @Inject
-    internal lateinit var appSettingsStorage: AppSettingsStorage
+    internal lateinit var appSettingsRepository: AppSettingsRepository
 
     @Inject
     internal lateinit var cicerone: Cicerone<Router>
@@ -50,7 +50,7 @@ internal class RootActivity : AppCompatActivity(R.layout.activity_root) {
 
     private fun initTheme() {
         setTheme(R.style.AppTheme)
-        NightThemeDelegate(this, appSettingsStorage).init()
-        AppLanguageDelegate(this, appSettingsStorage).init()
+        NightThemeDelegate(this, appSettingsRepository).init()
+        AppLanguageDelegate(this, appSettingsRepository).init()
     }
 }

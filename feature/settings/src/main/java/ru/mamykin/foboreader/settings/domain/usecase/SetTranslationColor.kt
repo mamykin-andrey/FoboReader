@@ -1,12 +1,12 @@
 package ru.mamykin.foboreader.settings.domain.usecase
 
-import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
 import javax.inject.Inject
 
 internal class SetTranslationColor @Inject constructor(
-    private val appSettingsStorage: AppSettingsStorage
+    private val appSettingsRepository: AppSettingsRepository
 ) {
     fun execute(color: String) {
-        appSettingsStorage.translationColor = color
+        appSettingsRepository.translationColor = color
     }
 }

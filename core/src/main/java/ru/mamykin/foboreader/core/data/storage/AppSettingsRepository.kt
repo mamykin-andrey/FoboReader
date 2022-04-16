@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.core.data.storage
 
 import kotlinx.coroutines.flow.Flow
 
-interface AppSettingsStorage {
+interface AppSettingsRepository {
 
     fun nightThemeFlow(): Flow<Boolean>
     fun appLanguageFlow(): Flow<String>

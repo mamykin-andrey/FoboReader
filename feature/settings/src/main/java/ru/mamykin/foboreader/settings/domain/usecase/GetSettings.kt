@@ -1,16 +1,16 @@
 package ru.mamykin.foboreader.settings.domain.usecase
 
-import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import javax.inject.Inject
 
 internal class GetSettings @Inject constructor(
-    private val settingsStorage: AppSettingsStorage,
+    private val settingsRepository: AppSettingsRepository,
     private val getSelectedLanguage: GetSelectedLanguage,
 ) {
     fun execute(): List<SettingsItem> {
         val selectedLanguageName = getSelectedLanguage.execute().name
-        return with(settingsStorage) {
+        return with(settingsRepository) {
             listOf(
                 SettingsItem.NightTheme(nightThemeEnabled),
                 SettingsItem.Brightness(brightness),

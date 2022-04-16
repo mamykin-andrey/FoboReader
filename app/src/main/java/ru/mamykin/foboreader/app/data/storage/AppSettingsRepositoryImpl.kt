@@ -1,15 +1,15 @@
 package ru.mamykin.foboreader.app.data.storage
 
-import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class AppSettingsStorageImpl @Inject constructor(
+internal class AppSettingsRepositoryImpl @Inject constructor(
     private val prefManager: PreferencesManager,
-) : AppSettingsStorage {
+) : AppSettingsRepository {
     companion object {
 
         private const val NIGHT_THEME_ENABLED = "night_theme_enabled"

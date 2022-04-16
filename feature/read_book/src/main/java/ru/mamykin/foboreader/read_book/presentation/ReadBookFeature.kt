@@ -5,7 +5,7 @@ import android.text.SpannableString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
-import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.trimSpecialCharacters
 import ru.mamykin.foboreader.core.presentation.Actor
@@ -41,7 +41,7 @@ internal class ReadBookFeature @Inject constructor(
         private val getParagraphTranslation: GetParagraphTranslation,
         private val getWordTranslation: GetWordTranslation,
         private val getBookInfo: GetBookInfo,
-        private val appSettingsStorage: AppSettingsStorage,
+        private val appSettingsRepository: AppSettingsRepository,
     ) : Actor<Intent, Action> {
 
         override fun invoke(intent: Intent): Flow<Action> = flow {
@@ -78,7 +78,7 @@ internal class ReadBookFeature @Inject constructor(
                         Action.BookLoaded(
                             info = bookInfo,
                             text = bookContent.text,
-                            textSize = appSettingsStorage.readTextSize.toFloat(),
+                            textSize = appSettingsRepository.readTextSize.toFloat(),
                         )
                     )
                 }
@@ -87,7 +87,7 @@ internal class ReadBookFeature @Inject constructor(
     }
 
     internal class ReadBookReducer @Inject constructor(
-        private val appSettingsStorage: AppSettingsStorage,
+        private val appSettingsRepository: AppSettingsRepository,
     ) : Reducer<State, Action, Effect> {
 
         override fun invoke(state: State, action: Action): ReducerResult<State, Effect> = when (action) {
@@ -134,7 +134,7 @@ internal class ReadBookFeature @Inject constructor(
         private fun getParagraphTranslationText(paragraph: String, translatedParagraph: String): CharSequence {
             return SpannableString(paragraph + "\n\n" + translatedParagraph).apply {
                 setColor(
-                    color = Color.parseColor(appSettingsStorage.translationColor),
+                    color = Color.parseColor(appSettingsRepository.translationColor),
                     start = paragraph.length,
                     end = length - 1
                 )

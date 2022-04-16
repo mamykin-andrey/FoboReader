@@ -1,12 +1,12 @@
 package ru.mamykin.foboreader.read_book.domain.usecase
 
-import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
 import javax.inject.Inject
 
 internal class GetVibrationEnabled @Inject constructor(
-    private val settingsStorage: AppSettingsStorage
+    private val settingsRepository: AppSettingsRepository
 ) {
     fun execute(): Boolean {
-        return settingsStorage.useVibration
+        return settingsRepository.useVibration
     }
 }

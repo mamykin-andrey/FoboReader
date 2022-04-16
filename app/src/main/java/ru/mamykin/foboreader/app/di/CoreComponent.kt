@@ -5,12 +5,12 @@ import dagger.Binds
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
-import ru.mamykin.foboreader.app.data.storage.AppSettingsStorageImpl
+import ru.mamykin.foboreader.app.data.storage.AppSettingsRepositoryImpl
 import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
 import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.app.platform.NotificationManagerImpl
 import ru.mamykin.foboreader.app.platform.ResourceManagerImpl
-import ru.mamykin.foboreader.core.data.storage.AppSettingsStorage
+import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
@@ -48,7 +48,7 @@ internal interface CoreBindsModule {
 
     @Binds
     @Singleton
-    fun bindAppSettings(impl: AppSettingsStorageImpl): AppSettingsStorage
+    fun bindAppSettings(impl: AppSettingsRepositoryImpl): AppSettingsRepository
 
     @Binds
     @Singleton
