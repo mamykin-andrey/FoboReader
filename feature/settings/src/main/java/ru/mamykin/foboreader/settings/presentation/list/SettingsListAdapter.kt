@@ -1,14 +1,12 @@
 package ru.mamykin.foboreader.settings.presentation.list
 
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.mamykin.foboreader.core.extension.getLayoutInflater
 import ru.mamykin.foboreader.core.extension.setCheckedChangedListener
+import ru.mamykin.foboreader.core.extension.setColorFilter
 import ru.mamykin.foboreader.core.extension.setProgressChangedListener
 import ru.mamykin.foboreader.core.presentation.list.SimpleDiffUtil
 import ru.mamykin.foboreader.settings.R
@@ -182,10 +180,7 @@ internal class SettingsListAdapter(
 
         override fun bind(item: SettingsItem.TranslationColor) {
             binding.apply {
-                ivTranslationColor.colorFilter = PorterDuffColorFilter(
-                    Color.parseColor(item.colorCode),
-                    PorterDuff.Mode.SRC_ATOP
-                )
+                ivTranslationColor.setColorFilter(item.colorCode)
             }
         }
     }
