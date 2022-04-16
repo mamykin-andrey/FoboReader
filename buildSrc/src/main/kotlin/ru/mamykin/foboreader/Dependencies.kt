@@ -22,6 +22,7 @@ object Versions {
     const val ciceroneVersion = "7.1"
     const val lifecycleVersion = "2.3.1"
     const val lottieVersion = "4.2.2"
+    const val composeVersion = "1.1.1"
 }
 
 object Dependencies {
@@ -58,4 +59,11 @@ object Dependencies {
     const val liveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycleVersion}"
     const val lifecycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleVersion}"
     const val lottie = "com.airbnb.android:lottie:${Versions.lottieVersion}"
+    const val composeUi = "androidx.compose.ui:ui:${Versions.composeVersion}"
+    const val composeTooling = "androidx.compose.ui:ui-tooling:${Versions.composeVersion}"
+    const val composeFoundation = "androidx.compose.foundation:foundation:${Versions.composeVersion}"
+    const val composeMaterial = "androidx.compose.material:material:${Versions.composeVersion}"
+    const val composeMaterialIconsCore = "androidx.compose.material:material-icons-core:${Versions.composeVersion}"
+    const val composeMaterialIconsExt = "androidx.compose.material:material-icons-extended:${Versions.composeVersion}"
+    const val composeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.composeVersion}"
 }
