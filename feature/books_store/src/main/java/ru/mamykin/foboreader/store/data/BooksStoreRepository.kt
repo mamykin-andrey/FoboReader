@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.store.data
 
-import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
+import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.store.data.network.TestBooksStoreService
 import ru.mamykin.foboreader.store.domain.model.BookCategory
 import ru.mamykin.foboreader.store.domain.model.StoreBook
@@ -12,7 +12,7 @@ internal class BooksStoreRepository @Inject constructor(
 ) {
     private val categoryBooks = mutableMapOf<String, List<StoreBook>>()
     private val locale: String
-        get() = appSettingsRepository.appLanguageCode
+        get() = appSettingsRepository.getAppLanguageCode()
 
     suspend fun getCategories(): List<BookCategory> {
         return service.getCategories(locale)

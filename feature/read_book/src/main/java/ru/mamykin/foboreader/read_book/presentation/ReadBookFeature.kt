@@ -5,7 +5,7 @@ import android.text.SpannableString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
-import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
+import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.extension.trimSpecialCharacters
 import ru.mamykin.foboreader.core.presentation.Actor
@@ -78,7 +78,7 @@ internal class ReadBookFeature @Inject constructor(
                         Action.BookLoaded(
                             info = bookInfo,
                             text = bookContent.text,
-                            textSize = appSettingsRepository.readTextSize.toFloat(),
+                            textSize = appSettingsRepository.getReadTextSize().toFloat(),
                         )
                     )
                 }
@@ -134,7 +134,7 @@ internal class ReadBookFeature @Inject constructor(
         private fun getParagraphTranslationText(paragraph: String, translatedParagraph: String): CharSequence {
             return SpannableString(paragraph + "\n\n" + translatedParagraph).apply {
                 setColor(
-                    color = Color.parseColor(appSettingsRepository.translationColor),
+                    color = Color.parseColor(appSettingsRepository.getTranslationColor()),
                     start = paragraph.length,
                     end = length - 1
                 )

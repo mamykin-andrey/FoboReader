@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
+import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.extension.setCurrentLocale
 
 internal class AppLanguageDelegate(

@@ -7,7 +7,7 @@ import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.app.di.DaggerRootComponent
-import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
+import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import javax.inject.Inject

@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.settings.domain.usecase
 
-import ru.mamykin.foboreader.core.data.storage.AppSettingsRepository
+import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
 import javax.inject.Inject
 
@@ -12,12 +12,12 @@ internal class GetSettings @Inject constructor(
         val selectedLanguageName = getSelectedLanguage.execute().name
         return with(settingsRepository) {
             listOf(
-                SettingsItem.NightTheme(nightThemeEnabled),
-                SettingsItem.Brightness(brightness),
-                SettingsItem.ReadTextSize(readTextSize),
-                SettingsItem.TranslationColor(translationColor),
+                SettingsItem.NightTheme(isNightThemeEnabled()),
+                SettingsItem.Brightness(getBrightness()),
+                SettingsItem.ReadTextSize(getReadTextSize()),
+                SettingsItem.TranslationColor(getTranslationColor()),
                 SettingsItem.AppLanguage(selectedLanguageName),
-                SettingsItem.UseVibration(useVibration),
+                SettingsItem.UseVibration(isUseVibration()),
             )
         }
     }
