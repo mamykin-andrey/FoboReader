@@ -11,71 +11,79 @@ import javax.inject.Singleton
 internal class AppSettingsRepositoryImpl @Inject constructor(
     private val prefManager: PreferencesManager,
 ) : AppSettingsRepository {
-    companion object {
 
-        private const val NIGHT_THEME_ENABLED = "night_theme_enabled"
-        private const val BRIGHTNESS = "brightness"
-        private const val READ_TEXT_SIZE = "read_text_size"
-        private const val TRANSLATION_COLOR = "translation_color"
-        private const val APP_LANGUAGE_CODE = "app_language"
-        private const val USE_VIBRATION = "use_vibration"
+    companion object {
+        private const val KEY_NIGHT_THEME_ENABLED = "night_theme_enabled"
+        private const val KEY_BRIGHTNESS = "brightness"
+        private const val KEY_READ_TEXT_SIZE = "read_text_size"
+        private const val KEY_TRANSLATION_COLOR = "translation_color"
+        private const val KEY_APP_LANGUAGE_CODE = "app_language"
+        private const val KEY_USE_VIBRATION = "use_vibration"
+
+        private const val DEFAULT_NIGHT_THEME_ENABLED = false
+        private const val DEFAULT_BRIGHTNESS = 100
+        private const val DEFAULT_READ_TEXT_SIZE = 16
+        private const val DEFAULT_TRANSLATION_COLOR = "#000000"
+        private const val DEFAULT_USE_VIBRATION = true
     }
 
     override fun nightThemeFlow(): Flow<Boolean> {
-        return prefManager.observeBooleanChanges(NIGHT_THEME_ENABLED)
+        return prefManager.observeBooleanChanges(KEY_NIGHT_THEME_ENABLED)
     }
 
     override fun appLanguageFlow(): Flow<String> {
-        return prefManager.observeStringChanges(APP_LANGUAGE_CODE)
+        return prefManager.observeStringChanges(KEY_APP_LANGUAGE_CODE)
     }
 
     override fun isNightThemeEnabled(): Boolean {
-        return prefManager.getBoolean(NIGHT_THEME_ENABLED, false)
+        return prefManager.getBoolean(KEY_NIGHT_THEME_ENABLED, DEFAULT_NIGHT_THEME_ENABLED)
     }
 
     override fun setNightThemeEnabled(enabled: Boolean) {
-        prefManager.putBoolean(NIGHT_THEME_ENABLED, enabled)
+        prefManager.putBoolean(KEY_NIGHT_THEME_ENABLED, enabled)
     }
 
     override fun getBrightness(): Int {
-        return prefManager.getInt(BRIGHTNESS) ?: 100
+        return prefManager.getInt(KEY_BRIGHTNESS)
+            ?: DEFAULT_BRIGHTNESS
     }
 
     override fun setBrightness(brightness: Int) {
-        prefManager.putInt(BRIGHTNESS, brightness)
+        prefManager.putInt(KEY_BRIGHTNESS, brightness)
     }
 
     override fun getReadTextSize(): Int {
-        return prefManager.getInt(READ_TEXT_SIZE) ?: 16
+        return prefManager.getInt(KEY_READ_TEXT_SIZE)
+            ?: DEFAULT_READ_TEXT_SIZE
     }
 
     override fun setReadTextSize(size: Int) {
-        size.takeIf { it in 10..30 }?.let {
-            prefManager.putInt(READ_TEXT_SIZE, size)
-        }
+        prefManager.putInt(KEY_READ_TEXT_SIZE, size)
     }
 
     override fun getTranslationColor(): String {
-        return prefManager.getString(TRANSLATION_COLOR) ?: "#000000"
+        return prefManager.getString(KEY_TRANSLATION_COLOR)
+            ?: DEFAULT_TRANSLATION_COLOR
     }
 
     override fun setTranslationColor(color: String) {
-        prefManager.putString(TRANSLATION_COLOR, color)
+        prefManager.putString(KEY_TRANSLATION_COLOR, color)
     }
 
     override fun getAppLanguageCode(): String {
-        return prefManager.getString(APP_LANGUAGE_CODE) ?: Locale.getDefault().language
+        return prefManager.getString(KEY_APP_LANGUAGE_CODE)
+            ?: Locale.getDefault().language
     }
 
     override fun setAppLanguageCode(code: String) {
-        prefManager.putString(APP_LANGUAGE_CODE, code)
+        prefManager.putString(KEY_APP_LANGUAGE_CODE, code)
     }
 
     override fun isUseVibration(): Boolean {
-        return prefManager.getBoolean(USE_VIBRATION, true)
+        return prefManager.getBoolean(KEY_USE_VIBRATION, DEFAULT_USE_VIBRATION)
     }
 
     override fun setUseVibration(use: Boolean) {
-        prefManager.putBoolean(USE_VIBRATION, use)
+        prefManager.putBoolean(KEY_USE_VIBRATION, use)
     }
 }

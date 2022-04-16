@@ -48,7 +48,7 @@ internal interface CoreBindsModule {
 
     @Binds
     @Singleton
-    fun bindAppSettings(impl: AppSettingsRepositoryImpl): AppSettingsRepository
+    fun bindAppSettingsRepository(impl: AppSettingsRepositoryImpl): AppSettingsRepository
 
     @Binds
     @Singleton
