@@ -10,6 +10,7 @@ inline fun <reified T> SharedPreferences.putValue(key: String, value: T) {
     when (T::class) {
         String::class -> editor.putString(key, value as String)
         Boolean::class -> editor.putBoolean(key, value as Boolean)
+        Int::class -> editor.putInt(key, value as Int)
         else -> throw IllegalArgumentException("Unsupported type: ${T::class}!")
     }
     editor.apply()
@@ -19,6 +20,7 @@ inline fun <reified T> SharedPreferences.getValue(key: String): T {
     return when (T::class) {
         String::class -> getString(key, "") as T
         Boolean::class -> getBoolean(key, false) as T
+        Int::class -> getInt(key, -1) as T
         else -> throw IllegalArgumentException("Unsupported type: ${T::class}!")
     }
 }
