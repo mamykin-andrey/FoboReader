@@ -5,13 +5,14 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.collectWithRepeatOnStarted
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.databinding.*
+import ru.mamykin.foboreader.settings.databinding.FragmentSettingsBinding
 import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
-import ru.mamykin.foboreader.settings.presentation.list.*
+import ru.mamykin.foboreader.settings.presentation.list.SettingsListAdapter
 import javax.inject.Inject
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismissedListener {
@@ -75,7 +76,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
     }
 
     private fun initFeature() {
-        feature.stateData.observe(viewLifecycleOwner, ::showState)
+        feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
         feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 

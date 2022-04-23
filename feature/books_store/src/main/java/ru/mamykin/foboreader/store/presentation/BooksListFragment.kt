@@ -69,7 +69,7 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         initErrorView()
         initToolbar()
         initBooksList()
-        feature.stateData.observe(viewLifecycleOwner, ::showState)
+        feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
         feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 

@@ -10,6 +10,7 @@ import ru.mamykin.foboreader.book_details.di.DaggerBookDetailsComponent
 import ru.mamykin.foboreader.book_details.presentation.list.BookInfoListAdapter
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.collectWithRepeatOnStarted
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
@@ -61,7 +62,7 @@ class BookDetailsFragment : BaseFragment(R.layout.fragment_book_details) {
         toolbar.title = getString(R.string.my_books_book_info_title)
         fabRead.setOnClickListener { feature.sendIntent(BookDetailsFeature.Intent.OpenBook) }
         initBookInfoList()
-        feature.stateData.observe(viewLifecycleOwner, ::showState)
+        feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
     }
 
     override fun onDestroyView() {

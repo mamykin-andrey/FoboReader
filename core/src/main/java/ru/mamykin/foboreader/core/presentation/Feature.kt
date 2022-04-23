@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.core.presentation
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -27,13 +26,6 @@ abstract class Feature<State, Intent, Effect, Action>(
         private const val TAG = "Feature"
     }
 
-    @Deprecated("Use state flow instead")
-    private val _stateData = MutableLiveData(initialState)
-
-    @Deprecated("Use state flow instead")
-    val stateData: LiveData<State>
-        get() = _stateData
-
     private val _stateFlow = MutableStateFlow(initialState)
     val stateFlow: Flow<State> get() = _stateFlow
 
@@ -52,7 +44,6 @@ abstract class Feature<State, Intent, Effect, Action>(
             val (state, effects) = reducer.invoke(state, it)
 
             Log.debug("state: $state", TAG)
-            _stateData.value = state
             _stateFlow.value = state
 
             Log.debug("effects: $effects", TAG)

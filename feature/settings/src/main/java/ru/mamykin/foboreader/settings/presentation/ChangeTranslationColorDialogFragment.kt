@@ -11,10 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.extension.addGlobalLayoutListener
-import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.commonApi
-import ru.mamykin.foboreader.core.extension.dpToPx
+import ru.mamykin.foboreader.core.extension.*
 import ru.mamykin.foboreader.core.presentation.BaseDialogFragment
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.DialogChangeTranslationColorBinding
@@ -86,7 +83,7 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
     }
 
     private fun initFeature() {
-        feature.stateData.observe(viewLifecycleOwner, ::showState)
+        feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
         feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 

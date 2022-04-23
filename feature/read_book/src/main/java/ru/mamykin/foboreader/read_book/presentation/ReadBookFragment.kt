@@ -9,10 +9,7 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.commonApi
-import ru.mamykin.foboreader.core.extension.showSnackbar
-import ru.mamykin.foboreader.core.extension.toHtml
+import ru.mamykin.foboreader.core.extension.*
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.read_book.R
@@ -82,7 +79,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
                 feature.sendIntent(ReadBookFeature.Intent.TranslateWord(word))
             }
         })
-        feature.stateData.observe(viewLifecycleOwner, ::showState)
+        feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
         feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
     }
 

@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-fun <T> LifecycleOwner.collectWithRepeatOnStarted(flow: Flow<T>, collector: (T) -> Unit) {
-    lifecycleScope.launch {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            flow.collect { collector(it) }
+fun <T> Flow<T>.collectWithRepeatOnStarted(lifecycleOwner: LifecycleOwner, collector: (T) -> Unit) {
+    lifecycleOwner.lifecycleScope.launch {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            collect { collector(it) }
         }
     }
 }
