@@ -56,7 +56,6 @@ object Dependencies {
     const val dagger = "com.google.dagger:dagger:${Versions.daggerVersion}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.daggerVersion}"
     const val cicerone = "com.github.terrakok:cicerone:${Versions.ciceroneVersion}"
-    const val liveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycleVersion}"
     const val lifecycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleVersion}"
     const val lottie = "com.airbnb.android:lottie:${Versions.lottieVersion}"
     const val composeUi = "androidx.compose.ui:ui:${Versions.composeVersion}"
@@ -65,5 +64,4 @@ object Dependencies {
     const val composeMaterial = "androidx.compose.material:material:${Versions.composeVersion}"
     const val composeMaterialIconsCore = "androidx.compose.material:material-icons-core:${Versions.composeVersion}"
     const val composeMaterialIconsExt = "androidx.compose.material:material-icons-extended:${Versions.composeVersion}"
-    const val composeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.composeVersion}"
 }

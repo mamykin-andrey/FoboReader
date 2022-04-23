@@ -69,8 +69,8 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         initErrorView()
         initToolbar()
         initBooksList()
-        feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
-        feature.effectFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::takeEffect)
+        feature.stateFlow.collectWithRepeatOnStarted(::showState)
+        feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
     }
 
     override fun onDestroyView() {

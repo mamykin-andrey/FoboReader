@@ -13,7 +13,6 @@ dependencies {
     implementation(Dependencies.materialLib)
     implementation(Dependencies.constraintLayout)
     implementation(Dependencies.lifecycleRuntimeKtx)
-    implementation(Dependencies.liveDataKtx)
     implementation(Dependencies.picasso)
     implementation(Dependencies.lottie)
 }

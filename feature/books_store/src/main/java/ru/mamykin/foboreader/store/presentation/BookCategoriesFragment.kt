@@ -6,7 +6,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.collectWithRepeatOnStarted
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
@@ -64,8 +63,8 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
     }
 
     private fun observeFeature() {
-        feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
-        feature.effectFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::takeEffect)
+        feature.stateFlow.collectWithRepeatOnStarted(::showState)
+        feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
     }
 
     override fun onDestroyView() {

@@ -17,7 +17,6 @@ dependencies {
     implementation(Dependencies.fragmentX)
     implementation(Dependencies.appCompatX)
     implementation(Dependencies.lifecycleRuntimeKtx)
-    implementation(Dependencies.liveDataKtx)
     implementation(Dependencies.retrofit)
     implementation(Dependencies.retrofitGsonConverter)
     implementation(Dependencies.retrofitCoroutinesAdapter)

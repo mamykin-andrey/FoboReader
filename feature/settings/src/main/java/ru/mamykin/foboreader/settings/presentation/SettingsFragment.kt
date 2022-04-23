@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.collectWithRepeatOnStarted
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
@@ -76,8 +75,8 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings), DialogDismiss
     }
 
     private fun initFeature() {
-        feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
-        feature.effectFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::takeEffect)
+        feature.stateFlow.collectWithRepeatOnStarted(::showState)
+        feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
     }
 
     private fun showState(state: SettingsFeature.State) {

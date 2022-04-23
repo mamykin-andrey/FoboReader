@@ -106,8 +106,8 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
     }
 
     private fun initFeature() {
-        feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
-        feature.effectFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
+        feature.stateFlow.collectWithRepeatOnStarted(::showState)
+        feature.effectFlow.collectWithRepeatOnStarted(::showState)
     }
 
     private fun showState(state: MyBooksFeature.State) = with(binding) {

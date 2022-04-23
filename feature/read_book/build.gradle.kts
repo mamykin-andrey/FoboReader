@@ -23,7 +23,6 @@ dependencies {
     implementation(Dependencies.fragmentX)
     implementation(Dependencies.appCompatX)
     implementation(Dependencies.lifecycleRuntimeKtx)
-    implementation(Dependencies.liveDataKtx)
     implementation(Dependencies.retrofit)
     implementation(Dependencies.picasso)
     implementation(Dependencies.okHttp)
