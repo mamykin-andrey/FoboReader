@@ -8,7 +8,6 @@ import ru.mamykin.foboreader.core.extension.getLayoutInflater
 import ru.mamykin.foboreader.core.extension.setCheckedChangedListener
 import ru.mamykin.foboreader.core.extension.setColorFilter
 import ru.mamykin.foboreader.core.extension.setProgressChangedListener
-import ru.mamykin.foboreader.core.presentation.list.SimpleDiffUtil
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.*
 import ru.mamykin.foboreader.settings.domain.model.SettingsItem
@@ -17,7 +16,7 @@ import ru.mamykin.foboreader.settings.presentation.SettingsFeature
 internal class SettingsListAdapter(
     private val onEvent: (SettingsFeature.Intent) -> Unit,
 ) : ListAdapter<SettingsItem, RecyclerView.ViewHolder>(
-    SimpleDiffUtil.equalsCallback { it::class.java }
+    SettingsDiffCallback()
 ) {
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is SettingsItem.NightTheme -> R.layout.item_night_theme
@@ -83,20 +82,25 @@ internal class SettingsListAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         @Suppress("unchecked_cast")
-        val holders = holder as SettingsItemHolder<SettingsItem>
-        holders.bind(getItem(position))
+        val itemHolder = holder as SettingsItemHolder<SettingsItem>
+        itemHolder.bind(getItem(position))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
-        super.onBindViewHolder(holder, position, payloads)
+        @Suppress("unchecked_cast")
+        val itemHolder = holder as SettingsItemHolder<SettingsItem>
+        itemHolder.bind(getItem(position), payloads)
     }
 
-    // TODO: Support payloads for holders
     private abstract class SettingsItemHolder<T : SettingsItem>(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
 
         abstract fun bind(item: T)
+
+        open fun bind(item: T, payloads: List<Any>) {
+            bind(item)
+        }
     }
 
     private class AppLanguageHolder(
