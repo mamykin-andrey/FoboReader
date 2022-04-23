@@ -32,7 +32,7 @@ abstract class Feature<State, Intent, Effect, Action>(
     protected val state: State
         get() = requireNotNull(_stateFlow.value)
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     fun sendIntent(intent: Intent) {
         Log.debug("intent: $intent", TAG)
