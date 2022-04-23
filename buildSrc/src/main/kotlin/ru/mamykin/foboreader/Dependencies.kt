@@ -20,7 +20,7 @@ object Versions {
     const val leakcanaryVersion = "2.5"
     const val daggerVersion = "2.38.1"
     const val ciceroneVersion = "7.1"
-    const val lifecycleVersion = "2.3.1"
+    const val lifecycleVersion = "2.4.1"
     const val lottieVersion = "4.2.2"
     const val composeVersion = "1.1.1"
 }

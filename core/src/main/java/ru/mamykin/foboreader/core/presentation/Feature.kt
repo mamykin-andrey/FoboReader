@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.mamykin.foboreader.core.platform.Log
@@ -26,14 +27,21 @@ abstract class Feature<State, Intent, Effect, Action>(
         private const val TAG = "Feature"
     }
 
+    @Deprecated("Use state flow instead")
     private val _stateData = MutableLiveData(initialState)
-    val stateData: LiveData<State> get() = _stateData
+
+    @Deprecated("Use state flow instead")
+    val stateData: LiveData<State>
+        get() = _stateData
+
+    private val _stateFlow = MutableStateFlow(initialState)
+    val stateFlow: Flow<State> get() = _stateFlow
 
     private val _effectData = SingleLiveEvent<Effect>()
     val effectData: LiveData<Effect> get() = _effectData
 
     protected val state: State
-        get() = _stateData.value!!
+        get() = requireNotNull(_stateFlow.value)
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
@@ -45,6 +53,7 @@ abstract class Feature<State, Intent, Effect, Action>(
 
             Log.debug("state: $state", TAG)
             _stateData.value = state
+            _stateFlow.value = state
 
             Log.debug("effects: $effects", TAG)
             effects.forEach(_effectData::setValue)
