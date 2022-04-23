@@ -1,14 +1,11 @@
 package ru.mamykin.foboreader.core.presentation
 
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import ru.mamykin.foboreader.core.platform.Log
 
 typealias ReducerResult<State, Effect> = Pair<State, Set<Effect>>
@@ -29,8 +26,8 @@ abstract class Feature<State, Intent, Effect, Action>(
     private val _stateFlow = MutableStateFlow(initialState)
     val stateFlow: Flow<State> get() = _stateFlow
 
-    private val _effectData = SingleLiveEvent<Effect>()
-    val effectData: LiveData<Effect> get() = _effectData
+    private val effectChannel = Channel<Effect>(Channel.BUFFERED)
+    val effectFlow = effectChannel.receiveAsFlow()
 
     protected val state: State
         get() = requireNotNull(_stateFlow.value)
@@ -47,7 +44,7 @@ abstract class Feature<State, Intent, Effect, Action>(
             _stateFlow.value = state
 
             Log.debug("effects: $effects", TAG)
-            effects.forEach(_effectData::setValue)
+            effects.forEach(effectChannel::trySend)
         }.launchIn(scope)
     }
 

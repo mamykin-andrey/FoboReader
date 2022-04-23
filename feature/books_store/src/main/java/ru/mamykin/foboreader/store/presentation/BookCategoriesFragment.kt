@@ -65,7 +65,7 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
 
     private fun observeFeature() {
         feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
-        feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
+        feature.effectFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::takeEffect)
     }
 
     override fun onDestroyView() {

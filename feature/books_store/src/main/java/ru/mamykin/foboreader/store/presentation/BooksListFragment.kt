@@ -70,7 +70,7 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         initToolbar()
         initBooksList()
         feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
-        feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
+        feature.effectFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::takeEffect)
     }
 
     override fun onDestroyView() {

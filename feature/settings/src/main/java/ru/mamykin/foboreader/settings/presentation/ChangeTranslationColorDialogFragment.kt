@@ -84,7 +84,7 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
 
     private fun initFeature() {
         feature.stateFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::showState)
-        feature.effectData.observe(viewLifecycleOwner, ::takeEffect)
+        feature.effectFlow.collectWithRepeatOnStarted(viewLifecycleOwner, ::takeEffect)
     }
 
     private fun initDi() {
