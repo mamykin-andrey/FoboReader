@@ -49,13 +49,12 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
 
     private fun initDi() {
         ComponentHolder.getOrCreateComponent(featureName) {
-            val params = BooksListFeature.BookCategoriesParams(categoryId)
             DaggerBookListComponent.factory().create(
                 commonApi(),
                 apiHolder().networkApi(),
                 apiHolder().navigationApi(),
                 apiHolder().settingsApi(),
-                params,
+                categoryId,
             )
         }.inject(this)
     }

@@ -91,7 +91,6 @@ internal class BookCategoriesFeature @Inject constructor(
         class ShowSnackbar(val message: String) : Effect()
     }
 
-    // TODO: Use sealed class
     data class State(
         val isLoading: Boolean = true,
         val errorMessage: String? = null,

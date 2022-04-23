@@ -14,6 +14,7 @@ import ru.mamykin.foboreader.store.domain.usecase.DownloadBook
 import ru.mamykin.foboreader.store.domain.usecase.FilterStoreBooks
 import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
 import javax.inject.Inject
+import javax.inject.Named
 
 @BookListScope
 internal class BooksListFeature @Inject constructor(
@@ -28,28 +29,25 @@ internal class BooksListFeature @Inject constructor(
         sendIntent(Intent.LoadBooks)
     }
 
-    internal class BookCategoriesParams(
-        val categoryId: String,
-    )
-
     internal class BooksListActor @Inject constructor(
         private val downloadStoreBook: DownloadBook,
         private val getStoreBooks: GetStoreBooks,
         private val filterStoreBooks: FilterStoreBooks,
-        private val params: BookCategoriesParams,
+        @Named("categoryId")
+        private val categoryId: String,
     ) : Actor<Intent, Action> {
 
         override operator fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
                 is Intent.LoadBooks -> {
                     emit(Action.BooksLoading)
-                    getStoreBooks.execute(params.categoryId).fold(
+                    getStoreBooks.execute(categoryId).fold(
                         { emit(Action.BooksLoaded(it)) },
                         { emit(Action.BooksLoadingError(it)) }
                     )
                 }
                 is Intent.FilterBooks -> {
-                    filterStoreBooks.execute(params.categoryId, intent.query).fold(
+                    filterStoreBooks.execute(categoryId, intent.query).fold(
                         { emit(Action.BooksLoaded(it)) },
                         { emit(Action.BooksLoadingError(it)) }
                     )

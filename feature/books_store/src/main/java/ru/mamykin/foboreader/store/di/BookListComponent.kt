@@ -10,8 +10,8 @@ import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.store.data.network.FileRepository
 import ru.mamykin.foboreader.store.data.network.FileRepositoryImpl
-import ru.mamykin.foboreader.store.presentation.BooksListFeature
 import ru.mamykin.foboreader.store.presentation.BooksListFragment
+import javax.inject.Named
 import javax.inject.Scope
 
 @Scope
@@ -43,7 +43,9 @@ internal interface BookListComponent {
             networkApi: NetworkApi,
             navigationApi: NavigationApi,
             settingsApi: SettingsApi,
-            @BindsInstance params: BooksListFeature.BookCategoriesParams,
+            @BindsInstance
+            @Named("categoryId")
+            categoryId: String,
         ): BookListComponent
     }
 }
@@ -53,5 +55,5 @@ internal interface BooksStoreModule {
 
     @Binds
     @BookListScope
-    fun bindFileRepository(imple: FileRepositoryImpl): FileRepository
+    fun bindFileRepository(impl: FileRepositoryImpl): FileRepository
 }
