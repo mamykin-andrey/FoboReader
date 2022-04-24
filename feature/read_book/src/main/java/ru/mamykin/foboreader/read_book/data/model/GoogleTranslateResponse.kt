@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.read_book.data.model
 
 import androidx.annotation.Keep
-import ru.mamykin.foboreader.read_book.domain.model.Translation
+import ru.mamykin.foboreader.read_book.domain.model.TextTranslation
 
 @Keep
 internal class GoogleTranslateResponse(
@@ -15,7 +15,7 @@ internal class GoogleTranslateResponse(
         val translatedText: String
     )
 
-    fun toDomainModel(sourceText: String) = Translation(
+    fun toDomainModel(sourceText: String) = TextTranslation(
         sourceText,
         data.translations.map { it.translatedText }
     )

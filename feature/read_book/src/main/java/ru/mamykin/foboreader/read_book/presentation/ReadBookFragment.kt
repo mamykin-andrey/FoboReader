@@ -1,12 +1,7 @@
 package ru.mamykin.foboreader.read_book.presentation
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
@@ -17,11 +12,9 @@ import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.databinding.FragmentReadBookBinding
-import ru.mamykin.foboreader.read_book.databinding.LayoutWordPopupBinding
 import ru.mamykin.foboreader.read_book.di.DaggerReadBookComponent
-import ru.mamykin.foboreader.read_book.domain.model.Translation
+import ru.mamykin.foboreader.read_book.domain.model.TextTranslation
 import ru.mamykin.foboreader.read_book.platform.VibrationManager
-import ru.mamykin.foboreader.read_book.presentation.view.ClickableTextView
 import javax.inject.Inject
 
 class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
@@ -47,7 +40,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
 
     private val binding by autoCleanedValue { FragmentReadBookBinding.bind(requireView()) }
     private var lastTextHashCode: Int = 0
-    private var popupWindow: PopupWindow? = null
+    private val wordTranslationPopup by lazy { WordTranslationPopup(requireContext()) }
     private val bookId: Long by lazy { requireArguments().getLong(EXTRA_BOOK_ID) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,17 +66,18 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvText.setOnActionListener(object : ClickableTextView.OnActionListener {
-            override fun onClick(paragraph: String) {
-                feature.sendIntent(ReadBookFeature.Intent.TranslateParagraph(paragraph))
-            }
-
-            override fun onLongClick(word: String) {
-                feature.sendIntent(ReadBookFeature.Intent.TranslateWord(word))
-            }
-        })
+        initBookTextViews()
         feature.stateFlow.collectWithRepeatOnStarted(::showState)
         feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
+    }
+
+    private fun initBookTextViews() {
+        binding.tvText.setOnParagraphClickListener {
+            feature.sendIntent(ReadBookFeature.Intent.TranslateParagraph(it))
+        }
+        binding.tvText.setOnWordLongClickListener {
+            feature.sendIntent(ReadBookFeature.Intent.TranslateWord(it))
+        }
     }
 
     private fun showState(state: ReadBookFeature.State) = with(binding) {
@@ -93,11 +87,7 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         updateWordTranslation(state.wordTranslation)
         state.paragraphTranslation?.let(::showParagraphTranslation)
         tvName.text = state.title
-        tvRead.text = getString(
-            R.string.read_book_user_read_pages,
-            state.currentPage,
-            state.totalPages
-        )
+        updatePagesRead(state.currentPage, state.totalPages)
         tvReadPercent.text = state.readPercent.toString()
     }
 
@@ -107,13 +97,21 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         }
     }
 
+    private fun updatePagesRead(currentPage: Int, totalPages: Int) = with(binding) {
+        tvRead.text = getString(
+            R.string.read_book_user_read_pages,
+            currentPage,
+            totalPages
+        )
+    }
+
     private fun showBookText(text: String) {
-        val hashCode = text.hashCode()
-        text.takeIf { hashCode != lastTextHashCode }
-            ?.toHtml()
-            ?.let { binding.tvText.setup(it) }
-            ?.also { lastTextHashCode = hashCode }
-        binding.tvText.setOnClickListener(null)
+        val textHashCode = text.hashCode()
+        if (textHashCode != lastTextHashCode) {
+            binding.tvText.setup(text.toHtml())
+            lastTextHashCode = textHashCode
+            binding.tvText.setOnClickListener(null)
+        }
     }
 
     private fun showParagraphTranslation(translation: CharSequence) {
@@ -124,33 +122,13 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         lastTextHashCode = 0
     }
 
-    private fun updateWordTranslation(translation: Translation?) {
+    private fun updateWordTranslation(translation: TextTranslation?) {
         if (translation != null) {
-            showWordTranslation(translation)
+            wordTranslationPopup.show(requireView(), translation) {
+                feature.sendIntent(ReadBookFeature.Intent.HideWordTranslation)
+            }
         } else {
-            popupWindow?.dismiss()
-        }
-    }
-
-    @SuppressLint("InflateParams", "ClickableViewAccessibility")
-    private fun showWordTranslation(translation: Translation) {
-        val inflater = LayoutInflater.from(context)
-        val popupBinding = LayoutWordPopupBinding.inflate(inflater, null, false)
-
-        popupBinding.tvSource.text = translation.sourceText
-        popupBinding.tvTranslated.text = translation.getMostPreciseTranslation()
-
-        popupWindow = PopupWindow(
-            popupBinding.root,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            true
-        )
-        popupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
-
-        popupBinding.root.setOnTouchListener { _, _ ->
-            feature.sendIntent(ReadBookFeature.Intent.HideWordTranslation)
-            true
+            wordTranslationPopup.dismiss()
         }
     }
 

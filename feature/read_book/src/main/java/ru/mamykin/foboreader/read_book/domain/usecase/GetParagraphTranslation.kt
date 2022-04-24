@@ -7,6 +7,6 @@ internal class GetParagraphTranslation @Inject constructor(
     private val repository: BookContentRepository
 ) {
     fun execute(paragraph: String): String? {
-        return repository.getParagraphTranslation(paragraph)
+        return repository.getParagraphTranslation(paragraph.trim())
     }
 }

@@ -14,7 +14,7 @@ fun String.toDate(): Date? {
     return runCatching { format.parse(this) }.getOrNull()
 }
 
-fun SpannableString.setColor(color: Int, start: Int, end: Int) {
+fun SpannableString.setColor(color: Int, start: Int = 0, end: Int = length - 1) {
     setSpan(
         ForegroundColorSpan(color),
         start,

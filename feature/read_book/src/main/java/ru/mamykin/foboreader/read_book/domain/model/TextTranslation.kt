@@ -1,10 +1,10 @@
 package ru.mamykin.foboreader.read_book.domain.model
 
-class Translation(
+class TextTranslation(
     val sourceText: String,
-    private val translations: List<String>
+    private val textTranslations: List<String>
 ) {
     fun getMostPreciseTranslation(): String? {
-        return translations.firstOrNull()
+        return textTranslations.firstOrNull()
     }
 }

@@ -15,7 +15,8 @@ class ClickableTextView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : AppCompatTextView(context, attrs, defStyle) {
 
-    private var actionListener: OnActionListener? = null
+    private var onClick: ((String) -> Unit)? = null
+    private var onLongClick: ((String) -> Unit)? = null
 
     @ColorInt
     private var userTextColor: Int = currentTextColor
@@ -25,8 +26,12 @@ class ClickableTextView @JvmOverloads constructor(
         highlightColor = Color.TRANSPARENT
     }
 
-    fun setOnActionListener(listener: OnActionListener) {
-        this.actionListener = listener
+    fun setOnParagraphClickListener(onClick: (paragraph: String) -> Unit) {
+        this.onClick = onClick
+    }
+
+    fun setOnWordLongClickListener(onLongClick: (word: String) -> Unit) {
+        this.onLongClick = onLongClick
     }
 
     fun setup(text: CharSequence) {
@@ -35,7 +40,9 @@ class ClickableTextView @JvmOverloads constructor(
     }
 
     private fun getSelectedWord(selectionStart: Int, selectionEnd: Int): String {
-        return text.subSequence(selectionStart, selectionEnd).trim(' ').toString()
+        return text.subSequence(selectionStart, selectionEnd)
+            .trim(' ')
+            .toString()
     }
 
     private fun updateWordSpans() {
@@ -75,29 +82,12 @@ class ClickableTextView @JvmOverloads constructor(
 
         override fun onClick(view: View, selStart: Int, selEnd: Int) {
             getSelectedParagraph(selStart, selEnd).takeIf { it.isNotEmpty() }
-                ?.let { actionListener?.onClick(it) }
+                ?.let { onClick?.invoke(it) }
         }
 
         override fun onLongClick(view: View, selStart: Int, selEnd: Int) {
             getSelectedWord(selStart, selEnd).takeIf { it.isNotEmpty() }
-                ?.let { actionListener?.onLongClick(it) }
+                ?.let { onLongClick?.invoke(it) }
         }
-    }
-
-    interface OnActionListener {
-
-        /**
-         * Notification about click by paragraph
-         *
-         * @param paragraph paragraph clicked by the user
-         */
-        fun onClick(paragraph: String)
-
-        /**
-         * Notification about long click by word
-         *
-         * @param word word long clicked by the user
-         */
-        fun onLongClick(word: String)
     }
 }

@@ -34,8 +34,6 @@ internal class MyBooksFeature @Inject constructor(
     internal class MyBooksUiTransformer @Inject constructor() {
 
         operator fun invoke(event: Event): Intent = when (event) {
-            is Event.RemoveBookClicked -> Intent.RemoveBook(event.id)
-            is Event.SortOrderChanged -> Intent.SortBooks(event.sortOrder)
             is Event.FilterTextChanged -> Intent.FilterBooks(event.query)
         }
     }
@@ -81,8 +79,6 @@ internal class MyBooksFeature @Inject constructor(
     )
 
     sealed class Event {
-        class RemoveBookClicked(val id: Long) : Event()
-        class SortOrderChanged(val sortOrder: SortOrder) : Event()
         class FilterTextChanged(val query: String) : Event()
     }
 

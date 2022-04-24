@@ -42,7 +42,7 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
         BookAdapter(
             { router.navigateTo(screenProvider.readBookScreen(it)) },
             { router.navigateTo(screenProvider.bookDetailsScreen(it)) },
-            { feature.sendEvent(MyBooksFeature.Event.RemoveBookClicked(it)) }
+            { feature.sendIntent(MyBooksFeature.Intent.RemoveBook(it)) }
         )
     }
 
@@ -88,7 +88,7 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
 
     private fun bindItemClick(menu: Menu, @IdRes itemId: Int, sortOrder: SortOrder) {
         menu.findItem(itemId).setItemClickedListener {
-            feature.sendEvent(MyBooksFeature.Event.SortOrderChanged(sortOrder))
+            feature.sendIntent(MyBooksFeature.Intent.SortBooks(sortOrder))
             true
         }
     }
