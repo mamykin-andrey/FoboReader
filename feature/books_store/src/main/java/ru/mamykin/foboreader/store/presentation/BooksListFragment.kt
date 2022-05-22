@@ -121,6 +121,15 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
     private fun takeEffect(effect: BooksListFeature.Effect) {
         when (effect) {
             is BooksListFeature.Effect.ShowSnackbar -> showSnackbar(effect.message)
+            is BooksListFeature.Effect.ShowNotification -> showNotification(
+                notificationId = effect.notificationId,
+                iconRes = effect.iconRes,
+                title = effect.title,
+                text = effect.text
+            )
+            is BooksListFeature.Effect.NavigateToMyBooks -> {
+                // TODO:
+            }
         }
     }
 }

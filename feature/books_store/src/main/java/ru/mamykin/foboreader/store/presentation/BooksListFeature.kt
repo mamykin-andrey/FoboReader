@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.store.presentation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
+import ru.mamykin.foboreader.core.platform.NotificationId
 import ru.mamykin.foboreader.core.platform.ResourceManager
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
@@ -40,23 +41,24 @@ internal class BooksListFeature @Inject constructor(
         override operator fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
                 is Intent.LoadBooks -> {
-                    emit(Action.BooksLoading)
+                    emit(Action.BooksLoadingStarted)
                     getStoreBooks.execute(categoryId).fold(
-                        { emit(Action.BooksLoaded(it)) },
-                        { emit(Action.BooksLoadingError(it)) }
+                        onSuccess = { emit(Action.BooksLoadingSucceed(it)) },
+                        onFailure = { emit(Action.BooksLoadingFailed(it)) }
                     )
                 }
                 is Intent.FilterBooks -> {
                     filterStoreBooks.execute(categoryId, intent.query).fold(
-                        { emit(Action.BooksLoaded(it)) },
-                        { emit(Action.BooksLoadingError(it)) }
+                        onSuccess = { emit(Action.BooksLoadingSucceed(it)) },
+                        onFailure = { emit(Action.BooksLoadingFailed(it)) }
                     )
                 }
                 is Intent.DownloadBook -> {
-                    emit(Action.DownloadBookStarted)
-                    downloadStoreBook.execute(intent.bookLink, intent.fileName).fold(
-                        { emit(Action.BookDownloaded) },
-                        { emit(Action.BookDownloadError(it.message.orEmpty())) }
+                    val fileName = intent.fileName
+                    emit(Action.DownloadBookStarted(fileName))
+                    downloadStoreBook.execute(intent.bookLink, fileName).fold(
+                        onSuccess = { emit(Action.BookDownloadSucceed(fileName)) },
+                        onFailure = { emit(Action.BookDownloadFailed(fileName)) }
                     )
                 }
             }
@@ -68,45 +70,57 @@ internal class BooksListFeature @Inject constructor(
         private val errorMessageMapper: ErrorMessageMapper,
     ) : Reducer<State, Action, Effect> {
 
-        override operator fun invoke(state: State, action: Action) =
-            when (action) {
-                is Action.BooksLoading -> {
-                    state.copy(
-                        isLoading = true,
-                        errorMessage = null,
-                        books = emptyList()
-                    ) to emptySet()
-                }
-                is Action.BooksLoaded -> {
-                    state.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        books = action.books
-                    ) to emptySet()
-                }
-                is Action.BooksLoadingError -> {
-                    state.copy(
-                        isLoading = false,
-                        errorMessage = errorMessageMapper.getMessage(action.error),
-                        books = emptyList()
-                    ) to emptySet()
-                }
-                is Action.DownloadBookStarted -> {
-                    state to setOf(
-                        Effect.ShowSnackbar(resourceManager.getString(R.string.books_store_download_progress))
-                    )
-                }
-                is Action.BookDownloaded -> {
-                    state to setOf(
-                        Effect.NavigateToMyBooks
-                    )
-                }
-                is Action.BookDownloadError -> {
-                    state to setOf(
-                        Effect.ShowSnackbar(resourceManager.getString(R.string.books_store_download_failed))
-                    )
-                }
-            }
+        private val downloadStarted by lazy { resourceManager.getString(R.string.books_store_download_progress) }
+        private val downloadSucceed by lazy { resourceManager.getString(R.string.books_store_download_completed) }
+        private val downloadFailed by lazy { resourceManager.getString(R.string.books_store_download_failed) }
+
+        override operator fun invoke(state: State, action: Action) = when (action) {
+            is Action.BooksLoadingStarted -> state.copy(
+                isLoading = true,
+                errorMessage = null,
+                books = emptyList()
+            ) to emptySet()
+
+            is Action.BooksLoadingSucceed -> state.copy(
+                isLoading = false,
+                errorMessage = null,
+                books = action.books
+            ) to emptySet()
+
+            is Action.BooksLoadingFailed -> state.copy(
+                isLoading = false,
+                errorMessage = errorMessageMapper.getMessage(action.error),
+                books = emptyList()
+            ) to emptySet()
+
+            is Action.DownloadBookStarted -> state to setOf(
+                Effect.ShowNotification(
+                    notificationId = NotificationId.FILE_DOWNLOAD,
+                    title = downloadStarted,
+                    text = action.fileName,
+                    iconRes = R.drawable.ic_download,
+                )
+            )
+
+            is Action.BookDownloadSucceed -> state to setOf(
+                Effect.ShowNotification(
+                    notificationId = NotificationId.FILE_DOWNLOAD,
+                    title = downloadSucceed,
+                    text = action.fileName,
+                    R.drawable.ic_download,
+                ),
+                Effect.NavigateToMyBooks,
+            )
+
+            is Action.BookDownloadFailed -> state to setOf(
+                Effect.ShowNotification(
+                    notificationId = NotificationId.FILE_DOWNLOAD,
+                    title = downloadFailed,
+                    text = action.fileName,
+                    R.drawable.ic_download,
+                )
+            )
+        }
     }
 
     sealed class Intent {
@@ -116,16 +130,22 @@ internal class BooksListFeature @Inject constructor(
     }
 
     sealed class Action {
-        object BooksLoading : Action()
-        class BooksLoaded(val books: List<StoreBook>) : Action()
-        class BooksLoadingError(val error: Throwable) : Action()
-        object DownloadBookStarted : Action()
-        object BookDownloaded : Action()
-        class BookDownloadError(val message: String) : Action()
+        object BooksLoadingStarted : Action()
+        class BooksLoadingSucceed(val books: List<StoreBook>) : Action()
+        class BooksLoadingFailed(val error: Throwable) : Action()
+        class DownloadBookStarted(val fileName: String) : Action()
+        class BookDownloadSucceed(val fileName: String) : Action()
+        class BookDownloadFailed(val fileName: String) : Action()
     }
 
     sealed class Effect {
         class ShowSnackbar(val message: String) : Effect()
+        class ShowNotification(
+            val notificationId: Int,
+            val title: String,
+            val text: String,
+            val iconRes: Int,
+        ) : Effect()
 
         // TODO: Use navigation instead of effect?
         object NavigateToMyBooks : Effect()
