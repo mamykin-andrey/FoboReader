@@ -30,17 +30,15 @@ class ReaderApp : MultiDexApplication(), ApiHolderProvider, CommonApiProvider {
     override fun onCreate() {
         super.onCreate()
         NotificationUtils.initNotificationChannels(this)
-        initLeakCanary()
+        initLeakCanary(enabled = BuildConfig.DEBUG)
         initLogger()
     }
 
-    private fun initLeakCanary() {
-        if (!BuildConfig.DEBUG) return
-
-        val newConfig = LeakCanary.config.copy(
+    private fun initLeakCanary(enabled: Boolean) {
+        LeakCanary.config = LeakCanary.config.copy(
+            dumpHeap = enabled,
             retainedVisibleThreshold = 2
         )
-        LeakCanary.config = newConfig
     }
 
     private fun initLogger() {
