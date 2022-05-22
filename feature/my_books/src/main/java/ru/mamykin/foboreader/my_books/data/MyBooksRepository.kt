@@ -15,16 +15,16 @@ internal class MyBooksRepository @Inject constructor(
     private var sortOrder: SortOrder = SortOrder.ByName
     private var searchQuery: String = ""
 
-    suspend fun getBooks(): List<BookInfo> {
+    suspend fun getBooks(force: Boolean): List<BookInfo> {
         return sortAndFilter(
-            books = getAllBooks(),
+            books = getAllBooks(force),
             searchQuery = searchQuery,
             sortOrder = sortOrder
         )
     }
 
-    private suspend fun getAllBooks(): List<BookInfo> {
-        return allBooks ?: loadBooks()
+    private suspend fun getAllBooks(force: Boolean): List<BookInfo> {
+        return allBooks.takeIf { !force } ?: loadBooks()
             .also { allBooks = it }
     }
 
@@ -44,11 +44,11 @@ internal class MyBooksRepository @Inject constructor(
 
     suspend fun sortBooks(sortOrder: SortOrder): List<BookInfo> {
         this.sortOrder = sortOrder
-        return getBooks()
+        return getBooks(false)
     }
 
     suspend fun filterBooks(searchQuery: String): List<BookInfo> {
         this.searchQuery = searchQuery
-        return getBooks()
+        return getBooks(false)
     }
 }

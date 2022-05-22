@@ -107,7 +107,7 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
 
     private fun initFeature() {
         feature.stateFlow.collectWithRepeatOnStarted(::showState)
-        feature.effectFlow.collectWithRepeatOnStarted(::showState)
+        feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
     }
 
     private fun showState(state: MyBooksFeature.State) = with(binding) {
@@ -121,5 +121,9 @@ class MyBooksFragment : BaseFragment(R.layout.fragment_my_books) {
     private fun showNoBooks(noBooks: Boolean) = with(binding) {
         vNoBooks.isVisible = noBooks
         rvMyBooks.isVisible = !noBooks
+    }
+
+    private fun takeEffect(effect: MyBooksFeature.Effect) = when (effect) {
+        is MyBooksFeature.Effect.ShowSnackbar -> showSnackbar(effect.message)
     }
 }

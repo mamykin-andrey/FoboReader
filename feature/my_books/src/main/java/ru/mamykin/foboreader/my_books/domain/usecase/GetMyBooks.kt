@@ -7,7 +7,7 @@ import javax.inject.Inject
 internal class GetMyBooks @Inject constructor(
     private val repository: MyBooksRepository,
 ) {
-    suspend fun execute(): List<BookInfo> {
-        return repository.getBooks()
+    suspend fun execute(force: Boolean): List<BookInfo> {
+        return repository.getBooks(force)
     }
 }

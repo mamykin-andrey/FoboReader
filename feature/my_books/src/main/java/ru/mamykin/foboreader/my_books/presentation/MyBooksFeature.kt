@@ -1,8 +1,10 @@
 package ru.mamykin.foboreader.my_books.presentation
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.Feature
 import ru.mamykin.foboreader.core.presentation.Reducer
@@ -18,13 +20,13 @@ internal class MyBooksFeature @Inject constructor(
     actor: MyBooksActor,
     reducer: MyBooksReducer,
     private val uiTransformer: MyBooksUiTransformer,
-) : Feature<MyBooksFeature.State, MyBooksFeature.Intent, Nothing, MyBooksFeature.Action>(
-    State(isLoading = true, books = null),
+) : Feature<MyBooksFeature.State, MyBooksFeature.Intent, MyBooksFeature.Effect, MyBooksFeature.Action>(
+    State(isLoading = true, books = null, error = null),
     actor,
     reducer,
 ) {
     init {
-        sendIntent(Intent.ScanBooks)
+        sendIntent(Intent.LoadBooks)
     }
 
     fun sendEvent(event: Event) {
@@ -43,16 +45,19 @@ internal class MyBooksFeature @Inject constructor(
         private val sortMyBooks: SortMyBooks,
         private val filterMyBooks: FilterMyBooks,
         private val removeBook: RemoveBook,
+        private val errorMessageMapper: ErrorMessageMapper,
     ) : Actor<Intent, Action> {
 
         override fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
-                is Intent.ScanBooks -> {
-                    emit(Action.BooksLoaded(getMyBooks.execute()))
-                }
+                is Intent.LoadBooks -> loadBooks(true)
                 is Intent.RemoveBook -> {
-                    removeBook.execute(intent.id)
-                    emit(Action.BooksLoaded(getMyBooks.execute()))
+                    removeBook.execute(intent.id).fold(
+                        onSuccess = { loadBooks(true) },
+                        onFailure = {
+                            emit(Action.RemoveBookError(errorMessageMapper.getMessage(it)))
+                        }
+                    )
                 }
                 is Intent.SortBooks -> {
                     emit(Action.BooksLoaded(sortMyBooks.execute(intent.sortOrder)))
@@ -62,20 +67,25 @@ internal class MyBooksFeature @Inject constructor(
                 }
             }
         }
+
+        private suspend fun FlowCollector<Action>.loadBooks(force: Boolean) {
+            emit(Action.BooksLoaded(getMyBooks.execute(force)))
+        }
     }
 
-    internal class MyBooksReducer @Inject constructor() :
-        Reducer<State, Action, Nothing> {
+    internal class MyBooksReducer @Inject constructor() : Reducer<State, Action, Effect> {
 
-        override operator fun invoke(state: State, action: Action): ReducerResult<State, Nothing> = when (action) {
+        override operator fun invoke(state: State, action: Action): ReducerResult<State, Effect> = when (action) {
             is Action.Loading -> state.copy(isLoading = true, books = null) to emptySet()
             is Action.BooksLoaded -> state.copy(isLoading = false, books = action.books) to emptySet()
+            is Action.RemoveBookError -> state to setOf(Effect.ShowSnackbar(action.error))
         }
     }
 
     data class State(
         val isLoading: Boolean,
         val books: List<BookInfo>?,
+        val error: String?,
     )
 
     sealed class Event {
@@ -83,7 +93,7 @@ internal class MyBooksFeature @Inject constructor(
     }
 
     sealed class Intent {
-        object ScanBooks : Intent()
+        object LoadBooks : Intent()
         class RemoveBook(val id: Long) : Intent()
         class SortBooks(val sortOrder: SortOrder) : Intent()
         class FilterBooks(val query: String) : Intent()
@@ -92,5 +102,10 @@ internal class MyBooksFeature @Inject constructor(
     sealed class Action {
         object Loading : Action()
         class BooksLoaded(val books: List<BookInfo>) : Action()
+        class RemoveBookError(val error: String) : Action()
+    }
+
+    sealed class Effect {
+        class ShowSnackbar(val message: String) : Effect()
     }
 }
