@@ -35,6 +35,8 @@ class ReaderApp : MultiDexApplication(), ApiHolderProvider, CommonApiProvider {
     }
 
     private fun initLeakCanary() {
+        if (!BuildConfig.DEBUG) return
+
         val newConfig = LeakCanary.config.copy(
             retainedVisibleThreshold = 2
         )
