@@ -37,6 +37,7 @@ dependencies {
     implementation(Dependencies.okHttp)
     implementation(Dependencies.dagger)
     implementation(Dependencies.cicerone)
+    implementation(Dependencies.jankStats)
 
     kapt(Dependencies.daggerCompiler)
 
