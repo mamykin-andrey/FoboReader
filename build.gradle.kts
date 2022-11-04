@@ -5,8 +5,8 @@ buildscript {
         maven(url = "https://plugins.gradle.org/m2/")
     }
     dependencies {
-        val kotlinVersion: String by project
-        val gradlePluginVersion: String by project
+        val kotlinVersion = "1.6.0"
+        val gradlePluginVersion = "7.3.1"
 
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("com.android.tools.build:gradle:$gradlePluginVersion")
