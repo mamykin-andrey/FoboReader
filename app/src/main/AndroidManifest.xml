@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.mamykin.foboreader">
 
@@ -22,6 +21,7 @@
 
         <activity
             android:name="ru.mamykin.foboreader.app.presentation.RootActivity"
+            android:exported="true"
             android:theme="@style/Splash"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
 

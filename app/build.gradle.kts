@@ -1,10 +1,52 @@
 import ru.mamykin.foboreader.Dependencies
+import ru.mamykin.foboreader.ProjectInfo
 
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("ru.mamykin.foboreader")
+}
+
+android {
+    compileSdk = ProjectInfo.compileSdkVersion
+
+    defaultConfig {
+        multiDexEnabled = true
+        applicationId = "ru.mamykin.foboreader"
+        minSdk = ProjectInfo.minSdkVersion
+        targetSdk = ProjectInfo.targetSdkVersion
+        versionCode = ProjectInfo.versionCode
+        versionName = ProjectInfo.versionName
+        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
+
+        getByName("debug") {
+            isMinifyEnabled = false
+            isDebuggable = true
+        }
+
+        buildTypes.forEach {
+            it.buildConfigField("String", "googleApiKey", project.properties["googleApiKey"] as String)
+            it.buildConfigField("String", "googleApiHost", project.properties["googleApiHost"] as String)
+        }
+    }
+
+    buildFeatures.viewBinding = true
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        isAbortOnError = false
+    }
 }
 
 dependencies {

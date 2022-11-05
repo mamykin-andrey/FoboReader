@@ -1,10 +1,38 @@
 import ru.mamykin.foboreader.Dependencies
+import ru.mamykin.foboreader.ProjectInfo
 
 plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("ru.mamykin.foboreader")
+}
+
+android {
+    compileSdk = ProjectInfo.compileSdkVersion
+
+    defaultConfig {
+        minSdk = ProjectInfo.minSdkVersion
+        targetSdk = ProjectInfo.targetSdkVersion
+        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        buildTypes.forEach {
+            it.buildConfigField("String", "googleApiKey", project.properties["googleApiKey"] as String)
+            it.buildConfigField("String", "googleApiHost", project.properties["googleApiHost"] as String)
+        }
+    }
+
+    buildFeatures.viewBinding = true
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        isAbortOnError = false
+    }
 }
 
 dependencies {

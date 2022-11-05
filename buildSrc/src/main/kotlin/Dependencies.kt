@@ -17,7 +17,7 @@ object Versions {
     const val retrofitCoroutinesAdapterVersion = "0.9.2"
     const val retrofitLoggingInterceptorVersion = "4.3.0"
     const val espressoCoreVersion = "3.1.1"
-    const val leakcanaryVersion = "2.5"
+    const val leakcanaryVersion = "2.9.1"
     const val daggerVersion = "2.38.1"
     const val ciceroneVersion = "7.1"
     const val jankStatsVersion = "1.0.0-alpha01"
