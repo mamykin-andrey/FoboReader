@@ -1,4 +1,5 @@
 buildscript {
+    val compose_ui_version by extra("1.1.1")
     repositories {
         google()
         mavenCentral()
@@ -26,6 +27,7 @@ tasks.register("clean", Delete::class) {
 
 plugins {
     id("net.rdrei.android.buildtimetracker") version "0.11.0"
+    id("org.jetbrains.kotlin.android") version "1.6.10" apply false
 }
 
 buildtimetracker {

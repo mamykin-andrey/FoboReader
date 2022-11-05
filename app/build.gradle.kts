@@ -18,6 +18,9 @@ android {
         versionCode = ProjectInfo.versionCode
         versionName = ProjectInfo.versionName
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -36,6 +39,9 @@ android {
             it.buildConfigField("String", "googleApiHost", project.properties["googleApiHost"] as String)
         }
     }
+    buildFeatures {
+        compose = true
+    }
 
     buildFeatures.viewBinding = true
 
@@ -46,6 +52,17 @@ android {
 
     lintOptions {
         isAbortOnError = false
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.1.1"
+    }
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
@@ -63,6 +80,14 @@ dependencies {
     implementation(Dependencies.multidex)
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation("androidx.activity:activity-compose:1.3.1")
+    implementation("androidx.compose.ui:ui:${rootProject.extra["compose_ui_version"]}")
+    implementation("androidx.compose.ui:ui-tooling-preview:${rootProject.extra["compose_ui_version"]}")
+    implementation("androidx.compose.material:material:1.1.1")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${rootProject.extra["compose_ui_version"]}")
+    debugImplementation("androidx.compose.ui:ui-tooling:${rootProject.extra["compose_ui_version"]}")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:${rootProject.extra["compose_ui_version"]}")
     releaseImplementation(Dependencies.leakcanaryNoOp)
     debugImplementation(Dependencies.leakcanary)
     implementation(Dependencies.coroutinesCore)
