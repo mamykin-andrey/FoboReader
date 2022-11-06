@@ -1,14 +1,16 @@
 Android application for reading English books with instant translation.
 
 Features:
-* Paragraph translation (Local/Google Translate)
-* Word translation, voice word  (Google Translate/Android Speech)
+* Text (paragraphs, words) translation
 * Books store
+* Dark theme
+* Localization
 
 Tech stack:
-* Kotlin, Gradle Kotlin DSL
-* Multi-module, Clean architecture, MVI
+* Kotlin
+* MVI
+* Jetpack Compose
+* Multi-module
 * Coroutines + Flow
 * Dagger
-
-**[Demonstration video](https://www.youtube.com/watch?v=vn6THQxQK-s) (OLD)**
+* Gradle Kotlin DSL
