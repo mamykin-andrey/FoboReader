@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.core.extension
 import android.content.Context
 import android.util.TypedValue
 import android.view.View
+import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationCompat
@@ -60,4 +61,11 @@ fun Context.dpToPx(value: Int): Float {
         value.toFloat(),
         resources.displayMetrics
     )
+}
+
+@ColorInt
+fun Context.getAttrColor(colorAttr: Int): Int {
+    return TypedValue().apply {
+        theme.resolveAttribute(colorAttr, this, true)
+    }.data
 }
