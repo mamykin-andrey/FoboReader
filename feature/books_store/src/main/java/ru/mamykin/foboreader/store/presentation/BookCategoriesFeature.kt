@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.Actor
-import ru.mamykin.foboreader.core.presentation.Feature
+import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.store.di.BookCategoriesScope
 import ru.mamykin.foboreader.store.domain.model.BookCategory
@@ -17,8 +17,8 @@ import javax.inject.Inject
 internal class BookCategoriesFeature @Inject constructor(
     reducer: BookCategoriesReducer,
     actor: BookCategoriesActor,
-) : Feature<BookCategoriesFeature.State, BookCategoriesFeature.Intent, BookCategoriesFeature.Effect, BookCategoriesFeature.Action>(
-    State(),
+) : ComposeFeature<BookCategoriesFeature.State, BookCategoriesFeature.Intent, BookCategoriesFeature.Effect, BookCategoriesFeature.Action>(
+    State.Progress,
     actor,
     reducer
 ) {
@@ -52,27 +52,9 @@ internal class BookCategoriesFeature @Inject constructor(
     ) : Reducer<State, Action, Effect> {
 
         override operator fun invoke(state: State, action: Action) = when (action) {
-            is Action.Loading -> {
-                state.copy(
-                    isLoading = true,
-                    errorMessage = null,
-                    categories = emptyList()
-                ) to emptySet<Effect>()
-            }
-            is Action.LoadingSuccess -> {
-                state.copy(
-                    isLoading = false,
-                    errorMessage = null,
-                    categories = action.categories
-                ) to emptySet()
-            }
-            is Action.LoadingError -> {
-                state.copy(
-                    isLoading = false,
-                    errorMessage = errorMessageMapper.getMessage(action.error),
-                    categories = emptyList()
-                ) to emptySet()
-            }
+            is Action.Loading -> State.Progress to emptySet<Effect>()
+            is Action.LoadingSuccess -> State.Content(action.categories) to emptySet()
+            is Action.LoadingError -> State.Error(errorMessageMapper.getMessage(action.error)) to emptySet()
         }
     }
 
@@ -91,9 +73,16 @@ internal class BookCategoriesFeature @Inject constructor(
         class ShowSnackbar(val message: String) : Effect()
     }
 
-    data class State(
-        val isLoading: Boolean = true,
-        val errorMessage: String? = null,
-        val categories: List<BookCategory>? = null
-    )
+    sealed class State {
+
+        object Progress : State()
+
+        data class Content(
+            val categories: List<BookCategory>
+        ) : State()
+
+        data class Error(
+            val errorMessage: String
+        ) : State()
+    }
 }

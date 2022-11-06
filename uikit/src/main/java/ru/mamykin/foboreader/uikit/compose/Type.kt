@@ -26,3 +26,18 @@ val Typography = Typography(
     )
     */
 )
+
+object TextStyles {
+
+    val Subtitle1 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+    )
+
+    val Body2 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+    )
+}

@@ -1,22 +1,47 @@
 package ru.mamykin.foboreader.store.presentation
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.core.view.isVisible
+import android.view.ViewGroup
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
-import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
-import ru.mamykin.foboreader.store.databinding.FragmentBookCategoriesBinding
 import ru.mamykin.foboreader.store.di.DaggerBookCategoriesComponent
-import ru.mamykin.foboreader.store.presentation.list.CategoryListAdapter
+import ru.mamykin.foboreader.store.domain.model.BookCategory
+import ru.mamykin.foboreader.uikit.ErrorStubWidget
+import ru.mamykin.foboreader.uikit.compose.Dark
+import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.TextStyles
 import javax.inject.Inject
 
-class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
+class BookCategoriesFragment : BaseFragment() {
 
     companion object {
         fun newInstance(): Fragment = BookCategoriesFragment()
@@ -26,13 +51,6 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
 
     @Inject
     internal lateinit var feature: BookCategoriesFeature
-
-    private val adapter: CategoryListAdapter by lazy {
-        CategoryListAdapter {
-            feature.sendIntent(BookCategoriesFeature.Intent.OpenCategory(it))
-        }
-    }
-    private val binding by autoCleanedValue { FragmentBookCategoriesBinding.bind(requireView()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,54 +72,135 @@ class BookCategoriesFragment : BaseFragment(R.layout.fragment_book_categories) {
         feature.onCleared()
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View = ComposeView(requireContext()).apply {
+        setContent {
+            BookCategoriesScreen(state = feature.state)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initErrorView()
-        initToolbar()
-        initCategoriesList()
         observeFeature()
     }
 
     private fun observeFeature() {
-        feature.stateFlow.collectWithRepeatOnStarted(::showState)
         feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
-    }
-
-    override fun onDestroyView() {
-        binding.rvCategories.adapter = null
-        super.onDestroyView()
-    }
-
-    private fun initErrorView() {
-        binding.vError.setRetryClickListener {
-            feature.sendIntent(BookCategoriesFeature.Intent.LoadCategories)
-        }
-    }
-
-    private fun initToolbar() {
-        binding.toolbar.apply {
-            title = getString(R.string.books_store_title)
-            navigationIcon = null
-        }
-    }
-
-    private fun initCategoriesList() {
-        binding.rvCategories.adapter = adapter
-    }
-
-    private fun showState(state: BookCategoriesFeature.State) = with(binding) {
-        pbLoadingCategories.isVisible = state.isLoading
-
-        state.errorMessage?.let(vError::setMessage)
-        vError.isVisible = state.errorMessage != null
-
-        rvCategories.isVisible = !state.categories.isNullOrEmpty()
-        state.categories?.let { adapter.submitList(it) }
     }
 
     private fun takeEffect(effect: BookCategoriesFeature.Effect) {
         when (effect) {
             is BookCategoriesFeature.Effect.ShowSnackbar -> showSnackbar(effect.message)
         }
+    }
+
+    @Composable
+    internal fun BookCategoriesScreen(state: BookCategoriesFeature.State) {
+        FoboReaderTheme {
+            Scaffold(topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Books store")
+                    }, elevation = 12.dp
+                )
+            }, content = {
+                when (state) {
+                    is BookCategoriesFeature.State.Progress -> ProgressComposable()
+                    is BookCategoriesFeature.State.Error -> ErrorComposable(state)
+                    is BookCategoriesFeature.State.Content -> ContentComposable(state)
+                }
+            })
+        }
+    }
+
+    @Composable
+    private fun ProgressComposable() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+
+    @Composable
+    private fun ContentComposable(state: BookCategoriesFeature.State.Content) {
+        state.categories.forEach { CategoryComposable(it) }
+    }
+
+    @Composable
+    private fun CategoryComposable(category: BookCategory) {
+        // TODO: theming
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+                .clickable {
+                    feature.sendIntent(BookCategoriesFeature.Intent.OpenCategory(category.id))
+                },
+            elevation = 16.dp,
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = category.name,
+                        style = TextStyles.Subtitle1,
+                        color = Dark.TextOnPrimary,
+                    )
+                    if (category.description != null) {
+                        Text(
+                            text = category.description,
+                            style = TextStyles.Body2,
+                            color = Dark.TextOnBackgroundLight,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
+                    Text(
+                        text = "Книг: ${category.booksCount}",
+                        style = TextStyles.Body2,
+                        color = Dark.TextOnBackgroundLight,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                }
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding()
+                )
+            }
+        }
+    }
+
+    @Composable
+    private fun ErrorComposable(state: BookCategoriesFeature.State.Error) {
+        AndroidView(factory = {
+            ErrorStubWidget(it).apply {
+                setMessage(state.errorMessage)
+                visibility = View.VISIBLE
+                setRetryClickListener {
+                    feature.sendIntent(BookCategoriesFeature.Intent.LoadCategories)
+                }
+            }
+        })
+    }
+
+    @Preview
+    @Composable
+    fun Preview() {
+        BookCategoriesScreen(
+            state = BookCategoriesFeature.State.Error(
+                "Unable to parse incoming data: root is not an object!"
+            )
+        )
     }
 }

@@ -18,9 +18,6 @@ android {
         versionCode = ProjectInfo.versionCode
         versionName = ProjectInfo.versionName
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -39,11 +36,6 @@ android {
             it.buildConfigField("String", "googleApiHost", project.properties["googleApiHost"] as String)
         }
     }
-    buildFeatures {
-        compose = true
-    }
-
-    buildFeatures.viewBinding = true
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -55,14 +47,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.1.1"
-    }
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 

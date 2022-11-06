@@ -10,9 +10,13 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.di.ComponentHolder
 
-abstract class BaseFragment(
-    @LayoutRes layoutId: Int
-) : Fragment(layoutId) {
+abstract class BaseFragment : Fragment {
+
+    constructor(
+        @LayoutRes layoutId: Int
+    ) : super(layoutId)
+
+    constructor() : super()
 
     abstract val featureName: String
 

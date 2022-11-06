@@ -48,6 +48,15 @@ dependencies {
     implementation(Dependencies.cicerone)
     implementation(Dependencies.dagger)
 
+    implementation(Dependencies.composeUi)
+    implementation(Dependencies.composeTooling)
+    implementation(Dependencies.composeFoundation)
+    implementation(Dependencies.composeMaterial)
+    implementation(Dependencies.composeMaterialIconsCore)
+    implementation(Dependencies.composeMaterialIconsExt)
+    implementation(Dependencies.composeActivity)
+    implementation(Dependencies.composeToolingPreview)
+
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)
 
