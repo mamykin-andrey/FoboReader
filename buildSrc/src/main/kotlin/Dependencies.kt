@@ -24,6 +24,7 @@ object Versions {
     const val lifecycleVersion = "2.4.1"
     const val lottieVersion = "4.2.2"
     const val composeVersion = "1.1.1"
+    const val composeUiVersion = "1.1.1"
 }
 
 object Dependencies {
@@ -67,4 +68,8 @@ object Dependencies {
     const val composeMaterial = "androidx.compose.material:material:${Versions.composeVersion}"
     const val composeMaterialIconsCore = "androidx.compose.material:material-icons-core:${Versions.composeVersion}"
     const val composeMaterialIconsExt = "androidx.compose.material:material-icons-extended:${Versions.composeVersion}"
+    const val composeActivity = "androidx.activity:activity-compose:${Versions.composeVersion}"
+    const val composeToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.composeUiVersion}"
+    // const val composeUiTest = androidTestImplementation("androidx.compose.ui:ui-test-junit4:${rootProject.extra["compose_ui_version"]}")
+    // const val composeUiTest = debugImplementation("androidx.compose.ui:ui-test-manifest:${rootProject.extra["compose_ui_version"]}")
 }

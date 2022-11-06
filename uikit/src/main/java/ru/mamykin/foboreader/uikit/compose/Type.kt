@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.app.presentation.ui.theme
+package ru.mamykin.foboreader.uikit.compose
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

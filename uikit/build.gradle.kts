@@ -13,17 +13,23 @@ android {
         minSdk = ProjectInfo.minSdkVersion
         targetSdk = ProjectInfo.targetSdkVersion
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildFeatures.viewBinding = true
+    buildFeatures.compose = true
+    lintOptions.isAbortOnError = false
+    kotlinOptions.jvmTarget = "1.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.1.1"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-    lintOptions {
-        isAbortOnError = false
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
@@ -36,4 +42,12 @@ dependencies {
     implementation(Dependencies.lifecycleRuntimeKtx)
     implementation(Dependencies.picasso)
     implementation(Dependencies.lottie)
+    implementation(Dependencies.composeUi)
+    implementation(Dependencies.composeTooling)
+    implementation(Dependencies.composeFoundation)
+    implementation(Dependencies.composeMaterial)
+    implementation(Dependencies.composeMaterialIconsCore)
+    implementation(Dependencies.composeMaterialIconsExt)
+    implementation(Dependencies.composeActivity)
+    implementation(Dependencies.composeToolingPreview)
 }
