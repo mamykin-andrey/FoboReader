@@ -9,12 +9,14 @@ import ru.mamykin.foboreader.app.data.AppSettingsRepositoryImpl
 import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
 import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.app.platform.NotificationManagerImpl
+import ru.mamykin.foboreader.app.platform.PermissionManagerImpl
 import ru.mamykin.foboreader.app.platform.ResourceManagerImpl
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
+import ru.mamykin.foboreader.core.platform.PermissionManager
 import ru.mamykin.foboreader.core.platform.ResourceManager
 import javax.inject.Singleton
 
@@ -53,4 +55,8 @@ internal interface CoreBindsModule {
     @Binds
     @Singleton
     fun bindErrorMapper(impl: ErrorMessageMapperImpl): ErrorMessageMapper
+
+    @Binds
+    @Singleton
+    fun bindPermissionManager(impl: PermissionManagerImpl): PermissionManager
 }
