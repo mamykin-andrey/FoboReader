@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,7 +38,6 @@ import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.di.DaggerBookCategoriesComponent
 import ru.mamykin.foboreader.store.domain.model.BookCategory
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
-import ru.mamykin.foboreader.uikit.compose.Dark
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 import javax.inject.Inject
@@ -101,12 +102,12 @@ class BookCategoriesFragment : BaseFragment() {
             Scaffold(topBar = {
                 TopAppBar(
                     title = {
-                        Text(text = "Books store")
+                        Text(text = stringResource(id = R.string.books_store_title))
                     }, elevation = 12.dp
                 )
             }, content = {
                 when (state) {
-                    is BookCategoriesFeature.State.Progress -> ProgressComposable()
+                    is BookCategoriesFeature.State.Progress -> LoadingComposable()
                     is BookCategoriesFeature.State.Error -> ErrorComposable(state)
                     is BookCategoriesFeature.State.Content -> ContentComposable(state)
                 }
@@ -115,7 +116,7 @@ class BookCategoriesFragment : BaseFragment() {
     }
 
     @Composable
-    private fun ProgressComposable() {
+    private fun LoadingComposable() {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -127,7 +128,9 @@ class BookCategoriesFragment : BaseFragment() {
 
     @Composable
     private fun ContentComposable(state: BookCategoriesFeature.State.Content) {
-        state.categories.forEach { CategoryComposable(it) }
+        Column {
+            state.categories.forEach { CategoryComposable(it) }
+        }
     }
 
     @Composable
@@ -153,20 +156,20 @@ class BookCategoriesFragment : BaseFragment() {
                     Text(
                         text = category.name,
                         style = TextStyles.Subtitle1,
-                        color = Dark.TextOnPrimary,
+                        color = MaterialTheme.colors.onBackground,
                     )
                     if (category.description != null) {
                         Text(
                             text = category.description,
                             style = TextStyles.Body2,
-                            color = Dark.TextOnBackgroundLight,
+                            color = MaterialTheme.colors.onBackground,
                             modifier = Modifier.padding(top = 4.dp),
                         )
                     }
                     Text(
-                        text = "Книг: ${category.booksCount}",
+                        text = stringResource(id = R.string.books_store_category_count, category.booksCount),
                         style = TextStyles.Body2,
-                        color = Dark.TextOnBackgroundLight,
+                        color = MaterialTheme.colors.onBackground,
                         modifier = Modifier.padding(top = 4.dp),
                     )
                 }

@@ -1,11 +1,14 @@
 package ru.mamykin.foboreader.core.extension
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
@@ -22,6 +25,9 @@ fun Fragment.showSnackbar(message: String, long: Boolean = false) {
     val contentView = requireActivity().findViewById<View>(android.R.id.content)
     Snackbar.make(contentView, message, duration).show()
 }
+
+fun Context.getDrawableCompat(@DrawableRes drawableId: Int): Drawable =
+    AppCompatResources.getDrawable(this, drawableId)!!
 
 fun Fragment.showNotification(
     notificationId: Int,

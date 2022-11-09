@@ -6,7 +6,7 @@ import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationId
 import ru.mamykin.foboreader.core.platform.ResourceManager
 import ru.mamykin.foboreader.core.presentation.Actor
-import ru.mamykin.foboreader.core.presentation.Feature
+import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.di.BookListScope
@@ -21,8 +21,8 @@ import javax.inject.Named
 internal class BooksListFeature @Inject constructor(
     reducer: BooksListReducer,
     actor: BooksListActor,
-) : Feature<BooksListFeature.State, BooksListFeature.Intent, BooksListFeature.Effect, BooksListFeature.Action>(
-    State(),
+) : ComposeFeature<BooksListFeature.State, BooksListFeature.Intent, BooksListFeature.Effect, BooksListFeature.Action>(
+    State.Loading,
     actor,
     reducer
 ) {
@@ -75,23 +75,11 @@ internal class BooksListFeature @Inject constructor(
         private val downloadFailed by lazy { resourceManager.getString(R.string.books_store_download_failed) }
 
         override operator fun invoke(state: State, action: Action) = when (action) {
-            is Action.BooksLoadingStarted -> state.copy(
-                isLoading = true,
-                errorMessage = null,
-                books = emptyList()
-            ) to emptySet()
+            is Action.BooksLoadingStarted -> State.Loading to emptySet()
 
-            is Action.BooksLoadingSucceed -> state.copy(
-                isLoading = false,
-                errorMessage = null,
-                books = action.books
-            ) to emptySet()
+            is Action.BooksLoadingSucceed -> State.Content(action.books) to emptySet()
 
-            is Action.BooksLoadingFailed -> state.copy(
-                isLoading = false,
-                errorMessage = errorMessageMapper.getMessage(action.error),
-                books = emptyList()
-            ) to emptySet()
+            is Action.BooksLoadingFailed -> State.Error(errorMessageMapper.getMessage(action.error)) to emptySet()
 
             is Action.DownloadBookStarted -> state to setOf(
                 Effect.ShowNotification(
@@ -139,7 +127,9 @@ internal class BooksListFeature @Inject constructor(
     }
 
     sealed class Effect {
+
         class ShowSnackbar(val message: String) : Effect()
+
         class ShowNotification(
             val notificationId: Int,
             val title: String,
@@ -151,9 +141,16 @@ internal class BooksListFeature @Inject constructor(
         object NavigateToMyBooks : Effect()
     }
 
-    data class State(
-        val isLoading: Boolean = true,
-        val errorMessage: String? = null,
-        val books: List<StoreBook>? = null,
-    )
+    sealed class State {
+
+        object Loading : State()
+
+        data class Content(
+            val books: List<StoreBook>
+        ) : State()
+
+        data class Error(
+            val message: String
+        ) : State()
+    }
 }

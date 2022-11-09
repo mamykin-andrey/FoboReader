@@ -1,22 +1,56 @@
 package ru.mamykin.foboreader.store.presentation
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
-import androidx.core.view.isVisible
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
+import com.squareup.picasso.Picasso
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.extension.*
+import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.commonApi
+import ru.mamykin.foboreader.core.extension.getSearchView
+import ru.mamykin.foboreader.core.extension.setQueryChangedListener
+import ru.mamykin.foboreader.core.extension.showNotification
+import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
-import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.store.R
-import ru.mamykin.foboreader.store.databinding.FragmentBooksListBinding
 import ru.mamykin.foboreader.store.di.DaggerBookListComponent
-import ru.mamykin.foboreader.store.presentation.list.BookListAdapter
+import ru.mamykin.foboreader.store.domain.model.StoreBook
+import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.TextStyles
 import javax.inject.Inject
-import ru.mamykin.foboreader.core.R as coreR
 
-internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
+internal class BooksListFragment : BaseFragment() {
 
     companion object {
 
@@ -34,12 +68,6 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
     @Inject
     internal lateinit var feature: BooksListFeature
 
-    private val adapter by lazy {
-        BookListAdapter { link, fileName ->
-            feature.sendIntent(BooksListFeature.Intent.DownloadBook(link, fileName))
-        }
-    }
-    private val binding by autoCleanedValue { FragmentBooksListBinding.bind(requireView()) }
     private val categoryId by lazy { requireArguments().getString(EXTRA_CATEGORY_ID)!! }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,41 +91,28 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         feature.onCleared()
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View = ComposeView(requireContext()).apply {
+        setContent {
+            BooksListScreen(state = feature.state)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initErrorView()
-        initToolbar()
-        initBooksList()
-        feature.stateFlow.collectWithRepeatOnStarted(::showState)
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
         feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
     }
 
-    override fun onDestroyView() {
-        binding.rvBooks.adapter = null
-        super.onDestroyView()
-    }
-
     private fun initErrorView() {
-        binding.vError.setRetryClickListener {
-            feature.sendIntent(BooksListFeature.Intent.LoadBooks)
-        }
-    }
-
-    private fun initToolbar() {
-        val rawIconBackDrawable = requireContext().getDrawable(coreR.drawable.ic_back)!!
-        val iconBackDrawable = rawIconBackDrawable.mutate()
-        iconBackDrawable.setTint(resources.getColor(coreR.color.colorSecondary))
-        binding.toolbar.apply {
-            title = getString(R.string.books_store_title)
-            navigationIcon = iconBackDrawable
-            inflateMenu(R.menu.menu_books_store)
-            initSearchView(menu)
-            setNavigationOnClickListener { requireActivity().onBackPressed() }
-        }
-    }
-
-    private fun initBooksList() {
-        binding.rvBooks.adapter = adapter
+        // binding.vError.setRetryClickListener {
+        //     feature.sendIntent(BooksListFeature.Intent.LoadBooks)
+        // }
     }
 
     private fun initSearchView(menu: Menu) {
@@ -106,16 +121,6 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
         searchView.setQueryChangedListener {
             feature.sendIntent(BooksListFeature.Intent.FilterBooks(it))
         }
-    }
-
-    private fun showState(state: BooksListFeature.State) = binding.apply {
-        pbLoadingBooks.isVisible = state.isLoading
-
-        state.errorMessage?.let(vError::setMessage)
-        vError.isVisible = state.errorMessage != null
-
-        state.books?.let(adapter::submitList)
-        rvBooks.isVisible = !state.books.isNullOrEmpty()
     }
 
     private fun takeEffect(effect: BooksListFeature.Effect) {
@@ -131,5 +136,142 @@ internal class BooksListFragment : BaseFragment(R.layout.fragment_books_list) {
                 // TODO:
             }
         }
+    }
+
+    @Composable
+    private fun BooksListScreen(state: BooksListFeature.State) {
+        FoboReaderTheme {
+            Scaffold(topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = stringResource(id = R.string.books_store_title))
+                    },
+                    elevation = 12.dp,
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            requireActivity().onBackPressed()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                modifier = Modifier,
+                                contentDescription = null,
+                            )
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = {
+                            TODO("Not implemented")
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                modifier = Modifier,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                )
+            }, content = {
+                when (state) {
+                    is BooksListFeature.State.Loading -> LoadingComposable()
+                    is BooksListFeature.State.Content -> ContentComposable(state)
+                    is BooksListFeature.State.Error -> ErrorComposable(state)
+                }
+            })
+        }
+    }
+
+    @Composable
+    private fun LoadingComposable() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+
+    @Composable
+    private fun ContentComposable(state: BooksListFeature.State.Content) {
+        Column {
+            state.books.forEach { BookComposable(it) }
+        }
+    }
+
+    @Composable
+    private fun BookComposable(book: StoreBook) {
+        // TODO: Replace image loading with Coil
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+                .clickable {
+                    feature.sendIntent(BooksListFeature.Intent.DownloadBook(book.link, book.getFileName()))
+                },
+            elevation = 16.dp,
+        ) {
+            Row(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                AndroidView(
+                    factory = {
+                        ImageView(requireContext()).apply {
+                            Picasso.with(requireContext()).load(book.cover).into(this)
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                        }
+                    },
+                    modifier = Modifier
+                        .size(80.dp)
+                )
+                Column(
+                    modifier = Modifier.padding(start = 16.dp)
+                ) {
+                    Text(
+                        text = book.title,
+                        style = TextStyles.Subtitle1,
+                        color = MaterialTheme.colors.onBackground,
+                    )
+                    Text(
+                        text = book.author,
+                        style = TextStyles.Subtitle1,
+                        color = MaterialTheme.colors.onBackground,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                    Text(
+                        text = book.genre,
+                        style = TextStyles.Subtitle1,
+                        color = MaterialTheme.colors.onBackground,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun ErrorComposable(state: BooksListFeature.State.Error) {
+        // state.errorMessage?.let(vError::setMessage)
+        // vError.isVisible = state.errorMessage != null
+    }
+
+    @Composable
+    @Preview
+    fun BooksListScreenPreview() {
+        BooksListScreen(
+            state = BooksListFeature.State.Content(
+                listOf(
+                    StoreBook(
+                        id = "1",
+                        genre = "Classic",
+                        author = "Pierre Cardine",
+                        title = "Wonderful life",
+                        lang = "English",
+                        format = "fb",
+                        cover = "https://m.media-amazon.com/images/I/81sG60wsNtL.jpg",
+                        link = "https://www.amazon.co.uk/Wonderful-Life-Burgess-Nature-History/dp/0099273454",
+                    )
+                )
+            )
+        )
     }
 }
