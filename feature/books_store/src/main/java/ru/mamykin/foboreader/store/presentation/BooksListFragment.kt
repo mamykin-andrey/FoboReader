@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,13 +26,14 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
-import com.squareup.picasso.Picasso
+import coil.compose.AsyncImage
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
@@ -183,7 +183,6 @@ internal class BooksListFragment : BaseFragment() {
 
     @Composable
     private fun BookComposable(book: StoreBook) {
-        // TODO: Replace image loading with Coil
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -196,15 +195,11 @@ internal class BooksListFragment : BaseFragment() {
             Row(
                 modifier = Modifier.padding(16.dp)
             ) {
-                AndroidView(
-                    factory = {
-                        ImageView(requireContext()).apply {
-                            Picasso.with(requireContext()).load(book.cover).into(this)
-                            scaleType = ImageView.ScaleType.CENTER_CROP
-                        }
-                    },
-                    modifier = Modifier
-                        .size(80.dp)
+                AsyncImage(
+                    model = book.cover,
+                    contentDescription = null,
+                    modifier = Modifier.size(80.dp),
+                    contentScale = ContentScale.Crop,
                 )
                 Column(
                     modifier = Modifier.padding(start = 16.dp)
