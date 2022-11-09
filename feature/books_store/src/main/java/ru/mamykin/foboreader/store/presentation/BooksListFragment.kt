@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.store.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -38,14 +37,13 @@ import com.squareup.picasso.Picasso
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
-import ru.mamykin.foboreader.core.extension.getSearchView
-import ru.mamykin.foboreader.core.extension.setQueryChangedListener
 import ru.mamykin.foboreader.core.extension.showNotification
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.di.DaggerBookListComponent
 import ru.mamykin.foboreader.store.domain.model.StoreBook
+import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 import javax.inject.Inject
@@ -101,26 +99,11 @@ internal class BooksListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initErrorView()
         observeViewModel()
     }
 
     private fun observeViewModel() {
         feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
-    }
-
-    private fun initErrorView() {
-        // binding.vError.setRetryClickListener {
-        //     feature.sendIntent(BooksListFeature.Intent.LoadBooks)
-        // }
-    }
-
-    private fun initSearchView(menu: Menu) {
-        val searchView = menu.getSearchView(R.id.action_search)
-        searchView.queryHint = getString(R.string.books_store_menu_search)
-        searchView.setQueryChangedListener {
-            feature.sendIntent(BooksListFeature.Intent.FilterBooks(it))
-        }
     }
 
     private fun takeEffect(effect: BooksListFeature.Effect) {
@@ -152,7 +135,7 @@ internal class BooksListFragment : BaseFragment() {
                             requireActivity().onBackPressed()
                         }) {
                             Icon(
-                                imageVector = Icons.Filled.ArrowBack,
+                                imageVector = Icons.Default.ArrowBack,
                                 modifier = Modifier,
                                 contentDescription = null,
                             )
@@ -250,8 +233,15 @@ internal class BooksListFragment : BaseFragment() {
 
     @Composable
     private fun ErrorComposable(state: BooksListFeature.State.Error) {
-        // state.errorMessage?.let(vError::setMessage)
-        // vError.isVisible = state.errorMessage != null
+        AndroidView(factory = {
+            ErrorStubWidget(it).apply {
+                setMessage(state.message)
+                visibility = View.VISIBLE
+                setRetryClickListener {
+                    feature.sendIntent(BooksListFeature.Intent.LoadBooks)
+                }
+            }
+        })
     }
 
     @Composable
