@@ -177,12 +177,12 @@ internal class BooksListFragment : BaseFragment() {
     @Composable
     private fun ContentComposable(state: BooksListFeature.State.Content) {
         Column {
-            state.books.forEach { BookComposable(it) }
+            state.books.forEach { BookRowComposable(it) }
         }
     }
 
     @Composable
-    private fun BookComposable(book: StoreBook) {
+    private fun BookRowComposable(book: StoreBook) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()

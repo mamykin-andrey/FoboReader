@@ -18,13 +18,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -129,13 +129,12 @@ class BookCategoriesFragment : BaseFragment() {
     @Composable
     private fun ContentComposable(state: BookCategoriesFeature.State.Content) {
         Column {
-            state.categories.forEach { CategoryComposable(it) }
+            state.categories.forEach { CategoryRowComposable(it) }
         }
     }
 
     @Composable
-    private fun CategoryComposable(category: BookCategory) {
-        // TODO: theming
+    private fun CategoryRowComposable(category: BookCategory) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -174,7 +173,7 @@ class BookCategoriesFragment : BaseFragment() {
                     )
                 }
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
+                    imageVector = Icons.Default.ArrowRight,
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
