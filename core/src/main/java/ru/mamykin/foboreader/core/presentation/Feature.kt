@@ -5,7 +5,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import ru.mamykin.foboreader.core.platform.Log
 
 typealias ReducerResult<State, Effect> = Pair<State, Set<Effect>>
@@ -14,6 +18,10 @@ typealias Actor<Intent, Action> = (intent: Intent) -> Flow<Action>
 
 typealias Reducer<State, Action, Effect> = (state: State, action: Action) -> ReducerResult<State, Effect>
 
+@Deprecated(
+    "Feature is deprecated. Use ComposeFeature instead",
+    replaceWith = ReplaceWith("ComposeFeature<State, Intent, Effect, Action>")
+)
 abstract class Feature<State, Intent, Effect, Action>(
     initialState: State,
     private val actor: Actor<Intent, Action>,

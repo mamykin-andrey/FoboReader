@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.Actor
-import ru.mamykin.foboreader.core.presentation.Feature
+import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.core.presentation.ReducerResult
 import ru.mamykin.foboreader.my_books.domain.model.SortOrder
@@ -20,8 +20,8 @@ internal class MyBooksFeature @Inject constructor(
     actor: MyBooksActor,
     reducer: MyBooksReducer,
     private val uiTransformer: MyBooksUiTransformer,
-) : Feature<MyBooksFeature.State, MyBooksFeature.Intent, MyBooksFeature.Effect, MyBooksFeature.Action>(
-    State(isLoading = true, books = null, error = null),
+) : ComposeFeature<MyBooksFeature.State, MyBooksFeature.Intent, MyBooksFeature.Effect, MyBooksFeature.Action>(
+    State.Loading,
     actor,
     reducer,
 ) {
@@ -52,12 +52,9 @@ internal class MyBooksFeature @Inject constructor(
             when (intent) {
                 is Intent.LoadBooks -> loadBooks(true)
                 is Intent.RemoveBook -> {
-                    removeBook.execute(intent.id).fold(
-                        onSuccess = { loadBooks(true) },
-                        onFailure = {
-                            emit(Action.RemoveBookError(errorMessageMapper.getMessage(it)))
-                        }
-                    )
+                    removeBook.execute(intent.id).fold(onSuccess = { loadBooks(true) }, onFailure = {
+                        emit(Action.RemoveBookError(errorMessageMapper.getMessage(it)))
+                    })
                 }
                 is Intent.SortBooks -> {
                     emit(Action.BooksLoaded(sortMyBooks.execute(intent.sortOrder)))
@@ -76,17 +73,19 @@ internal class MyBooksFeature @Inject constructor(
     internal class MyBooksReducer @Inject constructor() : Reducer<State, Action, Effect> {
 
         override operator fun invoke(state: State, action: Action): ReducerResult<State, Effect> = when (action) {
-            is Action.Loading -> state.copy(isLoading = true, books = null) to emptySet()
-            is Action.BooksLoaded -> state.copy(isLoading = false, books = action.books) to emptySet()
+            is Action.Loading -> State.Loading to emptySet()
+            is Action.BooksLoaded -> State.Content(action.books) to emptySet()
             is Action.RemoveBookError -> state to setOf(Effect.ShowSnackbar(action.error))
         }
     }
 
-    data class State(
-        val isLoading: Boolean,
-        val books: List<BookInfo>?,
-        val error: String?,
-    )
+    sealed class State {
+        object Loading : State()
+
+        data class Content(
+            val books: List<BookInfo>
+        ) : State()
+    }
 
     sealed class Event {
         class FilterTextChanged(val query: String) : Event()

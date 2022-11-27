@@ -1,7 +1,8 @@
 package ru.mamykin.foboreader.common_book_info.domain.model
 
 import java.io.File
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class BookInfo(
     val id: Long,
@@ -22,8 +23,13 @@ class BookInfo(
         return file.extension.toUpperCase(Locale.getDefault())
     }
 
-    fun getFileSizeKb(): Long {
-        return file.length() / 1024
+    fun getDisplayFileSize(): String {
+        val fileSizeKb = file.length() / 1024
+        return if (fileSizeKb > 1024) {
+            "${fileSizeKb / 1024}MB"
+        } else {
+            "${fileSizeKb}KB"
+        }
     }
 
     fun getReadPercent(): Int {

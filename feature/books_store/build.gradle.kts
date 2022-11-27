@@ -64,7 +64,6 @@ dependencies {
     implementation(Dependencies.composeMaterialIconsExt)
     implementation(Dependencies.composeActivity)
     implementation(Dependencies.composeToolingPreview)
-
     implementation(Dependencies.coil)
 
     kapt(Dependencies.daggerCompiler)
