@@ -3,19 +3,23 @@ package ru.mamykin.foboreader.settings.presentation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
-import ru.mamykin.foboreader.core.presentation.Feature
+import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.settings.di.SettingsScope
-import ru.mamykin.foboreader.settings.domain.model.SettingsItem
-import ru.mamykin.foboreader.settings.domain.usecase.*
+import ru.mamykin.foboreader.settings.domain.model.AppSettings
+import ru.mamykin.foboreader.settings.domain.usecase.GetSettings
+import ru.mamykin.foboreader.settings.domain.usecase.SetBrightness
+import ru.mamykin.foboreader.settings.domain.usecase.SetNightTheme
+import ru.mamykin.foboreader.settings.domain.usecase.SetTextSize
+import ru.mamykin.foboreader.settings.domain.usecase.SetUseVibration
 import javax.inject.Inject
 
 @SettingsScope
 internal class SettingsFeature @Inject constructor(
     reducer: SettingsReducer,
     actor: SettingsActor,
-) : Feature<SettingsFeature.State, SettingsFeature.Intent, SettingsFeature.Effect, SettingsFeature.Action>(
-    State(),
+) : ComposeFeature<SettingsFeature.State, SettingsFeature.Intent, SettingsFeature.Effect, SettingsFeature.Action>(
+    State.Loading,
     actor,
     reducer
 ) {
@@ -71,7 +75,7 @@ internal class SettingsFeature @Inject constructor(
 
         override operator fun invoke(state: State, action: Action) = when (action) {
             is Action.SettingsLoaded -> {
-                state.copy(settings = action.settings) to emptySet()
+                State.Content(action.settings) to emptySet()
             }
             is Action.SelectReadColorSelected -> {
                 state to setOf(Effect.SelectReadColor)
@@ -94,7 +98,7 @@ internal class SettingsFeature @Inject constructor(
     }
 
     sealed class Action {
-        class SettingsLoaded(val settings: List<SettingsItem>) : Action()
+        class SettingsLoaded(val settings: AppSettings) : Action()
         object SelectReadColorSelected : Action()
         object SelectAppLanguageSelected : Action()
     }
@@ -104,7 +108,12 @@ internal class SettingsFeature @Inject constructor(
         object SelectAppLanguage : Effect()
     }
 
-    data class State(
-        val settings: List<SettingsItem>? = null
-    )
+    sealed class State {
+
+        object Loading : State()
+
+        data class Content(
+            val settings: AppSettings,
+        ) : State()
+    }
 }

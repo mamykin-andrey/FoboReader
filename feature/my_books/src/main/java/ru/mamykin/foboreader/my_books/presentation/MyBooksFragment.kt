@@ -176,7 +176,7 @@ class MyBooksFragment : BaseFragment() {
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize(),
         ) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(modifier = Modifier.size(48.dp))
         }
     }
 

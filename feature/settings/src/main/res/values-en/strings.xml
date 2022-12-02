@@ -2,6 +2,7 @@
 <resources>
     <string name="settings_title">Settings</string>
     <string name="settings_night_theme">Night theme</string>
+    <string name="settings_bg_color_title">Background color</string>
     <string name="settings_translate_color_title">Translation color</string>
     <string name="settings_translate_color_description">Translation paragraph text color</string>
     <string name="settings_text_size">Text size</string>

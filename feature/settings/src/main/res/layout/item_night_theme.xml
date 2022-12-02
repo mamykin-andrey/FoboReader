@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Switch
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sw_night_theme"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/margin_padding_size_medium"
-    android:text="@string/settings_night_theme"
-    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
