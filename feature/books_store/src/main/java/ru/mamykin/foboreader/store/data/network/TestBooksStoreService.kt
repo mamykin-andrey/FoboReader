@@ -69,7 +69,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "Английский/Русский",
                     format = "fbwt",
                     cover = "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",
-                    link = "https://fobo-reader-backend.herokuapp.com/books/1",
+                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
                 ),
                 BookListResponse.BookResponse(
                     id = "1",
@@ -79,7 +79,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "Английский",
                     format = "fb2",
                     cover = "https://cdn1.ozone.ru/s3/multimedia-0/c650/6000372312.jpg",
-                    link = "https://fobo-reader-backend.herokuapp.com/books/2"
+                    link = "https://foboreader.pythonanywhere.com/static/the_young_giant.fbwt"
                 ),
             )
         )
@@ -94,7 +94,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "English/Russian",
                     format = "fbwt",
                     cover = "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",
-                    link = "https://fobo-reader-backend.herokuapp.com/books/1",
+                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
                 ),
                 BookListResponse.BookResponse(
                     id = "1",
@@ -104,7 +104,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "English/Russian",
                     format = "fb2",
                     cover = "https://cdn1.ozone.ru/s3/multimedia-0/c650/6000372312.jpg",
-                    link = "https://fobo-reader-backend.herokuapp.com/books/2"
+                    link = "https://foboreader.pythonanywhere.com/static/the_young_giant.fbwt"
                 ),
             )
         )
@@ -119,7 +119,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "Английский/Русский",
                     format = "fbwt",
                     cover = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg/400px-GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg",
-                    link = "https://fobo-reader-backend.herokuapp.com/books/1",
+                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
                 ),
             )
         )
@@ -134,7 +134,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "English/Russian",
                     format = "fbwt",
                     cover = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg/400px-GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg",
-                    link = "https://fobo-reader-backend.herokuapp.com/books/1",
+                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
                 ),
             )
         )
@@ -149,7 +149,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "Английский/Русский",
                     format = "fbwt",
                     cover = "https://s1.livelib.ru/boocover/1002005641/o/fc01/Agatha_Christie__Murder_in_Mesopotamia.jpeg",
-                    link = "https://fobo-reader-backend.herokuapp.com/books/1",
+                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
                 ),
             )
         )
@@ -164,7 +164,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "English/Russian",
                     format = "fbwt",
                     cover = "https://s1.livelib.ru/boocover/1002005641/o/fc01/Agatha_Christie__Murder_in_Mesopotamia.jpeg",
-                    link = "https://fobo-reader-backend.herokuapp.com/books/1",
+                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
                 ),
             )
         )
