@@ -4,12 +4,11 @@ import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import java.io.File
 import javax.inject.Inject
 import javax.xml.parsers.SAXParserFactory
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class BookInfoParser @Inject constructor() {
 
-    suspend fun parse(filePath: String): BookInfo = suspendCoroutine { cont ->
+    suspend fun parse(filePath: String): BookInfo? = suspendCoroutine { cont ->
         runCatching {
             val parser = SAXParserFactory.newInstance().newSAXParser()
             val parseHandler = BookInfoParserHandler(filePath) { bookInfo ->
@@ -18,7 +17,7 @@ class BookInfoParser @Inject constructor() {
             parser.parse(File(filePath), parseHandler)
         }.getOrElse {
             it.printStackTrace()
-            cont.resumeWithException(it)
+            cont.resumeWith(Result.success(null))
         }
     }
 }

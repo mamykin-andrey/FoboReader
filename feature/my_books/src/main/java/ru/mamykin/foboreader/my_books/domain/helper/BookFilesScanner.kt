@@ -21,7 +21,7 @@ internal class BookFilesScanner @Inject constructor(
             ?.filter { it.isFictionBook }
             ?.map { it.absolutePath }
             ?.filterNot { addedFiles.contains(it) }
-            ?.map { bookInfoParser.parse(it).toDatabaseModel() }
+            ?.mapNotNull { bookInfoParser.parse(it)?.toDatabaseModel() }
             ?.let { bookInfoDao.insertAll(it) }
     }
 }
