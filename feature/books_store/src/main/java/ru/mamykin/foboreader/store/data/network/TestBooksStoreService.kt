@@ -16,10 +16,8 @@ internal class TestBooksStoreService @Inject constructor(
 
         private const val RU_LOCALE = "ru"
         private const val EN_LOCALE = "en"
-        private const val DEAD_MANS_ISLAND_LINK =
-            "https://www.pythonanywhere.com/user/foboreader/files/home/foboreader/foboreader/static/dead_mans_island.fb2"
-        private const val THE_YOUNG_GIANT_LINK =
-            "https://www.pythonanywhere.com/user/foboreader/files/home/foboreader/foboreader/static/the_young_giant.fbwt"
+        private const val DEAD_MANS_ISLAND_LINK = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2"
+        private const val THE_YOUNG_GIANT_LINK = "https://foboreader.pythonanywhere.com/static/the_young_giant.fbwt"
 
         private val ruCategories = listOf(
             BookCategoriesResponse.BookCategoryResponse(
