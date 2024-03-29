@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -29,6 +31,8 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -50,6 +54,7 @@ import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.di.DaggerMyBooksComponent
+import ru.mamykin.foboreader.my_books.domain.model.SortOrder
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 import java.util.Date
@@ -72,9 +77,6 @@ class MyBooksFragment : BaseFragment() {
 
     @Inject
     internal lateinit var screenProvider: ScreenProvider
-
-    //             { router.navigateTo(screenProvider.bookDetailsScreen(it)) },
-    //             { feature.sendIntent(MyBooksFeature.Intent.RemoveBook(it)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,23 +111,6 @@ class MyBooksFragment : BaseFragment() {
         initFeature()
     }
 
-    // TODO: Sort books
-    // private fun bindItemClick(menu: Menu, @IdRes itemId: Int, sortOrder: SortOrder) {
-    //     menu.findItem(itemId).setItemClickedListener {
-    //         feature.sendIntent(MyBooksFeature.Intent.SortBooks(sortOrder))
-    //         true
-    //     }
-    // }
-
-    // TODO: SearchView
-    // private fun initSearchView(menu: Menu) {
-    //     val searchView = menu.getSearchView(R.id.action_search)
-    //     searchView.queryHint = getString(R.string.my_books_menu_search)
-    //     searchView.setQueryChangedListener {
-    //         feature.sendEvent(MyBooksFeature.Event.FilterTextChanged(it))
-    //     }
-    // }
-
     private fun initFeature() {
         feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
     }
@@ -142,22 +127,8 @@ class MyBooksFragment : BaseFragment() {
                     Text(text = stringResource(id = R.string.my_books_screen_title))
                 }, elevation = 12.dp, actions = {
                     Row {
-                        IconButton(onClick = {
-                            TODO("Not implemented")
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = null,
-                            )
-                        }
-                        IconButton(onClick = {
-                            TODO("Not implemented")
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Sort,
-                                contentDescription = null,
-                            )
-                        }
+                        SearchBooksComposable()
+                        SortBooksComposable()
                     }
                 })
             }, content = {
@@ -166,6 +137,61 @@ class MyBooksFragment : BaseFragment() {
                     is MyBooksFeature.State.Content -> ContentComposable(state)
                 }
             })
+        }
+    }
+
+    @Composable
+    private fun SearchBooksComposable() {
+        IconButton(onClick = {
+            TODO("Not implemented")
+            //     val searchView = menu.getSearchView(R.id.action_search)
+            //     searchView.queryHint = getString(R.string.my_books_menu_search)
+            //     searchView.setQueryChangedListener {
+            //         feature.sendEvent(MyBooksFeature.Event.FilterTextChanged(it))
+            //     }
+        }) {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = null,
+            )
+        }
+    }
+
+    @Composable
+    private fun SortBooksComposable() {
+        val isPopupExpanded = remember { mutableStateOf(false) }
+        IconButton(onClick = {
+            isPopupExpanded.value = true
+        }) {
+            Icon(
+                imageVector = Icons.Default.Sort,
+                contentDescription = null,
+            )
+        }
+        Box {
+            DropdownMenu(
+                expanded = isPopupExpanded.value,
+                onDismissRequest = { isPopupExpanded.value = false },
+            ) {
+                DropdownMenuItem(onClick = {
+                    isPopupExpanded.value = false
+                    feature.sendIntent(MyBooksFeature.Intent.SortBooks(SortOrder.ByName))
+                }) {
+                    Text("By name")
+                }
+                DropdownMenuItem(onClick = {
+                    isPopupExpanded.value = false
+                    feature.sendIntent(MyBooksFeature.Intent.SortBooks(SortOrder.ByReadPages))
+                }) {
+                    Text("By read pages")
+                }
+                DropdownMenuItem(onClick = {
+                    isPopupExpanded.value = false
+                    feature.sendIntent(MyBooksFeature.Intent.SortBooks(SortOrder.ByDate))
+                }) {
+                    Text("By date")
+                }
+            }
         }
     }
 
@@ -198,10 +224,7 @@ class MyBooksFragment : BaseFragment() {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp)
-                .clickable {
-                    TODO("Not implemented")
-                },
+                .padding(4.dp),
             elevation = 16.dp,
             onClick = {
                 router.navigateTo(screenProvider.readBookScreen(bookInfo.id))
@@ -227,79 +250,125 @@ class MyBooksFragment : BaseFragment() {
                         .align(Alignment.Top)
                         .padding(0.dp)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 12.dp)
-                    ) {
-                        Text(
-                            text = bookInfo.title,
-                            style = TextStyles.Body2,
-                            color = MaterialTheme.colors.onBackground,
-                            modifier = Modifier.weight(1f)
-                        )
-                        IconButton(
-                            onClick = {
-                                TODO("Not implemented")
-                            }, modifier = Modifier.size(20.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.MoreVert,
-                                contentDescription = null,
-                            )
-                        }
-                    }
-                    Text(
-                        text = stringResource(
-                            id = R.string.my_books_book_info_description_title,
-                            bookInfo.getFormat(),
-                            bookInfo.getDisplayFileSize(),
-                        ),
-                        style = TextStyles.Body2,
-                        color = MaterialTheme.colors.onBackground,
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .padding(horizontal = 12.dp),
-                    )
-                    Text(
-                        text = bookInfo.author,
-                        style = TextStyles.Body2,
-                        color = MaterialTheme.colors.onBackground,
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .padding(horizontal = 12.dp),
-                    )
+                    BookContextActionsComposable(bookInfo)
+                    BookFormatComposable(bookInfo)
+                    BookAuthorComposable(bookInfo)
                     LinearProgressIndicator(
                         progress = bookInfo.getReadPercent().toFloat() / 100,
                         modifier = Modifier
                             .padding(top = 4.dp)
                             .padding(horizontal = 12.dp),
                     )
-                    Text(
-                        text = stringResource(
-                            id = R.string.book_pages_info, bookInfo.currentPage, bookInfo.totalPages ?: 0
-                        ),
-                        style = TextStyles.Body2,
-                        color = MaterialTheme.colors.onBackground,
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .padding(horizontal = 12.dp),
-                    )
+                    BookReadStatusComposable(bookInfo)
                 }
             }
         }
     }
 
     @Composable
-    private fun NoBooksComposable() {
-        // TODO: align by center
+    private fun BookFormatComposable(bookInfo: BookInfo) {
         Text(
-            text = stringResource(id = R.string.my_books_no_books),
-            style = TextStyles.Subtitle1,
-            textAlign = TextAlign.Center,
+            text = stringResource(
+                id = R.string.my_books_book_info_description_title,
+                bookInfo.getFormat(),
+                bookInfo.getDisplayFileSize(),
+            ),
+            style = TextStyles.Body2,
+            color = MaterialTheme.colors.onBackground,
+            modifier = Modifier
+                .padding(top = 4.dp)
+                .padding(horizontal = 12.dp),
+        )
+    }
+
+    @Composable
+    private fun BookContextActionsComposable(bookInfo: BookInfo) {
+        val isBookPopupExpanded = remember { mutableStateOf(false) }
+        Row {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 12.dp)
+            ) {
+                Text(
+                    text = bookInfo.title,
+                    style = TextStyles.Body2,
+                    color = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(
+                    onClick = {
+                        isBookPopupExpanded.value = true
+                    }, modifier = Modifier.size(20.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.MoreVert,
+                        contentDescription = null,
+                    )
+                }
+            }
+            Box {
+                DropdownMenu(
+                    expanded = isBookPopupExpanded.value,
+                    onDismissRequest = { isBookPopupExpanded.value = false },
+                ) {
+                    DropdownMenuItem(onClick = {
+                        isBookPopupExpanded.value = false
+                        router.navigateTo(screenProvider.bookDetailsScreen(bookInfo.id))
+                    }) {
+                        Text("About")
+                    }
+                    DropdownMenuItem(onClick = {
+                        isBookPopupExpanded.value = false
+                        feature.sendIntent(MyBooksFeature.Intent.RemoveBook(bookInfo.id))
+                    }) {
+                        Text("Remove")
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun BookAuthorComposable(bookInfo: BookInfo) {
+        Text(
+            text = bookInfo.author,
+            style = TextStyles.Body2,
+            color = MaterialTheme.colors.onBackground,
+            modifier = Modifier
+                .padding(top = 4.dp)
+                .padding(horizontal = 12.dp),
+        )
+    }
+
+    @Composable
+    private fun BookReadStatusComposable(bookInfo: BookInfo) {
+        Text(
+            text = stringResource(
+                id = R.string.book_pages_info, bookInfo.currentPage, bookInfo.totalPages ?: 0
+            ),
+            style = TextStyles.Body2,
+            color = MaterialTheme.colors.onBackground,
+            modifier = Modifier
+                .padding(top = 4.dp)
+                .padding(horizontal = 12.dp),
+        )
+    }
+
+    @Composable
+    private fun NoBooksComposable() {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-        )
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = stringResource(id = R.string.my_books_no_books),
+                style = TextStyles.Subtitle1,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 
     @Preview

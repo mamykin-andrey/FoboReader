@@ -20,7 +20,10 @@ android {
     buildFeatures.viewBinding = true
     buildFeatures.compose = true
     lintOptions.isAbortOnError = false
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=kotlin.RequiresOptIn")
+    }
     composeOptions.kotlinCompilerExtensionVersion = "1.1.1"
 
     compileOptions {
