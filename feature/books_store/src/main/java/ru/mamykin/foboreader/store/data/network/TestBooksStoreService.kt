@@ -16,6 +16,10 @@ internal class TestBooksStoreService @Inject constructor(
 
         private const val RU_LOCALE = "ru"
         private const val EN_LOCALE = "en"
+        private const val DEAD_MANS_ISLAND_LINK =
+            "https://www.pythonanywhere.com/user/foboreader/files/home/foboreader/foboreader/static/dead_mans_island.fb2"
+        private const val THE_YOUNG_GIANT_LINK =
+            "https://www.pythonanywhere.com/user/foboreader/files/home/foboreader/foboreader/static/the_young_giant.fbwt"
 
         private val ruCategories = listOf(
             BookCategoriesResponse.BookCategoryResponse(
@@ -69,7 +73,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "Английский/Русский",
                     format = "fbwt",
                     cover = "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",
-                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
+                    link = DEAD_MANS_ISLAND_LINK,
                 ),
                 BookListResponse.BookResponse(
                     id = "1",
@@ -79,7 +83,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "Английский",
                     format = "fb2",
                     cover = "https://cdn1.ozone.ru/s3/multimedia-0/c650/6000372312.jpg",
-                    link = "https://foboreader.pythonanywhere.com/static/the_young_giant.fbwt"
+                    link = THE_YOUNG_GIANT_LINK
                 ),
             )
         )
@@ -94,7 +98,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "English/Russian",
                     format = "fbwt",
                     cover = "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",
-                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
+                    link = DEAD_MANS_ISLAND_LINK,
                 ),
                 BookListResponse.BookResponse(
                     id = "1",
@@ -104,7 +108,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "English/Russian",
                     format = "fb2",
                     cover = "https://cdn1.ozone.ru/s3/multimedia-0/c650/6000372312.jpg",
-                    link = "https://foboreader.pythonanywhere.com/static/the_young_giant.fbwt"
+                    link = THE_YOUNG_GIANT_LINK
                 ),
             )
         )
@@ -119,7 +123,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "Английский/Русский",
                     format = "fbwt",
                     cover = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg/400px-GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg",
-                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
+                    link = DEAD_MANS_ISLAND_LINK,
                 ),
             )
         )
@@ -134,7 +138,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "English/Russian",
                     format = "fbwt",
                     cover = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg/400px-GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg",
-                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
+                    link = DEAD_MANS_ISLAND_LINK,
                 ),
             )
         )
@@ -149,7 +153,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "Английский/Русский",
                     format = "fbwt",
                     cover = "https://s1.livelib.ru/boocover/1002005641/o/fc01/Agatha_Christie__Murder_in_Mesopotamia.jpeg",
-                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
+                    link = DEAD_MANS_ISLAND_LINK,
                 ),
             )
         )
@@ -164,7 +168,7 @@ internal class TestBooksStoreService @Inject constructor(
                     lang = "English/Russian",
                     format = "fbwt",
                     cover = "https://s1.livelib.ru/boocover/1002005641/o/fc01/Agatha_Christie__Murder_in_Mesopotamia.jpeg",
-                    link = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2",
+                    link = DEAD_MANS_ISLAND_LINK,
                 ),
             )
         )
