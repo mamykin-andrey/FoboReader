@@ -19,7 +19,6 @@ import javax.inject.Inject
 internal class MyBooksFeature @Inject constructor(
     actor: MyBooksActor,
     reducer: MyBooksReducer,
-    private val uiTransformer: MyBooksUiTransformer,
 ) : ComposeFeature<MyBooksFeature.State, MyBooksFeature.Intent, MyBooksFeature.Effect, MyBooksFeature.Action>(
     State.Loading,
     actor,
@@ -27,17 +26,6 @@ internal class MyBooksFeature @Inject constructor(
 ) {
     init {
         sendIntent(Intent.LoadBooks)
-    }
-
-    fun sendEvent(event: Event) {
-        sendIntent(uiTransformer.invoke(event))
-    }
-
-    internal class MyBooksUiTransformer @Inject constructor() {
-
-        operator fun invoke(event: Event): Intent = when (event) {
-            is Event.FilterTextChanged -> Intent.FilterBooks(event.query)
-        }
     }
 
     internal class MyBooksActor @Inject constructor(
@@ -85,10 +73,6 @@ internal class MyBooksFeature @Inject constructor(
         data class Content(
             val books: List<BookInfo>
         ) : State()
-    }
-
-    sealed class Event {
-        class FilterTextChanged(val query: String) : Event()
     }
 
     sealed class Intent {
