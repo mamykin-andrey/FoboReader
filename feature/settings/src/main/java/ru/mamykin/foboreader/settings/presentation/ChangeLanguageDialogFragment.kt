@@ -8,14 +8,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseDialogFragment
 import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.databinding.DialogChangeLanuageBinding
 import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
-import ru.mamykin.foboreader.settings.presentation.list.LanguageListAdapter
+import ru.mamykin.foboreader.settings.domain.model.AppLanguage
+import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.TextStyles
 import javax.inject.Inject
 
 internal class ChangeLanguageDialogFragment : BaseDialogFragment() {
@@ -32,22 +48,18 @@ internal class ChangeLanguageDialogFragment : BaseDialogFragment() {
     @Inject
     internal lateinit var feature: ChangeLanguageFeature
 
-    private val adapter by lazy {
-        LanguageListAdapter {
-            feature.sendIntent(ChangeLanguageFeature.Intent.SelectLanguage(it))
-        }
-    }
-
     private var dialogView: View? = null
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         initDi()
+        dialogView = ComposeView(requireActivity()).apply {
+            setContent {
+                ChangeLanguageScreen(feature.state)
+            }
+        }
 
-        val inflater = requireActivity().layoutInflater
-        dialogView = inflater.inflate(R.layout.dialog_change_lanuage, null)
-
-        return AlertDialog.Builder(requireContext())
+        return AlertDialog.Builder(requireActivity())
             .setTitle(R.string.select_app_language)
             .setView(dialogView)
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
@@ -60,8 +72,40 @@ internal class ChangeLanguageDialogFragment : BaseDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView(requireNotNull(dialogView))
-        initFeature()
+        feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
+    }
+
+    @Composable
+    private fun ChangeLanguageScreen(state: ChangeLanguageFeature.State) {
+        FoboReaderTheme {
+            if (state is ChangeLanguageFeature.State.Loaded) {
+                Column(modifier = Modifier.padding(top = 12.dp)) {
+                    state.languages.forEach { LanguageItemComposable(it) }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun LanguageItemComposable(language: AppLanguage) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                indication = rememberRipple(),
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = {
+                    feature.sendIntent(ChangeLanguageFeature.Intent.SelectLanguage(language.code))
+                }
+            )) {
+            Text(
+                text = language.name,
+                style = TextStyles.Subtitle1,
+                color = MaterialTheme.colors.onBackground,
+                modifier = Modifier
+                    .padding(vertical = 12.dp)
+                    .padding(horizontal = 16.dp)
+            )
+        }
     }
 
     private fun initDi() {
@@ -74,37 +118,35 @@ internal class ChangeLanguageDialogFragment : BaseDialogFragment() {
         }.inject(this)
     }
 
-    private fun initView(view: View) {
-        val binding = DialogChangeLanuageBinding.bind(view)
-        binding.rvLanguages.adapter = adapter
-    }
-
-    private fun initFeature() {
-        feature.stateFlow.collectWithRepeatOnStarted(::showState)
-        feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
-    }
-
-    private fun showState(state: ChangeLanguageFeature.State) {
-        state.languages?.let(adapter::submitList)
-    }
-
     private fun takeEffect(effect: ChangeLanguageFeature.Effect) = when (effect) {
         ChangeLanguageFeature.Effect.Dismiss -> dismiss()
     }
 
-    override fun onDestroyView() {
-        dialogView = null
-        super.onDestroyView()
-    }
-
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        if (parentFragment is DialogDismissedListener) {
-            (parentFragment as DialogDismissedListener).onDismiss()
-        }
+        (parentFragment as? DialogDismissedListener)?.onDismiss()
     }
 
     override fun onCleared() {
         feature.onCleared()
+    }
+
+    @Preview
+    @Composable
+    fun ChangeLanguageScreenPreview() {
+        ChangeLanguageScreen(
+            state = ChangeLanguageFeature.State.Loaded(
+                listOf(
+                    AppLanguage(
+                        "ru",
+                        "Русский",
+                    ),
+                    AppLanguage(
+                        "en",
+                        "English",
+                    ),
+                )
+            )
+        )
     }
 }

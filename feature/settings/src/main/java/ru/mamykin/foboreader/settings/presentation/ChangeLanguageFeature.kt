@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.settings.presentation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
-import ru.mamykin.foboreader.core.presentation.Feature
+import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.settings.di.SettingsScope
 import ru.mamykin.foboreader.settings.domain.model.AppLanguage
@@ -15,8 +15,8 @@ import javax.inject.Inject
 internal class ChangeLanguageFeature @Inject constructor(
     reducer: ChangeLanguageReducer,
     actor: ChangeLanguageActor,
-) : Feature<ChangeLanguageFeature.State, ChangeLanguageFeature.Intent, ChangeLanguageFeature.Effect, ChangeLanguageFeature.Action>(
-    State(),
+) : ComposeFeature<ChangeLanguageFeature.State, ChangeLanguageFeature.Intent, ChangeLanguageFeature.Effect, ChangeLanguageFeature.Action>(
+    State.Loaded(emptyList()),
     actor,
     reducer
 ) {
@@ -46,7 +46,7 @@ internal class ChangeLanguageFeature @Inject constructor(
 
         override operator fun invoke(state: State, action: Action) = when (action) {
             is Action.LanguagesLoaded -> {
-                state.copy(languages = action.languages) to emptySet()
+                State.Loaded(languages = action.languages) to emptySet()
             }
             is Action.LanguageSelected -> {
                 state to setOf(Effect.Dismiss)
@@ -68,7 +68,9 @@ internal class ChangeLanguageFeature @Inject constructor(
         object Dismiss : Effect()
     }
 
-    data class State(
-        val languages: List<AppLanguage>? = null
-    )
+    sealed class State {
+        data class Loaded(
+            val languages: List<AppLanguage>
+        ) : State()
+    }
 }
