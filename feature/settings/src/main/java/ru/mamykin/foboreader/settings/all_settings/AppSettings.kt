@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.domain.model
+package ru.mamykin.foboreader.settings.all_settings
 
 // TODO: Add a separate class for working with colors
 internal data class AppSettings(

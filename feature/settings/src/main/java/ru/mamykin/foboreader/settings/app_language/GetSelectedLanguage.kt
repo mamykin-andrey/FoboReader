@@ -1,8 +1,6 @@
-package ru.mamykin.foboreader.settings.domain.usecase
+package ru.mamykin.foboreader.settings.app_language
 
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
-import ru.mamykin.foboreader.settings.domain.model.AppLanguage
-import ru.mamykin.foboreader.settings.domain.model.supportedAppLanguages
 import javax.inject.Inject
 
 internal class GetSelectedLanguage @Inject constructor(

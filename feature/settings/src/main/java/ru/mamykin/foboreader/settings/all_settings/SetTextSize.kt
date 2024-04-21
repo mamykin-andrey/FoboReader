@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.domain.usecase
+package ru.mamykin.foboreader.settings.all_settings
 
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import javax.inject.Inject

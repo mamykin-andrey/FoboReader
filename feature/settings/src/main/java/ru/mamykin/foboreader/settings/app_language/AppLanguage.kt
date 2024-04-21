@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.domain.model
+package ru.mamykin.foboreader.settings.app_language
 
 class AppLanguage(
     val code: String,

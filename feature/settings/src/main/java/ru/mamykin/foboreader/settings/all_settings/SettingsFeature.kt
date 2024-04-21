@@ -1,17 +1,11 @@
-package ru.mamykin.foboreader.settings.presentation
+package ru.mamykin.foboreader.settings.all_settings
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
-import ru.mamykin.foboreader.settings.di.SettingsScope
-import ru.mamykin.foboreader.settings.domain.model.AppSettings
-import ru.mamykin.foboreader.settings.domain.usecase.GetSettings
-import ru.mamykin.foboreader.settings.domain.usecase.SetBrightness
-import ru.mamykin.foboreader.settings.domain.usecase.SetNightTheme
-import ru.mamykin.foboreader.settings.domain.usecase.SetTextSize
-import ru.mamykin.foboreader.settings.domain.usecase.SetUseVibration
+import ru.mamykin.foboreader.settings.SettingsScope
 import javax.inject.Inject
 
 @SettingsScope

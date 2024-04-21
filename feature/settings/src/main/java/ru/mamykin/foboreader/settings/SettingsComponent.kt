@@ -1,12 +1,12 @@
-package ru.mamykin.foboreader.settings.di
+package ru.mamykin.foboreader.settings
 
 import dagger.Component
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
-import ru.mamykin.foboreader.settings.presentation.ChangeTranslationColorDialogFragment
-import ru.mamykin.foboreader.settings.presentation.ChangeLanguageDialogFragment
-import ru.mamykin.foboreader.settings.presentation.SettingsFragment
+import ru.mamykin.foboreader.settings.all_settings.SettingsFragment
+import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogFragment
+import ru.mamykin.foboreader.settings.translation_color.ChangeTranslationColorDialogFragment
 import javax.inject.Scope
 
 @Scope

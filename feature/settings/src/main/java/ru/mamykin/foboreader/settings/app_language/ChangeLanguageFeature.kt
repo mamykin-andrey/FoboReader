@@ -1,14 +1,11 @@
-package ru.mamykin.foboreader.settings.presentation
+package ru.mamykin.foboreader.settings.app_language
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
-import ru.mamykin.foboreader.settings.di.SettingsScope
-import ru.mamykin.foboreader.settings.domain.model.AppLanguage
-import ru.mamykin.foboreader.settings.domain.usecase.GetAppLanguages
-import ru.mamykin.foboreader.settings.domain.usecase.SetAppLanguage
+import ru.mamykin.foboreader.settings.SettingsScope
 import javax.inject.Inject
 
 @SettingsScope

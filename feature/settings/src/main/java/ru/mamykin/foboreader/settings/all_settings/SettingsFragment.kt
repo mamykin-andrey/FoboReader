@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.presentation
+package ru.mamykin.foboreader.settings.all_settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -42,9 +42,11 @@ import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseFragment
+import ru.mamykin.foboreader.settings.DialogDismissedListener
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
-import ru.mamykin.foboreader.settings.domain.model.AppSettings
+import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogFragment
+import ru.mamykin.foboreader.settings.translation_color.ChangeTranslationColorDialogFragment
 import ru.mamykin.foboreader.uikit.compose.ColoredCircleCompose
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles

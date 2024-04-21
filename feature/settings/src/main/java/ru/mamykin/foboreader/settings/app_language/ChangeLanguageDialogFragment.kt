@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.presentation
+package ru.mamykin.foboreader.settings.app_language
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -29,7 +29,7 @@ import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseDialogFragment
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
-import ru.mamykin.foboreader.settings.domain.model.AppLanguage
+import ru.mamykin.foboreader.settings.DialogDismissedListener
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 import javax.inject.Inject

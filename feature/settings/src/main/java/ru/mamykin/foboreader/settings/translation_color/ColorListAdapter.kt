@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.presentation.list
+package ru.mamykin.foboreader.settings.translation_color
 
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.mamykin.foboreader.core.extension.getLayoutInflater
 import ru.mamykin.foboreader.core.presentation.list.SimpleDiffUtil
 import ru.mamykin.foboreader.settings.databinding.ItemColorBinding
-import ru.mamykin.foboreader.settings.domain.model.ColorItem
 
 internal class ColorListAdapter(
     private val onClick: (String) -> Unit,

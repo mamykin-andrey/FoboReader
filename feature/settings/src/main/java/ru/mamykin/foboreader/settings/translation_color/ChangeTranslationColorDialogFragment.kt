@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.presentation
+package ru.mamykin.foboreader.settings.translation_color
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -16,7 +16,7 @@ import ru.mamykin.foboreader.core.presentation.BaseDialogFragment
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.databinding.DialogChangeTranslationColorBinding
 import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
-import ru.mamykin.foboreader.settings.presentation.list.ColorListAdapter
+import ru.mamykin.foboreader.settings.DialogDismissedListener
 import javax.inject.Inject
 
 internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {

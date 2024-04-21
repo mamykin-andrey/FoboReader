@@ -1,12 +1,12 @@
-package ru.mamykin.foboreader.settings.domain.usecase
+package ru.mamykin.foboreader.settings.all_settings
 
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import javax.inject.Inject
 
-internal class SetUseVibration @Inject constructor(
+internal class SetNightTheme @Inject constructor(
     private val appSettings: AppSettingsRepository
 ) {
     fun execute(enabled: Boolean) {
-        appSettings.setUseVibration(enabled)
+        appSettings.setNightThemeEnabled(enabled)
     }
 }

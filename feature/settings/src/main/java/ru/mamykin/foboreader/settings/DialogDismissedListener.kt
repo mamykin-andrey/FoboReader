@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.presentation
+package ru.mamykin.foboreader.settings
 
 interface DialogDismissedListener {
 
