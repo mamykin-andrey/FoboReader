@@ -6,7 +6,7 @@ import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.settings.all_settings.SettingsFragment
 import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogFragment
-import ru.mamykin.foboreader.settings.translation_color.ChangeTranslationColorDialogFragment
+import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogFragment
 import javax.inject.Scope
 
 @Scope
@@ -20,7 +20,7 @@ internal interface SettingsComponent {
 
     fun inject(fragment: SettingsFragment)
 
-    fun inject(fragment: ChangeTranslationColorDialogFragment)
+    fun inject(fragment: ChooseCustomColorDialogFragment)
 
     fun inject(fragment: ChangeLanguageDialogFragment)
 

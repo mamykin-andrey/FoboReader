@@ -46,7 +46,7 @@ import ru.mamykin.foboreader.settings.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.DialogDismissedListener
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogFragment
-import ru.mamykin.foboreader.settings.translation_color.ChangeTranslationColorDialogFragment
+import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogFragment
 import ru.mamykin.foboreader.uikit.compose.ColoredCircleCompose
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
@@ -108,16 +108,16 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
     private fun takeEffect(effect: SettingsFeature.Effect) {
         when (effect) {
             is SettingsFeature.Effect.SelectReadColor -> {
-                ChangeTranslationColorDialogFragment.newInstance().show(
+                ChooseCustomColorDialogFragment.newInstance().show(
                     childFragmentManager,
-                    ChangeTranslationColorDialogFragment.TAG
+                    ChooseCustomColorDialogFragment.TAG
                 )
             }
             // TODO: Update background color, not read color
             is SettingsFeature.Effect.SelectBackgroundColor -> {
-                ChangeTranslationColorDialogFragment.newInstance().show(
+                ChooseCustomColorDialogFragment.newInstance().show(
                     childFragmentManager,
-                    ChangeTranslationColorDialogFragment.TAG
+                    ChooseCustomColorDialogFragment.TAG
                 )
             }
             is SettingsFeature.Effect.SelectAppLanguage -> {

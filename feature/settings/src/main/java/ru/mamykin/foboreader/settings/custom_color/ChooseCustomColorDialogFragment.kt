@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.translation_color
+package ru.mamykin.foboreader.settings.custom_color
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -33,19 +33,19 @@ import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
 
-internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
+internal class ChooseCustomColorDialogFragment : BaseDialogFragment() {
 
     companion object {
 
-        const val TAG = "ColorPickerDialogFragment"
+        const val TAG = "ChooseCustomColorDialogFragment"
 
-        fun newInstance(): DialogFragment = ChangeTranslationColorDialogFragment()
+        fun newInstance(): DialogFragment = ChooseCustomColorDialogFragment()
     }
 
-    override val featureName: String = "select_translation_color"
+    override val featureName: String = "choose_custom_color"
 
     @Inject
-    internal lateinit var feature: ChangeTranslationColorFeature
+    internal lateinit var feature: ChooseCustomColorFeature
 
     private var dialogView: View? = null
 
@@ -55,7 +55,7 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
 
         dialogView = ComposeView(requireActivity()).apply {
             setContent {
-                ChangeTranslationColorScreen(state = feature.state)
+                ChooseCustomColorScreen(state = feature.state)
             }
         }
 
@@ -67,16 +67,16 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
     }
 
     @Composable
-    private fun ChangeTranslationColorScreen(state: ChangeTranslationColorFeature.State) {
+    private fun ChooseCustomColorScreen(state: ChooseCustomColorFeature.State) {
         FoboReaderTheme {
-            if (state is ChangeTranslationColorFeature.State.Loaded) {
-                TranslationColorsScreen(state.colors)
+            if (state is ChooseCustomColorFeature.State.Loaded) {
+                CustomColorsScreen(state.colors)
             }
         }
     }
 
     @Composable
-    private fun TranslationColorsScreen(colors: List<ColorItem>) {
+    private fun CustomColorsScreen(colors: List<ColorItem>) {
         val circleSize = 45
         val paddingSize = 4
         LazyVerticalGrid(
@@ -90,7 +90,7 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
                         .padding(all = paddingSize.dp)
                         .aspectRatio(1f)
                         .clickable {
-                            feature.sendIntent(ChangeTranslationColorFeature.Intent.SelectColor(color.colorCode))
+                            feature.sendIntent(ChooseCustomColorFeature.Intent.SelectColor(color.colorCode))
                         },
                     shape = CircleShape,
                     color = color.colorCode.fromHex()
@@ -131,15 +131,15 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
         feature.onCleared()
     }
 
-    private fun takeEffect(effect: ChangeTranslationColorFeature.Effect) = when (effect) {
-        is ChangeTranslationColorFeature.Effect.Dismiss -> dismiss()
+    private fun takeEffect(effect: ChooseCustomColorFeature.Effect) = when (effect) {
+        is ChooseCustomColorFeature.Effect.Dismiss -> dismiss()
     }
 
     @Preview
     @Composable
     private fun Preview() {
-        ChangeTranslationColorScreen(
-            state = ChangeTranslationColorFeature.State.Loaded(
+        ChooseCustomColorScreen(
+            state = ChooseCustomColorFeature.State.Loaded(
                 listOf(
                     ColorItem(
                         "#000000",

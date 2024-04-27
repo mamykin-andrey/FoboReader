@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.translation_color
+package ru.mamykin.foboreader.settings.custom_color
 
 data class ColorItem(
     val colorCode: String,

@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.settings.translation_color
+package ru.mamykin.foboreader.settings.custom_color
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -9,10 +9,10 @@ import ru.mamykin.foboreader.settings.SettingsScope
 import javax.inject.Inject
 
 @SettingsScope
-internal class ChangeTranslationColorFeature @Inject constructor(
-    reducer: ChangeTranslationColorReducer,
-    actor: ChangeTranslationColorActor,
-) : ComposeFeature<ChangeTranslationColorFeature.State, ChangeTranslationColorFeature.Intent, ChangeTranslationColorFeature.Effect, ChangeTranslationColorFeature.Action>(
+internal class ChooseCustomColorFeature @Inject constructor(
+    reducer: ChooseCustomColorReducer,
+    actor: ChooseCustomColorActor,
+) : ComposeFeature<ChooseCustomColorFeature.State, ChooseCustomColorFeature.Intent, ChooseCustomColorFeature.Effect, ChooseCustomColorFeature.Action>(
     State.Loaded(emptyList()),
     actor,
     reducer
@@ -21,15 +21,15 @@ internal class ChangeTranslationColorFeature @Inject constructor(
         sendIntent(Intent.LoadColors)
     }
 
-    internal class ChangeTranslationColorActor @Inject constructor(
-        private val getTranslationColors: GetTranslationColors,
-        private val setTranslationColor: SetTranslationColor,
+    internal class ChooseCustomColorActor @Inject constructor(
+        private val getCustomColorsUseCase: GetCustomColors,
+        private val setTranslationColor: SetTranslationColor, // TODO
     ) : Actor<Intent, Action> {
 
         override operator fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
                 is Intent.LoadColors -> {
-                    emit(Action.ColorsLoaded(getTranslationColors.execute()))
+                    emit(Action.ColorsLoaded(getCustomColorsUseCase.execute()))
                 }
                 is Intent.SelectColor -> {
                     setTranslationColor.execute(intent.color)
@@ -39,7 +39,7 @@ internal class ChangeTranslationColorFeature @Inject constructor(
         }
     }
 
-    internal class ChangeTranslationColorReducer @Inject constructor() : Reducer<State, Action, Effect> {
+    internal class ChooseCustomColorReducer @Inject constructor() : Reducer<State, Action, Effect> {
 
         override operator fun invoke(state: State, action: Action) = when (action) {
             is Action.ColorsLoaded -> {
