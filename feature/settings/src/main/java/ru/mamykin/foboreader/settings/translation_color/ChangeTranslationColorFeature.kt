@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.settings.translation_color
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
-import ru.mamykin.foboreader.core.presentation.Feature
+import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.settings.SettingsScope
 import javax.inject.Inject
@@ -12,8 +12,8 @@ import javax.inject.Inject
 internal class ChangeTranslationColorFeature @Inject constructor(
     reducer: ChangeTranslationColorReducer,
     actor: ChangeTranslationColorActor,
-) : Feature<ChangeTranslationColorFeature.State, ChangeTranslationColorFeature.Intent, ChangeTranslationColorFeature.Effect, ChangeTranslationColorFeature.Action>(
-    State(),
+) : ComposeFeature<ChangeTranslationColorFeature.State, ChangeTranslationColorFeature.Intent, ChangeTranslationColorFeature.Effect, ChangeTranslationColorFeature.Action>(
+    State.Loaded(emptyList()),
     actor,
     reducer
 ) {
@@ -43,7 +43,7 @@ internal class ChangeTranslationColorFeature @Inject constructor(
 
         override operator fun invoke(state: State, action: Action) = when (action) {
             is Action.ColorsLoaded -> {
-                state.copy(colors = action.colors) to emptySet()
+                State.Loaded(colors = action.colors) to emptySet()
             }
             is Action.ColorSelected -> {
                 state to setOf(Effect.Dismiss)
@@ -65,7 +65,9 @@ internal class ChangeTranslationColorFeature @Inject constructor(
         object Dismiss : Effect()
     }
 
-    data class State(
-        val colors: List<ColorItem>? = null,
-    )
+    sealed class State {
+        data class Loaded(
+            val colors: List<ColorItem>
+        ) : State()
+    }
 }

@@ -53,6 +53,9 @@ internal class SettingsFeature @Inject constructor(
                 is Intent.SelectReadColor -> {
                     emit(Action.SelectReadColorSelected)
                 }
+                is Intent.SelectBackgroundColor -> {
+                    emit(Action.SelectBackgroundColorSelected)
+                }
                 is Intent.SelectAppLanguage -> {
                     emit(Action.SelectAppLanguageSelected)
                 }
@@ -74,6 +77,9 @@ internal class SettingsFeature @Inject constructor(
             is Action.SelectReadColorSelected -> {
                 state to setOf(Effect.SelectReadColor)
             }
+            is Action.SelectBackgroundColorSelected -> {
+                state to setOf(Effect.SelectBackgroundColor)
+            }
             is Action.SelectAppLanguageSelected -> {
                 state to setOf(Effect.SelectAppLanguage)
             }
@@ -87,6 +93,7 @@ internal class SettingsFeature @Inject constructor(
         object IncreaseTextSize : Intent()
         object DecreaseTextSize : Intent()
         object SelectReadColor : Intent()
+        object SelectBackgroundColor : Intent()
         object SelectAppLanguage : Intent()
         class ChangeUseVibration(val enabled: Boolean) : Intent()
     }
@@ -94,11 +101,13 @@ internal class SettingsFeature @Inject constructor(
     sealed class Action {
         class SettingsLoaded(val settings: AppSettings) : Action()
         object SelectReadColorSelected : Action()
+        object SelectBackgroundColorSelected : Action()
         object SelectAppLanguageSelected : Action()
     }
 
     sealed class Effect {
         object SelectReadColor : Effect()
+        object SelectBackgroundColor : Effect()
         object SelectAppLanguage : Effect()
     }
 

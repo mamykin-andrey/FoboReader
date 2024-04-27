@@ -8,15 +8,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.GridLayoutManager
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.*
 import ru.mamykin.foboreader.core.presentation.BaseDialogFragment
-import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.databinding.DialogChangeTranslationColorBinding
-import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
+import ru.mamykin.foboreader.settings.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.DialogDismissedListener
+import ru.mamykin.foboreader.settings.R
+import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
 
 internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
@@ -30,12 +44,6 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
 
     override val featureName: String = "select_translation_color"
 
-    private val adapter by lazy {
-        ColorListAdapter {
-            feature.sendIntent(ChangeTranslationColorFeature.Intent.SelectColor(it))
-        }
-    }
-
     @Inject
     internal lateinit var feature: ChangeTranslationColorFeature
 
@@ -45,8 +53,11 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         initDi()
 
-        val inflater = requireActivity().layoutInflater
-        dialogView = inflater.inflate(R.layout.dialog_change_translation_color, null)
+        dialogView = ComposeView(requireActivity()).apply {
+            setContent {
+                ChangeTranslationColorScreen(state = feature.state)
+            }
+        }
 
         return AlertDialog.Builder(requireContext())
             .setTitle(R.string.select_color)
@@ -55,35 +66,49 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
             .create()
     }
 
+    @Composable
+    private fun ChangeTranslationColorScreen(state: ChangeTranslationColorFeature.State) {
+        FoboReaderTheme {
+            if (state is ChangeTranslationColorFeature.State.Loaded) {
+                TranslationColorsScreen(state.colors)
+            }
+        }
+    }
+
+    @Composable
+    private fun TranslationColorsScreen(colors: List<ColorItem>) {
+        val circleSize = 45
+        val paddingSize = 4
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = (circleSize + paddingSize * 2).dp),
+            modifier = Modifier.padding(12.dp)
+        ) {
+            items(colors.size) { pos ->
+                val color = colors[pos]
+                Surface(
+                    modifier = Modifier
+                        .padding(all = paddingSize.dp)
+                        .aspectRatio(1f)
+                        .clickable {
+                            feature.sendIntent(ChangeTranslationColorFeature.Intent.SelectColor(color.colorCode))
+                        },
+                    shape = CircleShape,
+                    color = color.colorCode.fromHex()
+                ) {
+                    Box(modifier = Modifier.size(size = circleSize.dp))
+                }
+            }
+        }
+    }
+
+    private fun String.fromHex() = Color(android.graphics.Color.parseColor(this))
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return requireNotNull(dialogView)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView(view)
-        initFeature()
-    }
-
-    override fun onDestroyView() {
-        dialogView = null
-        super.onDestroyView()
-    }
-
-    private fun initView(view: View) {
-        val binding = DialogChangeTranslationColorBinding.bind(view)
-        binding.rvColors.adapter = adapter
-        binding.rvColors.addGlobalLayoutListener {
-            val recyclerViewWidth = binding.rvColors.width - requireContext().dpToPx(16 * 2).toInt()
-            val itemWidth = requireContext().dpToPx(40 + (8 * 2)).toInt()
-            val itemsCount = recyclerViewWidth / itemWidth - 1
-            val layoutManager = GridLayoutManager(requireContext(), itemsCount)
-            binding.rvColors.layoutManager = layoutManager
-        }
-    }
-
-    private fun initFeature() {
-        feature.stateFlow.collectWithRepeatOnStarted(::showState)
         feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
     }
 
@@ -99,20 +124,45 @@ internal class ChangeTranslationColorDialogFragment : BaseDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        if (parentFragment is DialogDismissedListener) {
-            (parentFragment as DialogDismissedListener).onDismiss()
-        }
+        (parentFragment as? DialogDismissedListener)?.onDismiss()
     }
 
     override fun onCleared() {
         feature.onCleared()
     }
 
-    private fun showState(state: ChangeTranslationColorFeature.State) {
-        state.colors?.let(adapter::submitList)
-    }
-
     private fun takeEffect(effect: ChangeTranslationColorFeature.Effect) = when (effect) {
         is ChangeTranslationColorFeature.Effect.Dismiss -> dismiss()
+    }
+
+    @Preview
+    @Composable
+    private fun Preview() {
+        ChangeTranslationColorScreen(
+            state = ChangeTranslationColorFeature.State.Loaded(
+                listOf(
+                    ColorItem(
+                        "#000000",
+                        "#ffffff", // TODO: Automatic detection?
+                        true,
+                    ),
+                    ColorItem(
+                        "#000000",
+                        "#ffffff",
+                        true,
+                    ),
+                    ColorItem(
+                        "#ff0000",
+                        "#00ffff",
+                        true,
+                    ),
+                    ColorItem(
+                        "#0000ff",
+                        "#ffff00",
+                        true,
+                    ),
+                )
+            )
+        )
     }
 }

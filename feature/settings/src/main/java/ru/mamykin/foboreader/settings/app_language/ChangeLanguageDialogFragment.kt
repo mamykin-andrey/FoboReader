@@ -28,7 +28,7 @@ import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseDialogFragment
 import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
+import ru.mamykin.foboreader.settings.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.DialogDismissedListener
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles

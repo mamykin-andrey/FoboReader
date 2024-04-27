@@ -42,9 +42,9 @@ import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseFragment
+import ru.mamykin.foboreader.settings.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.DialogDismissedListener
 import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.di.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogFragment
 import ru.mamykin.foboreader.settings.translation_color.ChangeTranslationColorDialogFragment
 import ru.mamykin.foboreader.uikit.compose.ColoredCircleCompose
@@ -113,6 +113,13 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
                     ChangeTranslationColorDialogFragment.TAG
                 )
             }
+            // TODO: Update background color, not read color
+            is SettingsFeature.Effect.SelectBackgroundColor -> {
+                ChangeTranslationColorDialogFragment.newInstance().show(
+                    childFragmentManager,
+                    ChangeTranslationColorDialogFragment.TAG
+                )
+            }
             is SettingsFeature.Effect.SelectAppLanguage -> {
                 ChangeLanguageDialogFragment.newInstance().show(
                     childFragmentManager,
@@ -158,6 +165,7 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
             modifier = Modifier
                 .fillMaxSize()
         ) {
+            // TODO: Fix the items clickable area
             NightThemeComposable(state)
             BackgroundColorComposable(state)
             TranslationColorComposable(state)
@@ -190,11 +198,10 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
     @Composable
     private fun BackgroundColorComposable(state: SettingsFeature.State.Content) {
         ColorRowComposable(
-            colorHex = getBackgroundColor(),
+            colorHex = state.settings.backgroundColor,
             titleRes = R.string.settings_bg_color_title
         ) {
-            // TODO:
-            feature.sendIntent(SettingsFeature.Intent.SelectReadColor)
+            feature.sendIntent(SettingsFeature.Intent.SelectBackgroundColor)
         }
     }
 
@@ -217,11 +224,15 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
     private fun ColorRowComposable(
         colorHex: String,
         @StringRes titleRes: Int,
-        onColorChanged: (String) -> Unit,
+        onClick: () -> Unit,
     ) {
         val color = remember { mutableStateOf(colorHex) }
         Row(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable {
+                    onClick()
+                }
         ) {
             Text(
                 text = stringResource(id = titleRes),
