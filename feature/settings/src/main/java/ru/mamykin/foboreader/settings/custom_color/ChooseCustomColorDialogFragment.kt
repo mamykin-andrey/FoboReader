@@ -16,11 +16,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
@@ -38,6 +40,8 @@ internal class ChooseCustomColorDialogFragment : BaseDialogFragment() {
     companion object {
 
         const val TAG = "ChooseCustomColorDialogFragment"
+        private const val COLOR_CIRCLE_SIZE = 45
+        private const val COLOR_CIRCLE_PADDING = 4
 
         fun newInstance(): DialogFragment = ChooseCustomColorDialogFragment()
     }
@@ -77,26 +81,37 @@ internal class ChooseCustomColorDialogFragment : BaseDialogFragment() {
 
     @Composable
     private fun CustomColorsScreen(colors: List<ColorItem>) {
-        val circleSize = 45
-        val paddingSize = 4
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = (circleSize + paddingSize * 2).dp),
+            columns = GridCells.Adaptive(minSize = (COLOR_CIRCLE_SIZE + COLOR_CIRCLE_PADDING * 2).dp),
             modifier = Modifier.padding(12.dp)
         ) {
             items(colors.size) { pos ->
                 val color = colors[pos]
-                Surface(
-                    modifier = Modifier
-                        .padding(all = paddingSize.dp)
-                        .aspectRatio(1f)
-                        .clickable {
-                            feature.sendIntent(ChooseCustomColorFeature.Intent.SelectColor(color.colorCode))
-                        },
-                    shape = CircleShape,
-                    color = color.colorCode.fromHex()
-                ) {
-                    Box(modifier = Modifier.size(size = circleSize.dp))
-                }
+                ColorCircleComposable(color)
+            }
+        }
+    }
+
+    @Composable
+    private fun ColorCircleComposable(color: ColorItem) {
+        Surface(
+            modifier = Modifier
+                .padding(all = COLOR_CIRCLE_PADDING.dp)
+                .aspectRatio(1f)
+                .clickable {
+                    feature.sendIntent(ChooseCustomColorFeature.Intent.SelectColor(color.colorCode))
+                },
+            shape = CircleShape,
+            color = color.colorCode.fromHex()
+        ) {
+            Box(modifier = Modifier.size(size = COLOR_CIRCLE_SIZE.dp))
+            if (color.selected) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_check),
+                    tint = color.checkColorCode.fromHex(),
+                    contentDescription = null,
+                    modifier = Modifier.padding(8.dp)
+                )
             }
         }
     }
