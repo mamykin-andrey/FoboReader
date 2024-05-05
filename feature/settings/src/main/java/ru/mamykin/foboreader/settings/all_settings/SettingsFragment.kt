@@ -27,8 +27,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,6 +56,11 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
         fun newInstance(): Fragment = SettingsFragment()
     }
 
+    private object RequestKey {
+        const val BACKGROUND_COLOR = "background_color"
+        const val TRANSLATION_COLOR = "translation_color"
+    }
+
     override val featureName: String = "settings"
 
     @Inject
@@ -66,6 +69,24 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initDi()
+        initFragmentRequestListeners()
+    }
+
+    private fun initFragmentRequestListeners() {
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            RequestKey.BACKGROUND_COLOR,
+            this
+        ) { _, bundle ->
+            val newColor = bundle.getString(ChooseCustomColorDialogFragment.RETURN_RESULT_COLOR_CODE)
+            newColor?.let { feature.sendIntent(SettingsFeature.Intent.ChangeBackgroundColor(it)) }
+        }
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            RequestKey.TRANSLATION_COLOR,
+            this
+        ) { _, bundle ->
+            val newColor = bundle.getString(ChooseCustomColorDialogFragment.RETURN_RESULT_COLOR_CODE)
+            newColor?.let { feature.sendIntent(SettingsFeature.Intent.ChangeTranslationColor(it)) }
+        }
     }
 
     private fun initDi() {
@@ -107,19 +128,26 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
 
     private fun takeEffect(effect: SettingsFeature.Effect) {
         when (effect) {
-            is SettingsFeature.Effect.SelectReadColor -> {
-                ChooseCustomColorDialogFragment.newInstance().show(
+            is SettingsFeature.Effect.SelectTranslationColor -> {
+                ChooseCustomColorDialogFragment.newInstance(
+                    RequestKey.TRANSLATION_COLOR,
+                    effect.currentColorCode
+                ).show(
                     childFragmentManager,
                     ChooseCustomColorDialogFragment.TAG
                 )
             }
-            // TODO: Update background color, not read color
+
             is SettingsFeature.Effect.SelectBackgroundColor -> {
-                ChooseCustomColorDialogFragment.newInstance().show(
+                ChooseCustomColorDialogFragment.newInstance(
+                    RequestKey.BACKGROUND_COLOR,
+                    effect.currentColorCode
+                ).show(
                     childFragmentManager,
                     ChooseCustomColorDialogFragment.TAG
                 )
             }
+
             is SettingsFeature.Effect.SelectAppLanguage -> {
                 ChangeLanguageDialogFragment.newInstance().show(
                     childFragmentManager,
@@ -205,18 +233,13 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
         }
     }
 
-    private fun getBackgroundColor(): String {
-        return "#FF0033"
-    }
-
     @Composable
     private fun TranslationColorComposable(state: SettingsFeature.State.Content) {
         ColorRowComposable(
-            colorHex = getBackgroundColor(),
+            colorHex = state.settings.translationColor,
             titleRes = R.string.settings_translate_color_title
         ) {
-            // TODO:
-            feature.sendIntent(SettingsFeature.Intent.SelectReadColor)
+            feature.sendIntent(SettingsFeature.Intent.SelectTranslationColor)
         }
     }
 
@@ -226,7 +249,6 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
         @StringRes titleRes: Int,
         onClick: () -> Unit,
     ) {
-        val color = remember { mutableStateOf(colorHex) }
         Row(
             modifier = Modifier
                 .padding(16.dp)
@@ -239,7 +261,7 @@ class SettingsFragment : BaseFragment(), DialogDismissedListener {
                 modifier = Modifier.weight(1f),
             )
             ColoredCircleCompose(
-                colorHexCode = color.value,
+                colorHexCode = colorHex,
                 size = 24.dp,
             )
         }

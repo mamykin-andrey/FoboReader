@@ -21,12 +21,15 @@ internal class SettingsFeature @Inject constructor(
         sendIntent(Intent.LoadSettings)
     }
 
+    // TODO: Refactor to use a single UseCase
     internal class SettingsActor @Inject constructor(
         private val getSettings: GetSettings,
         private val setBrightness: SetBrightness,
         private val setTextSize: SetTextSize,
         private val setNightTheme: SetNightTheme,
         private val setUseVibration: SetUseVibration,
+        private val setTranslationColor: SetTranslationColor,
+        private val setBackgroundColor: SetBackgroundColor,
     ) : Actor<Intent, Action> {
 
         override operator fun invoke(intent: Intent): Flow<Action> = flow {
@@ -34,31 +37,49 @@ internal class SettingsFeature @Inject constructor(
                 Intent.LoadSettings -> {
                     emit(Action.SettingsLoaded(getSettings.execute()))
                 }
+
                 is Intent.ChangeBrightness -> {
                     setBrightness.execute(intent.brightness)
                     emit(Action.SettingsLoaded(getSettings.execute()))
                 }
+
                 is Intent.ChangeNightTheme -> {
                     setNightTheme.execute(intent.isEnabled)
                     emit(Action.SettingsLoaded(getSettings.execute()))
                 }
+
                 is Intent.IncreaseTextSize -> {
                     setTextSize.execute(SetTextSize.Action.Increase)
                     emit(Action.SettingsLoaded(getSettings.execute()))
                 }
+
                 is Intent.DecreaseTextSize -> {
                     setTextSize.execute(SetTextSize.Action.Decrease)
                     emit(Action.SettingsLoaded(getSettings.execute()))
                 }
-                is Intent.SelectReadColor -> {
-                    emit(Action.SelectReadColorSelected)
+
+                is Intent.SelectTranslationColor -> {
+                    emit(Action.SelectTranslationColorSelected(getSettings.execute().translationColor))
                 }
+
+                is Intent.ChangeTranslationColor -> {
+                    setTranslationColor.execute(intent.colorCode)
+                    emit(Action.SettingsLoaded(getSettings.execute()))
+                }
+
                 is Intent.SelectBackgroundColor -> {
-                    emit(Action.SelectBackgroundColorSelected)
+                    emit(Action.SelectBackgroundColorSelected(getSettings.execute().backgroundColor))
                 }
+
+                is Intent.ChangeBackgroundColor -> {
+                    setBackgroundColor.execute(intent.colorCode)
+                    emit(Action.SettingsLoaded(getSettings.execute()))
+                }
+
                 is Intent.SelectAppLanguage -> {
                     emit(Action.SelectAppLanguageSelected)
                 }
+
                 is Intent.ChangeUseVibration -> {
                     setUseVibration.execute(intent.enabled)
                     emit(Action.SettingsLoaded(getSettings.execute()))
@@ -74,12 +95,15 @@ internal class SettingsFeature @Inject constructor(
             is Action.SettingsLoaded -> {
                 State.Content(action.settings) to emptySet()
             }
-            is Action.SelectReadColorSelected -> {
-                state to setOf(Effect.SelectReadColor)
+
+            is Action.SelectTranslationColorSelected -> {
+                state to setOf(Effect.SelectTranslationColor(action.currentColorCode))
             }
+
             is Action.SelectBackgroundColorSelected -> {
-                state to setOf(Effect.SelectBackgroundColor)
+                state to setOf(Effect.SelectBackgroundColor(action.currentColorCode))
             }
+
             is Action.SelectAppLanguageSelected -> {
                 state to setOf(Effect.SelectAppLanguage)
             }
@@ -92,22 +116,24 @@ internal class SettingsFeature @Inject constructor(
         class ChangeNightTheme(val isEnabled: Boolean) : Intent()
         object IncreaseTextSize : Intent()
         object DecreaseTextSize : Intent()
-        object SelectReadColor : Intent()
+        object SelectTranslationColor : Intent()
+        data class ChangeTranslationColor(val colorCode: String) : Intent()
         object SelectBackgroundColor : Intent()
+        data class ChangeBackgroundColor(val colorCode: String) : Intent()
         object SelectAppLanguage : Intent()
         class ChangeUseVibration(val enabled: Boolean) : Intent()
     }
 
     sealed class Action {
         class SettingsLoaded(val settings: AppSettings) : Action()
-        object SelectReadColorSelected : Action()
-        object SelectBackgroundColorSelected : Action()
+        data class SelectTranslationColorSelected(val currentColorCode: String?) : Action()
+        data class SelectBackgroundColorSelected(val currentColorCode: String?) : Action()
         object SelectAppLanguageSelected : Action()
     }
 
     sealed class Effect {
-        object SelectReadColor : Effect()
-        object SelectBackgroundColor : Effect()
+        data class SelectTranslationColor(val currentColorCode: String?) : Effect()
+        data class SelectBackgroundColor(val currentColorCode: String?) : Effect()
         object SelectAppLanguage : Effect()
     }
 

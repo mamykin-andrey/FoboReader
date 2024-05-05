@@ -1,17 +1,13 @@
 package ru.mamykin.foboreader.settings.custom_color
 
-import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import javax.inject.Inject
 
-internal class GetCustomColors @Inject constructor(
-    private val appSettingsRepository: AppSettingsRepository
-) {
+internal class GetCustomColors @Inject constructor() {
     fun execute(): List<ColorItem> {
-        val selectedColorCode = appSettingsRepository.getTranslationColor() // TODO
-        return createColors(selectedColorCode)
+        return createColors()
     }
 
-    private fun createColors(selectedColorCode: String): List<ColorItem> {
+    private fun createColors(): List<ColorItem> {
         return listOf(
             Pair("#ff0000", "#ffffff"),
             Pair("#0099ff", "#ffffff"),
@@ -21,6 +17,6 @@ internal class GetCustomColors @Inject constructor(
             Pair("#009900", "#ffffff"),
             Pair("#336600", "#ffffff"),
             Pair("#00cc66", "#ffffff")
-        ).map { (code, checkCode) -> ColorItem(code, checkCode, code == selectedColorCode) }
+        ).map { (code, checkCode) -> ColorItem(code, checkCode, false) }
     }
 }

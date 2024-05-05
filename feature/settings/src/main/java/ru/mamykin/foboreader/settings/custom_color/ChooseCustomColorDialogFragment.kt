@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.settings.custom_color
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,10 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.extension.*
+import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.presentation.BaseDialogFragment
 import ru.mamykin.foboreader.settings.DaggerSettingsComponent
-import ru.mamykin.foboreader.settings.DialogDismissedListener
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
@@ -40,10 +39,25 @@ internal class ChooseCustomColorDialogFragment : BaseDialogFragment() {
     companion object {
 
         const val TAG = "ChooseCustomColorDialogFragment"
+        const val RETURN_RESULT_COLOR_CODE = "result_color_code"
+
         private const val COLOR_CIRCLE_SIZE = 45
         private const val COLOR_CIRCLE_PADDING = 4
 
-        fun newInstance(): DialogFragment = ChooseCustomColorDialogFragment()
+        fun newInstance(
+            requestKey: String,
+            currentColorCode: String?,
+        ): DialogFragment = ChooseCustomColorDialogFragment().apply {
+            arguments = Bundle().apply {
+                putString(FragmentParams.REQUEST_KEY, requestKey)
+                putString(FragmentParams.CURRENT_COLOR_CODE, currentColorCode)
+            }
+        }
+    }
+
+    private object FragmentParams {
+        const val REQUEST_KEY = "request_key"
+        const val CURRENT_COLOR_CODE = "current_color_code"
     }
 
     override val featureName: String = "choose_custom_color"
@@ -56,6 +70,9 @@ internal class ChooseCustomColorDialogFragment : BaseDialogFragment() {
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         initDi()
+
+        val currentColorCode = arguments?.getString(FragmentParams.CURRENT_COLOR_CODE)
+        feature.sendIntent(ChooseCustomColorFeature.Intent.LoadColors(currentColorCode))
 
         dialogView = ComposeView(requireActivity()).apply {
             setContent {
@@ -137,17 +154,20 @@ internal class ChooseCustomColorDialogFragment : BaseDialogFragment() {
         }.inject(this)
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        parentFragmentManager.setFragmentResult("test", Bundle())
-    }
-
     override fun onCleared() {
         feature.onCleared()
     }
 
     private fun takeEffect(effect: ChooseCustomColorFeature.Effect) = when (effect) {
-        is ChooseCustomColorFeature.Effect.Dismiss -> dismiss()
+        is ChooseCustomColorFeature.Effect.Dismiss -> {
+            val requestCode = requireNotNull(arguments?.getString(FragmentParams.REQUEST_KEY))
+            requireActivity().supportFragmentManager.setFragmentResult(
+                requestCode, Bundle().apply {
+                    putString(RETURN_RESULT_COLOR_CODE, effect.selectedColorCode)
+                }
+            )
+            dismiss()
+        }
     }
 
     @Preview

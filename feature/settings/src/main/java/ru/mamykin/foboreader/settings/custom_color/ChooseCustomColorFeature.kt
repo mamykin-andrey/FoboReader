@@ -17,23 +17,22 @@ internal class ChooseCustomColorFeature @Inject constructor(
     actor,
     reducer
 ) {
-    init {
-        sendIntent(Intent.LoadColors)
-    }
-
     internal class ChooseCustomColorActor @Inject constructor(
         private val getCustomColorsUseCase: GetCustomColors,
-        private val setTranslationColor: SetTranslationColor, // TODO
     ) : Actor<Intent, Action> {
 
         override operator fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
                 is Intent.LoadColors -> {
-                    emit(Action.ColorsLoaded(getCustomColorsUseCase.execute()))
+                    val colors = getCustomColorsUseCase.execute()
+                    val stateColors = colors.map {
+                        if (it.colorCode == intent.currentColorCode) it.copy(selected = true) else it
+                    }
+                    emit(Action.ColorsLoaded(stateColors))
                 }
+
                 is Intent.SelectColor -> {
-                    setTranslationColor.execute(intent.color)
-                    emit(Action.ColorSelected)
+                    emit(Action.ColorSelected(intent.color))
                 }
             }
         }
@@ -45,24 +44,25 @@ internal class ChooseCustomColorFeature @Inject constructor(
             is Action.ColorsLoaded -> {
                 State.Loaded(colors = action.colors) to emptySet()
             }
+
             is Action.ColorSelected -> {
-                state to setOf(Effect.Dismiss)
+                state to setOf(Effect.Dismiss(action.colorCode))
             }
         }
     }
 
     sealed class Intent {
-        object LoadColors : Intent()
+        data class LoadColors(val currentColorCode: String?) : Intent()
         class SelectColor(val color: String) : Intent()
     }
 
     sealed class Action {
         class ColorsLoaded(val colors: List<ColorItem>) : Action()
-        object ColorSelected : Action()
+        data class ColorSelected(val colorCode: String) : Action()
     }
 
     sealed class Effect {
-        object Dismiss : Effect()
+        data class Dismiss(val selectedColorCode: String?) : Effect()
     }
 
     sealed class State {
