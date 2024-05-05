@@ -9,7 +9,7 @@ inline fun <reified T> SharedPreferences.observeChanges(key: String): Flow<T> = 
     val listener: SharedPreferences.OnSharedPreferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { prefs, prefKey ->
             if (prefKey == key) {
-                offer(
+                trySend(
                     when (T::class) {
                         String::class -> prefs.getString(key, "") as T
                         Boolean::class -> prefs.getBoolean(key, false) as T

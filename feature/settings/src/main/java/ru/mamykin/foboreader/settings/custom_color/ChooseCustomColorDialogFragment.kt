@@ -139,7 +139,7 @@ internal class ChooseCustomColorDialogFragment : BaseDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        (parentFragment as? DialogDismissedListener)?.onDismiss()
+        parentFragmentManager.setFragmentResult("test", Bundle())
     }
 
     override fun onCleared() {

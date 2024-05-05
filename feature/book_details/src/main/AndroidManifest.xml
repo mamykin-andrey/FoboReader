@@ -1,5 +1,2 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.mamykin.foboreader.book_details">
-
-    /
-</manifest>
+    package="ru.mamykin.foboreader.book_details"/>

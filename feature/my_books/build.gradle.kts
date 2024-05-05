@@ -8,6 +8,7 @@ plugins {
 }
 
 android {
+    namespace = "ru.mamykin.foboreader.my_books"
     compileSdk = ProjectInfo.compileSdkVersion
 
     defaultConfig {
@@ -20,14 +21,14 @@ android {
     buildFeatures.compose = true
     lintOptions.isAbortOnError = false
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
         freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
-    composeOptions.kotlinCompilerExtensionVersion = "1.1.1"
+    composeOptions.kotlinCompilerExtensionVersion = "1.4.8"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     packagingOptions {
         resources {

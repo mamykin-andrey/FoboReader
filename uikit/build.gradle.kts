@@ -7,6 +7,7 @@ plugins {
 }
 
 android {
+    namespace = "ru.mamykin.foboreader.uikit"
     compileSdk = ProjectInfo.compileSdkVersion
 
     defaultConfig {
@@ -19,12 +20,12 @@ android {
     buildFeatures.viewBinding = true
     buildFeatures.compose = true
     lintOptions.isAbortOnError = false
-    kotlinOptions.jvmTarget = "1.8"
-    composeOptions.kotlinCompilerExtensionVersion = "1.1.1"
+    kotlinOptions.jvmTarget = "17"
+    composeOptions.kotlinCompilerExtensionVersion = "1.4.8"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     packagingOptions {
         resources {

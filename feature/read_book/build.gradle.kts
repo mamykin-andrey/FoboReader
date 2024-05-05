@@ -8,6 +8,7 @@ plugins {
 }
 
 android {
+    namespace = "ru.mamykin.foboreader.read_book"
     compileSdk = ProjectInfo.compileSdkVersion
 
     defaultConfig {
@@ -26,8 +27,8 @@ android {
     buildFeatures.viewBinding = true
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     lintOptions {

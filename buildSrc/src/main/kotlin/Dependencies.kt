@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader
 
 object Versions {
-    const val roomVersion = "2.4.0"
+    const val roomVersion = "2.6.1"
     const val coroutinesVersion = "1.3.2"
     const val retrofitVersion = "2.3.0"
     const val okHttpVersion = "4.9.0"
@@ -14,23 +14,24 @@ object Versions {
     const val materialLibVersion = "1.0.0"
     const val constraintLayoutVersion = "1.1.3"
     const val androidxVersion = "1.1.0"
+    const val fragmentxVersion = "1.6.2"
     const val retrofitCoroutinesAdapterVersion = "0.9.2"
     const val retrofitLoggingInterceptorVersion = "4.3.0"
     const val espressoCoreVersion = "3.1.1"
     const val leakcanaryVersion = "2.9.1"
-    const val daggerVersion = "2.38.1"
+    const val daggerVersion = "2.51.1"
     const val ciceroneVersion = "7.1"
     const val jankStatsVersion = "1.0.0-alpha01"
     const val lifecycleVersion = "2.4.1"
     const val lottieVersion = "4.2.2"
-    const val composeVersion = "1.1.1"
-    const val composeUiVersion = "1.1.1"
+    const val composeVersion = "1.6.6"
+    const val composeUiVersion = "1.6.6"
     const val coilVersion = "2.2.2"
 }
 
 object Dependencies {
     const val activityX = "androidx.activity:activity:${Versions.androidxVersion}"
-    const val fragmentX = "androidx.fragment:fragment:${Versions.androidxVersion}"
+    const val fragmentX = "androidx.fragment:fragment:${Versions.fragmentxVersion}"
     const val appCompatX = "androidx.appcompat:appcompat:${Versions.androidxVersion}"
     const val coreKtx = "androidx.core:core-ktx:${Versions.coreKtxVersion}"
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerViewVersion}"

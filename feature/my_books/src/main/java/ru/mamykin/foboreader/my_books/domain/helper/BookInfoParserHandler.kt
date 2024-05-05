@@ -5,6 +5,7 @@ import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.toDate
+import java.lang.IllegalStateException
 import java.util.*
 
 class BookInfoParserHandler(
@@ -42,6 +43,7 @@ class BookInfoParserHandler(
             ElementType.LastName -> lastName = str
             ElementType.MiddleName -> middleName = str
             ElementType.Cover -> coverUrl = str
+            else -> throw IllegalStateException()
         }
     }
 

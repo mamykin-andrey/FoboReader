@@ -25,11 +25,14 @@ class BookContentParserHandler(
             ElementType.Paragraph -> {
                 lastSentence += elementStr
             }
+
             ElementType.Translation -> {
                 paragraphs.add(lastSentence.asParagraph())
                 translations[lastSentence] = elementStr
                 lastSentence = ""
             }
+
+            else -> throw IllegalStateException()
         }
     }
 
