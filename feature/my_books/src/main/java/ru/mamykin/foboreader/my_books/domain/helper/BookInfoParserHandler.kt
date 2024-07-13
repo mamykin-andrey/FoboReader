@@ -1,17 +1,21 @@
 package ru.mamykin.foboreader.my_books.domain.helper
 
+import android.util.Log
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.toDate
-import java.lang.IllegalStateException
 import java.util.*
 
 class BookInfoParserHandler(
     private val filePath: String,
     private val successFunc: (BookInfo) -> Unit
 ) : DefaultHandler2() {
+
+    companion object {
+        private const val TAG = "InfoParserHandler"
+    }
 
     private var currentElement: ElementType = ElementType.Unknown
     private var title = ""
@@ -43,7 +47,9 @@ class BookInfoParserHandler(
             ElementType.LastName -> lastName = str
             ElementType.MiddleName -> middleName = str
             ElementType.Cover -> coverUrl = str
-            else -> throw IllegalStateException()
+            else -> {
+                Log.w(TAG, "No element type for the string: $str!")
+            }
         }
     }
 

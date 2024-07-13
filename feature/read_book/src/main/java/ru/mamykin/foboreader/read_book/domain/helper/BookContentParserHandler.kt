@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.read_book.domain.helper
 
+import android.util.Log
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
@@ -8,6 +9,10 @@ import ru.mamykin.foboreader.read_book.domain.model.BookContent
 class BookContentParserHandler(
     private val successFunc: (BookContent) -> Unit
 ) : DefaultHandler2() {
+
+    companion object {
+        private const val TAG = "ContentParserHandler"
+    }
 
     private val paragraphs = mutableListOf<String>()
     private val translations = HashMap<String, String>()
@@ -27,16 +32,16 @@ class BookContentParserHandler(
             }
 
             ElementType.Translation -> {
-                paragraphs.add(lastSentence.asParagraph())
+                paragraphs.add(lastSentence)
                 translations[lastSentence] = elementStr
                 lastSentence = ""
             }
 
-            else -> throw IllegalStateException()
+            else -> {
+                Log.w(TAG, "No element type for the string: $elementStr!")
+            }
         }
     }
-
-    private fun String.asParagraph() = "<p>$this</p>"
 
     override fun endElement(uri: String?, localName: String?, qName: String?) {
         elementType = ElementType.Unknown
@@ -46,7 +51,7 @@ class BookContentParserHandler(
     override fun endDocument() {
         successFunc.invoke(
             BookContent(
-                paragraphs.joinToString(""),
+                paragraphs.joinToString("\n").trim(),
                 translations.takeIf { it.isNotEmpty() }
             )
         )
