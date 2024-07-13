@@ -1,13 +1,11 @@
 package ru.mamykin.foboreader.read_book.presentation
 
 import android.graphics.Color
-import android.text.SpannableString
 import androidx.annotation.ColorInt
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
-import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
@@ -100,9 +98,9 @@ internal class ReadBookFeature @Inject constructor(
             ) to emptySet()
 
             is Action.ParagraphTranslationLoaded -> (state as State.Content).copy(
-                paragraphTranslation = getParagraphTranslationText(
+                paragraphTranslation = TextTranslation(
                     action.paragraph,
-                    action.translatedParagraph
+                    listOf(action.translatedParagraph)
                 )
             ) to setOf(Effect.Vibrate)
 
@@ -127,13 +125,6 @@ internal class ReadBookFeature @Inject constructor(
             is Action.WordTranslationHidden -> (state as State.Content).copy(
                 wordTranslation = null
             ) to emptySet()
-        }
-
-        private fun getParagraphTranslationText(
-            paragraph: String,
-            translatedParagraph: String
-        ): CharSequence = SpannableString(paragraph + "\n\n" + translatedParagraph).apply {
-            setColor(translationColor, end = length - 1)
         }
     }
 
@@ -185,7 +176,7 @@ internal class ReadBookFeature @Inject constructor(
             val totalPages: Int,
             val readPercent: Float,
             val wordTranslation: TextTranslation? = null,
-            val paragraphTranslation: CharSequence? = null,
+            val paragraphTranslation: TextTranslation? = null,
         ) : State()
     }
 }

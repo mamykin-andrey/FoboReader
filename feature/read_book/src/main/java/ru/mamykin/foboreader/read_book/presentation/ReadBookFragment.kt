@@ -5,11 +5,12 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.Px
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -28,18 +30,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
@@ -47,12 +55,17 @@ import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.di.DaggerReadBookComponent
+import ru.mamykin.foboreader.read_book.domain.model.TextTranslation
 import ru.mamykin.foboreader.read_book.platform.VibrationManager
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
 
 // TODO: Optimize the Composable functions
-class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
+// TODO: Remove the split/find words/paragraphs logic from UI
+// TODO: Fix the loading on main thread issue
+// TODO: Fix handing clicks by the text view when the popup is shown
+// TODO: Add support of parapgraph translation pagination
+class ReadBookFragment : BaseFragment() {
 
     companion object {
 
@@ -74,8 +87,6 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     internal lateinit var vibrationManager: VibrationManager
     private val bookTextStyle: TextStyle = TextStyle(fontSize = 18.sp)
     private val textPageSplitter = TextPageSplitter()
-
-    // private val wordTranslationPopup by lazy { WordTranslationPopup(requireContext()) }
     private val bookId: Long by lazy { requireArguments().getLong(EXTRA_BOOK_ID) }
 
     override fun onCreateView(
@@ -115,10 +126,42 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         }
     }
 
-    // TODO: keep the line break
     @Composable
     private fun ContentComposable(state: ReadBookFeature.State.Content, contentPadding: PaddingValues) {
-        PaginatedTextScreen(longText = state.text, contentPadding = contentPadding)
+        if (state.paragraphTranslation != null) {
+            val paragraphTranslation = state.paragraphTranslation
+            val onClick: () -> Unit = {
+                feature.sendIntent(ReadBookFeature.Intent.HideParagraphTranslation)
+            }
+            Column {
+                Text(
+                    modifier = Modifier.pointerInput(onClick) {
+                        detectTapGestures(
+                            onTap = {
+                                onClick()
+                            }
+                        )
+                    },
+                    style = TextStyle(color = Color.White, fontSize = bookTextStyle.fontSize),
+                    text = AnnotatedString.Builder().apply {
+                        append(paragraphTranslation.sourceText)
+                        append(
+                            AnnotatedString(
+                                text = paragraphTranslation.getMostPreciseTranslation().orEmpty(),
+                                SpanStyle(color = Color.Red)
+                            )
+                        )
+                    }.toAnnotatedString(),
+                )
+            }
+        } else {
+            PaginatedTextScreen(longText = state.text, contentPadding = contentPadding)
+            if (state.wordTranslation != null) {
+                TranslationPopupBox(state.wordTranslation) {
+                    feature.sendIntent(ReadBookFeature.Intent.HideWordTranslation)
+                }
+            }
+        }
     }
 
     @Px
@@ -179,6 +222,81 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     }
 
     @Composable
+    fun TranslationPopupBox(
+        wordTranslation: TextTranslation,
+        onClickOutside: () -> Unit,
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Popup(
+                alignment = Alignment.Center,
+                properties = PopupProperties(
+                    excludeFromSystemGesture = true,
+                ),
+                onDismissRequest = { onClickOutside() }
+            ) {
+                Box(
+                    Modifier
+                        .background(Color.White)
+                        .padding(20.dp)
+                        .clip(RoundedCornerShape(4.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column {
+                        PopupTitledText(title = "Original: ", text = wordTranslation.sourceText)
+                        PopupTitledText(
+                            title = "Translation: ",
+                            text = wordTranslation.getMostPreciseTranslation().orEmpty()
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun PopupTitledText(title: String, text: String) {
+        Text(
+            text = AnnotatedString.Builder().apply {
+                append(
+                    AnnotatedString(
+                        title,
+                        SpanStyle(color = Color.DarkGray, fontWeight = FontWeight.Medium)
+                    )
+                )
+                append(
+                    AnnotatedString(
+                        text,
+                        SpanStyle(color = Color.Black)
+                    )
+                )
+            }.toAnnotatedString()
+        )
+    }
+
+    private fun getSelectedParagraph(text: String, selectionStart: Int, selectionEnd: Int): String {
+        val paragraphStart = findLeftLineBreak(text, selectionStart)
+        val paragraphEnd = findRightLineBreak(text, selectionEnd)
+        return text.substring(paragraphStart, paragraphEnd)
+    }
+
+    private fun findLeftLineBreak(text: CharSequence, selStart: Int): Int {
+        for (i in selStart downTo 0) {
+            if (text[i] == '\n') return i + 1
+        }
+        return 0
+    }
+
+    private fun findRightLineBreak(text: CharSequence, selEnd: Int): Int {
+        for (i in selEnd until text.length) {
+            if (text[i] == '\n') return i + 1
+        }
+        return text.length - 1
+    }
+
+    @Composable
     private fun CombinedClickableText(fullText: String, modifier: Modifier = Modifier) {
         val wordsPositions = getWordsPositions(fullText)
         val annotatedString = buildAnnotatedString {
@@ -194,17 +312,14 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
         }
         val onLongClick = { pos: Int ->
             wordsPositions.find { pos in it.first..it.second }?.let { (start, end) ->
-                Toast.makeText(requireContext(), "Clicked word: ${fullText.substring(start, end)}", Toast.LENGTH_LONG)
-                    .show()
+                val word = fullText.substring(start, end)
+                feature.sendIntent(ReadBookFeature.Intent.TranslateWord(word))
             }
         }
         val onClick = { pos: Int ->
             wordsPositions.find { pos in it.first..it.second }?.let { (start, end) ->
-                Toast.makeText(
-                    requireContext(),
-                    "Clicked paragraph: ${fullText.substring(start, end)}",
-                    Toast.LENGTH_LONG
-                ).show()
+                val paragraph = getSelectedParagraph(fullText, start, end)
+                feature.sendIntent(ReadBookFeature.Intent.TranslateParagraph(paragraph))
             }
         }
         val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -271,25 +386,11 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initBookTextViews()
         feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
     }
 
-    private fun initBookTextViews() {
-        // binding.tvText.setOnParagraphClickListener {
-        //     feature.sendIntent(ReadBookFeature.Intent.TranslateParagraph(it))
-        // }
-        // binding.tvText.setOnWordLongClickListener {
-        //     feature.sendIntent(ReadBookFeature.Intent.TranslateWord(it))
-        // }
-    }
-
     private fun showState(state: ReadBookFeature.State) {
-        // pbLoadingBook.isVisible = state.isTranslationLoading
         // updateBookTextSize(state.textSize)
-        // showBookText(state.text)
-        // updateWordTranslation(state.wordTranslation)
-        // state.paragraphTranslation?.let(::showParagraphTranslation)
         // tvName.text = state.title
         // updatePagesRead(state.currentPage, state.totalPages)
         // tvReadPercent.text = state.readPercent.toString()
@@ -315,24 +416,6 @@ class ReadBookFragment : BaseFragment(R.layout.fragment_read_book) {
     //         binding.tvText.setup(text.toHtml())
     //         lastTextHashCode = textHashCode
     //         binding.tvText.setOnClickListener(null)
-    //     }
-    // }
-
-    // private fun showParagraphTranslation(translation: CharSequence) {
-    //     binding.tvText.text = translation
-    //     binding.tvText.setOnClickListener {
-    //         feature.sendIntent(ReadBookFeature.Intent.HideParagraphTranslation)
-    //     }
-    //     lastTextHashCode = 0
-    // }
-
-    // private fun updateWordTranslation(translation: TextTranslation?) {
-    //     if (translation != null) {
-    //         wordTranslationPopup.show(requireView(), translation) {
-    //             feature.sendIntent(ReadBookFeature.Intent.HideWordTranslation)
-    //         }
-    //     } else {
-    //         wordTranslationPopup.dismiss()
     //     }
     // }
 
