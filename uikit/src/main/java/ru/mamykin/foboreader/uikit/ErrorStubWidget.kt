@@ -11,6 +11,7 @@ import ru.mamykin.foboreader.core.extension.getLayoutInflater
 import ru.mamykin.foboreader.core.extension.safeThrow
 import ru.mamykin.foboreader.uikit.databinding.ViewErrorStubContentBinding
 
+// TODO: Refactor and remove databinding
 class ErrorStubWidget @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

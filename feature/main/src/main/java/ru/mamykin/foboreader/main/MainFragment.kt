@@ -9,6 +9,7 @@ import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.presentation.autoCleanedValue
 import ru.mamykin.foboreader.main.databinding.FragmentMainBinding
 
+// TODO: Refactor to Compose
 class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val tagsToNavIdsMap = mapOf(

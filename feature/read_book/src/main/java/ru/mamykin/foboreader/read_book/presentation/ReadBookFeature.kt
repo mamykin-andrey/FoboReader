@@ -9,7 +9,7 @@ import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.extension.setColor
 import ru.mamykin.foboreader.core.presentation.Actor
-import ru.mamykin.foboreader.core.presentation.Feature
+import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.core.presentation.ReducerResult
 import ru.mamykin.foboreader.read_book.R
@@ -26,8 +26,8 @@ import javax.inject.Named
 internal class ReadBookFeature @Inject constructor(
     actor: ReadBookActor,
     reducer: ReadBookReducer,
-) : Feature<ReadBookFeature.State, ReadBookFeature.Intent, ReadBookFeature.Effect, ReadBookFeature.Action>(
-    State(),
+) : ComposeFeature<ReadBookFeature.State, ReadBookFeature.Intent, ReadBookFeature.Effect, ReadBookFeature.Action>(
+    State.Loading,
     actor,
     reducer,
 ) {
@@ -53,7 +53,6 @@ internal class ReadBookFeature @Inject constructor(
                 }
 
                 is Intent.TranslateWord -> {
-                    emit(Action.WordTranslationStarted)
                     getWordTranslation.execute(intent.word).fold(
                         { emit(Action.WordTranslationLoaded(it)) },
                         { emit(Action.WordTranslationFailed) }
@@ -69,7 +68,6 @@ internal class ReadBookFeature @Inject constructor(
                 }
 
                 is Intent.LoadBookInfo -> {
-                    emit(Action.BookLoadingStarted)
                     val bookInfo = getBookInfo.execute(bookId)
                     val bookText = getBookText.execute(bookInfo.filePath)
                     emit(
@@ -85,60 +83,48 @@ internal class ReadBookFeature @Inject constructor(
     }
 
     internal class ReadBookReducer @Inject constructor(
-        private val appSettingsRepository: AppSettingsRepository,
+        appSettingsRepository: AppSettingsRepository,
     ) : Reducer<State, Action, Effect> {
 
         @ColorInt
         private val translationColor = Color.parseColor(appSettingsRepository.getTranslationColor())
 
         override fun invoke(state: State, action: Action): ReducerResult<State, Effect> = when (action) {
-            is Action.BookLoadingStarted -> state.copy(isBookLoading = true) to emptySet()
-
-            is Action.BookLoaded -> state.copy(
-                isBookLoading = false,
+            is Action.BookLoaded -> State.Content(
                 text = action.text,
                 title = action.info.title,
                 currentPage = action.info.currentPage,
                 textSize = action.textSize,
+                readPercent = 0f,
+                totalPages = 0,
             ) to emptySet()
 
-            is Action.WordTranslationStarted -> state.copy(
-                isTranslationLoading = true
-            ) to emptySet()
-
-            is Action.ParagraphTranslationLoaded -> state.copy(
-                isTranslationLoading = false,
+            is Action.ParagraphTranslationLoaded -> (state as State.Content).copy(
                 paragraphTranslation = getParagraphTranslationText(
                     action.paragraph,
                     action.translatedParagraph
                 )
-            ) to setOf(
-                Effect.Vibrate
-            )
+            ) to setOf(Effect.Vibrate)
 
             is Action.ParagraphTranslationFailed -> state to setOf(
                 Effect.ShowSnackbar(R.string.read_book_translation_download_error),
                 Effect.Vibrate,
             )
-            is Action.ParagraphTranslationHidden -> state.copy(
-                paragraphTranslation = null
-            ) to setOf(
-                Effect.Vibrate
-            )
 
-            is Action.WordTranslationLoaded -> state.copy(
-                isTranslationLoading = false,
+            is Action.ParagraphTranslationHidden -> (state as State.Content).copy(
+                paragraphTranslation = null
+            ) to setOf(Effect.Vibrate)
+
+            is Action.WordTranslationLoaded -> (state as State.Content).copy(
                 wordTranslation = action.translation
-            ) to setOf(
-                Effect.Vibrate
-            )
+            ) to setOf(Effect.Vibrate)
 
             is Action.WordTranslationFailed -> state to setOf(
                 Effect.ShowSnackbar(R.string.read_book_translation_download_error),
                 Effect.Vibrate,
             )
 
-            is Action.WordTranslationHidden -> state.copy(
+            is Action.WordTranslationHidden -> (state as State.Content).copy(
                 wordTranslation = null
             ) to emptySet()
         }
@@ -174,8 +160,6 @@ internal class ReadBookFeature @Inject constructor(
 
         object ParagraphTranslationHidden : Action()
 
-        object WordTranslationStarted : Action()
-
         class WordTranslationLoaded(
             val translation: TextTranslation
         ) : Action()
@@ -184,8 +168,6 @@ internal class ReadBookFeature @Inject constructor(
 
         object WordTranslationHidden : Action()
 
-        object BookLoadingStarted : Action()
-
         class BookLoaded(
             val info: BookInfo,
             val text: String,
@@ -193,16 +175,17 @@ internal class ReadBookFeature @Inject constructor(
         ) : Action()
     }
 
-    data class State(
-        val isBookLoading: Boolean = true,
-        val isTranslationLoading: Boolean = false,
-        val title: String = "",
-        val text: String = "",
-        val textSize: Float? = null,
-        val currentPage: Int = 0,
-        val totalPages: Int = 0,
-        val readPercent: Float = 0f,
-        val wordTranslation: TextTranslation? = null,
-        val paragraphTranslation: CharSequence? = null,
-    )
+    sealed class State {
+        object Loading : State()
+        data class Content(
+            val title: String,
+            val text: String,
+            val textSize: Float?,
+            val currentPage: Int,
+            val totalPages: Int,
+            val readPercent: Float,
+            val wordTranslation: TextTranslation? = null,
+            val paragraphTranslation: CharSequence? = null,
+        ) : State()
+    }
 }

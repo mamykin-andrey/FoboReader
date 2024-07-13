@@ -1,7 +1,11 @@
 package ru.mamykin.foboreader.read_book.di
 
 import android.content.Context
-import dagger.*
+import dagger.Binds
+import dagger.BindsInstance
+import dagger.Component
+import dagger.Module
+import dagger.Provides
 import okhttp3.OkHttpClient
 import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
 import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDaoFactory
