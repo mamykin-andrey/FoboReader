@@ -26,9 +26,6 @@ fun Fragment.showSnackbar(message: String, long: Boolean = false) {
     Snackbar.make(contentView, message, duration).show()
 }
 
-fun Context.getDrawableCompat(@DrawableRes drawableId: Int): Drawable =
-    AppCompatResources.getDrawable(this, drawableId)!!
-
 fun Fragment.showNotification(
     notificationId: Int,
     iconRes: Int,
