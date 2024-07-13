@@ -17,6 +17,11 @@ android {
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures.compose = true
+    lintOptions.isAbortOnError = false
+    kotlinOptions.jvmTarget = "17"
+    composeOptions.kotlinCompilerExtensionVersion = "1.4.8"
+
     buildTypes {
         buildTypes.forEach {
             it.buildConfigField("String", "googleApiKey", project.properties["googleApiKey"] as String)
@@ -24,15 +29,16 @@ android {
         }
     }
 
-    buildFeatures.viewBinding = true
+    buildFeatures.viewBinding = true // TODO: remove everywhere
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
-    lintOptions {
-        isAbortOnError = false
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
@@ -57,6 +63,16 @@ dependencies {
     implementation(Dependencies.okHttp)
     implementation(Dependencies.dagger)
     implementation(Dependencies.cicerone)
+
+    implementation(Dependencies.composeUi)
+    implementation(Dependencies.composeTooling)
+    implementation(Dependencies.composeFoundation)
+    implementation(Dependencies.composeMaterial)
+    implementation(Dependencies.composeMaterialIconsCore)
+    implementation(Dependencies.composeMaterialIconsExt)
+    implementation(Dependencies.composeActivity)
+    implementation(Dependencies.composeToolingPreview)
+    implementation(Dependencies.coil)
 
     kapt(Dependencies.daggerCompiler)
 

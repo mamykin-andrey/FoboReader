@@ -18,7 +18,6 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-    buildFeatures.viewBinding = true
     buildFeatures.compose = true
     lintOptions.isAbortOnError = false
     kotlinOptions.jvmTarget = "17"
