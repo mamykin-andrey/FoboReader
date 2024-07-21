@@ -1,20 +1,15 @@
 package ru.mamykin.foboreader.read_book.presentation
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.Px
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,15 +21,18 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
@@ -42,8 +40,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
@@ -53,18 +49,18 @@ import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
-import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.di.DaggerReadBookComponent
 import ru.mamykin.foboreader.read_book.domain.model.TextTranslation
 import ru.mamykin.foboreader.read_book.platform.VibrationManager
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
 
-// TODO: Optimize the Composable functions
-// TODO: Remove the split/find words/paragraphs logic from UI
-// TODO: Fix the loading on main thread issue
-// TODO: Fix handing clicks by the text view when the popup is shown
-// TODO: Add support of parapgraph translation pagination
+// TODO: P0 - Fix the loading on the main thread issue
+// TODO: P0 - Implement the rest of the features
+// TODO: P1 - Fix handing clicks by the text view when the popup is shown
+// TODO: P2 - Optimize the Composable functions
+// TODO: P2 - Add support of paragraph translation pagination
+// TODO: P3 - Remove the split/find words/paragraphs logic from UI
 class ReadBookFragment : BaseFragment() {
 
     companion object {
@@ -86,6 +82,7 @@ class ReadBookFragment : BaseFragment() {
     @Inject
     internal lateinit var vibrationManager: VibrationManager
     private val bookTextStyle: TextStyle = TextStyle(fontSize = 18.sp)
+    private val bookTextPadding = 24.dp
     private val textPageSplitter = TextPageSplitter()
     private val bookId: Long by lazy { requireArguments().getLong(EXTRA_BOOK_ID) }
 
@@ -106,10 +103,10 @@ class ReadBookFragment : BaseFragment() {
                         Text(text = "Read book")
                     }, elevation = 12.dp
                 )
-            }, content = { contentPadding ->
+            }, content = { _ ->
                 when (state) {
                     is ReadBookFeature.State.Loading -> LoadingComposable()
-                    is ReadBookFeature.State.Content -> ContentComposable(state, contentPadding)
+                    is ReadBookFeature.State.Content -> ContentComposable(state)
                 }
             })
         }
@@ -127,97 +124,91 @@ class ReadBookFragment : BaseFragment() {
     }
 
     @Composable
-    private fun ContentComposable(state: ReadBookFeature.State.Content, contentPadding: PaddingValues) {
-        if (state.paragraphTranslation != null) {
-            val paragraphTranslation = state.paragraphTranslation
-            val onClick: () -> Unit = {
-                feature.sendIntent(ReadBookFeature.Intent.HideParagraphTranslation)
-            }
-            Column {
-                Text(
-                    modifier = Modifier.pointerInput(onClick) {
-                        detectTapGestures(
-                            onTap = {
-                                onClick()
-                            }
-                        )
-                    },
-                    style = TextStyle(color = Color.White, fontSize = bookTextStyle.fontSize),
-                    text = AnnotatedString.Builder().apply {
-                        append(paragraphTranslation.sourceText)
-                        append(
-                            AnnotatedString(
-                                text = paragraphTranslation.getMostPreciseTranslation().orEmpty(),
-                                SpanStyle(color = Color.Red)
-                            )
-                        )
-                    }.toAnnotatedString(),
-                )
-            }
-        } else {
-            PaginatedTextScreen(longText = state.text, contentPadding = contentPadding)
-            if (state.wordTranslation != null) {
-                TranslationPopupBox(state.wordTranslation) {
-                    feature.sendIntent(ReadBookFeature.Intent.HideWordTranslation)
-                }
+    private fun ContentComposable(state: ReadBookFeature.State.Content) {
+        state.paragraphTranslation?.let {
+            ParagraphTranslationComposable(it)
+        } ?: BookTextComposable(state)
+    }
+
+    @Composable
+    private fun BookTextComposable(
+        state: ReadBookFeature.State.Content
+    ) {
+        PaginatedTextComposable(longText = state.text)
+        if (state.wordTranslation != null) {
+            TranslationPopupBox(state.wordTranslation) {
+                feature.sendIntent(ReadBookFeature.Intent.HideWordTranslation)
             }
         }
     }
 
-    @Px
-    private fun getHorizontalPaddingInPx(contentPadding: PaddingValues, screenDensity: Density): Int {
-        val startPadding = with(screenDensity) { contentPadding.calculateStartPadding(LayoutDirection.Ltr).toPx() }
-        val endPadding = with(screenDensity) { contentPadding.calculateEndPadding(LayoutDirection.Ltr).toPx() }
-        return (startPadding + endPadding).toInt()
-    }
-
-    @Px
-    private fun getVerticalPaddingInPx(contentPadding: PaddingValues, screenDensity: Density): Int {
-        val topPadding = with(screenDensity) { contentPadding.calculateTopPadding().toPx() }
-        val bottomPadding = with(screenDensity) { contentPadding.calculateBottomPadding().toPx() }
-        return (topPadding + bottomPadding).toInt()
-    }
-
-    @Px
-    private fun getAvailableScreenSize(screenDensity: Density, contentPadding: PaddingValues): Pair<Int, Int> {
-        val toolbarHeight = with(screenDensity) { 64.dp.toPx() }
-        val displayMetrics = DisplayMetrics()
-        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val screenHeight: Int = displayMetrics.heightPixels
-        val contentHorizontalPadding = getHorizontalPaddingInPx(contentPadding, screenDensity)
-        val availableScreenHeight = screenHeight - toolbarHeight - contentHorizontalPadding
-        val screenWidth: Int = displayMetrics.widthPixels
-        val availableScreenWidth = screenWidth - getVerticalPaddingInPx(contentPadding, screenDensity)
-        return availableScreenHeight.toInt() to availableScreenWidth
+    @Composable
+    private fun ParagraphTranslationComposable(paragraphTranslation: TextTranslation) {
+        val onClick: () -> Unit = {
+            feature.sendIntent(ReadBookFeature.Intent.HideParagraphTranslation)
+        }
+        Text(
+            modifier = Modifier
+                .padding(bookTextPadding)
+                .pointerInput(onClick) {
+                    detectTapGestures(
+                        onTap = {
+                            onClick()
+                        }
+                    )
+                },
+            style = TextStyle(color = Color.White, fontSize = bookTextStyle.fontSize),
+            text = AnnotatedString.Builder().apply {
+                append(paragraphTranslation.sourceText)
+                append(
+                    AnnotatedString(
+                        text = paragraphTranslation.getMostPreciseTranslation().orEmpty(),
+                        SpanStyle(color = Color.Red)
+                    )
+                )
+            }.toAnnotatedString(),
+        )
     }
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun PaginatedTextScreen(longText: String, contentPadding: PaddingValues) {
-        val textMeasurer = rememberTextMeasurer()
-        val (availableScreenHeight, availableScreenWidth) = getAvailableScreenSize(
-            LocalDensity.current,
-            contentPadding
-        )
-        val textPages = textPageSplitter.splitTextToPages(
-            text = longText,
-            measurer = textMeasurer,
-            availableHeight = availableScreenHeight,
-            availableWidth = availableScreenWidth,
-            bookTextStyle = bookTextStyle,
-        )
-        val pageCount = remember { textPages.count() }
-        val pagerState = rememberPagerState(pageCount = { pageCount })
-        HorizontalPager(state = pagerState) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 0.dp)
-            ) {
+    fun PaginatedTextComposable(longText: String) {
+        var isViewMeasured by remember { mutableStateOf(false) }
+        var viewHeight by remember { mutableIntStateOf(0) }
+        var viewWidth by remember { mutableIntStateOf(0) }
+        if (isViewMeasured) {
+            val textMeasurer = rememberTextMeasurer()
+            val (availableScreenHeight, availableScreenWidth) = viewHeight to viewWidth
+            val textPages = textPageSplitter.splitTextToPages(
+                text = longText,
+                measurer = textMeasurer,
+                availableHeight = availableScreenHeight,
+                availableWidth = availableScreenWidth,
+                bookTextStyle = bookTextStyle,
+            )
+            val pageCount = remember { textPages.count() }
+            val pagerState = rememberPagerState(pageCount = { pageCount })
+            HorizontalPager(state = pagerState) {
                 val currentPageIndex = it
                 val pageContent = textPages[currentPageIndex]
-                CombinedClickableText(fullText = pageContent)
+                CombinedClickableText(
+                    fullText = pageContent,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bookTextPadding)
+                )
             }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bookTextPadding)
+                    .onGloballyPositioned {
+                        isViewMeasured = true
+                        viewHeight = it.size.height
+                        viewWidth = it.size.width
+                    }
+            )
         }
     }
 
@@ -276,29 +267,9 @@ class ReadBookFragment : BaseFragment() {
         )
     }
 
-    private fun getSelectedParagraph(text: String, selectionStart: Int, selectionEnd: Int): String {
-        val paragraphStart = findLeftLineBreak(text, selectionStart)
-        val paragraphEnd = findRightLineBreak(text, selectionEnd)
-        return text.substring(paragraphStart, paragraphEnd)
-    }
-
-    private fun findLeftLineBreak(text: CharSequence, selStart: Int): Int {
-        for (i in selStart downTo 0) {
-            if (text[i] == '\n') return i + 1
-        }
-        return 0
-    }
-
-    private fun findRightLineBreak(text: CharSequence, selEnd: Int): Int {
-        for (i in selEnd until text.length) {
-            if (text[i] == '\n') return i + 1
-        }
-        return text.length - 1
-    }
-
     @Composable
-    private fun CombinedClickableText(fullText: String, modifier: Modifier = Modifier) {
-        val wordsPositions = getWordsPositions(fullText)
+    private fun CombinedClickableText(fullText: String, modifier: Modifier) {
+        val wordsPositions: List<Pair<Int, Int>> = TextUtils.getWordsPositions(fullText)
         val annotatedString = buildAnnotatedString {
             append(fullText)
             wordsPositions.forEach { (wordStart, wordEnd) ->
@@ -311,16 +282,11 @@ class ReadBookFragment : BaseFragment() {
             }
         }
         val onLongClick = { pos: Int ->
-            wordsPositions.find { pos in it.first..it.second }?.let { (start, end) ->
-                val word = fullText.substring(start, end)
-                feature.sendIntent(ReadBookFeature.Intent.TranslateWord(word))
-            }
+            feature.sendIntent(ReadBookFeature.Intent.TranslateWord(TextUtils.getWord(wordsPositions, pos, fullText)))
         }
         val onClick = { pos: Int ->
-            wordsPositions.find { pos in it.first..it.second }?.let { (start, end) ->
-                val paragraph = getSelectedParagraph(fullText, start, end)
-                feature.sendIntent(ReadBookFeature.Intent.TranslateParagraph(paragraph))
-            }
+            val paragraph = TextUtils.getParagraph(wordsPositions, pos, fullText)
+            feature.sendIntent(ReadBookFeature.Intent.TranslateParagraph(paragraph))
         }
         val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
         val gesture = Modifier.pointerInput(onClick, onLongClick) {
@@ -345,22 +311,6 @@ class ReadBookFragment : BaseFragment() {
                 layoutResult.value = it
             }
         )
-    }
-
-    private fun getWordsPositions(text: String): List<Pair<Int, Int>> {
-        val wordPositions = mutableListOf<Pair<Int, Int>>()
-        var wordStartPos = 0
-        for (i in text.indices) {
-            val character = text[i]
-            if (character.isLetter() || character == '\'') {
-                if (wordStartPos == wordPositions.lastOrNull()?.first) {
-                    wordStartPos = i
-                }
-            } else if (wordStartPos != wordPositions.lastOrNull()?.first) {
-                wordPositions.add(wordStartPos to i)
-            }
-        }
-        return wordPositions
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
