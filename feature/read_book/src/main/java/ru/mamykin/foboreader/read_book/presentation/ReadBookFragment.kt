@@ -10,7 +10,9 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -38,6 +40,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
@@ -47,22 +50,22 @@ import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
+import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.di.DaggerReadBookComponent
 import ru.mamykin.foboreader.read_book.domain.model.TextTranslation
 import ru.mamykin.foboreader.read_book.platform.VibrationManager
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
 
-// TODO: P0 - Implement the rest of the features
 // TODO: P1 - Fix handing clicks by the text view when the popup is shown
 // TODO: P2 - Optimize the Composable functions
 // TODO: P2 - Add support of paragraph translation pagination
-// TODO: P3 - Remove the split/find words/paragraphs logic from UI
 class ReadBookFragment : BaseFragment() {
 
     companion object {
 
         private const val EXTRA_BOOK_ID = "extra_book_id"
+        private const val TEXT_ANNOTATION_WORD_TAG = "word"
 
         fun newInstance(bookId: Long) = ReadBookFragment().apply {
             arguments = Bundle().apply {
@@ -79,7 +82,7 @@ class ReadBookFragment : BaseFragment() {
     @Inject
     internal lateinit var vibrationManager: VibrationManager
     private val bookTextStyle: TextStyle = TextStyle(fontSize = 18.sp)
-    private val bookTextPadding = 24.dp
+    private val bookTextPadding = 8.dp
     private val bookId: Long by lazy { requireArguments().getLong(EXTRA_BOOK_ID) }
 
     override fun onCreateView(
@@ -96,7 +99,7 @@ class ReadBookFragment : BaseFragment() {
             Scaffold(topBar = {
                 TopAppBar(
                     title = {
-                        Text(text = "Read book")
+                        Text(text = (state as? ReadBookFeature.State.Content)?.title ?: "Loading")
                     }, elevation = 12.dp
                 )
             }, content = { _ ->
@@ -117,35 +120,82 @@ class ReadBookFragment : BaseFragment() {
         ) {
             CircularProgressIndicator(modifier = Modifier.size(48.dp))
         }
+        StubContentComposable()
+    }
+
+    /**
+     * Measures the text Composable size and sends intent to the feature
+     * So it can correctly split the text by pages based on that
+     */
+    @Composable
+    private fun StubContentComposable() {
         val textMeasurer = rememberTextMeasurer()
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .alpha(0f)
-                .padding(bookTextPadding)
-                .onGloballyPositioned {
-                    feature.sendIntent(
-                        ReadBookFeature.Intent.LoadBook(
-                            textMeasurer,
-                            it.size.height to it.size.width
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(0f)
+                    .weight(1f)
+                    .padding(bookTextPadding)
+                    .onGloballyPositioned {
+                        feature.sendIntent(
+                            ReadBookFeature.Intent.LoadBook(
+                                textMeasurer,
+                                it.size.height to it.size.width
+                            )
                         )
-                    )
-                }
-        )
+                    }
+            )
+            ReadStatusComposable(
+                currentPage = 0,
+                totalPages = 0,
+                readPercent = 0f,
+                modifier = Modifier.alpha(0f)
+            )
+        }
     }
 
     @Composable
     private fun ContentComposable(state: ReadBookFeature.State.Content) {
-        state.paragraphTranslation?.let {
-            ParagraphTranslationComposable(it)
-        } ?: BookTextComposable(state)
+        Column {
+            state.paragraphTranslation?.let {
+                ParagraphTranslationComposable(it)
+            } ?: BookTextComposable(state, Modifier.weight(1f))
+            ReadStatusComposable(
+                currentPage = state.currentPage,
+                totalPages = state.totalPages,
+                readPercent = state.readPercent,
+                modifier = Modifier
+            )
+        }
+    }
+
+    @Composable
+    private fun ReadStatusComposable(
+        currentPage: Int,
+        totalPages: Int,
+        readPercent: Float,
+        modifier: Modifier
+    ) {
+        Box(
+            modifier = modifier.then(
+                Modifier
+                    .background(color = Color.Gray)
+                    .fillMaxWidth()
+            )
+        ) {
+            Row(modifier = Modifier.padding(4.dp)) {
+                Text(text = "$currentPage of $totalPages, $readPercent%")
+            }
+        }
     }
 
     @Composable
     private fun BookTextComposable(
-        state: ReadBookFeature.State.Content
+        state: ReadBookFeature.State.Content,
+        modifier: Modifier
     ) {
-        PaginatedTextComposable(state)
+        PaginatedTextComposable(state, modifier)
         if (state.wordTranslation != null) {
             TranslationPopupBox(state.wordTranslation) {
                 feature.sendIntent(ReadBookFeature.Intent.HideWordTranslation)
@@ -183,16 +233,18 @@ class ReadBookFragment : BaseFragment() {
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    private fun PaginatedTextComposable(state: ReadBookFeature.State.Content) {
+    private fun PaginatedTextComposable(state: ReadBookFeature.State.Content, modifier: Modifier) {
         val pagerState = rememberPagerState(pageCount = { state.pages.size })
         HorizontalPager(state = pagerState) {
             val currentPageIndex = it
             val pageContent = state.pages[currentPageIndex]
             CombinedClickableText(
                 fullText = pageContent,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bookTextPadding)
+                modifier = modifier.then(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bookTextPadding)
+                )
             )
         }
     }
@@ -221,9 +273,12 @@ class ReadBookFragment : BaseFragment() {
                     contentAlignment = Alignment.Center
                 ) {
                     Column {
-                        PopupTitledText(title = "Original: ", text = wordTranslation.sourceText)
                         PopupTitledText(
-                            title = "Translation: ",
+                            title = "${getString(R.string.rb_translation_original)}: ",
+                            text = wordTranslation.sourceText,
+                        )
+                        PopupTitledText(
+                            title = "${getString(R.string.rb_translation_translated)}: ",
                             text = wordTranslation.getMostPreciseTranslation().orEmpty()
                         )
                     }
@@ -259,7 +314,7 @@ class ReadBookFragment : BaseFragment() {
             append(fullText)
             wordsPositions.forEach { (wordStart, wordEnd) ->
                 addStringAnnotation(
-                    tag = "word",
+                    tag = TEXT_ANNOTATION_WORD_TAG,
                     annotation = fullText.substring(wordStart, wordEnd),
                     start = wordStart,
                     end = wordEnd
@@ -324,40 +379,25 @@ class ReadBookFragment : BaseFragment() {
         feature.effectFlow.collectWithRepeatOnStarted(::takeEffect)
     }
 
-    private fun showState(state: ReadBookFeature.State) {
-        // updateBookTextSize(state.textSize)
-        // tvName.text = state.title
-        // updatePagesRead(state.currentPage, state.totalPages)
-        // tvReadPercent.text = state.readPercent.toString()
-    }
-
-    // private fun updateBookTextSize(textSize: Float?) = with(binding) {
-    //     textSize?.let {
-    //         tvText.textSize = it
-    //     }
-    // }
-
-    // private fun updatePagesRead(currentPage: Int, totalPages: Int) = with(binding) {
-    //     tvRead.text = getString(
-    //         R.string.read_book_user_read_pages,
-    //         currentPage,
-    //         totalPages
-    //     )
-    // }
-
-    // private fun showBookText(text: String) {
-    //     val textHashCode = text.hashCode()
-    //     if (textHashCode != lastTextHashCode) {
-    //         binding.tvText.setup(text.toHtml())
-    //         lastTextHashCode = textHashCode
-    //         binding.tvText.setOnClickListener(null)
-    //     }
-    // }
-
     private fun takeEffect(effect: ReadBookFeature.Effect) {
         when (effect) {
             is ReadBookFeature.Effect.ShowSnackbar -> showSnackbar(effect.messageId)
             is ReadBookFeature.Effect.Vibrate -> vibrationManager.vibrate(requireView())
         }
+    }
+
+    @Preview
+    @Composable
+    fun ReadBookScreenPreview() {
+        ReadBookScreen(
+            state = ReadBookFeature.State.Content(
+                "Title",
+                listOf("Page1", "Page2"),
+                18f,
+                1,
+                2,
+                50f,
+            )
+        )
     }
 }
