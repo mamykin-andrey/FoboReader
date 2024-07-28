@@ -2,6 +2,7 @@ package ru.mamykin.foboreader.read_book.presentation
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.compose.ui.text.TextMeasurer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
@@ -29,10 +30,6 @@ internal class ReadBookFeature @Inject constructor(
     actor,
     reducer,
 ) {
-    init {
-        sendIntent(Intent.LoadBookInfo)
-    }
-
     internal class ReadBookActor @Inject constructor(
         @Named("bookId") private val bookId: Long,
         private val getBookText: GetBookText,
@@ -65,13 +62,13 @@ internal class ReadBookFeature @Inject constructor(
                     emit(Action.WordTranslationHidden)
                 }
 
-                is Intent.LoadBookInfo -> {
-                    val bookInfo = getBookInfo.execute(bookId)
-                    val bookText = getBookText.execute(bookInfo.filePath)
+                is Intent.LoadBook -> {
+                    val info = getBookInfo.execute(bookId)
+                    val pages = getBookText.execute(info.filePath, intent.measurer, intent.screenSize)
                     emit(
                         Action.BookLoaded(
-                            info = bookInfo,
-                            text = bookText,
+                            info = info,
+                            pages = pages,
                             textSize = appSettingsRepository.getReadTextSize().toFloat(),
                         )
                     )
@@ -89,7 +86,7 @@ internal class ReadBookFeature @Inject constructor(
 
         override fun invoke(state: State, action: Action): ReducerResult<State, Effect> = when (action) {
             is Action.BookLoaded -> State.Content(
-                text = action.text,
+                pages = action.pages,
                 title = action.info.title,
                 currentPage = action.info.currentPage,
                 textSize = action.textSize,
@@ -129,7 +126,10 @@ internal class ReadBookFeature @Inject constructor(
     }
 
     sealed class Intent {
-        object LoadBookInfo : Intent()
+        data class LoadBook(
+            val measurer: TextMeasurer, val screenSize: Pair<Int, Int>
+        ) : Intent()
+
         class TranslateParagraph(val paragraph: String) : Intent()
         class TranslateWord(val word: String) : Intent()
         object HideParagraphTranslation : Intent()
@@ -161,7 +161,7 @@ internal class ReadBookFeature @Inject constructor(
 
         class BookLoaded(
             val info: BookInfo,
-            val text: String,
+            val pages: List<String>,
             val textSize: Float?,
         ) : Action()
     }
@@ -170,7 +170,7 @@ internal class ReadBookFeature @Inject constructor(
         object Loading : State()
         data class Content(
             val title: String,
-            val text: String,
+            val pages: List<String>,
             val textSize: Float?,
             val currentPage: Int,
             val totalPages: Int,

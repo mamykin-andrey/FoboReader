@@ -5,9 +5,9 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Constraints
+import javax.inject.Inject
 
-// TODO: refactor and make it a use case
-class TextPageSplitter {
+class TextPageSplitter @Inject constructor() {
 
     fun splitTextToPages(
         text: String,

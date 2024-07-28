@@ -21,13 +21,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -55,7 +53,6 @@ import ru.mamykin.foboreader.read_book.platform.VibrationManager
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
 
-// TODO: P0 - Fix the loading on the main thread issue
 // TODO: P0 - Implement the rest of the features
 // TODO: P1 - Fix handing clicks by the text view when the popup is shown
 // TODO: P2 - Optimize the Composable functions
@@ -83,7 +80,6 @@ class ReadBookFragment : BaseFragment() {
     internal lateinit var vibrationManager: VibrationManager
     private val bookTextStyle: TextStyle = TextStyle(fontSize = 18.sp)
     private val bookTextPadding = 24.dp
-    private val textPageSplitter = TextPageSplitter()
     private val bookId: Long by lazy { requireArguments().getLong(EXTRA_BOOK_ID) }
 
     override fun onCreateView(
@@ -121,6 +117,21 @@ class ReadBookFragment : BaseFragment() {
         ) {
             CircularProgressIndicator(modifier = Modifier.size(48.dp))
         }
+        val textMeasurer = rememberTextMeasurer()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0f)
+                .padding(bookTextPadding)
+                .onGloballyPositioned {
+                    feature.sendIntent(
+                        ReadBookFeature.Intent.LoadBook(
+                            textMeasurer,
+                            it.size.height to it.size.width
+                        )
+                    )
+                }
+        )
     }
 
     @Composable
@@ -134,7 +145,7 @@ class ReadBookFragment : BaseFragment() {
     private fun BookTextComposable(
         state: ReadBookFeature.State.Content
     ) {
-        PaginatedTextComposable(longText = state.text)
+        PaginatedTextComposable(state)
         if (state.wordTranslation != null) {
             TranslationPopupBox(state.wordTranslation) {
                 feature.sendIntent(ReadBookFeature.Intent.HideWordTranslation)
@@ -172,48 +183,22 @@ class ReadBookFragment : BaseFragment() {
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun PaginatedTextComposable(longText: String) {
-        var isViewMeasured by remember { mutableStateOf(false) }
-        var viewHeight by remember { mutableIntStateOf(0) }
-        var viewWidth by remember { mutableIntStateOf(0) }
-        if (isViewMeasured) {
-            val textMeasurer = rememberTextMeasurer()
-            val (availableScreenHeight, availableScreenWidth) = viewHeight to viewWidth
-            val textPages = textPageSplitter.splitTextToPages(
-                text = longText,
-                measurer = textMeasurer,
-                availableHeight = availableScreenHeight,
-                availableWidth = availableScreenWidth,
-                bookTextStyle = bookTextStyle,
-            )
-            val pageCount = remember { textPages.count() }
-            val pagerState = rememberPagerState(pageCount = { pageCount })
-            HorizontalPager(state = pagerState) {
-                val currentPageIndex = it
-                val pageContent = textPages[currentPageIndex]
-                CombinedClickableText(
-                    fullText = pageContent,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bookTextPadding)
-                )
-            }
-        } else {
-            Box(
+    private fun PaginatedTextComposable(state: ReadBookFeature.State.Content) {
+        val pagerState = rememberPagerState(pageCount = { state.pages.size })
+        HorizontalPager(state = pagerState) {
+            val currentPageIndex = it
+            val pageContent = state.pages[currentPageIndex]
+            CombinedClickableText(
+                fullText = pageContent,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(bookTextPadding)
-                    .onGloballyPositioned {
-                        isViewMeasured = true
-                        viewHeight = it.size.height
-                        viewWidth = it.size.width
-                    }
             )
         }
     }
 
     @Composable
-    fun TranslationPopupBox(
+    private fun TranslationPopupBox(
         wordTranslation: TextTranslation,
         onClickOutside: () -> Unit,
     ) {
