@@ -1,14 +1,10 @@
 package ru.mamykin.foboreader.core.extension
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.View
 import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
@@ -45,18 +41,6 @@ fun Fragment.showNotification(
 
 @Deprecated("Use externalMediaDirs.first() direcly")
 fun Context.getExternalMediaDir(): File? = externalMediaDirs.first()
-
-fun setNightModeEnabled(enabled: Boolean) {
-    val oldEnabled = isNightModeEnabled()
-    if (enabled != oldEnabled) {
-        val newMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-        AppCompatDelegate.setDefaultNightMode(newMode)
-    }
-}
-
-private fun isNightModeEnabled(): Boolean {
-    return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
-}
 
 fun Context.dpToPx(value: Int): Float {
     return TypedValue.applyDimension(

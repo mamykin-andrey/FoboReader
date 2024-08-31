@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 // TODO: use real text size
 internal class GetBookText @Inject constructor(
-    private val repository: BookContentRepository,
+    private val bookContentRepository: BookContentRepository,
 ) {
     suspend fun execute(
         filePath: String,
@@ -22,7 +22,7 @@ internal class GetBookText @Inject constructor(
     ): List<String> = withContext(
         Dispatchers.Default
     ) {
-        val fullText = repository.getBookContent(filePath).text
+        val fullText = bookContentRepository.getBookContent(filePath).text
         return@withContext splitTextToPages(fullText, measurer, screenSize)
     }
 
