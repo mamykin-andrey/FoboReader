@@ -4,11 +4,11 @@ import androidx.compose.ui.graphics.Color
 
 internal object LightColors {
 
-    val Primary = Color(0xFF6200EE)
-    val PrimaryVariant = Color(0xFF3700B3)
-    val Secondary = Color(0xFF03DAC6)
-    val SecondaryVariant = Color(0xFF018786)
-    val Background = Color.White
+    val Primary = Color(0xFF1565C0)
+    val PrimaryVariant = Color(0xFF0277BD)
+    val Secondary = Color(0xFFF9A825)
+    val SecondaryVariant = Color(0xFFFF8F00)
+    val Background = Color(0xFFE2E2E2)
     val Surface = Color.White
     val Error = Color(0xFFB00020)
     val OnPrimary = Color.White
