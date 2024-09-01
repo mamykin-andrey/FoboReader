@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import ru.mamykin.foboreader.book_details.domain.model.BookDetails
-import ru.mamykin.foboreader.book_details.domain.usecase.GetBookDetails
+import ru.mamykin.foboreader.book_details.details.BookDetails
+import ru.mamykin.foboreader.book_details.details.BookDetailsFeature
+import ru.mamykin.foboreader.book_details.details.GetBookDetails
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 
 class BookDetailsActorTest {

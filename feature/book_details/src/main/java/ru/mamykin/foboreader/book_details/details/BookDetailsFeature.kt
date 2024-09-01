@@ -1,10 +1,8 @@
-package ru.mamykin.foboreader.book_details.presentation
+package ru.mamykin.foboreader.book_details.details
 
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.mamykin.foboreader.book_details.domain.model.BookDetails
-import ru.mamykin.foboreader.book_details.domain.usecase.GetBookDetails
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.ComposeFeature

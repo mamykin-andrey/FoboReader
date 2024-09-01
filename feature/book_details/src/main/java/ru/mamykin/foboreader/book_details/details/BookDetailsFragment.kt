@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.book_details.presentation
+package ru.mamykin.foboreader.book_details.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -36,8 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import coil.compose.AsyncImage
 import ru.mamykin.foboreader.book_details.R
-import ru.mamykin.foboreader.book_details.di.DaggerBookDetailsComponent
-import ru.mamykin.foboreader.book_details.domain.model.BookDetails
+import ru.mamykin.foboreader.book_details.details.DaggerBookDetailsComponent
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi

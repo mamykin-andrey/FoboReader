@@ -4,7 +4,8 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import ru.mamykin.foboreader.book_details.domain.model.BookDetails
+import ru.mamykin.foboreader.book_details.details.BookDetails
+import ru.mamykin.foboreader.book_details.details.BookDetailsFeature
 import ru.mamykin.foboreader.core.platform.ResourceManager
 
 class BookDetailsFeatureTest {

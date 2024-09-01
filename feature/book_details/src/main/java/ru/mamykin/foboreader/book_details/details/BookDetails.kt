@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.book_details.domain.model
+package ru.mamykin.foboreader.book_details.details
 
 data class BookDetails(
     val author: String,

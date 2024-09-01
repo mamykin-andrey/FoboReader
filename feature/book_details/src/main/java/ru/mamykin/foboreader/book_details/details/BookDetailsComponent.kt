@@ -1,8 +1,7 @@
-package ru.mamykin.foboreader.book_details.di
+package ru.mamykin.foboreader.book_details.details
 
 import dagger.BindsInstance
 import dagger.Component
-import ru.mamykin.foboreader.book_details.presentation.BookDetailsFragment
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import javax.inject.Named

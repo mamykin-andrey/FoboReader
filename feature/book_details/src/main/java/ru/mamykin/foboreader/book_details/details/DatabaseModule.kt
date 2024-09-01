@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.book_details.di
+package ru.mamykin.foboreader.book_details.details
 
 import android.content.Context
 import dagger.Module
