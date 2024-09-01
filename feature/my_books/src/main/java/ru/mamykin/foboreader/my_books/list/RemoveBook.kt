@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.my_books.domain.usecase
+package ru.mamykin.foboreader.my_books.list
 
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import java.io.File

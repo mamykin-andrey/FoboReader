@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.my_books.presentation
+package ru.mamykin.foboreader.my_books.list
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -9,11 +9,9 @@ import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.core.presentation.ReducerResult
-import ru.mamykin.foboreader.my_books.domain.model.SortOrder
-import ru.mamykin.foboreader.my_books.domain.usecase.FilterMyBooks
-import ru.mamykin.foboreader.my_books.domain.usecase.GetMyBooks
-import ru.mamykin.foboreader.my_books.domain.usecase.RemoveBook
-import ru.mamykin.foboreader.my_books.domain.usecase.SortMyBooks
+import ru.mamykin.foboreader.my_books.search.FilterMyBooks
+import ru.mamykin.foboreader.my_books.sort.SortMyBooks
+import ru.mamykin.foboreader.my_books.sort.SortOrder
 import javax.inject.Inject
 
 internal class MyBooksFeature @Inject constructor(
@@ -44,9 +42,11 @@ internal class MyBooksFeature @Inject constructor(
                         emit(Action.RemoveBookError(errorMessageMapper.getMessage(it)))
                     })
                 }
+
                 is Intent.SortBooks -> {
                     emit(Action.BooksLoaded(sortMyBooks.execute(intent.sortOrder)))
                 }
+
                 is Intent.FilterBooks -> {
                     emit(Action.BooksLoaded(filterMyBooks.execute(intent.query)))
                 }

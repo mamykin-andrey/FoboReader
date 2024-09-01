@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.my_books.domain.helper
+package ru.mamykin.foboreader.my_books.list
 
 import android.util.Log
 import org.xml.sax.Attributes

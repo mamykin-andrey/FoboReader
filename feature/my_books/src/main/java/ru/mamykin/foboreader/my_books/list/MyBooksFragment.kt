@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.my_books.presentation
+package ru.mamykin.foboreader.my_books.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -54,7 +54,7 @@ import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.di.DaggerMyBooksComponent
-import ru.mamykin.foboreader.my_books.domain.model.SortOrder
+import ru.mamykin.foboreader.my_books.sort.SortOrder
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 import java.util.Date

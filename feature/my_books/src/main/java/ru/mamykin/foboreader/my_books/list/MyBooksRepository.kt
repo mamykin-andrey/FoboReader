@@ -1,10 +1,9 @@
-package ru.mamykin.foboreader.my_books.data
+package ru.mamykin.foboreader.my_books.list
 
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
-import ru.mamykin.foboreader.my_books.domain.helper.BookFilesScanner
-import ru.mamykin.foboreader.my_books.domain.helper.BooksComparatorFactory
-import ru.mamykin.foboreader.my_books.domain.model.SortOrder
+import ru.mamykin.foboreader.my_books.sort.BooksComparatorFactory
+import ru.mamykin.foboreader.my_books.sort.SortOrder
 import javax.inject.Inject
 
 internal class MyBooksRepository @Inject constructor(

@@ -1,9 +1,8 @@
-package ru.mamykin.foboreader.my_books.di
+package ru.mamykin.foboreader.my_books.list
 
 import dagger.Component
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
-import ru.mamykin.foboreader.my_books.presentation.MyBooksFragment
 import javax.inject.Scope
 
 @Scope

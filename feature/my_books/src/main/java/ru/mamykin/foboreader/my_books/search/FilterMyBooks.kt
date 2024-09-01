@@ -1,7 +1,7 @@
-package ru.mamykin.foboreader.my_books.domain.usecase
+package ru.mamykin.foboreader.my_books.search
 
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
-import ru.mamykin.foboreader.my_books.data.MyBooksRepository
+import ru.mamykin.foboreader.my_books.list.MyBooksRepository
 import javax.inject.Inject
 
 internal class FilterMyBooks @Inject constructor(

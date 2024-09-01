@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.my_books.di
+package ru.mamykin.foboreader.my_books.list
 
 import android.content.Context
 import dagger.Module
