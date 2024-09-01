@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.presentation
+package ru.mamykin.foboreader.store.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -42,7 +42,6 @@ import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.di.DaggerBookListComponent
-import ru.mamykin.foboreader.store.domain.model.StoreBook
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
@@ -188,7 +187,7 @@ internal class BooksListFragment : BaseFragment() {
                 .fillMaxWidth()
                 .padding(4.dp)
                 .clickable {
-                    feature.sendIntent(BooksListFeature.Intent.DownloadBook(book.link, book.getFileName()))
+                    feature.sendIntent(BooksListFeature.Intent.DownloadBook(book))
                 },
             elevation = 16.dp,
         ) {

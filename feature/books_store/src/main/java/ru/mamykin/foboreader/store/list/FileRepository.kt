@@ -1,5 +1,6 @@
-package ru.mamykin.foboreader.store.data.network
+package ru.mamykin.foboreader.store.list
 
+import ru.mamykin.foboreader.store.list.DownloadFileException
 import java.io.File
 
 internal interface FileRepository {

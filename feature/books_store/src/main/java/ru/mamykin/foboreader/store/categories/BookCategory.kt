@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.domain.model
+package ru.mamykin.foboreader.store.categories
 
 class BookCategory(
     val id: String,

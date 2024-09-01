@@ -14,12 +14,3 @@ fun Activity.apiHolder(): ApiHolder {
 fun Activity.commonApi(): CommonApi {
     return (application as CommonApiProvider).commonApi
 }
-
-fun Activity.setCurrentLocale(languageCode: String) {
-    if (resources.configuration.locale.language == languageCode) return
-    resources.apply {
-        configuration.setLocale(Locale(languageCode))
-        updateConfiguration(configuration, displayMetrics)
-    }
-    recreate()
-}

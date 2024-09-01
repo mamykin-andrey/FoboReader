@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.presentation
+package ru.mamykin.foboreader.store.categories
 
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.Flow
@@ -7,10 +7,7 @@ import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
-import ru.mamykin.foboreader.store.di.BookCategoriesScope
-import ru.mamykin.foboreader.store.domain.model.BookCategory
-import ru.mamykin.foboreader.store.domain.usecase.GetBookCategories
-import ru.mamykin.foboreader.store.navigation.BooksListScreen
+import ru.mamykin.foboreader.store.list.BooksListScreen
 import javax.inject.Inject
 
 @BookCategoriesScope

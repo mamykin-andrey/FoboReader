@@ -1,16 +1,15 @@
 package ru.mamykin.foboreader.settings.all_settings
 
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
-import ru.mamykin.foboreader.settings.all_settings.AppSettings
-import ru.mamykin.foboreader.settings.app_language.GetSelectedLanguage
+import ru.mamykin.foboreader.settings.app_language.AppLanguage
+import ru.mamykin.foboreader.settings.app_language.supportedAppLanguages
 import javax.inject.Inject
 
 internal class GetSettings @Inject constructor(
     private val settingsRepository: AppSettingsRepository,
-    private val getSelectedLanguage: GetSelectedLanguage,
 ) {
     fun execute(): AppSettings {
-        val selectedLanguageName = getSelectedLanguage.execute().name
+        val selectedLanguageName = getSelectedLanguage().name
         return with(settingsRepository) {
             AppSettings(
                 isNightThemeEnabled = isNightThemeEnabled(),
@@ -21,5 +20,11 @@ internal class GetSettings @Inject constructor(
                 isVibrationEnabled = isUseVibration(),
             )
         }
+    }
+
+    private fun getSelectedLanguage(): AppLanguage {
+        val selectedLanguageCode = settingsRepository.getAppLanguageCode()
+        return supportedAppLanguages.find { it.code == selectedLanguageCode }
+            ?: supportedAppLanguages.first()
     }
 }

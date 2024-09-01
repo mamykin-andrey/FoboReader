@@ -1,7 +1,6 @@
-package ru.mamykin.foboreader.store.data.model
+package ru.mamykin.foboreader.store.categories
 
 import androidx.annotation.Keep
-import ru.mamykin.foboreader.store.domain.model.BookCategory
 
 @Keep
 internal class BookCategoriesResponse(

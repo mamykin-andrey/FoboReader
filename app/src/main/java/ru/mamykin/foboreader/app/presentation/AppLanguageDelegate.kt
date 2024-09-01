@@ -5,7 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
-import ru.mamykin.foboreader.core.extension.setCurrentLocale
+import java.util.Locale
 
 internal class AppLanguageDelegate(
     private val activity: AppCompatActivity,
@@ -13,7 +13,16 @@ internal class AppLanguageDelegate(
 ) {
     fun init() {
         appSettingsRepository.appLanguageFlow()
-            .onEach { activity.setCurrentLocale(it) }
+            .onEach { setCurrentLocale(it) }
             .launchIn(activity.lifecycleScope)
+    }
+
+    private fun setCurrentLocale(languageCode: String) {
+        if (activity.resources.configuration.locale.language == languageCode) return
+        activity.resources.apply {
+            configuration.setLocale(Locale(languageCode))
+            updateConfiguration(configuration, displayMetrics)
+        }
+        activity.recreate()
     }
 }

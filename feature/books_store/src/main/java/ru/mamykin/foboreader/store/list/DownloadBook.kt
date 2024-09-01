@@ -1,7 +1,6 @@
-package ru.mamykin.foboreader.store.domain.usecase
+package ru.mamykin.foboreader.store.list
 
 import ru.mamykin.foboreader.core.platform.Log
-import ru.mamykin.foboreader.store.data.network.FileRepository
 import javax.inject.Inject
 
 internal class DownloadBook @Inject constructor(

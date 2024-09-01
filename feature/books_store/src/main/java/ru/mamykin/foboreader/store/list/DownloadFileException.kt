@@ -1,3 +1,3 @@
-package ru.mamykin.foboreader.store.data.network
+package ru.mamykin.foboreader.store.list
 
 class DownloadFileException : RuntimeException()

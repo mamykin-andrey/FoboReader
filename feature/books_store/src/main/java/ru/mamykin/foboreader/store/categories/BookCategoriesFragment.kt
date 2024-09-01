@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.presentation
+package ru.mamykin.foboreader.store.categories
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -37,7 +37,6 @@ import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.di.DaggerBookCategoriesComponent
-import ru.mamykin.foboreader.store.domain.model.BookCategory
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles

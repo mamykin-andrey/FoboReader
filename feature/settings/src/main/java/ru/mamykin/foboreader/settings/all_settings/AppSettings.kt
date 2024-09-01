@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.settings.all_settings
 
-// TODO: Add a separate class for working with colors
 internal data class AppSettings(
     val isNightThemeEnabled: Boolean,
     val backgroundColor: String,

@@ -1,28 +1,23 @@
-package ru.mamykin.foboreader.store.di
+package ru.mamykin.foboreader.store.categories
 
-import dagger.Binds
-import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
-import ru.mamykin.foboreader.store.data.network.FileRepository
-import ru.mamykin.foboreader.store.data.network.FileRepositoryImpl
-import ru.mamykin.foboreader.store.presentation.BooksListFragment
-import javax.inject.Named
+import ru.mamykin.foboreader.store.common.BooksStoreApiServiceModule
 import javax.inject.Scope
 
 @Scope
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-internal annotation class BookListScope
+internal annotation class BookCategoriesScope
 
-@BookListScope
+@BookCategoriesScope
 @Component(
     modules = [
-        BooksStoreModule::class,
+        BookCategoriesModule::class,
     ],
     dependencies = [
         NetworkApi::class,
@@ -31,9 +26,9 @@ internal annotation class BookListScope
         SettingsApi::class,
     ]
 )
-internal interface BookListComponent {
+internal interface BookCategoriesComponent {
 
-    fun inject(fragment: BooksListFragment)
+    fun inject(fragment: BookCategoriesFragment)
 
     @Component.Factory
     interface Factory {
@@ -43,17 +38,9 @@ internal interface BookListComponent {
             networkApi: NetworkApi,
             navigationApi: NavigationApi,
             settingsApi: SettingsApi,
-            @BindsInstance
-            @Named("categoryId")
-            categoryId: String,
-        ): BookListComponent
+        ): BookCategoriesComponent
     }
 }
 
 @Module(includes = [BooksStoreApiServiceModule::class])
-internal interface BooksStoreModule {
-
-    @Binds
-    @BookListScope
-    fun bindFileRepository(impl: FileRepositoryImpl): FileRepository
-}
+internal class BookCategoriesModule

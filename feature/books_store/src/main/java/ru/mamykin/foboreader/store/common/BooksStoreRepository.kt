@@ -1,9 +1,8 @@
-package ru.mamykin.foboreader.store.data
+package ru.mamykin.foboreader.store.common
 
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
-import ru.mamykin.foboreader.store.data.network.TestBooksStoreService
-import ru.mamykin.foboreader.store.domain.model.BookCategory
-import ru.mamykin.foboreader.store.domain.model.StoreBook
+import ru.mamykin.foboreader.store.categories.BookCategory
+import ru.mamykin.foboreader.store.list.StoreBook
 import javax.inject.Inject
 
 internal class BooksStoreRepository @Inject constructor(
@@ -47,5 +46,9 @@ internal class BooksStoreRepository @Inject constructor(
             return books
         }
         return books.filter { it.containsText(searchQuery) }
+    }
+
+    private fun StoreBook.containsText(text: String): Boolean {
+        return title.contains(text, ignoreCase = true) || author.contains(text, ignoreCase = true)
     }
 }

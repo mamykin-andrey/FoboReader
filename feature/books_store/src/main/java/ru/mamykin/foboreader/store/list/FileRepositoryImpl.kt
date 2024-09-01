@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.data.network
+package ru.mamykin.foboreader.store.list
 
 import android.content.Context
 import kotlinx.coroutines.Dispatchers

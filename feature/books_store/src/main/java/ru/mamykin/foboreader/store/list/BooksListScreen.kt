@@ -1,9 +1,8 @@
-package ru.mamykin.foboreader.store.navigation
+package ru.mamykin.foboreader.store.list
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import com.github.terrakok.cicerone.androidx.FragmentScreen
-import ru.mamykin.foboreader.store.presentation.BooksListFragment
 
 class BooksListScreen(
     private val categoryId: String,

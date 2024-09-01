@@ -1,7 +1,6 @@
-package ru.mamykin.foboreader.store.domain.usecase
+package ru.mamykin.foboreader.store.list
 
-import ru.mamykin.foboreader.store.data.BooksStoreRepository
-import ru.mamykin.foboreader.store.domain.model.StoreBook
+import ru.mamykin.foboreader.store.common.BooksStoreRepository
 import javax.inject.Inject
 
 internal class FilterStoreBooks @Inject constructor(

@@ -1,11 +1,11 @@
-package ru.mamykin.foboreader.store.data.network
+package ru.mamykin.foboreader.store.common
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import kotlinx.coroutines.delay
-import ru.mamykin.foboreader.store.data.model.BookCategoriesResponse
-import ru.mamykin.foboreader.store.data.model.BookListResponse
+import ru.mamykin.foboreader.store.categories.BookCategoriesResponse
+import ru.mamykin.foboreader.store.list.BookListResponse
 import java.io.IOException
 import javax.inject.Inject
 
@@ -187,6 +187,7 @@ internal class TestBooksStoreService @Inject constructor(
                     else -> throw IllegalStateException("Unknown category id: $categoryId!")
                 }
             }
+
             EN_LOCALE -> {
                 when (categoryId) {
                     "1" -> enFantasticBooks
@@ -195,6 +196,7 @@ internal class TestBooksStoreService @Inject constructor(
                     else -> throw IllegalStateException("Unknown category id: $categoryId!")
                 }
             }
+
             else -> throw IllegalStateException("Unknown locale: $locale")
         }
     }

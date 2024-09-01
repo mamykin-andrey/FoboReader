@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.presentation
+package ru.mamykin.foboreader.store.list
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -9,11 +9,6 @@ import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.store.R
-import ru.mamykin.foboreader.store.di.BookListScope
-import ru.mamykin.foboreader.store.domain.model.StoreBook
-import ru.mamykin.foboreader.store.domain.usecase.DownloadBook
-import ru.mamykin.foboreader.store.domain.usecase.FilterStoreBooks
-import ru.mamykin.foboreader.store.domain.usecase.GetStoreBooks
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -47,21 +42,28 @@ internal class BooksListFeature @Inject constructor(
                         onFailure = { emit(Action.BooksLoadingFailed(it)) }
                     )
                 }
+
                 is Intent.FilterBooks -> {
                     filterStoreBooks.execute(categoryId, intent.query).fold(
                         onSuccess = { emit(Action.BooksLoadingSucceed(it)) },
                         onFailure = { emit(Action.BooksLoadingFailed(it)) }
                     )
                 }
+
                 is Intent.DownloadBook -> {
-                    val fileName = intent.fileName
+                    val fileName = getStorageFileName(intent.book)
                     emit(Action.DownloadBookStarted(fileName))
-                    downloadStoreBook.execute(intent.bookLink, fileName).fold(
+                    downloadStoreBook.execute(intent.book.link, fileName).fold(
                         onSuccess = { emit(Action.BookDownloadSucceed(fileName)) },
                         onFailure = { emit(Action.BookDownloadFailed(fileName)) }
                     )
                 }
             }
+        }
+
+        private fun getStorageFileName(book: StoreBook): String {
+            val transliteratedName = StringTransliterator.transliterate(book.title)
+            return "$transliteratedName.${book.format}"
         }
     }
 
@@ -114,7 +116,7 @@ internal class BooksListFeature @Inject constructor(
     sealed class Intent {
         object LoadBooks : Intent()
         class FilterBooks(val query: String) : Intent()
-        class DownloadBook(val bookLink: String, val fileName: String) : Intent()
+        class DownloadBook(val book: StoreBook) : Intent()
     }
 
     sealed class Action {

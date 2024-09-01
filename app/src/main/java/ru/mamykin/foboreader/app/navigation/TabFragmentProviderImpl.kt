@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import ru.mamykin.foboreader.core.navigation.TabFragmentProvider
 import ru.mamykin.foboreader.my_books.presentation.MyBooksFragment
 import ru.mamykin.foboreader.settings.all_settings.SettingsFragment
-import ru.mamykin.foboreader.store.presentation.BookCategoriesFragment
+import ru.mamykin.foboreader.store.categories.BookCategoriesFragment
 import javax.inject.Inject
 
 class TabFragmentProviderImpl @Inject constructor() : TabFragmentProvider {

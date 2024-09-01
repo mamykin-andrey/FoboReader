@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.core.extension
+package ru.mamykin.foboreader.store.list
 
 object StringTransliterator {
 
