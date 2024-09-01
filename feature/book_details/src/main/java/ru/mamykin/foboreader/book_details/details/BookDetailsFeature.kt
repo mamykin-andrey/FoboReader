@@ -35,6 +35,7 @@ internal class BookDetailsFeature @Inject constructor(
                 is Intent.OpenBook -> {
                     router.navigateTo(screenProvider.readBookScreen(bookId))
                 }
+
                 is Intent.LoadBookInfo -> {
                     emit(Action.BookLoaded(getBookDetails.execute(bookId)))
                 }

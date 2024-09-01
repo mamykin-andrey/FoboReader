@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.book_details.details
 
-import ru.mamykin.foboreader.book_details.details.BookDetails
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import javax.inject.Inject
 
