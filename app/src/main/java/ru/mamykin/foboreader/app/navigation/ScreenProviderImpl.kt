@@ -5,7 +5,7 @@ import com.github.terrakok.cicerone.androidx.FragmentScreen
 import ru.mamykin.foboreader.main.MainFragment
 import ru.mamykin.foboreader.book_details.details.BookDetailsFragment
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
-import ru.mamykin.foboreader.read_book.presentation.ReadBookFragment
+import ru.mamykin.foboreader.read_book.reader.ReadBookFragment
 import javax.inject.Inject
 import javax.inject.Singleton
 

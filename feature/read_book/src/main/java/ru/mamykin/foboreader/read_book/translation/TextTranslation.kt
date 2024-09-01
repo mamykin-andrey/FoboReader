@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.read_book.domain.model
+package ru.mamykin.foboreader.read_book.translation
 
 class TextTranslation(
     val sourceText: String,

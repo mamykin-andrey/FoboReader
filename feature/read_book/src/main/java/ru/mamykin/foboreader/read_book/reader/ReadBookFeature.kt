@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.read_book.presentation
+package ru.mamykin.foboreader.read_book.reader
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
@@ -12,12 +12,9 @@ import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.core.presentation.ReducerResult
 import ru.mamykin.foboreader.read_book.R
-import ru.mamykin.foboreader.read_book.di.ReadBookScope
-import ru.mamykin.foboreader.read_book.domain.model.TextTranslation
-import ru.mamykin.foboreader.read_book.domain.usecase.GetBookInfo
-import ru.mamykin.foboreader.read_book.domain.usecase.GetBookText
-import ru.mamykin.foboreader.read_book.domain.usecase.GetParagraphTranslation
-import ru.mamykin.foboreader.read_book.domain.usecase.GetWordTranslation
+import ru.mamykin.foboreader.read_book.translation.GetParagraphTranslation
+import ru.mamykin.foboreader.read_book.translation.GetWordTranslation
+import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import javax.inject.Inject
 import javax.inject.Named
 

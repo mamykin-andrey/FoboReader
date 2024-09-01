@@ -1,6 +1,6 @@
-package ru.mamykin.foboreader.read_book.domain.usecase
+package ru.mamykin.foboreader.read_book.translation
 
-import ru.mamykin.foboreader.read_book.data.BookContentRepository
+import ru.mamykin.foboreader.read_book.reader.BookContentRepository
 import javax.inject.Inject
 
 internal class GetParagraphTranslation @Inject constructor(

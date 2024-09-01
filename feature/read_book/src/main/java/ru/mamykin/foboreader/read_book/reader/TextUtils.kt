@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.read_book.presentation
+package ru.mamykin.foboreader.read_book.reader
 
 object TextUtils {
 

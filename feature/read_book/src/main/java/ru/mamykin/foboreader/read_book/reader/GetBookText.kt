@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.read_book.domain.usecase
+package ru.mamykin.foboreader.read_book.reader
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
@@ -8,7 +8,6 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ru.mamykin.foboreader.read_book.data.BookContentRepository
 import javax.inject.Inject
 
 // TODO: use real text size

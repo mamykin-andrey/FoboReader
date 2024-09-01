@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.read_book.platform
+package ru.mamykin.foboreader.read_book.reader
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,7 +6,6 @@ import android.os.Vibrator
 import android.view.HapticFeedbackConstants
 import android.view.View
 import ru.mamykin.foboreader.core.platform.OsHelper
-import ru.mamykin.foboreader.read_book.domain.usecase.GetVibrationEnabled
 import javax.inject.Inject
 
 internal class VibrationManagerImpl @Inject constructor(

@@ -1,8 +1,6 @@
-package ru.mamykin.foboreader.read_book.domain.usecase
+package ru.mamykin.foboreader.read_book.translation
 
 import ru.mamykin.foboreader.core.extension.trimSpecialCharacters
-import ru.mamykin.foboreader.read_book.data.TranslationRepository
-import ru.mamykin.foboreader.read_book.domain.model.TextTranslation
 import javax.inject.Inject
 
 internal class GetWordTranslation @Inject constructor(

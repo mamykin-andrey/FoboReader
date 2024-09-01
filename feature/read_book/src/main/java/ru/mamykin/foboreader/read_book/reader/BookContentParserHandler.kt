@@ -1,10 +1,9 @@
-package ru.mamykin.foboreader.read_book.domain.helper
+package ru.mamykin.foboreader.read_book.reader
 
 import android.util.Log
 import org.xml.sax.Attributes
 import org.xml.sax.SAXException
 import org.xml.sax.ext.DefaultHandler2
-import ru.mamykin.foboreader.read_book.domain.model.BookContent
 
 class BookContentParserHandler(
     private val successFunc: (BookContent) -> Unit

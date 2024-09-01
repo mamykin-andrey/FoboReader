@@ -1,11 +1,10 @@
-package ru.mamykin.foboreader.read_book.data.network
+package ru.mamykin.foboreader.read_book.translation
 
 import kotlinx.coroutines.Deferred
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
-import ru.mamykin.foboreader.read_book.data.model.GoogleTranslateResponse
 
 internal interface GoogleTranslateService {
 

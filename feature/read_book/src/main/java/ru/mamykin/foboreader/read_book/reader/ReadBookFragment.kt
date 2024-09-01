@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.read_book.presentation
+package ru.mamykin.foboreader.read_book.reader
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -52,8 +52,7 @@ import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.di.DaggerReadBookComponent
-import ru.mamykin.foboreader.read_book.domain.model.TextTranslation
-import ru.mamykin.foboreader.read_book.platform.VibrationManager
+import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
 

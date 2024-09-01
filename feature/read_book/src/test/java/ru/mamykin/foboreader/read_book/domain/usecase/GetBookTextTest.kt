@@ -4,7 +4,8 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import ru.mamykin.foboreader.read_book.data.BookContentRepository
+import ru.mamykin.foboreader.read_book.reader.BookContentRepository
+import ru.mamykin.foboreader.read_book.reader.GetBookText
 
 class GetBookTextTest {
 

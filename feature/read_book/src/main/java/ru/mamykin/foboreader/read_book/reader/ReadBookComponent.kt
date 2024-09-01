@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.read_book.di
+package ru.mamykin.foboreader.read_book.reader
 
 import android.content.Context
 import dagger.Binds
@@ -17,10 +17,7 @@ import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.read_book.BuildConfig
-import ru.mamykin.foboreader.read_book.data.network.GoogleTranslateService
-import ru.mamykin.foboreader.read_book.platform.VibrationManager
-import ru.mamykin.foboreader.read_book.platform.VibrationManagerImpl
-import ru.mamykin.foboreader.read_book.presentation.ReadBookFragment
+import ru.mamykin.foboreader.read_book.translation.GoogleTranslateService
 import javax.inject.Named
 import javax.inject.Scope
 

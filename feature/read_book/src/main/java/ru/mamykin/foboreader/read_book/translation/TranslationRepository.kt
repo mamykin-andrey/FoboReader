@@ -1,9 +1,7 @@
-package ru.mamykin.foboreader.read_book.data
+package ru.mamykin.foboreader.read_book.translation
 
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import ru.mamykin.foboreader.read_book.data.network.GoogleTranslateService
-import ru.mamykin.foboreader.read_book.domain.model.TextTranslation
 import javax.inject.Inject
 import javax.inject.Named
 

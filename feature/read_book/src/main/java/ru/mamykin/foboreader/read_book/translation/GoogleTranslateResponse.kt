@@ -1,7 +1,6 @@
-package ru.mamykin.foboreader.read_book.data.model
+package ru.mamykin.foboreader.read_book.translation
 
 import androidx.annotation.Keep
-import ru.mamykin.foboreader.read_book.domain.model.TextTranslation
 
 @Keep
 internal class GoogleTranslateResponse(
