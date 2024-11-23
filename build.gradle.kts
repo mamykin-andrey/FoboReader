@@ -26,4 +26,5 @@ tasks.register("clean", Delete::class) {
 
 plugins {
     id("org.jetbrains.kotlin.android") version "1.6.10" apply false
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.22"
 }

@@ -27,6 +27,9 @@ object Versions {
     const val composeVersion = "1.6.6"
     const val composeUiVersion = "1.6.6"
     const val coilVersion = "2.2.2"
+    const val composeNavigationVersion = "2.8.4"
+    const val kotlinSerializationVersion = "1.5.1"
+    const val composeMaterial = "1.2.0"
 }
 
 object Dependencies {
@@ -73,6 +76,9 @@ object Dependencies {
     const val composeActivity = "androidx.activity:activity-compose:${Versions.composeVersion}"
     const val composeToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.composeUiVersion}"
     const val coil = "io.coil-kt:coil-compose:${Versions.coilVersion}"
-    // const val composeUiTest = androidTestImplementation("androidx.compose.ui:ui-test-junit4:${rootProject.extra["compose_ui_version"]}")
-    // const val composeUiTest = debugImplementation("androidx.compose.ui:ui-test-manifest:${rootProject.extra["compose_ui_version"]}")
+    const val composeNavigation = "androidx.navigation:navigation-compose:${Versions.composeNavigationVersion}"
+    const val navigationFragment = "androidx.navigation:navigation-fragment-ktx:${Versions.composeNavigationVersion}"
+    const val navigationUi = "androidx.navigation:navigation-ui-ktx:${Versions.composeNavigationVersion}"
+    const val kotlinSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinSerializationVersion}"
+    const val composeMaterial3 = "androidx.compose.material3:material3:${Versions.composeMaterial}"
 }

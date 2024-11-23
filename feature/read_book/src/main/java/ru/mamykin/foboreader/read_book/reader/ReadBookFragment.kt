@@ -51,7 +51,6 @@ import ru.mamykin.foboreader.core.extension.commonApi
 import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.read_book.R
-import ru.mamykin.foboreader.read_book.di.DaggerReadBookComponent
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
@@ -98,6 +97,7 @@ class ReadBookFragment : BaseFragment() {
             Scaffold(topBar = {
                 TopAppBar(
                     title = {
+                        // TODO: Move to the feature state
                         Text(text = (state as? ReadBookFeature.State.Content)?.title ?: "Loading")
                     }, elevation = 12.dp
                 )

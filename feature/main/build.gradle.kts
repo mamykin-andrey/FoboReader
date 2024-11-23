@@ -5,6 +5,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
+    kotlin("plugin.serialization") version "1.8.22"
 }
 
 android {
@@ -18,6 +19,8 @@ android {
     }
 
     buildFeatures.viewBinding = true
+    buildFeatures.compose = true
+    composeOptions.kotlinCompilerExtensionVersion = "1.4.8"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -31,10 +34,27 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":uikit"))
 
     implementation(Dependencies.materialLib)
     implementation(Dependencies.constraintLayout)
     implementation(Dependencies.fragmentX)
+    implementation(Dependencies.kotlinSerialization)
 
+    implementation(Dependencies.composeUi)
+    implementation(Dependencies.composeTooling)
+    implementation(Dependencies.composeFoundation)
+    implementation(Dependencies.composeMaterial)
+    implementation(Dependencies.composeMaterial3)
+    implementation(Dependencies.composeMaterialIconsCore)
+    implementation(Dependencies.composeMaterialIconsExt)
+    implementation(Dependencies.composeToolingPreview)
+    implementation(Dependencies.coil)
+    implementation(Dependencies.composeNavigation)
+    implementation(Dependencies.navigationFragment)
+    implementation(Dependencies.navigationUi)
+
+    implementation(Dependencies.dagger)
+    implementation("androidx.compose.ui:ui-viewbinding:1.7.5")
     kapt(Dependencies.daggerCompiler)
 }

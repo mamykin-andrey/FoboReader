@@ -8,8 +8,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.di.ComponentHolder
 
+// TODO: Remove this class
 abstract class BaseFragment : Fragment() {
 
+    // TODO: Automate this field
     abstract val featureName: String
 
     override fun onDestroy() {
@@ -20,6 +22,7 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
+    // TODO: Remove this method and use onDestroy with the flag if needed
     abstract fun onCleared()
 
     protected fun <T> Flow<T>.collectWithRepeatOnStarted(collector: (T) -> Unit) {

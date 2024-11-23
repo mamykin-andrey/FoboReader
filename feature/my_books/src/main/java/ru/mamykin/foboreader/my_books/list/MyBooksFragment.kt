@@ -53,7 +53,6 @@ import ru.mamykin.foboreader.core.extension.showSnackbar
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.my_books.R
-import ru.mamykin.foboreader.my_books.di.DaggerMyBooksComponent
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles

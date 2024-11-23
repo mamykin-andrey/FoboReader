@@ -14,4 +14,16 @@ class TabFragmentProviderImpl @Inject constructor() : TabFragmentProvider {
     override fun newBooksStoreFragment(): Fragment = BookCategoriesFragment.newInstance()
 
     override fun newSettingsFragment(): Fragment = SettingsFragment.newInstance()
+
+    // override fun myBooksScreen() {
+    //     TODO("Not yet implemented")
+    // }
+    //
+    // override fun booksStoreScreen() {
+    //     TODO("Not yet implemented")
+    // }
+    //
+    // override fun settingsFragment() {
+    //     TODO("Not yet implemented")
+    // }
 }
