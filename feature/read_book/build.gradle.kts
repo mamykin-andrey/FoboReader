@@ -29,8 +29,6 @@ android {
         }
     }
 
-    buildFeatures.viewBinding = true // TODO: remove everywhere
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

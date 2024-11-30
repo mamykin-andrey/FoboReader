@@ -18,7 +18,6 @@ android {
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures.viewBinding = true
     buildFeatures.compose = true
     composeOptions.kotlinCompilerExtensionVersion = "1.4.8"
 
@@ -55,6 +54,6 @@ dependencies {
     implementation(Dependencies.navigationUi)
 
     implementation(Dependencies.dagger)
-    implementation("androidx.compose.ui:ui-viewbinding:1.7.5")
     kapt(Dependencies.daggerCompiler)
+
 }
