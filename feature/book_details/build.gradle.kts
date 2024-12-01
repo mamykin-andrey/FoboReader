@@ -23,7 +23,7 @@ android {
         jvmTarget = "17"
         freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
-    composeOptions.kotlinCompilerExtensionVersion = "1.4.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

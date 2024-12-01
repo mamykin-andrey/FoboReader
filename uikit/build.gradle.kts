@@ -20,7 +20,7 @@ android {
     buildFeatures.compose = true
     lintOptions.isAbortOnError = false
     kotlinOptions.jvmTarget = "17"
-    composeOptions.kotlinCompilerExtensionVersion = "1.4.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

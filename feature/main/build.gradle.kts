@@ -5,7 +5,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    kotlin("plugin.serialization") version "1.8.22"
+    kotlin("plugin.serialization") version "1.9.22"
 }
 
 android {
@@ -19,7 +19,7 @@ android {
     }
 
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = "1.4.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

@@ -43,6 +43,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    buildFeatures.compose = true
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
+
     lintOptions {
         isAbortOnError = false
     }
@@ -52,7 +55,6 @@ android {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(project(":core"))
     implementation(project(":feature:common_book_info"))
     implementation(project(":feature:books_store"))
@@ -82,6 +84,15 @@ dependencies {
     implementation(Dependencies.dagger)
     implementation(Dependencies.cicerone)
     implementation(Dependencies.jankStats)
+
+    implementation(Dependencies.composeUi)
+    implementation(Dependencies.composeTooling)
+    implementation(Dependencies.composeFoundation)
+    implementation(Dependencies.composeMaterial)
+    implementation(Dependencies.composeMaterialIconsCore)
+    implementation(Dependencies.composeMaterialIconsExt)
+    implementation(Dependencies.composeActivity)
+    implementation(Dependencies.composeToolingPreview)
 
     kapt(Dependencies.daggerCompiler)
 
