@@ -56,4 +56,7 @@ dependencies {
     implementation(Dependencies.dagger)
     kapt(Dependencies.daggerCompiler)
 
+    testImplementation(Dependencies.junit)
+    testImplementation(Dependencies.mockk)
+    testImplementation(Dependencies.coroutinesTest)
 }
