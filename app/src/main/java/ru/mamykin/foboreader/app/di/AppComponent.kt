@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient
 import ru.mamykin.foboreader.app.data.AppSettingsRepositoryImpl
 import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
 import ru.mamykin.foboreader.app.navigation.ScreenProviderImpl
-import ru.mamykin.foboreader.app.navigation.TabFragmentProviderImpl
+import ru.mamykin.foboreader.app.navigation.TabComposableProviderImpl
 import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
@@ -19,7 +19,7 @@ import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
-import ru.mamykin.foboreader.core.navigation.TabFragmentProvider
+import ru.mamykin.foboreader.core.navigation.TabComposableProvider
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import javax.inject.Singleton
 
@@ -58,7 +58,7 @@ internal class AppModule {
 
         @Binds
         @Singleton
-        fun bindFragmentProvider(impl: TabFragmentProviderImpl): TabFragmentProvider
+        fun bindFragmentProvider(impl: TabComposableProviderImpl): TabComposableProvider
 
         @Binds
         @Singleton

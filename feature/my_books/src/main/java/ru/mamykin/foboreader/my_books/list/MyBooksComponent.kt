@@ -17,7 +17,7 @@ internal annotation class MyBooksScope
 )
 internal interface MyBooksComponent {
 
-    fun inject(fragment: MyBooksFragment)
+    fun myBooksFeature(): MyBooksFeature
 
     @Component.Factory
     interface Factory {

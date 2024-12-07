@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.core.di
 
+@Deprecated("Do not use with pure Compose functions, use viewModelStore instead")
 object ComponentHolder {
 
     private var componentMap: MutableMap<String, Any?> = hashMapOf()
