@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.settings.custom_color
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
@@ -12,10 +13,12 @@ import javax.inject.Inject
 internal class ChooseCustomColorFeature @Inject constructor(
     reducer: ChooseCustomColorReducer,
     actor: ChooseCustomColorActor,
+    scope: CoroutineScope,
 ) : ComposeFeature<ChooseCustomColorFeature.State, ChooseCustomColorFeature.Intent, ChooseCustomColorFeature.Effect, ChooseCustomColorFeature.Action>(
     State.Loaded(emptyList()),
     actor,
-    reducer
+    reducer,
+    scope,
 ) {
     internal class ChooseCustomColorActor @Inject constructor(
         private val getCustomColorsUseCase: GetCustomColors,

@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.store.categories
 
 import com.github.terrakok.cicerone.Router
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
@@ -14,10 +15,12 @@ import javax.inject.Inject
 internal class BookCategoriesFeature @Inject constructor(
     reducer: BookCategoriesReducer,
     actor: BookCategoriesActor,
+    scope: CoroutineScope,
 ) : ComposeFeature<BookCategoriesFeature.State, BookCategoriesFeature.Intent, BookCategoriesFeature.Effect, BookCategoriesFeature.Action>(
     State.Progress,
     actor,
-    reducer
+    reducer,
+    scope,
 ) {
     init {
         sendIntent(Intent.LoadCategories)
@@ -37,6 +40,7 @@ internal class BookCategoriesFeature @Inject constructor(
                         { emit(Action.LoadingError(it)) }
                     )
                 }
+
                 is Intent.OpenCategory -> {
                     router.navigateTo(BooksListScreen(intent.id))
                 }

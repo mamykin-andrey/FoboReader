@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
@@ -17,10 +18,12 @@ import javax.inject.Inject
 internal class MainFeature @Inject constructor(
     actor: MainActor,
     reducer: MainReducer,
+    scope: CoroutineScope,
 ) : ComposeFeature<MainFeature.State, MainFeature.Intent, MainFeature.Effect, MainFeature.Action>(
     State(),
     actor,
     reducer,
+    scope,
 ) {
     internal class MainActor @Inject constructor() : Actor<Intent, Action> {
 

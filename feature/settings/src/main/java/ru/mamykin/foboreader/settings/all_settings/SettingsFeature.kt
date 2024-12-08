@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.settings.all_settings
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
@@ -12,10 +13,12 @@ import javax.inject.Inject
 internal class SettingsFeature @Inject constructor(
     reducer: SettingsReducer,
     actor: SettingsActor,
+    scope: CoroutineScope,
 ) : ComposeFeature<SettingsFeature.State, SettingsFeature.Intent, SettingsFeature.Effect, SettingsFeature.Action>(
     State.Loading,
     actor,
-    reducer
+    reducer,
+    scope,
 ) {
     init {
         sendIntent(Intent.LoadSettings)

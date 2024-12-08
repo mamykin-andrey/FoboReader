@@ -4,6 +4,7 @@ import ru.mamykin.foboreader.ProjectInfo
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("kapt")
 }
 
 android {
@@ -57,6 +58,8 @@ dependencies {
     implementation(Dependencies.composeMaterialIconsExt)
     implementation(Dependencies.composeActivity)
     implementation(Dependencies.composeToolingPreview)
+
+    kapt(Dependencies.daggerCompiler)
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)

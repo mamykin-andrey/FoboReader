@@ -4,8 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +19,8 @@ typealias Reducer<State, Action, Effect> = (state: State, action: Action) -> Red
 abstract class ComposeFeature<State, Intent, Effect, Action>(
     initialState: State,
     private val actor: Actor<Intent, Action>,
-    private val reducer: Reducer<State, Action, Effect>
+    private val reducer: Reducer<State, Action, Effect>,
+    private val scope: CoroutineScope,
 ) {
     companion object {
         private const val TAG = "ComposeFeature"
@@ -31,8 +30,6 @@ abstract class ComposeFeature<State, Intent, Effect, Action>(
 
     private val effectChannel = Channel<Effect>(Channel.BUFFERED)
     val effectFlow = effectChannel.receiveAsFlow()
-
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     fun sendIntent(intent: Intent) {
         Log.debug("intent: $intent", TAG)

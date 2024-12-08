@@ -1,8 +1,8 @@
 package ru.mamykin.foboreader.my_books.list
 
 import com.github.terrakok.cicerone.Router
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
@@ -19,10 +19,12 @@ import javax.inject.Inject
 internal class MyBooksFeature @Inject constructor(
     actor: MyBooksActor,
     reducer: MyBooksReducer,
+    scope: CoroutineScope,
 ) : ComposeFeature<MyBooksFeature.State, MyBooksFeature.Intent, MyBooksFeature.Effect, MyBooksFeature.Action>(
     State.Loading,
     actor,
     reducer,
+    scope,
 ) {
     init {
         sendIntent(Intent.LoadBooks)
@@ -40,9 +42,14 @@ internal class MyBooksFeature @Inject constructor(
 
         override fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
-                is Intent.LoadBooks -> loadBooks(true)
+                is Intent.LoadBooks -> {
+                    emit(Action.BooksLoaded(getMyBooks.execute(force = true)))
+                }
+
                 is Intent.RemoveBook -> {
-                    removeBook.execute(intent.id).fold(onSuccess = { loadBooks(true) }, onFailure = {
+                    removeBook.execute(intent.id).fold(onSuccess = {
+                        emit(Action.BooksLoaded(getMyBooks.execute(force = true)))
+                    }, onFailure = {
                         emit(Action.RemoveBookError(errorMessageMapper.getMessage(it)))
                     })
                 }
@@ -71,10 +78,6 @@ internal class MyBooksFeature @Inject constructor(
                     emit(Action.CloseSearch)
                 }
             }
-        }
-
-        private suspend fun FlowCollector<Action>.loadBooks(force: Boolean) {
-            emit(Action.BooksLoaded(getMyBooks.execute(force)))
         }
     }
 

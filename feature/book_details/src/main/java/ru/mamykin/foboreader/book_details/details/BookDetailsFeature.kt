@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.book_details.details
 
 import com.github.terrakok.cicerone.Router
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
@@ -14,10 +15,12 @@ import javax.inject.Named
 internal class BookDetailsFeature @Inject constructor(
     actor: BookDetailsActor,
     reducer: BookDetailsReducer,
+    scope: CoroutineScope,
 ) : ComposeFeature<BookDetailsFeature.State, BookDetailsFeature.Intent, Nothing, BookDetailsFeature.Action>(
     State.Loading,
     actor,
     reducer,
+    scope,
 ) {
     init {
         sendIntent(Intent.LoadBookInfo)

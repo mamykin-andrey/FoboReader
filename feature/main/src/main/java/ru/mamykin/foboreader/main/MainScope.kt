@@ -1,9 +1,9 @@
 package ru.mamykin.foboreader.main
 
 import dagger.Component
-import dagger.Module
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.MainApi
+import ru.mamykin.foboreader.core.di.module.CoroutinesModule
 import javax.inject.Scope
 
 // TODO: Rename to MainScreen
@@ -16,7 +16,7 @@ internal annotation class MainScope
 @MainScope
 @Component(
     dependencies = [CommonApi::class, MainApi::class],
-    modules = [MainProvidesModule::class, MainBindsModule::class]
+    modules = [CoroutinesModule::class]
 )
 internal interface MainComponent {
 
@@ -30,12 +30,4 @@ internal interface MainComponent {
             mainApi: MainApi,
         ): MainComponent
     }
-}
-
-@Module
-internal class MainProvidesModule {
-}
-
-@Module
-internal interface MainBindsModule {
 }

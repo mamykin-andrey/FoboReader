@@ -6,6 +6,7 @@ import ru.mamykin.foboreader.my_books.sort.BooksComparatorFactory
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import javax.inject.Inject
 
+// TODO: Make it stateless
 internal class MyBooksRepository @Inject constructor(
     private val repository: BookInfoRepository,
     private val booksScanner: BookFilesScanner,

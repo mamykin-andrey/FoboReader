@@ -8,6 +8,7 @@ import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
+import ru.mamykin.foboreader.core.di.module.CoroutinesModule
 import ru.mamykin.foboreader.store.common.BooksStoreApiServiceModule
 import javax.inject.Named
 import javax.inject.Scope
@@ -21,6 +22,7 @@ internal annotation class BookListScope
 @Component(
     modules = [
         BooksStoreModule::class,
+        CoroutinesModule::class,
     ],
     dependencies = [
         NetworkApi::class,

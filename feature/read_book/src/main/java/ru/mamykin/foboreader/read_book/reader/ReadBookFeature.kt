@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.read_book.reader
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.compose.ui.text.TextMeasurer
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
@@ -22,10 +23,12 @@ import javax.inject.Named
 internal class ReadBookFeature @Inject constructor(
     actor: ReadBookActor,
     reducer: ReadBookReducer,
+    scope: CoroutineScope,
 ) : ComposeFeature<ReadBookFeature.State, ReadBookFeature.Intent, ReadBookFeature.Effect, ReadBookFeature.Action>(
     State.Loading,
     actor,
     reducer,
+    scope,
 ) {
     internal class ReadBookActor @Inject constructor(
         @Named("bookId") private val bookId: Long,

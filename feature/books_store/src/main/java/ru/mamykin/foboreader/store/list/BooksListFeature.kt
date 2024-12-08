@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.store.list
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
@@ -16,10 +17,12 @@ import javax.inject.Named
 internal class BooksListFeature @Inject constructor(
     reducer: BooksListReducer,
     actor: BooksListActor,
+    scope: CoroutineScope,
 ) : ComposeFeature<BooksListFeature.State, BooksListFeature.Intent, BooksListFeature.Effect, BooksListFeature.Action>(
     State.Loading,
     actor,
-    reducer
+    reducer,
+    scope,
 ) {
     init {
         sendIntent(Intent.LoadBooks)

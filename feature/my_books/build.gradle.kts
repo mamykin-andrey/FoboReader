@@ -72,6 +72,7 @@ dependencies {
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)
+    testImplementation(Dependencies.coroutinesTest)
 
     androidTestImplementation(Dependencies.espressoCore)
 }

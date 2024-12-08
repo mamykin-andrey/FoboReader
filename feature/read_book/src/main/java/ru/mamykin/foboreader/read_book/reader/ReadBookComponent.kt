@@ -15,6 +15,7 @@ import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
+import ru.mamykin.foboreader.core.di.module.CoroutinesModule
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
 import ru.mamykin.foboreader.read_book.BuildConfig
 import ru.mamykin.foboreader.read_book.translation.GoogleTranslateService
@@ -29,7 +30,7 @@ internal annotation class ReadBookScope
 @ReadBookScope
 @Component(
     dependencies = [NetworkApi::class, NavigationApi::class, CommonApi::class, SettingsApi::class],
-    modules = [ReadBookProvidesModule::class, ReadBookBindsModule::class]
+    modules = [ReadBookProvidesModule::class, ReadBookBindsModule::class, CoroutinesModule::class]
 )
 internal interface ReadBookComponent {
 

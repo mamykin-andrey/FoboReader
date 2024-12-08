@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.settings.app_language
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.mamykin.foboreader.core.presentation.Actor
@@ -12,10 +13,12 @@ import javax.inject.Inject
 internal class ChangeLanguageFeature @Inject constructor(
     reducer: ChangeLanguageReducer,
     actor: ChangeLanguageActor,
+    scope: CoroutineScope,
 ) : ComposeFeature<ChangeLanguageFeature.State, ChangeLanguageFeature.Intent, ChangeLanguageFeature.Effect, ChangeLanguageFeature.Action>(
     State.Loaded(emptyList()),
     actor,
-    reducer
+    reducer,
+    scope,
 ) {
     init {
         sendIntent(Intent.LoadLanguages)
@@ -31,6 +34,7 @@ internal class ChangeLanguageFeature @Inject constructor(
                 is Intent.LoadLanguages -> {
                     emit(Action.LanguagesLoaded(getAppLanguages.execute()))
                 }
+
                 is Intent.SelectLanguage -> {
                     setAppLanguage.execute(intent.languageCode)
                     emit(Action.LanguageSelected)
@@ -45,6 +49,7 @@ internal class ChangeLanguageFeature @Inject constructor(
             is Action.LanguagesLoaded -> {
                 State.Loaded(languages = action.languages) to emptySet()
             }
+
             is Action.LanguageSelected -> {
                 state to setOf(Effect.Dismiss)
             }
