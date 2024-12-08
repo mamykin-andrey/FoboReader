@@ -127,6 +127,6 @@ internal class MyBooksFeature @Inject constructor(
     }
 
     sealed class Effect {
-        class ShowSnackbar(val message: String) : Effect()
+        data class ShowSnackbar(val message: String) : Effect()
     }
 }

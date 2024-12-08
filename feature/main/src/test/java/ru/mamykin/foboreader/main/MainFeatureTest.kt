@@ -1,31 +1,33 @@
 package ru.mamykin.foboreader.main
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
-import org.junit.Before
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MainFeatureTest {
 
     private val actor = MainFeature.MainActor()
     private val reducer = MainFeature.MainReducer()
-    private val feature = MainFeature(actor, reducer)
+    private val testScope = TestScope(StandardTestDispatcher())
+    private val feature = MainFeature(actor, reducer, testScope)
     private val testRoute = "test"
 
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(StandardTestDispatcher())
+    @Test
+    fun `show screen tabs on start`() {
+        assertTrue(feature.state.tabs.isNotEmpty())
     }
 
     @Test
-    fun openTab_navigateToTabEffect() = runTest {
+    fun `navigate to tab`() = runTest {
         val state = feature.state
 
         feature.sendIntent(MainFeature.Intent.OpenTab(testRoute))
+        testScope.advanceUntilIdle()
 
         assertEquals(state, feature.state)
         assertEquals(MainFeature.Effect.NavigateToTab(testRoute), feature.effectFlow.first())
