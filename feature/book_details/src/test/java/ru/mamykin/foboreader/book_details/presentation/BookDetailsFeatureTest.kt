@@ -1,56 +1,54 @@
 package ru.mamykin.foboreader.book_details.presentation
 
+import com.github.terrakok.cicerone.Screen
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import ru.mamykin.foboreader.book_details.details.BookDetails
 import ru.mamykin.foboreader.book_details.details.BookDetailsFeature
-import ru.mamykin.foboreader.core.platform.ResourceManager
+import ru.mamykin.foboreader.book_details.details.GetBookDetails
+import ru.mamykin.foboreader.core.navigation.ScreenProvider
 
 class BookDetailsFeatureTest {
 
-    private val testStr = "test"
-    private val resourceManager: ResourceManager = mockk()
-    private val reducer = BookDetailsFeature.BookDetailsReducer(resourceManager)
+    private val bookId: Long = 100L
+    private val screenProvider: ScreenProvider = mockk()
+    private val getBookDetails: GetBookDetails = mockk()
+    private val actor = BookDetailsFeature.BookDetailsActor(
+        bookId = bookId,
+        getBookDetails = getBookDetails,
+    )
+    private val reducer = BookDetailsFeature.BookDetailsReducer()
+    private val testScope = TestScope()
+    private val feature = BookDetailsFeature(actor, reducer, testScope)
 
-    init {
-        every { resourceManager.getString(any()) } returns testStr
+    @Test
+    fun `open book`() = runTest {
+        val readBookScreen: Screen = mockk()
+        every { screenProvider.readBookScreen(bookId) } returns readBookScreen
+        val prevState = feature.state
+
+        feature.sendIntent(BookDetailsFeature.Intent.OpenBook)
+        testScope.advanceUntilIdle()
+
+        assertEquals(prevState, feature.state)
+        assertEquals(BookDetailsFeature.Effect.NavigateToReadBook(bookId), feature.effectFlow.first())
     }
 
     @Test
-    fun `test loading book finished`() {
-        runBlocking {
-            val state = BookDetailsFeature.State()
-            val bookDetails = BookDetails(
-                author = "",
-                title = "",
-                coverUrl = null,
-                filePath = "",
-                currentPage = 0,
-                genre = "",
-            )
+    fun `load book info`() = runTest {
+        val bookDetails: BookDetails = mockk()
+        coEvery { getBookDetails.execute(bookId) } returns bookDetails
 
-            val (newState, _) = reducer.invoke(state, BookDetailsFeature.Action.BookLoaded(bookDetails))
+        feature.sendIntent(BookDetailsFeature.Intent.LoadBookInfo)
+        testScope.advanceUntilIdle()
 
-            assert(!newState.isError)
-            assert(!newState.isLoading)
-            assert(newState.bookDetails == bookDetails)
-            assert(!newState.items.isNullOrEmpty())
-        }
-    }
-
-    @Test
-    fun `test loading book failed`() {
-        runBlocking {
-            val state = BookDetailsFeature.State()
-
-            val (newState, _) = reducer.invoke(state, BookDetailsFeature.Action.LoadingError)
-
-            assert(newState.isError)
-            assert(!newState.isLoading)
-            assert(newState.bookDetails == null)
-            assert(newState.items.isNullOrEmpty())
-        }
+        assertEquals(BookDetailsFeature.State.Loaded(bookDetails), feature.state)
     }
 }

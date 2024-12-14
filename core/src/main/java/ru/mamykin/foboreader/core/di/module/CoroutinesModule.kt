@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
+// TODO: Fix the scope and bind it to the screen where it's used
 @Module
 class CoroutinesModule {
 

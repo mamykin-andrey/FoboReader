@@ -1,10 +1,8 @@
 package ru.mamykin.foboreader.book_details.details
 
-import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
@@ -16,27 +14,21 @@ internal class BookDetailsFeature @Inject constructor(
     actor: BookDetailsActor,
     reducer: BookDetailsReducer,
     scope: CoroutineScope,
-) : ComposeFeature<BookDetailsFeature.State, BookDetailsFeature.Intent, Nothing, BookDetailsFeature.Action>(
+) : ComposeFeature<BookDetailsFeature.State, BookDetailsFeature.Intent, BookDetailsFeature.Effect, BookDetailsFeature.Action>(
     State.Loading,
     actor,
     reducer,
     scope,
 ) {
-    init {
-        sendIntent(Intent.LoadBookInfo)
-    }
-
     internal class BookDetailsActor @Inject constructor(
         @Named("bookId") private val bookId: Long,
-        private val router: Router,
-        private val screenProvider: ScreenProvider,
         private val getBookDetails: GetBookDetails,
     ) : Actor<Intent, Action> {
 
         override fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
                 is Intent.OpenBook -> {
-                    router.navigateTo(screenProvider.readBookScreen(bookId))
+                    emit(Action.BookOpened(bookId))
                 }
 
                 is Intent.LoadBookInfo -> {
@@ -46,28 +38,35 @@ internal class BookDetailsFeature @Inject constructor(
         }
     }
 
-    internal class BookDetailsReducer @Inject constructor() : Reducer<State, Action, Nothing> {
+    internal class BookDetailsReducer @Inject constructor() : Reducer<State, Action, Effect> {
 
-        override fun invoke(state: State, action: Action): ReducerResult<State, Nothing> = when (action) {
+        override fun invoke(state: State, action: Action): ReducerResult<State, Effect> = when (action) {
             is Action.BookLoaded -> State.Loaded(
                 bookDetails = action.bookDetails,
             ) to emptySet()
+
+            is Action.BookOpened -> state to setOf(Effect.NavigateToReadBook(action.bookId))
         }
     }
 
     sealed class Intent {
-        object LoadBookInfo : Intent()
-        object OpenBook : Intent()
+        data object LoadBookInfo : Intent()
+        data object OpenBook : Intent()
     }
 
     sealed class Action {
         data class BookLoaded(val bookDetails: BookDetails) : Action()
+        data class BookOpened(val bookId: Long) : Action()
     }
 
     sealed class State {
-        object Loading : State()
+        data object Loading : State()
         data class Loaded(
             val bookDetails: BookDetails,
         ) : State()
+    }
+
+    sealed class Effect {
+        data class NavigateToReadBook(val bookId: Long) : Effect()
     }
 }

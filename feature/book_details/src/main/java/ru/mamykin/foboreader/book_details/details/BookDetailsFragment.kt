@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.book_details.details
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -35,11 +37,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import coil.compose.AsyncImage
+import com.github.terrakok.cicerone.Router
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import ru.mamykin.foboreader.book_details.R
-import ru.mamykin.foboreader.book_details.details.DaggerBookDetailsComponent
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
 import ru.mamykin.foboreader.core.extension.commonApi
+import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.presentation.BaseFragment
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
@@ -63,14 +68,20 @@ class BookDetailsFragment : BaseFragment() {
     @Inject
     internal lateinit var feature: BookDetailsFeature
 
+    @Inject
+    internal lateinit var router: Router
+
+    @Inject
+    internal lateinit var screenProvider: ScreenProvider
+
     private val bookId by lazy { requireArguments().getLong(EXTRA_BOOK_ID) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initDi()
+        initFeature()
     }
 
-    private fun initDi() {
+    private fun initFeature() {
         ComponentHolder.getOrCreateComponent(featureName) {
             DaggerBookDetailsComponent.factory().create(
                 bookId,
@@ -78,6 +89,7 @@ class BookDetailsFragment : BaseFragment() {
                 commonApi(),
             )
         }.inject(this)
+        feature.sendIntent(BookDetailsFeature.Intent.LoadBookInfo)
     }
 
     override fun onCleared() {
@@ -90,12 +102,19 @@ class BookDetailsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setContent {
-            BookDetailsScreen(feature.state)
+            BookDetailsScreen(feature.state, feature.effectFlow)
         }
     }
 
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @Composable
-    private fun BookDetailsScreen(state: BookDetailsFeature.State) {
+    private fun BookDetailsScreen(state: BookDetailsFeature.State, effectFlow: Flow<BookDetailsFeature.Effect>) {
+        LaunchedEffect(effectFlow) {
+            effectFlow.collect {
+                takeEffect(it)
+            }
+        }
+
         FoboReaderTheme {
             Scaffold(topBar = {
                 TopAppBar(title = {
@@ -117,6 +136,12 @@ class BookDetailsFragment : BaseFragment() {
                     is BookDetailsFeature.State.Loaded -> LoadedComposable(state)
                 }
             })
+        }
+    }
+
+    private fun takeEffect(effect: BookDetailsFeature.Effect) = when (effect) {
+        is BookDetailsFeature.Effect.NavigateToReadBook -> {
+            router.navigateTo(screenProvider.readBookScreen(bookId))
         }
     }
 
@@ -252,7 +277,7 @@ class BookDetailsFragment : BaseFragment() {
                     10,
                     "Genre"
                 )
-            )
+            ), emptyFlow()
         )
     }
 }
