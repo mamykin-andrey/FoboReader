@@ -18,12 +18,12 @@ import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.my_books.search.FilterMyBooks
-import ru.mamykin.foboreader.my_books.sort.SortMyBooks
+import ru.mamykin.foboreader.my_books.sort.SortAndFilterBooks
 
 class MyBooksFeatureTest {
 
-    private val getMyBooks: GetMyBooks = mockk()
-    private val sortMyBooks: SortMyBooks = mockk()
+    private val getMyBooks: LoadMyBooks = mockk()
+    private val sortMyBooks: SortAndFilterBooks = mockk()
     private val filterMyBooks: FilterMyBooks = mockk()
     private val removeBook: RemoveBook = mockk()
     private val errorMessageMapper: ErrorMessageMapper = mockk()
@@ -32,7 +32,7 @@ class MyBooksFeatureTest {
     private val testScope = TestScope(StandardTestDispatcher())
     private val feature = MyBooksFeature(
         MyBooksFeature.MyBooksActor(
-            getMyBooks = getMyBooks,
+            loadMyBooks = getMyBooks,
             sortMyBooks = sortMyBooks,
             filterMyBooks = filterMyBooks,
             removeBook = removeBook,
@@ -48,7 +48,7 @@ class MyBooksFeatureTest {
 
     @Before
     fun setUp() {
-        coEvery { getMyBooks.execute(any()) } returns testBooksList
+        coEvery { getMyBooks.execute() } returns testBooksList
     }
 
     @Test
@@ -63,7 +63,7 @@ class MyBooksFeatureTest {
         feature.sendIntent(MyBooksFeature.Intent.RemoveBook(testBookId))
         testScope.advanceUntilIdle()
 
-        coVerify(exactly = 2) { getMyBooks.execute(true) }
+        coVerify(exactly = 2) { getMyBooks.execute() }
         val state = feature.state as? MyBooksFeature.State.Content
         assertTrue(state?.books == testBooksList)
     }
@@ -77,7 +77,7 @@ class MyBooksFeatureTest {
         feature.sendIntent(MyBooksFeature.Intent.RemoveBook(testBookId))
         testScope.advanceUntilIdle()
 
-        coVerify(exactly = 1) { getMyBooks.execute(true) }
+        coVerify(exactly = 1) { getMyBooks.execute() }
         assertEquals(MyBooksFeature.Effect.ShowSnackbar(testErrorMessage), feature.effectFlow.first())
     }
 }

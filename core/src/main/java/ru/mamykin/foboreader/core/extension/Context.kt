@@ -10,7 +10,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import ru.mamykin.foboreader.core.platform.ChannelId
-import java.io.File
 
 fun Fragment.showSnackbar(@StringRes messageRes: Int, long: Boolean = false) {
     showSnackbar(getString(messageRes), long)
@@ -38,9 +37,6 @@ fun Fragment.showNotification(
     NotificationManagerCompat.from(requireContext())
         .notify(notificationId, notification)
 }
-
-@Deprecated("Use externalMediaDirs.first() direcly")
-fun Context.getExternalMediaDir(): File? = externalMediaDirs.first()
 
 fun Context.dpToPx(value: Int): Float {
     return TypedValue.applyDimension(

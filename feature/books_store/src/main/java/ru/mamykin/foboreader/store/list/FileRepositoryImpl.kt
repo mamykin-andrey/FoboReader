@@ -8,7 +8,6 @@ import okhttp3.Request
 import okio.buffer
 import okio.sink
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
-import ru.mamykin.foboreader.core.extension.getExternalMediaDir
 import java.io.File
 import javax.inject.Inject
 
@@ -18,7 +17,7 @@ internal class FileRepositoryImpl @Inject constructor(
 ) : FileRepository {
 
     override fun createFile(fileName: String): File {
-        val downloadsDir = context.getExternalMediaDir()
+        val downloadsDir = context.externalMediaDirs.first()
             ?: throw DownloadFileException()
 
         return File(downloadsDir, fileName).also {

@@ -6,11 +6,11 @@ import ru.mamykin.foboreader.core.di.api.CommonApi
 
 interface TabComposableProvider {
     @Composable
-    fun myBooksScreen(apiHolder: ApiHolder, commonApi: CommonApi)
+    fun MyBooksScreen(apiHolder: ApiHolder, commonApi: CommonApi)
 
     @Composable
-    fun booksStoreScreen()
+    fun BooksStoreScreen()
 
     @Composable
-    fun settingsScreen()
+    fun SettingsScreen()
 }

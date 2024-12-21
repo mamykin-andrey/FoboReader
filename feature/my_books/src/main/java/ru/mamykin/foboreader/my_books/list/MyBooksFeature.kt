@@ -11,8 +11,7 @@ import ru.mamykin.foboreader.core.presentation.Actor
 import ru.mamykin.foboreader.core.presentation.ComposeFeature
 import ru.mamykin.foboreader.core.presentation.Reducer
 import ru.mamykin.foboreader.core.presentation.ReducerResult
-import ru.mamykin.foboreader.my_books.search.FilterMyBooks
-import ru.mamykin.foboreader.my_books.sort.SortMyBooks
+import ru.mamykin.foboreader.my_books.sort.SortAndFilterBooks
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import javax.inject.Inject
 
@@ -26,16 +25,12 @@ internal class MyBooksFeature @Inject constructor(
     reducer,
     scope,
 ) {
-    init {
-        sendIntent(Intent.LoadBooks)
-    }
-
     internal class MyBooksActor @Inject constructor(
-        private val getMyBooks: GetMyBooks,
-        private val sortMyBooks: SortMyBooks,
-        private val filterMyBooks: FilterMyBooks,
+        private val loadMyBooks: LoadMyBooks,
+        private val sortAndFilterBooks: SortAndFilterBooks,
         private val removeBook: RemoveBook,
         private val errorMessageMapper: ErrorMessageMapper,
+        // TODO: Move to UI
         private val router: Router,
         private val screenProvider: ScreenProvider,
     ) : Actor<Intent, Action> {
@@ -43,23 +38,25 @@ internal class MyBooksFeature @Inject constructor(
         override fun invoke(intent: Intent): Flow<Action> = flow {
             when (intent) {
                 is Intent.LoadBooks -> {
-                    emit(Action.BooksLoaded(getMyBooks.execute(force = true)))
+                    emit(Action.BooksLoaded(loadMyBooks.execute()))
                 }
 
                 is Intent.RemoveBook -> {
                     removeBook.execute(intent.id).fold(onSuccess = {
-                        emit(Action.BooksLoaded(getMyBooks.execute(force = true)))
+                        sendIntent(Intent.LoadBooks)
                     }, onFailure = {
                         emit(Action.RemoveBookError(errorMessageMapper.getMessage(it)))
                     })
                 }
 
                 is Intent.SortBooks -> {
-                    emit(Action.BooksLoaded(sortMyBooks.execute(intent.sortOrder)))
+                    val state = (state as? State.Content) ?: return@flow
+                    emit(createSortAndFilterBooksAction(state.allBooks, intent.sortOrder, state.searchQuery))
                 }
 
                 is Intent.FilterBooks -> {
-                    emit(Action.BooksFiltered(filterMyBooks.execute(intent.query), searchQuery = intent.query))
+                    val state = (state as? State.Content) ?: return@flow
+                    emit(createSortAndFilterBooksAction(state.allBooks, state.sortOrder, intent.searchQuery))
                 }
 
                 is Intent.OpenBook -> {
@@ -79,21 +76,50 @@ internal class MyBooksFeature @Inject constructor(
                 }
             }
         }
+
+        private fun createSortAndFilterBooksAction(
+            allBooks: List<BookInfo>,
+            sortOrder: SortOrder,
+            searchQuery: String?
+        ): Action.BooksUpdated {
+            return Action.BooksUpdated(
+                allBooks = allBooks,
+                books = sortAndFilterBooks.execute(allBooks, sortOrder, searchQuery),
+                searchQuery = searchQuery,
+                sortOrder = sortOrder,
+            )
+        }
     }
 
     internal class MyBooksReducer @Inject constructor() : Reducer<State, Action, Effect> {
 
         override operator fun invoke(state: State, action: Action): ReducerResult<State, Effect> = when (action) {
             is Action.Loading -> State.Loading to emptySet()
-            is Action.BooksLoaded -> State.Content(action.books) to emptySet()
-            is Action.BooksFiltered -> {
-                val prevState = state as State.Content
-                prevState.copy(books = action.books, searchQuery = action.searchQuery) to emptySet()
+
+            is Action.BooksUpdated -> {
+                getUpdatedBooksState(state, action) to emptySet()
             }
 
             is Action.RemoveBookError -> state to setOf(Effect.ShowSnackbar(action.error))
             is Action.ShowSearch -> (state as State.Content).copy(searchQuery = "") to emptySet()
             is Action.CloseSearch -> (state as State.Content).copy(searchQuery = null) to emptySet()
+        }
+
+        private fun getUpdatedBooksState(state: State, action: Action.BooksUpdated): State.Content {
+            return if (state is State.Content) {
+                state.copy(
+                    books = action.books,
+                    searchQuery = action.searchQuery,
+                    sortOrder = action.sortOrder,
+                )
+            } else {
+                State.Content(
+                    allBooks = action.allBooks,
+                    books = action.books,
+                    searchQuery = action.searchQuery,
+                    sortOrder = action.sortOrder,
+                )
+            }
         }
     }
 
@@ -101,8 +127,10 @@ internal class MyBooksFeature @Inject constructor(
         data object Loading : State()
 
         data class Content(
+            val allBooks: List<BookInfo>,
             val books: List<BookInfo>,
             val searchQuery: String? = null,
+            val sortOrder: SortOrder = SortOrder.ByName,
         ) : State()
     }
 
@@ -112,7 +140,7 @@ internal class MyBooksFeature @Inject constructor(
         data object ShowSearch : Intent()
         class RemoveBook(val id: Long) : Intent()
         class SortBooks(val sortOrder: SortOrder) : Intent()
-        class FilterBooks(val query: String) : Intent()
+        class FilterBooks(val searchQuery: String) : Intent()
         class OpenBook(val bookId: Long) : Intent()
         class OpenBookDetails(val bookId: Long) : Intent()
     }
@@ -120,7 +148,13 @@ internal class MyBooksFeature @Inject constructor(
     sealed class Action {
         data object Loading : Action()
         class BooksLoaded(val books: List<BookInfo>) : Action()
-        class BooksFiltered(val books: List<BookInfo>, val searchQuery: String) : Action()
+        class BooksUpdated(
+            val allBooks: List<BookInfo>,
+            val books: List<BookInfo>,
+            val searchQuery: String?,
+            val sortOrder: SortOrder,
+        ) : Action()
+
         class RemoveBookError(val error: String) : Action()
         data object ShowSearch : Action()
         data object CloseSearch : Action()

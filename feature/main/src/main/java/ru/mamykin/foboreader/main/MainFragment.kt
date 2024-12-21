@@ -46,13 +46,13 @@ class MainFragment : BaseFragment() {
 
     private val tabContentProviders = mapOf<String, TabContentProvider>(
         MainFeature.BottomNavigationTab.MyBooks.route to {
-            tabFragmentProvider.myBooksScreen(apiHolder(), commonApi())
+            tabFragmentProvider.MyBooksScreen(apiHolder(), commonApi())
         },
-        MainFeature.BottomNavigationTab.MyBooks.route to {
-            tabFragmentProvider.booksStoreScreen()
+        MainFeature.BottomNavigationTab.BooksStore.route to {
+            tabFragmentProvider.BooksStoreScreen()
         },
-        MainFeature.BottomNavigationTab.MyBooks.route to {
-            tabFragmentProvider.settingsScreen()
+        MainFeature.BottomNavigationTab.Settings.route to {
+            tabFragmentProvider.SettingsScreen()
         },
     )
 
@@ -111,7 +111,7 @@ class MainFragment : BaseFragment() {
                 ) {
                     state.tabs.forEach { item ->
                         composable(item.route) {
-                            tabContentProviders[item.route]
+                            tabContentProviders[item.route]!!.invoke()
                         }
                     }
                 }

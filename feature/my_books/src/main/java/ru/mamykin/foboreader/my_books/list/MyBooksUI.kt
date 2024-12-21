@@ -65,18 +65,18 @@ import java.util.Date
 
 private const val SCREEN_KEY = "my_books"
 
-private fun createFeature(apiHolder: ApiHolder, commonApi: CommonApi): MyBooksFeature {
+private fun createAndInitFeature(apiHolder: ApiHolder, commonApi: CommonApi): MyBooksFeature {
     return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
         DaggerMyBooksComponent.factory().create(
             apiHolder.navigationApi(),
             commonApi,
         )
-    }.myBooksFeature()
+    }.myBooksFeature().also { it.sendIntent(MyBooksFeature.Intent.LoadBooks) }
 }
 
 @Composable
-fun MyBooksScreenNew(apiHolder: ApiHolder, commonApi: CommonApi) {
-    val feature = remember { createFeature(apiHolder, commonApi) }
+fun MyBooksScreen(apiHolder: ApiHolder, commonApi: CommonApi) {
+    val feature = remember { createAndInitFeature(apiHolder, commonApi) }
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         onDispose {
