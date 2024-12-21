@@ -7,6 +7,7 @@ import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.navigation.TabComposableProvider
 import ru.mamykin.foboreader.my_books.list.MyBooksScreen
+import ru.mamykin.foboreader.settings.all_settings.SettingsTabUI
 import ru.mamykin.foboreader.store.main.BooksCategoriesScreen
 import javax.inject.Inject
 
@@ -29,6 +30,6 @@ class TabComposableProviderImpl @Inject constructor(
 
     @Composable
     override fun SettingsScreenTabContent() {
-        // TODO
+        SettingsTabUI(navigationApi, commonApi, settingsApi)
     }
 }
