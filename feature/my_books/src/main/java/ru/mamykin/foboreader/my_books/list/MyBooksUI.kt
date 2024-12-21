@@ -65,18 +65,18 @@ import java.util.Date
 
 private const val SCREEN_KEY = "my_books"
 
-private fun createAndInitFeature(apiHolder: ApiHolder, commonApi: CommonApi): MyBooksFeature {
+private fun createAndInitViewModel(apiHolder: ApiHolder, commonApi: CommonApi): MyBooksViewModel {
     return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
         DaggerMyBooksComponent.factory().create(
             apiHolder.navigationApi(),
             commonApi,
         )
-    }.myBooksFeature().also { it.sendIntent(MyBooksFeature.Intent.LoadBooks) }
+    }.myBooksViewModel().also { it.sendIntent(MyBooksViewModel.Intent.LoadBooks) }
 }
 
 @Composable
 fun MyBooksScreen(apiHolder: ApiHolder, commonApi: CommonApi) {
-    val feature = remember { createAndInitFeature(apiHolder, commonApi) }
+    val viewModel = remember { createAndInitViewModel(apiHolder, commonApi) }
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         onDispose {
@@ -85,15 +85,15 @@ fun MyBooksScreen(apiHolder: ApiHolder, commonApi: CommonApi) {
             }
         }
     }
-    MyBooksScreenUI(feature.state, feature.effectFlow, feature::sendIntent)
+    MyBooksScreenUI(viewModel.state, viewModel.effectFlow, viewModel::sendIntent)
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 private fun MyBooksScreenUI(
-    state: MyBooksFeature.State,
-    effectFlow: Flow<MyBooksFeature.Effect>,
-    onIntent: (MyBooksFeature.Intent) -> Unit,
+    state: MyBooksViewModel.State,
+    effectFlow: Flow<MyBooksViewModel.Effect>,
+    onIntent: (MyBooksViewModel.Intent) -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(effectFlow) {
@@ -103,7 +103,7 @@ private fun MyBooksScreenUI(
     }
     FoboReaderTheme {
         Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }, topBar = {
-            val searchQuery = (state as? MyBooksFeature.State.Content)?.searchQuery
+            val searchQuery = (state as? MyBooksViewModel.State.Content)?.searchQuery
             TopAppBar(title = {
                 if (searchQuery == null) {
                     Text(text = stringResource(id = R.string.my_books_screen_title))
@@ -114,7 +114,7 @@ private fun MyBooksScreenUI(
                 } else {
                     Row {
                         SearchButtonComposable {
-                            onIntent(MyBooksFeature.Intent.ShowSearch)
+                            onIntent(MyBooksViewModel.Intent.ShowSearch)
                         }
                         SortBooksComposable(onIntent)
                     }
@@ -122,29 +122,29 @@ private fun MyBooksScreenUI(
             })
         }, content = {
             when (state) {
-                is MyBooksFeature.State.Loading -> LoadingComposable()
-                is MyBooksFeature.State.Content -> ContentComposable(state, onIntent)
+                is MyBooksViewModel.State.Loading -> LoadingComposable()
+                is MyBooksViewModel.State.Content -> ContentComposable(state, onIntent)
             }
         })
     }
 }
 
-private suspend fun takeEffect(effect: MyBooksFeature.Effect, snackbarHostState: SnackbarHostState) {
+private suspend fun takeEffect(effect: MyBooksViewModel.Effect, snackbarHostState: SnackbarHostState) {
     when (effect) {
-        is MyBooksFeature.Effect.ShowSnackbar -> {
+        is MyBooksViewModel.Effect.ShowSnackbar -> {
             snackbarHostState.showSnackbar(effect.message)
         }
     }
 }
 
 @Composable
-private fun SearchFieldComposable(searchQuery: String, onIntent: (MyBooksFeature.Intent) -> Unit) {
-    val closeSearch = { onIntent(MyBooksFeature.Intent.CloseSearch) }
+private fun SearchFieldComposable(searchQuery: String, onIntent: (MyBooksViewModel.Intent) -> Unit) {
+    val closeSearch = { onIntent(MyBooksViewModel.Intent.CloseSearch) }
     val focusRequester = remember { FocusRequester() }
     OutlinedTextField(
         value = searchQuery,
         onValueChange = { newQuery ->
-            onIntent(MyBooksFeature.Intent.FilterBooks(newQuery))
+            onIntent(MyBooksViewModel.Intent.FilterBooks(newQuery))
         },
         placeholder = { Text(text = stringResource(R.string.my_books_menu_search)) },
         singleLine = true,
@@ -178,7 +178,7 @@ private fun SearchButtonComposable(onClick: () -> Unit) {
 }
 
 @Composable
-private fun SortBooksComposable(onIntent: (MyBooksFeature.Intent) -> Unit) {
+private fun SortBooksComposable(onIntent: (MyBooksViewModel.Intent) -> Unit) {
     val isPopupExpanded = remember { mutableStateOf(false) }
     IconButton(onClick = {
         isPopupExpanded.value = true
@@ -195,19 +195,19 @@ private fun SortBooksComposable(onIntent: (MyBooksFeature.Intent) -> Unit) {
         ) {
             DropdownMenuItem(onClick = {
                 isPopupExpanded.value = false
-                onIntent(MyBooksFeature.Intent.SortBooks(SortOrder.ByName))
+                onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByName))
             }) {
                 Text("By name")
             }
             DropdownMenuItem(onClick = {
                 isPopupExpanded.value = false
-                onIntent(MyBooksFeature.Intent.SortBooks(SortOrder.ByReadPages))
+                onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByReadPages))
             }) {
                 Text("By read pages")
             }
             DropdownMenuItem(onClick = {
                 isPopupExpanded.value = false
-                onIntent(MyBooksFeature.Intent.SortBooks(SortOrder.ByDate))
+                onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByDate))
             }) {
                 Text("By date")
             }
@@ -227,7 +227,7 @@ private fun LoadingComposable() {
 }
 
 @Composable
-private fun ContentComposable(state: MyBooksFeature.State.Content, onIntent: (MyBooksFeature.Intent) -> Unit) {
+private fun ContentComposable(state: MyBooksViewModel.State.Content, onIntent: (MyBooksViewModel.Intent) -> Unit) {
     val books = state.books
     if (books.isEmpty()) {
         NoBooksComposable()
@@ -240,11 +240,11 @@ private fun ContentComposable(state: MyBooksFeature.State.Content, onIntent: (My
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun BookRowComposable(bookInfo: BookInfo, onIntent: (MyBooksFeature.Intent) -> Unit) {
+private fun BookRowComposable(bookInfo: BookInfo, onIntent: (MyBooksViewModel.Intent) -> Unit) {
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(4.dp), elevation = 16.dp, onClick = {
-        onIntent(MyBooksFeature.Intent.OpenBook(bookInfo.id))
+        onIntent(MyBooksViewModel.Intent.OpenBook(bookInfo.id))
     }) {
         Row(
             modifier = Modifier
@@ -298,7 +298,7 @@ private fun BookFormatComposable(bookInfo: BookInfo) {
 }
 
 @Composable
-private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksFeature.Intent) -> Unit) {
+private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksViewModel.Intent) -> Unit) {
     val isBookPopupExpanded = remember { mutableStateOf(false) }
     Row {
         Row(
@@ -330,13 +330,13 @@ private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksF
             ) {
                 DropdownMenuItem(onClick = {
                     isBookPopupExpanded.value = false
-                    onIntent(MyBooksFeature.Intent.OpenBookDetails(bookInfo.id))
+                    onIntent(MyBooksViewModel.Intent.OpenBookDetails(bookInfo.id))
                 }) {
                     Text("About")
                 }
                 DropdownMenuItem(onClick = {
                     isBookPopupExpanded.value = false
-                    onIntent(MyBooksFeature.Intent.RemoveBook(bookInfo.id))
+                    onIntent(MyBooksViewModel.Intent.RemoveBook(bookInfo.id))
                 }) {
                     Text("Remove")
                 }
@@ -391,8 +391,9 @@ private fun NoBooksComposable() {
 @Preview
 @Composable
 fun MyBooksScreenPreview() {
-    MyBooksScreenUI(state = MyBooksFeature.State.Content(
-        listOf(
+    MyBooksScreenUI(state = MyBooksViewModel.State.Content(
+        allBooks = emptyList(),
+        books = listOf(
             BookInfo(
                 id = 0,
                 filePath = "",

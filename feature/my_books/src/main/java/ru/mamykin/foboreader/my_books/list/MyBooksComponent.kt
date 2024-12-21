@@ -18,7 +18,7 @@ internal annotation class MyBooksScope
 )
 internal interface MyBooksComponent {
 
-    fun myBooksFeature(): MyBooksFeature
+    fun myBooksViewModel(): MyBooksViewModel
 
     @Component.Factory
     interface Factory {

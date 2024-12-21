@@ -3,22 +3,23 @@ package ru.mamykin.foboreader.core.platform
 import android.util.Log
 
 object Log {
-
     private const val DEFAULT_TAG = "foboreader"
-    private var enabled = false
+    private var isDebug = false
 
-    fun init(enabled: Boolean) {
-        this.enabled = enabled
+    fun init(isDebug: Boolean) {
+        this.isDebug = isDebug
     }
 
     fun error(message: String, tag: String? = DEFAULT_TAG) {
-        if (enabled) {
-            Log.e(tag, message)
+        if (isDebug) {
+            throw IllegalStateException("Unhandled error: $message")
+        } else {
+            // log non-fatal
         }
     }
 
     fun debug(message: String, tag: String? = DEFAULT_TAG) {
-        if (enabled) {
+        if (isDebug) {
             Log.d(tag, message)
         }
     }
