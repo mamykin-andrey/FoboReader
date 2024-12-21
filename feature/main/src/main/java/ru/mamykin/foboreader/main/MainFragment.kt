@@ -46,7 +46,7 @@ class MainFragment : BaseFragment() {
 
     private val tabContentProviders = mapOf<String, TabContentProvider>(
         MainFeature.BottomNavigationTab.MyBooks.route to {
-            tabFragmentProvider.MyBooksScreenTabContent(apiHolder(), commonApi())
+            tabFragmentProvider.MyBooksScreenTabContent()
         },
         MainFeature.BottomNavigationTab.BooksStore.route to {
             tabFragmentProvider.BooksStoreScreenTabContent()

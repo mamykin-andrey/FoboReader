@@ -55,28 +55,29 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.di.api.ApiHolder
 import ru.mamykin.foboreader.core.di.api.CommonApi
+import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 import java.util.Date
 
+// TODO: Use viewModelStore instead
 private const val SCREEN_KEY = "my_books"
 
-private fun createAndInitViewModel(apiHolder: ApiHolder, commonApi: CommonApi): MyBooksViewModel {
+private fun createAndInitViewModel(navigationApi: NavigationApi, commonApi: CommonApi): MyBooksViewModel {
     return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
         DaggerMyBooksComponent.factory().create(
-            apiHolder.navigationApi(),
+            navigationApi,
             commonApi,
         )
     }.myBooksViewModel().also { it.sendIntent(MyBooksViewModel.Intent.LoadBooks) }
 }
 
 @Composable
-fun MyBooksScreen(apiHolder: ApiHolder, commonApi: CommonApi) {
-    val viewModel = remember { createAndInitViewModel(apiHolder, commonApi) }
+fun MyBooksScreen(navigationApi: NavigationApi, commonApi: CommonApi) {
+    val viewModel = remember { createAndInitViewModel(navigationApi, commonApi) }
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         onDispose {

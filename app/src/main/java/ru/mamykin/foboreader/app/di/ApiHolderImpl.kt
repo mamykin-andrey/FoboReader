@@ -5,6 +5,7 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 import ru.mamykin.foboreader.core.di.api.*
 
+// TODO: Move to the AppComponent
 class ApiHolderImpl(
     private val context: Context,
     private val cicerone: Cicerone<Router>

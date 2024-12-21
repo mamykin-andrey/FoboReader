@@ -30,7 +30,7 @@ internal annotation class BookCategoriesScope
 )
 internal interface BookCategoriesComponent {
 
-    fun inject(fragment: BookCategoriesFragment)
+    fun bookCategoriesViewModel(): BookCategoriesViewModel
 
     @Component.Factory
     interface Factory {

@@ -1,22 +1,30 @@
 package ru.mamykin.foboreader.app.navigation
 
 import androidx.compose.runtime.Composable
-import ru.mamykin.foboreader.core.di.api.ApiHolder
 import ru.mamykin.foboreader.core.di.api.CommonApi
+import ru.mamykin.foboreader.core.di.api.NavigationApi
+import ru.mamykin.foboreader.core.di.api.NetworkApi
+import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.navigation.TabComposableProvider
 import ru.mamykin.foboreader.my_books.list.MyBooksScreen
+import ru.mamykin.foboreader.store.categories.BooksCategoriesScreen
 import javax.inject.Inject
 
-class TabComposableProviderImpl @Inject constructor() : TabComposableProvider {
+class TabComposableProviderImpl @Inject constructor(
+    private val navigationApi: NavigationApi,
+    private val commonApi: CommonApi,
+    private val networkApi: NetworkApi,
+    private val settingsApi: SettingsApi,
+) : TabComposableProvider {
 
     @Composable
-    override fun MyBooksScreenTabContent(apiHolder: ApiHolder, commonApi: CommonApi) {
-        MyBooksScreen(apiHolder, commonApi)
+    override fun MyBooksScreenTabContent() {
+        MyBooksScreen(navigationApi, commonApi)
     }
 
     @Composable
     override fun BooksStoreScreenTabContent() {
-        // BooksstoreFr
+        BooksCategoriesScreen(commonApi, networkApi, navigationApi, settingsApi)
     }
 
     @Composable
