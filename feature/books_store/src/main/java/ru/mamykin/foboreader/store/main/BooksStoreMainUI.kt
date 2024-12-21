@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.categories
+package ru.mamykin.foboreader.store.main
 
 import android.annotation.SuppressLint
 import android.view.View
@@ -52,15 +52,15 @@ private fun createAndInitViewModel(
     networkApi: NetworkApi,
     navigationApi: NavigationApi,
     settingsApi: SettingsApi,
-): BookCategoriesViewModel {
+): BooksStoreMainViewModel {
     return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
-        DaggerBookCategoriesComponent.factory().create(
+        DaggerBooksStoreMainComponent.factory().create(
             commonApi,
             networkApi,
             navigationApi,
             settingsApi,
         )
-    }.bookCategoriesViewModel().also { it.sendIntent(BookCategoriesViewModel.Intent.LoadCategories) }
+    }.booksStoreMainViewModel().also { it.sendIntent(BooksStoreMainViewModel.Intent.LoadCategories) }
 }
 
 @Composable
@@ -83,20 +83,20 @@ fun BooksCategoriesScreen(
 }
 
 private suspend fun takeEffect(
-    effect: BookCategoriesViewModel.Effect,
+    effect: BooksStoreMainViewModel.Effect,
     snackbarHostState: SnackbarHostState,
 ) {
     when (effect) {
-        is BookCategoriesViewModel.Effect.ShowSnackbar -> snackbarHostState.showSnackbar(effect.message)
+        is BooksStoreMainViewModel.Effect.ShowSnackbar -> snackbarHostState.showSnackbar(effect.message)
     }
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 internal fun BookCategoriesUI(
-    state: BookCategoriesViewModel.State,
-    effectFlow: Flow<BookCategoriesViewModel.Effect>,
-    onIntent: (BookCategoriesViewModel.Intent) -> Unit,
+    state: BooksStoreMainViewModel.State,
+    effectFlow: Flow<BooksStoreMainViewModel.Effect>,
+    onIntent: (BooksStoreMainViewModel.Intent) -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(effectFlow) {
@@ -113,9 +113,9 @@ internal fun BookCategoriesUI(
             )
         }, content = {
             when (state) {
-                is BookCategoriesViewModel.State.Loading -> LoadingComposable()
-                is BookCategoriesViewModel.State.Error -> ErrorComposable(state, onIntent)
-                is BookCategoriesViewModel.State.Content -> ContentComposable(state, onIntent)
+                is BooksStoreMainViewModel.State.Loading -> LoadingComposable()
+                is BooksStoreMainViewModel.State.Error -> ErrorComposable(state, onIntent)
+                is BooksStoreMainViewModel.State.Content -> ContentComposable(state, onIntent)
             }
         })
     }
@@ -134,8 +134,8 @@ private fun LoadingComposable() {
 
 @Composable
 private fun ContentComposable(
-    state: BookCategoriesViewModel.State.Content,
-    onIntent: (BookCategoriesViewModel.Intent) -> Unit
+    state: BooksStoreMainViewModel.State.Content,
+    onIntent: (BooksStoreMainViewModel.Intent) -> Unit
 ) {
     Column {
         state.categories.forEach { CategoryRowComposable(it, onIntent) }
@@ -143,13 +143,13 @@ private fun ContentComposable(
 }
 
 @Composable
-private fun CategoryRowComposable(category: BookCategory, onIntent: (BookCategoriesViewModel.Intent) -> Unit) {
+private fun CategoryRowComposable(category: BookCategory, onIntent: (BooksStoreMainViewModel.Intent) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
             .clickable {
-                onIntent(BookCategoriesViewModel.Intent.OpenCategory(category.id))
+                onIntent(BooksStoreMainViewModel.Intent.OpenCategory(category.id))
             },
         elevation = 16.dp,
     ) {
@@ -194,15 +194,15 @@ private fun CategoryRowComposable(category: BookCategory, onIntent: (BookCategor
 
 @Composable
 private fun ErrorComposable(
-    state: BookCategoriesViewModel.State.Error,
-    onIntent: (BookCategoriesViewModel.Intent) -> Unit
+    state: BooksStoreMainViewModel.State.Error,
+    onIntent: (BooksStoreMainViewModel.Intent) -> Unit
 ) {
     AndroidView(factory = {
         ErrorStubWidget(it).apply {
             setMessage(state.errorMessage)
             visibility = View.VISIBLE
             setRetryClickListener {
-                onIntent(BookCategoriesViewModel.Intent.LoadCategories)
+                onIntent(BooksStoreMainViewModel.Intent.LoadCategories)
             }
         }
     })
@@ -212,7 +212,7 @@ private fun ErrorComposable(
 @Composable
 fun Preview() {
     BookCategoriesUI(
-        state = BookCategoriesViewModel.State.Content(listOf(BookCategory("1", "Classic", "Classic books", 10))),
+        state = BooksStoreMainViewModel.State.Content(listOf(BookCategory("1", "Classic", "Classic books", 10))),
         effectFlow = emptyFlow(),
         onIntent = {}
     )

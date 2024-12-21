@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import kotlinx.coroutines.delay
-import ru.mamykin.foboreader.store.categories.BookCategoriesResponse
+import ru.mamykin.foboreader.store.main.BookCategoriesResponse
 import ru.mamykin.foboreader.store.list.BookListResponse
 import java.io.IOException
 import javax.inject.Inject

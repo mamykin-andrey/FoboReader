@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.categories
+package ru.mamykin.foboreader.store.main
 
 import dagger.Component
 import dagger.Module
@@ -28,9 +28,9 @@ internal annotation class BookCategoriesScope
         SettingsApi::class,
     ]
 )
-internal interface BookCategoriesComponent {
+internal interface BooksStoreMainComponent {
 
-    fun bookCategoriesViewModel(): BookCategoriesViewModel
+    fun booksStoreMainViewModel(): BooksStoreMainViewModel
 
     @Component.Factory
     interface Factory {
@@ -40,7 +40,7 @@ internal interface BookCategoriesComponent {
             networkApi: NetworkApi,
             navigationApi: NavigationApi,
             settingsApi: SettingsApi,
-        ): BookCategoriesComponent
+        ): BooksStoreMainComponent
     }
 }
 

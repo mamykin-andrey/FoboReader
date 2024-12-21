@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.categories
+package ru.mamykin.foboreader.store.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 // TODO: Move navigation to UI
 @BookCategoriesScope
-internal class BookCategoriesViewModel @Inject constructor(
+internal class BooksStoreMainViewModel @Inject constructor(
     private val getBookCategories: GetBookCategories,
     private val router: Router,
     private val errorMessageMapper: ErrorMessageMapper,

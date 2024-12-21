@@ -7,7 +7,7 @@ import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.navigation.TabComposableProvider
 import ru.mamykin.foboreader.my_books.list.MyBooksScreen
-import ru.mamykin.foboreader.store.categories.BooksCategoriesScreen
+import ru.mamykin.foboreader.store.main.BooksCategoriesScreen
 import javax.inject.Inject
 
 class TabComposableProviderImpl @Inject constructor(

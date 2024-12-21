@@ -50,10 +50,10 @@ import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 import javax.inject.Inject
 
-class SettingsFragment : BaseFragment(), DialogDismissedListener {
+class SettingsTabUI : BaseFragment(), DialogDismissedListener {
 
     companion object {
-        fun newInstance(): Fragment = SettingsFragment()
+        fun newInstance(): Fragment = SettingsTabUI()
     }
 
     private object RequestKey {

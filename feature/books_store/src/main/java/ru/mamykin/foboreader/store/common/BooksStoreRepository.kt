@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.store.common
 
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
-import ru.mamykin.foboreader.store.categories.BookCategory
+import ru.mamykin.foboreader.store.main.BookCategory
 import ru.mamykin.foboreader.store.list.StoreBook
 import javax.inject.Inject
 

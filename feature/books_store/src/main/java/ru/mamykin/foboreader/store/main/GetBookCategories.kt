@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.categories
+package ru.mamykin.foboreader.store.main
 
 import ru.mamykin.foboreader.store.common.BooksStoreRepository
 import javax.inject.Inject
