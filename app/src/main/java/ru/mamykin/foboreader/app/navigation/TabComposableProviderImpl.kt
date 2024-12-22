@@ -11,6 +11,7 @@ import ru.mamykin.foboreader.settings.all_settings.SettingsTabUI
 import ru.mamykin.foboreader.store.main.BooksCategoriesScreen
 import javax.inject.Inject
 
+// TODO: Pass the APIs through LocalCompositionProvider
 class TabComposableProviderImpl @Inject constructor(
     private val navigationApi: NavigationApi,
     private val commonApi: CommonApi,

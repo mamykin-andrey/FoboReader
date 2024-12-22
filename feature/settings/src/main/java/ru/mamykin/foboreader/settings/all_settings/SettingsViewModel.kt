@@ -53,21 +53,39 @@ internal class SettingsViewModel @Inject constructor(
             }
 
             is Intent.SelectTranslationColor -> {
-                effectChannel.send(Effect.SelectTranslationColor(getSettings.execute().translationColor))
+                val prevState = state as? State.Content ?: return@launch
+                state = prevState.copy(translationColorDialogCode = getSettings.execute().translationColor)
             }
 
             is Intent.ChangeTranslationColor -> {
-                setTranslationColor.execute(intent.colorCode)
-                state = State.Content(getSettings.execute())
+                val prevState = (state as? State.Content) ?: return@launch
+                var newSettings = prevState.settings
+                if (intent.colorCode != null) {
+                    setTranslationColor.execute(intent.colorCode)
+                    newSettings = getSettings.execute()
+                }
+                state = prevState.copy(
+                    settings = newSettings,
+                    translationColorDialogCode = null,
+                )
             }
 
             is Intent.SelectBackgroundColor -> {
-                effectChannel.send(Effect.SelectBackgroundColor(getSettings.execute().backgroundColor))
+                val prevState = state as? State.Content ?: return@launch
+                state = prevState.copy(backgroundColorDialogCode = getSettings.execute().backgroundColor)
             }
 
             is Intent.ChangeBackgroundColor -> {
-                setBackgroundColor.execute(intent.colorCode)
-                state = State.Content(getSettings.execute())
+                val prevState = (state as? State.Content) ?: return@launch
+                var newSettings = prevState.settings
+                if (intent.colorCode != null) {
+                    setBackgroundColor.execute(intent.colorCode)
+                    newSettings = getSettings.execute()
+                }
+                state = prevState.copy(
+                    settings = newSettings,
+                    backgroundColorDialogCode = null,
+                )
             }
 
             is Intent.SelectAppLanguage -> {
@@ -88,16 +106,14 @@ internal class SettingsViewModel @Inject constructor(
         data object IncreaseTextSize : Intent()
         data object DecreaseTextSize : Intent()
         data object SelectTranslationColor : Intent()
-        data class ChangeTranslationColor(val colorCode: String) : Intent()
+        data class ChangeTranslationColor(val colorCode: String?) : Intent()
         data object SelectBackgroundColor : Intent()
-        data class ChangeBackgroundColor(val colorCode: String) : Intent()
+        data class ChangeBackgroundColor(val colorCode: String?) : Intent()
         data object SelectAppLanguage : Intent()
         class ChangeUseVibration(val enabled: Boolean) : Intent()
     }
 
     sealed class Effect {
-        data class SelectTranslationColor(val currentColorCode: String?) : Effect()
-        data class SelectBackgroundColor(val currentColorCode: String?) : Effect()
         data object SelectAppLanguage : Effect()
     }
 
@@ -106,6 +122,8 @@ internal class SettingsViewModel @Inject constructor(
 
         data class Content(
             val settings: AppSettings,
+            val backgroundColorDialogCode: String? = null,
+            val translationColorDialogCode: String? = null,
         ) : State()
     }
 }

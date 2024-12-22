@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +43,7 @@ import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.settings.DaggerSettingsComponent
 import ru.mamykin.foboreader.settings.R
+import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogScreen
 import ru.mamykin.foboreader.uikit.compose.ColoredCircleCompose
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
@@ -65,11 +65,6 @@ private fun createAndInitViewModel(
     }.settingsViewModel().also { it.sendIntent(SettingsViewModel.Intent.LoadSettings) }
 }
 
-// private object RequestKey {
-//     const val BACKGROUND_COLOR = "background_color"
-//     const val TRANSLATION_COLOR = "translation_color"
-// }
-
 @Composable
 fun SettingsTabUI(navigationApi: NavigationApi, commonApi: CommonApi, settingsApi: SettingsApi) {
     val viewModel = remember { createAndInitViewModel(navigationApi, commonApi, settingsApi) }
@@ -84,58 +79,6 @@ fun SettingsTabUI(navigationApi: NavigationApi, commonApi: CommonApi, settingsAp
     SettingsScreen(viewModel.state, viewModel.effectFlow, viewModel::sendIntent)
 }
 
-// private fun initFragmentRequestListeners() {
-//     requireActivity().supportFragmentManager.setFragmentResultListener(
-//         RequestKey.BACKGROUND_COLOR,
-//         this
-//     ) { _, bundle ->
-//         val newColor = bundle.getString(ChooseCustomColorDialogFragment.RETURN_RESULT_COLOR_CODE)
-//         newColor?.let { onIntent(SettingsViewModel.Intent.ChangeBackgroundColor(it)) }
-//     }
-//     requireActivity().supportFragmentManager.setFragmentResultListener(
-//         RequestKey.TRANSLATION_COLOR,
-//         this
-//     ) { _, bundle ->
-//         val newColor = bundle.getString(ChooseCustomColorDialogFragment.RETURN_RESULT_COLOR_CODE)
-//         newColor?.let { onIntent(SettingsViewModel.Intent.ChangeTranslationColor(it)) }
-//     }
-// }
-
-// override fun onDismiss() {
-//     onIntent(SettingsViewModel.Intent.LoadSettings)
-// }
-
-private fun takeEffect(effect: SettingsViewModel.Effect) {
-    // when (effect) {
-    //     is SettingsViewModel.Effect.SelectTranslationColor -> {
-    //         ChooseCustomColorDialogFragment.newInstance(
-    //             RequestKey.TRANSLATION_COLOR,
-    //             effect.currentColorCode
-    //         ).show(
-    //             childFragmentManager,
-    //             ChooseCustomColorDialogFragment.TAG
-    //         )
-    //     }
-    //
-    //     is SettingsViewModel.Effect.SelectBackgroundColor -> {
-    //         ChooseCustomColorDialogFragment.newInstance(
-    //             RequestKey.BACKGROUND_COLOR,
-    //             effect.currentColorCode
-    //         ).show(
-    //             childFragmentManager,
-    //             ChooseCustomColorDialogFragment.TAG
-    //         )
-    //     }
-    //
-    //     is SettingsViewModel.Effect.SelectAppLanguage -> {
-    //         ChangeLanguageDialogFragment.newInstance().show(
-    //             childFragmentManager,
-    //             ChangeLanguageDialogFragment.TAG
-    //         )
-    //     }
-    // }
-}
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 private fun SettingsScreen(
@@ -143,11 +86,6 @@ private fun SettingsScreen(
     effectFlow: Flow<SettingsViewModel.Effect>,
     onIntent: (SettingsViewModel.Intent) -> Unit,
 ) {
-    LaunchedEffect(effectFlow) {
-        effectFlow.collect {
-            takeEffect(it)
-        }
-    }
     FoboReaderTheme {
         Scaffold(topBar = {
             TopAppBar(
@@ -189,6 +127,22 @@ private fun ContentComposable(state: SettingsViewModel.State.Content, onIntent: 
         TextSizeComposable(state, onIntent)
         AppLanguageComposable(state, onIntent)
         UseVibrationComposable(state, onIntent)
+        if (state.backgroundColorDialogCode != null) {
+            ChooseCustomColorDialogScreen(
+                currentColorCode = state.backgroundColorDialogCode,
+                title = "Select background color",
+            ) {
+                onIntent(SettingsViewModel.Intent.ChangeBackgroundColor(it))
+            }
+        }
+        if (state.translationColorDialogCode != null) {
+            ChooseCustomColorDialogScreen(
+                currentColorCode = state.translationColorDialogCode,
+                title = "Select translation color",
+            ) {
+                onIntent(SettingsViewModel.Intent.ChangeTranslationColor(it))
+            }
+        }
     }
 }
 

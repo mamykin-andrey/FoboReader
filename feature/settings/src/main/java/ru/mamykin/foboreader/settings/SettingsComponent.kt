@@ -7,7 +7,6 @@ import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.di.module.CoroutinesModule
 import ru.mamykin.foboreader.settings.all_settings.SettingsViewModel
 import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogFragment
-import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogFragment
 import javax.inject.Scope
 
 @Scope
@@ -23,8 +22,6 @@ annotation class SettingsScope
 internal interface SettingsComponent {
 
     fun settingsViewModel(): SettingsViewModel
-
-    fun inject(fragment: ChooseCustomColorDialogFragment)
 
     fun inject(fragment: ChangeLanguageDialogFragment)
 
