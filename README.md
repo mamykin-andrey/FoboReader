@@ -1,4 +1,4 @@
-Android application for reading English books with instant translation.
+Android application for reading English books with parallel translation.
 
 Features:
 * Text (paragraphs, words) translation
