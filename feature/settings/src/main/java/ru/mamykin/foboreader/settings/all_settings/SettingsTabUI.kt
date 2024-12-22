@@ -29,21 +29,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.di.api.CommonApi
-import ru.mamykin.foboreader.core.di.api.NavigationApi
-import ru.mamykin.foboreader.core.di.api.SettingsApi
-import ru.mamykin.foboreader.settings.DaggerSettingsComponent
+import ru.mamykin.foboreader.core.di.api.ApiHolder
+import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.getActivity
 import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogScreen
+import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogUI
+import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogUI
 import ru.mamykin.foboreader.uikit.compose.ColoredCircleCompose
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
@@ -52,22 +51,20 @@ import ru.mamykin.foboreader.uikit.compose.TextStyles
 private const val SCREEN_KEY = "settings"
 
 private fun createAndInitViewModel(
-    navigationApi: NavigationApi,
-    commonApi: CommonApi,
-    settingsApi: SettingsApi
+    apiHolder: ApiHolder,
 ): SettingsViewModel {
     return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
         DaggerSettingsComponent.factory().create(
-            commonApi,
-            settingsApi,
-            navigationApi,
+            apiHolder.commonApi(),
+            apiHolder.settingsApi(),
         )
     }.settingsViewModel().also { it.sendIntent(SettingsViewModel.Intent.LoadSettings) }
 }
 
 @Composable
-fun SettingsTabUI(navigationApi: NavigationApi, commonApi: CommonApi, settingsApi: SettingsApi) {
-    val viewModel = remember { createAndInitViewModel(navigationApi, commonApi, settingsApi) }
+fun SettingsTabUI() {
+    val context = LocalContext.current
+    val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         onDispose {
@@ -76,14 +73,13 @@ fun SettingsTabUI(navigationApi: NavigationApi, commonApi: CommonApi, settingsAp
             }
         }
     }
-    SettingsScreen(viewModel.state, viewModel.effectFlow, viewModel::sendIntent)
+    SettingsScreen(viewModel.state, viewModel::sendIntent)
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 private fun SettingsScreen(
     state: SettingsViewModel.State,
-    effectFlow: Flow<SettingsViewModel.Effect>,
     onIntent: (SettingsViewModel.Intent) -> Unit,
 ) {
     FoboReaderTheme {
@@ -128,7 +124,7 @@ private fun ContentComposable(state: SettingsViewModel.State.Content, onIntent: 
         AppLanguageComposable(state, onIntent)
         UseVibrationComposable(state, onIntent)
         if (state.backgroundColorDialogCode != null) {
-            ChooseCustomColorDialogScreen(
+            ChooseCustomColorDialogUI(
                 currentColorCode = state.backgroundColorDialogCode,
                 title = "Select background color",
             ) {
@@ -136,11 +132,16 @@ private fun ContentComposable(state: SettingsViewModel.State.Content, onIntent: 
             }
         }
         if (state.translationColorDialogCode != null) {
-            ChooseCustomColorDialogScreen(
+            ChooseCustomColorDialogUI(
                 currentColorCode = state.translationColorDialogCode,
                 title = "Select translation color",
             ) {
                 onIntent(SettingsViewModel.Intent.ChangeTranslationColor(it))
+            }
+        }
+        if (state.isChangeLanguageDialogShown) {
+            ChangeLanguageDialogUI {
+                onIntent(SettingsViewModel.Intent.AppLanguageChanged)
             }
         }
     }
@@ -327,7 +328,6 @@ fun SettingsScreenPreview() {
                 true,
             )
         ),
-        effectFlow = emptyFlow(),
         onIntent = {},
     )
 }

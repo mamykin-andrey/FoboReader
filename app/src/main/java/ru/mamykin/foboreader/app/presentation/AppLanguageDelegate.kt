@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import java.util.Locale
 
+// TODO: Move to Settings
 internal class AppLanguageDelegate(
     private val activity: AppCompatActivity,
     private val appSettingsRepository: AppSettingsRepository,

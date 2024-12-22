@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,12 +52,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import coil.compose.AsyncImage
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.di.api.CommonApi
-import ru.mamykin.foboreader.core.di.api.NavigationApi
+import ru.mamykin.foboreader.core.di.api.ApiHolder
+import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.getActivity
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
@@ -66,18 +66,19 @@ import java.util.Date
 // TODO: Use viewModelStore instead
 private const val SCREEN_KEY = "my_books"
 
-private fun createAndInitViewModel(navigationApi: NavigationApi, commonApi: CommonApi): MyBooksViewModel {
+private fun createAndInitViewModel(apiHolder: ApiHolder): MyBooksViewModel {
     return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
         DaggerMyBooksComponent.factory().create(
-            navigationApi,
-            commonApi,
+            apiHolder.navigationApi(),
+            apiHolder.commonApi(),
         )
     }.myBooksViewModel().also { it.sendIntent(MyBooksViewModel.Intent.LoadBooks) }
 }
 
 @Composable
-fun MyBooksScreen(navigationApi: NavigationApi, commonApi: CommonApi) {
-    val viewModel = remember { createAndInitViewModel(navigationApi, commonApi) }
+fun MyBooksScreen() {
+    val context = LocalContext.current
+    val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         onDispose {
@@ -86,22 +87,30 @@ fun MyBooksScreen(navigationApi: NavigationApi, commonApi: CommonApi) {
             }
         }
     }
-    MyBooksScreenUI(viewModel.state, viewModel.effectFlow, viewModel::sendIntent)
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(viewModel.effectFlow) {
+        viewModel.effectFlow.collect {
+            takeEffect(it, snackbarHostState)
+        }
+    }
+    MyBooksScreenUI(viewModel.state, viewModel::sendIntent, snackbarHostState)
+}
+
+private suspend fun takeEffect(effect: MyBooksViewModel.Effect, snackbarHostState: SnackbarHostState) {
+    when (effect) {
+        is MyBooksViewModel.Effect.ShowSnackbar -> {
+            snackbarHostState.showSnackbar(effect.message)
+        }
+    }
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 private fun MyBooksScreenUI(
     state: MyBooksViewModel.State,
-    effectFlow: Flow<MyBooksViewModel.Effect>,
     onIntent: (MyBooksViewModel.Intent) -> Unit,
+    snackbarHostState: SnackbarHostState,
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    LaunchedEffect(effectFlow) {
-        effectFlow.collect {
-            takeEffect(it, snackbarHostState)
-        }
-    }
     FoboReaderTheme {
         Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }, topBar = {
             val searchQuery = (state as? MyBooksViewModel.State.Content)?.searchQuery
@@ -127,14 +136,6 @@ private fun MyBooksScreenUI(
                 is MyBooksViewModel.State.Content -> ContentComposable(state, onIntent)
             }
         })
-    }
-}
-
-private suspend fun takeEffect(effect: MyBooksViewModel.Effect, snackbarHostState: SnackbarHostState) {
-    when (effect) {
-        is MyBooksViewModel.Effect.ShowSnackbar -> {
-            snackbarHostState.showSnackbar(effect.message)
-        }
     }
 }
 
@@ -409,5 +410,5 @@ fun MyBooksScreenPreview() {
                 lastOpen = 1000,
             )
         )
-    ), effectFlow = emptyFlow(), onIntent = {})
+    ), onIntent = {}, snackbarHostState = remember { SnackbarHostState() })
 }

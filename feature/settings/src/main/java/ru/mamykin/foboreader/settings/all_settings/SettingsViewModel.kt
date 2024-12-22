@@ -3,9 +3,7 @@ package ru.mamykin.foboreader.settings.all_settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
-import ru.mamykin.foboreader.settings.SettingsScope
 import javax.inject.Inject
 
 // TODO: Refactor to use a single UseCase
@@ -22,9 +20,6 @@ internal class SettingsViewModel @Inject constructor(
 
     var state: State by LoggingStateDelegate(State.Loading)
         private set
-
-    private val effectChannel = LoggingEffectChannel<Effect>()
-    val effectFlow = effectChannel.receiveAsFlow()
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
@@ -89,7 +84,13 @@ internal class SettingsViewModel @Inject constructor(
             }
 
             is Intent.SelectAppLanguage -> {
-                effectChannel.send(Effect.SelectAppLanguage)
+                val prevState = (state as? State.Content) ?: return@launch
+                state = prevState.copy(isChangeLanguageDialogShown = true)
+            }
+
+            is Intent.AppLanguageChanged -> {
+                val prevState = (state as? State.Content) ?: return@launch
+                state = prevState.copy(isChangeLanguageDialogShown = false)
             }
 
             is Intent.ChangeUseVibration -> {
@@ -110,11 +111,8 @@ internal class SettingsViewModel @Inject constructor(
         data object SelectBackgroundColor : Intent()
         data class ChangeBackgroundColor(val colorCode: String?) : Intent()
         data object SelectAppLanguage : Intent()
+        data object AppLanguageChanged : Intent()
         class ChangeUseVibration(val enabled: Boolean) : Intent()
-    }
-
-    sealed class Effect {
-        data object SelectAppLanguage : Effect()
     }
 
     sealed class State {
@@ -124,6 +122,7 @@ internal class SettingsViewModel @Inject constructor(
             val settings: AppSettings,
             val backgroundColorDialogCode: String? = null,
             val translationColorDialogCode: String? = null,
+            val isChangeLanguageDialogShown: Boolean = false,
         ) : State()
     }
 }

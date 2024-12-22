@@ -1,12 +1,9 @@
-package ru.mamykin.foboreader.settings
+package ru.mamykin.foboreader.settings.all_settings
 
 import dagger.Component
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
-import ru.mamykin.foboreader.core.di.module.CoroutinesModule
-import ru.mamykin.foboreader.settings.all_settings.SettingsViewModel
-import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogFragment
 import javax.inject.Scope
 
 @Scope
@@ -16,14 +13,11 @@ annotation class SettingsScope
 
 @SettingsScope
 @Component(
-    dependencies = [CommonApi::class, SettingsApi::class, NavigationApi::class],
-    modules = [CoroutinesModule::class]
+    dependencies = [CommonApi::class, SettingsApi::class],
 )
 internal interface SettingsComponent {
 
     fun settingsViewModel(): SettingsViewModel
-
-    fun inject(fragment: ChangeLanguageDialogFragment)
 
     @Component.Factory
     interface Factory {
@@ -31,7 +25,6 @@ internal interface SettingsComponent {
         fun create(
             commonApi: CommonApi,
             settingsApi: SettingsApi,
-            navigationApi: NavigationApi,
         ): SettingsComponent
     }
 }

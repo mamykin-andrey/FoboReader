@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,10 +36,9 @@ import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.di.api.CommonApi
-import ru.mamykin.foboreader.core.di.api.NavigationApi
-import ru.mamykin.foboreader.core.di.api.NetworkApi
-import ru.mamykin.foboreader.core.di.api.SettingsApi
+import ru.mamykin.foboreader.core.di.api.ApiHolder
+import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.getActivity
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
@@ -48,29 +48,22 @@ import ru.mamykin.foboreader.uikit.compose.TextStyles
 private const val SCREEN_KEY = "books_categories"
 
 private fun createAndInitViewModel(
-    commonApi: CommonApi,
-    networkApi: NetworkApi,
-    navigationApi: NavigationApi,
-    settingsApi: SettingsApi,
+    apiHolder: ApiHolder,
 ): BooksStoreMainViewModel {
     return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
         DaggerBooksStoreMainComponent.factory().create(
-            commonApi,
-            networkApi,
-            navigationApi,
-            settingsApi,
+            apiHolder.commonApi(),
+            apiHolder.networkApi(),
+            apiHolder.navigationApi(),
+            apiHolder.settingsApi(),
         )
     }.booksStoreMainViewModel().also { it.sendIntent(BooksStoreMainViewModel.Intent.LoadCategories) }
 }
 
 @Composable
-fun BooksCategoriesScreen(
-    commonApi: CommonApi,
-    networkApi: NetworkApi,
-    navigationApi: NavigationApi,
-    settingsApi: SettingsApi,
-) {
-    val viewModel = remember { createAndInitViewModel(commonApi, networkApi, navigationApi, settingsApi) }
+fun BooksCategoriesScreen() {
+    val context = LocalContext.current
+    val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         onDispose {

@@ -35,8 +35,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.Lifecycle
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.settings.R
 
@@ -57,7 +55,7 @@ private fun createAndInitViewModel(
 }
 
 @Composable
-fun ChooseCustomColorDialogScreen(
+fun ChooseCustomColorDialogUI(
     currentColorCode: String,
     title: String,
     onDismiss: (selectedColorCode: String?) -> Unit,
@@ -71,28 +69,24 @@ fun ChooseCustomColorDialogScreen(
             }
         }
     }
-    ChooseCustomColorUI(
-        viewModel.state,
-        viewModel.effectFlow,
-        viewModel::sendIntent,
-        onDismiss,
-    )
-}
-
-@Composable
-private fun ChooseCustomColorUI(
-    state: ChooseCustomColorViewModel.State,
-    effectFlow: Flow<ChooseCustomColorViewModel.Effect>,
-    onIntent: (ChooseCustomColorViewModel.Intent) -> Unit,
-    onDismiss: (String?) -> Unit,
-) {
-    LaunchedEffect(effectFlow) {
-        effectFlow.collect {
+    LaunchedEffect(viewModel.effectFlow) {
+        viewModel.effectFlow.collect {
             if (it is ChooseCustomColorViewModel.Effect.Dismiss) {
                 onDismiss(it.selectedColorCode)
             }
         }
     }
+    ChooseCustomColorDialogScreen(
+        viewModel.state,
+        viewModel::sendIntent,
+    )
+}
+
+@Composable
+private fun ChooseCustomColorDialogScreen(
+    state: ChooseCustomColorViewModel.State,
+    onIntent: (ChooseCustomColorViewModel.Intent) -> Unit,
+) {
     Dialog(
         onDismissRequest = {
             onIntent(ChooseCustomColorViewModel.Intent.SelectColor(null))
@@ -167,7 +161,7 @@ private fun String.fromHex() = Color(android.graphics.Color.parseColor(this))
 @Preview
 @Composable
 private fun Preview() {
-    ChooseCustomColorUI(
+    ChooseCustomColorDialogScreen(
         state = ChooseCustomColorViewModel.State(
             "Select translation color", listOf(
                 ColorItem(
@@ -192,8 +186,6 @@ private fun Preview() {
                 ),
             )
         ),
-        effectFlow = emptyFlow(),
         onIntent = {},
-        onDismiss = {},
     )
 }
