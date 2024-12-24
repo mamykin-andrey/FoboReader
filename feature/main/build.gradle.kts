@@ -36,7 +36,6 @@ dependencies {
     implementation(project(":uikit"))
 
     implementation(Dependencies.materialLib)
-    implementation(Dependencies.constraintLayout)
     implementation(Dependencies.fragmentX)
     implementation(Dependencies.kotlinSerialization)
 

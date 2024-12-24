@@ -36,11 +36,8 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    implementation(Dependencies.cardView)
     implementation(Dependencies.materialLib)
-    implementation(Dependencies.constraintLayout)
     implementation(Dependencies.lifecycleRuntimeKtx)
-    implementation(Dependencies.picasso)
     implementation(Dependencies.lottie)
 
     implementation(Dependencies.composeUi)

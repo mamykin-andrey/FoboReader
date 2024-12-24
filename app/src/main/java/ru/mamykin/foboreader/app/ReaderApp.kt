@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.app
 
 import androidx.multidex.MultiDexApplication
-import com.github.terrakok.cicerone.Cicerone
 import leakcanary.LeakCanary
 import ru.mamykin.foboreader.BuildConfig
 import ru.mamykin.foboreader.app.di.ApiHolderImpl
@@ -14,9 +13,7 @@ import javax.inject.Inject
 @Suppress("unused")
 class ReaderApp : MultiDexApplication(), ApiHolderProvider {
 
-    private val cicerone = Cicerone.create()
-
-    override val apiHolder = ApiHolderImpl(this, cicerone)
+    override val apiHolder = ApiHolderImpl(this)
 
     @Inject
     internal lateinit var notificationManager: NotificationManager
@@ -41,6 +38,6 @@ class ReaderApp : MultiDexApplication(), ApiHolderProvider {
     }
 
     private fun initDi() {
-        DaggerAppComponent.factory().create(this, cicerone).inject(this)
+        DaggerAppComponent.factory().create(this).inject(this)
     }
 }

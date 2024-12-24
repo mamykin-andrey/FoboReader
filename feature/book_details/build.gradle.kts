@@ -51,9 +51,7 @@ dependencies {
     implementation(Dependencies.fragmentX)
     implementation(Dependencies.lifecycleRuntimeKtx)
     implementation(Dependencies.retrofit)
-    implementation(Dependencies.picasso)
     implementation(Dependencies.dagger)
-    implementation(Dependencies.cicerone)
 
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)

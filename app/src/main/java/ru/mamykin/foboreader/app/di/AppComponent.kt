@@ -1,8 +1,6 @@
 package ru.mamykin.foboreader.app.di
 
 import android.content.Context
-import com.github.terrakok.cicerone.Cicerone
-import com.github.terrakok.cicerone.Router
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Component
@@ -43,7 +41,6 @@ internal interface AppComponent : NetworkApi, SettingsApi, MainApi, CommonApi {
 
         fun create(
             @BindsInstance context: Context,
-            @BindsInstance cicerone: Cicerone<Router>
         ): AppComponent
     }
 }
@@ -55,10 +52,6 @@ internal class AppModule {
     @Singleton
     @CommonClient
     fun provideCommonClient(): OkHttpClient = OkHttpFactory.create(true)
-
-    @Provides
-    @Singleton
-    fun provideRouter(cicerone: Cicerone<Router>): Router = cicerone.router
 
     @Module
     interface BindsModule {

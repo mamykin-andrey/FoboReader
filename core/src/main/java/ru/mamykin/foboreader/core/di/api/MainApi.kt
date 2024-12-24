@@ -4,5 +4,5 @@ import ru.mamykin.foboreader.core.navigation.TabComposableProvider
 
 interface MainApi {
 
-    fun tabFragmentProvider(): TabComposableProvider
+    fun tabComposableProvider(): TabComposableProvider
 }

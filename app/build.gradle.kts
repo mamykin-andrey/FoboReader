@@ -66,7 +66,6 @@ dependencies {
 
     implementation(Dependencies.multidex)
     implementation(Dependencies.coreKtx)
-    implementation(Dependencies.recyclerView)
     implementation(Dependencies.composeNavigation)
     releaseImplementation(Dependencies.leakcanaryNoOp)
     debugImplementation(Dependencies.leakcanary)
@@ -83,7 +82,6 @@ dependencies {
     implementation(Dependencies.okio)
     implementation(Dependencies.okHttp)
     implementation(Dependencies.dagger)
-    implementation(Dependencies.cicerone)
     implementation(Dependencies.jankStats)
 
     implementation(Dependencies.composeUi)
