@@ -5,33 +5,28 @@ import com.github.terrakok.cicerone.Cicerone
 import leakcanary.LeakCanary
 import ru.mamykin.foboreader.BuildConfig
 import ru.mamykin.foboreader.app.di.ApiHolderImpl
-import ru.mamykin.foboreader.app.di.CoreComponent
-import ru.mamykin.foboreader.app.di.DaggerCoreComponent
+import ru.mamykin.foboreader.app.di.DaggerAppComponent
 import ru.mamykin.foboreader.core.di.api.ApiHolderProvider
-import ru.mamykin.foboreader.core.di.api.CommonApi
-import ru.mamykin.foboreader.core.di.api.CommonApiProvider
 import ru.mamykin.foboreader.core.platform.Log
-import ru.mamykin.foboreader.core.platform.NotificationUtils
+import ru.mamykin.foboreader.core.platform.NotificationManager
+import javax.inject.Inject
 
 @Suppress("unused")
-class ReaderApp : MultiDexApplication(), ApiHolderProvider, CommonApiProvider {
+class ReaderApp : MultiDexApplication(), ApiHolderProvider {
 
     private val cicerone = Cicerone.create()
 
     override val apiHolder = ApiHolderImpl(this, cicerone)
 
-    override val commonApi: CommonApi
-        get() = coreComponent
-
-    private val coreComponent: CoreComponent by lazy {
-        DaggerCoreComponent.factory().create(this)
-    }
+    @Inject
+    internal lateinit var notificationManager: NotificationManager
 
     override fun onCreate() {
         super.onCreate()
-        NotificationUtils.initNotificationChannels(this)
+        initDi()
         initLeakCanary(enabled = BuildConfig.DEBUG)
         initLogger()
+        notificationManager.initNotificationChannels()
     }
 
     private fun initLeakCanary(enabled: Boolean) {
@@ -43,5 +38,9 @@ class ReaderApp : MultiDexApplication(), ApiHolderProvider, CommonApiProvider {
 
     private fun initLogger() {
         Log.init(BuildConfig.DEBUG)
+    }
+
+    private fun initDi() {
+        DaggerAppComponent.factory().create(this, cicerone).inject(this)
     }
 }

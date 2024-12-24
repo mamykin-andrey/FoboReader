@@ -5,42 +5,27 @@ import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.ui.graphics.vector.ImageVector
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import ru.mamykin.foboreader.core.presentation.Actor
-import ru.mamykin.foboreader.core.presentation.ComposeFeature
-import ru.mamykin.foboreader.core.presentation.Reducer
-import ru.mamykin.foboreader.core.presentation.ReducerResult
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
+import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
 
 @MainScope
-internal class MainFeature @Inject constructor(
-    actor: MainActor,
-    reducer: MainReducer,
-    scope: CoroutineScope,
-) : ComposeFeature<MainFeature.State, MainFeature.Intent, MainFeature.Effect, MainFeature.Action>(
-    State(),
-    actor,
-    reducer,
-    scope,
-) {
-    internal class MainActor @Inject constructor() : Actor<Intent, Action> {
+internal class MainViewModel @Inject constructor() : ViewModel() {
 
-        override fun invoke(intent: Intent): Flow<Action> = flow {
-            when (intent) {
-                is Intent.OpenTab -> {
-                    emit(Action.TabChanged(intent.route))
-                }
+    var state: State by LoggingStateDelegate(State())
+        private set
+
+    private val effectChannel = LoggingEffectChannel<Effect>()
+    val effectFlow = effectChannel.receiveAsFlow()
+
+    fun sendIntent(intent: Intent) = viewModelScope.launch {
+        when (intent) {
+            is Intent.OpenTab -> {
+                effectChannel.send(Effect.NavigateToTab(intent.route))
             }
-        }
-    }
-
-    internal class MainReducer @Inject constructor(
-    ) : Reducer<State, Action, Effect> {
-
-        override fun invoke(state: State, action: Action): ReducerResult<State, Effect> = when (action) {
-            is Action.TabChanged -> state to setOf(Effect.NavigateToTab(action.route))
         }
     }
 
@@ -50,10 +35,6 @@ internal class MainFeature @Inject constructor(
 
     sealed class Effect {
         data class NavigateToTab(val route: String) : Effect()
-    }
-
-    sealed class Action {
-        data class TabChanged(val route: String) : Action()
     }
 
     data class State(

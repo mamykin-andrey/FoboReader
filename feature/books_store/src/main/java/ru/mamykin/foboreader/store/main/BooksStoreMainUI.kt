@@ -15,6 +15,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -33,8 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.di.api.ApiHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
@@ -54,14 +53,13 @@ private fun createAndInitViewModel(
         DaggerBooksStoreMainComponent.factory().create(
             apiHolder.commonApi(),
             apiHolder.networkApi(),
-            apiHolder.navigationApi(),
             apiHolder.settingsApi(),
         )
     }.booksStoreMainViewModel().also { it.sendIntent(BooksStoreMainViewModel.Intent.LoadCategories) }
 }
 
 @Composable
-fun BooksCategoriesScreen() {
+fun BooksCategoriesScreen(onBookCategoryClick: (String) -> Unit) {
     val context = LocalContext.current
     val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -72,15 +70,27 @@ fun BooksCategoriesScreen() {
             }
         }
     }
-    BookCategoriesUI(state = viewModel.state, viewModel.effectFlow, viewModel::sendIntent)
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(viewModel.effectFlow) {
+        viewModel.effectFlow.collect {
+            takeEffect(it, snackbarHostState, onBookCategoryClick)
+        }
+    }
+    BookCategoriesUI(
+        viewModel.state,
+        viewModel::sendIntent,
+        snackbarHostState,
+    )
 }
 
 private suspend fun takeEffect(
     effect: BooksStoreMainViewModel.Effect,
     snackbarHostState: SnackbarHostState,
+    onBookCategoryClick: (String) -> Unit,
 ) {
     when (effect) {
         is BooksStoreMainViewModel.Effect.ShowSnackbar -> snackbarHostState.showSnackbar(effect.message)
+        is BooksStoreMainViewModel.Effect.OpenBooksListScreen -> onBookCategoryClick(effect.categoryId)
     }
 }
 
@@ -88,29 +98,25 @@ private suspend fun takeEffect(
 @Composable
 internal fun BookCategoriesUI(
     state: BooksStoreMainViewModel.State,
-    effectFlow: Flow<BooksStoreMainViewModel.Effect>,
     onIntent: (BooksStoreMainViewModel.Intent) -> Unit,
+    snackbarHostState: SnackbarHostState,
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    LaunchedEffect(effectFlow) {
-        effectFlow.collect {
-            takeEffect(it, snackbarHostState)
-        }
-    }
     FoboReaderTheme {
-        Scaffold(topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.books_store_title))
-                }, elevation = 12.dp
-            )
-        }, content = {
-            when (state) {
-                is BooksStoreMainViewModel.State.Loading -> LoadingComposable()
-                is BooksStoreMainViewModel.State.Error -> ErrorComposable(state, onIntent)
-                is BooksStoreMainViewModel.State.Content -> ContentComposable(state, onIntent)
-            }
-        })
+        Scaffold(
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = stringResource(id = R.string.books_store_title))
+                    }, elevation = 12.dp, backgroundColor = MaterialTheme.colors.primary
+                )
+            }, content = {
+                when (state) {
+                    is BooksStoreMainViewModel.State.Loading -> LoadingComposable()
+                    is BooksStoreMainViewModel.State.Error -> ErrorComposable(state, onIntent)
+                    is BooksStoreMainViewModel.State.Content -> ContentComposable(state, onIntent)
+                }
+            })
     }
 }
 
@@ -206,7 +212,7 @@ private fun ErrorComposable(
 fun Preview() {
     BookCategoriesUI(
         state = BooksStoreMainViewModel.State.Content(listOf(BookCategory("1", "Classic", "Classic books", 10))),
-        effectFlow = emptyFlow(),
-        onIntent = {}
+        onIntent = {},
+        snackbarHostState = remember { SnackbarHostState() }
     )
 }

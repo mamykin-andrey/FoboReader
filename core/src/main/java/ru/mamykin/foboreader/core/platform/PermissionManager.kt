@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 
 interface PermissionManager {
 
-    fun init(activity: AppCompatActivity)
+    fun checkPermission(
+        permission: RequestedPermission,
+    ): Boolean
 
-    suspend fun requestPermissions(
-        vararg permissions: RequestedPermission,
+    suspend fun requestPermission(
+        activity: AppCompatActivity,
+        permission: RequestedPermission,
     ): Boolean
 }
 

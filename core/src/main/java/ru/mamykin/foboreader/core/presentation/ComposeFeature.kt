@@ -16,6 +16,7 @@ typealias ReducerResult<State, Effect> = Pair<State, Set<Effect>>
 typealias Actor<Intent, Action> = (intent: Intent) -> Flow<Action>
 typealias Reducer<State, Action, Effect> = (state: State, action: Action) -> ReducerResult<State, Effect>
 
+@Deprecated("Use Jetpack ViewModel instead")
 abstract class ComposeFeature<State, Intent, Effect, Action>(
     initialState: State,
     private val actor: Actor<Intent, Action>,

@@ -2,10 +2,8 @@ package ru.mamykin.foboreader.my_books.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
-import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
@@ -13,14 +11,11 @@ import ru.mamykin.foboreader.my_books.sort.SortAndFilterBooks
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import javax.inject.Inject
 
-// TODO: Move navigation to UI
 internal class MyBooksViewModel @Inject constructor(
     private val loadMyBooks: LoadMyBooks,
     private val sortAndFilterBooks: SortAndFilterBooks,
     private val removeBook: RemoveBook,
     private val errorMessageMapper: ErrorMessageMapper,
-    private val router: Router,
-    private val screenProvider: ScreenProvider,
 ) : ViewModel() {
 
     var state: State by LoggingStateDelegate(State.Loading)
@@ -32,8 +27,13 @@ internal class MyBooksViewModel @Inject constructor(
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadBooks -> {
-                val allBooks = loadMyBooks.execute()
-                state = State.Content(allBooks, allBooks)
+                loadMyBooks.execute().fold(
+                    onSuccess = {
+                        state = State.Content(allBooks = it, books = it)
+                    }, onFailure = {
+                        effectChannel.send(Effect.ShowSnackbar(errorMessageMapper.getMessage(it)))
+                    }
+                )
             }
 
             is Intent.RemoveBook -> {
@@ -57,11 +57,11 @@ internal class MyBooksViewModel @Inject constructor(
             }
 
             is Intent.OpenBook -> {
-                router.navigateTo(screenProvider.readBookScreen(intent.bookId))
+                effectChannel.send(Effect.NavigateToReadBook(intent.bookId))
             }
 
             is Intent.OpenBookDetails -> {
-                router.navigateTo(screenProvider.bookDetailsScreen(intent.bookId))
+                effectChannel.send(Effect.NavigateToBookDetails(intent.bookId))
             }
 
             is Intent.ShowSearch -> {
@@ -113,5 +113,7 @@ internal class MyBooksViewModel @Inject constructor(
 
     sealed class Effect {
         data class ShowSnackbar(val message: String) : Effect()
+        data class NavigateToBookDetails(val bookId: Long) : Effect()
+        data class NavigateToReadBook(val bookId: Long) : Effect()
     }
 }

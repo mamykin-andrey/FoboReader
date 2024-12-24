@@ -65,6 +65,7 @@ dependencies {
     implementation(Dependencies.composeActivity)
     implementation(Dependencies.composeToolingPreview)
     implementation(Dependencies.coil)
+    implementation(Dependencies.composeNavigation)
 
     kapt(Dependencies.daggerCompiler)
 

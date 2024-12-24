@@ -1,7 +1,9 @@
 package ru.mamykin.foboreader.settings.all_settings
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +18,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
@@ -25,6 +28,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +43,7 @@ import androidx.lifecycle.Lifecycle
 import ru.mamykin.foboreader.core.di.ComponentHolder
 import ru.mamykin.foboreader.core.di.api.ApiHolder
 import ru.mamykin.foboreader.core.extension.apiHolder
+import ru.mamykin.foboreader.core.extension.changeLocale
 import ru.mamykin.foboreader.core.extension.getActivity
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogUI
@@ -73,7 +78,29 @@ fun SettingsTabUI() {
             }
         }
     }
+    LaunchedEffect(viewModel.effectFlow) {
+        viewModel.effectFlow.collect {
+            takeEffect(it, context.getActivity())
+        }
+    }
     SettingsScreen(viewModel.state, viewModel::sendIntent)
+}
+
+private fun takeEffect(effect: SettingsViewModel.Effect, activity: Activity) {
+    when (effect) {
+        is SettingsViewModel.Effect.SwitchTheme -> {
+            setNightModeEnabled(effect.isNightTheme)
+        }
+
+        is SettingsViewModel.Effect.SwitchLanguage -> {
+            activity.changeLocale(effect.languageCode)
+        }
+    }
+}
+
+private fun setNightModeEnabled(enabled: Boolean) {
+    val newMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+    AppCompatDelegate.setDefaultNightMode(newMode)
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -87,8 +114,7 @@ private fun SettingsScreen(
             TopAppBar(
                 title = {
                     Text(text = stringResource(id = R.string.settings_title))
-                },
-                elevation = 12.dp
+                }, elevation = 12.dp, backgroundColor = MaterialTheme.colors.primary
             )
         }, content = {
             when (state) {
@@ -113,8 +139,7 @@ private fun LoadingComposable() {
 @Composable
 private fun ContentComposable(state: SettingsViewModel.State.Content, onIntent: (SettingsViewModel.Intent) -> Unit) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         // TODO: Fix the items clickable area
         NightThemeComposable(state, onIntent)
@@ -141,7 +166,7 @@ private fun ContentComposable(state: SettingsViewModel.State.Content, onIntent: 
         }
         if (state.isChangeLanguageDialogShown) {
             ChangeLanguageDialogUI {
-                onIntent(SettingsViewModel.Intent.AppLanguageChanged)
+                onIntent(SettingsViewModel.Intent.AppLanguageChanged(it))
             }
         }
     }
@@ -150,31 +175,25 @@ private fun ContentComposable(state: SettingsViewModel.State.Content, onIntent: 
 @Composable
 private fun NightThemeComposable(state: SettingsViewModel.State.Content, onIntent: (SettingsViewModel.Intent) -> Unit) {
     Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+        verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 16.dp, end = 16.dp)
     ) {
         Text(
             stringResource(id = R.string.settings_night_theme),
             fontSize = 16.sp,
             modifier = Modifier.weight(1f),
         )
-        Switch(
-            checked = state.settings.isNightThemeEnabled,
-            onCheckedChange = {
-                onIntent(SettingsViewModel.Intent.ChangeNightTheme(it))
-            }
-        )
+        Switch(checked = state.settings.isNightThemeEnabled, onCheckedChange = {
+            onIntent(SettingsViewModel.Intent.SwitchTheme(it))
+        })
     }
 }
 
 @Composable
 private fun BackgroundColorComposable(
-    state: SettingsViewModel.State.Content,
-    onIntent: (SettingsViewModel.Intent) -> Unit
+    state: SettingsViewModel.State.Content, onIntent: (SettingsViewModel.Intent) -> Unit
 ) {
     ColorRowComposable(
-        colorHex = state.settings.backgroundColor,
-        titleRes = R.string.settings_bg_color_title
+        colorHex = state.settings.backgroundColor, titleRes = R.string.settings_bg_color_title
     ) {
         onIntent(SettingsViewModel.Intent.SelectBackgroundColor)
     }
@@ -182,12 +201,10 @@ private fun BackgroundColorComposable(
 
 @Composable
 private fun TranslationColorComposable(
-    state: SettingsViewModel.State.Content,
-    onIntent: (SettingsViewModel.Intent) -> Unit
+    state: SettingsViewModel.State.Content, onIntent: (SettingsViewModel.Intent) -> Unit
 ) {
     ColorRowComposable(
-        colorHex = state.settings.translationColor,
-        titleRes = R.string.settings_translate_color_title
+        colorHex = state.settings.translationColor, titleRes = R.string.settings_translate_color_title
     ) {
         onIntent(SettingsViewModel.Intent.SelectTranslationColor)
     }
@@ -199,13 +216,11 @@ private fun ColorRowComposable(
     @StringRes titleRes: Int,
     onClick: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .padding(16.dp)
-            .clickable {
-                onClick()
-            }
-    ) {
+    Row(modifier = Modifier
+        .padding(16.dp)
+        .clickable {
+            onClick()
+        }) {
         Text(
             text = stringResource(id = titleRes),
             modifier = Modifier.weight(1f),
@@ -220,8 +235,7 @@ private fun ColorRowComposable(
 @Composable
 private fun TextSizeComposable(state: SettingsViewModel.State.Content, onIntent: (SettingsViewModel.Intent) -> Unit) {
     Row(
-        modifier = Modifier
-            .padding(16.dp)
+        modifier = Modifier.padding(16.dp)
     ) {
         Text(
             text = stringResource(id = R.string.settings_text_size),
@@ -270,29 +284,23 @@ private fun TextSizeComposable(state: SettingsViewModel.State.Content, onIntent:
 
 @Composable
 private fun AppLanguageComposable(
-    state: SettingsViewModel.State.Content,
-    onIntent: (SettingsViewModel.Intent) -> Unit
+    state: SettingsViewModel.State.Content, onIntent: (SettingsViewModel.Intent) -> Unit
 ) {
     val language = state.settings.languageName
-    Text(
-        text = language,
-        modifier = Modifier
-            .padding(16.dp)
-            .clickable {
-                onIntent(SettingsViewModel.Intent.SelectAppLanguage)
-            }
-    )
+    Text(text = language, modifier = Modifier
+        .padding(16.dp)
+        .clickable {
+            onIntent(SettingsViewModel.Intent.SelectAppLanguage)
+        })
 }
 
 @Composable
 private fun UseVibrationComposable(
-    state: SettingsViewModel.State.Content,
-    onIntent: (SettingsViewModel.Intent) -> Unit
+    state: SettingsViewModel.State.Content, onIntent: (SettingsViewModel.Intent) -> Unit
 ) {
     val useVibration = state.settings.isVibrationEnabled
     Row(
-        modifier = Modifier
-            .padding(16.dp)
+        modifier = Modifier.padding(16.dp)
     ) {
         Column(
             modifier = Modifier.weight(1f)
@@ -305,12 +313,9 @@ private fun UseVibrationComposable(
                 style = TextStyles.Body2,
             )
         }
-        Checkbox(
-            checked = useVibration,
-            onCheckedChange = {
-                onIntent(SettingsViewModel.Intent.ChangeUseVibration(it))
-            }
-        )
+        Checkbox(checked = useVibration, onCheckedChange = {
+            onIntent(SettingsViewModel.Intent.ChangeUseVibration(it))
+        })
     }
 }
 

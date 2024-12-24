@@ -6,7 +6,6 @@ import com.github.terrakok.cicerone.Router
 import ru.mamykin.foboreader.core.di.api.ApiHolder
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.MainApi
-import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 
@@ -19,8 +18,6 @@ class ApiHolderImpl(
     private val appComponent: AppComponent by lazy {
         DaggerAppComponent.factory().create(context, cicerone)
     }
-
-    override fun navigationApi(): NavigationApi = appComponent
 
     override fun networkApi(): NetworkApi = appComponent
 

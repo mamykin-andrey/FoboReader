@@ -67,6 +67,7 @@ dependencies {
     implementation(Dependencies.multidex)
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.recyclerView)
+    implementation(Dependencies.composeNavigation)
     releaseImplementation(Dependencies.leakcanaryNoOp)
     debugImplementation(Dependencies.leakcanary)
     implementation(Dependencies.coroutinesCore)

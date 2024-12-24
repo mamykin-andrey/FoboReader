@@ -4,9 +4,8 @@ import dagger.Component
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.MainApi
 import ru.mamykin.foboreader.core.di.module.CoroutinesModule
+import ru.mamykin.foboreader.core.navigation.TabComposableProvider
 import javax.inject.Scope
-
-// TODO: Rename to MainScreen
 
 @Scope
 @MustBeDocumented
@@ -20,7 +19,9 @@ internal annotation class MainScope
 )
 internal interface MainComponent {
 
-    fun inject(fragment: MainFragment)
+    fun viewModel(): MainViewModel
+
+    fun tabComposableProvider(): TabComposableProvider
 
     @Component.Factory
     interface Factory {

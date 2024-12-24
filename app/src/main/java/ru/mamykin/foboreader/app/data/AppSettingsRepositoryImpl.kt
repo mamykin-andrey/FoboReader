@@ -1,9 +1,8 @@
 package ru.mamykin.foboreader.app.data
 
-import kotlinx.coroutines.flow.Flow
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,14 +26,6 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
         private const val DEFAULT_TRANSLATION_COLOR = "#000000"
         private const val DEFAULT_BACKGROUND_COLOR = "#ffffff"
         private const val DEFAULT_USE_VIBRATION = true
-    }
-
-    override fun nightThemeFlow(): Flow<Boolean> {
-        return prefManager.observeBooleanChanges(KEY_NIGHT_THEME_ENABLED)
-    }
-
-    override fun appLanguageFlow(): Flow<String> {
-        return prefManager.observeStringChanges(KEY_APP_LANGUAGE_CODE)
     }
 
     override fun isNightThemeEnabled(): Boolean {

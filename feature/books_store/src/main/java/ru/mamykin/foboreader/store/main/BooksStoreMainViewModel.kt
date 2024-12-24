@@ -2,19 +2,16 @@ package ru.mamykin.foboreader.store.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
-import ru.mamykin.foboreader.store.list.BooksListScreen
 import javax.inject.Inject
 
 // TODO: Move navigation to UI
 @BookCategoriesScope
 internal class BooksStoreMainViewModel @Inject constructor(
     private val getBookCategories: GetBookCategories,
-    private val router: Router,
     private val errorMessageMapper: ErrorMessageMapper,
 ) : ViewModel() {
 
@@ -35,18 +32,19 @@ internal class BooksStoreMainViewModel @Inject constructor(
             }
 
             is Intent.OpenCategory -> {
-                router.navigateTo(BooksListScreen(intent.id))
+                effectChannel.send(Effect.OpenBooksListScreen(intent.categoryId))
             }
         }
     }
 
     sealed class Intent {
         data object LoadCategories : Intent()
-        class OpenCategory(val id: String) : Intent()
+        class OpenCategory(val categoryId: String) : Intent()
     }
 
     sealed class Effect {
         class ShowSnackbar(val message: String) : Effect()
+        class OpenBooksListScreen(val categoryId: String) : Effect()
     }
 
     sealed class State {

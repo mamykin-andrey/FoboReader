@@ -10,13 +10,13 @@ import javax.inject.Inject
 class TabComposableProviderImpl @Inject constructor() : TabComposableProvider {
 
     @Composable
-    override fun MyBooksScreenTabContent() {
-        MyBooksScreen()
+    override fun MyBooksScreenTabContent(onBookDetailsClick: (Long) -> Unit, onReadBookClick: (Long) -> Unit) {
+        MyBooksScreen(onBookDetailsClick, onReadBookClick)
     }
 
     @Composable
-    override fun BooksStoreScreenTabContent() {
-        BooksCategoriesScreen()
+    override fun BooksStoreScreenTabContent(onBookCategoryClick: (String) -> Unit) {
+        BooksCategoriesScreen(onBookCategoryClick)
     }
 
     @Composable

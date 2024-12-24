@@ -11,10 +11,10 @@ import org.junit.Test
 
 class MainFeatureTest {
 
-    private val actor = MainFeature.MainActor()
-    private val reducer = MainFeature.MainReducer()
+    private val actor = MainViewModel.MainActor()
+    private val reducer = MainViewModel.MainReducer()
     private val testScope = TestScope(StandardTestDispatcher())
-    private val feature = MainFeature(actor, reducer, testScope)
+    private val feature = MainViewModel(actor, reducer, testScope)
     private val testRoute = "test"
 
     @Test
@@ -26,10 +26,10 @@ class MainFeatureTest {
     fun `navigate to tab`() = runTest {
         val state = feature.state
 
-        feature.sendIntent(MainFeature.Intent.OpenTab(testRoute))
+        feature.sendIntent(MainViewModel.Intent.OpenTab(testRoute))
         testScope.advanceUntilIdle()
 
         assertEquals(state, feature.state)
-        assertEquals(MainFeature.Effect.NavigateToTab(testRoute), feature.effectFlow.first())
+        assertEquals(MainViewModel.Effect.NavigateToTab(testRoute), feature.effectFlow.first())
     }
 }

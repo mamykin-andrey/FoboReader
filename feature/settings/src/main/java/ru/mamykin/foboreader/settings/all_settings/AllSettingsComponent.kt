@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.settings.all_settings
 
 import dagger.Component
 import ru.mamykin.foboreader.core.di.api.CommonApi
-import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import javax.inject.Scope
 

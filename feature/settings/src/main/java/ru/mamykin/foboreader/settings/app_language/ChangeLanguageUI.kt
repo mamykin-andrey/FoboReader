@@ -40,7 +40,7 @@ private fun createAndInitViewModel(apiHolder: ApiHolder): ChangeLanguageViewMode
 }
 
 @Composable
-fun ChangeLanguageDialogUI(onDismiss: () -> Unit) {
+fun ChangeLanguageDialogUI(onDismiss: (selectedLanguageCode: String?) -> Unit) {
     val context = LocalContext.current
     val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -54,18 +54,18 @@ fun ChangeLanguageDialogUI(onDismiss: () -> Unit) {
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
             if (it is ChangeLanguageViewModel.Effect.Dismiss) {
-                onDismiss()
+                onDismiss(it.selectedLanguageCode)
             }
         }
     }
-    ChangeLanguageDialogScreen(
+    ChangeLanguageDialogComposable(
         viewModel.state,
         viewModel::sendIntent,
     )
 }
 
 @Composable
-private fun ChangeLanguageDialogScreen(
+private fun ChangeLanguageDialogComposable(
     state: ChangeLanguageViewModel.State,
     onIntent: (ChangeLanguageViewModel.Intent) -> Unit,
 ) {
@@ -118,7 +118,7 @@ private fun LanguageItemComposable(
 @Preview
 @Composable
 fun ChangeLanguageScreenPreview() {
-    ChangeLanguageDialogScreen(
+    ChangeLanguageDialogComposable(
         state = ChangeLanguageViewModel.State(
             listOf(
                 AppLanguage(

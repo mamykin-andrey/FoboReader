@@ -3,7 +3,9 @@ package ru.mamykin.foboreader.settings.all_settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.settings.app_language.SetAppLanguage
 import javax.inject.Inject
 
 // TODO: Refactor to use a single UseCase
@@ -16,10 +18,14 @@ internal class SettingsViewModel @Inject constructor(
     private val setUseVibration: SetUseVibration,
     private val setTranslationColor: SetTranslationColor,
     private val setBackgroundColor: SetBackgroundColor,
+    private val setAppLanguage: SetAppLanguage,
 ) : ViewModel() {
 
     var state: State by LoggingStateDelegate(State.Loading)
         private set
+
+    private val effectChannel = LoggingEffectChannel<Effect>()
+    val effectFlow = effectChannel.receiveAsFlow()
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
@@ -32,9 +38,10 @@ internal class SettingsViewModel @Inject constructor(
                 state = State.Content(getSettings.execute())
             }
 
-            is Intent.ChangeNightTheme -> {
-                setNightTheme.execute(intent.isEnabled)
+            is Intent.SwitchTheme -> {
+                setNightTheme.execute(intent.isNightTheme)
                 state = State.Content(getSettings.execute())
+                effectChannel.send(Effect.SwitchTheme(intent.isNightTheme))
             }
 
             is Intent.IncreaseTextSize -> {
@@ -89,8 +96,11 @@ internal class SettingsViewModel @Inject constructor(
             }
 
             is Intent.AppLanguageChanged -> {
+                val selectedLanguageCode = intent.selectedLanguageCode ?: return@launch
+                setAppLanguage.execute(selectedLanguageCode)
                 val prevState = (state as? State.Content) ?: return@launch
                 state = prevState.copy(isChangeLanguageDialogShown = false)
+                effectChannel.send(Effect.SwitchLanguage(selectedLanguageCode))
             }
 
             is Intent.ChangeUseVibration -> {
@@ -103,7 +113,7 @@ internal class SettingsViewModel @Inject constructor(
     sealed class Intent {
         data object LoadSettings : Intent()
         class ChangeBrightness(val brightness: Int) : Intent()
-        class ChangeNightTheme(val isEnabled: Boolean) : Intent()
+        class SwitchTheme(val isNightTheme: Boolean) : Intent()
         data object IncreaseTextSize : Intent()
         data object DecreaseTextSize : Intent()
         data object SelectTranslationColor : Intent()
@@ -111,7 +121,7 @@ internal class SettingsViewModel @Inject constructor(
         data object SelectBackgroundColor : Intent()
         data class ChangeBackgroundColor(val colorCode: String?) : Intent()
         data object SelectAppLanguage : Intent()
-        data object AppLanguageChanged : Intent()
+        data class AppLanguageChanged(val selectedLanguageCode: String?) : Intent()
         class ChangeUseVibration(val enabled: Boolean) : Intent()
     }
 
@@ -124,5 +134,10 @@ internal class SettingsViewModel @Inject constructor(
             val translationColorDialogCode: String? = null,
             val isChangeLanguageDialogShown: Boolean = false,
         ) : State()
+    }
+
+    sealed class Effect {
+        data class SwitchTheme(val isNightTheme: Boolean) : Effect()
+        data class SwitchLanguage(val languageCode: String) : Effect()
     }
 }

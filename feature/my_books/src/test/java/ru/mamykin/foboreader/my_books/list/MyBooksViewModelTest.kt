@@ -14,7 +14,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
-import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.my_books.sort.SortAndFilterBooks
 
@@ -65,7 +64,7 @@ class MyBooksViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(StandardTestDispatcher())
-        coEvery { getMyBooks.execute() } returns testBooksList
+        coEvery { getMyBooks.execute() } returns Result.success(testBooksList)
     }
 
     @Test

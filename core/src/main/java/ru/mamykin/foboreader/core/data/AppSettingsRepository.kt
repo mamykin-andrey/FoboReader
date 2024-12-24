@@ -1,11 +1,7 @@
 package ru.mamykin.foboreader.core.data
 
-import kotlinx.coroutines.flow.Flow
-
 interface AppSettingsRepository {
 
-    fun nightThemeFlow(): Flow<Boolean>
-    fun appLanguageFlow(): Flow<String>
     fun isNightThemeEnabled(): Boolean
     fun setNightThemeEnabled(enabled: Boolean)
     fun getBrightness(): Int

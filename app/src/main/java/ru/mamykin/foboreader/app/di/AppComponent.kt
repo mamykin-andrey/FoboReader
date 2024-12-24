@@ -9,9 +9,9 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import ru.mamykin.foboreader.app.ReaderApp
 import ru.mamykin.foboreader.app.data.AppSettingsRepositoryImpl
 import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
-import ru.mamykin.foboreader.app.navigation.ScreenProviderImpl
 import ru.mamykin.foboreader.app.navigation.TabComposableProviderImpl
 import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.app.platform.NotificationManagerImpl
@@ -22,11 +22,9 @@ import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.MainApi
-import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.di.qualifier.CommonClient
-import ru.mamykin.foboreader.core.navigation.ScreenProvider
 import ru.mamykin.foboreader.core.navigation.TabComposableProvider
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
@@ -36,7 +34,9 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class])
-internal interface AppComponent : NavigationApi, NetworkApi, SettingsApi, MainApi, CommonApi {
+internal interface AppComponent : NetworkApi, SettingsApi, MainApi, CommonApi {
+
+    fun inject(app: ReaderApp)
 
     @Component.Factory
     interface Factory {
@@ -65,10 +65,6 @@ internal class AppModule {
 
         @Binds
         @Singleton
-        fun navigationApi(component: AppComponent): NavigationApi
-
-        @Binds
-        @Singleton
         fun commonApi(component: AppComponent): CommonApi
 
         @Binds
@@ -78,10 +74,6 @@ internal class AppModule {
         @Binds
         @Singleton
         fun settingsApi(component: AppComponent): SettingsApi
-
-        @Binds
-        @Singleton
-        fun bindScreenProvider(impl: ScreenProviderImpl): ScreenProvider
 
         @Binds
         @Singleton

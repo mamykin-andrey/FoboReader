@@ -16,22 +16,24 @@ internal class FileRepositoryImpl @Inject constructor(
     @CommonClient private val client: OkHttpClient,
 ) : FileRepository {
 
-    override fun createFile(fileName: String): File {
+    override fun createFile(fileName: String): Result<File> {
         val downloadsDir = context.externalMediaDirs.first()
-            ?: throw DownloadFileException()
+            ?: return Result.failure(DownloadFileException("No external media dir is found!"))
 
-        return File(downloadsDir, fileName).also {
-            it.takeIf { it.exists() }?.delete()
-        }
+        return Result.success(
+            File(downloadsDir, fileName).also {
+                it.takeIf { it.exists() }?.delete()
+            }
+        )
     }
 
-    override suspend fun downloadFile(url: String, outputFile: File) {
+    override suspend fun downloadFile(url: String, outputFile: File): Result<Unit> = runCatching {
         withContext(Dispatchers.IO) {
             val request = Request.Builder().url(url).build()
 
             val response = client.newCall(request).execute()
                 .takeIf { it.isSuccessful }
-                ?: throw DownloadFileException()
+                ?: throw DownloadFileException("Unable to connect to: $url!")
 
             outputFile.sink().buffer().use {
                 it.writeAll(response.body!!.source())

@@ -1,21 +1,18 @@
 package ru.mamykin.foboreader.app.presentation
 
 import android.os.Bundle
+import android.view.View
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentContainerView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
-import com.github.terrakok.cicerone.Cicerone
-import com.github.terrakok.cicerone.Router
-import com.github.terrakok.cicerone.androidx.AppNavigator
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.app.di.DaggerRootComponent
 import ru.mamykin.foboreader.app.platform.PerformanceTracker
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.commonApi
-import ru.mamykin.foboreader.core.extension.getAttrColor
-import ru.mamykin.foboreader.core.navigation.ScreenProvider
+import ru.mamykin.foboreader.core.extension.changeLocale
+import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.core.platform.PermissionManager
 import ru.mamykin.foboreader.core.platform.RequestedPermission
 import javax.inject.Inject
@@ -26,65 +23,49 @@ internal class RootActivity : AppCompatActivity() {
     internal lateinit var appSettingsRepository: AppSettingsRepository
 
     @Inject
-    internal lateinit var cicerone: Cicerone<Router>
-
-    @Inject
-    internal lateinit var screenProvider: ScreenProvider
-
-    @Inject
     internal lateinit var permissionManager: PermissionManager
 
-    private val router by lazy { cicerone.router }
-    private val navigatorHolder by lazy { cicerone.getNavigatorHolder() }
-    private val rootView by lazy {
-        FragmentContainerView(this).apply {
-            id = R.id.fcv_root
-            setBackgroundColor(getAttrColor(android.R.attr.colorBackground))
-        }
-    }
+    private lateinit var contentView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(rootView)
+        contentView = findViewById(android.R.id.content)
         initDi()
-        permissionManager.init(this)
-        initTheme()
-        requestNotificationPermission()
-        if (savedInstanceState == null) {
-            router.newRootChain(screenProvider.mainScreen())
+        initAppPreferences()
+        setContent {
+            AppNavigation()
         }
+        initPermissions()
     }
 
     private fun initDi() {
         DaggerRootComponent.factory().create(
-            apiHolder().navigationApi(),
             apiHolder().settingsApi(),
-            commonApi(),
+            apiHolder().commonApi(),
         ).inject(this)
     }
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        navigatorHolder.setNavigator(AppNavigator(this, R.id.fcv_root))
-        PerformanceTracker.startTracking(rootView, window)
+        PerformanceTracker.startTracking(contentView, window)
     }
 
     override fun onStop() {
         super.onStop()
-        navigatorHolder.removeNavigator()
         PerformanceTracker.stopTracking()
     }
 
-    private fun initTheme() {
-        setTheme(R.style.AppTheme)
-        NightThemeDelegate(this, appSettingsRepository).init()
-        AppLanguageDelegate(this, appSettingsRepository).init()
+    private fun initAppPreferences() {
+        val newMode = if (appSettingsRepository.isNightThemeEnabled())
+            AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        AppCompatDelegate.setDefaultNightMode(newMode)
+
+        changeLocale(appSettingsRepository.getAppLanguageCode())
     }
 
-    private fun requestNotificationPermission() {
-        lifecycleScope.launch {
-            // TODO: Show rationale message if not granted
-            permissionManager.requestPermissions(RequestedPermission.NOTIFICATIONS)
+    private fun initPermissions() = lifecycleScope.launch {
+        if (!permissionManager.requestPermission(this@RootActivity, RequestedPermission.NOTIFICATIONS)) {
+            Log.debug("Notifications permission isn't granted!")
         }
     }
 }

@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 
 interface TabComposableProvider {
     @Composable
-    fun MyBooksScreenTabContent()
+    fun MyBooksScreenTabContent(onBookDetailsClick: (Long) -> Unit, onReadBookClick: (Long) -> Unit)
 
     @Composable
-    fun BooksStoreScreenTabContent()
+    fun BooksStoreScreenTabContent(onBookCategoryClick: (String) -> Unit)
 
     @Composable
     fun SettingsScreenTabContent()

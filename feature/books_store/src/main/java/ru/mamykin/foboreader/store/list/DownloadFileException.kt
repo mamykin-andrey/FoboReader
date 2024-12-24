@@ -1,3 +1,3 @@
 package ru.mamykin.foboreader.store.list
 
-class DownloadFileException : RuntimeException()
+class DownloadFileException(override val message: String) : RuntimeException(message)

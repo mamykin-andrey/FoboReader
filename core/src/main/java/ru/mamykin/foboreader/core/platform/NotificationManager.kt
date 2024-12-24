@@ -2,6 +2,10 @@ package ru.mamykin.foboreader.core.platform
 
 import androidx.annotation.DrawableRes
 
+object NotificationChannelId {
+    const val GENERAL = "general"
+}
+
 interface NotificationManager {
 
     fun notify(
@@ -11,4 +15,6 @@ interface NotificationManager {
         channelId: String,
         notificationId: Int,
     )
+
+    fun initNotificationChannels()
 }

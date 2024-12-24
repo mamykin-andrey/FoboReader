@@ -1,7 +1,5 @@
 package ru.mamykin.foboreader.core.data.storage
 
-import kotlinx.coroutines.flow.Flow
-
 interface PreferencesManager {
 
     fun putBoolean(key: String, value: Boolean)
@@ -10,6 +8,4 @@ interface PreferencesManager {
     fun getInt(key: String, defValue: Int): Int
     fun putString(key: String, value: String?)
     fun getString(key: String, defValue: String): String
-    fun observeBooleanChanges(key: String): Flow<Boolean>
-    fun observeStringChanges(key: String): Flow<String>
 }

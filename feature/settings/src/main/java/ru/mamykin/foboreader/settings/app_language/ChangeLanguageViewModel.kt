@@ -10,7 +10,6 @@ import javax.inject.Inject
 @ChangeLanguageScope
 internal class ChangeLanguageViewModel @Inject constructor(
     private val getAppLanguages: GetAppLanguages,
-    private val setAppLanguage: SetAppLanguage,
 ) : ViewModel() {
 
     var state: State by LoggingStateDelegate(State())
@@ -26,12 +25,11 @@ internal class ChangeLanguageViewModel @Inject constructor(
             }
 
             is Intent.SelectLanguage -> {
-                setAppLanguage.execute(intent.languageCode)
-                effectChannel.send(Effect.Dismiss)
+                effectChannel.send(Effect.Dismiss(intent.languageCode))
             }
 
             is Intent.Dismiss -> {
-                effectChannel.send(Effect.Dismiss)
+                effectChannel.send(Effect.Dismiss(null))
             }
         }
     }
@@ -43,7 +41,7 @@ internal class ChangeLanguageViewModel @Inject constructor(
     }
 
     sealed class Effect {
-        data object Dismiss : Effect()
+        data class Dismiss(val selectedLanguageCode: String?) : Effect()
     }
 
     data class State(

@@ -69,14 +69,13 @@ private const val SCREEN_KEY = "my_books"
 private fun createAndInitViewModel(apiHolder: ApiHolder): MyBooksViewModel {
     return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
         DaggerMyBooksComponent.factory().create(
-            apiHolder.navigationApi(),
             apiHolder.commonApi(),
         )
     }.myBooksViewModel().also { it.sendIntent(MyBooksViewModel.Intent.LoadBooks) }
 }
 
 @Composable
-fun MyBooksScreen() {
+fun MyBooksScreen(onBookDetailsClick: (Long) -> Unit, onReadBookClick: (Long) -> Unit) {
     val context = LocalContext.current
     val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -90,16 +89,29 @@ fun MyBooksScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
-            takeEffect(it, snackbarHostState)
+            takeEffect(it, snackbarHostState, onBookDetailsClick, onReadBookClick)
         }
     }
     MyBooksScreenUI(viewModel.state, viewModel::sendIntent, snackbarHostState)
 }
 
-private suspend fun takeEffect(effect: MyBooksViewModel.Effect, snackbarHostState: SnackbarHostState) {
+private suspend fun takeEffect(
+    effect: MyBooksViewModel.Effect,
+    snackbarHostState: SnackbarHostState,
+    onBookDetailsClick: (Long) -> Unit,
+    onReadBookClick: (Long) -> Unit
+) {
     when (effect) {
         is MyBooksViewModel.Effect.ShowSnackbar -> {
             snackbarHostState.showSnackbar(effect.message)
+        }
+
+        is MyBooksViewModel.Effect.NavigateToBookDetails -> {
+            onBookDetailsClick(effect.bookId)
+        }
+
+        is MyBooksViewModel.Effect.NavigateToReadBook -> {
+            onReadBookClick(effect.bookId)
         }
     }
 }
@@ -118,7 +130,7 @@ private fun MyBooksScreenUI(
                 if (searchQuery == null) {
                     Text(text = stringResource(id = R.string.my_books_screen_title))
                 }
-            }, elevation = 12.dp, actions = {
+            }, elevation = 12.dp, backgroundColor = MaterialTheme.colors.primary, actions = {
                 if (searchQuery != null) {
                     SearchFieldComposable(searchQuery, onIntent)
                 } else {
@@ -332,6 +344,7 @@ private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksV
             ) {
                 DropdownMenuItem(onClick = {
                     isBookPopupExpanded.value = false
+
                     onIntent(MyBooksViewModel.Intent.OpenBookDetails(bookInfo.id))
                 }) {
                     Text("About")

@@ -12,7 +12,6 @@ import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDaoFactory
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.core.data.RetrofitServiceFactory
 import ru.mamykin.foboreader.core.di.api.CommonApi
-import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.di.module.CoroutinesModule
@@ -29,12 +28,14 @@ internal annotation class ReadBookScope
 
 @ReadBookScope
 @Component(
-    dependencies = [NetworkApi::class, NavigationApi::class, CommonApi::class, SettingsApi::class],
+    dependencies = [NetworkApi::class, CommonApi::class, SettingsApi::class],
     modules = [ReadBookProvidesModule::class, ReadBookBindsModule::class, CoroutinesModule::class]
 )
 internal interface ReadBookComponent {
 
-    fun inject(fragment: ReadBookFragment)
+    fun viewModel(): ReadBookViewModel
+
+    fun vibrationManager(): VibrationManager
 
     @Component.Factory
     interface Factory {
@@ -42,7 +43,6 @@ internal interface ReadBookComponent {
         fun create(
             @BindsInstance @Named("bookId") bookId: Long,
             networkApi: NetworkApi,
-            navigationApi: NavigationApi,
             commonApi: CommonApi,
             settingsApi: SettingsApi
         ): ReadBookComponent

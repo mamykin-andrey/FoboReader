@@ -3,7 +3,6 @@ package ru.mamykin.foboreader.store.main
 import dagger.Component
 import dagger.Module
 import ru.mamykin.foboreader.core.di.api.CommonApi
-import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
 import ru.mamykin.foboreader.core.di.module.CoroutinesModule
@@ -24,7 +23,6 @@ internal annotation class BookCategoriesScope
     dependencies = [
         NetworkApi::class,
         CommonApi::class,
-        NavigationApi::class,
         SettingsApi::class,
     ]
 )
@@ -38,7 +36,6 @@ internal interface BooksStoreMainComponent {
         fun create(
             commonApi: CommonApi,
             networkApi: NetworkApi,
-            navigationApi: NavigationApi,
             settingsApi: SettingsApi,
         ): BooksStoreMainComponent
     }

@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.my_books.list
 
 import dagger.Component
 import ru.mamykin.foboreader.core.di.api.CommonApi
-import ru.mamykin.foboreader.core.di.api.NavigationApi
 import ru.mamykin.foboreader.core.di.module.CoroutinesModule
 import javax.inject.Scope
 
@@ -13,7 +12,7 @@ internal annotation class MyBooksScope
 
 @MyBooksScope
 @Component(
-    dependencies = [NavigationApi::class, CommonApi::class],
+    dependencies = [CommonApi::class],
     modules = [DatabaseModule::class, CoroutinesModule::class]
 )
 internal interface MyBooksComponent {
@@ -24,7 +23,6 @@ internal interface MyBooksComponent {
     interface Factory {
 
         fun create(
-            navigationApi: NavigationApi,
             commonApi: CommonApi
         ): MyBooksComponent
     }
