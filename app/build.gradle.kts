@@ -90,7 +90,6 @@ dependencies {
     implementation(Dependencies.composeMaterial)
     implementation(Dependencies.composeMaterialIconsCore)
     implementation(Dependencies.composeMaterialIconsExt)
-    implementation(Dependencies.composeActivity)
     implementation(Dependencies.composeToolingPreview)
 
     kapt(Dependencies.daggerCompiler)

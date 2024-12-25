@@ -32,6 +32,19 @@ internal class ReadBookViewModel @Inject constructor(
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
+            is Intent.LoadBook -> {
+                val info = getBookInfo.execute(bookId)
+                val pages = getBookText.execute(info.filePath, intent.measurer, intent.screenSize)
+                state = State.Content(
+                    pages = pages,
+                    title = info.title,
+                    currentPage = info.currentPage,
+                    textSize = appSettingsRepository.getReadTextSize().toFloat(),
+                    readPercent = 0f,
+                    totalPages = pages.size,
+                )
+            }
+
             is Intent.TranslateParagraph -> {
                 getParagraphTranslation.execute(intent.paragraph)
                     ?.let {
@@ -75,19 +88,6 @@ internal class ReadBookViewModel @Inject constructor(
                 val prevState = (state as? State.Content) ?: return@launch
                 state = prevState.copy(wordTranslation = null)
                 effectChannel.send(Effect.Vibrate)
-            }
-
-            is Intent.LoadBook -> {
-                val info = getBookInfo.execute(bookId)
-                val pages = getBookText.execute(info.filePath, intent.measurer, intent.screenSize)
-                state = State.Content(
-                    pages = pages,
-                    title = info.title,
-                    currentPage = info.currentPage,
-                    textSize = appSettingsRepository.getReadTextSize().toFloat(),
-                    readPercent = 0f,
-                    totalPages = 0,
-                )
             }
         }
     }

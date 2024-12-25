@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.settings.app_language
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +9,6 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -97,13 +95,8 @@ private fun LanguageItemComposable(
 ) {
     Box(modifier = Modifier
         .fillMaxWidth()
-        .clickable(
-            indication = rememberRipple(),
-            interactionSource = remember { MutableInteractionSource() },
-            onClick = {
-                onIntent(ChangeLanguageViewModel.Intent.SelectLanguage(language.code))
-            }
-        )) {
+        .clickable(onClick = { onIntent(ChangeLanguageViewModel.Intent.SelectLanguage(language.code)) })
+    ) {
         Text(
             text = language.name,
             style = TextStyles.Subtitle1,

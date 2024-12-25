@@ -57,9 +57,9 @@ class BookContentParserHandler(
     }
 
     sealed class ElementType {
-        object Paragraph : ElementType()
-        object Translation : ElementType()
-        object Unknown : ElementType()
+        data object Paragraph : ElementType()
+        data object Translation : ElementType()
+        data object Unknown : ElementType()
 
         companion object {
 

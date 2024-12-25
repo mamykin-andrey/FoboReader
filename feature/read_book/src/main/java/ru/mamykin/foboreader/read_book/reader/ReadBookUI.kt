@@ -1,13 +1,13 @@
 package ru.mamykin.foboreader.read_book.reader
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -187,10 +187,12 @@ private fun StubContentComposable(onIntent: (ReadBookViewModel.Intent) -> Unit) 
 
 @Composable
 private fun ContentComposable(state: ReadBookViewModel.State.Content, onIntent: (ReadBookViewModel.Intent) -> Unit) {
-    Column {
-        state.paragraphTranslation?.let {
-            ParagraphTranslationComposable(it, onIntent)
-        } ?: BookTextComposable(state, Modifier.weight(1f), onIntent)
+    Column(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.weight(1f)) {
+            state.paragraphTranslation?.let {
+                ParagraphTranslationComposable(it, onIntent)
+            } ?: BookTextComposable(state, Modifier, onIntent)
+        }
         ReadStatusComposable(
             currentPage = state.currentPage,
             totalPages = state.totalPages,
@@ -265,7 +267,6 @@ private fun ParagraphTranslationComposable(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PaginatedTextComposable(
     state: ReadBookViewModel.State.Content,
@@ -353,8 +354,7 @@ private fun CombinedClickableText(fullText: String, modifier: Modifier, onIntent
         append(fullText)
         wordsPositions.forEach { (wordStart, wordEnd) ->
             addStringAnnotation(
-                // tag = TEXT_ANNOTATION_WORD_TAG,
-                tag = "text",
+                tag = "word",
                 annotation = fullText.substring(wordStart, wordEnd),
                 start = wordStart,
                 end = wordEnd
