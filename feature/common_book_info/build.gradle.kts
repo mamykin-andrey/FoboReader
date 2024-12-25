@@ -13,7 +13,6 @@ android {
 
     defaultConfig {
         minSdk = ProjectInfo.minSdkVersion
-        targetSdk = ProjectInfo.targetSdkVersion
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
@@ -21,8 +20,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    lintOptions {
-        isAbortOnError = false
+    lint {
+        abortOnError = false
     }
 }
 

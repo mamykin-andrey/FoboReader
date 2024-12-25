@@ -13,21 +13,22 @@ android {
 
     defaultConfig {
         minSdk = ProjectInfo.minSdkVersion
-        targetSdk = ProjectInfo.targetSdkVersion
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
 
     buildFeatures.compose = true
-    lintOptions.isAbortOnError = false
     kotlinOptions.jvmTarget = "17"
     composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
 
+    lint {
+        abortOnError = false
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }

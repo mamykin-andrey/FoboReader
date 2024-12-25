@@ -13,7 +13,6 @@ android {
 
     defaultConfig {
         minSdk = ProjectInfo.minSdkVersion
-        targetSdk = ProjectInfo.targetSdkVersion
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -24,8 +23,8 @@ android {
     buildFeatures.compose = true
     composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
 
-    lintOptions {
-        isAbortOnError = false
+    lint {
+        abortOnError = false
     }
 }
 

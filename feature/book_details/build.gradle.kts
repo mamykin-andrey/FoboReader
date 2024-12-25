@@ -13,7 +13,6 @@ android {
 
     defaultConfig {
         minSdk = ProjectInfo.minSdkVersion
-        targetSdk = ProjectInfo.targetSdkVersion
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,13 +28,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    lintOptions {
-        isAbortOnError = false
+    lint {
+        abortOnError = false
     }
 }
 
