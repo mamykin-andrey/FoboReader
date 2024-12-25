@@ -28,7 +28,6 @@ object Versions {
     const val composeMaterial = "1.2.0"
 }
 
-// TODO: Clean up unused dependencies
 object Dependencies {
     const val activityX = "androidx.activity:activity:${Versions.androidxVersion}"
     const val fragmentX = "androidx.fragment:fragment:${Versions.fragmentxVersion}"

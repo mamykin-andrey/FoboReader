@@ -72,7 +72,6 @@ dependencies {
     implementation(Dependencies.coroutinesCore)
     implementation(Dependencies.coroutinesAndroid)
     implementation(Dependencies.activityX)
-    implementation(Dependencies.fragmentX)
     implementation(Dependencies.appCompatX)
     implementation(Dependencies.lifecycleRuntimeKtx)
     implementation(Dependencies.retrofit)
