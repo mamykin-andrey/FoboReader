@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.read_book.reader
 import androidx.compose.ui.text.TextMeasurer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
@@ -12,17 +13,18 @@ import ru.mamykin.foboreader.read_book.translation.GetParagraphTranslation
 import ru.mamykin.foboreader.read_book.translation.GetWordTranslation
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import javax.inject.Inject
-import javax.inject.Named
 
-@ReadBookScope
+@HiltViewModel
 internal class ReadBookViewModel @Inject constructor(
-    @Named("bookId") private val bookId: Long,
+    // @Named("bookId") private val bookId: Long, // TODO:
     private val getBookText: GetBookText,
     private val getParagraphTranslation: GetParagraphTranslation,
     private val getWordTranslation: GetWordTranslation,
     private val getBookInfo: GetBookInfo,
     private val appSettingsRepository: AppSettingsRepository,
 ) : ViewModel() {
+
+    private val bookId: Long = 0L
 
     var state: State by LoggingStateDelegate(State.Loading)
         private set

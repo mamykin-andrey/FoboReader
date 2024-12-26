@@ -22,7 +22,7 @@ android {
         jvmTarget = "17"
         freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.15"
 
     lint {
         abortOnError = false
@@ -48,7 +48,7 @@ dependencies {
     implementation(Dependencies.coroutinesAndroid)
     implementation(Dependencies.lifecycleRuntimeKtx)
     implementation(Dependencies.retrofit)
-    implementation(Dependencies.dagger)
+    implementation(Dependencies.hilt)
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)
     implementation(Dependencies.composeFoundation)
@@ -58,8 +58,9 @@ dependencies {
     implementation(Dependencies.composeActivity)
     implementation(Dependencies.composeToolingPreview)
     implementation(Dependencies.coil)
+    implementation(Dependencies.hiltNavigation)
 
-    kapt(Dependencies.daggerCompiler)
+    kapt(Dependencies.hiltCompiler)
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)

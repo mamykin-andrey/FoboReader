@@ -18,7 +18,7 @@ android {
 
     buildFeatures.compose = true
     kotlinOptions.jvmTarget = "17"
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.15"
 
     lint {
         abortOnError = false
@@ -53,7 +53,7 @@ dependencies {
     implementation(Dependencies.coroutinesAndroid)
     implementation(Dependencies.retrofit)
     implementation(Dependencies.okHttp)
-    implementation(Dependencies.dagger)
+    implementation(Dependencies.hilt)
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)
     implementation(Dependencies.composeFoundation)
@@ -62,8 +62,9 @@ dependencies {
     implementation(Dependencies.composeMaterialIconsExt)
     implementation(Dependencies.composeToolingPreview)
     implementation(Dependencies.coil)
+    implementation(Dependencies.hiltNavigation)
 
-    kapt(Dependencies.daggerCompiler)
+    kapt(Dependencies.hiltCompiler)
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)

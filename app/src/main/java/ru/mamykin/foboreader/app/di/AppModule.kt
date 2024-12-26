@@ -2,61 +2,67 @@ package ru.mamykin.foboreader.app.di
 
 import android.content.Context
 import dagger.Binds
-import dagger.BindsInstance
-import dagger.Component
 import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import ru.mamykin.foboreader.app.data.AppSettingsRepositoryImpl
 import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
+import ru.mamykin.foboreader.app.navigation.TabComposableProviderImpl
 import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.app.platform.NotificationManagerImpl
 import ru.mamykin.foboreader.app.platform.PermissionManagerImpl
 import ru.mamykin.foboreader.app.platform.ResourceManagerImpl
+import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
+import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDaoFactory
+import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
+import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
-import ru.mamykin.foboreader.core.di.api.CommonApi
+import ru.mamykin.foboreader.core.navigation.TabComposableProvider
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.PermissionManager
 import ru.mamykin.foboreader.core.platform.ResourceManager
-import javax.inject.Singleton
 
-@Singleton
-@Component(modules = [CoreBindsModule::class])
-internal interface CoreComponent : CommonApi {
+@Module
+@InstallIn(SingletonComponent::class)
+internal object AppProvidesModule {
 
-    @Component.Factory
-    interface Factory {
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient = OkHttpFactory.create(true)
 
-        fun create(
-            @BindsInstance context: Context,
-        ): CoreComponent
-    }
+    @Provides
+    fun provideBookInfoRepository(dao: BookInfoDao): BookInfoRepository = BookInfoRepository(dao)
+
+    @Provides
+    fun provideBookInfoDao(@ApplicationContext context: Context): BookInfoDao = BookInfoDaoFactory.create(context)
 }
 
 @Module
-internal interface CoreBindsModule {
+@InstallIn(SingletonComponent::class)
+internal interface AppBindsModule {
 
     @Binds
-    @Singleton
+    fun bindFragmentProvider(impl: TabComposableProviderImpl): TabComposableProvider
+
+    @Binds
     fun bindResourceManager(impl: ResourceManagerImpl): ResourceManager
 
     @Binds
-    @Singleton
     fun bindNotificationManager(impl: NotificationManagerImpl): NotificationManager
 
     @Binds
-    @Singleton
     fun bindPreferencesManager(impl: PreferencesManagerImpl): PreferencesManager
 
     @Binds
-    @Singleton
     fun bindAppSettingsRepository(impl: AppSettingsRepositoryImpl): AppSettingsRepository
 
     @Binds
-    @Singleton
     fun bindErrorMapper(impl: ErrorMessageMapperImpl): ErrorMessageMapper
 
     @Binds
-    @Singleton
     fun bindPermissionManager(impl: PermissionManagerImpl): PermissionManager
 }

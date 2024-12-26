@@ -5,7 +5,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    kotlin("plugin.serialization") version "1.9.22"
+    kotlin("plugin.serialization") version "1.9.25"
 }
 
 android {
@@ -18,7 +18,7 @@ android {
     }
 
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.15"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -35,7 +35,6 @@ dependencies {
     implementation(project(":uikit"))
 
     implementation(Dependencies.kotlinSerialization)
-
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)
     implementation(Dependencies.composeFoundation)
@@ -47,9 +46,10 @@ dependencies {
     implementation(Dependencies.composeNavigation)
     implementation(Dependencies.navigationFragment)
     implementation(Dependencies.navigationUi)
+    implementation(Dependencies.hiltNavigation)
+    implementation(Dependencies.hilt)
 
-    implementation(Dependencies.dagger)
-    kapt(Dependencies.daggerCompiler)
+    kapt(Dependencies.hiltCompiler)
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)

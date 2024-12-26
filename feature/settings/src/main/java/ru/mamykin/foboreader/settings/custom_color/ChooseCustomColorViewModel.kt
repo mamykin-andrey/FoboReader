@@ -2,17 +2,19 @@ package ru.mamykin.foboreader.settings.custom_color
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
-import javax.inject.Named
 
-@ChooseCustomColorScope
+@HiltViewModel
 internal class ChooseCustomColorViewModel @Inject constructor(
     private val getCustomColorsUseCase: GetCustomColors,
-    @Named("title") private val screenTitle: String,
+    // @Named("title") private val screenTitle: String, // TODO:
 ) : ViewModel() {
+
+    private val screenTitle: String = "Replace"
 
     var state: State by LoggingStateDelegate(State(screenTitle = screenTitle))
         private set

@@ -21,7 +21,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.15"
 
     lint {
         abortOnError = false
@@ -31,7 +31,6 @@ android {
 dependencies {
     implementation(Dependencies.appCompatX)
     implementation(Dependencies.fragmentX)
-
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.coroutinesCore)
     implementation(Dependencies.coroutinesAndroid)
@@ -42,8 +41,7 @@ dependencies {
     implementation(Dependencies.retrofitLoggingInterceptor)
     implementation(Dependencies.okio)
     implementation(Dependencies.okHttp)
-    implementation(Dependencies.dagger)
-
+    implementation(Dependencies.hilt)
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)
     implementation(Dependencies.composeFoundation)
@@ -51,8 +49,9 @@ dependencies {
     implementation(Dependencies.composeMaterialIconsCore)
     implementation(Dependencies.composeMaterialIconsExt)
     implementation(Dependencies.composeToolingPreview)
+    implementation(Dependencies.composeNavigation)
 
-    kapt(Dependencies.daggerCompiler)
+    kapt(Dependencies.hiltCompiler)
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)

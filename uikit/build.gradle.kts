@@ -18,7 +18,7 @@ android {
 
     buildFeatures.compose = true
     kotlinOptions.jvmTarget = "17"
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.15"
 
     lint {
         abortOnError = false

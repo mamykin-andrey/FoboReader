@@ -5,6 +5,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -22,7 +23,7 @@ android {
         jvmTarget = "17"
         freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.15"
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -49,7 +50,8 @@ dependencies {
     implementation(Dependencies.activityX)
     implementation(Dependencies.lifecycleRuntimeKtx)
     implementation(Dependencies.retrofit)
-    implementation(Dependencies.dagger)
+    implementation(Dependencies.hilt)
+    implementation(Dependencies.hiltNavigation)
 
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)
@@ -60,7 +62,7 @@ dependencies {
     implementation(Dependencies.composeToolingPreview)
     implementation(Dependencies.coil)
 
-    kapt(Dependencies.daggerCompiler)
+    kapt(Dependencies.hiltCompiler)
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)

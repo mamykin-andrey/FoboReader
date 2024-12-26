@@ -3,13 +3,12 @@ package ru.mamykin.foboreader.app.data.storage
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class PreferencesManagerImpl @Inject constructor(
-    context: Context,
+    @ApplicationContext context: Context,
 ) : PreferencesManager {
 
     companion object {

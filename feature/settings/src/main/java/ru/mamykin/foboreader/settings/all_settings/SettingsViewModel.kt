@@ -2,6 +2,7 @@ package ru.mamykin.foboreader.settings.all_settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
@@ -9,7 +10,7 @@ import ru.mamykin.foboreader.settings.app_language.SetAppLanguage
 import javax.inject.Inject
 
 // TODO: Refactor to use a single UseCase
-@SettingsScope
+@HiltViewModel
 internal class SettingsViewModel @Inject constructor(
     private val getSettings: GetSettings,
     private val setBrightness: SetBrightness,

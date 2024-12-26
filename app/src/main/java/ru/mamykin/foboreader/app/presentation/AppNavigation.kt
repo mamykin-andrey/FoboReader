@@ -7,12 +7,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ru.mamykin.foboreader.book_details.details.BookDetailsUI
+import ru.mamykin.foboreader.main.BottomNavigationTab
 import ru.mamykin.foboreader.main.MainScreenUI
+import ru.mamykin.foboreader.my_books.list.MyBooksScreen
 import ru.mamykin.foboreader.read_book.reader.ReadBookUI
+import ru.mamykin.foboreader.settings.all_settings.SettingsTabUI
 import ru.mamykin.foboreader.store.list.BooksStoreListUI
+import ru.mamykin.foboreader.store.main.BooksCategoriesScreen
 
 sealed class Screen(val route: String) {
-    data object Main : Screen("main")
+    data object Main : Screen("main/{tabRoute}") {
+        fun createRoute(tabRoute: String) = "main/$tabRoute"
+    }
+
     data object BooksStoreList : Screen("store/{categoryId}") {
         fun createRoute(categoryId: String) = "store/$categoryId"
     }
@@ -31,14 +38,31 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screen.Main.route
+        startDestination = Screen.Main.createRoute(BottomNavigationTab.MyBooks.route)
     ) {
-        composable(Screen.Main.route) {
+        composable(
+            route = Screen.Main.route,
+            arguments = listOf(navArgument("tabRoute") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val tabRoute = backStackEntry.arguments!!.getString("tabRoute")!!
             MainScreenUI(
-                onBookCategoryClick = { navController.navigate(Screen.BooksStoreList.createRoute(it)) },
-                onBookDetailsClick = { navController.navigate(Screen.BookDetails.createRoute(it)) },
-                onReadBookClick = { navController.navigate(Screen.ReadBook.createRoute(it)) },
-                onNightThemeSwitch = onNightThemeSwitch,
+                selectedTabRoute = tabRoute,
+                navigationTabs = listOf(
+                    BottomNavigationTab.MyBooks.route to {
+                        MyBooksScreen(
+                            onBookDetailsClick = { navController.navigate(Screen.BookDetails.createRoute(it)) },
+                            onReadBookClick = { navController.navigate(Screen.ReadBook.createRoute(it)) },
+                        )
+                    },
+                    BottomNavigationTab.BooksStore.route to {
+                        BooksCategoriesScreen {
+                            navController.navigate(Screen.BooksStoreList.createRoute(it))
+                        }
+                    },
+                    BottomNavigationTab.Settings.route to {
+                        SettingsTabUI(onNightThemeSwitch)
+                    }
+                )
             )
         }
 
@@ -47,7 +71,16 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
             arguments = listOf(navArgument("categoryId") { type = NavType.StringType })
         ) { backStackEntry ->
             val categoryId = backStackEntry.arguments!!.getString("categoryId")!!
-            BooksStoreListUI(categoryId = categoryId, onBackClick = { navController.popBackStack() })
+            BooksStoreListUI(
+                categoryId = categoryId,
+                onBackClick = { navController.popBackStack() },
+                onShowMyBooksClick = {
+                    navController.navigate(Screen.Main.createRoute(BottomNavigationTab.MyBooks.route)) {
+                        popUpTo(0)
+                        launchSingleTop = true
+                    }
+                },
+            )
         }
 
         composable(
@@ -56,10 +89,9 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
         ) { backStackEntry ->
             val bookId = backStackEntry.arguments!!.getLong("bookId")
             BookDetailsUI(
-                bookId,
+                bookId = bookId,
                 onBackPress = { navController.popBackStack() },
-                onReadBookClick = { navController.navigate(Screen.ReadBook.createRoute(it)) },
-            )
+            ) { navController.navigate(Screen.ReadBook.createRoute(it)) }
         }
 
         composable(

@@ -5,8 +5,8 @@ buildscript {
         maven(url = "https://plugins.gradle.org/m2/")
     }
     dependencies {
-        val kotlinVersion = "1.9.22"
-        val gradlePluginVersion = "8.3.2"
+        val kotlinVersion = "1.9.25"
+        val gradlePluginVersion = "8.7.0"
 
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("com.android.tools.build:gradle:$gradlePluginVersion")
@@ -25,6 +25,7 @@ tasks.register("clean", Delete::class) {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.android") version "1.6.10" apply false
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
+    id("org.jetbrains.kotlin.android") version "1.9.25" apply false
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.25"
+    id("com.google.dagger.hilt.android") version "2.54" apply false
 }

@@ -17,12 +17,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -34,25 +31,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.Lifecycle
-import ru.mamykin.foboreader.core.di.ComponentHolder
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mamykin.foboreader.settings.R
 
 private const val SCREEN_KEY = "choose_custom_color"
 private const val COLOR_CIRCLE_SIZE = 45
 private const val COLOR_CIRCLE_PADDING = 4
-
-private fun createAndInitViewModel(
-    dialogTitle: String,
-    currentColorCode: String,
-): ChooseCustomColorViewModel {
-    return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
-        DaggerChooseCustomColorComponent.factory().create(
-            dialogTitle,
-        )
-    }.chooseCustomColorViewModel()
-        .also { it.sendIntent(ChooseCustomColorViewModel.Intent.LoadColors(currentColorCode)) }
-}
 
 @Composable
 fun ChooseCustomColorDialogUI(
@@ -60,14 +44,9 @@ fun ChooseCustomColorDialogUI(
     title: String,
     onDismiss: (selectedColorCode: String?) -> Unit,
 ) {
-    val viewModel = remember { createAndInitViewModel(title, currentColorCode) }
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        onDispose {
-            if (lifecycleOwner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
-                ComponentHolder.clearComponent(SCREEN_KEY)
-            }
-        }
+    val viewModel: ChooseCustomColorViewModel = hiltViewModel() // TODO: Title
+    LaunchedEffect(viewModel) {
+        viewModel.sendIntent(ChooseCustomColorViewModel.Intent.LoadColors(currentColorCode))
     }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {

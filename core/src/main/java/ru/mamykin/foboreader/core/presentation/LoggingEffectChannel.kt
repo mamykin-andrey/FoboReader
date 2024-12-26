@@ -11,13 +11,8 @@ class LoggingEffectChannel<T>(
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND,
 ) {
     private val channel = Channel<T>(capacity, onBufferOverflow, onUndeliveredElement = {
-        Log.error("Couldn't deliver the effect: $it!")
+        Log.debug("Couldn't deliver the effect: $it!")
     })
-
-    fun trySend(element: T) {
-        Log.debug("Effect: $element")
-        channel.trySend(element)
-    }
 
     suspend fun send(element: T) {
         Log.debug("Effect: $element")

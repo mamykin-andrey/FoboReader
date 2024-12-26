@@ -2,6 +2,7 @@ package ru.mamykin.foboreader.my_books.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
@@ -11,6 +12,7 @@ import ru.mamykin.foboreader.my_books.sort.SortAndFilterBooks
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import javax.inject.Inject
 
+@HiltViewModel
 internal class MyBooksViewModel @Inject constructor(
     private val loadMyBooks: LoadMyBooks,
     private val sortAndFilterBooks: SortAndFilterBooks,

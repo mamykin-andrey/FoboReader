@@ -20,64 +20,40 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.di.api.ApiHolder
-import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.getActivity
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
-private const val SCREEN_KEY: String = "books_list"
-
-private fun createAndInitViewModel(categoryId: String, apiHolder: ApiHolder): BooksStoreListViewModel {
-    return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
-        DaggerBookListComponent.factory().create(
-            categoryId,
-            apiHolder.commonApi(),
-            apiHolder.networkApi(),
-            apiHolder.settingsApi(),
-        )
-    }.viewModel().also { it.sendIntent(BooksStoreListViewModel.Intent.LoadBooks) }
-}
-
 @Composable
-fun BooksStoreListUI(categoryId: String, onBackClick: () -> Unit) {
-    val context = LocalContext.current
-    val viewModel = remember { createAndInitViewModel(categoryId, context.getActivity().apiHolder()) }
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        onDispose {
-            if (lifecycleOwner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
-                ComponentHolder.clearComponent(SCREEN_KEY)
-            }
-        }
+fun BooksStoreListUI(categoryId: String, onBackClick: () -> Unit, onShowMyBooksClick: () -> Unit) {
+    val viewModel: BooksStoreListViewModel = hiltViewModel() // TODO: categoryId
+    LaunchedEffect(viewModel) {
+        viewModel.sendIntent(BooksStoreListViewModel.Intent.LoadBooks)
     }
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
-            takeEffect(it, snackbarHostState)
+            takeEffect(it, snackbarHostState, onShowMyBooksClick)
         }
     }
     BooksListScreen(
@@ -88,17 +64,27 @@ fun BooksStoreListUI(categoryId: String, onBackClick: () -> Unit) {
     )
 }
 
-private suspend fun takeEffect(effect: BooksStoreListViewModel.Effect, snackbarHostState: SnackbarHostState) {
+private suspend fun takeEffect(
+    effect: BooksStoreListViewModel.Effect,
+    snackbarHostState: SnackbarHostState,
+    onShowMyBooksClick: () -> Unit
+) {
     when (effect) {
         is BooksStoreListViewModel.Effect.ShowSnackbar -> {
-            val result = snackbarHostState.showSnackbar(effect.message, effect.action?.first)
+            val (message, action) = effect.data
+            val result = snackbarHostState.showSnackbar(
+                message = message,
+                actionLabel = action?.first,
+                duration = SnackbarDuration.Short,
+                withDismissAction = true
+            )
             if (result == SnackbarResult.ActionPerformed) {
-                requireNotNull(effect.action?.second).invoke()
+                requireNotNull(action?.second).invoke()
             }
         }
 
         is BooksStoreListViewModel.Effect.NavigateToMyBooks -> {
-            // TODO:
+            onShowMyBooksClick()
         }
     }
 }

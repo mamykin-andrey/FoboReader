@@ -9,6 +9,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
+import dagger.hilt.android.qualifiers.ApplicationContext
 import ru.mamykin.foboreader.core.R
 import ru.mamykin.foboreader.core.platform.NotificationChannelId
 import ru.mamykin.foboreader.core.platform.Log
@@ -18,7 +19,7 @@ import ru.mamykin.foboreader.core.platform.RequestedPermission
 import javax.inject.Inject
 
 internal class NotificationManagerImpl @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val permissionManager: PermissionManager,
 ) : NotificationManager {
 

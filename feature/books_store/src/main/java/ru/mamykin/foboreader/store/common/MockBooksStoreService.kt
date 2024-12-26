@@ -3,14 +3,15 @@ package ru.mamykin.foboreader.store.common
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
-import ru.mamykin.foboreader.store.main.BookCategoriesResponse
 import ru.mamykin.foboreader.store.list.BookListResponse
+import ru.mamykin.foboreader.store.main.BookCategoriesResponse
 import java.io.IOException
 import javax.inject.Inject
 
-internal class TestBooksStoreService @Inject constructor(
-    private val context: Context
+internal class MockBooksStoreService @Inject constructor(
+    @ApplicationContext private val context: Context
 ) {
     companion object {
 
@@ -175,10 +176,11 @@ internal class TestBooksStoreService @Inject constructor(
     suspend fun getBooks(
         locale: String,
         categoryId: String,
+        searchQuery: String?,
     ): BookListResponse {
         delay(1_000)
         validateInternetConnection(context)
-        return when (locale) {
+        val books = when (locale) {
             RU_LOCALE -> {
                 when (categoryId) {
                     "1" -> ruFantasticBooks
@@ -199,6 +201,23 @@ internal class TestBooksStoreService @Inject constructor(
 
             else -> throw IllegalStateException("Unknown locale: $locale")
         }
+        return filterBooks(books, searchQuery)
+    }
+
+    private fun filterBooks(
+        response: BookListResponse,
+        searchQuery: String?
+    ): BookListResponse {
+        if (searchQuery.isNullOrBlank()) {
+            return response
+        }
+        return BookListResponse(
+            books = response.books.filter { it.containsText(searchQuery) }
+        )
+    }
+
+    private fun BookListResponse.BookResponse.containsText(text: String): Boolean {
+        return title.contains(text, ignoreCase = true) || author.contains(text, ignoreCase = true)
     }
 
     suspend fun getCategories(

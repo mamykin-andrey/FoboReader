@@ -10,44 +10,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.di.api.ApiHolder
-import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.getActivity
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
-private const val SCREEN_KEY: String = "change_app_language"
-
-private fun createAndInitViewModel(apiHolder: ApiHolder): ChangeLanguageViewModel {
-    return ComponentHolder.getOrCreateComponent(SCREEN_KEY) {
-        DaggerChangeLanguageComponent.factory().create(apiHolder.settingsApi())
-    }.viewModel().also {
-        it.sendIntent(ChangeLanguageViewModel.Intent.LoadLanguages)
-    }
-}
-
 @Composable
 fun ChangeLanguageDialogUI(onDismiss: (selectedLanguageCode: String?) -> Unit) {
-    val context = LocalContext.current
-    val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        onDispose {
-            if (lifecycleOwner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
-                ComponentHolder.clearComponent(SCREEN_KEY)
-            }
-        }
+    val viewModel: ChangeLanguageViewModel = hiltViewModel()
+    LaunchedEffect(viewModel) {
+        viewModel.sendIntent(ChangeLanguageViewModel.Intent.LoadLanguages)
     }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {

@@ -4,9 +4,7 @@ import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import java.util.Locale
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class AppSettingsRepositoryImpl @Inject constructor(
     private val prefManager: PreferencesManager,
 ) : AppSettingsRepository {

@@ -34,7 +34,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,48 +42,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
-import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.di.api.ApiHolder
-import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.getActivity
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 import java.util.Date
 
-// TODO: Use viewModelStore instead
-private const val SCREEN_KEY = "my_books"
-
-private fun createAndInitViewModel(apiHolder: ApiHolder): MyBooksViewModel {
-    return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
-        DaggerMyBooksComponent.factory().create(
-            apiHolder.commonApi(),
-        )
-    }.myBooksViewModel().also { it.sendIntent(MyBooksViewModel.Intent.LoadBooks) }
-}
-
 @Composable
 fun MyBooksScreen(onBookDetailsClick: (Long) -> Unit, onReadBookClick: (Long) -> Unit) {
-    val context = LocalContext.current
-    val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        onDispose {
-            if (lifecycleOwner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
-                ComponentHolder.clearComponent(SCREEN_KEY)
-            }
-        }
+    val viewModel: MyBooksViewModel = hiltViewModel()
+    LaunchedEffect(viewModel) {
+        viewModel.sendIntent(MyBooksViewModel.Intent.LoadBooks)
     }
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(viewModel.effectFlow) {

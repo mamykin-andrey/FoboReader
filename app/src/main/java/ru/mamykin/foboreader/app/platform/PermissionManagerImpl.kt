@@ -10,6 +10,7 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import dagger.hilt.android.qualifiers.ApplicationContext
 import ru.mamykin.foboreader.core.platform.PermissionManager
 import ru.mamykin.foboreader.core.platform.RequestedPermission
 import javax.inject.Inject
@@ -17,7 +18,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 internal class PermissionManagerImpl @Inject constructor(
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) : PermissionManager {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)

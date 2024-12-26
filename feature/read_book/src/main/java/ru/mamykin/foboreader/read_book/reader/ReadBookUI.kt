@@ -21,7 +21,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,8 +31,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -47,11 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
-import androidx.lifecycle.Lifecycle
-import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.di.api.ApiHolder
-import ru.mamykin.foboreader.core.extension.apiHolder
-import ru.mamykin.foboreader.core.extension.getActivity
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
@@ -60,35 +53,12 @@ import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 // TODO: P2 - Optimize the Composable functions
 // TODO: P2 - Add support of paragraph translation pagination
 
-private const val SCREEN_KEY: String = "read_book"
-
+// TODO:
 private lateinit var vibrationManager: VibrationManager
-
-private fun createAndInitViewModel(bookId: Long, apiHolder: ApiHolder): ReadBookViewModel {
-    val component = ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
-        DaggerReadBookComponent.factory().create(
-            bookId,
-            apiHolder.networkApi(),
-            apiHolder.commonApi(),
-            apiHolder.settingsApi()
-        )
-    }
-    vibrationManager = component.vibrationManager()
-    return component.viewModel()
-}
 
 @Composable
 fun ReadBookUI(bookId: Long) {
-    val context = LocalContext.current
-    val viewModel = remember { createAndInitViewModel(bookId, context.getActivity().apiHolder()) }
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        onDispose {
-            if (lifecycleOwner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
-                ComponentHolder.clearComponent(SCREEN_KEY)
-            }
-        }
-    }
+    val viewModel: ReadBookViewModel = hiltViewModel() // TODO: BookId
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {

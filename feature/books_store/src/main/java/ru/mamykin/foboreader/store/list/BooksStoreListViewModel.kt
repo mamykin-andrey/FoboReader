@@ -2,25 +2,27 @@ package ru.mamykin.foboreader.store.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.ResourceManager
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.presentation.SnackbarData
 import ru.mamykin.foboreader.store.R
 import javax.inject.Inject
-import javax.inject.Named
 
-@BookListScope
+@HiltViewModel
 internal class BooksStoreListViewModel @Inject constructor(
-    @Named("categoryId")
-    private val categoryId: String,
+    // @Named("categoryId")
+    // private val categoryId: String,
     private val downloadStoreBook: DownloadBook,
     private val getStoreBooks: GetStoreBooks,
-    private val filterStoreBooks: FilterStoreBooks,
     private val resourceManager: ResourceManager,
     private val errorMessageMapper: ErrorMessageMapper,
 ) : ViewModel() {
+
+    private val categoryId: String = "1" // TODO:
 
     // TODO: Replace with StringOrResource
     private val downloadStarted by lazy { resourceManager.getString(R.string.books_store_download_progress) }
@@ -45,7 +47,7 @@ internal class BooksStoreListViewModel @Inject constructor(
                 }
 
                 is Intent.FilterBooks -> {
-                    filterStoreBooks.execute(categoryId, intent.query).fold(
+                    getStoreBooks.execute(categoryId).fold(
                         onSuccess = { state = State.Content(it) },
                         onFailure = { state = State.Error(errorMessageMapper.getMessage(it)) }
                     )
@@ -54,26 +56,28 @@ internal class BooksStoreListViewModel @Inject constructor(
                 is Intent.DownloadBook -> {
                     val fileName = getStorageFileName(intent.book)
                     effectChannel.send(
-                        Effect.ShowSnackbar(message = "$downloadStarted: $fileName")
+                        Effect.ShowSnackbar(
+                            data = SnackbarData(message = "$downloadStarted: $fileName")
+                        )
                     )
                     downloadStoreBook.execute(intent.book.link, fileName).fold(
                         onSuccess = {
-                            effectChannel.send(
-                                Effect.ShowSnackbar(
-                                    message = "$downloadSucceed: $fileName",
-                                    action = "Show" to { effectChannel.trySend(Effect.NavigateToMyBooks) }
-                                )
-                            )
+                            effectChannel.send(Effect.ShowSnackbar(data = SnackbarData(
+                                message = "$downloadSucceed: $fileName",
+                                action = "Show" to { sendIntent(Intent.OpenMyBooks) }
+                            )))
                         },
                         onFailure = {
-                            effectChannel.send(
-                                Effect.ShowSnackbar(
-                                    message = "$downloadFailed: $fileName",
-                                    action = "Retry" to { sendIntent(Intent.DownloadBook(intent.book)) }
-                                )
-                            )
+                            effectChannel.send(Effect.ShowSnackbar(data = SnackbarData(
+                                message = "$downloadFailed: $fileName",
+                                action = "Retry" to { sendIntent(Intent.DownloadBook(intent.book)) }
+                            )))
                         }
                     )
+                }
+
+                is Intent.OpenMyBooks -> {
+                    effectChannel.send(Effect.NavigateToMyBooks)
                 }
             }
         }
@@ -86,16 +90,13 @@ internal class BooksStoreListViewModel @Inject constructor(
 
     sealed class Intent {
         data object LoadBooks : Intent()
-        class FilterBooks(val query: String) : Intent()
-        class DownloadBook(val book: StoreBook) : Intent()
+        data class FilterBooks(val query: String) : Intent()
+        data class DownloadBook(val book: StoreBook) : Intent()
+        data object OpenMyBooks : Intent()
     }
 
     sealed class Effect {
-        class ShowSnackbar(
-            val message: String,
-            val action: Pair<String, () -> Unit>? = null,
-        ) : Effect()
-
+        class ShowSnackbar(val data: SnackbarData) : Effect()
         data object NavigateToMyBooks : Effect()
     }
 

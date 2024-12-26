@@ -26,22 +26,16 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import ru.mamykin.foboreader.core.di.ComponentHolder
-import ru.mamykin.foboreader.core.di.api.ApiHolder
-import ru.mamykin.foboreader.core.extension.apiHolder
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mamykin.foboreader.core.extension.changeLocale
 import ru.mamykin.foboreader.core.extension.getActivity
 import ru.mamykin.foboreader.settings.R
@@ -51,31 +45,12 @@ import ru.mamykin.foboreader.uikit.compose.ColoredCircleCompose
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
-// TODO: Use viewModelStore instead
-private const val SCREEN_KEY = "settings"
-
-private fun createAndInitViewModel(
-    apiHolder: ApiHolder,
-): SettingsViewModel {
-    return ComponentHolder.getOrCreateComponent(key = SCREEN_KEY) {
-        DaggerSettingsComponent.factory().create(
-            apiHolder.commonApi(),
-            apiHolder.settingsApi(),
-        )
-    }.settingsViewModel().also { it.sendIntent(SettingsViewModel.Intent.LoadSettings) }
-}
-
 @Composable
 fun SettingsTabUI(onNightThemeSwitch: (Boolean) -> Unit) {
     val context = LocalContext.current
-    val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        onDispose {
-            if (lifecycleOwner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
-                ComponentHolder.clearComponent(SCREEN_KEY)
-            }
-        }
+    val viewModel: SettingsViewModel = hiltViewModel()
+    LaunchedEffect(viewModel) {
+        viewModel.sendIntent(SettingsViewModel.Intent.LoadSettings)
     }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {

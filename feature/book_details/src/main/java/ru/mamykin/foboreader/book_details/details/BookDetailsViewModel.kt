@@ -1,17 +1,21 @@
 package ru.mamykin.foboreader.book_details.details
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
-import javax.inject.Named
 
+@HiltViewModel
 internal class BookDetailsViewModel @Inject constructor(
-    @Named("bookId") private val bookId: Long,
-    private val getBookDetails: GetBookDetails
+    private val getBookDetails: GetBookDetails,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+
+    private val bookId: Long = savedStateHandle.get<Long>("bookId")!!
 
     var state: State by LoggingStateDelegate(State.Loading)
         private set

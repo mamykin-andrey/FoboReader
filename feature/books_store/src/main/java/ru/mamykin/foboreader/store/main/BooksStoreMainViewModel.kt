@@ -2,14 +2,14 @@ package ru.mamykin.foboreader.store.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
 
-// TODO: Move navigation to UI
-@BookCategoriesScope
+@HiltViewModel
 internal class BooksStoreMainViewModel @Inject constructor(
     private val getBookCategories: GetBookCategories,
     private val errorMessageMapper: ErrorMessageMapper,

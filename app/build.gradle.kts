@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("com.google.dagger.hilt.android") version "2.54"
 }
 
 android {
@@ -44,7 +45,7 @@ android {
     }
 
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.15"
 
     lint {
         abortOnError = false
@@ -81,7 +82,7 @@ dependencies {
     implementation(Dependencies.retrofitLoggingInterceptor)
     implementation(Dependencies.okio)
     implementation(Dependencies.okHttp)
-    implementation(Dependencies.dagger)
+    implementation(Dependencies.hilt)
     implementation(Dependencies.jankStats)
 
     implementation(Dependencies.composeUi)
@@ -92,7 +93,7 @@ dependencies {
     implementation(Dependencies.composeMaterialIconsExt)
     implementation(Dependencies.composeToolingPreview)
 
-    kapt(Dependencies.daggerCompiler)
+    kapt(Dependencies.hiltCompiler)
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)
