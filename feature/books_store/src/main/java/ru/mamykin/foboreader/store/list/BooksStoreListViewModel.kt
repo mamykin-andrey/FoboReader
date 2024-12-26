@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
-import ru.mamykin.foboreader.core.platform.NotificationChannelId
-import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.ResourceManager
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
@@ -22,7 +20,6 @@ internal class BooksStoreListViewModel @Inject constructor(
     private val filterStoreBooks: FilterStoreBooks,
     private val resourceManager: ResourceManager,
     private val errorMessageMapper: ErrorMessageMapper,
-    private val notificationManager: NotificationManager,
 ) : ViewModel() {
 
     // TODO: Replace with StringOrResource
@@ -36,53 +33,48 @@ internal class BooksStoreListViewModel @Inject constructor(
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
 
-    fun sendIntent(intent: Intent) = viewModelScope.launch {
-        when (intent) {
-            is Intent.LoadBooks -> {
-                state = State.Loading
-                getStoreBooks.execute(categoryId).fold(
-                    onSuccess = { state = State.Content(it) },
-                    onFailure = { state = State.Error(errorMessageMapper.getMessage(it)) }
-                )
-            }
+    fun sendIntent(intent: Intent) {
+        viewModelScope.launch {
+            when (intent) {
+                is Intent.LoadBooks -> {
+                    state = State.Loading
+                    getStoreBooks.execute(categoryId).fold(
+                        onSuccess = { state = State.Content(it) },
+                        onFailure = { state = State.Error(errorMessageMapper.getMessage(it)) }
+                    )
+                }
 
-            is Intent.FilterBooks -> {
-                filterStoreBooks.execute(categoryId, intent.query).fold(
-                    onSuccess = { state = State.Content(it) },
-                    onFailure = { state = State.Error(errorMessageMapper.getMessage(it)) }
-                )
-            }
+                is Intent.FilterBooks -> {
+                    filterStoreBooks.execute(categoryId, intent.query).fold(
+                        onSuccess = { state = State.Content(it) },
+                        onFailure = { state = State.Error(errorMessageMapper.getMessage(it)) }
+                    )
+                }
 
-            is Intent.DownloadBook -> {
-                val fileName = getStorageFileName(intent.book)
-                notificationManager.notify(
-                    notificationId = DOWNLOAD_BOOK_NOTIFICATION_ID,
-                    title = downloadStarted,
-                    text = fileName,
-                    iconRes = R.drawable.ic_download,
-                    channelId = NotificationChannelId.GENERAL,
-                )
-                downloadStoreBook.execute(intent.book.link, fileName).fold(
-                    onSuccess = {
-                        notificationManager.notify(
-                            notificationId = DOWNLOAD_BOOK_NOTIFICATION_ID,
-                            title = downloadSucceed,
-                            text = fileName,
-                            iconRes = R.drawable.ic_download,
-                            channelId = NotificationChannelId.GENERAL,
-                        )
-                        effectChannel.send(Effect.NavigateToMyBooks)
-                    },
-                    onFailure = {
-                        notificationManager.notify(
-                            notificationId = DOWNLOAD_BOOK_NOTIFICATION_ID,
-                            title = downloadFailed,
-                            text = fileName,
-                            iconRes = R.drawable.ic_download,
-                            channelId = NotificationChannelId.GENERAL,
-                        )
-                    }
-                )
+                is Intent.DownloadBook -> {
+                    val fileName = getStorageFileName(intent.book)
+                    effectChannel.send(
+                        Effect.ShowSnackbar(message = "$downloadStarted: $fileName")
+                    )
+                    downloadStoreBook.execute(intent.book.link, fileName).fold(
+                        onSuccess = {
+                            effectChannel.send(
+                                Effect.ShowSnackbar(
+                                    message = "$downloadSucceed: $fileName",
+                                    action = "Show" to { effectChannel.trySend(Effect.NavigateToMyBooks) }
+                                )
+                            )
+                        },
+                        onFailure = {
+                            effectChannel.send(
+                                Effect.ShowSnackbar(
+                                    message = "$downloadFailed: $fileName",
+                                    action = "Retry" to { sendIntent(Intent.DownloadBook(intent.book)) }
+                                )
+                            )
+                        }
+                    )
+                }
             }
         }
     }
@@ -99,7 +91,11 @@ internal class BooksStoreListViewModel @Inject constructor(
     }
 
     sealed class Effect {
-        class ShowSnackbar(val message: String) : Effect()
+        class ShowSnackbar(
+            val message: String,
+            val action: Pair<String, () -> Unit>? = null,
+        ) : Effect()
+
         data object NavigateToMyBooks : Effect()
     }
 
@@ -112,9 +108,5 @@ internal class BooksStoreListViewModel @Inject constructor(
         data class Error(
             val message: String
         ) : State()
-    }
-
-    companion object {
-        private const val DOWNLOAD_BOOK_NOTIFICATION_ID = 1
     }
 }

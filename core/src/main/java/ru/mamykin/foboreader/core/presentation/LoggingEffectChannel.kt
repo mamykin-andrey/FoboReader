@@ -14,6 +14,11 @@ class LoggingEffectChannel<T>(
         Log.error("Couldn't deliver the effect: $it!")
     })
 
+    fun trySend(element: T) {
+        Log.debug("Effect: $element")
+        channel.trySend(element)
+    }
+
     suspend fun send(element: T) {
         Log.debug("Effect: $element")
         channel.send(element)

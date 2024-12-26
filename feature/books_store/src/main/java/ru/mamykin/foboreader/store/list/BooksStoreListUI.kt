@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -89,7 +90,13 @@ fun BooksStoreListUI(categoryId: String, onBackClick: () -> Unit) {
 
 private suspend fun takeEffect(effect: BooksStoreListViewModel.Effect, snackbarHostState: SnackbarHostState) {
     when (effect) {
-        is BooksStoreListViewModel.Effect.ShowSnackbar -> snackbarHostState.showSnackbar(effect.message)
+        is BooksStoreListViewModel.Effect.ShowSnackbar -> {
+            val result = snackbarHostState.showSnackbar(effect.message, effect.action?.first)
+            if (result == SnackbarResult.ActionPerformed) {
+                requireNotNull(effect.action?.second).invoke()
+            }
+        }
+
         is BooksStoreListViewModel.Effect.NavigateToMyBooks -> {
             // TODO:
         }
