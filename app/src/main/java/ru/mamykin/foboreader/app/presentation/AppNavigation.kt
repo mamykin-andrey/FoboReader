@@ -65,20 +65,5 @@ fun AppNavigation() {
             val bookId = backStackEntry.arguments!!.getLong("bookId")
             ReadBookUI(bookId)
         }
-
-        // composable(
-        //     route = Screen.Details.route,
-        //     arguments = listOf(
-        //         navArgument("itemId") { type = NavType.StringType }
-        //     )
-        // ) { backStackEntry ->
-        //     val itemId = backStackEntry.arguments?.getString("itemId")
-        //     DetailsScreen(
-        //         itemId = itemId,
-        //         onBackClick = {
-        //             navController.popBackStack()
-        //         }
-        //     )
-        // }
     }
 }

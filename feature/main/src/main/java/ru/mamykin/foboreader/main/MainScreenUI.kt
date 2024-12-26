@@ -1,8 +1,9 @@
 package ru.mamykin.foboreader.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -13,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
@@ -131,7 +133,7 @@ private fun NavigationBarComposable(
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
     NavigationBar(
-        containerColor = MaterialTheme.colors.primaryVariant
+        containerColor = MaterialTheme.colorScheme.primaryContainer
     ) {
         state.tabs.forEach { item ->
             NavigationBarItem(

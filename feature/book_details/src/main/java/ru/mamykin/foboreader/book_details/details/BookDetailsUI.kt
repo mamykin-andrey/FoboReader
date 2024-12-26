@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.book_details.details
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,16 +10,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -86,7 +86,7 @@ private fun takeEffect(effect: BookDetailsViewModel.Effect) = when (effect) {
 }
 
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BookDetailsScreenComposable(
     state: BookDetailsViewModel.State,
@@ -97,7 +97,7 @@ private fun BookDetailsScreenComposable(
         Scaffold(topBar = {
             TopAppBar(title = {
                 Text(text = stringResource(id = R.string.my_books_book_info_title))
-            }, elevation = 12.dp, navigationIcon = {
+            }, navigationIcon = {
                 IconButton(onClick = {
                     onBackPress()
                 }) {
@@ -108,10 +108,12 @@ private fun BookDetailsScreenComposable(
                     )
                 }
             })
-        }, content = {
-            when (state) {
-                is BookDetailsViewModel.State.Loading -> LoadingComposable()
-                is BookDetailsViewModel.State.Loaded -> LoadedComposable(state, onIntent)
+        }, content = { innerPadding ->
+            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+                when (state) {
+                    is BookDetailsViewModel.State.Loading -> LoadingComposable()
+                    is BookDetailsViewModel.State.Loaded -> LoadedComposable(state, onIntent)
+                }
             }
         })
     }
@@ -158,7 +160,7 @@ private fun LoadedComposable(
                     Text(
                         text = state.bookDetails.title,
                         style = TextStyles.Subtitle1,
-                        color = MaterialTheme.colors.onBackground
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(text = state.bookDetails.author)
                 }
@@ -180,14 +182,14 @@ private fun LoadedComposable(
         Text(
             text = stringResource(R.string.my_books_bookmarks),
             style = TextStyles.Subtitle1,
-            color = MaterialTheme.colors.onBackground,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(top = 12.dp, start = 16.dp, end = 16.dp)
         )
         Text(
             text = stringResource(R.string.my_books_no_bookmarks),
             style = TextStyles.Body2,
-            color = MaterialTheme.colors.onBackground,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp)
         )
@@ -195,14 +197,14 @@ private fun LoadedComposable(
         Text(
             text = stringResource(R.string.my_books_book_path),
             style = TextStyles.Subtitle1,
-            color = MaterialTheme.colors.onBackground,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(top = 12.dp, start = 16.dp, end = 16.dp)
         )
         Text(
             text = state.bookDetails.filePath,
             style = TextStyles.Body2,
-            color = MaterialTheme.colors.onBackground,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp)
         )
@@ -210,14 +212,14 @@ private fun LoadedComposable(
         Text(
             text = stringResource(R.string.my_books_current_page),
             style = TextStyles.Subtitle1,
-            color = MaterialTheme.colors.onBackground,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(top = 12.dp, start = 16.dp, end = 16.dp)
         )
         Text(
             text = state.bookDetails.currentPage.toString(),
             style = TextStyles.Body2,
-            color = MaterialTheme.colors.onBackground,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp)
         )
@@ -225,14 +227,14 @@ private fun LoadedComposable(
         Text(
             text = stringResource(R.string.my_books_book_genre),
             style = TextStyles.Subtitle1,
-            color = MaterialTheme.colors.onBackground,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(top = 12.dp, start = 16.dp, end = 16.dp)
         )
         Text(
             text = state.bookDetails.genre,
             style = TextStyles.Body2,
-            color = MaterialTheme.colors.onBackground,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp)
         )

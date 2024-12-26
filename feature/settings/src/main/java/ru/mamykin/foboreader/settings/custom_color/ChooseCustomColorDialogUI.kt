@@ -12,10 +12,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -96,7 +96,7 @@ private fun ChooseCustomColorDialogScreen(
     ) {
         Surface(
             shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colors.surface,
+            color = MaterialTheme.colorScheme.surface,
         ) {
             Column {
                 Text(
@@ -109,7 +109,7 @@ private fun ChooseCustomColorDialogScreen(
                 )
                 CustomColorsScreen(state.colors, onIntent)
                 ClickableText(text = AnnotatedString(stringResource(android.R.string.cancel)),
-                    style = TextStyle(color = MaterialTheme.colors.secondary),
+                    style = TextStyle(color = MaterialTheme.colorScheme.secondary),
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth(),

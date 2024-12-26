@@ -1,16 +1,17 @@
 package ru.mamykin.foboreader.uikit.compose
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-private val DarkColorPalette = darkColors(
+private val DarkColorPalette = darkColorScheme(
     primary = DarkColors.Primary,
-    primaryVariant = DarkColors.PrimaryVariant,
+    primaryContainer = DarkColors.PrimaryVariant,
     secondary = DarkColors.Secondary,
-    secondaryVariant = DarkColors.SecondaryVariant,
+    secondaryContainer = DarkColors.SecondaryVariant,
     background = DarkColors.Background,
     surface = DarkColors.Surface,
     error = DarkColors.Error,
@@ -21,11 +22,11 @@ private val DarkColorPalette = darkColors(
     onError = DarkColors.OnError,
 )
 
-private val LightColorPalette = lightColors(
+private val LightColorPalette = lightColorScheme(
     primary = LightColors.Primary,
-    primaryVariant = LightColors.PrimaryVariant,
+    primaryContainer = LightColors.PrimaryVariant,
     secondary = LightColors.Secondary,
-    secondaryVariant = LightColors.SecondaryVariant,
+    secondaryContainer = LightColors.SecondaryVariant,
     background = LightColors.Background,
     surface = LightColors.Surface,
     error = LightColors.Error,
@@ -37,17 +38,26 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun FoboReaderTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun FoboReaderTheme(
+    darkTheme: Boolean = true,
+    content: @Composable () -> Unit,
+) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
     }
-
     MaterialTheme(
-        colors = colors,
-        typography = Typography,
+        colorScheme = colors,
         shapes = Shapes,
-        content = content
+        typography = Typography,
+        content = {
+            val systemUiController = rememberSystemUiController()
+            val color = MaterialTheme.colorScheme.primaryContainer
+            SideEffect {
+                systemUiController.setStatusBarColor(color = color)
+            }
+            content()
+        }
     )
 }

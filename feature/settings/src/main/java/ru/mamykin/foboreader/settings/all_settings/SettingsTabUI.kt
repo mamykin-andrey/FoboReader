@@ -1,31 +1,30 @@
 package ru.mamykin.foboreader.settings.all_settings
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -99,11 +98,12 @@ private fun takeEffect(effect: SettingsViewModel.Effect, activity: Activity) {
 }
 
 private fun setNightModeEnabled(enabled: Boolean) {
-    val newMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-    AppCompatDelegate.setDefaultNightMode(newMode)
+    // TODO:
+    // val newMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+    // AppCompatDelegate.setDefaultNightMode(newMode)
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsScreen(
     state: SettingsViewModel.State,
@@ -114,12 +114,15 @@ private fun SettingsScreen(
             TopAppBar(
                 title = {
                     Text(text = stringResource(id = R.string.settings_title))
-                }, elevation = 12.dp, backgroundColor = MaterialTheme.colors.primary
+                },
+                windowInsets = WindowInsets(0.dp),
             )
-        }, content = {
-            when (state) {
-                is SettingsViewModel.State.Loading -> LoadingComposable()
-                is SettingsViewModel.State.Content -> ContentComposable(state, onIntent)
+        }, content = { innerPadding ->
+            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+                when (state) {
+                    is SettingsViewModel.State.Loading -> LoadingComposable()
+                    is SettingsViewModel.State.Content -> ContentComposable(state, onIntent)
+                }
             }
         })
     }
@@ -246,7 +249,7 @@ private fun TextSizeComposable(state: SettingsViewModel.State.Content, onIntent:
         Button(
             onClick = { onIntent(SettingsViewModel.Intent.IncreaseTextSize) },
             shape = RoundedCornerShape(4.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray, contentColor = Color.White),
+            // colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray, contentColor = Color.White),
             modifier = Modifier
                 .size(32.dp)
                 .align(Alignment.CenterVertically),
@@ -267,7 +270,7 @@ private fun TextSizeComposable(state: SettingsViewModel.State.Content, onIntent:
         Button(
             onClick = { onIntent(SettingsViewModel.Intent.DecreaseTextSize) },
             shape = RoundedCornerShape(4.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray, contentColor = Color.White),
+            // colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray, contentColor = Color.White),
             modifier = Modifier
                 .size(32.dp)
                 .align(Alignment.CenterVertically),

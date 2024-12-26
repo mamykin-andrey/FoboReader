@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,12 +14,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -115,7 +115,7 @@ private suspend fun takeEffect(effect: ReadBookViewModel.Effect, snackbarHostSta
     }
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ReadBookScreen(
     state: ReadBookViewModel.State,
@@ -130,12 +130,14 @@ private fun ReadBookScreen(
                     title = {
                         // TODO: Move to the feature state
                         Text(text = (state as? ReadBookViewModel.State.Content)?.title ?: "Loading")
-                    }, elevation = 12.dp
+                    }
                 )
-            }, content = { _ ->
-                when (state) {
-                    is ReadBookViewModel.State.Loading -> LoadingComposable(onIntent)
-                    is ReadBookViewModel.State.Content -> ContentComposable(state, onIntent)
+            }, content = { innerPadding ->
+                Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+                    when (state) {
+                        is ReadBookViewModel.State.Loading -> LoadingComposable(onIntent)
+                        is ReadBookViewModel.State.Content -> ContentComposable(state, onIntent)
+                    }
                 }
             })
     }

@@ -34,13 +34,11 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":uikit"))
 
-    implementation(Dependencies.materialLib)
     implementation(Dependencies.kotlinSerialization)
 
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)
     implementation(Dependencies.composeFoundation)
-    implementation(Dependencies.composeMaterial)
     implementation(Dependencies.composeMaterial3)
     implementation(Dependencies.composeMaterialIconsCore)
     implementation(Dependencies.composeMaterialIconsExt)

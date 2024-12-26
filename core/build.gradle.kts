@@ -29,11 +29,12 @@ android {
 }
 
 dependencies {
+    implementation(Dependencies.appCompatX)
+    implementation(Dependencies.fragmentX)
+
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.coroutinesCore)
     implementation(Dependencies.coroutinesAndroid)
-    implementation(Dependencies.materialLib)
-    implementation(Dependencies.fragmentX)
     implementation(Dependencies.lifecycleRuntimeKtx)
     implementation(Dependencies.retrofit)
     implementation(Dependencies.retrofitGsonConverter)
@@ -46,7 +47,7 @@ dependencies {
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)
     implementation(Dependencies.composeFoundation)
-    implementation(Dependencies.composeMaterial)
+    implementation(Dependencies.composeMaterial3)
     implementation(Dependencies.composeMaterialIconsCore)
     implementation(Dependencies.composeMaterialIconsExt)
     implementation(Dependencies.composeToolingPreview)

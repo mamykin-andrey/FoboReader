@@ -9,7 +9,6 @@ object Versions {
     const val junitVersion = "4.12"
     const val multidexVersion = "2.0.1"
     const val coreKtxVersion = "1.0.2"
-    const val materialLibVersion = "1.0.0"
     const val androidxVersion = "1.1.0"
     const val fragmentxVersion = "1.6.2"
     const val retrofitCoroutinesAdapterVersion = "0.9.2"
@@ -26,6 +25,7 @@ object Versions {
     const val composeNavigationVersion = "2.8.4"
     const val kotlinSerializationVersion = "1.5.1"
     const val composeMaterial = "1.2.0"
+    const val accompanist = "0.32.0"
 }
 
 object Dependencies {
@@ -39,7 +39,6 @@ object Dependencies {
     const val roomRuntime = "androidx.room:room-runtime:${Versions.roomVersion}"
     const val roomKtx = "androidx.room:room-ktx:${Versions.roomVersion}"
     const val roomCompiler = "androidx.room:room-compiler:${Versions.roomVersion}"
-    const val materialLib = "com.google.android.material:material:${Versions.materialLibVersion}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofitVersion}"
     const val okio = "com.squareup.okio:okio:${Versions.retrofitVersion}"
     const val okHttp = "com.squareup.okhttp3:okhttp:${Versions.okHttpVersion}"
@@ -58,11 +57,12 @@ object Dependencies {
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.daggerVersion}"
     const val jankStats = "androidx.metrics:metrics-performance:${Versions.jankStatsVersion}"
     const val lifecycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleVersion}"
+    const val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}"
     const val lottie = "com.airbnb.android:lottie:${Versions.lottieVersion}"
     const val composeUi = "androidx.compose.ui:ui:${Versions.composeVersion}"
     const val composeTooling = "androidx.compose.ui:ui-tooling:${Versions.composeVersion}"
     const val composeFoundation = "androidx.compose.foundation:foundation:${Versions.composeVersion}"
-    const val composeMaterial = "androidx.compose.material:material:${Versions.composeVersion}"
+    const val composeMaterial3 = "androidx.compose.material3:material3:${Versions.composeMaterial}"
     const val composeMaterialIconsCore = "androidx.compose.material:material-icons-core:${Versions.composeVersion}"
     const val composeMaterialIconsExt = "androidx.compose.material:material-icons-extended:${Versions.composeVersion}"
     const val composeActivity = "androidx.activity:activity-compose:${Versions.composeActivityVersion}"
@@ -73,5 +73,5 @@ object Dependencies {
     const val navigationUi = "androidx.navigation:navigation-ui-ktx:${Versions.composeNavigationVersion}"
     const val kotlinSerialization =
         "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinSerializationVersion}"
-    const val composeMaterial3 = "androidx.compose.material3:material3:${Versions.composeMaterial}"
+    const val accompanist = "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"
 }

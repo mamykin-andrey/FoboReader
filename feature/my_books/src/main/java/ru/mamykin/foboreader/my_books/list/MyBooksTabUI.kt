@@ -1,38 +1,38 @@
 package ru.mamykin.foboreader.my_books.list
 
-import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Sort
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -116,7 +116,7 @@ private suspend fun takeEffect(
     }
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MyBooksScreenUI(
     state: MyBooksViewModel.State,
@@ -124,30 +124,38 @@ private fun MyBooksScreenUI(
     snackbarHostState: SnackbarHostState,
 ) {
     FoboReaderTheme {
-        Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }, topBar = {
-            val searchQuery = (state as? MyBooksViewModel.State.Content)?.searchQuery
-            TopAppBar(title = {
-                if (searchQuery == null) {
-                    Text(text = stringResource(id = R.string.my_books_screen_title))
-                }
-            }, elevation = 12.dp, backgroundColor = MaterialTheme.colors.primary, actions = {
-                if (searchQuery != null) {
-                    SearchFieldComposable(searchQuery, onIntent)
-                } else {
-                    Row {
-                        SearchButtonComposable {
-                            onIntent(MyBooksViewModel.Intent.ShowSearch)
+        Scaffold(
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            topBar = {
+                val searchQuery = (state as? MyBooksViewModel.State.Content)?.searchQuery
+                TopAppBar(
+                    windowInsets = WindowInsets(top = 0.dp),
+                    title = {
+                        if (searchQuery == null) {
+                            Text(text = stringResource(id = R.string.my_books_screen_title))
                         }
-                        SortBooksComposable(onIntent)
+                    },
+                    actions = {
+                        if (searchQuery != null) {
+                            SearchFieldComposable(searchQuery, onIntent)
+                        } else {
+                            Row {
+                                SearchButtonComposable {
+                                    onIntent(MyBooksViewModel.Intent.ShowSearch)
+                                }
+                                SortBooksComposable(onIntent)
+                            }
+                        }
+                    }
+                )
+            }, content = { innerPadding ->
+                Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+                    when (state) {
+                        is MyBooksViewModel.State.Loading -> LoadingComposable()
+                        is MyBooksViewModel.State.Content -> ContentComposable(state, onIntent)
                     }
                 }
             })
-        }, content = {
-            when (state) {
-                is MyBooksViewModel.State.Loading -> LoadingComposable()
-                is MyBooksViewModel.State.Content -> ContentComposable(state, onIntent)
-            }
-        })
     }
 }
 
@@ -207,24 +215,32 @@ private fun SortBooksComposable(onIntent: (MyBooksViewModel.Intent) -> Unit) {
             expanded = isPopupExpanded.value,
             onDismissRequest = { isPopupExpanded.value = false },
         ) {
-            DropdownMenuItem(onClick = {
-                isPopupExpanded.value = false
-                onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByName))
-            }) {
-                Text("By name")
-            }
-            DropdownMenuItem(onClick = {
-                isPopupExpanded.value = false
-                onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByReadPages))
-            }) {
-                Text("By read pages")
-            }
-            DropdownMenuItem(onClick = {
-                isPopupExpanded.value = false
-                onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByDate))
-            }) {
-                Text("By date")
-            }
+            DropdownMenuItem(
+                text = {
+                    Text("By name")
+                },
+                onClick = {
+                    isPopupExpanded.value = false
+                    onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByName))
+                }
+            )
+            DropdownMenuItem(
+                onClick = {
+                    isPopupExpanded.value = false
+                    onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByReadPages))
+                },
+                text = {
+                    Text("By read pages")
+                }
+            )
+            DropdownMenuItem(
+                onClick = {
+                    isPopupExpanded.value = false
+                    onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByDate))
+                }, text = {
+                    Text("By date")
+                }
+            )
         }
     }
 }
@@ -252,12 +268,11 @@ private fun ContentComposable(state: MyBooksViewModel.State.Content, onIntent: (
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun BookRowComposable(bookInfo: BookInfo, onIntent: (MyBooksViewModel.Intent) -> Unit) {
     Card(modifier = Modifier
         .fillMaxWidth()
-        .padding(4.dp), elevation = 16.dp, onClick = {
+        .padding(4.dp), onClick = {
         onIntent(MyBooksViewModel.Intent.OpenBook(bookInfo.id))
     }) {
         Row(
@@ -304,7 +319,7 @@ private fun BookFormatComposable(bookInfo: BookInfo) {
             bookInfo.getDisplayFileSize(),
         ),
         style = TextStyles.Body2,
-        color = MaterialTheme.colors.onBackground,
+        color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier
             .padding(top = 4.dp)
             .padding(horizontal = 12.dp),
@@ -323,7 +338,7 @@ private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksV
             Text(
                 text = bookInfo.title,
                 style = TextStyles.Body2,
-                color = MaterialTheme.colors.onBackground,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.weight(1f)
             )
             IconButton(
@@ -342,19 +357,23 @@ private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksV
                 expanded = isBookPopupExpanded.value,
                 onDismissRequest = { isBookPopupExpanded.value = false },
             ) {
-                DropdownMenuItem(onClick = {
-                    isBookPopupExpanded.value = false
-
-                    onIntent(MyBooksViewModel.Intent.OpenBookDetails(bookInfo.id))
-                }) {
-                    Text("About")
-                }
-                DropdownMenuItem(onClick = {
-                    isBookPopupExpanded.value = false
-                    onIntent(MyBooksViewModel.Intent.RemoveBook(bookInfo.id))
-                }) {
-                    Text("Remove")
-                }
+                DropdownMenuItem(
+                    onClick = {
+                        isBookPopupExpanded.value = false
+                        onIntent(MyBooksViewModel.Intent.OpenBookDetails(bookInfo.id))
+                    },
+                    text = {
+                        Text("About")
+                    }
+                )
+                DropdownMenuItem(
+                    onClick = {
+                        isBookPopupExpanded.value = false
+                        onIntent(MyBooksViewModel.Intent.RemoveBook(bookInfo.id))
+                    }, text = {
+                        Text("Remove")
+                    }
+                )
             }
         }
     }
@@ -365,7 +384,7 @@ private fun BookAuthorComposable(bookInfo: BookInfo) {
     Text(
         text = bookInfo.author,
         style = TextStyles.Body2,
-        color = MaterialTheme.colors.onBackground,
+        color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier
             .padding(top = 4.dp)
             .padding(horizontal = 12.dp),
@@ -379,7 +398,7 @@ private fun BookReadStatusComposable(bookInfo: BookInfo) {
             id = R.string.book_pages_info, bookInfo.currentPage, bookInfo.totalPages ?: 0
         ),
         style = TextStyles.Body2,
-        color = MaterialTheme.colors.onBackground,
+        color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier
             .padding(top = 4.dp)
             .padding(horizontal = 12.dp),
@@ -392,7 +411,7 @@ private fun NoBooksComposable() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .background(MaterialTheme.colors.background),
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -406,22 +425,26 @@ private fun NoBooksComposable() {
 @Preview
 @Composable
 fun MyBooksScreenPreview() {
-    MyBooksScreenUI(state = MyBooksViewModel.State.Content(
-        allBooks = emptyList(),
-        books = listOf(
-            BookInfo(
-                id = 0,
-                filePath = "",
-                genre = "classic",
-                coverUrl = "https://m.media-amazon.com/images/I/71O2XIytdqL._AC_UF894,1000_QL80_.jpg",
-                author = "Fyodor Dostoyevsky",
-                title = "Crime & Punishment",
-                languages = listOf("ru, en"),
-                date = Date(),
-                currentPage = 0,
-                totalPages = 10,
-                lastOpen = 1000,
+    MyBooksScreenUI(
+        state = MyBooksViewModel.State.Content(
+            allBooks = emptyList(),
+            books = listOf(
+                BookInfo(
+                    id = 0,
+                    filePath = "",
+                    genre = "classic",
+                    coverUrl = "https://m.media-amazon.com/images/I/71O2XIytdqL._AC_UF894,1000_QL80_.jpg",
+                    author = "Fyodor Dostoyevsky",
+                    title = "Crime & Punishment",
+                    languages = listOf("ru, en"),
+                    date = Date(),
+                    currentPage = 0,
+                    totalPages = 10,
+                    lastOpen = 1000,
+                )
             )
-        )
-    ), onIntent = {}, snackbarHostState = remember { SnackbarHostState() })
+        ),
+        onIntent = {},
+        snackbarHostState = remember { SnackbarHostState() },
+    )
 }

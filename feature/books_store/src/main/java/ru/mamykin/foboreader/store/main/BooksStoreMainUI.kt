@@ -4,23 +4,26 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -94,7 +97,7 @@ private suspend fun takeEffect(
     }
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun BookCategoriesUI(
     state: BooksStoreMainViewModel.State,
@@ -108,13 +111,16 @@ internal fun BookCategoriesUI(
                 TopAppBar(
                     title = {
                         Text(text = stringResource(id = R.string.books_store_title))
-                    }, elevation = 12.dp, backgroundColor = MaterialTheme.colors.primary
+                    },
+                    windowInsets = WindowInsets(0.dp),
                 )
-            }, content = {
-                when (state) {
-                    is BooksStoreMainViewModel.State.Loading -> LoadingComposable()
-                    is BooksStoreMainViewModel.State.Error -> ErrorComposable(state, onIntent)
-                    is BooksStoreMainViewModel.State.Content -> ContentComposable(state, onIntent)
+            }, content = { innerPadding ->
+                Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+                    when (state) {
+                        is BooksStoreMainViewModel.State.Loading -> LoadingComposable()
+                        is BooksStoreMainViewModel.State.Error -> ErrorComposable(state, onIntent)
+                        is BooksStoreMainViewModel.State.Content -> ContentComposable(state, onIntent)
+                    }
                 }
             })
     }
@@ -150,7 +156,6 @@ private fun CategoryRowComposable(category: BookCategory, onIntent: (BooksStoreM
             .clickable {
                 onIntent(BooksStoreMainViewModel.Intent.OpenCategory(category.id))
             },
-        elevation = 16.dp,
     ) {
         Row(
             modifier = Modifier
@@ -163,20 +168,20 @@ private fun CategoryRowComposable(category: BookCategory, onIntent: (BooksStoreM
                 Text(
                     text = category.name,
                     style = TextStyles.Subtitle1,
-                    color = MaterialTheme.colors.onBackground,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
                 if (category.description != null) {
                     Text(
                         text = category.description,
                         style = TextStyles.Body2,
-                        color = MaterialTheme.colors.onBackground,
+                        color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.padding(top = 4.dp),
                     )
                 }
                 Text(
                     text = stringResource(id = R.string.books_store_category_count, category.booksCount),
                     style = TextStyles.Body2,
-                    color = MaterialTheme.colors.onBackground,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(top = 4.dp),
                 )
             }

@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -93,14 +93,15 @@ private fun LanguageItemComposable(
     language: AppLanguage,
     onIntent: (ChangeLanguageViewModel.Intent) -> Unit,
 ) {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .clickable(onClick = { onIntent(ChangeLanguageViewModel.Intent.SelectLanguage(language.code)) })
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onIntent(ChangeLanguageViewModel.Intent.SelectLanguage(language.code)) })
     ) {
         Text(
             text = language.name,
             style = TextStyles.Subtitle1,
-            color = MaterialTheme.colors.onBackground,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(vertical = 12.dp)
                 .padding(horizontal = 16.dp)

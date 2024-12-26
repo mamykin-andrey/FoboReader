@@ -86,7 +86,7 @@ dependencies {
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)
     implementation(Dependencies.composeFoundation)
-    implementation(Dependencies.composeMaterial)
+    implementation(Dependencies.composeMaterial3)
     implementation(Dependencies.composeMaterialIconsCore)
     implementation(Dependencies.composeMaterialIconsExt)
     implementation(Dependencies.composeToolingPreview)

@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.app.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
@@ -29,12 +30,13 @@ internal class RootActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        contentView = findViewById(android.R.id.content)
+        enableEdgeToEdge()
         initDi()
-        initAppPreferences()
         setContent {
             AppNavigation()
         }
+        contentView = findViewById(android.R.id.content)
+        initAppPreferences()
         initPermissions()
     }
 
@@ -56,9 +58,9 @@ internal class RootActivity : AppCompatActivity() {
     }
 
     private fun initAppPreferences() {
-        val newMode = if (appSettingsRepository.isNightThemeEnabled())
-            AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-        AppCompatDelegate.setDefaultNightMode(newMode)
+        // val newMode = if (appSettingsRepository.isNightThemeEnabled())
+        //     AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        // AppCompatDelegate.setDefaultNightMode(newMode)
 
         changeLocale(appSettingsRepository.getAppLanguageCode())
     }

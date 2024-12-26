@@ -37,15 +37,17 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    implementation(Dependencies.materialLib)
+    implementation(Dependencies.appCompatX)
+
     implementation(Dependencies.lifecycleRuntimeKtx)
     implementation(Dependencies.lottie)
 
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)
     implementation(Dependencies.composeFoundation)
-    implementation(Dependencies.composeMaterial)
+    implementation(Dependencies.composeMaterial3)
     implementation(Dependencies.composeMaterialIconsCore)
     implementation(Dependencies.composeMaterialIconsExt)
     implementation(Dependencies.composeToolingPreview)
+    implementation(Dependencies.accompanist)
 }
