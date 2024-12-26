@@ -65,10 +65,6 @@ internal class RootActivity : AppCompatActivity() {
     }
 
     private fun initAppPreferences() {
-        // val newMode = if (appSettingsRepository.isNightThemeEnabled())
-        //     AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-        // AppCompatDelegate.setDefaultNightMode(newMode)
-
         changeLocale(appSettingsRepository.getAppLanguageCode())
     }
 

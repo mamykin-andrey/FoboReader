@@ -3,7 +3,6 @@ package ru.mamykin.foboreader.main
 import dagger.Component
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.MainApi
-import ru.mamykin.foboreader.core.di.module.CoroutinesModule
 import ru.mamykin.foboreader.core.navigation.TabComposableProvider
 import javax.inject.Scope
 
@@ -15,7 +14,7 @@ internal annotation class MainScope
 @MainScope
 @Component(
     dependencies = [CommonApi::class, MainApi::class],
-    modules = [CoroutinesModule::class]
+    modules = []
 )
 internal interface MainComponent {
 

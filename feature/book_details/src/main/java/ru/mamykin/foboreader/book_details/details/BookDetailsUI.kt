@@ -56,7 +56,7 @@ private fun createAndInitViewModel(bookId: Long, apiHolder: ApiHolder): BookDeta
 }
 
 @Composable
-fun BookDetailsUI(bookId: Long, onBackPress: () -> Unit) {
+fun BookDetailsUI(bookId: Long, onBackPress: () -> Unit, onReadBookClick: (bookId: Long) -> Unit) {
     val context = LocalContext.current
     val viewModel = remember { createAndInitViewModel(bookId, context.getActivity().apiHolder()) }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -69,7 +69,7 @@ fun BookDetailsUI(bookId: Long, onBackPress: () -> Unit) {
     }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
-            takeEffect(it)
+            takeEffect(it, onReadBookClick)
         }
     }
     BookDetailsScreenComposable(
@@ -79,9 +79,9 @@ fun BookDetailsUI(bookId: Long, onBackPress: () -> Unit) {
     )
 }
 
-private fun takeEffect(effect: BookDetailsViewModel.Effect) = when (effect) {
+private fun takeEffect(effect: BookDetailsViewModel.Effect, onReadBookClick: (bookId: Long) -> Unit) = when (effect) {
     is BookDetailsViewModel.Effect.NavigateToReadBook -> {
-        // router.navigateTo(screenProvider.readBookScreen(bookId))
+        onReadBookClick(effect.bookId)
     }
 }
 

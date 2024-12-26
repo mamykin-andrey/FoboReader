@@ -3,7 +3,6 @@ package ru.mamykin.foboreader.book_details.details
 import dagger.BindsInstance
 import dagger.Component
 import ru.mamykin.foboreader.core.di.api.CommonApi
-import ru.mamykin.foboreader.core.di.module.CoroutinesModule
 import javax.inject.Named
 import javax.inject.Scope
 
@@ -15,7 +14,7 @@ internal annotation class BookDetailsScope
 @BookDetailsScope
 @Component(
     dependencies = [CommonApi::class],
-    modules = [DatabaseModule::class, CoroutinesModule::class]
+    modules = [DatabaseModule::class]
 )
 internal interface BookDetailsComponent {
 

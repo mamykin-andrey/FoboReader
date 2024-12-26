@@ -11,7 +11,6 @@ import ru.mamykin.foboreader.main.MainScreenUI
 import ru.mamykin.foboreader.read_book.reader.ReadBookUI
 import ru.mamykin.foboreader.store.list.BooksStoreListUI
 
-// TODO: Remove rememberNavController calls from everywhere but this file (and maybe the main screen)
 sealed class Screen(val route: String) {
     data object Main : Screen("main")
     data object BooksStoreList : Screen("store/{categoryId}") {
@@ -56,7 +55,11 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
             arguments = listOf(navArgument("bookId") { type = NavType.LongType })
         ) { backStackEntry ->
             val bookId = backStackEntry.arguments!!.getLong("bookId")
-            BookDetailsUI(bookId) { navController.popBackStack() }
+            BookDetailsUI(
+                bookId,
+                onBackPress = { navController.popBackStack() },
+                onReadBookClick = { navController.navigate(Screen.ReadBook.createRoute(it)) },
+            )
         }
 
         composable(

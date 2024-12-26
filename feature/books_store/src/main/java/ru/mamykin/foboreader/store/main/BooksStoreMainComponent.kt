@@ -5,7 +5,6 @@ import dagger.Module
 import ru.mamykin.foboreader.core.di.api.CommonApi
 import ru.mamykin.foboreader.core.di.api.NetworkApi
 import ru.mamykin.foboreader.core.di.api.SettingsApi
-import ru.mamykin.foboreader.core.di.module.CoroutinesModule
 import ru.mamykin.foboreader.store.common.BooksStoreApiServiceModule
 import javax.inject.Scope
 
@@ -16,10 +15,7 @@ internal annotation class BookCategoriesScope
 
 @BookCategoriesScope
 @Component(
-    modules = [
-        BookCategoriesModule::class,
-        CoroutinesModule::class,
-    ],
+    modules = [BookCategoriesModule::class],
     dependencies = [
         NetworkApi::class,
         CommonApi::class,
