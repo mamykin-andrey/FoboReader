@@ -5,7 +5,8 @@ import android.view.View
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.app.di.DaggerRootComponent
@@ -16,6 +17,7 @@ import ru.mamykin.foboreader.core.extension.changeLocale
 import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.core.platform.PermissionManager
 import ru.mamykin.foboreader.core.platform.RequestedPermission
+import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
 
 internal class RootActivity : AppCompatActivity() {
@@ -33,7 +35,12 @@ internal class RootActivity : AppCompatActivity() {
         enableEdgeToEdge()
         initDi()
         setContent {
-            AppNavigation()
+            val isDarkTheme = remember { mutableStateOf(appSettingsRepository.isNightThemeEnabled()) }
+            FoboReaderTheme(darkTheme = isDarkTheme.value) {
+                AppNavigation {
+                    isDarkTheme.value = it
+                }
+            }
         }
         contentView = findViewById(android.R.id.content)
         initAppPreferences()

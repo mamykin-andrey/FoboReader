@@ -66,7 +66,7 @@ private fun createAndInitViewModel(
 }
 
 @Composable
-fun SettingsTabUI() {
+fun SettingsTabUI(onNightThemeSwitch: (Boolean) -> Unit) {
     val context = LocalContext.current
     val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -79,16 +79,16 @@ fun SettingsTabUI() {
     }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
-            takeEffect(it, context.getActivity())
+            takeEffect(it, context.getActivity(), onNightThemeSwitch)
         }
     }
     SettingsScreen(viewModel.state, viewModel::sendIntent)
 }
 
-private fun takeEffect(effect: SettingsViewModel.Effect, activity: Activity) {
+private fun takeEffect(effect: SettingsViewModel.Effect, activity: Activity, onNightThemeSwitch: (Boolean) -> Unit) {
     when (effect) {
         is SettingsViewModel.Effect.SwitchTheme -> {
-            setNightModeEnabled(effect.isNightTheme)
+            onNightThemeSwitch(effect.isNightTheme)
         }
 
         is SettingsViewModel.Effect.SwitchLanguage -> {
@@ -97,35 +97,27 @@ private fun takeEffect(effect: SettingsViewModel.Effect, activity: Activity) {
     }
 }
 
-private fun setNightModeEnabled(enabled: Boolean) {
-    // TODO:
-    // val newMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-    // AppCompatDelegate.setDefaultNightMode(newMode)
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsScreen(
     state: SettingsViewModel.State,
     onIntent: (SettingsViewModel.Intent) -> Unit,
 ) {
-    FoboReaderTheme {
-        Scaffold(topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.settings_title))
-                },
-                windowInsets = WindowInsets(0.dp),
-            )
-        }, content = { innerPadding ->
-            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-                when (state) {
-                    is SettingsViewModel.State.Loading -> LoadingComposable()
-                    is SettingsViewModel.State.Content -> ContentComposable(state, onIntent)
-                }
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(text = stringResource(id = R.string.settings_title))
+            },
+            windowInsets = WindowInsets(0.dp),
+        )
+    }, content = { innerPadding ->
+        Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+            when (state) {
+                is SettingsViewModel.State.Loading -> LoadingComposable()
+                is SettingsViewModel.State.Content -> ContentComposable(state, onIntent)
             }
-        })
-    }
+        }
+    })
 }
 
 @Composable
@@ -325,17 +317,19 @@ private fun UseVibrationComposable(
 @Composable
 @Preview
 fun SettingsScreenPreview() {
-    SettingsScreen(
-        state = SettingsViewModel.State.Content(
-            AppSettings(
-                true,
-                "#ffffff",
-                "#ffffff",
-                20,
-                "Russian",
-                true,
-            )
-        ),
-        onIntent = {},
-    )
+    FoboReaderTheme {
+        SettingsScreen(
+            state = SettingsViewModel.State.Content(
+                AppSettings(
+                    true,
+                    "#ffffff",
+                    "#ffffff",
+                    20,
+                    "Russian",
+                    true,
+                )
+            ),
+            onIntent = {},
+        )
+    }
 }

@@ -20,7 +20,7 @@ class TabComposableProviderImpl @Inject constructor() : TabComposableProvider {
     }
 
     @Composable
-    override fun SettingsScreenTabContent() {
-        SettingsTabUI()
+    override fun SettingsScreenTabContent(onNightThemeSwitch: (Boolean) -> Unit) {
+        SettingsTabUI(onNightThemeSwitch)
     }
 }

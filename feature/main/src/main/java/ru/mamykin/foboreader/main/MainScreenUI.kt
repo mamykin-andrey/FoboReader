@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.main
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +13,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,6 +51,7 @@ fun MainScreenUI(
     onBookCategoryClick: (String) -> Unit,
     onBookDetailsClick: (Long) -> Unit,
     onReadBookClick: (Long) -> Unit,
+    onNightThemeSwitch: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     val viewModel = remember { createAndInitViewModel(context.getActivity().apiHolder()) }
@@ -76,6 +75,7 @@ fun MainScreenUI(
         onBookCategoryClick = onBookCategoryClick,
         onBookDetailsClick = onBookDetailsClick,
         onReadBookClick = onReadBookClick,
+        onNightThemeSwitch = onNightThemeSwitch,
         navController = navController,
     )
 }
@@ -94,31 +94,30 @@ private fun MainScreenComposable(
     onBookDetailsClick: (Long) -> Unit,
     onReadBookClick: (Long) -> Unit,
     navController: NavHostController,
+    onNightThemeSwitch: (Boolean) -> Unit,
 ) {
-    FoboReaderTheme {
-        Scaffold(
-            bottomBar = {
-                NavigationBarComposable(
-                    state,
-                    navController,
-                    onIntent,
-                )
+    Scaffold(
+        bottomBar = {
+            NavigationBarComposable(
+                state,
+                navController,
+                onIntent,
+            )
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = MainViewModel.BottomNavigationTab.MyBooks.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(MainViewModel.BottomNavigationTab.MyBooks.route) {
+                tabFragmentProvider.MyBooksScreenTabContent(onBookDetailsClick, onReadBookClick)
             }
-        ) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = MainViewModel.BottomNavigationTab.MyBooks.route,
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                composable(MainViewModel.BottomNavigationTab.MyBooks.route) {
-                    tabFragmentProvider.MyBooksScreenTabContent(onBookDetailsClick, onReadBookClick)
-                }
-                composable(MainViewModel.BottomNavigationTab.BooksStore.route) {
-                    tabFragmentProvider.BooksStoreScreenTabContent(onBookCategoryClick)
-                }
-                composable(MainViewModel.BottomNavigationTab.Settings.route) {
-                    tabFragmentProvider.SettingsScreenTabContent()
-                }
+            composable(MainViewModel.BottomNavigationTab.BooksStore.route) {
+                tabFragmentProvider.BooksStoreScreenTabContent(onBookCategoryClick)
+            }
+            composable(MainViewModel.BottomNavigationTab.Settings.route) {
+                tabFragmentProvider.SettingsScreenTabContent(onNightThemeSwitch)
             }
         }
     }
@@ -166,12 +165,15 @@ private fun navigateToScreen(
 @Preview
 @Composable
 fun MainScreenPreview() {
-    MainScreenComposable(
-        state = MainViewModel.State(),
-        onIntent = {},
-        onBookCategoryClick = {},
-        onBookDetailsClick = {},
-        onReadBookClick = {},
-        navController = rememberNavController(),
-    )
+    FoboReaderTheme {
+        MainScreenComposable(
+            state = MainViewModel.State(),
+            onIntent = {},
+            onBookCategoryClick = {},
+            onBookDetailsClick = {},
+            onReadBookClick = {},
+            navController = rememberNavController(),
+            onNightThemeSwitch = {},
+        )
+    }
 }

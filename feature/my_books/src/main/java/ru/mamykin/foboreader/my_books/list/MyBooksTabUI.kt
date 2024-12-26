@@ -123,40 +123,38 @@ private fun MyBooksScreenUI(
     onIntent: (MyBooksViewModel.Intent) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
-    FoboReaderTheme {
-        Scaffold(
-            snackbarHost = { SnackbarHost(snackbarHostState) },
-            topBar = {
-                val searchQuery = (state as? MyBooksViewModel.State.Content)?.searchQuery
-                TopAppBar(
-                    windowInsets = WindowInsets(top = 0.dp),
-                    title = {
-                        if (searchQuery == null) {
-                            Text(text = stringResource(id = R.string.my_books_screen_title))
-                        }
-                    },
-                    actions = {
-                        if (searchQuery != null) {
-                            SearchFieldComposable(searchQuery, onIntent)
-                        } else {
-                            Row {
-                                SearchButtonComposable {
-                                    onIntent(MyBooksViewModel.Intent.ShowSearch)
-                                }
-                                SortBooksComposable(onIntent)
-                            }
-                        }
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            val searchQuery = (state as? MyBooksViewModel.State.Content)?.searchQuery
+            TopAppBar(
+                windowInsets = WindowInsets(top = 0.dp),
+                title = {
+                    if (searchQuery == null) {
+                        Text(text = stringResource(id = R.string.my_books_screen_title))
                     }
-                )
-            }, content = { innerPadding ->
-                Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-                    when (state) {
-                        is MyBooksViewModel.State.Loading -> LoadingComposable()
-                        is MyBooksViewModel.State.Content -> ContentComposable(state, onIntent)
+                },
+                actions = {
+                    if (searchQuery != null) {
+                        SearchFieldComposable(searchQuery, onIntent)
+                    } else {
+                        Row {
+                            SearchButtonComposable {
+                                onIntent(MyBooksViewModel.Intent.ShowSearch)
+                            }
+                            SortBooksComposable(onIntent)
+                        }
                     }
                 }
-            })
-    }
+            )
+        }, content = { innerPadding ->
+            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+                when (state) {
+                    is MyBooksViewModel.State.Loading -> LoadingComposable()
+                    is MyBooksViewModel.State.Content -> ContentComposable(state, onIntent)
+                }
+            }
+        })
 }
 
 @Composable
@@ -425,26 +423,28 @@ private fun NoBooksComposable() {
 @Preview
 @Composable
 fun MyBooksScreenPreview() {
-    MyBooksScreenUI(
-        state = MyBooksViewModel.State.Content(
-            allBooks = emptyList(),
-            books = listOf(
-                BookInfo(
-                    id = 0,
-                    filePath = "",
-                    genre = "classic",
-                    coverUrl = "https://m.media-amazon.com/images/I/71O2XIytdqL._AC_UF894,1000_QL80_.jpg",
-                    author = "Fyodor Dostoyevsky",
-                    title = "Crime & Punishment",
-                    languages = listOf("ru, en"),
-                    date = Date(),
-                    currentPage = 0,
-                    totalPages = 10,
-                    lastOpen = 1000,
+    FoboReaderTheme {
+        MyBooksScreenUI(
+            state = MyBooksViewModel.State.Content(
+                allBooks = emptyList(),
+                books = listOf(
+                    BookInfo(
+                        id = 0,
+                        filePath = "",
+                        genre = "classic",
+                        coverUrl = "https://m.media-amazon.com/images/I/71O2XIytdqL._AC_UF894,1000_QL80_.jpg",
+                        author = "Fyodor Dostoyevsky",
+                        title = "Crime & Punishment",
+                        languages = listOf("ru, en"),
+                        date = Date(),
+                        currentPage = 0,
+                        totalPages = 10,
+                        lastOpen = 1000,
+                    )
                 )
-            )
-        ),
-        onIntent = {},
-        snackbarHostState = remember { SnackbarHostState() },
-    )
+            ),
+            onIntent = {},
+            snackbarHostState = remember { SnackbarHostState() },
+        )
+    }
 }

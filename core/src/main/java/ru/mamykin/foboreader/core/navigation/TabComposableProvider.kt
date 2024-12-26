@@ -10,5 +10,5 @@ interface TabComposableProvider {
     fun BooksStoreScreenTabContent(onBookCategoryClick: (String) -> Unit)
 
     @Composable
-    fun SettingsScreenTabContent()
+    fun SettingsScreenTabContent(onNightThemeSwitch: (Boolean) -> Unit)
 }

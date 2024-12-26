@@ -28,7 +28,7 @@ sealed class Screen(val route: String) {
 }
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -39,6 +39,7 @@ fun AppNavigation() {
                 onBookCategoryClick = { navController.navigate(Screen.BooksStoreList.createRoute(it)) },
                 onBookDetailsClick = { navController.navigate(Screen.BookDetails.createRoute(it)) },
                 onReadBookClick = { navController.navigate(Screen.ReadBook.createRoute(it)) },
+                onNightThemeSwitch = onNightThemeSwitch,
             )
         }
 

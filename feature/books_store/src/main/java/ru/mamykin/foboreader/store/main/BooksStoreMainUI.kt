@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.store.main
 
-import android.annotation.SuppressLint
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -104,26 +103,24 @@ internal fun BookCategoriesUI(
     onIntent: (BooksStoreMainViewModel.Intent) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
-    FoboReaderTheme {
-        Scaffold(
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(text = stringResource(id = R.string.books_store_title))
-                    },
-                    windowInsets = WindowInsets(0.dp),
-                )
-            }, content = { innerPadding ->
-                Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-                    when (state) {
-                        is BooksStoreMainViewModel.State.Loading -> LoadingComposable()
-                        is BooksStoreMainViewModel.State.Error -> ErrorComposable(state, onIntent)
-                        is BooksStoreMainViewModel.State.Content -> ContentComposable(state, onIntent)
-                    }
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(id = R.string.books_store_title))
+                },
+                windowInsets = WindowInsets(0.dp),
+            )
+        }, content = { innerPadding ->
+            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+                when (state) {
+                    is BooksStoreMainViewModel.State.Loading -> LoadingComposable()
+                    is BooksStoreMainViewModel.State.Error -> ErrorComposable(state, onIntent)
+                    is BooksStoreMainViewModel.State.Content -> ContentComposable(state, onIntent)
                 }
-            })
-    }
+            }
+        })
 }
 
 @Composable
@@ -215,9 +212,11 @@ private fun ErrorComposable(
 @Preview
 @Composable
 fun Preview() {
-    BookCategoriesUI(
-        state = BooksStoreMainViewModel.State.Content(listOf(BookCategory("1", "Classic", "Classic books", 10))),
-        onIntent = {},
-        snackbarHostState = remember { SnackbarHostState() }
-    )
+    FoboReaderTheme {
+        BookCategoriesUI(
+            state = BooksStoreMainViewModel.State.Content(listOf(BookCategory("1", "Classic", "Classic books", 10))),
+            onIntent = {},
+            snackbarHostState = remember { SnackbarHostState() }
+        )
+    }
 }

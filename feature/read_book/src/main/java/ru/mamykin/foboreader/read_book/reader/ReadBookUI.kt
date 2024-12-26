@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.read_book.reader
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -122,25 +121,23 @@ private fun ReadBookScreen(
     onIntent: (ReadBookViewModel.Intent) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
-    FoboReaderTheme {
-        Scaffold(
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-            topBar = {
-                TopAppBar(
-                    title = {
-                        // TODO: Move to the feature state
-                        Text(text = (state as? ReadBookViewModel.State.Content)?.title ?: "Loading")
-                    }
-                )
-            }, content = { innerPadding ->
-                Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-                    when (state) {
-                        is ReadBookViewModel.State.Loading -> LoadingComposable(onIntent)
-                        is ReadBookViewModel.State.Content -> ContentComposable(state, onIntent)
-                    }
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        topBar = {
+            TopAppBar(
+                title = {
+                    // TODO: Move to the feature state
+                    Text(text = (state as? ReadBookViewModel.State.Content)?.title ?: "Loading")
                 }
-            })
-    }
+            )
+        }, content = { innerPadding ->
+            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+                when (state) {
+                    is ReadBookViewModel.State.Loading -> LoadingComposable(onIntent)
+                    is ReadBookViewModel.State.Content -> ContentComposable(state, onIntent)
+                }
+            }
+        })
 }
 
 @Composable
@@ -398,16 +395,18 @@ private fun CombinedClickableText(fullText: String, modifier: Modifier, onIntent
 @Preview
 @Composable
 fun ReadBookScreenPreview() {
-    ReadBookScreen(
-        state = ReadBookViewModel.State.Content(
-            "Title",
-            listOf("Page1", "Page2"),
-            18f,
-            1,
-            2,
-            50f,
-        ),
-        onIntent = {},
-        snackbarHostState = SnackbarHostState(),
-    )
+    FoboReaderTheme {
+        ReadBookScreen(
+            state = ReadBookViewModel.State.Content(
+                "Title",
+                listOf("Page1", "Page2"),
+                18f,
+                1,
+                2,
+                50f,
+            ),
+            onIntent = {},
+            snackbarHostState = SnackbarHostState(),
+        )
+    }
 }

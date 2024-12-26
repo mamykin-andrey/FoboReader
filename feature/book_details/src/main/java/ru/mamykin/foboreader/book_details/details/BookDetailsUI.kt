@@ -93,30 +93,28 @@ private fun BookDetailsScreenComposable(
     onIntent: (BookDetailsViewModel.Intent) -> Unit,
     onBackPress: () -> Unit,
 ) {
-    FoboReaderTheme {
-        Scaffold(topBar = {
-            TopAppBar(title = {
-                Text(text = stringResource(id = R.string.my_books_book_info_title))
-            }, navigationIcon = {
-                IconButton(onClick = {
-                    onBackPress()
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        modifier = Modifier,
-                        contentDescription = null,
-                    )
-                }
-            })
-        }, content = { innerPadding ->
-            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-                when (state) {
-                    is BookDetailsViewModel.State.Loading -> LoadingComposable()
-                    is BookDetailsViewModel.State.Loaded -> LoadedComposable(state, onIntent)
-                }
+    Scaffold(topBar = {
+        TopAppBar(title = {
+            Text(text = stringResource(id = R.string.my_books_book_info_title))
+        }, navigationIcon = {
+            IconButton(onClick = {
+                onBackPress()
+            }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    modifier = Modifier,
+                    contentDescription = null,
+                )
             }
         })
-    }
+    }, content = { innerPadding ->
+        Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+            when (state) {
+                is BookDetailsViewModel.State.Loading -> LoadingComposable()
+                is BookDetailsViewModel.State.Loaded -> LoadedComposable(state, onIntent)
+            }
+        }
+    })
 }
 
 @Composable
@@ -244,18 +242,20 @@ private fun LoadedComposable(
 @Preview
 @Composable
 private fun MyBooksScreenPreview() {
-    BookDetailsScreenComposable(
-        state = BookDetailsViewModel.State.Loaded(
-            BookDetails(
-                "Author",
-                "Title",
-                "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",
-                "/dev/null",
-                10,
-                "Genre"
-            )
-        ),
-        onIntent = {},
-        onBackPress = {},
-    )
+    FoboReaderTheme {
+        BookDetailsScreenComposable(
+            state = BookDetailsViewModel.State.Loaded(
+                BookDetails(
+                    "Author",
+                    "Title",
+                    "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",
+                    "/dev/null",
+                    10,
+                    "Genre"
+                )
+            ),
+            onIntent = {},
+            onBackPress = {},
+        )
+    }
 }

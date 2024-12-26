@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.store.list
 
-import android.annotation.SuppressLint
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -105,47 +104,45 @@ private fun BooksListScreen(
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit
 ) {
-    FoboReaderTheme {
-        Scaffold(
-            snackbarHost = { SnackbarHost(snackbarHostState) },
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(text = stringResource(id = R.string.books_store_title))
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            onBackClick()
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                modifier = Modifier,
-                                contentDescription = null,
-                            )
-                        }
-                    },
-                    actions = {
-                        IconButton(onClick = {
-                            TODO("Not implemented")
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Search,
-                                modifier = Modifier,
-                                contentDescription = null,
-                            )
-                        }
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(id = R.string.books_store_title))
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        onBackClick()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            modifier = Modifier,
+                            contentDescription = null,
+                        )
                     }
-                )
-            }, content = { innerPadding ->
-                Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-                    when (state) {
-                        is BooksStoreListViewModel.State.Loading -> LoadingComposable()
-                        is BooksStoreListViewModel.State.Content -> ContentComposable(state, onIntent)
-                        is BooksStoreListViewModel.State.Error -> ErrorComposable(state, onIntent)
+                },
+                actions = {
+                    IconButton(onClick = {
+                        TODO("Not implemented")
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            modifier = Modifier,
+                            contentDescription = null,
+                        )
                     }
                 }
-            })
-    }
+            )
+        }, content = { innerPadding ->
+            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+                when (state) {
+                    is BooksStoreListViewModel.State.Loading -> LoadingComposable()
+                    is BooksStoreListViewModel.State.Content -> ContentComposable(state, onIntent)
+                    is BooksStoreListViewModel.State.Error -> ErrorComposable(state, onIntent)
+                }
+            }
+        })
 }
 
 @Composable
@@ -232,23 +229,25 @@ private fun ErrorComposable(
 @Composable
 @Preview
 fun BooksListScreenPreview() {
-    BooksListScreen(
-        state = BooksStoreListViewModel.State.Content(
-            listOf(
-                StoreBook(
-                    id = "1",
-                    genre = "Classic",
-                    author = "Pierre Cardine",
-                    title = "Wonderful life",
-                    lang = "English",
-                    format = "fb",
-                    cover = "https://m.media-amazon.com/images/I/81sG60wsNtL.jpg",
-                    link = "https://www.amazon.co.uk/Wonderful-Life-Burgess-Nature-History/dp/0099273454",
+    FoboReaderTheme {
+        BooksListScreen(
+            state = BooksStoreListViewModel.State.Content(
+                listOf(
+                    StoreBook(
+                        id = "1",
+                        genre = "Classic",
+                        author = "Pierre Cardine",
+                        title = "Wonderful life",
+                        lang = "English",
+                        format = "fb",
+                        cover = "https://m.media-amazon.com/images/I/81sG60wsNtL.jpg",
+                        link = "https://www.amazon.co.uk/Wonderful-Life-Burgess-Nature-History/dp/0099273454",
+                    )
                 )
-            )
-        ),
-        onIntent = {},
-        snackbarHostState = remember { SnackbarHostState() },
-        onBackClick = {},
-    )
+            ),
+            onIntent = {},
+            snackbarHostState = remember { SnackbarHostState() },
+            onBackClick = {},
+        )
+    }
 }
