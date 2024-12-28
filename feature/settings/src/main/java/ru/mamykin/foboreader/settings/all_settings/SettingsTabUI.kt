@@ -157,7 +157,6 @@ private fun ContentComposable(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // TODO: Fix the items clickable area
         NightThemeComposable(state, onIntent)
         BackgroundColorComposable(state, onIntent)
         TranslationColorComposable(state, onIntent)
@@ -241,7 +240,6 @@ private fun TextSizeComposable(state: SettingsViewModel.State.Content, onIntent:
         Button(
             onClick = { onIntent(SettingsViewModel.Intent.IncreaseTextSize) },
             shape = RoundedCornerShape(4.dp),
-            // colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray, contentColor = Color.White),
             modifier = Modifier
                 .size(32.dp)
                 .align(Alignment.CenterVertically),
@@ -262,7 +260,6 @@ private fun TextSizeComposable(state: SettingsViewModel.State.Content, onIntent:
         Button(
             onClick = { onIntent(SettingsViewModel.Intent.DecreaseTextSize) },
             shape = RoundedCornerShape(4.dp),
-            // colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray, contentColor = Color.White),
             modifier = Modifier
                 .size(32.dp)
                 .align(Alignment.CenterVertically),

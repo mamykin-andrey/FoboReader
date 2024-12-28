@@ -24,6 +24,7 @@ internal class ReadBookViewModel @Inject constructor(
     private val getWordTranslation: GetWordTranslation,
     private val getBookInfo: GetBookInfo,
     private val appSettingsRepository: AppSettingsRepository,
+    private val getVibrationEnabled: GetVibrationEnabled,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -34,6 +35,8 @@ internal class ReadBookViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
+
+    private val isVibrationEnabled = getVibrationEnabled.execute()
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
@@ -60,14 +63,14 @@ internal class ReadBookViewModel @Inject constructor(
                                 listOf(it)
                             )
                         )
-                        effectChannel.send(Effect.Vibrate)
+                        vibrateIfEnabled()
                     } ?: run {
                     effectChannel.send(
                         Effect.ShowSnackbar(
                             SnackbarData(StringOrResource.Resource(R.string.read_book_translation_download_error))
                         )
                     )
-                    effectChannel.send(Effect.Vibrate)
+                    vibrateIfEnabled()
                 }
             }
 
@@ -78,7 +81,7 @@ internal class ReadBookViewModel @Inject constructor(
                         state = prevState.copy(
                             wordTranslation = it
                         )
-                        effectChannel.send(Effect.Vibrate)
+                        vibrateIfEnabled()
                     },
                     {
                         effectChannel.send(
@@ -86,7 +89,7 @@ internal class ReadBookViewModel @Inject constructor(
                                 SnackbarData(StringOrResource.Resource(R.string.read_book_translation_download_error))
                             )
                         )
-                        effectChannel.send(Effect.Vibrate)
+                        vibrateIfEnabled()
                     }
                 )
             }
@@ -94,14 +97,20 @@ internal class ReadBookViewModel @Inject constructor(
             is Intent.HideParagraphTranslation -> {
                 val prevState = (state as? State.Content) ?: return@launch
                 state = prevState.copy(paragraphTranslation = null)
-                effectChannel.send(Effect.Vibrate)
+                vibrateIfEnabled()
             }
 
             is Intent.HideWordTranslation -> {
                 val prevState = (state as? State.Content) ?: return@launch
                 state = prevState.copy(wordTranslation = null)
-                effectChannel.send(Effect.Vibrate)
+                vibrateIfEnabled()
             }
+        }
+    }
+
+    private suspend fun vibrateIfEnabled() {
+        if (isVibrationEnabled) {
+            effectChannel.send(Effect.Vibrate)
         }
     }
 
