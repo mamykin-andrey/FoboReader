@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -104,8 +105,8 @@ private fun NavigationBarComposable(
     ) {
         state.tabs.forEach { item ->
             NavigationBarItem(
-                icon = { Icon(item.icon, contentDescription = item.tabName) },
-                label = { Text(item.tabName) },
+                icon = { Icon(item.icon, contentDescription = stringResource(item.tabNameId)) },
+                label = { Text(stringResource(item.tabNameId)) },
                 selected = currentRoute == item.route,
                 onClick = {
                     if (currentRoute != item.route) {
@@ -126,17 +127,17 @@ fun MainScreenPreview() {
             onIntent = {},
             navController = rememberNavController(),
             navigationTabs = listOf(
-                BottomNavigationTab.MyBooks.route to {
+                BottomNavigationTabRoute.MY_BOOKS to {
                     Text("tab1")
                 },
-                BottomNavigationTab.BooksStore.route to {
+                BottomNavigationTabRoute.BOOKS_STORE to {
                     Text("tab2")
                 },
-                BottomNavigationTab.Settings.route to {
+                BottomNavigationTabRoute.SETTINGS to {
                     Text("tab3")
                 }
             ),
-            selectedTabRoute = BottomNavigationTab.MyBooks.route,
+            selectedTabRoute = BottomNavigationTabRoute.MY_BOOKS,
         )
     }
 }

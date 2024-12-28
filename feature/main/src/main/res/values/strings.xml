@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_my_books_tab">Мои книги</string>
-    <string name="app_books_store_tab">Магазин</string>
+    <string name="app_books_store_tab">Магазин книг</string>
     <string name="app_settings_tab">Настройки</string>
 </resources>

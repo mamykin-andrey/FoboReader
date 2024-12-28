@@ -32,6 +32,7 @@ internal class RootActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initAppPreferences()
         enableEdgeToEdge()
         setContent {
             val isDarkTheme = remember { mutableStateOf(appSettingsRepository.isNightThemeEnabled()) }
@@ -42,7 +43,6 @@ internal class RootActivity : AppCompatActivity() {
             }
         }
         contentView = findViewById(android.R.id.content)
-        initAppPreferences()
         initPermissions()
     }
 

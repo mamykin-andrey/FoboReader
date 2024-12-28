@@ -8,7 +8,7 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ru.mamykin.foboreader.book_details.details.BookDetailsUI
-import ru.mamykin.foboreader.main.BottomNavigationTab
+import ru.mamykin.foboreader.main.BottomNavigationTabRoute
 import ru.mamykin.foboreader.main.MainScreenUI
 import ru.mamykin.foboreader.my_books.list.MyBooksScreen
 import ru.mamykin.foboreader.read_book.reader.ReadBookUI
@@ -48,7 +48,7 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screen.Main.createRoute(BottomNavigationTab.MyBooks.route)
+        startDestination = Screen.Main.createRoute(BottomNavigationTabRoute.MY_BOOKS)
     ) {
         composable(
             route = Screen.Main.route,
@@ -58,18 +58,18 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
             MainScreenUI(
                 selectedTabRoute = tabRoute,
                 navigationTabs = listOf(
-                    BottomNavigationTab.MyBooks.route to {
+                    BottomNavigationTabRoute.MY_BOOKS to {
                         MyBooksScreen(
                             onBookDetailsClick = { navController.navigate(Screen.BookDetails.createRoute(it)) },
                             onReadBookClick = { navController.navigate(Screen.ReadBook.createRoute(it)) },
                         )
                     },
-                    BottomNavigationTab.BooksStore.route to {
+                    BottomNavigationTabRoute.BOOKS_STORE to {
                         BooksCategoriesScreen {
                             navController.navigate(Screen.BooksStoreList.createRoute(it))
                         }
                     },
-                    BottomNavigationTab.Settings.route to {
+                    BottomNavigationTabRoute.SETTINGS to {
                         SettingsTabUI(
                             navController = navController,
                             onNightThemeSwitch = onNightThemeSwitch,
@@ -90,7 +90,7 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
                 categoryId = categoryId,
                 onBackClick = { navController.popBackStack() },
                 onShowMyBooksClick = {
-                    navController.navigate(Screen.Main.createRoute(BottomNavigationTab.MyBooks.route)) {
+                    navController.navigate(Screen.Main.createRoute(BottomNavigationTabRoute.MY_BOOKS)) {
                         popUpTo(0)
                         launchSingleTop = true
                     }
