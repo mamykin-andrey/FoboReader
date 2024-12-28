@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ru.mamykin.foboreader.book_details.details.BookDetailsUI
@@ -12,6 +13,8 @@ import ru.mamykin.foboreader.main.MainScreenUI
 import ru.mamykin.foboreader.my_books.list.MyBooksScreen
 import ru.mamykin.foboreader.read_book.reader.ReadBookUI
 import ru.mamykin.foboreader.settings.all_settings.SettingsTabUI
+import ru.mamykin.foboreader.settings.common.CustomColorType
+import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogUI
 import ru.mamykin.foboreader.store.list.BooksStoreListUI
 import ru.mamykin.foboreader.store.main.BooksCategoriesScreen
 
@@ -30,6 +33,10 @@ sealed class Screen(val route: String) {
 
     data object ReadBook : Screen("book/{bookId}") {
         fun createRoute(bookId: Long) = "book/$bookId"
+    }
+
+    data object ChooseCustomColor : Screen("choose_color/{type}") {
+        fun createRoute(type: CustomColorType) = "choose_color/$type"
     }
 }
 
@@ -60,7 +67,11 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
                         }
                     },
                     BottomNavigationTab.Settings.route to {
-                        SettingsTabUI(onNightThemeSwitch)
+                        SettingsTabUI(
+                            navController = navController,
+                            onNightThemeSwitch = onNightThemeSwitch,
+                            onChooseColorClick = { navController.navigate(Screen.ChooseCustomColor.createRoute(it)) }
+                        )
                     }
                 )
             )
@@ -97,9 +108,17 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
         composable(
             route = Screen.ReadBook.route,
             arguments = listOf(navArgument("bookId") { type = NavType.LongType })
-        ) { backStackEntry ->
-            val bookId = backStackEntry.arguments!!.getLong("bookId")
-            ReadBookUI(bookId)
+        ) {
+            ReadBookUI()
+        }
+
+        dialog(
+            route = Screen.ChooseCustomColor.route,
+            arguments = listOf(
+                navArgument("type") { type = NavType.EnumType(CustomColorType::class.java) },
+            )
+        ) {
+            ChooseCustomColorDialogUI(navController)
         }
     }
 }

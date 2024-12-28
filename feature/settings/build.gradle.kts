@@ -55,6 +55,7 @@ dependencies {
     implementation(Dependencies.composeToolingPreview)
     implementation(Dependencies.coil)
     implementation(Dependencies.hiltNavigation)
+    implementation(Dependencies.runtimeLiveData)
 
     kapt(Dependencies.hiltCompiler)
 

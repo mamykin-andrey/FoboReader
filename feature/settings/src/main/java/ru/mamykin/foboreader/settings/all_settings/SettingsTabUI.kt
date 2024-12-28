@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,31 +37,53 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import ru.mamykin.foboreader.core.extension.changeLocale
 import ru.mamykin.foboreader.core.extension.getActivity
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogUI
-import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogUI
+import ru.mamykin.foboreader.settings.common.CustomColorType
+import ru.mamykin.foboreader.settings.custom_color.ChooseColorResult
 import ru.mamykin.foboreader.uikit.compose.ColoredCircleCompose
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
-fun SettingsTabUI(onNightThemeSwitch: (Boolean) -> Unit) {
+fun SettingsTabUI(
+    navController: NavHostController,
+    onNightThemeSwitch: (Boolean) -> Unit,
+    onChooseColorClick: (type: CustomColorType) -> Unit,
+) {
     val context = LocalContext.current
     val viewModel: SettingsViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(SettingsViewModel.Intent.LoadSettings)
     }
+    navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<ChooseColorResult>("choose_color_result")
+        ?.observeAsState()
+        ?.value
+        ?.let {
+            LaunchedEffect(it) {
+                viewModel.sendIntent(SettingsViewModel.Intent.ChangeColor(it.type, it.colorCode))
+            }
+        }
+
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
-            takeEffect(it, context.getActivity(), onNightThemeSwitch)
+            takeEffect(it, context.getActivity(), onNightThemeSwitch, onChooseColorClick)
         }
     }
     SettingsScreen(viewModel.state, viewModel::sendIntent)
 }
 
-private fun takeEffect(effect: SettingsViewModel.Effect, activity: Activity, onNightThemeSwitch: (Boolean) -> Unit) {
+private fun takeEffect(
+    effect: SettingsViewModel.Effect,
+    activity: Activity,
+    onNightThemeSwitch: (Boolean) -> Unit,
+    onChooseColorClick: (type: CustomColorType) -> Unit,
+) {
     when (effect) {
         is SettingsViewModel.Effect.SwitchTheme -> {
             onNightThemeSwitch(effect.isNightTheme)
@@ -68,6 +91,10 @@ private fun takeEffect(effect: SettingsViewModel.Effect, activity: Activity, onN
 
         is SettingsViewModel.Effect.SwitchLanguage -> {
             activity.changeLocale(effect.languageCode)
+        }
+
+        is SettingsViewModel.Effect.ChooseColor -> {
+            onChooseColorClick(effect.type)
         }
     }
 }
@@ -107,7 +134,10 @@ private fun LoadingComposable() {
 }
 
 @Composable
-private fun ContentComposable(state: SettingsViewModel.State.Content, onIntent: (SettingsViewModel.Intent) -> Unit) {
+private fun ContentComposable(
+    state: SettingsViewModel.State.Content,
+    onIntent: (SettingsViewModel.Intent) -> Unit,
+) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -118,22 +148,6 @@ private fun ContentComposable(state: SettingsViewModel.State.Content, onIntent: 
         TextSizeComposable(state, onIntent)
         AppLanguageComposable(state, onIntent)
         UseVibrationComposable(state, onIntent)
-        if (state.backgroundColorDialogCode != null) {
-            ChooseCustomColorDialogUI(
-                currentColorCode = state.backgroundColorDialogCode,
-                title = "Select background color",
-            ) {
-                onIntent(SettingsViewModel.Intent.ChangeBackgroundColor(it))
-            }
-        }
-        if (state.translationColorDialogCode != null) {
-            ChooseCustomColorDialogUI(
-                currentColorCode = state.translationColorDialogCode,
-                title = "Select translation color",
-            ) {
-                onIntent(SettingsViewModel.Intent.ChangeTranslationColor(it))
-            }
-        }
         if (state.isChangeLanguageDialogShown) {
             ChangeLanguageDialogUI {
                 onIntent(SettingsViewModel.Intent.AppLanguageChanged(it))
@@ -165,7 +179,7 @@ private fun BackgroundColorComposable(
     ColorRowComposable(
         colorHex = state.settings.backgroundColor, titleRes = R.string.settings_bg_color_title
     ) {
-        onIntent(SettingsViewModel.Intent.SelectBackgroundColor)
+        onIntent(SettingsViewModel.Intent.ChooseColor(type = CustomColorType.BACKGROUND))
     }
 }
 
@@ -176,7 +190,7 @@ private fun TranslationColorComposable(
     ColorRowComposable(
         colorHex = state.settings.translationColor, titleRes = R.string.settings_translate_color_title
     ) {
-        onIntent(SettingsViewModel.Intent.SelectTranslationColor)
+        onIntent(SettingsViewModel.Intent.ChooseColor(type = CustomColorType.TRANSLATION))
     }
 }
 

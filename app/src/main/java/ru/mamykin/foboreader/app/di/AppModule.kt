@@ -10,7 +10,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import ru.mamykin.foboreader.app.data.AppSettingsRepositoryImpl
 import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
-import ru.mamykin.foboreader.app.navigation.TabComposableProviderImpl
 import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.app.platform.NotificationManagerImpl
 import ru.mamykin.foboreader.app.platform.PermissionManagerImpl
@@ -21,7 +20,6 @@ import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
-import ru.mamykin.foboreader.core.navigation.TabComposableProvider
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.PermissionManager
@@ -44,9 +42,6 @@ internal object AppProvidesModule {
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface AppBindsModule {
-
-    @Binds
-    fun bindFragmentProvider(impl: TabComposableProviderImpl): TabComposableProvider
 
     @Binds
     fun bindResourceManager(impl: ResourceManagerImpl): ResourceManager

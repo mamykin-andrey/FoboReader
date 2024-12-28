@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import ru.mamykin.foboreader.settings.app_language.SetAppLanguage
+import ru.mamykin.foboreader.settings.common.CustomColorType
 import javax.inject.Inject
 
 // TODO: Refactor to use a single UseCase
@@ -17,8 +18,7 @@ internal class SettingsViewModel @Inject constructor(
     private val setTextSize: SetTextSize,
     private val setNightTheme: SetNightTheme,
     private val setUseVibration: SetUseVibration,
-    private val setTranslationColor: SetTranslationColor,
-    private val setBackgroundColor: SetBackgroundColor,
+    private val changeColorUseCase: ChangeColorUseCase,
     private val setAppLanguage: SetAppLanguage,
 ) : ViewModel() {
 
@@ -55,40 +55,25 @@ internal class SettingsViewModel @Inject constructor(
                 state = State.Content(getSettings.execute())
             }
 
-            is Intent.SelectTranslationColor -> {
-                val prevState = state as? State.Content ?: return@launch
-                state = prevState.copy(translationColorDialogCode = getSettings.execute().translationColor)
-            }
-
-            is Intent.ChangeTranslationColor -> {
-                val prevState = (state as? State.Content) ?: return@launch
-                var newSettings = prevState.settings
-                if (intent.colorCode != null) {
-                    setTranslationColor.execute(intent.colorCode)
-                    newSettings = getSettings.execute()
+            is Intent.ChooseColor -> {
+                val settings = getSettings.execute()
+                val curColorCode = when (intent.type) {
+                    CustomColorType.TRANSLATION -> settings.translationColor
+                    CustomColorType.BACKGROUND -> settings.backgroundColor
                 }
-                state = prevState.copy(
-                    settings = newSettings,
-                    translationColorDialogCode = null,
-                )
-            }
-
-            is Intent.SelectBackgroundColor -> {
-                val prevState = state as? State.Content ?: return@launch
-                state = prevState.copy(backgroundColorDialogCode = getSettings.execute().backgroundColor)
-            }
-
-            is Intent.ChangeBackgroundColor -> {
-                val prevState = (state as? State.Content) ?: return@launch
-                var newSettings = prevState.settings
-                if (intent.colorCode != null) {
-                    setBackgroundColor.execute(intent.colorCode)
-                    newSettings = getSettings.execute()
+                val screenTitle = when (intent.type) {
+                    CustomColorType.TRANSLATION -> "Choose translation color"
+                    CustomColorType.BACKGROUND -> "Choose background color"
                 }
-                state = prevState.copy(
-                    settings = newSettings,
-                    backgroundColorDialogCode = null,
-                )
+                effectChannel.send(Effect.ChooseColor(intent.type, curColorCode, screenTitle))
+            }
+
+            is Intent.ChangeColor -> {
+                val prevState = (state as? State.Content) ?: return@launch
+                val newColorCode = intent.newColorCode ?: return@launch
+                changeColorUseCase.execute(intent.type, newColorCode)
+                val newSettings = getSettings.execute()
+                state = prevState.copy(settings = newSettings)
             }
 
             is Intent.SelectAppLanguage -> {
@@ -117,10 +102,12 @@ internal class SettingsViewModel @Inject constructor(
         class SwitchTheme(val isNightTheme: Boolean) : Intent()
         data object IncreaseTextSize : Intent()
         data object DecreaseTextSize : Intent()
-        data object SelectTranslationColor : Intent()
-        data class ChangeTranslationColor(val colorCode: String?) : Intent()
-        data object SelectBackgroundColor : Intent()
-        data class ChangeBackgroundColor(val colorCode: String?) : Intent()
+        data class ChooseColor(val type: CustomColorType) : Intent()
+        data class ChangeColor(
+            val type: CustomColorType,
+            val newColorCode: String?,
+        ) : Intent()
+
         data object SelectAppLanguage : Intent()
         data class AppLanguageChanged(val selectedLanguageCode: String?) : Intent()
         class ChangeUseVibration(val enabled: Boolean) : Intent()
@@ -131,8 +118,6 @@ internal class SettingsViewModel @Inject constructor(
 
         data class Content(
             val settings: AppSettings,
-            val backgroundColorDialogCode: String? = null,
-            val translationColorDialogCode: String? = null,
             val isChangeLanguageDialogShown: Boolean = false,
         ) : State()
     }
@@ -140,5 +125,10 @@ internal class SettingsViewModel @Inject constructor(
     sealed class Effect {
         data class SwitchTheme(val isNightTheme: Boolean) : Effect()
         data class SwitchLanguage(val languageCode: String) : Effect()
+        data class ChooseColor(
+            val type: CustomColorType,
+            val curColorCode: String,
+            val screenTitle: String,
+        ) : Effect()
     }
 }

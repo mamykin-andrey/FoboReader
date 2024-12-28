@@ -32,26 +32,25 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import ru.mamykin.foboreader.settings.R
 
-private const val SCREEN_KEY = "choose_custom_color"
 private const val COLOR_CIRCLE_SIZE = 45
 private const val COLOR_CIRCLE_PADDING = 4
 
 @Composable
-fun ChooseCustomColorDialogUI(
-    currentColorCode: String,
-    title: String,
-    onDismiss: (selectedColorCode: String?) -> Unit,
-) {
-    val viewModel: ChooseCustomColorViewModel = hiltViewModel() // TODO: Title
+fun ChooseCustomColorDialogUI(navController: NavHostController) {
+    val viewModel: ChooseCustomColorViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
-        viewModel.sendIntent(ChooseCustomColorViewModel.Intent.LoadColors(currentColorCode))
+        viewModel.sendIntent(ChooseCustomColorViewModel.Intent.LoadColors)
     }
     LaunchedEffect(viewModel.effectFlow) {
-        viewModel.effectFlow.collect {
-            if (it is ChooseCustomColorViewModel.Effect.Dismiss) {
-                onDismiss(it.selectedColorCode)
+        viewModel.effectFlow.collect { effect ->
+            if (effect is ChooseCustomColorViewModel.Effect.Dismiss) {
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("choose_color_result", effect.result)
+                navController.popBackStack()
             }
         }
     }

@@ -53,12 +53,9 @@ import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 // TODO: P2 - Optimize the Composable functions
 // TODO: P2 - Add support of paragraph translation pagination
 
-// TODO:
-private lateinit var vibrationManager: VibrationManager
-
 @Composable
-fun ReadBookUI(bookId: Long) {
-    val viewModel: ReadBookViewModel = hiltViewModel() // TODO: BookId
+fun ReadBookUI() {
+    val viewModel: ReadBookViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
@@ -75,7 +72,7 @@ fun ReadBookUI(bookId: Long) {
 private suspend fun takeEffect(effect: ReadBookViewModel.Effect, snackbarHostState: SnackbarHostState) {
     when (effect) {
         is ReadBookViewModel.Effect.ShowSnackbar -> {
-            // snackbarHostState.showSnackbar(effect.messageId) // TODO:
+            snackbarHostState.showSnackbar(effect.message)
         }
 
         is ReadBookViewModel.Effect.Vibrate -> {
