@@ -16,19 +16,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
-fun ChangeLanguageDialogUI(onDismiss: (selectedLanguageCode: String?) -> Unit) {
+fun ChooseAppLanguageDialogUI(navController: NavHostController) {
     val viewModel: ChangeLanguageViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(ChangeLanguageViewModel.Intent.LoadLanguages)
     }
     LaunchedEffect(viewModel.effectFlow) {
-        viewModel.effectFlow.collect {
-            if (it is ChangeLanguageViewModel.Effect.Dismiss) {
-                onDismiss(it.selectedLanguageCode)
+        viewModel.effectFlow.collect { effect ->
+            if (effect is ChangeLanguageViewModel.Effect.Dismiss) {
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("choose_app_language_result", effect.selectedLanguageCode)
+                navController.popBackStack()
             }
         }
     }

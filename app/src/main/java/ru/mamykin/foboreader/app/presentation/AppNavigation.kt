@@ -13,6 +13,7 @@ import ru.mamykin.foboreader.main.MainScreenUI
 import ru.mamykin.foboreader.my_books.list.MyBooksScreen
 import ru.mamykin.foboreader.read_book.reader.ReadBookUI
 import ru.mamykin.foboreader.settings.all_settings.SettingsTabUI
+import ru.mamykin.foboreader.settings.app_language.ChooseAppLanguageDialogUI
 import ru.mamykin.foboreader.settings.common.CustomColorType
 import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogUI
 import ru.mamykin.foboreader.store.list.BooksStoreListUI
@@ -38,6 +39,8 @@ sealed class Screen(val route: String) {
     data object ChooseCustomColor : Screen("choose_color/{type}") {
         fun createRoute(type: CustomColorType) = "choose_color/$type"
     }
+
+    data object ChooseAppLanguage : Screen("change_language")
 }
 
 @Composable
@@ -70,7 +73,8 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
                         SettingsTabUI(
                             navController = navController,
                             onNightThemeSwitch = onNightThemeSwitch,
-                            onChooseColorClick = { navController.navigate(Screen.ChooseCustomColor.createRoute(it)) }
+                            onChooseColorClick = { navController.navigate(Screen.ChooseCustomColor.createRoute(it)) },
+                            onChooseAppLanguageClick = { navController.navigate(Screen.ChooseAppLanguage.route) },
                         )
                     }
                 )
@@ -119,6 +123,10 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
             )
         ) {
             ChooseCustomColorDialogUI(navController)
+        }
+
+        dialog(route = Screen.ChooseAppLanguage.route) {
+            ChooseAppLanguageDialogUI(navController)
         }
     }
 }

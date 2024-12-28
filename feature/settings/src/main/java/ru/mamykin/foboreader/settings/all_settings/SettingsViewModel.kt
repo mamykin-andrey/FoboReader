@@ -56,16 +56,7 @@ internal class SettingsViewModel @Inject constructor(
             }
 
             is Intent.ChooseColor -> {
-                val settings = getSettings.execute()
-                val curColorCode = when (intent.type) {
-                    CustomColorType.TRANSLATION -> settings.translationColor
-                    CustomColorType.BACKGROUND -> settings.backgroundColor
-                }
-                val screenTitle = when (intent.type) {
-                    CustomColorType.TRANSLATION -> "Choose translation color"
-                    CustomColorType.BACKGROUND -> "Choose background color"
-                }
-                effectChannel.send(Effect.ChooseColor(intent.type, curColorCode, screenTitle))
+                effectChannel.send(Effect.ChooseColor(intent.type))
             }
 
             is Intent.ChangeColor -> {
@@ -77,15 +68,13 @@ internal class SettingsViewModel @Inject constructor(
             }
 
             is Intent.SelectAppLanguage -> {
-                val prevState = (state as? State.Content) ?: return@launch
-                state = prevState.copy(isChangeLanguageDialogShown = true)
+                effectChannel.send(Effect.ChooseAppLanguage)
             }
 
-            is Intent.AppLanguageChanged -> {
+            is Intent.ChangeAppLanguage -> {
                 val selectedLanguageCode = intent.selectedLanguageCode ?: return@launch
                 setAppLanguage.execute(selectedLanguageCode)
-                val prevState = (state as? State.Content) ?: return@launch
-                state = prevState.copy(isChangeLanguageDialogShown = false)
+                // no need to update the state since the screen will be re-created
                 effectChannel.send(Effect.SwitchLanguage(selectedLanguageCode))
             }
 
@@ -109,26 +98,20 @@ internal class SettingsViewModel @Inject constructor(
         ) : Intent()
 
         data object SelectAppLanguage : Intent()
-        data class AppLanguageChanged(val selectedLanguageCode: String?) : Intent()
+        data class ChangeAppLanguage(val selectedLanguageCode: String?) : Intent()
         class ChangeUseVibration(val enabled: Boolean) : Intent()
     }
 
     sealed class State {
         data object Loading : State()
 
-        data class Content(
-            val settings: AppSettings,
-            val isChangeLanguageDialogShown: Boolean = false,
-        ) : State()
+        data class Content(val settings: AppSettings) : State()
     }
 
     sealed class Effect {
         data class SwitchTheme(val isNightTheme: Boolean) : Effect()
         data class SwitchLanguage(val languageCode: String) : Effect()
-        data class ChooseColor(
-            val type: CustomColorType,
-            val curColorCode: String,
-            val screenTitle: String,
-        ) : Effect()
+        data class ChooseColor(val type: CustomColorType) : Effect()
+        data object ChooseAppLanguage : Effect()
     }
 }

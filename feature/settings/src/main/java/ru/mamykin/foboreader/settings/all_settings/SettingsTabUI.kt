@@ -41,7 +41,6 @@ import androidx.navigation.NavHostController
 import ru.mamykin.foboreader.core.extension.changeLocale
 import ru.mamykin.foboreader.core.extension.getActivity
 import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.app_language.ChangeLanguageDialogUI
 import ru.mamykin.foboreader.settings.common.CustomColorType
 import ru.mamykin.foboreader.settings.custom_color.ChooseColorResult
 import ru.mamykin.foboreader.uikit.compose.ColoredCircleCompose
@@ -53,29 +52,41 @@ fun SettingsTabUI(
     navController: NavHostController,
     onNightThemeSwitch: (Boolean) -> Unit,
     onChooseColorClick: (type: CustomColorType) -> Unit,
+    onChooseAppLanguageClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val viewModel: SettingsViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(SettingsViewModel.Intent.LoadSettings)
     }
-    navController.currentBackStackEntry
-        ?.savedStateHandle
-        ?.getLiveData<ChooseColorResult>("choose_color_result")
-        ?.observeAsState()
-        ?.value
-        ?.let {
-            LaunchedEffect(it) {
-                viewModel.sendIntent(SettingsViewModel.Intent.ChangeColor(it.type, it.colorCode))
-            }
-        }
-
+    navController.HandleResultState<ChooseColorResult>("choose_color_result") {
+        viewModel.sendIntent(SettingsViewModel.Intent.ChangeColor(it.type, it.colorCode))
+    }
+    navController.HandleResultState<String>("choose_app_language_result") {
+        viewModel.sendIntent(SettingsViewModel.Intent.ChangeAppLanguage(it))
+    }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
-            takeEffect(it, context.getActivity(), onNightThemeSwitch, onChooseColorClick)
+            takeEffect(
+                effect = it,
+                activity = context.getActivity(),
+                onNightThemeSwitch = onNightThemeSwitch,
+                onChooseColorClick = onChooseColorClick,
+                onChooseAppLanguageClick = onChooseAppLanguageClick,
+            )
         }
     }
     SettingsScreen(viewModel.state, viewModel::sendIntent)
+}
+
+@Composable
+private fun <R> NavHostController.HandleResultState(resultKey: String, onHandle: (result: R) -> Unit) {
+    this.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<R>(resultKey)
+        ?.observeAsState()
+        ?.value
+        ?.let { LaunchedEffect(it) { onHandle(it) } }
 }
 
 private fun takeEffect(
@@ -83,6 +94,7 @@ private fun takeEffect(
     activity: Activity,
     onNightThemeSwitch: (Boolean) -> Unit,
     onChooseColorClick: (type: CustomColorType) -> Unit,
+    onChooseAppLanguageClick: () -> Unit,
 ) {
     when (effect) {
         is SettingsViewModel.Effect.SwitchTheme -> {
@@ -95,6 +107,10 @@ private fun takeEffect(
 
         is SettingsViewModel.Effect.ChooseColor -> {
             onChooseColorClick(effect.type)
+        }
+
+        is SettingsViewModel.Effect.ChooseAppLanguage -> {
+            onChooseAppLanguageClick()
         }
     }
 }
@@ -148,11 +164,6 @@ private fun ContentComposable(
         TextSizeComposable(state, onIntent)
         AppLanguageComposable(state, onIntent)
         UseVibrationComposable(state, onIntent)
-        if (state.isChangeLanguageDialogShown) {
-            ChangeLanguageDialogUI {
-                onIntent(SettingsViewModel.Intent.AppLanguageChanged(it))
-            }
-        }
     }
 }
 
