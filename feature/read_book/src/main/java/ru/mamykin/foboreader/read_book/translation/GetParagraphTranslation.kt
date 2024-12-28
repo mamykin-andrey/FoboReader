@@ -1,12 +1,11 @@
 package ru.mamykin.foboreader.read_book.translation
 
-import ru.mamykin.foboreader.read_book.reader.BookContentRepository
+import ru.mamykin.foboreader.read_book.reader.Book
 import javax.inject.Inject
 
-internal class GetParagraphTranslation @Inject constructor(
-    private val repository: BookContentRepository
-) {
-    fun execute(paragraph: String): String? {
-        return repository.getParagraphTranslation(paragraph.trim())
+internal class GetParagraphTranslation @Inject constructor() {
+
+    fun execute(book: Book, paragraph: String): String {
+        return requireNotNull(book.content.getTranslation(paragraph))
     }
 }

@@ -8,21 +8,27 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import javax.inject.Inject
 
 // TODO: use real text size
-internal class GetBookText @Inject constructor(
+internal class GetBookUseCase @Inject constructor(
     private val bookContentRepository: BookContentRepository,
+    private val bookInfoRepository: BookInfoRepository
 ) {
     suspend fun execute(
-        filePath: String,
+        bookId: Long,
         measurer: TextMeasurer,
         screenSize: Pair<Int, Int>
-    ): List<String> = withContext(
-        Dispatchers.Default
-    ) {
-        val fullText = bookContentRepository.getBookContent(filePath).text
-        return@withContext splitTextToPages(fullText, measurer, screenSize)
+    ): Book = withContext(Dispatchers.Default) {
+        val info = bookInfoRepository.getBookInfo(bookId)
+        val content = bookContentRepository.getBookContent(info.filePath)
+        val pages = splitTextToPages(content.text, measurer, screenSize)
+        return@withContext Book(
+            info = info,
+            content = content,
+            pages = pages,
+        )
     }
 
     private fun splitTextToPages(

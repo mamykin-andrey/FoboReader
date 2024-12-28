@@ -19,16 +19,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class ReadBookViewModel @Inject constructor(
-    private val getBookText: GetBookText,
     private val getParagraphTranslation: GetParagraphTranslation,
     private val getWordTranslation: GetWordTranslation,
-    private val getBookInfo: GetBookInfo,
     private val appSettingsRepository: AppSettingsRepository,
-    private val getVibrationEnabled: GetVibrationEnabled,
+    private val getBookUseCase: GetBookUseCase,
+    getVibrationEnabled: GetVibrationEnabled,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val bookId: Long = savedStateHandle.get<Long>("bookId")!!
+    private var book: Book? = null
 
     var state: State by LoggingStateDelegate(State.Loading)
         private set
@@ -41,37 +41,31 @@ internal class ReadBookViewModel @Inject constructor(
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadBook -> {
-                val info = getBookInfo.execute(bookId)
-                val pages = getBookText.execute(info.filePath, intent.measurer, intent.screenSize)
+                this@ReadBookViewModel.book = getBookUseCase.execute(bookId, intent.measurer, intent.screenSize)
+                val book = requireNotNull(this@ReadBookViewModel.book)
                 state = State.Content(
-                    pages = pages,
-                    title = info.title,
-                    currentPage = info.currentPage,
+                    pages = book.pages,
+                    title = book.info.title,
+                    currentPage = book.info.currentPage,
                     textSize = appSettingsRepository.getReadTextSize().toFloat(),
                     readPercent = 0f,
-                    totalPages = pages.size,
+                    totalPages = book.pages.size,
                 )
             }
 
             is Intent.TranslateParagraph -> {
-                getParagraphTranslation.execute(intent.paragraph)
-                    ?.let {
-                        val prevState = (state as? State.Content) ?: return@launch
-                        state = prevState.copy(
-                            paragraphTranslation = TextTranslation(
-                                intent.paragraph,
-                                listOf(it)
-                            )
-                        )
-                        vibrateIfEnabled()
-                    } ?: run {
-                    effectChannel.send(
-                        Effect.ShowSnackbar(
-                            SnackbarData(StringOrResource.Resource(R.string.read_book_translation_download_error))
-                        )
+                val translation = getParagraphTranslation.execute(
+                    requireNotNull(this@ReadBookViewModel.book),
+                    intent.paragraph
+                )
+                val prevState = (state as? State.Content) ?: return@launch
+                state = prevState.copy(
+                    paragraphTranslation = TextTranslation(
+                        sourceText = intent.paragraph,
+                        textTranslations = listOf(translation)
                     )
-                    vibrateIfEnabled()
-                }
+                )
+                vibrateIfEnabled()
             }
 
             is Intent.TranslateWord -> {
