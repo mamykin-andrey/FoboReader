@@ -8,6 +8,7 @@ import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.presentation.SnackbarData
 import ru.mamykin.foboreader.my_books.sort.SortAndFilterBooks
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import javax.inject.Inject
@@ -33,7 +34,7 @@ internal class MyBooksViewModel @Inject constructor(
                     onSuccess = {
                         state = State.Content(allBooks = it, books = it)
                     }, onFailure = {
-                        effectChannel.send(Effect.ShowSnackbar(errorMessageMapper.getMessage(it)))
+                        effectChannel.send(Effect.ShowSnackbar(SnackbarData(errorMessageMapper.getMessage(it))))
                     }
                 )
             }
@@ -44,7 +45,7 @@ internal class MyBooksViewModel @Inject constructor(
                     val updatedBooks = prevState.books.filterNot { it.id == intent.id }
                     state = prevState.copy(books = updatedBooks)
                 }, onFailure = {
-                    effectChannel.send(Effect.ShowSnackbar(errorMessageMapper.getMessage(it)))
+                    effectChannel.send(Effect.ShowSnackbar(SnackbarData(errorMessageMapper.getMessage(it))))
                 })
             }
 
@@ -114,7 +115,10 @@ internal class MyBooksViewModel @Inject constructor(
     }
 
     sealed class Effect {
-        data class ShowSnackbar(val message: String) : Effect()
+        data class ShowSnackbar(
+            val data: SnackbarData,
+        ) : Effect()
+
         data class NavigateToBookDetails(val bookId: Long) : Effect()
         data class NavigateToReadBook(val bookId: Long) : Effect()
     }

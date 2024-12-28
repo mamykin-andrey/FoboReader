@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.store.list
 
+import android.content.Context
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +24,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -39,21 +39,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import ru.mamykin.foboreader.core.extension.showSnackbarWithData
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
-fun BooksStoreListUI(categoryId: String, onBackClick: () -> Unit, onShowMyBooksClick: () -> Unit) {
-    val viewModel: BooksStoreListViewModel = hiltViewModel() // TODO: categoryId
+fun BooksStoreListUI(onBackClick: () -> Unit, onShowMyBooksClick: () -> Unit) {
+    val viewModel: BooksStoreListViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(BooksStoreListViewModel.Intent.LoadBooks)
     }
+    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
-            takeEffect(it, snackbarHostState, onShowMyBooksClick)
+            takeEffect(
+                effect = it,
+                snackbarHostState = snackbarHostState,
+                onShowMyBooksClick = onShowMyBooksClick,
+                context = context,
+            )
         }
     }
     BooksListScreen(
@@ -67,20 +74,17 @@ fun BooksStoreListUI(categoryId: String, onBackClick: () -> Unit, onShowMyBooksC
 private suspend fun takeEffect(
     effect: BooksStoreListViewModel.Effect,
     snackbarHostState: SnackbarHostState,
-    onShowMyBooksClick: () -> Unit
+    onShowMyBooksClick: () -> Unit,
+    context: Context
 ) {
     when (effect) {
         is BooksStoreListViewModel.Effect.ShowSnackbar -> {
-            val (message, action) = effect.data
-            val result = snackbarHostState.showSnackbar(
-                message = message,
-                actionLabel = action?.first,
+            snackbarHostState.showSnackbarWithData(
+                data = effect.data,
+                context = context,
                 duration = SnackbarDuration.Short,
-                withDismissAction = true
+                withDismissAction = true,
             )
-            if (result == SnackbarResult.ActionPerformed) {
-                requireNotNull(action?.second).invoke()
-            }
         }
 
         is BooksStoreListViewModel.Effect.NavigateToMyBooks -> {
@@ -208,9 +212,10 @@ private fun ErrorComposable(
     state: BooksStoreListViewModel.State.Error,
     onIntent: (BooksStoreListViewModel.Intent) -> Unit
 ) {
+    val context = LocalContext.current
     AndroidView(factory = {
         ErrorStubWidget(it).apply {
-            setMessage(state.message)
+            setMessage(state.message.toString(context))
             visibility = View.VISIBLE
             setRetryClickListener {
                 onIntent(BooksStoreListViewModel.Intent.LoadBooks)

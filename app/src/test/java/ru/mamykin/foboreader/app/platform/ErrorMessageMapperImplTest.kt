@@ -1,13 +1,8 @@
 package ru.mamykin.foboreader.app.platform
 
-import io.mockk.every
-import io.mockk.mockk
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
-import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
-import ru.mamykin.foboreader.core.platform.ResourceManager
 import java.io.IOException
 
 internal class ErrorMessageMapperImplTest {
@@ -15,14 +10,7 @@ internal class ErrorMessageMapperImplTest {
     private val networkErrorMessage = "network_error"
     private val commonErrorMessage = "common_error"
     private val throwableMessage = "throwable_error"
-    private val resourceManager: ResourceManager = mockk()
-    private val errorMessageMapper: ErrorMessageMapper = ErrorMessageMapperImpl(resourceManager)
-
-    @Before
-    fun setUp() {
-        every { resourceManager.getString(R.string.network_error_message) } returns networkErrorMessage
-        every { resourceManager.getString(R.string.common_error_message) } returns commonErrorMessage
-    }
+    private val errorMessageMapper: ErrorMessageMapper = ErrorMessageMapperImpl()
 
     @Test
     fun `getMessage returns network error message when exception is IOException`() {

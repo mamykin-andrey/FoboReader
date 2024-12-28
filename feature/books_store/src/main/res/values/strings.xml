@@ -2,8 +2,8 @@
 <resources>
     <string name="books_store_title">Магазин</string>
     <string name="books_store_menu_search">Поиск</string>
-    <string name="books_store_download_progress">Файл загружается</string>
-    <string name="books_store_download_completed">Загрузка завершена</string>
-    <string name="books_store_download_failed">Не удалось загрузить файл</string>
+    <string name="books_store_download_progress_fmt">Файл загружается: %1$s</string>
+    <string name="books_store_download_completed_fmt">Загрузка завершена: %1$s</string>
+    <string name="books_store_download_failed_fmt">Ошибка загрузки файла: %1$s</string>
     <string name="books_store_category_count">Книг: %1$d</string>
 </resources>

@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.read_book.reader
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -29,8 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -45,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.mamykin.foboreader.core.extension.showSnackbarWithData
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
@@ -57,9 +63,16 @@ import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 fun ReadBookUI() {
     val viewModel: ReadBookViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    val haptic = LocalHapticFeedback.current
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
-            takeEffect(it, snackbarHostState)
+            takeEffect(
+                effect = it,
+                snackbarHostState = snackbarHostState,
+                context = context,
+                haptic = haptic,
+            )
         }
     }
     ReadBookScreen(
@@ -69,14 +82,19 @@ fun ReadBookUI() {
     )
 }
 
-private suspend fun takeEffect(effect: ReadBookViewModel.Effect, snackbarHostState: SnackbarHostState) {
+private suspend fun takeEffect(
+    effect: ReadBookViewModel.Effect,
+    snackbarHostState: SnackbarHostState,
+    context: Context,
+    haptic: HapticFeedback,
+) {
     when (effect) {
         is ReadBookViewModel.Effect.ShowSnackbar -> {
-            snackbarHostState.showSnackbar(effect.message)
+            snackbarHostState.showSnackbarWithData(effect.data, context)
         }
 
         is ReadBookViewModel.Effect.Vibrate -> {
-            // vibrationManager.vibrate(requireView()) // TODO:
+            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         }
     }
 }

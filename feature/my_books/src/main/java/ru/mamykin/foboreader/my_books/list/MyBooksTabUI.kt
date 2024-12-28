@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.my_books.list
 
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -50,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.core.extension.showSnackbarWithData
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
@@ -63,9 +66,16 @@ fun MyBooksScreen(onBookDetailsClick: (Long) -> Unit, onReadBookClick: (Long) ->
         viewModel.sendIntent(MyBooksViewModel.Intent.LoadBooks)
     }
     val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
-            takeEffect(it, snackbarHostState, onBookDetailsClick, onReadBookClick)
+            takeEffect(
+                effect = it,
+                snackbarHostState = snackbarHostState,
+                onBookDetailsClick = onBookDetailsClick,
+                onReadBookClick = onReadBookClick,
+                context = context,
+            )
         }
     }
     MyBooksScreenUI(viewModel.state, viewModel::sendIntent, snackbarHostState)
@@ -75,11 +85,12 @@ private suspend fun takeEffect(
     effect: MyBooksViewModel.Effect,
     snackbarHostState: SnackbarHostState,
     onBookDetailsClick: (Long) -> Unit,
-    onReadBookClick: (Long) -> Unit
+    onReadBookClick: (Long) -> Unit,
+    context: Context,
 ) {
     when (effect) {
         is MyBooksViewModel.Effect.ShowSnackbar -> {
-            snackbarHostState.showSnackbar(effect.message)
+            snackbarHostState.showSnackbarWithData(effect.data, context)
         }
 
         is MyBooksViewModel.Effect.NavigateToBookDetails -> {

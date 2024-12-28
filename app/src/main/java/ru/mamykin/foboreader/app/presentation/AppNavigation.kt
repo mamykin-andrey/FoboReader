@@ -87,7 +87,6 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
         ) { backStackEntry ->
             val categoryId = backStackEntry.arguments!!.getString("categoryId")!!
             BooksStoreListUI(
-                categoryId = categoryId,
                 onBackClick = { navController.popBackStack() },
                 onShowMyBooksClick = {
                     navController.navigate(Screen.Main.createRoute(BottomNavigationTabRoute.MY_BOOKS)) {

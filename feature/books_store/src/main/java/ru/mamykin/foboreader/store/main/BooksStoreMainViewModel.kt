@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.presentation.StringOrResource
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,7 +56,7 @@ internal class BooksStoreMainViewModel @Inject constructor(
         ) : State()
 
         data class Error(
-            val errorMessage: String
+            val message: StringOrResource
         ) : State()
     }
 }

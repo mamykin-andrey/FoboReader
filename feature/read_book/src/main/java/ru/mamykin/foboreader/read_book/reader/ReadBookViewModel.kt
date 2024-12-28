@@ -7,9 +7,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
-import ru.mamykin.foboreader.core.platform.ResourceManager
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.presentation.SnackbarData
+import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.GetParagraphTranslation
 import ru.mamykin.foboreader.read_book.translation.GetWordTranslation
@@ -23,7 +24,6 @@ internal class ReadBookViewModel @Inject constructor(
     private val getWordTranslation: GetWordTranslation,
     private val getBookInfo: GetBookInfo,
     private val appSettingsRepository: AppSettingsRepository,
-    private val resourceManager: ResourceManager,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -63,7 +63,9 @@ internal class ReadBookViewModel @Inject constructor(
                         effectChannel.send(Effect.Vibrate)
                     } ?: run {
                     effectChannel.send(
-                        Effect.ShowSnackbar(resourceManager.getString(R.string.read_book_translation_download_error))
+                        Effect.ShowSnackbar(
+                            SnackbarData(StringOrResource.Resource(R.string.read_book_translation_download_error))
+                        )
                     )
                     effectChannel.send(Effect.Vibrate)
                 }
@@ -81,7 +83,7 @@ internal class ReadBookViewModel @Inject constructor(
                     {
                         effectChannel.send(
                             Effect.ShowSnackbar(
-                                resourceManager.getString(R.string.read_book_translation_download_error)
+                                SnackbarData(StringOrResource.Resource(R.string.read_book_translation_download_error))
                             )
                         )
                         effectChannel.send(Effect.Vibrate)
@@ -115,7 +117,7 @@ internal class ReadBookViewModel @Inject constructor(
     }
 
     sealed class Effect {
-        class ShowSnackbar(val message: String) : Effect()
+        class ShowSnackbar(val data: SnackbarData) : Effect()
         data object Vibrate : Effect()
     }
 

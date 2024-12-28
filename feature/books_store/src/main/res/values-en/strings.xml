@@ -2,8 +2,8 @@
 <resources>
     <string name="books_store_title">Store</string>
     <string name="books_store_menu_search">Search</string>
-    <string name="books_store_download_progress">File is loading</string>
-    <string name="books_store_download_completed">Loading completed</string>
-    <string name="books_store_download_failed">Unable to load file</string>
+    <string name="books_store_download_progress_fmt">The file is downloading: %1$s</string>
+    <string name="books_store_download_completed_fmt">The file has been downloaded: %1$s</string>
+    <string name="books_store_download_failed_fmt">Unable to load file: %1$s</string>
     <string name="books_store_category_count">Books count: %1$d</string>
 </resources>
