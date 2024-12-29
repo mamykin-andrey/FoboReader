@@ -1,11 +1,13 @@
 package ru.mamykin.foboreader.read_book.translation
 
+import androidx.annotation.Keep
 import kotlinx.coroutines.Deferred
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
 
+@Keep
 internal interface GoogleTranslateService {
 
     companion object {

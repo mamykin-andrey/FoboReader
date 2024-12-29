@@ -22,15 +22,33 @@ android {
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("../keystore")
+            storePassword = project.properties["keystorePassword"] as String
+            keyAlias = project.properties["keyAlias"] as String
+            keyPassword = project.properties["keyPassword"] as String
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
 
         getByName("debug") {
             isMinifyEnabled = false
             isDebuggable = true
+        }
+
+        create("profile") {
+            initWith(getByName("debug"))
+            isProfileable = true
+            isDebuggable = true
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
 
         buildTypes.forEach {

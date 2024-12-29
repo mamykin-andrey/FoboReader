@@ -17,6 +17,22 @@ android {
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
+
+        getByName("debug") {
+            isMinifyEnabled = false
+        }
+
+        create("profile") {
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
+    }
+
     buildFeatures.compose = true
 
     kotlinOptions {
@@ -29,11 +45,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+    // packaging {
+    //     resources {
+    //         excludes += "/META-INF/{AL2.0,LGPL2.1}"
+    //     }
+    // }
     lint {
         abortOnError = false
     }

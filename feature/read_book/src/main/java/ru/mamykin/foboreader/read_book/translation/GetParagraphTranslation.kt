@@ -6,6 +6,8 @@ import javax.inject.Inject
 internal class GetParagraphTranslation @Inject constructor() {
 
     fun execute(book: Book, paragraph: String): String {
-        return requireNotNull(book.content.getTranslation(paragraph))
+        return ""
+        // TODO:
+        // return requireNotNull(book.content.getTranslation(paragraph))
     }
 }

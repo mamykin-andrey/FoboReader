@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,6 +37,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -57,8 +60,6 @@ import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 
 // TODO: P1 - Fix handing clicks by the text view when the popup is shown
 // TODO: P2 - Optimize the Composable functions
-// TODO: P2 - Add support of paragraph translation pagination
-
 @Composable
 fun ReadBookUI() {
     val viewModel: ReadBookViewModel = hiltViewModel()
@@ -111,8 +112,11 @@ private fun ReadBookScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    // TODO: Move to the feature state
-                    Text(text = (state as? ReadBookViewModel.State.Content)?.title ?: "Loading")
+                    val title = when (state) {
+                        is ReadBookViewModel.State.Loading -> stringResource(R.string.rb_book_loading)
+                        is ReadBookViewModel.State.Content -> state.title
+                    }
+                    Text(text = title)
                 }
             )
         }, content = { innerPadding ->
@@ -144,22 +148,28 @@ private fun LoadingComposable(onIntent: (ReadBookViewModel.Intent) -> Unit) {
 @Composable
 private fun StubContentComposable(onIntent: (ReadBookViewModel.Intent) -> Unit) {
     val textMeasurer = rememberTextMeasurer()
-    Column {
+    Column(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
                 .alpha(0f)
                 .weight(1f)
                 .padding(8.dp)
-                .onGloballyPositioned {
-                    onIntent(
-                        ReadBookViewModel.Intent.LoadBook(
-                            textMeasurer,
-                            it.size.height to it.size.width
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .onGloballyPositioned {
+                        onIntent(
+                            ReadBookViewModel.Intent.LoadBook(
+                                textMeasurer,
+                                it.size.height to it.size.width
+                            )
                         )
-                    )
-                }
-        )
+                    },
+                style = TextStyle(color = Color.White, fontSize = 16.sp),
+                text = AnnotatedString("")
+            )
+        }
         ReadStatusComposable(
             currentPage = 0,
             totalPages = 0,
@@ -172,16 +182,20 @@ private fun StubContentComposable(onIntent: (ReadBookViewModel.Intent) -> Unit) 
 @Composable
 private fun ContentComposable(state: ReadBookViewModel.State.Content, onIntent: (ReadBookViewModel.Intent) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.weight(1f)) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(8.dp)
+        ) {
             state.paragraphTranslation?.let {
                 ParagraphTranslationComposable(it, onIntent)
-            } ?: BookTextComposable(state, Modifier, onIntent)
+            } ?: BookTextComposable(state, Modifier.fillMaxSize(), onIntent)
         }
         ReadStatusComposable(
             currentPage = state.currentPage,
             totalPages = state.totalPages,
             readPercent = state.readPercent,
-            modifier = Modifier
+            modifier = Modifier,
         )
     }
 }
@@ -238,7 +252,7 @@ private fun ParagraphTranslationComposable(
                     }
                 )
             },
-        style = TextStyle(color = Color.White, fontSize = TextStyle(fontSize = 18.sp).fontSize),
+        style = TextStyle(color = Color.White, fontSize = 21.sp),
         text = AnnotatedString.Builder().apply {
             append(paragraphTranslation.sourceText)
             append(
@@ -263,12 +277,9 @@ private fun PaginatedTextComposable(
         val pageContent = state.pages[currentPageIndex]
         CombinedClickableText(
             fullText = pageContent,
-            modifier = modifier.then(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ),
+            modifier = modifier,
             onIntent,
+            state,
         )
     }
 }
@@ -332,7 +343,12 @@ private fun PopupTitledText(title: String, text: String) {
 }
 
 @Composable
-private fun CombinedClickableText(fullText: String, modifier: Modifier, onIntent: (ReadBookViewModel.Intent) -> Unit) {
+private fun CombinedClickableText(
+    fullText: String,
+    modifier: Modifier,
+    onIntent: (ReadBookViewModel.Intent) -> Unit,
+    state: ReadBookViewModel.State.Content
+) {
     val wordsPositions: List<Pair<Int, Int>> = TextUtils.getWordsPositions(fullText)
     val annotatedString = buildAnnotatedString {
         append(fullText)
@@ -367,9 +383,15 @@ private fun CombinedClickableText(fullText: String, modifier: Modifier, onIntent
             }
         )
     }
+    val (heightDp, widthDp) = with(LocalDensity.current) {
+        state.textHeight.toDp() to state.textWidth.toDp()
+    }
     Text(
-        modifier = modifier.then(gesture),
-        style = TextStyle(color = Color.White, fontSize = TextStyle(fontSize = 18.sp).fontSize),
+        modifier = modifier
+            .then(gesture)
+            .height(heightDp)
+            .width(widthDp),
+        style = TextStyle(fontSize = state.fontSize.sp),
         text = annotatedString,
         onTextLayout = {
             layoutResult.value = it
@@ -385,7 +407,9 @@ fun ReadBookScreenPreview() {
             state = ReadBookViewModel.State.Content(
                 "Title",
                 listOf("Page1", "Page2"),
-                18f,
+                300,
+                300,
+                18,
                 1,
                 2,
                 50f,

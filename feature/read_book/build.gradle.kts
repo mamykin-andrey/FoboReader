@@ -16,6 +16,22 @@ android {
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
+
+        getByName("debug") {
+            isMinifyEnabled = false
+        }
+
+        create("profile") {
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
+    }
+
     buildFeatures.compose = true
     kotlinOptions.jvmTarget = "17"
     composeOptions.kotlinCompilerExtensionVersion = "1.5.15"
@@ -34,11 +50,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+    // packaging {
+    //     resources {
+    //         excludes += "/META-INF/{AL2.0,LGPL2.1}"
+    //     }
+    // }
 }
 
 dependencies {
@@ -68,6 +84,7 @@ dependencies {
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)
+    testImplementation(Dependencies.coroutinesTest)
 
     androidTestImplementation(Dependencies.espressoCore)
 }

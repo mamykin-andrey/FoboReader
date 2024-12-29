@@ -11,11 +11,11 @@ internal object LightColors {
     val Background = Color(0xFFE2E2E2)
     val Surface = Color.White
     val Error = Color(0xFFB00020)
-    val OnPrimary = Color.White
+    val OnPrimary = Color.Black
     val OnSecondary = Color.Black
     val OnBackground = Color.Black
     val OnSurface = Color.Black
-    val OnError = Color.White
+    val OnError = Color.Black
 }
 
 internal object DarkColors {
@@ -27,9 +27,9 @@ internal object DarkColors {
     val Background = Color(0xFF121212)
     val Surface = Color(0xFF121212)
     val Error = Color(0xFFB00020)
-    val OnPrimary = Color.Black
-    val OnSecondary = Color.Black
+    val OnPrimary = Color.White
+    val OnSecondary = Color.White
     val OnBackground = Color.White
     val OnSurface = Color.White
-    val OnError = Color.Black
+    val OnError = Color.White
 }

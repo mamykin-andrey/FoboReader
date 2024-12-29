@@ -5,6 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
@@ -37,20 +39,33 @@ internal class ReadBookViewModel @Inject constructor(
     val effectFlow = effectChannel.receiveAsFlow()
 
     private val isVibrationEnabled = getVibrationEnabled.execute()
+    private var loadBookJob: Job? = null
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadBook -> {
-                this@ReadBookViewModel.book = getBookUseCase.execute(bookId, intent.measurer, intent.screenSize)
-                val book = requireNotNull(this@ReadBookViewModel.book)
-                state = State.Content(
-                    pages = book.pages,
-                    title = book.info.title,
-                    currentPage = book.info.currentPage,
-                    textSize = appSettingsRepository.getReadTextSize().toFloat(),
-                    readPercent = 0f,
-                    totalPages = book.pages.size,
-                )
+                loadBookJob?.cancel()
+                loadBookJob = null
+                coroutineScope {
+                    loadBookJob = launch {
+                        this@ReadBookViewModel.book = getBookUseCase.execute(
+                            bookId,
+                            ComposeTextPageSplitter(intent.measurer),
+                            intent.screenSize,
+                        )
+                        val book = requireNotNull(this@ReadBookViewModel.book)
+                        state = State.Content(
+                            pages = book.pages,
+                            title = book.info.title,
+                            currentPage = book.info.currentPage,
+                            fontSize = book.fontSize,
+                            readPercent = 0f,
+                            textHeight = intent.screenSize.first,
+                            textWidth = intent.screenSize.second,
+                            totalPages = book.pages.size,
+                        )
+                    }
+                }
             }
 
             is Intent.TranslateParagraph -> {
@@ -129,7 +144,9 @@ internal class ReadBookViewModel @Inject constructor(
         data class Content(
             val title: String,
             val pages: List<String>,
-            val textSize: Float?,
+            val textHeight: Int,
+            val textWidth: Int,
+            val fontSize: Int,
             val currentPage: Int,
             val totalPages: Int,
             val readPercent: Float,

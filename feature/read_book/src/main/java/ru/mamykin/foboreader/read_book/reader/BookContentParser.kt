@@ -8,7 +8,7 @@ import kotlin.coroutines.suspendCoroutine
 
 internal class BookContentParser @Inject constructor() {
 
-    suspend fun parse(filePath: String): BookContent = suspendCoroutine { cont ->
+    suspend fun parse(filePath: String): TranslatedText = suspendCoroutine { cont ->
         runCatching {
             val parser = SAXParserFactory.newInstance().newSAXParser()
             val parseHandler = BookContentParserHandler {

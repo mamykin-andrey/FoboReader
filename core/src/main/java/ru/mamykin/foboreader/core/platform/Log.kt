@@ -18,6 +18,12 @@ object Log {
         }
     }
 
+    fun warning(message: String, tag: String? = DEFAULT_TAG) {
+        if (isDebug) {
+            Log.w(tag, message)
+        }
+    }
+
     fun debug(message: String, tag: String? = DEFAULT_TAG) {
         if (isDebug) {
             Log.d(tag, message)
