@@ -32,12 +32,9 @@ class BookInfo(
         }
     }
 
-    fun getReadPercent(): Int {
-        return totalPages?.takeIf { it > 0 }
-            ?.toDouble()
-            ?.let { currentPage / it * 100 }
-            ?.toInt()
-            ?: 0
+    fun getReadPercent(): Float {
+        if (totalPages == null) return 0f
+        return ((currentPage + 1f) / totalPages) * 100f
     }
 
     fun containsText(text: String): Boolean {

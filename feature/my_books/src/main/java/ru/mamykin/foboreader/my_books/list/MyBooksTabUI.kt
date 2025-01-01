@@ -284,7 +284,7 @@ private fun BookRowComposable(bookInfo: BookInfo, onIntent: (MyBooksViewModel.In
                 BookFormatComposable(bookInfo)
                 BookAuthorComposable(bookInfo)
                 LinearProgressIndicator(
-                    progress = bookInfo.getReadPercent().toFloat() / 100,
+                    progress = bookInfo.getReadPercent() / 100,
                     modifier = Modifier
                         .padding(top = 4.dp)
                         .padding(horizontal = 12.dp),
@@ -380,7 +380,7 @@ private fun BookAuthorComposable(bookInfo: BookInfo) {
 private fun BookReadStatusComposable(bookInfo: BookInfo) {
     Text(
         text = stringResource(
-            id = R.string.book_pages_info, bookInfo.currentPage, bookInfo.totalPages ?: 0
+            id = R.string.book_pages_info, bookInfo.currentPage + 1, bookInfo.totalPages ?: 0
         ),
         style = TextStyles.Body2,
         color = MaterialTheme.colorScheme.onBackground,

@@ -26,17 +26,13 @@ internal class MyBooksViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
-    private var isDataLoaded = false
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadBooks -> {
-                if (isDataLoaded) return@launch
                 loadMyBooks.execute().fold(
-                    onSuccess = {
-                        state = State.Content(allBooks = it, books = it)
-                        isDataLoaded = true
-                    }, onFailure = {
+                    onSuccess = { state = State.Content(allBooks = it, books = it) },
+                    onFailure = {
                         effectChannel.send(Effect.ShowSnackbar(SnackbarData(errorMessageMapper.getMessage(it))))
                     }
                 )
