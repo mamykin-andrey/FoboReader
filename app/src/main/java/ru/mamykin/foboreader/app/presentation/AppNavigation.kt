@@ -1,5 +1,7 @@
 package ru.mamykin.foboreader.app.presentation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -48,7 +50,13 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screen.Main.createRoute(BottomNavigationTabRoute.MY_BOOKS)
+        startDestination = Screen.Main.createRoute(BottomNavigationTabRoute.MY_BOOKS),
+        enterTransition = {
+            EnterTransition.None
+        },
+        exitTransition = {
+            ExitTransition.None
+        }
     ) {
         composable(
             route = Screen.Main.route,
@@ -84,8 +92,7 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
         composable(
             route = Screen.BooksStoreList.route,
             arguments = listOf(navArgument("categoryId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val categoryId = backStackEntry.arguments!!.getString("categoryId")!!
+        ) {
             BooksStoreListUI(
                 onBackClick = { navController.popBackStack() },
                 onShowMyBooksClick = {
@@ -100,10 +107,8 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
         composable(
             route = Screen.BookDetails.route,
             arguments = listOf(navArgument("bookId") { type = NavType.LongType })
-        ) { backStackEntry ->
-            val bookId = backStackEntry.arguments!!.getLong("bookId")
+        ) {
             BookDetailsUI(
-                bookId = bookId,
                 onBackPress = { navController.popBackStack() },
             ) { navController.navigate(Screen.ReadBook.createRoute(it)) }
         }

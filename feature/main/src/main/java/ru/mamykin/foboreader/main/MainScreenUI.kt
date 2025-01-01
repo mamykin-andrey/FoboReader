@@ -1,5 +1,7 @@
 package ru.mamykin.foboreader.main
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -82,6 +84,12 @@ private fun MainScreenComposable(
             navController = navController,
             startDestination = selectedTabRoute,
             modifier = Modifier.padding(innerPadding),
+            enterTransition = {
+                EnterTransition.None
+            },
+            exitTransition = {
+                ExitTransition.None
+            }
         ) {
             navigationTabs.forEach { (route, composable) ->
                 composable(route) {
