@@ -16,8 +16,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -57,10 +61,8 @@ import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 
-// TODO: P1 - Fix handing clicks by the text view when the popup is shown
-// TODO: P2 - Optimize the Composable functions
 @Composable
-fun ReadBookUI() {
+fun ReadBookUI(onBackPress: () -> Unit) {
     val viewModel: ReadBookViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
@@ -79,6 +81,7 @@ fun ReadBookUI() {
         viewModel.state,
         viewModel::sendIntent,
         snackbarHostState,
+        onBackPress,
     )
 }
 
@@ -105,6 +108,7 @@ private fun ReadBookScreen(
     state: ReadBookViewModel.State,
     onIntent: (ReadBookViewModel.Intent) -> Unit,
     snackbarHostState: SnackbarHostState,
+    onBackPress: () -> Unit,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -116,6 +120,14 @@ private fun ReadBookScreen(
                         is ReadBookViewModel.State.Content -> state.title
                     }
                     Text(text = title)
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onBackPress() }) {
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = "Close"
+                        )
+                    }
                 }
             )
         }, content = { innerPadding ->
@@ -407,6 +419,7 @@ fun ReadBookScreenPreview() {
             ),
             onIntent = {},
             snackbarHostState = SnackbarHostState(),
+            onBackPress = {},
         )
     }
 }

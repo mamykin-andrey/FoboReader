@@ -117,7 +117,7 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
             route = Screen.ReadBook.route,
             arguments = listOf(navArgument("bookId") { type = NavType.LongType })
         ) {
-            ReadBookUI()
+            ReadBookUI(onBackPress = {navController.popBackStack()})
         }
 
         dialog(
