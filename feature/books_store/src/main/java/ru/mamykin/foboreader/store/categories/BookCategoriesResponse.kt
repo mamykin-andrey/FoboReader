@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.main
+package ru.mamykin.foboreader.store.categories
 
 import androidx.annotation.Keep
 

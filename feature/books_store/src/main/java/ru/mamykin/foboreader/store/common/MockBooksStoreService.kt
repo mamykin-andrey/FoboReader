@@ -5,8 +5,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
+import ru.mamykin.foboreader.core.platform.Log
+import ru.mamykin.foboreader.store.categories.BookCategoriesResponse
 import ru.mamykin.foboreader.store.list.BookListResponse
-import ru.mamykin.foboreader.store.main.BookCategoriesResponse
 import java.io.IOException
 import javax.inject.Inject
 
@@ -25,17 +26,11 @@ internal class MockBooksStoreService @Inject constructor(
                 id = "1",
                 name = "Фантастика",
                 description = null,
-                booksCount = 2
+                booksCount = 1,
             ),
             BookCategoriesResponse.BookCategoryResponse(
                 id = "2",
                 name = "Сказки",
-                description = null,
-                booksCount = 1
-            ),
-            BookCategoriesResponse.BookCategoryResponse(
-                id = "3",
-                name = "Приключения",
                 description = null,
                 booksCount = 1
             ),
@@ -44,70 +39,44 @@ internal class MockBooksStoreService @Inject constructor(
         private val enCategories = listOf(
             BookCategoriesResponse.BookCategoryResponse(
                 id = "1",
-                name = "Fantastic",
+                name = "Thriller",
                 description = null,
-                booksCount = 2
+                booksCount = 1,
             ),
             BookCategoriesResponse.BookCategoryResponse(
                 id = "2",
-                name = "Fairytale",
+                name = "Fairy tales",
                 description = null,
-                booksCount = 1
-            ),
-            BookCategoriesResponse.BookCategoryResponse(
-                id = "3",
-                name = "Adventure",
-                description = null,
-                booksCount = 1
+                booksCount = 1,
             ),
         )
 
-        private val ruFantasticBooks = BookListResponse(
+        private val ruThrillerBooks = BookListResponse(
             books = listOf(
                 BookListResponse.BookResponse(
-                    id = "0",
-                    genre = "Фантастика",
-                    author = "Герберт Джордж Уэллс",
-                    title = "Человек-невидимка",
-                    lang = "Английский/Русский",
-                    format = "fbwt",
-                    cover = "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",
-                    link = DEAD_MANS_ISLAND_LINK,
-                ),
-                BookListResponse.BookResponse(
                     id = "1",
-                    genre = "Фантастика",
+                    genre = "Триллеры",
                     author = "Джон Эскотт",
                     title = "Остров мертвеца",
-                    lang = "Английский",
+                    languages = listOf("Английский", "Русский"),
                     format = "fb2",
                     cover = "https://cdn1.ozone.ru/s3/multimedia-0/c650/6000372312.jpg",
-                    link = THE_YOUNG_GIANT_LINK
+                    link = DEAD_MANS_ISLAND_LINK,
                 ),
             )
         )
 
-        private val enFantasticBooks = BookListResponse(
+        private val enThrillerBooks = BookListResponse(
             books = listOf(
                 BookListResponse.BookResponse(
-                    id = "0",
-                    genre = "Fantastic",
-                    author = "Herbert George Wells",
-                    title = "The invisible man",
-                    lang = "English/Russian",
-                    format = "fbwt",
-                    cover = "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",
-                    link = DEAD_MANS_ISLAND_LINK,
-                ),
-                BookListResponse.BookResponse(
                     id = "1",
-                    genre = "Fantastic",
+                    genre = "Thriller",
                     author = "John Escot",
                     title = "Dead island",
-                    lang = "English/Russian",
+                    languages = listOf("English", "Russian"),
                     format = "fb2",
                     cover = "https://cdn1.ozone.ru/s3/multimedia-0/c650/6000372312.jpg",
-                    link = THE_YOUNG_GIANT_LINK
+                    link = DEAD_MANS_ISLAND_LINK,
                 ),
             )
         )
@@ -119,7 +88,7 @@ internal class MockBooksStoreService @Inject constructor(
                     genre = "Сказки",
                     author = "Братья Гримм",
                     title = "Юный великан",
-                    lang = "Английский/Русский",
+                    languages = listOf("Английский", "Русский"),
                     format = "fbwt",
                     cover = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg/400px-GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg",
                     link = DEAD_MANS_ISLAND_LINK,
@@ -134,40 +103,10 @@ internal class MockBooksStoreService @Inject constructor(
                     genre = "Fairytale",
                     author = "Brothers Grimm",
                     title = "The young giant",
-                    lang = "English/Russian",
+                    languages = listOf("English", "Russian"),
                     format = "fbwt",
                     cover = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg/400px-GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg",
-                    link = DEAD_MANS_ISLAND_LINK,
-                ),
-            )
-        )
-
-        private val ruAdventureBooks = BookListResponse(
-            books = listOf(
-                BookListResponse.BookResponse(
-                    id = "3",
-                    genre = "Приключения",
-                    author = "Агата Кристи",
-                    title = "Убийство в Месопотамии",
-                    lang = "Английский/Русский",
-                    format = "fbwt",
-                    cover = "https://s1.livelib.ru/boocover/1002005641/o/fc01/Agatha_Christie__Murder_in_Mesopotamia.jpeg",
-                    link = DEAD_MANS_ISLAND_LINK,
-                ),
-            )
-        )
-
-        private val enAdventureBooks = BookListResponse(
-            books = listOf(
-                BookListResponse.BookResponse(
-                    id = "3",
-                    genre = "Adventure",
-                    author = "Agatha Christie",
-                    title = "Murder in Mesopotamia",
-                    lang = "English/Russian",
-                    format = "fbwt",
-                    cover = "https://s1.livelib.ru/boocover/1002005641/o/fc01/Agatha_Christie__Murder_in_Mesopotamia.jpeg",
-                    link = DEAD_MANS_ISLAND_LINK,
+                    link = THE_YOUNG_GIANT_LINK,
                 ),
             )
         )
@@ -183,18 +122,16 @@ internal class MockBooksStoreService @Inject constructor(
         val books = when (locale) {
             RU_LOCALE -> {
                 when (categoryId) {
-                    "1" -> ruFantasticBooks
+                    "1" -> ruThrillerBooks
                     "2" -> ruFairytaleBooks
-                    "3" -> ruAdventureBooks
                     else -> throw IllegalStateException("Unknown category id: $categoryId!")
                 }
             }
 
             EN_LOCALE -> {
                 when (categoryId) {
-                    "1" -> enFantasticBooks
+                    "1" -> enThrillerBooks
                     "2" -> enFairytaleBooks
-                    "3" -> enAdventureBooks
                     else -> throw IllegalStateException("Unknown category id: $categoryId!")
                 }
             }
@@ -228,7 +165,10 @@ internal class MockBooksStoreService @Inject constructor(
         val categories = when (locale) {
             RU_LOCALE -> ruCategories
             EN_LOCALE -> enCategories
-            else -> throw IllegalStateException("Unknown locale: $locale")
+            else -> {
+                Log.warning("Unknown locale for store: $locale")
+                enCategories
+            }
         }
         return BookCategoriesResponse(categories)
     }

@@ -1,9 +1,9 @@
-package ru.mamykin.foboreader.store.main
+package ru.mamykin.foboreader.store.categories
 
 import ru.mamykin.foboreader.store.common.BooksStoreRepository
 import javax.inject.Inject
 
-internal class GetBookCategories @Inject constructor(
+internal class GetBookCategoriesUseCase @Inject constructor(
     private val repository: BooksStoreRepository,
 ) {
     suspend fun execute(): Result<List<BookCategory>> {

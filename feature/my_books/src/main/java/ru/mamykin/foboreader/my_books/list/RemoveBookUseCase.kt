@@ -4,7 +4,7 @@ import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import java.io.File
 import javax.inject.Inject
 
-class RemoveBook @Inject constructor(
+class RemoveBookUseCase @Inject constructor(
     private val repository: BookInfoRepository
 ) {
     suspend fun execute(bookId: Long): Result<Unit> {

@@ -1,6 +1,6 @@
-package ru.mamykin.foboreader.store.main
+package ru.mamykin.foboreader.store.categories
 
-class BookCategory(
+internal class BookCategory(
     val id: String,
     val name: String,
     val description: String?,

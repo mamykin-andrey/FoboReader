@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.book_details.details
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import javax.inject.Inject
 
-class GetBookDetails @Inject constructor(
+class GetBookDetailsUseCase @Inject constructor(
     private val repository: BookInfoRepository,
 ) {
     suspend fun execute(bookId: Long): BookDetails {

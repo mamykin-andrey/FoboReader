@@ -12,7 +12,8 @@ internal class BookListResponse(
         val genre: String,
         val author: String,
         val title: String,
-        val lang: String,
+        val languages: List<String>,
+        @Deprecated("Remove it")
         val format: String,
         val cover: String,
         val link: String
@@ -22,7 +23,7 @@ internal class BookListResponse(
             genre = genre,
             author = author,
             title = title,
-            lang = lang,
+            languages = languages,
             format = format,
             cover = cover,
             link = link

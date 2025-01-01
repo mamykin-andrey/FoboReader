@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class ChangeLanguageViewModel @Inject constructor(
-    private val getAppLanguages: GetAppLanguages,
+    private val getAppLanguagesUseCase: GetAppLanguagesUseCase,
 ) : ViewModel() {
 
     var state: State by LoggingStateDelegate(State())
@@ -24,7 +24,7 @@ internal class ChangeLanguageViewModel @Inject constructor(
         when (intent) {
             is Intent.LoadLanguages -> {
                 if (isDataLoaded) return@launch
-                state = State(languages = getAppLanguages.execute())
+                state = State(languages = getAppLanguagesUseCase.execute())
                 isDataLoaded = true
             }
 

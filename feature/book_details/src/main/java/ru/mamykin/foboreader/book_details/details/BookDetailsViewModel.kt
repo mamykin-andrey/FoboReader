@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class BookDetailsViewModel @Inject constructor(
-    private val getBookDetails: GetBookDetails,
+    private val getBookDetailsUseCase: GetBookDetailsUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -32,7 +32,7 @@ internal class BookDetailsViewModel @Inject constructor(
 
             is Intent.LoadBookInfo -> {
                 if (isDataLoaded) return@launch
-                state = State.Loaded(bookDetails = getBookDetails.execute(bookId))
+                state = State.Loaded(bookDetails = getBookDetailsUseCase.execute(bookId))
                 isDataLoaded = true
             }
         }

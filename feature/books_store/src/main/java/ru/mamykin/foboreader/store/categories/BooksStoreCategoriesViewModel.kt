@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.store.main
+package ru.mamykin.foboreader.store.categories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,8 +11,8 @@ import ru.mamykin.foboreader.core.presentation.StringOrResource
 import javax.inject.Inject
 
 @HiltViewModel
-internal class BooksStoreMainViewModel @Inject constructor(
-    private val getBookCategories: GetBookCategories,
+internal class BooksStoreCategoriesViewModel @Inject constructor(
+    private val getBookCategories: GetBookCategoriesUseCase,
     private val errorMessageMapper: ErrorMessageMapper,
 ) : ViewModel() {
 
@@ -57,7 +57,7 @@ internal class BooksStoreMainViewModel @Inject constructor(
         data object Loading : State()
 
         data class Content(
-            val categories: List<BookCategory>
+            val categories: List<BookCategory>,
         ) : State()
 
         data class Error(

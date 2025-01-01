@@ -15,10 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class MyBooksViewModel @Inject constructor(
-    private val loadMyBooks: LoadMyBooks,
+    private val getMyBooksUseCase: GetMyBooksUseCase,
     private val sortAndFilterBooks: SortAndFilterBooks,
-    private val removeBook: RemoveBook,
+    private val removeBookUseCase: RemoveBookUseCase,
     private val errorMessageMapper: ErrorMessageMapper,
+    private val myBookUIModelMapper: MyBookUIModelMapper,
 ) : ViewModel() {
 
     var state: State by LoggingStateDelegate(State.Loading)
@@ -26,24 +27,21 @@ internal class MyBooksViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
-    private var isDataLoaded = false
+    private var allBooks: List<BookInfo>? = null
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadBooks -> {
-                if (isDataLoaded) return@launch
-                loadMyBooks.execute().fold(
-                    onSuccess = {
-                        state = State.Content(allBooks = it, books = it)
-                        isDataLoaded = true
-                    }, onFailure = {
-                        effectChannel.send(Effect.ShowSnackbar(SnackbarData(errorMessageMapper.getMessage(it))))
-                    }
-                )
+                getMyBooksUseCase.execute().fold(onSuccess = {
+                    allBooks = it
+                    state = State.Content(books = it.map(myBookUIModelMapper::map))
+                }, onFailure = {
+                    effectChannel.send(Effect.ShowSnackbar(SnackbarData(errorMessageMapper.getMessage(it))))
+                })
             }
 
             is Intent.RemoveBook -> {
-                removeBook.execute(intent.id).fold(onSuccess = {
+                removeBookUseCase.execute(intent.id).fold(onSuccess = {
                     val prevState = state as? State.Content ?: return@launch
                     val updatedBooks = prevState.books.filterNot { it.id == intent.id }
                     state = prevState.copy(books = updatedBooks)
@@ -83,11 +81,12 @@ internal class MyBooksViewModel @Inject constructor(
     }
 
     private fun applySortAndFilter(prevState: State.Content, sortOrder: SortOrder, searchQuery: String?) {
+        val allBooks = this.allBooks ?: return
         val sortedBooks = sortAndFilterBooks.execute(
-            prevState.allBooks,
+            allBooks,
             sortOrder,
             searchQuery,
-        )
+        ).map(myBookUIModelMapper::map)
         state = prevState.copy(
             books = sortedBooks,
             searchQuery = searchQuery,
@@ -99,8 +98,7 @@ internal class MyBooksViewModel @Inject constructor(
         data object Loading : State()
 
         data class Content(
-            val allBooks: List<BookInfo>,
-            val books: List<BookInfo>,
+            val books: List<MyBookUIModel>,
             val searchQuery: String? = null,
             val sortOrder: SortOrder = SortOrder.ByName,
         ) : State()

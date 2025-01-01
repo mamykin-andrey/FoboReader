@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class BooksStoreListViewModel @Inject constructor(
-    private val downloadStoreBook: DownloadBook,
-    private val getStoreBooks: GetStoreBooks,
+    private val downloadStoreBookUseCase: DownloadBookUseCase,
+    private val getStoreBooksUseCase: GetStoreBooksUseCase,
     private val errorMessageMapper: ErrorMessageMapper,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -36,7 +36,7 @@ internal class BooksStoreListViewModel @Inject constructor(
                 is Intent.LoadBooks -> {
                     if (isDataLoaded) return@launch
                     state = State.Loading
-                    getStoreBooks.execute(categoryId).fold(
+                    getStoreBooksUseCase.execute(categoryId).fold(
                         onSuccess = {
                             state = State.Content(it)
                             isDataLoaded = true
@@ -46,7 +46,7 @@ internal class BooksStoreListViewModel @Inject constructor(
                 }
 
                 is Intent.FilterBooks -> {
-                    getStoreBooks.execute(categoryId).fold(
+                    getStoreBooksUseCase.execute(categoryId).fold(
                         onSuccess = { state = State.Content(it) },
                         onFailure = { state = State.Error(errorMessageMapper.getMessage(it)) }
                     )
@@ -61,7 +61,7 @@ internal class BooksStoreListViewModel @Inject constructor(
                             )
                         )
                     )
-                    downloadStoreBook.execute(intent.book.link, fileName).fold(
+                    downloadStoreBookUseCase.execute(intent.book.link, fileName).fold(
                         onSuccess = {
                             effectChannel.send(Effect.ShowSnackbar(
                                 SnackbarData(

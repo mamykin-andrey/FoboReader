@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.settings.all_settings
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import javax.inject.Inject
 
-internal class SetTextSize @Inject constructor(
+internal class SetTextSizeUseCase @Inject constructor(
     private val appSettings: AppSettingsRepository
 ) {
     companion object {

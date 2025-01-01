@@ -2,7 +2,8 @@ package ru.mamykin.foboreader.settings.custom_color
 
 import javax.inject.Inject
 
-internal class GetCustomColors @Inject constructor() {
+internal class GetCustomColorsUseCase @Inject constructor() {
+
     fun execute(): List<ColorItem> {
         return createColors()
     }

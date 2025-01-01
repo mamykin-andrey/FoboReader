@@ -8,10 +8,10 @@ import org.junit.Test
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 
-class GetBookDetailsTest {
+class GetBookDetailsUseCaseTest {
 
     private val repository: BookInfoRepository = mockk()
-    private val getBookDetails = GetBookDetails(repository)
+    private val getBookDetails = GetBookDetailsUseCase(repository)
 
     @Test
     fun `test get details`() = runBlocking {

@@ -51,13 +51,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.extension.showSnackbarWithData
+import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
-import java.util.Date
 
 @Composable
 fun MyBooksScreen(onBookDetailsClick: (Long) -> Unit, onReadBookClick: (Long) -> Unit) {
@@ -78,7 +77,11 @@ fun MyBooksScreen(onBookDetailsClick: (Long) -> Unit, onReadBookClick: (Long) ->
             )
         }
     }
-    MyBooksScreenUI(viewModel.state, viewModel::sendIntent, snackbarHostState)
+    MyBooksScreenUI(
+        state = viewModel.state,
+        onIntent = viewModel::sendIntent,
+        snackbarHostState = snackbarHostState,
+    )
 }
 
 private suspend fun takeEffect(
@@ -202,7 +205,7 @@ private fun SortBooksComposable(onIntent: (MyBooksViewModel.Intent) -> Unit) {
         ) {
             DropdownMenuItem(
                 text = {
-                    Text("By name")
+                    Text(stringResource(R.string.my_books_sort_by_name))
                 },
                 onClick = {
                     isPopupExpanded.value = false
@@ -215,7 +218,7 @@ private fun SortBooksComposable(onIntent: (MyBooksViewModel.Intent) -> Unit) {
                     onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByReadPages))
                 },
                 text = {
-                    Text("By read pages")
+                    Text(stringResource(R.string.my_books_sort_by_readed))
                 }
             )
             DropdownMenuItem(
@@ -223,7 +226,7 @@ private fun SortBooksComposable(onIntent: (MyBooksViewModel.Intent) -> Unit) {
                     isPopupExpanded.value = false
                     onIntent(MyBooksViewModel.Intent.SortBooks(SortOrder.ByDate))
                 }, text = {
-                    Text("By date")
+                    Text(stringResource(R.string.my_books_sort_by_date))
                 }
             )
         }
@@ -254,11 +257,11 @@ private fun ContentComposable(state: MyBooksViewModel.State.Content, onIntent: (
 }
 
 @Composable
-private fun BookRowComposable(bookInfo: BookInfo, onIntent: (MyBooksViewModel.Intent) -> Unit) {
+private fun BookRowComposable(book: MyBookUIModel, onIntent: (MyBooksViewModel.Intent) -> Unit) {
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(4.dp), onClick = {
-        onIntent(MyBooksViewModel.Intent.OpenBook(bookInfo.id))
+        onIntent(MyBooksViewModel.Intent.OpenBook(book.id))
     }) {
         Row(
             modifier = Modifier
@@ -266,7 +269,7 @@ private fun BookRowComposable(bookInfo: BookInfo, onIntent: (MyBooksViewModel.In
                 .padding(16.dp),
         ) {
             AsyncImage(
-                model = bookInfo.coverUrl,
+                model = book.coverUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .height(120.dp)
@@ -280,39 +283,27 @@ private fun BookRowComposable(bookInfo: BookInfo, onIntent: (MyBooksViewModel.In
                     .align(Alignment.Top)
                     .padding(0.dp)
             ) {
-                BookContextActionsComposable(bookInfo, onIntent)
-                BookFormatComposable(bookInfo)
-                BookAuthorComposable(bookInfo)
+                BookContextActionsComposable(book, onIntent)
+                BookAuthorComposable(book)
+                BookGenreComposable(book)
+                BookLanguagesComposable(book)
                 LinearProgressIndicator(
-                    progress = bookInfo.getReadPercent().toFloat() / 100,
+                    progress = book.readPercent,
                     modifier = Modifier
                         .padding(top = 4.dp)
                         .padding(horizontal = 12.dp),
                 )
-                BookReadStatusComposable(bookInfo)
+                BookReadStatusComposable(book)
             }
         }
     }
 }
 
 @Composable
-private fun BookFormatComposable(bookInfo: BookInfo) {
-    Text(
-        text = stringResource(
-            id = R.string.my_books_book_info_description_title,
-            bookInfo.getFormat(),
-            bookInfo.getDisplayFileSize(),
-        ),
-        style = TextStyles.Body2,
-        color = MaterialTheme.colorScheme.onBackground,
-        modifier = Modifier
-            .padding(top = 4.dp)
-            .padding(horizontal = 12.dp),
-    )
-}
-
-@Composable
-private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksViewModel.Intent) -> Unit) {
+private fun BookContextActionsComposable(
+    book: MyBookUIModel,
+    onIntent: (MyBooksViewModel.Intent) -> Unit
+) {
     val isBookPopupExpanded = remember { mutableStateOf(false) }
     Row {
         Row(
@@ -321,7 +312,7 @@ private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksV
                 .padding(start = 12.dp)
         ) {
             Text(
-                text = bookInfo.title,
+                text = book.title,
                 style = TextStyles.Body2,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.weight(1f)
@@ -345,7 +336,7 @@ private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksV
                 DropdownMenuItem(
                     onClick = {
                         isBookPopupExpanded.value = false
-                        onIntent(MyBooksViewModel.Intent.OpenBookDetails(bookInfo.id))
+                        onIntent(MyBooksViewModel.Intent.OpenBookDetails(book.id))
                     },
                     text = {
                         Text("About")
@@ -354,7 +345,7 @@ private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksV
                 DropdownMenuItem(
                     onClick = {
                         isBookPopupExpanded.value = false
-                        onIntent(MyBooksViewModel.Intent.RemoveBook(bookInfo.id))
+                        onIntent(MyBooksViewModel.Intent.RemoveBook(book.id))
                     }, text = {
                         Text("Remove")
                     }
@@ -365,9 +356,9 @@ private fun BookContextActionsComposable(bookInfo: BookInfo, onIntent: (MyBooksV
 }
 
 @Composable
-private fun BookAuthorComposable(bookInfo: BookInfo) {
+private fun BookAuthorComposable(book: MyBookUIModel) {
     Text(
-        text = bookInfo.author,
+        text = book.author,
         style = TextStyles.Body2,
         color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier
@@ -377,11 +368,33 @@ private fun BookAuthorComposable(bookInfo: BookInfo) {
 }
 
 @Composable
-private fun BookReadStatusComposable(bookInfo: BookInfo) {
+private fun BookGenreComposable(book: MyBookUIModel) {
     Text(
-        text = stringResource(
-            id = R.string.book_pages_info, bookInfo.currentPage, bookInfo.totalPages ?: 0
-        ),
+        text = book.genre,
+        style = TextStyles.Body2,
+        color = MaterialTheme.colorScheme.onBackground,
+        modifier = Modifier
+            .padding(top = 4.dp)
+            .padding(horizontal = 12.dp),
+    )
+}
+
+@Composable
+private fun BookLanguagesComposable(book: MyBookUIModel) {
+    Text(
+        text = book.languages.joinToString(", "),
+        style = TextStyles.Body2,
+        color = MaterialTheme.colorScheme.onBackground,
+        modifier = Modifier
+            .padding(top = 4.dp)
+            .padding(horizontal = 12.dp),
+    )
+}
+
+@Composable
+private fun BookReadStatusComposable(book: MyBookUIModel) {
+    Text(
+        text = book.readStatus.toString(LocalContext.current),
         style = TextStyles.Body2,
         color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier
@@ -413,20 +426,17 @@ fun MyBooksScreenPreview() {
     FoboReaderTheme {
         MyBooksScreenUI(
             state = MyBooksViewModel.State.Content(
-                allBooks = emptyList(),
                 books = listOf(
-                    BookInfo(
+                    MyBookUIModel(
                         id = 0,
-                        filePath = "",
                         genre = "classic",
                         coverUrl = "https://m.media-amazon.com/images/I/71O2XIytdqL._AC_UF894,1000_QL80_.jpg",
                         author = "Fyodor Dostoyevsky",
                         title = "Crime & Punishment",
-                        languages = listOf("ru, en"),
-                        date = Date(),
-                        currentPage = 0,
-                        totalPages = 10,
+                        languages = listOf("English, Russian, Spanish"),
+                        readStatus = StringOrResource.String("1 from 10"),
                         lastOpen = 1000,
+                        readPercent = 0.5f,
                     )
                 )
             ),

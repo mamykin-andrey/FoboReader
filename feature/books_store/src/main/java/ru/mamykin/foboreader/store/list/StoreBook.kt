@@ -5,7 +5,7 @@ data class StoreBook(
     val genre: String,
     val author: String,
     val title: String,
-    val lang: String,
+    val languages: List<String>,
     val format: String,
     val cover: String,
     val link: String

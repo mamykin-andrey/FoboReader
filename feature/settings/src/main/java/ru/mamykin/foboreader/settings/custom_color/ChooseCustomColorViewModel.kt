@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class ChooseCustomColorViewModel @Inject constructor(
-    private val getCustomColorsUseCase: GetCustomColors,
+    private val getCustomColorsUseCase: GetCustomColorsUseCase,
     getCurrentColorUseCase: GetCurrentColorUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {

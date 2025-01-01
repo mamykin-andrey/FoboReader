@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.my_books.list
 
-import com.github.terrakok.cicerone.Router
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -15,23 +14,23 @@ import org.junit.Before
 import org.junit.Test
 import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
+import ru.mamykin.foboreader.core.presentation.SnackbarData
+import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.my_books.sort.SortAndFilterBooks
 
 class MyBooksViewModelTest {
 
-    private val getMyBooks: LoadMyBooks = mockk()
+    private val getMyBooks: GetMyBooksUseCase = mockk()
     private val sortAndFilterBooks: SortAndFilterBooks = mockk()
-    private val removeBook: RemoveBook = mockk()
+    private val removeBook: RemoveBookUseCase = mockk()
     private val errorMessageMapper: ErrorMessageMapper = mockk()
-    private val router: Router = mockk()
-    private val screenProvider: ScreenProvider = mockk()
+    private val myBookUIModelMapper = MyBookUIModelMapper()
     private val viewModel = MyBooksViewModel(
-        loadMyBooks = getMyBooks,
+        getMyBooksUseCase = getMyBooks,
         sortAndFilterBooks = sortAndFilterBooks,
-        removeBook = removeBook,
+        removeBookUseCase = removeBook,
         errorMessageMapper = errorMessageMapper,
-        router = router,
-        screenProvider = screenProvider,
+        myBookUIModelMapper = myBookUIModelMapper,
     )
     private val testBook1 = BookInfo(
         id = 1L,
@@ -87,13 +86,16 @@ class MyBooksViewModelTest {
     @Test
     fun `removing book failed`() = runTest {
         viewModel.sendIntent(MyBooksViewModel.Intent.LoadBooks)
-        val testErrorMessage = "test_error"
+        val testErrorMessage = StringOrResource.String("test_error")
         coEvery { removeBook.execute(testBook1.id) } returns Result.failure(Throwable())
         every { errorMessageMapper.getMessage(any()) } returns testErrorMessage
 
         viewModel.sendIntent(MyBooksViewModel.Intent.RemoveBook(testBook1.id))
         advanceUntilIdle()
 
-        assertEquals(MyBooksViewModel.Effect.ShowSnackbar(testErrorMessage), viewModel.effectFlow.first())
+        assertEquals(
+            MyBooksViewModel.Effect.ShowSnackbar(SnackbarData((testErrorMessage))),
+            viewModel.effectFlow.first()
+        )
     }
 }

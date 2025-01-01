@@ -1,12 +1,10 @@
-package ru.mamykin.foboreader.store.main
+package ru.mamykin.foboreader.store.categories
 
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,17 +13,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,60 +33,43 @@ import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
-fun BooksCategoriesScreen(onBookCategoryClick: (String) -> Unit) {
-    val viewModel: BooksStoreMainViewModel = hiltViewModel()
+fun BooksCategoriesUI(snackbarHostState: SnackbarHostState, onBookCategoryClick: (String) -> Unit) {
+    val viewModel: BooksStoreCategoriesViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
-        viewModel.sendIntent(BooksStoreMainViewModel.Intent.LoadCategories)
+        viewModel.sendIntent(BooksStoreCategoriesViewModel.Intent.LoadCategories)
     }
-    val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
             takeEffect(it, snackbarHostState, onBookCategoryClick)
         }
     }
-    BookCategoriesUI(
-        viewModel.state,
-        viewModel::sendIntent,
-        snackbarHostState,
+    BookCategoriesScreen(
+        state = viewModel.state,
+        onIntent = viewModel::sendIntent,
     )
 }
 
 private suspend fun takeEffect(
-    effect: BooksStoreMainViewModel.Effect,
+    effect: BooksStoreCategoriesViewModel.Effect,
     snackbarHostState: SnackbarHostState,
     onBookCategoryClick: (String) -> Unit,
 ) {
     when (effect) {
-        is BooksStoreMainViewModel.Effect.ShowSnackbar -> snackbarHostState.showSnackbar(effect.message)
-        is BooksStoreMainViewModel.Effect.OpenBooksListScreen -> onBookCategoryClick(effect.categoryId)
+        is BooksStoreCategoriesViewModel.Effect.ShowSnackbar -> snackbarHostState.showSnackbar(effect.message)
+        is BooksStoreCategoriesViewModel.Effect.OpenBooksListScreen -> onBookCategoryClick(effect.categoryId)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun BookCategoriesUI(
-    state: BooksStoreMainViewModel.State,
-    onIntent: (BooksStoreMainViewModel.Intent) -> Unit,
-    snackbarHostState: SnackbarHostState,
+private fun BookCategoriesScreen(
+    state: BooksStoreCategoriesViewModel.State,
+    onIntent: (BooksStoreCategoriesViewModel.Intent) -> Unit,
 ) {
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.books_store_title))
-                },
-                windowInsets = WindowInsets(0.dp),
-            )
-        }, content = { innerPadding ->
-            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-                when (state) {
-                    is BooksStoreMainViewModel.State.Loading -> LoadingComposable()
-                    is BooksStoreMainViewModel.State.Error -> ErrorComposable(state, onIntent)
-                    is BooksStoreMainViewModel.State.Content -> ContentComposable(state, onIntent)
-                }
-            }
-        })
+    when (state) {
+        is BooksStoreCategoriesViewModel.State.Loading -> LoadingComposable()
+        is BooksStoreCategoriesViewModel.State.Error -> ErrorComposable(state, onIntent)
+        is BooksStoreCategoriesViewModel.State.Content -> ContentComposable(state, onIntent)
+    }
 }
 
 @Composable
@@ -109,8 +85,8 @@ private fun LoadingComposable() {
 
 @Composable
 private fun ContentComposable(
-    state: BooksStoreMainViewModel.State.Content,
-    onIntent: (BooksStoreMainViewModel.Intent) -> Unit
+    state: BooksStoreCategoriesViewModel.State.Content,
+    onIntent: (BooksStoreCategoriesViewModel.Intent) -> Unit
 ) {
     Column {
         state.categories.forEach { CategoryRowComposable(it, onIntent) }
@@ -118,13 +94,13 @@ private fun ContentComposable(
 }
 
 @Composable
-private fun CategoryRowComposable(category: BookCategory, onIntent: (BooksStoreMainViewModel.Intent) -> Unit) {
+private fun CategoryRowComposable(category: BookCategory, onIntent: (BooksStoreCategoriesViewModel.Intent) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
             .clickable {
-                onIntent(BooksStoreMainViewModel.Intent.OpenCategory(category.id))
+                onIntent(BooksStoreCategoriesViewModel.Intent.OpenCategory(category.id))
             },
     ) {
         Row(
@@ -168,8 +144,8 @@ private fun CategoryRowComposable(category: BookCategory, onIntent: (BooksStoreM
 
 @Composable
 private fun ErrorComposable(
-    state: BooksStoreMainViewModel.State.Error,
-    onIntent: (BooksStoreMainViewModel.Intent) -> Unit
+    state: BooksStoreCategoriesViewModel.State.Error,
+    onIntent: (BooksStoreCategoriesViewModel.Intent) -> Unit
 ) {
     val context = LocalContext.current
     AndroidView(factory = {
@@ -177,7 +153,7 @@ private fun ErrorComposable(
             setMessage(state.message.toString(context))
             visibility = View.VISIBLE
             setRetryClickListener {
-                onIntent(BooksStoreMainViewModel.Intent.LoadCategories)
+                onIntent(BooksStoreCategoriesViewModel.Intent.LoadCategories)
             }
         }
     })
@@ -187,10 +163,18 @@ private fun ErrorComposable(
 @Composable
 fun Preview() {
     FoboReaderTheme {
-        BookCategoriesUI(
-            state = BooksStoreMainViewModel.State.Content(listOf(BookCategory("1", "Classic", "Classic books", 10))),
-            onIntent = {},
-            snackbarHostState = remember { SnackbarHostState() }
+        BookCategoriesScreen(
+            state = BooksStoreCategoriesViewModel.State.Content(
+                listOf(
+                    BookCategory(
+                        "1",
+                        "Classic",
+                        "Classic books",
+                        10
+                    )
+                )
+            ),
+            onIntent = {}
         )
     }
 }

@@ -6,20 +6,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
-import ru.mamykin.foboreader.settings.app_language.SetAppLanguage
+import ru.mamykin.foboreader.settings.app_language.SetAppLanguageUseCase
 import ru.mamykin.foboreader.settings.common.CustomColorType
 import javax.inject.Inject
 
-// TODO: Refactor to use a single UseCase
 @HiltViewModel
 internal class SettingsViewModel @Inject constructor(
-    private val getSettings: GetSettings,
-    private val setBrightness: SetBrightness,
-    private val setTextSize: SetTextSize,
-    private val setNightTheme: SetNightTheme,
-    private val setUseVibration: SetUseVibration,
+    private val getSettings: GetSettingsUseCase,
+    private val setBrightnessUseCase: SetBrightnessUseCase,
+    private val setTextSizeUseCase: SetTextSizeUseCase,
+    private val setNightThemeUseCase: SetNightThemeUseCase,
+    private val setUseVibrationUseCase: SetUseVibrationUseCase,
     private val changeColorUseCase: ChangeColorUseCase,
-    private val setAppLanguage: SetAppLanguage,
+    private val setAppLanguageUseCase: SetAppLanguageUseCase,
 ) : ViewModel() {
 
     var state: State by LoggingStateDelegate(State.Loading)
@@ -38,23 +37,23 @@ internal class SettingsViewModel @Inject constructor(
             }
 
             is Intent.ChangeBrightness -> {
-                setBrightness.execute(intent.brightness)
+                setBrightnessUseCase.execute(intent.brightness)
                 state = State.Content(getSettings.execute())
             }
 
             is Intent.SwitchTheme -> {
-                setNightTheme.execute(intent.isNightTheme)
+                setNightThemeUseCase.execute(intent.isNightTheme)
                 state = State.Content(getSettings.execute())
                 effectChannel.send(Effect.SwitchTheme(intent.isNightTheme))
             }
 
             is Intent.IncreaseTextSize -> {
-                setTextSize.execute(SetTextSize.Action.Increase)
+                setTextSizeUseCase.execute(SetTextSizeUseCase.Action.Increase)
                 state = State.Content(getSettings.execute())
             }
 
             is Intent.DecreaseTextSize -> {
-                setTextSize.execute(SetTextSize.Action.Decrease)
+                setTextSizeUseCase.execute(SetTextSizeUseCase.Action.Decrease)
                 state = State.Content(getSettings.execute())
             }
 
@@ -76,13 +75,13 @@ internal class SettingsViewModel @Inject constructor(
 
             is Intent.ChangeAppLanguage -> {
                 val selectedLanguageCode = intent.selectedLanguageCode ?: return@launch
-                setAppLanguage.execute(selectedLanguageCode)
+                setAppLanguageUseCase.execute(selectedLanguageCode)
                 // no need to update the state since the screen will be re-created
                 effectChannel.send(Effect.SwitchLanguage(selectedLanguageCode))
             }
 
             is Intent.ChangeUseVibration -> {
-                setUseVibration.execute(intent.enabled)
+                setUseVibrationUseCase.execute(intent.enabled)
                 state = State.Content(getSettings.execute())
             }
         }

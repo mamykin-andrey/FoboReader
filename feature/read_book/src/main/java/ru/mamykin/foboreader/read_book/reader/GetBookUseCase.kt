@@ -29,7 +29,11 @@ internal class GetBookUseCase @Inject constructor(
         return@withContext Book(
             info = info,
             pages = pages,
-            fontSize = fontSize,
+            userSettings = Book.UserSettings(
+                fontSize = fontSize,
+                translationColorCode = appSettingsRepository.getTranslationColor(),
+                backgroundColorCode = appSettingsRepository.getBackgroundColor(),
+            ),
         )
     }
 
@@ -41,23 +45,25 @@ internal class GetBookUseCase @Inject constructor(
         textMeasurer: TextMeasurer
     ): MutableList<Book.Page> {
         val result = mutableListOf<Book.Page>()
-        var remaining = sentences
-        while (remaining.isNotEmpty()) {
+        var remainingSentences = sentences
+        var remainingTranslations = translations
+        while (remainingSentences.isNotEmpty()) {
             val resultSentences = mutableListOf<String>()
             val resultTranslations = mutableListOf<String>()
             var i = 1
-            while (i <= remaining.size) {
-                val newText = remaining.subList(0, i).joinToString("\n")
+            while (i <= remainingSentences.size) {
+                val newText = remainingSentences.subList(0, i).joinToString("\n")
                 if (textMeasurer.isTextFit(newText, screenSize, fontSize)) {
-                    resultSentences.add(remaining[i - 1])
-                    resultTranslations.add(translations[i - 1])
+                    resultSentences.add(remainingSentences[i - 1])
+                    resultTranslations.add(remainingTranslations[i - 1])
                 } else {
                     break
                 }
                 i++
             }
             result.add(Book.Page(sentences = resultSentences, translations = resultTranslations))
-            remaining = remaining.drop(i - 1)
+            remainingSentences = remainingSentences.drop(i - 1)
+            remainingTranslations = remainingTranslations.drop(i - 1)
         }
         return result
     }

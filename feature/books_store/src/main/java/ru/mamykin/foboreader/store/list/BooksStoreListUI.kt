@@ -4,55 +4,44 @@ import android.content.Context
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import ru.mamykin.foboreader.core.extension.showSnackbarWithData
-import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
-fun BooksStoreListUI(onBackClick: () -> Unit, onShowMyBooksClick: () -> Unit) {
+fun BooksStoreListUI(
+    snackbarHostState: SnackbarHostState,
+    onShowMyBooksClick: () -> Unit,
+) {
     val viewModel: BooksStoreListViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(BooksStoreListViewModel.Intent.LoadBooks)
     }
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
             takeEffect(
@@ -64,10 +53,8 @@ fun BooksStoreListUI(onBackClick: () -> Unit, onShowMyBooksClick: () -> Unit) {
         }
     }
     BooksListScreen(
-        viewModel.state,
-        viewModel::sendIntent,
-        snackbarHostState,
-        onBackClick,
+        state = viewModel.state,
+        onIntent = viewModel::sendIntent,
     )
 }
 
@@ -93,53 +80,16 @@ private suspend fun takeEffect(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BooksListScreen(
     state: BooksStoreListViewModel.State,
     onIntent: (BooksStoreListViewModel.Intent) -> Unit,
-    snackbarHostState: SnackbarHostState,
-    onBackClick: () -> Unit
 ) {
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.books_store_title))
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        onBackClick()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            modifier = Modifier,
-                            contentDescription = null,
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = {
-                        TODO("Not implemented")
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            modifier = Modifier,
-                            contentDescription = null,
-                        )
-                    }
-                }
-            )
-        }, content = { innerPadding ->
-            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-                when (state) {
-                    is BooksStoreListViewModel.State.Loading -> LoadingComposable()
-                    is BooksStoreListViewModel.State.Content -> ContentComposable(state, onIntent)
-                    is BooksStoreListViewModel.State.Error -> ErrorComposable(state, onIntent)
-                }
-            }
-        })
+    when (state) {
+        is BooksStoreListViewModel.State.Loading -> LoadingComposable()
+        is BooksStoreListViewModel.State.Content -> ContentComposable(state, onIntent)
+        is BooksStoreListViewModel.State.Error -> ErrorComposable(state, onIntent)
+    }
 }
 
 @Composable
@@ -236,7 +186,7 @@ fun BooksListScreenPreview() {
                         genre = "Classic",
                         author = "Pierre Cardine",
                         title = "Wonderful life",
-                        lang = "English",
+                        languages = listOf("English, Russian"),
                         format = "fb",
                         cover = "https://m.media-amazon.com/images/I/81sG60wsNtL.jpg",
                         link = "https://www.amazon.co.uk/Wonderful-Life-Burgess-Nature-History/dp/0099273454",
@@ -244,8 +194,6 @@ fun BooksListScreenPreview() {
                 )
             ),
             onIntent = {},
-            snackbarHostState = remember { SnackbarHostState() },
-            onBackClick = {},
         )
     }
 }

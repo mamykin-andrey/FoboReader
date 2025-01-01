@@ -5,7 +5,7 @@ import ru.mamykin.foboreader.settings.app_language.AppLanguage
 import ru.mamykin.foboreader.settings.app_language.supportedAppLanguages
 import javax.inject.Inject
 
-internal class GetSettings @Inject constructor(
+internal class GetSettingsUseCase @Inject constructor(
     private val settingsRepository: AppSettingsRepository,
 ) {
     fun execute(): AppSettings {

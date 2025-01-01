@@ -18,16 +18,11 @@ import ru.mamykin.foboreader.settings.all_settings.SettingsTabUI
 import ru.mamykin.foboreader.settings.app_language.ChooseAppLanguageDialogUI
 import ru.mamykin.foboreader.settings.common.CustomColorType
 import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogUI
-import ru.mamykin.foboreader.store.list.BooksStoreListUI
-import ru.mamykin.foboreader.store.main.BooksCategoriesScreen
+import ru.mamykin.foboreader.store.mainv2.BooksStoreUI
 
 sealed class Screen(val route: String) {
     data object Main : Screen("main/{tabRoute}") {
         fun createRoute(tabRoute: String) = "main/$tabRoute"
-    }
-
-    data object BooksStoreList : Screen("store/{categoryId}") {
-        fun createRoute(categoryId: String) = "store/$categoryId"
     }
 
     data object BookDetails : Screen("details/{bookId}") {
@@ -73,9 +68,7 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
                         )
                     },
                     BottomNavigationTabRoute.BOOKS_STORE to {
-                        BooksCategoriesScreen {
-                            navController.navigate(Screen.BooksStoreList.createRoute(it))
-                        }
+                        BooksStoreUI()
                     },
                     BottomNavigationTabRoute.SETTINGS to {
                         SettingsTabUI(
@@ -86,21 +79,6 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
                         )
                     }
                 )
-            )
-        }
-
-        composable(
-            route = Screen.BooksStoreList.route,
-            arguments = listOf(navArgument("categoryId") { type = NavType.StringType })
-        ) {
-            BooksStoreListUI(
-                onBackClick = { navController.popBackStack() },
-                onShowMyBooksClick = {
-                    navController.navigate(Screen.Main.createRoute(BottomNavigationTabRoute.MY_BOOKS)) {
-                        popUpTo(0)
-                        launchSingleTop = true
-                    }
-                },
             )
         }
 
@@ -117,7 +95,7 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
             route = Screen.ReadBook.route,
             arguments = listOf(navArgument("bookId") { type = NavType.LongType })
         ) {
-            ReadBookUI(onBackPress = {navController.popBackStack()})
+            ReadBookUI(onBackPress = { navController.popBackStack() })
         }
 
         dialog(

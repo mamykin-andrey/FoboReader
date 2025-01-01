@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.settings.app_language
 
-class AppLanguage(
+internal class AppLanguage(
     val code: String,
     val name: String,
 )

@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -182,7 +183,7 @@ private fun StubContentComposable(onIntent: (ReadBookViewModel.Intent) -> Unit) 
             )
         }
         ReadStatusComposable(
-            currentPage = 0,
+            currentPageIndex = 0,
             totalPages = 0,
             readPercent = 0f,
             modifier = Modifier.alpha(0f)
@@ -203,7 +204,7 @@ private fun ContentComposable(state: ReadBookViewModel.State.Content, onIntent: 
             } ?: BookTextComposable(state, Modifier.fillMaxSize(), onIntent)
         }
         ReadStatusComposable(
-            currentPage = state.currentPage,
+            currentPageIndex = state.currentPage,
             totalPages = state.totalPages,
             readPercent = state.readPercent,
             modifier = Modifier,
@@ -213,7 +214,7 @@ private fun ContentComposable(state: ReadBookViewModel.State.Content, onIntent: 
 
 @Composable
 private fun ReadStatusComposable(
-    currentPage: Int,
+    currentPageIndex: Int,
     totalPages: Int,
     readPercent: Float,
     modifier: Modifier
@@ -226,7 +227,8 @@ private fun ReadStatusComposable(
         )
     ) {
         Row(modifier = Modifier.padding(4.dp)) {
-            Text(text = "$currentPage of $totalPages, $readPercent%")
+            val percentStr = "%.2f".format(readPercent)
+            Text(text = "${currentPageIndex + 1} of $totalPages, $percentStr%")
         }
     }
 }
@@ -255,23 +257,21 @@ private fun ParagraphTranslationComposable(
         onIntent(ReadBookViewModel.Intent.HideParagraphTranslation)
     }
     Text(
-        modifier = Modifier
-            .padding(8.dp)
-            .pointerInput(onClick) {
-                detectTapGestures(
-                    onTap = {
-                        onClick()
-                    }
-                )
-            },
-        style = TextStyle(fontSize = state.fontSize.sp),
+        modifier = Modifier.pointerInput(onClick) {
+            detectTapGestures(
+                onTap = {
+                    onClick()
+                }
+            )
+        },
+        style = TextStyle(fontSize = state.userSettings.fontSize.sp),
         text = AnnotatedString.Builder().apply {
             append(paragraphTranslation.sourceText)
             append("\n\n")
             append(
                 AnnotatedString(
                     text = paragraphTranslation.getMostPreciseTranslation().orEmpty(),
-                    SpanStyle(color = Color.Red)
+                    SpanStyle(color = Color(android.graphics.Color.parseColor(state.userSettings.translationColorCode)))
                 )
             )
         }.toAnnotatedString(),
@@ -284,7 +284,12 @@ private fun PaginatedTextComposable(
     modifier: Modifier,
     onIntent: (ReadBookViewModel.Intent) -> Unit
 ) {
-    val pagerState = rememberPagerState(pageCount = { state.pages.size })
+    val pagerState = rememberPagerState(pageCount = { state.pages.size }, initialPage = state.currentPage)
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }.collect { page ->
+            onIntent(ReadBookViewModel.Intent.PageChanged(page))
+        }
+    }
     HorizontalPager(state = pagerState) {
         val currentPageIndex = it
         val pageContent = state.pages[currentPageIndex]
@@ -394,7 +399,7 @@ private fun CombinedClickableText(
             .then(gesture)
             .height(heightDp)
             .width(widthDp),
-        style = TextStyle(fontSize = state.fontSize.sp),
+        style = TextStyle(fontSize = state.userSettings.fontSize.sp),
         text = page,
         onTextLayout = {
             layoutResult.value = it
@@ -412,7 +417,7 @@ fun ReadBookScreenPreview() {
                 listOf(AnnotatedString("Page1"), AnnotatedString("Page2")),
                 300,
                 300,
-                18,
+                ReadBookViewModel.State.Content.UserSettings(18, "222222", "444444"),
                 1,
                 2,
                 50f,

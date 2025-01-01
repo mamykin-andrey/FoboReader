@@ -3,7 +3,7 @@ package ru.mamykin.foboreader.read_book.reader
 import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import javax.inject.Inject
 
-class UpdateBookInfo @Inject constructor(
+class UpdateBookInfoUseCase @Inject constructor(
     private val bookInfoRepository: BookInfoRepository
 ) {
     suspend fun execute(
