@@ -44,8 +44,8 @@ data class BookDetailsParameters(
 ) : Parcelable
 
 @Composable
-fun BookDetailsUI(bookId: Long, onBackPress: () -> Unit, onReadBookClick: (bookId: Long) -> Unit) {
-    val viewModel: BookDetailsViewModel = hiltViewModel(key = BookDetailsParameters(bookId).toString())
+fun BookDetailsUI(onBackPress: () -> Unit, onReadBookClick: (bookId: Long) -> Unit) {
+    val viewModel: BookDetailsViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(BookDetailsViewModel.Intent.LoadBookInfo)
     }

@@ -1,6 +1,8 @@
 package ru.mamykin.foboreader.read_book.reader
 
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.data.AppSettingsRepository
+import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import ru.mamykin.foboreader.core.presentation.SnackbarData
@@ -23,7 +25,6 @@ import javax.inject.Inject
 internal class ReadBookViewModel @Inject constructor(
     private val getParagraphTranslation: GetParagraphTranslation,
     private val getWordTranslation: GetWordTranslation,
-    private val appSettingsRepository: AppSettingsRepository,
     private val getBookUseCase: GetBookUseCase,
     getVibrationEnabled: GetVibrationEnabled,
     savedStateHandle: SavedStateHandle,
@@ -50,12 +51,12 @@ internal class ReadBookViewModel @Inject constructor(
                     loadBookJob = launch {
                         this@ReadBookViewModel.book = getBookUseCase.execute(
                             bookId,
-                            ComposeTextPageSplitter(intent.measurer),
+                            ComposeTextMeasurer(intent.measurer),
                             intent.screenSize,
                         )
                         val book = requireNotNull(this@ReadBookViewModel.book)
                         state = State.Content(
-                            pages = book.pages,
+                            pages = book.pages.map { it.toTranslatedAnnotatedString() },
                             title = book.info.title,
                             currentPage = book.info.currentPage,
                             fontSize = book.fontSize,
@@ -68,18 +69,22 @@ internal class ReadBookViewModel @Inject constructor(
                 }
             }
 
-            is Intent.TranslateParagraph -> {
-                val translation = getParagraphTranslation.execute(
-                    requireNotNull(this@ReadBookViewModel.book),
-                    intent.paragraph
-                )
+            is Intent.TranslateSentence -> {
                 val prevState = (state as? State.Content) ?: return@launch
-                state = prevState.copy(
-                    paragraphTranslation = TextTranslation(
-                        sourceText = intent.paragraph,
-                        textTranslations = listOf(translation)
-                    )
-                )
+                val page = requireNotNull(book).pages[prevState.currentPage]
+                Log.debug("Sentence index: ${intent.index}")
+                Log.debug("Translation: ${page.translations[intent.index]}")
+                // val translation = getParagraphTranslation.execute(
+                //     requireNotNull(this@ReadBookViewModel.book),
+                //     intent.paragraph
+                // )
+                // val prevState = (state as? State.Content) ?: return@launch
+                // state = prevState.copy(
+                //     paragraphTranslation = TextTranslation(
+                //         sourceText = intent.paragraph,
+                //         textTranslations = listOf(translation)
+                //     )
+                // )
                 vibrateIfEnabled()
             }
 
@@ -117,6 +122,34 @@ internal class ReadBookViewModel @Inject constructor(
         }
     }
 
+    private fun Book.Page.toTranslatedAnnotatedString(): AnnotatedString {
+        // val wordsPositions: List<Pair<Int, Int>> = TextUtils.getWordsPositions(fullText)
+        //     val annotatedString = buildAnnotatedString {
+        //         append(fullText)
+        //         wordsPositions.forEach { (wordStart, wordEnd) ->
+        //             addStringAnnotation(
+        //                 tag = "word",
+        //                 annotation = fullText.substring(wordStart, wordEnd),
+        //                 start = wordStart,
+        //                 end = wordEnd
+        //             )
+        //         }
+        //     }
+        val sentences = this.sentences
+        return buildAnnotatedString {
+            for (i in 0 until sentences.lastIndex) {
+                val sentence = sentences[i] + "\n"
+                append(sentence)
+                addStringAnnotation(
+                    tag = TextAnnotation.SENTENCE_NUMBER,
+                    annotation = i.toString(),
+                    start = length - sentence.length,
+                    end = length,
+                )
+            }
+        }
+    }
+
     private suspend fun vibrateIfEnabled() {
         if (isVibrationEnabled) {
             effectChannel.send(Effect.Vibrate)
@@ -128,7 +161,7 @@ internal class ReadBookViewModel @Inject constructor(
             val measurer: TextMeasurer, val screenSize: Pair<Int, Int>
         ) : Intent()
 
-        class TranslateParagraph(val paragraph: String) : Intent()
+        class TranslateSentence(val index: Int) : Intent()
         class TranslateWord(val word: String) : Intent()
         data object HideParagraphTranslation : Intent()
         data object HideWordTranslation : Intent()
@@ -143,7 +176,7 @@ internal class ReadBookViewModel @Inject constructor(
         data object Loading : State()
         data class Content(
             val title: String,
-            val pages: List<String>,
+            val pages: List<AnnotatedString>,
             val textHeight: Int,
             val textWidth: Int,
             val fontSize: Int,

@@ -44,7 +44,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
@@ -276,7 +275,7 @@ private fun PaginatedTextComposable(
         val currentPageIndex = it
         val pageContent = state.pages[currentPageIndex]
         CombinedClickableText(
-            fullText = pageContent,
+            page = pageContent,
             modifier = modifier,
             onIntent,
             state,
@@ -344,43 +343,27 @@ private fun PopupTitledText(title: String, text: String) {
 
 @Composable
 private fun CombinedClickableText(
-    fullText: String,
+    page: AnnotatedString,
     modifier: Modifier,
     onIntent: (ReadBookViewModel.Intent) -> Unit,
     state: ReadBookViewModel.State.Content
 ) {
-    val wordsPositions: List<Pair<Int, Int>> = TextUtils.getWordsPositions(fullText)
-    val annotatedString = buildAnnotatedString {
-        append(fullText)
-        wordsPositions.forEach { (wordStart, wordEnd) ->
-            addStringAnnotation(
-                tag = "word",
-                annotation = fullText.substring(wordStart, wordEnd),
-                start = wordStart,
-                end = wordEnd
-            )
-        }
-    }
-    val onLongClick = { pos: Int ->
-        onIntent(ReadBookViewModel.Intent.TranslateWord(TextUtils.getWord(wordsPositions, pos, fullText)))
-    }
+    // val onLongClick = { pos: Int ->
+    //     onIntent(ReadBookViewModel.Intent.TranslateWord(TextUtils.getWord(wordsPositions, pos, fullText)))
+    // }
     val onClick = { pos: Int ->
-        val paragraph = TextUtils.getParagraph(wordsPositions, pos, fullText)
-        onIntent(ReadBookViewModel.Intent.TranslateParagraph(paragraph))
+        val sentenceNum = page.getStringAnnotations(TextAnnotation.SENTENCE_NUMBER, pos, pos).first().item.toInt()
+        onIntent(ReadBookViewModel.Intent.TranslateSentence(sentenceNum))
     }
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
-    val gesture = Modifier.pointerInput(onClick, onLongClick) {
+    // val gesture = Modifier.pointerInput(onClick, onLongClick) {
+    val gesture = Modifier.pointerInput(onClick) {
         detectTapGestures(
             onTap = { pos ->
                 layoutResult.value?.let { layout ->
                     onClick(layout.getOffsetForPosition(pos))
                 }
             },
-            onLongPress = { pos ->
-                layoutResult.value?.let { layout ->
-                    onLongClick(layout.getOffsetForPosition(pos))
-                }
-            }
         )
     }
     val (heightDp, widthDp) = with(LocalDensity.current) {
@@ -392,7 +375,8 @@ private fun CombinedClickableText(
             .height(heightDp)
             .width(widthDp),
         style = TextStyle(fontSize = state.fontSize.sp),
-        text = annotatedString,
+        // text = annotatedString,
+        text = page,
         onTextLayout = {
             layoutResult.value = it
         }
@@ -406,7 +390,7 @@ fun ReadBookScreenPreview() {
         ReadBookScreen(
             state = ReadBookViewModel.State.Content(
                 "Title",
-                listOf("Page1", "Page2"),
+                listOf(AnnotatedString("Page1"), AnnotatedString("Page2")),
                 300,
                 300,
                 18,
