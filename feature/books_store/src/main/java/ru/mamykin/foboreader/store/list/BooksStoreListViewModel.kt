@@ -28,14 +28,19 @@ internal class BooksStoreListViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
+    private var isDataLoaded = false
 
     fun sendIntent(intent: Intent) {
         viewModelScope.launch {
             when (intent) {
                 is Intent.LoadBooks -> {
+                    if (isDataLoaded) return@launch
                     state = State.Loading
                     getStoreBooks.execute(categoryId).fold(
-                        onSuccess = { state = State.Content(it) },
+                        onSuccess = {
+                            state = State.Content(it)
+                            isDataLoaded = true
+                        },
                         onFailure = { state = State.Error(errorMessageMapper.getMessage(it)) }
                     )
                 }

@@ -30,15 +30,18 @@ internal class ChooseCustomColorViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
+    private var isDataLoaded = false
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadColors -> {
+                if (isDataLoaded) return@launch
                 val colors = getCustomColorsUseCase.execute()
                 val stateColors = colors.map {
                     if (it.colorCode == colorCode) it.copy(selected = true) else it
                 }
                 state = state.copy(colors = stateColors)
+                isDataLoaded = true
             }
 
             is Intent.SelectColor -> {

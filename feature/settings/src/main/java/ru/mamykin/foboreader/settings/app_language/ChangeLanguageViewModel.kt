@@ -18,11 +18,14 @@ internal class ChangeLanguageViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
+    private var isDataLoaded = false
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadLanguages -> {
+                if (isDataLoaded) return@launch
                 state = State(languages = getAppLanguages.execute())
+                isDataLoaded = true
             }
 
             is Intent.SelectLanguage -> {

@@ -38,10 +38,12 @@ internal class ReadBookViewModel @Inject constructor(
 
     private val isVibrationEnabled = getVibrationEnabled.execute()
     private var loadBookJob: Job? = null
+    private var isDataLoaded = false
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadBook -> {
+                if (isDataLoaded) return@launch
                 loadBookJob?.cancel()
                 loadBookJob = null
                 coroutineScope {
@@ -52,6 +54,7 @@ internal class ReadBookViewModel @Inject constructor(
                             intent.screenSize,
                         )
                         val book = requireNotNull(this@ReadBookViewModel.book)
+                        isDataLoaded = true
                         state = State.Content(
                             pages = book.pages.map { it.toTranslatedAnnotatedString() },
                             title = book.info.title,

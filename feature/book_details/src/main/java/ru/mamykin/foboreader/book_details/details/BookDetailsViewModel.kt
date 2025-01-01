@@ -22,6 +22,7 @@ internal class BookDetailsViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
+    private var isDataLoaded = false
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
@@ -30,7 +31,9 @@ internal class BookDetailsViewModel @Inject constructor(
             }
 
             is Intent.LoadBookInfo -> {
+                if (isDataLoaded) return@launch
                 state = State.Loaded(bookDetails = getBookDetails.execute(bookId))
+                isDataLoaded = true
             }
         }
     }
