@@ -10,20 +10,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import ru.mamykin.foboreader.core.presentation.SnackbarData
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.read_book.R
-import ru.mamykin.foboreader.read_book.translation.GetParagraphTranslation
 import ru.mamykin.foboreader.read_book.translation.GetWordTranslation
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import javax.inject.Inject
 
 @HiltViewModel
 internal class ReadBookViewModel @Inject constructor(
-    private val getParagraphTranslation: GetParagraphTranslation,
     private val getWordTranslation: GetWordTranslation,
     private val getBookUseCase: GetBookUseCase,
     getVibrationEnabled: GetVibrationEnabled,
@@ -71,20 +68,16 @@ internal class ReadBookViewModel @Inject constructor(
 
             is Intent.TranslateSentence -> {
                 val prevState = (state as? State.Content) ?: return@launch
-                val page = requireNotNull(book).pages[prevState.currentPage]
-                Log.debug("Sentence index: ${intent.index}")
-                Log.debug("Translation: ${page.translations[intent.index]}")
-                // val translation = getParagraphTranslation.execute(
-                //     requireNotNull(this@ReadBookViewModel.book),
-                //     intent.paragraph
-                // )
-                // val prevState = (state as? State.Content) ?: return@launch
-                // state = prevState.copy(
-                //     paragraphTranslation = TextTranslation(
-                //         sourceText = intent.paragraph,
-                //         textTranslations = listOf(translation)
-                //     )
-                // )
+                val book = requireNotNull(book)
+                val page = book.pages[prevState.currentPage]
+                val sentence = page.sentences[intent.index]
+                val translation = page.translations[intent.index]
+                state = prevState.copy(
+                    paragraphTranslation = TextTranslation(
+                        sourceText = sentence,
+                        textTranslations = listOf(translation)
+                    )
+                )
                 vibrateIfEnabled()
             }
 
@@ -123,31 +116,45 @@ internal class ReadBookViewModel @Inject constructor(
     }
 
     private fun Book.Page.toTranslatedAnnotatedString(): AnnotatedString {
-        // val wordsPositions: List<Pair<Int, Int>> = TextUtils.getWordsPositions(fullText)
-        //     val annotatedString = buildAnnotatedString {
-        //         append(fullText)
-        //         wordsPositions.forEach { (wordStart, wordEnd) ->
-        //             addStringAnnotation(
-        //                 tag = "word",
-        //                 annotation = fullText.substring(wordStart, wordEnd),
-        //                 start = wordStart,
-        //                 end = wordEnd
-        //             )
-        //         }
-        //     }
         val sentences = this.sentences
         return buildAnnotatedString {
             for (i in 0 until sentences.lastIndex) {
                 val sentence = sentences[i] + "\n"
                 append(sentence)
+                val sentenceStartInText = length - sentence.length
                 addStringAnnotation(
                     tag = TextAnnotation.SENTENCE_NUMBER,
                     annotation = i.toString(),
-                    start = length - sentence.length,
+                    start = sentenceStartInText,
                     end = length,
                 )
+                val wordsPositions = getWordsPositions(sentence)
+                wordsPositions.forEach { (wordInSentenceStart, wordInSentenceEnd) ->
+                    addStringAnnotation(
+                        tag = TextAnnotation.WORD,
+                        annotation = sentence.substring(wordInSentenceStart, wordInSentenceEnd),
+                        start = sentenceStartInText + wordInSentenceStart,
+                        end = sentenceStartInText + wordInSentenceEnd,
+                    )
+                }
             }
         }
+    }
+
+    private fun getWordsPositions(text: String): List<Pair<Int, Int>> {
+        val wordPositions = mutableListOf<Pair<Int, Int>>()
+        var wordStartPos = 0
+        for (i in text.indices) {
+            val character = text[i]
+            if (character.isLetter() || character == '\'') {
+                if (wordStartPos == wordPositions.lastOrNull()?.first) {
+                    wordStartPos = i
+                }
+            } else if (wordStartPos != wordPositions.lastOrNull()?.first) {
+                wordPositions.add(wordStartPos to i)
+            }
+        }
+        return wordPositions
     }
 
     private suspend fun vibrateIfEnabled() {
