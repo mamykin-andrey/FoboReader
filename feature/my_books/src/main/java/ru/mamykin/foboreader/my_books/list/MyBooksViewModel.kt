@@ -75,7 +75,7 @@ internal class MyBooksViewModel @Inject constructor(
 
             is Intent.CloseSearch -> {
                 val prevState = (state as? State.Content) ?: return@launch
-                state = prevState.copy(searchQuery = null)
+                applySortAndFilter(prevState, prevState.sortOrder, null)
             }
         }
     }
