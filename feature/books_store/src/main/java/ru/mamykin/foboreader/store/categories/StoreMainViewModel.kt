@@ -11,7 +11,7 @@ import ru.mamykin.foboreader.core.presentation.StringOrResource
 import javax.inject.Inject
 
 @HiltViewModel
-internal class BooksStoreCategoriesViewModel @Inject constructor(
+internal class StoreMainViewModel @Inject constructor(
     private val getBookCategories: GetBookCategoriesUseCase,
     private val errorMessageMapper: ErrorMessageMapper,
 ) : ViewModel() {

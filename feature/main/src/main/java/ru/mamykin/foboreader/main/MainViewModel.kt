@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.core.navigation.MainTabScreenRoutes
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
@@ -42,17 +43,17 @@ internal class MainViewModel @Inject constructor() : ViewModel() {
     data class State(
         val tabs: List<BottomNavigationTab> = listOf(
             BottomNavigationTab(
-                route = BottomNavigationTabRoute.MY_BOOKS,
+                route = MainTabScreenRoutes.MY_BOOKS,
                 tabNameId = R.string.app_my_books_tab,
                 icon = Icons.Filled.Book
             ),
             BottomNavigationTab(
-                route = BottomNavigationTabRoute.BOOKS_STORE,
+                route = MainTabScreenRoutes.BOOKS_STORE,
                 tabNameId = R.string.app_books_store_tab,
                 icon = Icons.Filled.Storefront
             ),
             BottomNavigationTab(
-                route = BottomNavigationTabRoute.SETTINGS,
+                route = MainTabScreenRoutes.SETTINGS,
                 tabNameId = R.string.app_books_store_tab,
                 icon = Icons.Filled.Settings
             ),

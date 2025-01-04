@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import ru.mamykin.foboreader.core.navigation.MainTabScreenRoutes
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 
 @Composable
@@ -135,17 +136,17 @@ fun MainScreenPreview() {
             onIntent = {},
             navController = rememberNavController(),
             navigationTabs = listOf(
-                BottomNavigationTabRoute.MY_BOOKS to {
+                MainTabScreenRoutes.MY_BOOKS to {
                     Text("tab1")
                 },
-                BottomNavigationTabRoute.BOOKS_STORE to {
+                MainTabScreenRoutes.BOOKS_STORE to {
                     Text("tab2")
                 },
-                BottomNavigationTabRoute.SETTINGS to {
+                MainTabScreenRoutes.SETTINGS to {
                     Text("tab3")
                 }
             ),
-            selectedTabRoute = BottomNavigationTabRoute.MY_BOOKS,
+            selectedTabRoute = MainTabScreenRoutes.MY_BOOKS,
         )
     }
 }

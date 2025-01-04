@@ -10,7 +10,8 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ru.mamykin.foboreader.book_details.details.BookDetailsUI
-import ru.mamykin.foboreader.main.BottomNavigationTabRoute
+import ru.mamykin.foboreader.core.navigation.AppScreen
+import ru.mamykin.foboreader.core.navigation.MainTabScreenRoutes
 import ru.mamykin.foboreader.main.MainScreenUI
 import ru.mamykin.foboreader.my_books.list.MyBooksScreen
 import ru.mamykin.foboreader.read_book.reader.ReadBookUI
@@ -18,34 +19,16 @@ import ru.mamykin.foboreader.settings.all_settings.SettingsTabUI
 import ru.mamykin.foboreader.settings.app_language.ChooseAppLanguageDialogUI
 import ru.mamykin.foboreader.settings.common.CustomColorType
 import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogUI
-import ru.mamykin.foboreader.store.mainv2.BooksStoreUI
-
-sealed class Screen(val route: String) {
-    data object Main : Screen("main/{tabRoute}") {
-        fun createRoute(tabRoute: String) = "main/$tabRoute"
-    }
-
-    data object BookDetails : Screen("details/{bookId}") {
-        fun createRoute(bookId: Long) = "details/$bookId"
-    }
-
-    data object ReadBook : Screen("book/{bookId}") {
-        fun createRoute(bookId: Long) = "book/$bookId"
-    }
-
-    data object ChooseCustomColor : Screen("choose_color/{type}") {
-        fun createRoute(type: CustomColorType) = "choose_color/$type"
-    }
-
-    data object ChooseAppLanguage : Screen("change_language")
-}
+import ru.mamykin.foboreader.store.categories.StoreMainUI
+import ru.mamykin.foboreader.store.list.StoreBooksUI
+import ru.mamykin.foboreader.store.search.StoreSearchUI
 
 @Composable
 fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screen.Main.createRoute(BottomNavigationTabRoute.MY_BOOKS),
+        startDestination = AppScreen.Main.createRoute(MainTabScreenRoutes.MY_BOOKS),
         enterTransition = {
             EnterTransition.None
         },
@@ -54,28 +37,28 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
         }
     ) {
         composable(
-            route = Screen.Main.route,
+            route = AppScreen.Main.route,
             arguments = listOf(navArgument("tabRoute") { type = NavType.StringType })
         ) { backStackEntry ->
             val tabRoute = backStackEntry.arguments!!.getString("tabRoute")!!
             MainScreenUI(
                 selectedTabRoute = tabRoute,
                 navigationTabs = listOf(
-                    BottomNavigationTabRoute.MY_BOOKS to {
+                    MainTabScreenRoutes.MY_BOOKS to {
                         MyBooksScreen(
-                            onBookDetailsClick = { navController.navigate(Screen.BookDetails.createRoute(it)) },
-                            onReadBookClick = { navController.navigate(Screen.ReadBook.createRoute(it)) },
+                            onBookDetailsClick = { navController.navigate(AppScreen.BookDetails.createRoute(it)) },
+                            onReadBookClick = { navController.navigate(AppScreen.ReadBook.createRoute(it)) },
                         )
                     },
-                    BottomNavigationTabRoute.BOOKS_STORE to {
-                        BooksStoreUI()
+                    MainTabScreenRoutes.BOOKS_STORE to {
+                        StoreMainUI(navController)
                     },
-                    BottomNavigationTabRoute.SETTINGS to {
+                    MainTabScreenRoutes.SETTINGS to {
                         SettingsTabUI(
                             navController = navController,
                             onNightThemeSwitch = onNightThemeSwitch,
-                            onChooseColorClick = { navController.navigate(Screen.ChooseCustomColor.createRoute(it)) },
-                            onChooseAppLanguageClick = { navController.navigate(Screen.ChooseAppLanguage.route) },
+                            onChooseColorClick = { navController.navigate(AppScreen.ChooseCustomColor.createRoute(it.toString())) }, // TODO: Check
+                            onChooseAppLanguageClick = { navController.navigate(AppScreen.ChooseAppLanguage.route) },
                         )
                     }
                 )
@@ -83,23 +66,38 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
         }
 
         composable(
-            route = Screen.BookDetails.route,
+            route = AppScreen.BookDetails.route,
             arguments = listOf(navArgument("bookId") { type = NavType.LongType })
         ) {
             BookDetailsUI(
                 onBackPress = { navController.popBackStack() },
-            ) { navController.navigate(Screen.ReadBook.createRoute(it)) }
+            ) { navController.navigate(AppScreen.ReadBook.createRoute(it)) }
         }
 
         composable(
-            route = Screen.ReadBook.route,
+            route = AppScreen.ReadBook.route,
             arguments = listOf(navArgument("bookId") { type = NavType.LongType })
         ) {
             ReadBookUI(onBackPress = { navController.popBackStack() })
         }
 
+        composable(
+            route = AppScreen.StoreBooks.route,
+            arguments = listOf(
+                navArgument("categoryId") { type = NavType.StringType },
+            )
+        ) {
+            StoreBooksUI(navController)
+        }
+
+        composable(
+            route = AppScreen.StoreSearch.route
+        ) {
+            StoreSearchUI(navController)
+        }
+
         dialog(
-            route = Screen.ChooseCustomColor.route,
+            route = AppScreen.ChooseCustomColor.route,
             arguments = listOf(
                 navArgument("type") { type = NavType.EnumType(CustomColorType::class.java) },
             )
@@ -107,7 +105,7 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
             ChooseCustomColorDialogUI(navController)
         }
 
-        dialog(route = Screen.ChooseAppLanguage.route) {
+        dialog(route = AppScreen.ChooseAppLanguage.route) {
             ChooseAppLanguageDialogUI(navController)
         }
     }

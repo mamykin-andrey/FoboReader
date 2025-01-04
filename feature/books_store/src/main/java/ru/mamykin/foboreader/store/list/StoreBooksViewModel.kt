@@ -14,7 +14,7 @@ import ru.mamykin.foboreader.store.R
 import javax.inject.Inject
 
 @HiltViewModel
-internal class BooksStoreListViewModel @Inject constructor(
+internal class StoreBooksViewModel @Inject constructor(
     private val downloadStoreBookUseCase: DownloadBookUseCase,
     private val getStoreBooksUseCase: GetStoreBooksUseCase,
     private val errorMessageMapper: ErrorMessageMapper,
