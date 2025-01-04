@@ -40,29 +40,24 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ru.mamykin.foboreader.core.extension.changeLocale
 import ru.mamykin.foboreader.core.extension.getActivity
+import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.settings.R
-import ru.mamykin.foboreader.settings.common.CustomColorType
 import ru.mamykin.foboreader.settings.custom_color.ChooseColorResult
 import ru.mamykin.foboreader.uikit.compose.ColoredCircleCompose
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
-fun SettingsTabUI(
-    navController: NavHostController,
-    onNightThemeSwitch: (Boolean) -> Unit,
-    onChooseColorClick: (type: CustomColorType) -> Unit,
-    onChooseAppLanguageClick: () -> Unit,
-) {
+fun SettingsTabUI(appNavController: NavHostController, onNightThemeSwitch: (Boolean) -> Unit) {
     val context = LocalContext.current
     val viewModel: SettingsViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(SettingsViewModel.Intent.LoadSettings)
     }
-    navController.HandleResultState<ChooseColorResult>("choose_color_result") {
+    appNavController.HandleResultState<ChooseColorResult>("choose_color_result") {
         viewModel.sendIntent(SettingsViewModel.Intent.ChangeColor(it.type, it.colorCode))
     }
-    navController.HandleResultState<String>("choose_app_language_result") {
+    appNavController.HandleResultState<String>("choose_app_language_result") {
         viewModel.sendIntent(SettingsViewModel.Intent.ChangeAppLanguage(it))
     }
     LaunchedEffect(viewModel.effectFlow) {
@@ -71,8 +66,7 @@ fun SettingsTabUI(
                 effect = it,
                 activity = context.getActivity(),
                 onNightThemeSwitch = onNightThemeSwitch,
-                onChooseColorClick = onChooseColorClick,
-                onChooseAppLanguageClick = onChooseAppLanguageClick,
+                appNavController = appNavController,
             )
         }
     }
@@ -93,8 +87,7 @@ private fun takeEffect(
     effect: SettingsViewModel.Effect,
     activity: Activity,
     onNightThemeSwitch: (Boolean) -> Unit,
-    onChooseColorClick: (type: CustomColorType) -> Unit,
-    onChooseAppLanguageClick: () -> Unit,
+    appNavController: NavHostController,
 ) {
     when (effect) {
         is SettingsViewModel.Effect.SwitchTheme -> {
@@ -106,11 +99,11 @@ private fun takeEffect(
         }
 
         is SettingsViewModel.Effect.ChooseColor -> {
-            onChooseColorClick(effect.type)
+            appNavController.navigate(AppScreen.ChooseColor.createRoute(effect.type))
         }
 
         is SettingsViewModel.Effect.ChooseAppLanguage -> {
-            onChooseAppLanguageClick()
+            appNavController.navigate(AppScreen.ChooseAppLanguage.route)
         }
     }
 }
@@ -189,7 +182,7 @@ private fun BackgroundColorComposable(
     ColorRowComposable(
         colorHex = state.settings.backgroundColor, titleRes = R.string.settings_bg_color_title
     ) {
-        onIntent(SettingsViewModel.Intent.ChooseColor(type = CustomColorType.BACKGROUND))
+        onIntent(SettingsViewModel.Intent.ChooseColor(type = AppScreen.ChooseColor.CustomColorType.BACKGROUND))
     }
 }
 
@@ -200,7 +193,7 @@ private fun TranslationColorComposable(
     ColorRowComposable(
         colorHex = state.settings.translationColor, titleRes = R.string.settings_translate_color_title
     ) {
-        onIntent(SettingsViewModel.Intent.ChooseColor(type = CustomColorType.TRANSLATION))
+        onIntent(SettingsViewModel.Intent.ChooseColor(type = AppScreen.ChooseColor.CustomColorType.TRANSLATION))
     }
 }
 

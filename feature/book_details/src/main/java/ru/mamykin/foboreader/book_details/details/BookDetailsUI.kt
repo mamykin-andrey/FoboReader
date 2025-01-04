@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.book_details.details
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,38 +31,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import kotlinx.parcelize.Parcelize
 import ru.mamykin.foboreader.book_details.R
+import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
-@Parcelize
-data class BookDetailsParameters(
-    val bookId: Long,
-) : Parcelable
-
 @Composable
-fun BookDetailsUI(onBackPress: () -> Unit, onReadBookClick: (bookId: Long) -> Unit) {
+fun BookDetailsUI(appNavController: NavHostController) {
     val viewModel: BookDetailsViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(BookDetailsViewModel.Intent.LoadBookInfo)
     }
     LaunchedEffect(viewModel.effectFlow) {
         viewModel.effectFlow.collect {
-            takeEffect(it, onReadBookClick)
+            takeEffect(it, appNavController)
         }
     }
     BookDetailsScreenComposable(
-        viewModel.state,
-        viewModel::sendIntent,
-        onBackPress,
+        state = viewModel.state,
+        onIntent = viewModel::sendIntent,
+        appNavController = appNavController,
     )
 }
 
-private fun takeEffect(effect: BookDetailsViewModel.Effect, onReadBookClick: (bookId: Long) -> Unit) = when (effect) {
+private fun takeEffect(effect: BookDetailsViewModel.Effect, appNavController: NavHostController) = when (effect) {
     is BookDetailsViewModel.Effect.NavigateToReadBook -> {
-        onReadBookClick(effect.bookId)
+        appNavController.navigate(AppScreen.ReadBook.createRoute(effect.bookId))
     }
 }
 
@@ -73,14 +69,14 @@ private fun takeEffect(effect: BookDetailsViewModel.Effect, onReadBookClick: (bo
 private fun BookDetailsScreenComposable(
     state: BookDetailsViewModel.State,
     onIntent: (BookDetailsViewModel.Intent) -> Unit,
-    onBackPress: () -> Unit,
+    appNavController: NavHostController,
 ) {
     Scaffold(topBar = {
         TopAppBar(title = {
             Text(text = stringResource(id = R.string.my_books_book_info_title))
         }, navigationIcon = {
             IconButton(onClick = {
-                onBackPress()
+                appNavController.popBackStack()
             }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -237,7 +233,7 @@ private fun MyBooksScreenPreview() {
                 )
             ),
             onIntent = {},
-            onBackPress = {},
+            appNavController = rememberNavController(),
         )
     }
 }

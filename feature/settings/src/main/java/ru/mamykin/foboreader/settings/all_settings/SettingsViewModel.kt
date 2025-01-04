@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import ru.mamykin.foboreader.settings.app_language.SetAppLanguageUseCase
-import ru.mamykin.foboreader.settings.common.CustomColorType
 import javax.inject.Inject
 
 @HiltViewModel
@@ -93,9 +93,9 @@ internal class SettingsViewModel @Inject constructor(
         class SwitchTheme(val isNightTheme: Boolean) : Intent()
         data object IncreaseTextSize : Intent()
         data object DecreaseTextSize : Intent()
-        data class ChooseColor(val type: CustomColorType) : Intent()
+        data class ChooseColor(val type: AppScreen.ChooseColor.CustomColorType) : Intent()
         data class ChangeColor(
-            val type: CustomColorType,
+            val type: AppScreen.ChooseColor.CustomColorType,
             val newColorCode: String?,
         ) : Intent()
 
@@ -113,7 +113,7 @@ internal class SettingsViewModel @Inject constructor(
     sealed class Effect {
         data class SwitchTheme(val isNightTheme: Boolean) : Effect()
         data class SwitchLanguage(val languageCode: String) : Effect()
-        data class ChooseColor(val type: CustomColorType) : Effect()
+        data class ChooseColor(val type: AppScreen.ChooseColor.CustomColorType) : Effect()
         data object ChooseAppLanguage : Effect()
     }
 }

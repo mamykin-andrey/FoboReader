@@ -50,8 +50,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import ru.mamykin.foboreader.core.extension.showSnackbarWithData
+import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.sort.SortOrder
@@ -59,7 +61,7 @@ import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
-fun MyBooksScreen(onBookDetailsClick: (Long) -> Unit, onReadBookClick: (Long) -> Unit) {
+fun MyBooksScreen(appNavController: NavHostController) {
     val viewModel: MyBooksViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(MyBooksViewModel.Intent.LoadBooks)
@@ -71,9 +73,8 @@ fun MyBooksScreen(onBookDetailsClick: (Long) -> Unit, onReadBookClick: (Long) ->
             takeEffect(
                 effect = it,
                 snackbarHostState = snackbarHostState,
-                onBookDetailsClick = onBookDetailsClick,
-                onReadBookClick = onReadBookClick,
                 context = context,
+                appNavController = appNavController,
             )
         }
     }
@@ -87,9 +88,8 @@ fun MyBooksScreen(onBookDetailsClick: (Long) -> Unit, onReadBookClick: (Long) ->
 private suspend fun takeEffect(
     effect: MyBooksViewModel.Effect,
     snackbarHostState: SnackbarHostState,
-    onBookDetailsClick: (Long) -> Unit,
-    onReadBookClick: (Long) -> Unit,
     context: Context,
+    appNavController: NavHostController,
 ) {
     when (effect) {
         is MyBooksViewModel.Effect.ShowSnackbar -> {
@@ -97,11 +97,11 @@ private suspend fun takeEffect(
         }
 
         is MyBooksViewModel.Effect.NavigateToBookDetails -> {
-            onBookDetailsClick(effect.bookId)
+            appNavController.navigate(AppScreen.BookDetails.createRoute(effect.bookId))
         }
 
         is MyBooksViewModel.Effect.NavigateToReadBook -> {
-            onReadBookClick(effect.bookId)
+            appNavController.navigate(AppScreen.ReadBook.createRoute(effect.bookId))
         }
     }
 }

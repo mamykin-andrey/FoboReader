@@ -1,14 +1,14 @@
 package ru.mamykin.foboreader.settings.all_settings
 
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
-import ru.mamykin.foboreader.settings.common.CustomColorType
+import ru.mamykin.foboreader.core.navigation.AppScreen
 import javax.inject.Inject
 
 internal class GetCurrentColorUseCase @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository
 ) {
-    fun execute(colorType: CustomColorType): String = when (colorType) {
-        CustomColorType.TRANSLATION -> appSettingsRepository.getTranslationColor()
-        CustomColorType.BACKGROUND -> appSettingsRepository.getBackgroundColor()
+    fun execute(colorType: AppScreen.ChooseColor.CustomColorType): String = when (colorType) {
+        AppScreen.ChooseColor.CustomColorType.TRANSLATION -> appSettingsRepository.getTranslationColor()
+        AppScreen.ChooseColor.CustomColorType.BACKGROUND -> appSettingsRepository.getBackgroundColor()
     }
 }

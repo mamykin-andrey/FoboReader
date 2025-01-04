@@ -57,13 +57,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import ru.mamykin.foboreader.core.extension.showSnackbarWithData
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 
 @Composable
-fun ReadBookUI(onBackPress: () -> Unit) {
+fun ReadBookUI(appNavController: NavHostController) {
     val viewModel: ReadBookViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
@@ -79,10 +81,10 @@ fun ReadBookUI(onBackPress: () -> Unit) {
         }
     }
     ReadBookScreen(
-        viewModel.state,
-        viewModel::sendIntent,
-        snackbarHostState,
-        onBackPress,
+        state = viewModel.state,
+        onIntent = viewModel::sendIntent,
+        snackbarHostState = snackbarHostState,
+        appNavController = appNavController,
     )
 }
 
@@ -109,7 +111,7 @@ private fun ReadBookScreen(
     state: ReadBookViewModel.State,
     onIntent: (ReadBookViewModel.Intent) -> Unit,
     snackbarHostState: SnackbarHostState,
-    onBackPress: () -> Unit,
+    appNavController: NavHostController,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -123,7 +125,7 @@ private fun ReadBookScreen(
                     Text(text = title)
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onBackPress() }) {
+                    IconButton(onClick = { appNavController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = "Close"
@@ -424,7 +426,7 @@ fun ReadBookScreenPreview() {
             ),
             onIntent = {},
             snackbarHostState = SnackbarHostState(),
-            onBackPress = {},
+            appNavController = rememberNavController(),
         )
     }
 }

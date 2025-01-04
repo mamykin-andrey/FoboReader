@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import ru.mamykin.foboreader.settings.all_settings.GetCurrentColorUseCase
-import ru.mamykin.foboreader.settings.common.CustomColorType
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,11 +18,12 @@ internal class ChooseCustomColorViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val colorType: CustomColorType = savedStateHandle.get<CustomColorType>("type")!!
+    private val colorType: AppScreen.ChooseColor.CustomColorType =
+        savedStateHandle.get<AppScreen.ChooseColor.CustomColorType>("type")!!
     private val colorCode: String = getCurrentColorUseCase.execute(colorType)
     private val screenTitle: String = when (colorType) {
-        CustomColorType.TRANSLATION -> "Choose translation color"
-        CustomColorType.BACKGROUND -> "Choose background color"
+        AppScreen.ChooseColor.CustomColorType.TRANSLATION -> "Choose translation color"
+        AppScreen.ChooseColor.CustomColorType.BACKGROUND -> "Choose background color"
     }
 
     var state: State by LoggingStateDelegate(State(screenTitle = screenTitle))

@@ -14,8 +14,13 @@ sealed class AppScreen(val route: String) {
         fun createRoute(bookId: Long) = "book/$bookId"
     }
 
-    data object ChooseCustomColor : AppScreen("choose_color/{type}") {
-        fun createRoute(type: String) = "choose_color/$type"
+    data object ChooseColor : AppScreen("choose_color/{type}") {
+        fun createRoute(type: CustomColorType) = "choose_color/$type"
+
+        enum class CustomColorType {
+            TRANSLATION,
+            BACKGROUND
+        }
     }
 
     data object ChooseAppLanguage : AppScreen("change_language")

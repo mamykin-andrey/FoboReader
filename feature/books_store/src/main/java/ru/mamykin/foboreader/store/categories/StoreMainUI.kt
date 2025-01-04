@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
@@ -57,6 +60,7 @@ fun StoreMainUI(appNavController: NavController) {
         state = viewModel.state,
         onIntent = viewModel::sendIntent,
         snackbarHostState = snackbarHostState,
+        appNavController = appNavController,
     )
 }
 
@@ -79,6 +83,7 @@ internal fun StoreMainScreen(
     state: StoreMainViewModel.State,
     onIntent: (StoreMainViewModel.Intent) -> Unit,
     snackbarHostState: SnackbarHostState,
+    appNavController: NavController,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -88,6 +93,17 @@ internal fun StoreMainScreen(
                     Text(text = stringResource(id = R.string.books_store_title))
                 },
                 windowInsets = WindowInsets(0.dp),
+                actions = {
+                    IconButton(onClick = {
+                        appNavController.navigate(AppScreen.StoreSearch.route)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            modifier = Modifier,
+                            contentDescription = null,
+                        )
+                    }
+                },
             )
         }, content = { innerPadding ->
             Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
@@ -203,7 +219,8 @@ fun Preview() {
                 )
             ),
             onIntent = {},
-            snackbarHostState = remember { SnackbarHostState() }
+            snackbarHostState = remember { SnackbarHostState() },
+            appNavController = rememberNavController(),
         )
     }
 }
