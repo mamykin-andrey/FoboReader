@@ -85,12 +85,8 @@ private fun MainScreenComposable(
             navController = navController,
             startDestination = selectedTabRoute,
             modifier = Modifier.padding(innerPadding),
-            enterTransition = {
-                EnterTransition.None
-            },
-            exitTransition = {
-                ExitTransition.None
-            }
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
         ) {
             navigationTabs.forEach { (route, composable) ->
                 composable(route) {

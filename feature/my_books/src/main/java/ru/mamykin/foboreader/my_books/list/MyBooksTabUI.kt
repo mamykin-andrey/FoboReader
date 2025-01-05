@@ -168,7 +168,7 @@ private fun SearchFieldComposable(searchQuery: String, onIntent: (MyBooksViewMod
         },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 0.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
+            .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
             .focusRequester(focusRequester)
     )
     BackHandler(onBack = closeSearch)

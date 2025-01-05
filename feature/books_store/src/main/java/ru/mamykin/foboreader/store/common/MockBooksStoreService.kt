@@ -5,9 +5,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
-import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.store.categories.BookCategoriesResponse
 import ru.mamykin.foboreader.store.list.BookListResponse
+import ru.mamykin.foboreader.store.search.StoreSearchResponse
 import java.io.IOException
 import javax.inject.Inject
 
@@ -17,7 +17,6 @@ internal class MockBooksStoreService @Inject constructor(
     companion object {
 
         private const val RU_LOCALE = "ru"
-        private const val EN_LOCALE = "en"
         private const val DEAD_MANS_ISLAND_LINK = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2"
         private const val THE_YOUNG_GIANT_LINK = "https://foboreader.pythonanywhere.com/static/the_young_giant.fbwt"
 
@@ -112,10 +111,9 @@ internal class MockBooksStoreService @Inject constructor(
         )
     }
 
-    suspend fun getBooks(
+    suspend fun getStoreBooks(
         locale: String,
         categoryId: String,
-        searchQuery: String?,
     ): BookListResponse {
         delay(1_000)
         validateInternetConnection(context)
@@ -128,47 +126,54 @@ internal class MockBooksStoreService @Inject constructor(
                 }
             }
 
-            EN_LOCALE -> {
+            else -> {
                 when (categoryId) {
                     "1" -> enThrillerBooks
                     "2" -> enFairytaleBooks
                     else -> throw IllegalStateException("Unknown category id: $categoryId!")
                 }
             }
-
-            else -> throw IllegalStateException("Unknown locale: $locale")
         }
-        return filterBooks(books, searchQuery)
+        return books
     }
 
-    private fun filterBooks(
-        response: BookListResponse,
-        searchQuery: String?
-    ): BookListResponse {
-        if (searchQuery.isNullOrBlank()) {
-            return response
+    suspend fun searchInStore(
+        locale: String,
+        searchQuery: String,
+    ): StoreSearchResponse {
+        delay(1_000)
+        validateInternetConnection(context)
+        val allBooks = when (locale) {
+            RU_LOCALE -> ruThrillerBooks.books + ruFairytaleBooks.books
+            else -> enThrillerBooks.books + enFairytaleBooks.books
         }
-        return BookListResponse(
-            books = response.books.filter { it.containsText(searchQuery) }
+        val allCategories = when (locale) {
+            RU_LOCALE -> ruCategories
+            else -> enCategories
+        }
+        val categories = allCategories.filter {
+            it.name.contains(searchQuery, ignoreCase = true) || it.description?.contains(
+                searchQuery,
+                ignoreCase = true
+            ) == true
+        }
+        val books = allBooks.filter {
+            it.title.contains(searchQuery, ignoreCase = true) || it.author.contains(searchQuery, ignoreCase = true)
+        }
+        return StoreSearchResponse(
+            categories = categories,
+            books = books,
         )
     }
 
-    private fun BookListResponse.BookResponse.containsText(text: String): Boolean {
-        return title.contains(text, ignoreCase = true) || author.contains(text, ignoreCase = true)
-    }
-
-    suspend fun getCategories(
+    suspend fun getStoreCategories(
         locale: String,
     ): BookCategoriesResponse {
         delay(1_000)
         validateInternetConnection(context)
         val categories = when (locale) {
             RU_LOCALE -> ruCategories
-            EN_LOCALE -> enCategories
-            else -> {
-                Log.warning("Unknown locale for store: $locale")
-                enCategories
-            }
+            else -> enCategories
         }
         return BookCategoriesResponse(categories)
     }

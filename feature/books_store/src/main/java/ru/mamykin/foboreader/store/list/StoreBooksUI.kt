@@ -168,12 +168,12 @@ private fun ContentComposable(
     onIntent: (StoreBooksViewModel.Intent) -> Unit
 ) {
     Column {
-        state.books.forEach { BookRowComposable(it, onIntent) }
+        state.books.forEach { StoreBookItemComposable(it, onIntent) }
     }
 }
 
 @Composable
-private fun BookRowComposable(book: StoreBook, onIntent: (StoreBooksViewModel.Intent) -> Unit) {
+internal fun StoreBookItemComposable(book: StoreBook, onIntent: (StoreBooksViewModel.Intent) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
