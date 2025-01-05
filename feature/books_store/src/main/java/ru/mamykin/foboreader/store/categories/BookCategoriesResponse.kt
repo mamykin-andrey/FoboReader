@@ -13,7 +13,7 @@ internal class BookCategoriesResponse(
         val description: String?,
         val booksCount: Int,
     ) {
-        fun toDomainModel() = BookCategory(
+        fun toDomainModel() = BookCategoryEntity(
             id = id,
             name = name,
             description = description,

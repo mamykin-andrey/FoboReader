@@ -2,8 +2,12 @@
 <resources>
     <string name="books_store_title">Store</string>
     <string name="books_store_menu_search">Search</string>
-    <string name="books_store_download_progress_fmt">The file is downloading: %1$s</string>
-    <string name="books_store_download_completed_fmt">The file has been downloaded: %1$s</string>
-    <string name="books_store_download_failed_fmt">Unable to load file: %1$s</string>
+    <string name="books_store_download_progress_fmt">The book is downloading: %1$s</string>
+    <string name="books_store_download_completed_fmt">The book has been downloaded: %1$s</string>
+    <string name="books_store_download_failed_fmt">Unable to load the book: %1$s</string>
     <string name="books_store_category_count">Books count: %1$d</string>
+    <string name="bs_search_no_results">Nothing found, try to change the query</string>
+    <string name="bs_search_type_nudge">Type something to search</string>
+    <string name="bs_search_categories_section_title">Categories</string>
+    <string name="bs_search_books_section_title">Books</string>
 </resources>

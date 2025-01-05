@@ -41,6 +41,24 @@ android {
         getByName("debug") {
             isMinifyEnabled = false
             isDebuggable = true
+            kotlin {
+                compilerOptions {
+                    freeCompilerArgs.addAll(
+                        listOf(
+                            "-P",
+                            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                                "${project.buildDir.absolutePath}/compose_metrics"
+                        )
+                    )
+                    freeCompilerArgs.addAll(
+                        listOf(
+                            "-P",
+                            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                                "${project.buildDir.absolutePath}/compose_reports"
+                        )
+                    )
+                }
+            }
         }
 
         create("profile") {
@@ -101,7 +119,6 @@ dependencies {
     implementation(Dependencies.okio)
     implementation(Dependencies.okHttp)
     implementation(Dependencies.hilt)
-    implementation(Dependencies.jankStats)
 
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeTooling)

@@ -89,7 +89,7 @@ private fun BookDetailsScreenComposable(
         Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
             when (state) {
                 is BookDetailsViewModel.State.Loading -> LoadingComposable()
-                is BookDetailsViewModel.State.Loaded -> LoadedComposable(state, onIntent)
+                is BookDetailsViewModel.State.Content -> LoadedComposable(state, onIntent)
             }
         }
     })
@@ -108,7 +108,7 @@ private fun LoadingComposable() {
 
 @Composable
 private fun LoadedComposable(
-    state: BookDetailsViewModel.State.Loaded,
+    state: BookDetailsViewModel.State.Content,
     onIntent: (BookDetailsViewModel.Intent) -> Unit
 ) {
     Column {
@@ -222,8 +222,8 @@ private fun LoadedComposable(
 private fun MyBooksScreenPreview() {
     FoboReaderTheme {
         BookDetailsScreenComposable(
-            state = BookDetailsViewModel.State.Loaded(
-                BookDetails(
+            state = BookDetailsViewModel.State.Content(
+                BookInfoUIModel(
                     "Author",
                     "Title",
                     "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",

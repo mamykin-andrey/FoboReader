@@ -7,7 +7,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import ru.mamykin.foboreader.store.categories.BookCategoriesResponse
 import ru.mamykin.foboreader.store.list.BookListResponse
-import ru.mamykin.foboreader.store.search.StoreSearchResponse
+import ru.mamykin.foboreader.store.search.SearchResultsResponse
 import java.io.IOException
 import javax.inject.Inject
 
@@ -17,8 +17,8 @@ internal class MockBooksStoreService @Inject constructor(
     companion object {
 
         private const val RU_LOCALE = "ru"
-        private const val DEAD_MANS_ISLAND_LINK = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2"
-        private const val THE_YOUNG_GIANT_LINK = "https://foboreader.pythonanywhere.com/static/the_young_giant.fbwt"
+        private const val DEAD_MANS_ISLAND_LINK = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2" // TODO: Migrate to JSON
+        private const val THE_YOUNG_GIANT_LINK = "https://foboreader.pythonanywhere.com/static/the_young_giant.json"
 
         private val ruCategories = listOf(
             BookCategoriesResponse.BookCategoryResponse(
@@ -140,7 +140,7 @@ internal class MockBooksStoreService @Inject constructor(
     suspend fun searchInStore(
         locale: String,
         searchQuery: String,
-    ): StoreSearchResponse {
+    ): SearchResultsResponse {
         delay(1_000)
         validateInternetConnection(context)
         val allBooks = when (locale) {
@@ -160,7 +160,7 @@ internal class MockBooksStoreService @Inject constructor(
         val books = allBooks.filter {
             it.title.contains(searchQuery, ignoreCase = true) || it.author.contains(searchQuery, ignoreCase = true)
         }
-        return StoreSearchResponse(
+        return SearchResultsResponse(
             categories = categories,
             books = books,
         )

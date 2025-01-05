@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
@@ -19,7 +19,7 @@ internal class MyBooksViewModel @Inject constructor(
     private val sortAndFilterBooks: SortAndFilterBooks,
     private val removeBookUseCase: RemoveBookUseCase,
     private val errorMessageMapper: ErrorMessageMapper,
-    private val myBookUIModelMapper: MyBookUIModelMapper,
+    private val myBookUIModelMapper: BookInfoUIModelMapper,
 ) : ViewModel() {
 
     var state: State by LoggingStateDelegate(State.Loading)
@@ -27,17 +27,14 @@ internal class MyBooksViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
-    private var allBooks: List<BookInfo>? = null
+    private var allBooks: List<DownloadedBookEntity>? = null
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadBooks -> {
-                getMyBooksUseCase.execute().fold(onSuccess = {
-                    allBooks = it
-                    state = State.Content(books = it.map(myBookUIModelMapper::map))
-                }, onFailure = {
-                    effectChannel.send(Effect.ShowSnackbar(SnackbarData(errorMessageMapper.getMessage(it))))
-                })
+                val books = getMyBooksUseCase.execute()
+                this@MyBooksViewModel.allBooks = books
+                state = State.Content(books = books.map(myBookUIModelMapper::map))
             }
 
             is Intent.RemoveBook -> {
@@ -98,7 +95,7 @@ internal class MyBooksViewModel @Inject constructor(
         data object Loading : State()
 
         data class Content(
-            val books: List<MyBookUIModel>,
+            val books: List<BookInfoUIModel>,
             val searchQuery: String? = null,
             val sortOrder: SortOrder = SortOrder.ByName,
         ) : State()

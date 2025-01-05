@@ -6,13 +6,13 @@ import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
+import ru.mamykin.foboreader.common_book_info.data.repository.DownloadedBooksRepository
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 
 class GetBookUseCaseTest {
 
     private val bookContentRepository: BookContentRepository = mockk()
-    private val bookInfoRepository: BookInfoRepository = mockk()
+    private val bookInfoRepository: DownloadedBooksRepository = mockk()
     private val appSettingsRepository: AppSettingsRepository = mockk {
         every { getReadTextSize() } returns 15
     }
@@ -25,7 +25,7 @@ class GetBookUseCaseTest {
         coEvery { bookInfoRepository.getBookInfo(bookId) } returns mockk {
             coEvery { filePath } returns bookFilePath
         }
-        coEvery { bookContentRepository.getBookContent(bookFilePath) } returns TranslatedText(
+        coEvery { bookContentRepository.getBookContent(bookFilePath) } returns BookContent(
             sentences = listOf("Original sentence#1"), // total = 20 with line breaks
             translations = emptyList(),
         )
@@ -44,7 +44,7 @@ class GetBookUseCaseTest {
         coEvery { bookInfoRepository.getBookInfo(bookId) } returns mockk {
             coEvery { filePath } returns bookFilePath
         }
-        coEvery { bookContentRepository.getBookContent(bookFilePath) } returns TranslatedText(
+        coEvery { bookContentRepository.getBookContent(bookFilePath) } returns BookContent(
             sentences = listOf("Original sentence#1", "Original sentence#2"), // total = 40 with line breaks
             translations = emptyList(),
         )
@@ -66,7 +66,7 @@ class GetBookUseCaseTest {
         coEvery { bookInfoRepository.getBookInfo(bookId) } returns mockk {
             coEvery { filePath } returns bookFilePath
         }
-        coEvery { bookContentRepository.getBookContent(bookFilePath) } returns TranslatedText(
+        coEvery { bookContentRepository.getBookContent(bookFilePath) } returns BookContent(
             sentences = listOf(
                 "Original sentence#1",
                 "Original sentence#2",

@@ -139,7 +139,7 @@ private fun ContentComposable(
 
 @Composable
 internal fun StoreCategoryItemComposable(
-    category: BookCategory,
+    category: BookCategoryUIModel,
     onIntent: (StoreMainViewModel.Intent) -> Unit,
 ) {
     Card(
@@ -213,7 +213,7 @@ fun Preview() {
         StoreMainScreen(
             state = StoreMainViewModel.State.Content(
                 listOf(
-                    BookCategory(
+                    BookCategoryUIModel(
                         "1",
                         "Classic",
                         "Classic books",

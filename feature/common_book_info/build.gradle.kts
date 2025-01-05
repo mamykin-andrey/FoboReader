@@ -48,6 +48,8 @@ dependencies {
     implementation(Dependencies.coroutinesCore)
     implementation(Dependencies.roomRuntime)
     implementation(Dependencies.roomKtx)
+    implementation(Dependencies.hilt)
 
+    kapt(Dependencies.hiltCompiler)
     kapt(Dependencies.roomCompiler)
 }

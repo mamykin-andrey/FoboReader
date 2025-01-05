@@ -2,8 +2,12 @@
 <resources>
     <string name="books_store_title">Магазин</string>
     <string name="books_store_menu_search">Поиск</string>
-    <string name="books_store_download_progress_fmt">Файл загружается: %1$s</string>
-    <string name="books_store_download_completed_fmt">Загрузка завершена: %1$s</string>
-    <string name="books_store_download_failed_fmt">Ошибка загрузки файла: %1$s</string>
+    <string name="books_store_download_progress_fmt">Книга загружается: %1$s</string>
+    <string name="books_store_download_completed_fmt">Книга загружена: %1$s</string>
+    <string name="books_store_download_failed_fmt">Ошибка загрузки книги: %1$s</string>
     <string name="books_store_category_count">Книг: %1$d</string>
+    <string name="bs_search_no_results">Ничего не найдено, попробуйте изменить запрос</string>
+    <string name="bs_search_type_nudge">Введите поисковый запрос</string>
+    <string name="bs_search_categories_section_title">Категории</string>
+    <string name="bs_search_books_section_title">Книги</string>
 </resources>

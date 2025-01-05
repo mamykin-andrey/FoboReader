@@ -5,7 +5,7 @@ import androidx.room.Room
 
 object BookInfoDaoFactory {
 
-    fun create(context: Context): BookInfoDao {
+    fun create(context: Context): DownloadedBooksDao {
         return Room.databaseBuilder(context, BookInfoDatabase::class.java, "book_info")
             .build()
             .getBookInfoDao()

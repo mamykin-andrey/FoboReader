@@ -257,7 +257,7 @@ private fun ContentComposable(state: MyBooksViewModel.State.Content, onIntent: (
 }
 
 @Composable
-private fun BookRowComposable(book: MyBookUIModel, onIntent: (MyBooksViewModel.Intent) -> Unit) {
+private fun BookRowComposable(book: BookInfoUIModel, onIntent: (MyBooksViewModel.Intent) -> Unit) {
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(4.dp), onClick = {
@@ -301,7 +301,7 @@ private fun BookRowComposable(book: MyBookUIModel, onIntent: (MyBooksViewModel.I
 
 @Composable
 private fun BookContextActionsComposable(
-    book: MyBookUIModel,
+    book: BookInfoUIModel,
     onIntent: (MyBooksViewModel.Intent) -> Unit
 ) {
     val isBookPopupExpanded = remember { mutableStateOf(false) }
@@ -356,7 +356,7 @@ private fun BookContextActionsComposable(
 }
 
 @Composable
-private fun BookAuthorComposable(book: MyBookUIModel) {
+private fun BookAuthorComposable(book: BookInfoUIModel) {
     Text(
         text = book.author,
         style = TextStyles.Body2,
@@ -368,7 +368,7 @@ private fun BookAuthorComposable(book: MyBookUIModel) {
 }
 
 @Composable
-private fun BookGenreComposable(book: MyBookUIModel) {
+private fun BookGenreComposable(book: BookInfoUIModel) {
     Text(
         text = book.genre,
         style = TextStyles.Body2,
@@ -380,7 +380,7 @@ private fun BookGenreComposable(book: MyBookUIModel) {
 }
 
 @Composable
-private fun BookLanguagesComposable(book: MyBookUIModel) {
+private fun BookLanguagesComposable(book: BookInfoUIModel) {
     Text(
         text = book.languages.joinToString(", "),
         style = TextStyles.Body2,
@@ -392,7 +392,7 @@ private fun BookLanguagesComposable(book: MyBookUIModel) {
 }
 
 @Composable
-private fun BookReadStatusComposable(book: MyBookUIModel) {
+private fun BookReadStatusComposable(book: BookInfoUIModel) {
     Text(
         text = book.readStatus.toString(LocalContext.current),
         style = TextStyles.Body2,
@@ -427,7 +427,7 @@ fun MyBooksScreenPreview() {
         MyBooksScreenUI(
             state = MyBooksViewModel.State.Content(
                 books = listOf(
-                    MyBookUIModel(
+                    BookInfoUIModel(
                         id = 0,
                         genre = "classic",
                         coverUrl = "https://m.media-amazon.com/images/I/71O2XIytdqL._AC_UF894,1000_QL80_.jpg",
@@ -435,7 +435,6 @@ fun MyBooksScreenPreview() {
                         title = "Crime & Punishment",
                         languages = listOf("English, Russian, Spanish"),
                         readStatus = StringOrResource.String("1 from 10"),
-                        lastOpen = 1000,
                         readPercent = 0.5f,
                     )
                 )

@@ -1,16 +1,13 @@
 package ru.mamykin.foboreader.my_books.list
 
-import ru.mamykin.foboreader.common_book_info.domain.model.BookInfo
+import ru.mamykin.foboreader.common_book_info.data.repository.DownloadedBooksRepository
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
 import javax.inject.Inject
 
 internal class GetMyBooksUseCase @Inject constructor(
-    private val myBooksRepository: MyBooksRepository,
-    private val booksScanner: BookFilesScanner,
+    private val bookInfoRepository: DownloadedBooksRepository,
 ) {
-    suspend fun execute(): Result<List<BookInfo>> {
-        return booksScanner.scan().map { allStoredBooks ->
-            myBooksRepository.updateBooks(allStoredBooks)
-            myBooksRepository.getBooks()
-        }
+    suspend fun execute(): List<DownloadedBookEntity> {
+        return bookInfoRepository.getBooks()
     }
 }

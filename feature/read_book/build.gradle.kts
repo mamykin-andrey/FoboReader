@@ -79,6 +79,7 @@ dependencies {
     implementation(Dependencies.composeToolingPreview)
     implementation(Dependencies.coil)
     implementation(Dependencies.hiltNavigation)
+    implementation(Dependencies.retrofitGsonConverter)
 
     kapt(Dependencies.hiltCompiler)
 

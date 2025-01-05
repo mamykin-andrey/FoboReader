@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.store.search
 
+import android.view.View
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -7,8 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,26 +32,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import ru.mamykin.foboreader.store.categories.BookCategory
+import ru.mamykin.foboreader.store.R
+import ru.mamykin.foboreader.store.categories.BookCategoryUIModel
 import ru.mamykin.foboreader.store.categories.StoreCategoryItemComposable
-import ru.mamykin.foboreader.store.list.StoreBook
 import ru.mamykin.foboreader.store.list.StoreBookItemComposable
+import ru.mamykin.foboreader.store.list.StoreBookUIModel
+import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
 fun StoreSearchUI(appNavController: NavHostController) {
     val viewModel: StoreSearchViewModel = hiltViewModel()
-    // LaunchedEffect(viewModel) {
-    //     viewModel.sendIntent(StoreSearchViewModel.Intent.LoadBooks)
-    // }
     val snackbarHostState = remember { SnackbarHostState() }
     // LaunchedEffect(viewModel.effectFlow) {
     //     viewModel.effectFlow.collect {
@@ -107,11 +112,15 @@ private fun MyBooksScreenUI(
                     SearchFieldComposable(searchQuery, onIntent, appNavController)
                 })
         }, content = { innerPadding ->
-            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+            Box(
+                modifier = Modifier
+                    .imePadding()
+                    .padding(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding())
+            ) {
                 when (state.searchState) {
-                    is StoreSearchViewModel.SearchState.NotStarted -> TypingNudgeComposable()
+                    is StoreSearchViewModel.SearchState.NotStarted -> TypeNudgeComposable()
                     is StoreSearchViewModel.SearchState.Loading -> LoadingComposable()
-                    is StoreSearchViewModel.SearchState.Failed -> LoadingFailedComposable()
+                    is StoreSearchViewModel.SearchState.Failed -> LoadingFailedComposable(state.searchState, onIntent)
                     is StoreSearchViewModel.SearchState.Loaded -> ContentComposable(state.searchState, onIntent)
                 }
             }
@@ -124,14 +133,16 @@ private fun SearchFieldComposable(
     onIntent: (StoreSearchViewModel.Intent) -> Unit,
     appNavController: NavHostController,
 ) {
-    val closeSearch: () -> Unit = { appNavController.popBackStack() }
+    val closeSearch = remember(appNavController) { { appNavController.popBackStack(); Unit } }
     val focusRequester = remember { FocusRequester() }
     OutlinedTextField(
         value = searchQuery,
-        onValueChange = { newQuery ->
-            onIntent(StoreSearchViewModel.Intent.Search(newQuery))
+        onValueChange = remember(onIntent) {
+            { newQuery ->
+                onIntent(StoreSearchViewModel.Intent.Search(newQuery))
+            }
         },
-        placeholder = { Text(text = "Search") },
+        placeholder = { Text(text = stringResource(R.string.books_store_menu_search)) },
         singleLine = true,
         trailingIcon = {
             IconButton(onClick = closeSearch) {
@@ -143,7 +154,7 @@ private fun SearchFieldComposable(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
+            .padding(horizontal = 8.dp, vertical = 2.dp)
             .focusRequester(focusRequester)
     )
     BackHandler(onBack = closeSearch)
@@ -153,25 +164,36 @@ private fun SearchFieldComposable(
 }
 
 @Composable
-private fun TypingNudgeComposable() {
+private fun TypeNudgeComposable() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize(),
     ) {
-        Text("Type something to search")
+        Text(stringResource(R.string.bs_search_type_nudge))
     }
 }
 
 @Composable
-private fun LoadingFailedComposable() {
+private fun LoadingFailedComposable(
+    searchState: StoreSearchViewModel.SearchState.Failed,
+    onIntent: (StoreSearchViewModel.Intent) -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize(),
     ) {
-        // TODO: Replace with the ErrorStub widget
-        Text("The network request has failed, please try again later")
+        val context = LocalContext.current
+        AndroidView(factory = {
+            ErrorStubWidget(it).apply {
+                setMessage(searchState.errorMessage.toString(context))
+                visibility = View.VISIBLE
+                setRetryClickListener {
+                    onIntent(StoreSearchViewModel.Intent.RetrySearch)
+                }
+            }
+        })
     }
 }
 
@@ -200,20 +222,23 @@ private fun ContentComposable(
 
 @Composable
 private fun CategoriesAndBooksComposable(state: StoreSearchViewModel.SearchState.Loaded) {
-    // TODO: Check and fix performance
-    Column {
+    LazyColumn {
         if (state.categories.isNotEmpty()) {
-            SectionTitleComposable("Categories")
-            state.categories.forEach {
-                StoreCategoryItemComposable(it) {
+            items(1) {
+                SectionTitleComposable(stringResource(R.string.bs_search_categories_section_title))
+            }
+            items(state.categories.size) {
+                StoreCategoryItemComposable(state.categories[it]) {
                     // TODO:
                 }
             }
         }
         if (state.books.isNotEmpty()) {
-            SectionTitleComposable("Books")
-            state.books.forEach {
-                StoreBookItemComposable(it) {
+            items(1) {
+                SectionTitleComposable(stringResource(R.string.bs_search_books_section_title))
+            }
+            items(state.books.size) {
+                StoreBookItemComposable(state.books[it]) {
                     // TODO:
                 }
             }
@@ -244,8 +269,7 @@ private fun NoSearchResultsComposable() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            // text = stringResource(id = R.string.my_books_no_books),
-            text = "Nothing found, try to change your query",
+            text = stringResource(id = R.string.bs_search_no_results),
             style = TextStyles.Subtitle1,
             textAlign = TextAlign.Center,
         )
@@ -261,13 +285,13 @@ fun MyBooksScreenPreview() {
                 searchQuery = "",
                 searchState = StoreSearchViewModel.SearchState.Loaded(
                     categories = listOf(
-                        BookCategory(
+                        BookCategoryUIModel(
                             "0",
                             "Classic",
                             "Classic books for all time",
                             2
                         ),
-                        BookCategory(
+                        BookCategoryUIModel(
                             "1",
                             "Thriller",
                             "Suspense books",
@@ -275,7 +299,7 @@ fun MyBooksScreenPreview() {
                         ),
                     ),
                     books = listOf(
-                        StoreBook(
+                        StoreBookUIModel(
                             "0",
                             "Classic",
                             "Author",

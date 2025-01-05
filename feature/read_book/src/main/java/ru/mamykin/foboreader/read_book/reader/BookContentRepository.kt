@@ -5,7 +5,7 @@ import javax.inject.Inject
 internal class BookContentRepository @Inject constructor(
     private val bookContentParser: BookContentParser
 ) {
-    suspend fun getBookContent(filePath: String): TranslatedText {
+    suspend fun getBookContent(filePath: String): BookContent {
         return bookContentParser.parse(filePath)
     }
 }

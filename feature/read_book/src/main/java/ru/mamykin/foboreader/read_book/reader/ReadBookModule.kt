@@ -1,5 +1,6 @@
 package ru.mamykin.foboreader.read_book.reader
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,4 +29,12 @@ internal class ReadBookProvidesModule {
     @Named("ApiHost")
     @Provides
     fun provideGoogleApiHost() = BuildConfig.googleApiHost
+}
+
+@Module
+@InstallIn(ViewModelComponent::class)
+internal interface ReadBookBindsModule {
+
+    @Binds
+    fun bindBookParser(parser: JsonBookContentParser): BookContentParser
 }

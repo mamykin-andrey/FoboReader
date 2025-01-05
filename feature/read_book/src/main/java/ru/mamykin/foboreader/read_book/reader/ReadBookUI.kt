@@ -60,6 +60,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ru.mamykin.foboreader.core.extension.showSnackbarWithData
+import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
@@ -118,11 +119,7 @@ private fun ReadBookScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    val title = when (state) {
-                        is ReadBookViewModel.State.Loading -> stringResource(R.string.rb_book_loading)
-                        is ReadBookViewModel.State.Content -> state.title
-                    }
-                    Text(text = title)
+                    Text(text = state.title.toString(LocalContext.current))
                 },
                 navigationIcon = {
                     IconButton(onClick = { appNavController.popBackStack() }) {
@@ -370,12 +367,12 @@ private fun CombinedClickableText(
     state: ReadBookViewModel.State.Content
 ) {
     val onLongClick = { pos: Int ->
-        val word = page.getStringAnnotations(TextAnnotation.WORD, pos, pos).firstOrNull()?.item
+        val word = page.getStringAnnotations(TextAnnotations.WORD, pos, pos).firstOrNull()?.item
         word?.let { onIntent(ReadBookViewModel.Intent.TranslateWord(it)) }
     }
     val onClick = { pos: Int ->
         val sentenceNum =
-            page.getStringAnnotations(TextAnnotation.SENTENCE_NUMBER, pos, pos).firstOrNull()?.item?.toInt()
+            page.getStringAnnotations(TextAnnotations.SENTENCE_NUMBER, pos, pos).firstOrNull()?.item?.toInt()
         sentenceNum?.let { onIntent(ReadBookViewModel.Intent.TranslateSentence(it)) }
     }
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -415,7 +412,7 @@ fun ReadBookScreenPreview() {
     FoboReaderTheme {
         ReadBookScreen(
             state = ReadBookViewModel.State.Content(
-                "Title",
+                StringOrResource.String("Title"),
                 listOf(AnnotatedString("Page1"), AnnotatedString("Page2")),
                 300,
                 300,

@@ -21,18 +21,14 @@ internal class StoreMainViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
-    private var isDataLoaded = false
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadCategories -> {
-                if (isDataLoaded) return@launch
+                if (state is State.Content) return@launch
                 state = State.Loading
                 getBookCategories.execute().fold(
-                    {
-                        isDataLoaded = true
-                        state = State.Content(it)
-                    },
+                    { state = State.Content(it.map(BookCategoryUIModel::fromDomainModel)) },
                     { state = State.Error(errorMessageMapper.getMessage(it)) }
                 )
             }
@@ -57,7 +53,7 @@ internal class StoreMainViewModel @Inject constructor(
         data object Loading : State()
 
         data class Content(
-            val categories: List<BookCategory>,
+            val categories: List<BookCategoryUIModel>,
         ) : State()
 
         data class Error(

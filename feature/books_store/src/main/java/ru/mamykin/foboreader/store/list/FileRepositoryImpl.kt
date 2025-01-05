@@ -18,7 +18,7 @@ internal class FileRepositoryImpl @Inject constructor(
 
     override fun createFile(fileName: String): Result<File> {
         val downloadsDir = context.externalMediaDirs.first()
-            ?: return Result.failure(DownloadFileException("No external media dir is found!"))
+            ?: return Result.failure(IllegalStateException("No external media dir is found!"))
 
         return Result.success(
             File(downloadsDir, fileName).also {
@@ -33,7 +33,7 @@ internal class FileRepositoryImpl @Inject constructor(
 
             val response = client.newCall(request).execute()
                 .takeIf { it.isSuccessful }
-                ?: throw DownloadFileException("Unable to connect to: $url!")
+                ?: throw RuntimeException("Unable to connect to: $url!")
 
             outputFile.sink().buffer().use {
                 it.writeAll(response.body!!.source())

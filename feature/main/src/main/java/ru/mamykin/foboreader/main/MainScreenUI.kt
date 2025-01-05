@@ -10,7 +10,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,24 +30,12 @@ fun MainScreenUI(
 ) {
     val viewModel: MainViewModel = hiltViewModel()
     val navController = rememberNavController()
-    LaunchedEffect(viewModel.effectFlow) {
-        viewModel.effectFlow.collect {
-            takeEffect(it, navController = navController)
-        }
-    }
     MainScreenComposable(
         state = viewModel.state,
-        onIntent = viewModel::sendIntent,
         navigationTabs = navigationTabs,
         navController = navController,
         selectedTabRoute = selectedTabRoute,
     )
-}
-
-private fun takeEffect(effect: MainViewModel.Effect, navController: NavHostController) = when (effect) {
-    is MainViewModel.Effect.NavigateToTab -> {
-        navigateToScreen(navController, effect.route)
-    }
 }
 
 private fun navigateToScreen(
@@ -67,7 +54,6 @@ private fun navigateToScreen(
 @Composable
 private fun MainScreenComposable(
     state: MainViewModel.State,
-    onIntent: (MainViewModel.Intent) -> Unit,
     navigationTabs: List<Pair<String, @Composable () -> Unit>>,
     navController: NavHostController,
     selectedTabRoute: String,
@@ -77,7 +63,6 @@ private fun MainScreenComposable(
             NavigationBarComposable(
                 state = state,
                 navController = navController,
-                onIntent = onIntent,
             )
         }
     ) { innerPadding ->
@@ -101,7 +86,6 @@ private fun MainScreenComposable(
 private fun NavigationBarComposable(
     state: MainViewModel.State,
     navController: NavHostController,
-    onIntent: (MainViewModel.Intent) -> Unit
 ) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
@@ -115,7 +99,7 @@ private fun NavigationBarComposable(
                 selected = currentRoute == item.route,
                 onClick = {
                     if (currentRoute != item.route) {
-                        onIntent(MainViewModel.Intent.OpenTab(item.route))
+                        navigateToScreen(navController, item.route)
                     }
                 }
             )
@@ -129,7 +113,6 @@ fun MainScreenPreview() {
     FoboReaderTheme {
         MainScreenComposable(
             state = MainViewModel.State(),
-            onIntent = {},
             navController = rememberNavController(),
             navigationTabs = listOf(
                 MainTabScreenRoutes.MY_BOOKS to {

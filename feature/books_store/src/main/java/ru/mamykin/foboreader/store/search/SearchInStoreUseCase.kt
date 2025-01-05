@@ -7,7 +7,7 @@ import javax.inject.Inject
 internal class SearchInStoreUseCase @Inject constructor(
     private val repository: BooksStoreRepository,
 ) {
-    suspend fun execute(searchQuery: String): Result<StoreSearchModel> {
+    suspend fun execute(searchQuery: String): Result<SearchResultsEntity> {
         return runCatchingCancellable {
             repository.search(searchQuery)
         }

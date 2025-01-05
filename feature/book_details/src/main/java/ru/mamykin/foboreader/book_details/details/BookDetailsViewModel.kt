@@ -5,13 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.common_book_info.domain.GetBookInfoUseCase
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
 
 @HiltViewModel
 internal class BookDetailsViewModel @Inject constructor(
-    private val getBookDetailsUseCase: GetBookDetailsUseCase,
+    private val getBookInfoUseCase: GetBookInfoUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -22,7 +23,6 @@ internal class BookDetailsViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
-    private var isDataLoaded = false
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
@@ -31,9 +31,11 @@ internal class BookDetailsViewModel @Inject constructor(
             }
 
             is Intent.LoadBookInfo -> {
-                if (isDataLoaded) return@launch
-                state = State.Loaded(bookDetails = getBookDetailsUseCase.execute(bookId))
-                isDataLoaded = true
+                if (state is State.Content) return@launch
+                state = State.Content(
+                    getBookInfoUseCase.execute(bookId)
+                        .let(BookInfoUIModel::fromDomainModel)
+                )
             }
         }
     }
@@ -45,8 +47,8 @@ internal class BookDetailsViewModel @Inject constructor(
 
     sealed class State {
         data object Loading : State()
-        data class Loaded(
-            val bookDetails: BookDetails,
+        data class Content(
+            val bookDetails: BookInfoUIModel,
         ) : State()
     }
 

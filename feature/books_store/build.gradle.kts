@@ -25,6 +25,24 @@ android {
 
         getByName("debug") {
             isMinifyEnabled = false
+            kotlin {
+                compilerOptions {
+                    freeCompilerArgs.addAll(
+                        listOf(
+                            "-P",
+                            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                                "${project.buildDir.absolutePath}/compose_metrics"
+                        )
+                    )
+                    freeCompilerArgs.addAll(
+                        listOf(
+                            "-P",
+                            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                                "${project.buildDir.absolutePath}/compose_reports"
+                        )
+                    )
+                }
+            }
         }
 
         create("profile") {
@@ -54,6 +72,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":uikit"))
+    implementation(project(":feature:common_book_info"))
 
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.coroutinesCore)
@@ -78,6 +97,7 @@ dependencies {
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)
+    testImplementation(Dependencies.coroutinesTest)
 
     androidTestImplementation(Dependencies.espressoCore)
 }

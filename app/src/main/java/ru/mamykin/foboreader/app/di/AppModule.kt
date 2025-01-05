@@ -13,9 +13,8 @@ import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
 import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.app.platform.NotificationManagerImpl
 import ru.mamykin.foboreader.app.platform.PermissionManagerImpl
-import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDao
+import ru.mamykin.foboreader.common_book_info.data.database.DownloadedBooksDao
 import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDaoFactory
-import ru.mamykin.foboreader.common_book_info.data.repository.BookInfoRepository
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
@@ -31,10 +30,7 @@ internal object AppProvidesModule {
     fun provideOkHttpClient(): OkHttpClient = OkHttpFactory.create(true)
 
     @Provides
-    fun provideBookInfoRepository(dao: BookInfoDao): BookInfoRepository = BookInfoRepository(dao)
-
-    @Provides
-    fun provideBookInfoDao(@ApplicationContext context: Context): BookInfoDao = BookInfoDaoFactory.create(context)
+    fun provideBookInfoDao(@ApplicationContext context: Context): DownloadedBooksDao = BookInfoDaoFactory.create(context)
 }
 
 @Module

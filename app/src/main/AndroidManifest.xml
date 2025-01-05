@@ -23,7 +23,7 @@
             android:name=".app.presentation.RootActivity"
             android:exported="true"
             android:theme="@style/Splash"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

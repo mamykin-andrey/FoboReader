@@ -13,19 +13,18 @@ internal class BookListResponse(
         val author: String,
         val title: String,
         val languages: List<String>,
-        @Deprecated("Remove it")
         val format: String,
         val cover: String,
         val link: String
     ) {
-        fun toDomainModel() = StoreBook(
+        fun toDomainModel() = StoreBookEntity(
             id = id,
             genre = genre,
             author = author,
             title = title,
             languages = languages,
             format = format,
-            cover = cover,
+            coverUrl = cover,
             link = link
         )
     }

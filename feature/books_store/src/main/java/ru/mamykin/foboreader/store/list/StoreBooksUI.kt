@@ -173,13 +173,13 @@ private fun ContentComposable(
 }
 
 @Composable
-internal fun StoreBookItemComposable(book: StoreBook, onIntent: (StoreBooksViewModel.Intent) -> Unit) {
+internal fun StoreBookItemComposable(book: StoreBookUIModel, onIntent: (StoreBooksViewModel.Intent) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
             .clickable {
-                onIntent(StoreBooksViewModel.Intent.DownloadBook(book))
+                onIntent(StoreBooksViewModel.Intent.DownloadBook(book.id))
             },
     ) {
         Row(
@@ -240,7 +240,7 @@ fun BooksListScreenPreview() {
         StoreBooksScreen(
             state = StoreBooksViewModel.State.Content(
                 listOf(
-                    StoreBook(
+                    StoreBookUIModel(
                         id = "1",
                         genre = "Classic",
                         author = "Pierre Cardine",

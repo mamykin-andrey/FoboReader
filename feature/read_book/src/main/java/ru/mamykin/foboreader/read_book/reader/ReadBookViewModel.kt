@@ -30,8 +30,9 @@ internal class ReadBookViewModel @Inject constructor(
 
     private val bookId: Long = savedStateHandle.get<Long>("bookId")!!
     private var bookPages: List<Book.Page>? = null
+    private var wordsDictionary: Map<String, String> = emptyMap()
 
-    var state: State by LoggingStateDelegate(State.Loading)
+    var state: State by LoggingStateDelegate(State.Loading(StringOrResource.Resource(R.string.rb_book_loading)))
         private set
 
     private val effectChannel = LoggingEffectChannel<Effect>()
@@ -39,12 +40,11 @@ internal class ReadBookViewModel @Inject constructor(
 
     private val isVibrationEnabled = getVibrationEnabled.execute()
     private var loadBookJob: Job? = null
-    private var isDataLoaded = false
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             is Intent.LoadBook -> {
-                if (isDataLoaded) return@launch
+                if (state is State.Content) return@launch
                 loadBookJob?.cancel()
                 loadBookJob = null
                 coroutineScope {
@@ -55,6 +55,7 @@ internal class ReadBookViewModel @Inject constructor(
                             intent.screenSize,
                         )
                         bookPages = book.pages
+                        wordsDictionary = book.dictionary
                         val userSettings = State.Content.UserSettings(
                             fontSize = book.userSettings.fontSize,
                             translationColorCode = book.userSettings.translationColorCode,
@@ -62,7 +63,7 @@ internal class ReadBookViewModel @Inject constructor(
                         )
                         state = State.Content(
                             pages = book.pages.map { it.toTranslatedAnnotatedString() },
-                            title = book.info.title,
+                            title = StringOrResource.String(book.info.title),
                             currentPage = book.info.currentPage,
                             userSettings = userSettings,
                             readPercent = calculateReadPercent(book.info.currentPage, book.pages.size),
@@ -70,7 +71,6 @@ internal class ReadBookViewModel @Inject constructor(
                             textWidth = intent.screenSize.second,
                             totalPages = book.pages.size,
                         )
-                        isDataLoaded = true
                     }
                 }
             }
@@ -90,23 +90,24 @@ internal class ReadBookViewModel @Inject constructor(
             }
 
             is Intent.TranslateWord -> {
-                getWordTranslation.execute(intent.word).fold(
-                    {
-                        val prevState = (state as? State.Content) ?: return@launch
-                        state = prevState.copy(
-                            wordTranslation = it
+                val prevState = (state as? State.Content) ?: return@launch
+                val translation = wordsDictionary[intent.word] ?: translateWordRemote(intent)
+                if (translation != null) {
+                    state = prevState.copy(
+                        wordTranslation = TextTranslation(
+                            intent.word,
+                            listOf(translation),
                         )
-                        vibrateIfEnabled()
-                    },
-                    {
-                        effectChannel.send(
-                            Effect.ShowSnackbar(
-                                SnackbarData(StringOrResource.Resource(R.string.read_book_translation_download_error))
-                            )
+                    )
+                    vibrateIfEnabled()
+                } else {
+                    effectChannel.send(
+                        Effect.ShowSnackbar(
+                            SnackbarData(StringOrResource.Resource(R.string.read_book_translation_download_error))
                         )
-                        vibrateIfEnabled()
-                    }
-                )
+                    )
+                    vibrateIfEnabled()
+                }
             }
 
             is Intent.HideParagraphTranslation -> {
@@ -134,6 +135,10 @@ internal class ReadBookViewModel @Inject constructor(
         }
     }
 
+    private suspend fun translateWordRemote(intent: Intent.TranslateWord): String? {
+        return getWordTranslation.execute(intent.word).getOrNull()?.getMostPreciseTranslation()
+    }
+
     private fun calculateReadPercent(currentPageIndex: Int, totalPages: Int): Float {
         return (currentPageIndex + 1f) / totalPages.toFloat() * 100
     }
@@ -146,7 +151,7 @@ internal class ReadBookViewModel @Inject constructor(
                 append(sentence)
                 val sentenceStartInText = length - sentence.length
                 addStringAnnotation(
-                    tag = TextAnnotation.SENTENCE_NUMBER,
+                    tag = TextAnnotations.SENTENCE_NUMBER,
                     annotation = i.toString(),
                     start = sentenceStartInText,
                     end = length,
@@ -154,7 +159,7 @@ internal class ReadBookViewModel @Inject constructor(
                 val wordsPositions = getWordsPositions(sentence)
                 wordsPositions.forEach { (wordInSentenceStart, wordInSentenceEnd) ->
                     addStringAnnotation(
-                        tag = TextAnnotation.WORD,
+                        tag = TextAnnotations.WORD,
                         annotation = sentence.substring(wordInSentenceStart, wordInSentenceEnd),
                         start = sentenceStartInText + wordInSentenceStart,
                         end = sentenceStartInText + wordInSentenceEnd,
@@ -203,10 +208,15 @@ internal class ReadBookViewModel @Inject constructor(
         data object Vibrate : Effect()
     }
 
-    sealed class State {
-        data object Loading : State()
+    sealed class State(
+        open val title: StringOrResource
+    ) {
+        data class Loading(
+            override val title: StringOrResource,
+        ) : State(title)
+
         data class Content(
-            val title: String,
+            override val title: StringOrResource,
             val pages: List<AnnotatedString>,
             val textHeight: Int,
             val textWidth: Int,
@@ -216,7 +226,7 @@ internal class ReadBookViewModel @Inject constructor(
             val readPercent: Float,
             val wordTranslation: TextTranslation? = null,
             val paragraphTranslation: TextTranslation? = null,
-        ) : State() {
+        ) : State(title) {
             data class UserSettings(
                 val fontSize: Int,
                 val translationColorCode: String,

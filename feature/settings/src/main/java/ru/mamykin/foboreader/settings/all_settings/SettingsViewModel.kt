@@ -26,14 +26,12 @@ internal class SettingsViewModel @Inject constructor(
 
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
-    private var isDataLoaded = false
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
             Intent.LoadSettings -> {
-                if (isDataLoaded) return@launch
+                if (state is State.Content) return@launch
                 state = State.Content(getSettings.execute())
-                isDataLoaded = true
             }
 
             is Intent.ChangeBrightness -> {

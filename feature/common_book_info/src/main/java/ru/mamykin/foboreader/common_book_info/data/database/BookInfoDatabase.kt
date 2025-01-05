@@ -5,11 +5,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.mamykin.foboreader.common_book_info.data.database.converter.DateTimestampConverter
 import ru.mamykin.foboreader.common_book_info.data.database.converter.StringListConverter
-import ru.mamykin.foboreader.common_book_info.data.model.BookInfoModel
+import ru.mamykin.foboreader.common_book_info.data.model.DownloadedBookDBModel
 
-@Database(entities = [BookInfoModel::class], version = 1)
+@Database(entities = [DownloadedBookDBModel::class], version = 1)
 @TypeConverters(DateTimestampConverter::class, StringListConverter::class)
 abstract class BookInfoDatabase : RoomDatabase() {
 
-    abstract fun getBookInfoDao(): BookInfoDao
+    abstract fun getBookInfoDao(): DownloadedBooksDao
 }
