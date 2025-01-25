@@ -12,12 +12,12 @@ internal class DownloadBookUseCase @Inject constructor(
         val file = fileRepository.createFile(outputFileName).getOrThrow()
         fileRepository.downloadFile(book.link, file)
         downloadedBooksRepository.saveBook(
-            file.absolutePath,
-            book.genre,
-            book.coverUrl,
-            book.author,
-            book.title,
-            book.languages,
+            filePath = file.absolutePath,
+            genre = book.genre,
+            coverUrl = book.coverUrl,
+            author = book.author,
+            title = book.title,
+            languages = book.languages,
         )
     }
 

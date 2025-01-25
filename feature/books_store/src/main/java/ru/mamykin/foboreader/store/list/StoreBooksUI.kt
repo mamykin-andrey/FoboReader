@@ -183,7 +183,7 @@ internal fun StoreBookItemComposable(book: StoreBookUIModel, onIntent: (StoreBoo
             },
     ) {
         Row(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(12.dp)
         ) {
             AsyncImage(
                 model = book.cover,
@@ -196,18 +196,30 @@ internal fun StoreBookItemComposable(book: StoreBookUIModel, onIntent: (StoreBoo
             ) {
                 Text(
                     text = book.title,
-                    style = TextStyles.Subtitle1,
+                    style = TextStyles.Body2,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
                     text = book.author,
-                    style = TextStyles.Subtitle1,
+                    style = TextStyles.Body2,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(top = 4.dp),
                 )
                 Text(
                     text = book.genre,
-                    style = TextStyles.Subtitle1,
+                    style = TextStyles.Body2,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+                Text(
+                    text = book.languages.joinToString(", "),
+                    style = TextStyles.Body2,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+                Text(
+                    text = "Free",
+                    style = TextStyles.Body2,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(top = 4.dp),
                 )
