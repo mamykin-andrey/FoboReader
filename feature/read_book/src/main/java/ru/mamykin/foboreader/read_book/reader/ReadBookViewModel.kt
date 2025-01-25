@@ -144,6 +144,7 @@ internal class ReadBookViewModel @Inject constructor(
             backgroundColorCode = book.userSettings.backgroundColorCode,
         )
         state = State.Content(
+            bookId = book.info.id,
             pages = book.pages.map { it.toTranslatedAnnotatedString() },
             title = StringOrResource.String(book.info.title),
             currentPage = book.info.currentPage,
@@ -240,6 +241,7 @@ internal class ReadBookViewModel @Inject constructor(
 
         data class Content(
             override val title: StringOrResource,
+            val bookId: Long,
             val pages: List<AnnotatedString>,
             val textHeight: Int,
             val textWidth: Int,

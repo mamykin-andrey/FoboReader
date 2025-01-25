@@ -18,6 +18,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -61,6 +62,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ru.mamykin.foboreader.core.extension.showSnackbarWithData
+import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
@@ -127,6 +129,15 @@ private fun ReadBookScreen(
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = "Close"
+                        )
+                    }
+                },
+                actions = {
+                    val bookId = (state as? ReadBookViewModel.State.Content)?.bookId ?: return@TopAppBar
+                    IconButton(onClick = { appNavController.navigate(AppScreen.BookDetails.createRoute(bookId)) }) {
+                        Icon(
+                            imageVector = Icons.Filled.Info,
+                            contentDescription = "Information"
                         )
                     }
                 }
@@ -435,17 +446,18 @@ private fun OpenBookErrorComposable(
 fun ReadBookScreenPreview() {
     FoboReaderTheme {
         ReadBookScreen(
-            // state = ReadBookViewModel.State.Content(
-            //     StringOrResource.String("Title"),
-            //     listOf(AnnotatedString("Page1"), AnnotatedString("Page2")),
-            //     300,
-            //     300,
-            //     ReadBookViewModel.State.Content.UserSettings(18, "222222", "444444"),
-            //     1,
-            //     2,
-            //     50f,
-            // ),
-            state = ReadBookViewModel.State.Failed(StringOrResource.String("Title")),
+            state = ReadBookViewModel.State.Content(
+                StringOrResource.String("Title"),
+                0,
+                listOf(AnnotatedString("Page1"), AnnotatedString("Page2")),
+                300,
+                300,
+                ReadBookViewModel.State.Content.UserSettings(18, "222222", "444444"),
+                1,
+                2,
+                50f,
+            ),
+            // state = ReadBookViewModel.State.Failed(StringOrResource.String("Title")),
             onIntent = {},
             snackbarHostState = SnackbarHostState(),
             appNavController = rememberNavController(),
