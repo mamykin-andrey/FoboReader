@@ -18,6 +18,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -135,6 +136,7 @@ private fun ReadBookScreen(
                 when (state) {
                     is ReadBookViewModel.State.Loading -> LoadingComposable(onIntent)
                     is ReadBookViewModel.State.Content -> ContentComposable(state, onIntent)
+                    is ReadBookViewModel.State.Failed -> OpenBookErrorComposable(state = state, onIntent)
                 }
             }
         })
@@ -406,21 +408,44 @@ private fun CombinedClickableText(
     )
 }
 
+@Composable
+private fun OpenBookErrorComposable(
+    state: ReadBookViewModel.State.Failed,
+    onIntent: (ReadBookViewModel.Intent) -> Unit,
+) {
+    val measurer = rememberTextMeasurer()
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(text = "Unable to open the book, please try again.")
+        Button(
+            modifier = Modifier.padding(top = 12.dp),
+            onClick = {
+                onIntent(ReadBookViewModel.Intent.ReloadBook)
+            }) {
+            Text(text = "Try again")
+        }
+    }
+}
+
 @Preview
 @Composable
 fun ReadBookScreenPreview() {
     FoboReaderTheme {
         ReadBookScreen(
-            state = ReadBookViewModel.State.Content(
-                StringOrResource.String("Title"),
-                listOf(AnnotatedString("Page1"), AnnotatedString("Page2")),
-                300,
-                300,
-                ReadBookViewModel.State.Content.UserSettings(18, "222222", "444444"),
-                1,
-                2,
-                50f,
-            ),
+            // state = ReadBookViewModel.State.Content(
+            //     StringOrResource.String("Title"),
+            //     listOf(AnnotatedString("Page1"), AnnotatedString("Page2")),
+            //     300,
+            //     300,
+            //     ReadBookViewModel.State.Content.UserSettings(18, "222222", "444444"),
+            //     1,
+            //     2,
+            //     50f,
+            // ),
+            state = ReadBookViewModel.State.Failed(StringOrResource.String("Title")),
             onIntent = {},
             snackbarHostState = SnackbarHostState(),
             appNavController = rememberNavController(),

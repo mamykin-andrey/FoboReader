@@ -15,27 +15,29 @@ internal class GetBookUseCase @Inject constructor(
         bookId: Long,
         textMeasurer: TextMeasurer,
         screenSize: Pair<Int, Int>
-    ): Book = withContext(Dispatchers.Default) {
-        val fontSize = appSettingsRepository.getReadTextSize()
-        val info = getBookInfoUseCase.execute(bookId)
-        val content = bookContentRepository.getBookContent(info.filePath)
-        val pages = splitText(
-            sentences = content.sentences,
-            translations = content.translations,
-            screenSize = screenSize,
-            fontSize = fontSize,
-            textMeasurer = textMeasurer,
-        )
-        return@withContext Book(
-            info = info,
-            pages = pages,
-            dictionary = content.dictionary,
-            userSettings = Book.UserSettings(
+    ): Result<Book> = runCatching {
+        withContext(Dispatchers.Default) {
+            val fontSize = appSettingsRepository.getReadTextSize()
+            val info = getBookInfoUseCase.execute(bookId)
+            val content = bookContentRepository.getBookContent(info.filePath)
+            val pages = splitText(
+                sentences = content.sentences,
+                translations = content.translations,
+                screenSize = screenSize,
                 fontSize = fontSize,
-                translationColorCode = appSettingsRepository.getTranslationColor(),
-                backgroundColorCode = appSettingsRepository.getBackgroundColor(),
-            ),
-        )
+                textMeasurer = textMeasurer,
+            )
+            Book(
+                info = info,
+                pages = pages,
+                dictionary = content.dictionary,
+                userSettings = Book.UserSettings(
+                    fontSize = fontSize,
+                    translationColorCode = appSettingsRepository.getTranslationColor(),
+                    backgroundColorCode = appSettingsRepository.getBackgroundColor(),
+                ),
+            )
+        }
     }
 
     private fun splitText(

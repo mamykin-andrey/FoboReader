@@ -1,6 +1,5 @@
 <resources>
     <string name="core_error_retry_title">Повторить</string>
     <string name="core_error_retry_description">Не удалось загрузить данные</string>
-    <string name="core_general_notifications_title">Общие уведомления</string>
-    <string name="core_general_notifications_description">Общие уведомления от приложения</string>
+    <string name="cr_error_title">Ошибка</string>
 </resources>

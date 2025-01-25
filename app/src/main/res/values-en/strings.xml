@@ -6,4 +6,6 @@
     <string name="app_settings_tab">Settings</string>
     <string name="network_error_message">No connection with server, check your network connection and try again</string>
     <string name="common_error_message">Unknown error, try again</string>
+    <string name="core_general_notifications_title">General notifications</string>
+    <string name="core_general_notifications_description">General app notifications</string>
 </resources>

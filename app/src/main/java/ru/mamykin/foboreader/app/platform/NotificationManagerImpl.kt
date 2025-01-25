@@ -10,9 +10,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
 import dagger.hilt.android.qualifiers.ApplicationContext
-import ru.mamykin.foboreader.core.R
-import ru.mamykin.foboreader.core.platform.NotificationChannelId
+import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.platform.Log
+import ru.mamykin.foboreader.core.platform.NotificationChannelId
 import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.PermissionManager
 import ru.mamykin.foboreader.core.platform.RequestedPermission

@@ -1,6 +1,5 @@
 <resources>
     <string name="core_error_retry_title">Retry</string>
     <string name="core_error_retry_description">Unable to load data</string>
-    <string name="core_general_notifications_title">General notifications</string>
-    <string name="core_general_notifications_description">General app notifications</string>
+    <string name="cr_error_title">Error</string>
 </resources>

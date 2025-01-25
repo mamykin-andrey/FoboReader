@@ -43,36 +43,15 @@ internal class ReadBookViewModel @Inject constructor(
 
     fun sendIntent(intent: Intent) = viewModelScope.launch {
         when (intent) {
+            is Intent.ReloadBook -> {
+                state = State.Loading(StringOrResource.Resource(R.string.rb_book_loading))
+            }
+
             is Intent.LoadBook -> {
                 if (state is State.Content) return@launch
                 loadBookJob?.cancel()
                 loadBookJob = null
-                coroutineScope {
-                    loadBookJob = launch {
-                        val book = getBookUseCase.execute(
-                            bookId,
-                            ComposeTextMeasurer(intent.measurer),
-                            intent.screenSize,
-                        )
-                        bookPages = book.pages
-                        wordsDictionary = book.dictionary
-                        val userSettings = State.Content.UserSettings(
-                            fontSize = book.userSettings.fontSize,
-                            translationColorCode = book.userSettings.translationColorCode,
-                            backgroundColorCode = book.userSettings.backgroundColorCode,
-                        )
-                        state = State.Content(
-                            pages = book.pages.map { it.toTranslatedAnnotatedString() },
-                            title = StringOrResource.String(book.info.title),
-                            currentPage = book.info.currentPage,
-                            userSettings = userSettings,
-                            readPercent = calculateReadPercent(book.info.currentPage, book.pages.size),
-                            textHeight = intent.screenSize.first,
-                            textWidth = intent.screenSize.second,
-                            totalPages = book.pages.size,
-                        )
-                    }
-                }
+                loadBook(intent)
             }
 
             is Intent.TranslateSentence -> {
@@ -135,6 +114,46 @@ internal class ReadBookViewModel @Inject constructor(
         }
     }
 
+    private suspend fun loadBook(intent: Intent.LoadBook) = coroutineScope {
+        loadBookJob = launch {
+            getBookUseCase.execute(
+                bookId,
+                ComposeTextMeasurer(intent.measurer),
+                intent.screenSize,
+            ).fold(
+                onSuccess = { showBookContent(it, intent) },
+                onFailure = { showOpenBookError() },
+            )
+        }
+    }
+
+    private fun showOpenBookError() {
+        state = State.Failed(StringOrResource.Resource(ru.mamykin.foboreader.core.R.string.cr_error_title))
+    }
+
+    private fun showBookContent(
+        book: Book,
+        intent: Intent.LoadBook
+    ) {
+        bookPages = book.pages
+        wordsDictionary = book.dictionary
+        val userSettings = State.Content.UserSettings(
+            fontSize = book.userSettings.fontSize,
+            translationColorCode = book.userSettings.translationColorCode,
+            backgroundColorCode = book.userSettings.backgroundColorCode,
+        )
+        state = State.Content(
+            pages = book.pages.map { it.toTranslatedAnnotatedString() },
+            title = StringOrResource.String(book.info.title),
+            currentPage = book.info.currentPage,
+            userSettings = userSettings,
+            readPercent = calculateReadPercent(book.info.currentPage, book.pages.size),
+            textHeight = intent.screenSize.first,
+            textWidth = intent.screenSize.second,
+            totalPages = book.pages.size,
+        )
+    }
+
     private suspend fun translateWordRemote(intent: Intent.TranslateWord): String? {
         return getWordTranslation.execute(intent.word).getOrNull()?.getMostPreciseTranslation()
     }
@@ -192,8 +211,11 @@ internal class ReadBookViewModel @Inject constructor(
     }
 
     sealed class Intent {
+        data object ReloadBook : Intent()
+
         data class LoadBook(
-            val measurer: TextMeasurer, val screenSize: Pair<Int, Int>
+            val measurer: TextMeasurer,
+            val screenSize: Pair<Int, Int>,
         ) : Intent()
 
         class TranslateSentence(val index: Int) : Intent()
@@ -233,5 +255,7 @@ internal class ReadBookViewModel @Inject constructor(
                 val backgroundColorCode: String,
             )
         }
+
+        data class Failed(override val title: StringOrResource) : State(title)
     }
 }

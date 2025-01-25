@@ -7,4 +7,6 @@
     <string name="network_error_message">Нет связи с сервером, проверьте подключение и повторите попытку</string>
     <string name="common_error_message">Неизвестная ошибка, повторите позднее</string>
     <string name="leak_canary_display_activity_label" translatable="false">FoBo Reader Leaks</string>
+    <string name="core_general_notifications_title">Общие уведомления</string>
+    <string name="core_general_notifications_description">Общие уведомления от приложения</string>
 </resources>
