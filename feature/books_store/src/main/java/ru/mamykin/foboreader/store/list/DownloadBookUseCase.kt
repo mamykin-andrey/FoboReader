@@ -18,6 +18,7 @@ internal class DownloadBookUseCase @Inject constructor(
             author = book.author,
             title = book.title,
             languages = book.languages,
+            link = book.link,
         )
     }
 

@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.core.extension.foldCancellable
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import ru.mamykin.foboreader.core.presentation.SnackbarData
@@ -120,7 +121,7 @@ internal class ReadBookViewModel @Inject constructor(
                 bookId,
                 ComposeTextMeasurer(intent.measurer),
                 intent.screenSize,
-            ).fold(
+            ).foldCancellable(
                 onSuccess = { showBookContent(it, intent) },
                 onFailure = { showOpenBookError() },
             )

@@ -26,7 +26,8 @@ internal class JsonBookInfoParser @Inject constructor() : BookInfoParser {
                     languages = listOf(),
                     date = Date(),
                     currentPage = 0,
-                    lastOpen = System.currentTimeMillis()
+                    lastOpen = System.currentTimeMillis(),
+                    link = "",
                 )
             )
         }.getOrElse {

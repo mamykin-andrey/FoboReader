@@ -9,6 +9,7 @@ internal data class StoreBookUIModel(
     val format: String,
     val cover: String,
     val link: String,
+    val isOwned: Boolean,
 ) {
     companion object {
         fun fromDomainModel(entity: StoreBookEntity) = StoreBookUIModel(
@@ -20,6 +21,7 @@ internal data class StoreBookUIModel(
             format = entity.format,
             cover = entity.coverUrl,
             link = entity.link,
+            isOwned = entity.isOwned,
         )
     }
 }

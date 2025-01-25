@@ -308,6 +308,7 @@ fun MyBooksScreenPreview() {
                             "FBWT",
                             "",
                             "",
+                            isOwned = true,
                         )
                     )
                 )

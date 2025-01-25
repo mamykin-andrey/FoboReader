@@ -19,6 +19,7 @@ class DownloadedBookDBModel(
     val currentPage: Int,
     val totalPages: Int?,
     val lastOpen: Long?,
+    val link: String,
 ) {
     fun toDomainModel() = DownloadedBookEntity(
         id = id,
@@ -31,7 +32,8 @@ class DownloadedBookDBModel(
         date = date,
         currentPage = currentPage,
         totalPages = totalPages,
-        lastOpen = lastOpen
+        lastOpen = lastOpen,
+        link = link,
     )
 
     companion object {
@@ -47,6 +49,7 @@ class DownloadedBookDBModel(
             currentPage = entity.currentPage,
             totalPages = entity.totalPages,
             lastOpen = entity.lastOpen,
+            link = entity.link,
         )
     }
 }

@@ -17,7 +17,7 @@ internal class BookListResponse(
         val cover: String,
         val link: String
     ) {
-        fun toDomainModel() = StoreBookEntity(
+        fun toDomainModel(isOwned: Boolean) = StoreBookEntity(
             id = id,
             genre = genre,
             author = author,
@@ -25,7 +25,8 @@ internal class BookListResponse(
             languages = languages,
             format = format,
             coverUrl = cover,
-            link = link
+            link = link,
+            isOwned = isOwned,
         )
     }
 }

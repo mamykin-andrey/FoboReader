@@ -36,6 +36,7 @@ class DownloadedBooksRepository @Inject constructor(
         author: String,
         title: String,
         languages: List<String>,
+        link: String,
     ) {
         downloadedBooksDao.insert(
             DownloadedBookDBModel(
@@ -50,6 +51,7 @@ class DownloadedBooksRepository @Inject constructor(
                 currentPage = 0,
                 totalPages = null,
                 lastOpen = null,
+                link = link,
             )
         )
     }

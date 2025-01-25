@@ -8,9 +8,4 @@ import ru.mamykin.foboreader.store.list.BookListResponse
 internal class SearchResultsResponse(
     val categories: List<BookCategoriesResponse.BookCategoryResponse>,
     val books: List<BookListResponse.BookResponse>,
-) {
-    fun toDomainModel() = SearchResultsEntity(
-        categories = categories.map { it.toDomainModel() },
-        books = books.map { it.toDomainModel() },
-    )
-}
+)

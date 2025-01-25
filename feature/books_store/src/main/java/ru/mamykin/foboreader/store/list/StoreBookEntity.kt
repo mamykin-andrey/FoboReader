@@ -9,4 +9,5 @@ internal data class StoreBookEntity(
     val format: String,
     val coverUrl: String,
     val link: String,
+    val isOwned: Boolean,
 )

@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.store.list
 
 import android.content.Context
 import android.view.View
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -173,17 +174,18 @@ private fun ContentComposable(
 }
 
 @Composable
-internal fun StoreBookItemComposable(book: StoreBookUIModel, onIntent: (StoreBooksViewModel.Intent) -> Unit) {
+internal fun StoreBookItemComposable(
+    book: StoreBookUIModel,
+    onIntent: (StoreBooksViewModel.Intent) -> Unit,
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
-            .clickable {
-                onIntent(StoreBooksViewModel.Intent.DownloadBook(book.id))
-            },
     ) {
         Row(
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
                 model = book.cover,
@@ -191,40 +193,83 @@ internal fun StoreBookItemComposable(book: StoreBookUIModel, onIntent: (StoreBoo
                 modifier = Modifier.size(80.dp),
                 contentScale = ContentScale.Crop,
             )
-            Column(
-                modifier = Modifier.padding(start = 16.dp)
-            ) {
-                Text(
-                    text = book.title,
-                    style = TextStyles.Body2,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                Text(
-                    text = book.author,
-                    style = TextStyles.Body2,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
-                Text(
-                    text = book.genre,
-                    style = TextStyles.Body2,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
-                Text(
-                    text = book.languages.joinToString(", "),
-                    style = TextStyles.Body2,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
-                Text(
-                    text = "Free",
-                    style = TextStyles.Body2,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
+            BookInfoComposable(book, Modifier.weight(1f))
+            if (book.isOwned) {
+                OpenBookButtonComposable(onIntent)
+            } else {
+                DownloadBookButtonComposable(onIntent, book)
             }
         }
+    }
+}
+
+@Composable
+private fun OpenBookButtonComposable(
+    onIntent: (StoreBooksViewModel.Intent) -> Unit,
+) {
+    IconButton(onClick = {
+        onIntent(StoreBooksViewModel.Intent.OpenMyBooks)
+    }) {
+        Icon(
+            imageVector = Icons.Default.KeyboardDoubleArrowRight,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(36.dp),
+            contentDescription = null,
+        )
+    }
+}
+
+@Composable
+private fun DownloadBookButtonComposable(
+    onIntent: (StoreBooksViewModel.Intent) -> Unit,
+    book: StoreBookUIModel,
+) {
+    IconButton(onClick = {
+        onIntent(StoreBooksViewModel.Intent.DownloadBook(book.id))
+    }) {
+        Icon(
+            imageVector = Icons.Default.Download,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(36.dp),
+            contentDescription = null,
+        )
+    }
+}
+
+@Composable
+private fun BookInfoComposable(book: StoreBookUIModel, modifier: Modifier) {
+    Column(
+        modifier = modifier.then(Modifier.padding(start = 16.dp))
+    ) {
+        Text(
+            text = book.title,
+            style = TextStyles.Body2,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        Text(
+            text = book.author,
+            style = TextStyles.Body2,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(top = 4.dp),
+        )
+        Text(
+            text = book.genre,
+            style = TextStyles.Body2,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(top = 4.dp),
+        )
+        Text(
+            text = book.languages.joinToString(", "),
+            style = TextStyles.Body2,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(top = 4.dp),
+        )
+        Text(
+            text = "Free",
+            style = TextStyles.Body2,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(top = 4.dp),
+        )
     }
 }
 
@@ -261,6 +306,7 @@ fun BooksListScreenPreview() {
                         format = "fb",
                         cover = "https://m.media-amazon.com/images/I/81sG60wsNtL.jpg",
                         link = "https://www.amazon.co.uk/Wonderful-Life-Burgess-Nature-History/dp/0099273454",
+                        isOwned = true,
                     )
                 )
             ),
