@@ -15,6 +15,7 @@ class DownloadedBookEntity(
     val totalPages: Int? = null,
     val lastOpen: Long?,
     val link: String,
+    val rating: Float,
 ) {
     fun containsText(text: String): Boolean {
         return title.contains(text, ignoreCase = true) || author.contains(text, ignoreCase = true)

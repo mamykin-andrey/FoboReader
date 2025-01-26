@@ -9,4 +9,5 @@
     <string name="my_books_created_date">Дата создания:</string>
     <string name="bd_author_title">Автор:</string>
     <string name="bd_languages_title">Языки:</string>
+    <string name="bd_book_rating_title">Оценка:</string>
 </resources>

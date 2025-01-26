@@ -9,4 +9,5 @@
     <string name="my_books_created_date">Creation date:</string>
     <string name="bd_author_title">Author:</string>
     <string name="bd_languages_title">Languages:</string>
+    <string name="bd_book_rating_title">Rating:</string>
 </resources>

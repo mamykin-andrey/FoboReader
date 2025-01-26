@@ -20,6 +20,7 @@ class DownloadedBookDBModel(
     val totalPages: Int?,
     val lastOpen: Long?,
     val link: String,
+    val rating: Float,
 ) {
     fun toDomainModel() = DownloadedBookEntity(
         id = id,
@@ -34,6 +35,7 @@ class DownloadedBookDBModel(
         totalPages = totalPages,
         lastOpen = lastOpen,
         link = link,
+        rating = rating,
     )
 
     companion object {
@@ -50,6 +52,7 @@ class DownloadedBookDBModel(
             totalPages = entity.totalPages,
             lastOpen = entity.lastOpen,
             link = entity.link,
+            rating = entity.rating,
         )
     }
 }

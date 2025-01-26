@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.book_details.details
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -30,8 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -40,6 +44,7 @@ import ru.mamykin.foboreader.book_details.R
 import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
+import java.util.Locale
 
 @Composable
 fun BookDetailsUI(appNavController: NavHostController) {
@@ -142,6 +147,24 @@ private fun LoadedComposable(
                 }
             }
         }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(16.dp),
+                contentDescription = null,
+            )
+            Text(
+                text = String.format(Locale.UK, "%.1f", state.bookDetails.rating),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(start = 4.dp),
+            )
+        }
 
         Text(
             text = stringResource(R.string.bd_author_title),
@@ -235,6 +258,7 @@ private fun MyBooksScreenPreview() {
                     "Genre",
                     listOf("English, Russian, Spanish"),
                     readPercent = 0.5f,
+                    rating = 4.5f,
                 ),
                 true,
             ),

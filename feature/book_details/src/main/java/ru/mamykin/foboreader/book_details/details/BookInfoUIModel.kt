@@ -11,6 +11,7 @@ internal data class BookInfoUIModel(
     val genre: String,
     val languages: List<String>,
     val readPercent: Float,
+    val rating: Float,
 ) {
     companion object {
         fun fromDomainModel(entity: DownloadedBookEntity): BookInfoUIModel {
@@ -24,6 +25,7 @@ internal data class BookInfoUIModel(
                 genre = entity.genre,
                 languages = entity.languages,
                 readPercent = readPercent,
+                rating = entity.rating,
             )
         }
     }
