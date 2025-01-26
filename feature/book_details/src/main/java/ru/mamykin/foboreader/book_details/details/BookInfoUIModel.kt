@@ -9,6 +9,7 @@ internal data class BookInfoUIModel(
     val filePath: String,
     val currentPage: Int,
     val genre: String,
+    val languages: List<String>,
 ) {
     companion object {
         fun fromDomainModel(entity: DownloadedBookEntity) = BookInfoUIModel(
@@ -18,6 +19,7 @@ internal data class BookInfoUIModel(
             filePath = entity.filePath,
             currentPage = entity.currentPage,
             genre = entity.genre,
+            languages = entity.languages,
         )
     }
 }

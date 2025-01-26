@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="my_books_book_info_title">Book information</string>
     <string name="my_books_bookmarks">Bookmarks</string>
     <string name="my_books_no_bookmarks">No bookmarks</string>
     <string name="my_books_book_path">File:</string>
@@ -8,4 +7,6 @@
     <string name="my_books_book_genre">Genre:</string>
     <string name="my_books_original_language">Source language:</string>
     <string name="my_books_created_date">Creation date:</string>
+    <string name="bd_author_title">Author:</string>
+    <string name="bd_languages_title">Languages:</string>
 </resources>

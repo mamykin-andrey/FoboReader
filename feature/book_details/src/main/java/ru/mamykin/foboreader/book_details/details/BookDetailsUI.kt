@@ -3,7 +3,6 @@ package ru.mamykin.foboreader.book_details.details
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -73,7 +72,7 @@ private fun BookDetailsScreenComposable(
 ) {
     Scaffold(topBar = {
         TopAppBar(title = {
-            Text(text = stringResource(id = R.string.my_books_book_info_title))
+            Text(text = (state as? BookDetailsViewModel.State.Content)?.bookDetails?.title.orEmpty())
         }, navigationIcon = {
             IconButton(onClick = {
                 appNavController.popBackStack()
@@ -113,34 +112,16 @@ private fun LoadedComposable(
 ) {
     Column {
         Box(modifier = Modifier.fillMaxWidth()) {
-            Row(
+            AsyncImage(
+                model = state.bookDetails.coverUrl,
+                contentDescription = null,
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-            ) {
-                AsyncImage(
-                    model = state.bookDetails.coverUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .height(120.dp)
-                        .width(100.dp),
-                    contentScale = ContentScale.Crop,
-                    error = painterResource(id = R.drawable.img_no_image),
-                )
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 16.dp),
-                    horizontalAlignment = Alignment.Start,
-                ) {
-                    Text(
-                        text = state.bookDetails.title,
-                        style = TextStyles.Subtitle1,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Text(text = state.bookDetails.author)
-                }
-            }
+                    .height(160.dp)
+                    .width(160.dp)
+                    .padding(12.dp),
+                contentScale = ContentScale.Crop,
+                error = painterResource(id = R.drawable.img_no_image),
+            )
             FloatingActionButton(
                 onClick = {
                     onIntent(BookDetailsViewModel.Intent.OpenBook)
@@ -156,44 +137,14 @@ private fun LoadedComposable(
             }
         }
         Text(
-            text = stringResource(R.string.my_books_bookmarks),
+            text = stringResource(R.string.bd_author_title),
             style = TextStyles.Subtitle1,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
-                .padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                .padding(top = 12.dp, start = 16.dp, end = 16.dp),
         )
         Text(
-            text = stringResource(R.string.my_books_no_bookmarks),
-            style = TextStyles.Body2,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier
-                .padding(top = 8.dp, start = 16.dp, end = 16.dp)
-        )
-
-        Text(
-            text = stringResource(R.string.my_books_book_path),
-            style = TextStyles.Subtitle1,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier
-                .padding(top = 12.dp, start = 16.dp, end = 16.dp)
-        )
-        Text(
-            text = state.bookDetails.filePath,
-            style = TextStyles.Body2,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier
-                .padding(top = 8.dp, start = 16.dp, end = 16.dp)
-        )
-
-        Text(
-            text = stringResource(R.string.my_books_current_page),
-            style = TextStyles.Subtitle1,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier
-                .padding(top = 12.dp, start = 16.dp, end = 16.dp)
-        )
-        Text(
-            text = state.bookDetails.currentPage.toString(),
+            text = state.bookDetails.author,
             style = TextStyles.Body2,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
@@ -214,6 +165,51 @@ private fun LoadedComposable(
             modifier = Modifier
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp)
         )
+
+        Text(
+            text = stringResource(R.string.bd_languages_title),
+            style = TextStyles.Subtitle1,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+                .padding(top = 12.dp, start = 16.dp, end = 16.dp)
+        )
+        Text(
+            text = state.bookDetails.languages.joinToString(", "),
+            style = TextStyles.Body2,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+                .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+        )
+
+        Text(
+            text = stringResource(R.string.my_books_bookmarks),
+            style = TextStyles.Subtitle1,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+                .padding(top = 12.dp, start = 16.dp, end = 16.dp),
+        )
+        Text(
+            text = stringResource(R.string.my_books_no_bookmarks),
+            style = TextStyles.Body2,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+                .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+        )
+
+        Text(
+            text = stringResource(R.string.my_books_current_page),
+            style = TextStyles.Subtitle1,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+                .padding(top = 12.dp, start = 16.dp, end = 16.dp)
+        )
+        Text(
+            text = state.bookDetails.currentPage.toString(),
+            style = TextStyles.Body2,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+                .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+        )
     }
 }
 
@@ -229,7 +225,8 @@ private fun MyBooksScreenPreview() {
                     "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",
                     "/dev/null",
                     10,
-                    "Genre"
+                    "Genre",
+                    listOf("English, Russian, Spanish")
                 )
             ),
             onIntent = {},
