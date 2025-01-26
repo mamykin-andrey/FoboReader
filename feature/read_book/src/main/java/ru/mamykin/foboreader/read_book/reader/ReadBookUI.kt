@@ -63,6 +63,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ru.mamykin.foboreader.core.extension.showSnackbarWithData
 import ru.mamykin.foboreader.core.navigation.AppScreen
+import ru.mamykin.foboreader.core.navigation.MainTabScreenRoutes
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
@@ -125,7 +126,13 @@ private fun ReadBookScreen(
                     Text(text = state.title.toString(LocalContext.current))
                 },
                 navigationIcon = {
-                    IconButton(onClick = { appNavController.popBackStack() }) {
+                    IconButton(
+                        onClick = {
+                            appNavController.popBackStack(
+                                AppScreen.Main.createRoute(MainTabScreenRoutes.MY_BOOKS),
+                                false,
+                            )
+                        }) {
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = "Close"
