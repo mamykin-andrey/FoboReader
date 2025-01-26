@@ -10,16 +10,21 @@ internal data class BookInfoUIModel(
     val currentPage: Int,
     val genre: String,
     val languages: List<String>,
+    val readPercent: Float,
 ) {
     companion object {
-        fun fromDomainModel(entity: DownloadedBookEntity) = BookInfoUIModel(
-            author = entity.author,
-            title = entity.title,
-            coverUrl = entity.coverUrl,
-            filePath = entity.filePath,
-            currentPage = entity.currentPage,
-            genre = entity.genre,
-            languages = entity.languages,
-        )
+        fun fromDomainModel(entity: DownloadedBookEntity): BookInfoUIModel {
+            val readPercent = entity.totalPages?.let { entity.currentPage + 1f / it } ?: 0f
+            return BookInfoUIModel(
+                author = entity.author,
+                title = entity.title,
+                coverUrl = entity.coverUrl,
+                filePath = entity.filePath,
+                currentPage = entity.currentPage,
+                genre = entity.genre,
+                languages = entity.languages,
+                readPercent = readPercent,
+            )
+        }
     }
 }

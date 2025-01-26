@@ -32,7 +32,6 @@ internal class BookDetailsViewModel @Inject constructor(
             }
 
             is Intent.LoadBookInfo -> {
-                if (state is State.Content) return@launch
                 state = State.Content(
                     bookDetails = getBookInfoUseCase.execute(bookId)
                         .let(BookInfoUIModel::fromDomainModel),

@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -138,6 +139,14 @@ private fun LoadedComposable(
                 }
             }
         }
+
+        LinearProgressIndicator(
+            progress = state.bookDetails.readPercent,
+            modifier = Modifier
+                .padding(top = 4.dp)
+                .padding(horizontal = 12.dp),
+        )
+
         Text(
             text = stringResource(R.string.bd_author_title),
             style = TextStyles.Subtitle1,
@@ -228,7 +237,8 @@ private fun MyBooksScreenPreview() {
                     "/dev/null",
                     10,
                     "Genre",
-                    listOf("English, Russian, Spanish")
+                    listOf("English, Russian, Spanish"),
+                    readPercent = 0.5f,
                 ),
                 true,
             ),
