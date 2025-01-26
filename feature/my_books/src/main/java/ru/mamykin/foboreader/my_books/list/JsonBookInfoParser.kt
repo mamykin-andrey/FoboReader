@@ -29,6 +29,7 @@ internal class JsonBookInfoParser @Inject constructor() : BookInfoParser {
                     lastOpen = System.currentTimeMillis(),
                     link = "",
                     rating = 0f,
+                    isRatedByUser = false,
                 )
             )
         }.getOrElse {

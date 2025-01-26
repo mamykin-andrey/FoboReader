@@ -20,6 +20,7 @@ internal class DownloadBookUseCase @Inject constructor(
             languages = book.languages,
             link = book.link,
             rating = book.rating,
+            isRatedByUser = false,
         )
     }
 

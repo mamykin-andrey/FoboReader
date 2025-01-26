@@ -38,6 +38,7 @@ class DownloadedBooksRepository @Inject constructor(
         languages: List<String>,
         link: String,
         rating: Float,
+        isRatedByUser: Boolean,
     ) {
         downloadedBooksDao.insert(
             DownloadedBookDBModel(
@@ -54,6 +55,7 @@ class DownloadedBooksRepository @Inject constructor(
                 lastOpen = null,
                 link = link,
                 rating = rating,
+                isRatedByUser = isRatedByUser,
             )
         )
     }

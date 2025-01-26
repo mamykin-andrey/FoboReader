@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -153,7 +152,7 @@ private fun LoadedComposable(
         ) {
             Icon(
                 imageVector = Icons.Default.Star,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = if (state.bookDetails.isRatedByUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.size(16.dp),
                 contentDescription = null,
             )
@@ -259,6 +258,7 @@ private fun MyBooksScreenPreview() {
                     listOf("English, Russian, Spanish"),
                     readPercent = 0.5f,
                     rating = 4.5f,
+                    isRatedByUser = false,
                 ),
                 true,
             ),
