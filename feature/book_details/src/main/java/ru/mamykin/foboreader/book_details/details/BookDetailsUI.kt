@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -125,6 +127,7 @@ private fun LoadedComposable(
             )
             if (state.isReadButtonEnabled) {
                 FloatingActionButton(
+                    shape = CircleShape,
                     onClick = {
                         onIntent(BookDetailsViewModel.Intent.OpenBook)
                     },
@@ -139,13 +142,6 @@ private fun LoadedComposable(
                 }
             }
         }
-
-        LinearProgressIndicator(
-            progress = state.bookDetails.readPercent,
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .padding(horizontal = 12.dp),
-        )
 
         Text(
             text = stringResource(R.string.bd_author_title),
@@ -208,17 +204,17 @@ private fun LoadedComposable(
         )
 
         Text(
-            text = stringResource(R.string.my_books_current_page),
+            text = stringResource(R.string.bd_read_progress_title),
             style = TextStyles.Subtitle1,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
-                .padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                .padding(top = 12.dp, start = 16.dp, end = 16.dp),
         )
-        Text(
-            text = state.bookDetails.currentPage.toString(),
-            style = TextStyles.Body2,
-            color = MaterialTheme.colorScheme.onBackground,
+        LinearProgressIndicator(
+            progress = state.bookDetails.readPercent,
             modifier = Modifier
+                .padding(top = 4.dp)
+                .fillMaxWidth()
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp)
         )
     }

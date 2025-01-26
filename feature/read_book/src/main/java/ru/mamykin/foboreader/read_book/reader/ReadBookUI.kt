@@ -1,6 +1,7 @@
 package ru.mamykin.foboreader.read_book.reader
 
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -118,53 +119,50 @@ private fun ReadBookScreen(
     snackbarHostState: SnackbarHostState,
     appNavController: NavHostController,
 ) {
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = state.title.toString(LocalContext.current))
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            appNavController.popBackStack(
-                                AppScreen.Main.createRoute(MainTabScreenRoutes.MY_BOOKS),
-                                false,
-                            )
-                        }) {
-                        Icon(
-                            imageVector = Icons.Filled.Close,
-                            contentDescription = "Close"
-                        )
-                    }
-                },
-                actions = {
-                    val bookId = (state as? ReadBookViewModel.State.Content)?.bookId ?: return@TopAppBar
-                    IconButton(onClick = {
-                        appNavController.navigate(
-                            AppScreen.BookDetails.createRoute(
-                                bookId = bookId,
-                                readAllowed = false,
-                            )
-                        )
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.Info,
-                            contentDescription = "Information"
-                        )
-                    }
-                }
+    val goBackFunc = remember {
+        {
+            appNavController.popBackStack(
+                AppScreen.Main.createRoute(MainTabScreenRoutes.MY_BOOKS),
+                false,
             )
-        }, content = { innerPadding ->
-            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-                when (state) {
-                    is ReadBookViewModel.State.Loading -> LoadingComposable(onIntent)
-                    is ReadBookViewModel.State.Content -> ContentComposable(state, onIntent)
-                    is ReadBookViewModel.State.Failed -> OpenBookErrorComposable(state = state, onIntent)
-                }
+        }
+    }
+    BackHandler(onBack = {
+        goBackFunc()
+    })
+    Scaffold(snackbarHost = { SnackbarHost(hostState = snackbarHostState) }, topBar = {
+        TopAppBar(title = {
+            Text(text = state.title.toString(LocalContext.current))
+        }, navigationIcon = {
+            IconButton(onClick = { goBackFunc() }) {
+                Icon(
+                    imageVector = Icons.Filled.Close, contentDescription = "Close"
+                )
+            }
+        }, actions = {
+            val bookId = (state as? ReadBookViewModel.State.Content)?.bookId ?: return@TopAppBar
+            IconButton(onClick = {
+                appNavController.navigate(
+                    AppScreen.BookDetails.createRoute(
+                        bookId = bookId,
+                        readAllowed = false,
+                    )
+                )
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Info, contentDescription = "Information"
+                )
             }
         })
+    }, content = { innerPadding ->
+        Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+            when (state) {
+                is ReadBookViewModel.State.Loading -> LoadingComposable(onIntent)
+                is ReadBookViewModel.State.Content -> ContentComposable(state, onIntent)
+                is ReadBookViewModel.State.Failed -> OpenBookErrorComposable(state = state, onIntent)
+            }
+        }
+    })
 }
 
 @Composable
@@ -199,20 +197,14 @@ private fun StubContentComposable(onIntent: (ReadBookViewModel.Intent) -> Unit) 
                     .onGloballyPositioned {
                         onIntent(
                             ReadBookViewModel.Intent.LoadBook(
-                                textMeasurer,
-                                it.size.height to it.size.width
+                                textMeasurer, it.size.height to it.size.width
                             )
                         )
-                    },
-                style = TextStyle(color = Color.White, fontSize = 16.sp),
-                text = AnnotatedString("")
+                    }, style = TextStyle(color = Color.White, fontSize = 16.sp), text = AnnotatedString("")
             )
         }
         ReadStatusComposable(
-            currentPageIndex = 0,
-            totalPages = 0,
-            readPercent = 0f,
-            modifier = Modifier.alpha(0f)
+            currentPageIndex = 0, totalPages = 0, readPercent = 0f, modifier = Modifier.alpha(0f)
         )
     }
 }
@@ -240,10 +232,7 @@ private fun ContentComposable(state: ReadBookViewModel.State.Content, onIntent: 
 
 @Composable
 private fun ReadStatusComposable(
-    currentPageIndex: Int,
-    totalPages: Int,
-    readPercent: Float,
-    modifier: Modifier
+    currentPageIndex: Int, totalPages: Int, readPercent: Float, modifier: Modifier
 ) {
     Box(
         modifier = modifier.then(
@@ -261,9 +250,7 @@ private fun ReadStatusComposable(
 
 @Composable
 private fun BookTextComposable(
-    state: ReadBookViewModel.State.Content,
-    modifier: Modifier,
-    onIntent: (ReadBookViewModel.Intent) -> Unit
+    state: ReadBookViewModel.State.Content, modifier: Modifier, onIntent: (ReadBookViewModel.Intent) -> Unit
 ) {
     PaginatedTextComposable(state, modifier, onIntent)
     if (state.wordTranslation != null) {
@@ -284,11 +271,9 @@ private fun ParagraphTranslationComposable(
     }
     Text(
         modifier = Modifier.pointerInput(onClick) {
-            detectTapGestures(
-                onTap = {
-                    onClick()
-                }
-            )
+            detectTapGestures(onTap = {
+                onClick()
+            })
         },
         style = TextStyle(fontSize = state.userSettings.fontSize.sp),
         text = AnnotatedString.Builder().apply {
@@ -306,9 +291,7 @@ private fun ParagraphTranslationComposable(
 
 @Composable
 private fun PaginatedTextComposable(
-    state: ReadBookViewModel.State.Content,
-    modifier: Modifier,
-    onIntent: (ReadBookViewModel.Intent) -> Unit
+    state: ReadBookViewModel.State.Content, modifier: Modifier, onIntent: (ReadBookViewModel.Intent) -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { state.pages.size }, initialPage = state.currentPage)
     LaunchedEffect(pagerState) {
@@ -334,16 +317,11 @@ private fun TranslationPopupBox(
     onClickOutside: () -> Unit,
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
-        Popup(
-            alignment = Alignment.Center,
-            properties = PopupProperties(
-                excludeFromSystemGesture = true,
-            ),
-            onDismissRequest = { onClickOutside() }
-        ) {
+        Popup(alignment = Alignment.Center, properties = PopupProperties(
+            excludeFromSystemGesture = true,
+        ), onDismissRequest = { onClickOutside() }) {
             Box(
                 Modifier
                     .background(Color.White)
@@ -372,14 +350,12 @@ private fun PopupTitledText(title: String, text: String) {
         text = AnnotatedString.Builder().apply {
             append(
                 AnnotatedString(
-                    title,
-                    SpanStyle(color = Color.DarkGray, fontWeight = FontWeight.Medium)
+                    title, SpanStyle(color = Color.DarkGray, fontWeight = FontWeight.Medium)
                 )
             )
             append(
                 AnnotatedString(
-                    text,
-                    SpanStyle(color = Color.Black)
+                    text, SpanStyle(color = Color.Black)
                 )
             )
         }.toAnnotatedString()
@@ -404,33 +380,28 @@ private fun CombinedClickableText(
     }
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     val gesture = Modifier.pointerInput(onClick, onLongClick) {
-        detectTapGestures(
-            onTap = { pos ->
-                layoutResult.value?.let { layout ->
-                    onClick(layout.getOffsetForPosition(pos))
-                }
-            },
-            onLongPress = { pos ->
-                layoutResult.value?.let { layout ->
-                    onLongClick(layout.getOffsetForPosition(pos))
-                }
+        detectTapGestures(onTap = { pos ->
+            layoutResult.value?.let { layout ->
+                onClick(layout.getOffsetForPosition(pos))
             }
-        )
+        }, onLongPress = { pos ->
+            layoutResult.value?.let { layout ->
+                onLongClick(layout.getOffsetForPosition(pos))
+            }
+        })
     }
     val (heightDp, widthDp) = with(LocalDensity.current) {
         state.textHeight.toDp() to state.textWidth.toDp()
     }
-    Text(
-        modifier = modifier
-            .then(gesture)
-            .height(heightDp)
-            .width(widthDp),
+    Text(modifier = modifier
+        .then(gesture)
+        .height(heightDp)
+        .width(widthDp),
         style = TextStyle(fontSize = state.userSettings.fontSize.sp),
         text = page,
         onTextLayout = {
             layoutResult.value = it
-        }
-    )
+        })
 }
 
 @Composable
@@ -445,11 +416,9 @@ private fun OpenBookErrorComposable(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(text = "Unable to open the book, please try again.")
-        Button(
-            modifier = Modifier.padding(top = 12.dp),
-            onClick = {
-                onIntent(ReadBookViewModel.Intent.ReloadBook)
-            }) {
+        Button(modifier = Modifier.padding(top = 12.dp), onClick = {
+            onIntent(ReadBookViewModel.Intent.ReloadBook)
+        }) {
             Text(text = "Try again")
         }
     }

@@ -3,7 +3,7 @@
     <string name="my_books_bookmarks">Bookmarks</string>
     <string name="my_books_no_bookmarks">No bookmarks</string>
     <string name="my_books_book_path">File:</string>
-    <string name="my_books_current_page">Current page:</string>
+    <string name="bd_read_progress_title">Progress:</string>
     <string name="my_books_book_genre">Genre:</string>
     <string name="my_books_original_language">Source language:</string>
     <string name="my_books_created_date">Creation date:</string>
