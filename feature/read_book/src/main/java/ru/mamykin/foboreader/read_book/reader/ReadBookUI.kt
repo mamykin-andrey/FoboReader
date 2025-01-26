@@ -141,7 +141,14 @@ private fun ReadBookScreen(
                 },
                 actions = {
                     val bookId = (state as? ReadBookViewModel.State.Content)?.bookId ?: return@TopAppBar
-                    IconButton(onClick = { appNavController.navigate(AppScreen.BookDetails.createRoute(bookId)) }) {
+                    IconButton(onClick = {
+                        appNavController.navigate(
+                            AppScreen.BookDetails.createRoute(
+                                bookId = bookId,
+                                readAllowed = false,
+                            )
+                        )
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.Info,
                             contentDescription = "Information"

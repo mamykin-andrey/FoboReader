@@ -122,18 +122,20 @@ private fun LoadedComposable(
                 contentScale = ContentScale.Crop,
                 error = painterResource(id = R.drawable.img_no_image),
             )
-            FloatingActionButton(
-                onClick = {
-                    onIntent(BookDetailsViewModel.Intent.OpenBook)
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_book_read),
-                    contentDescription = null,
-                )
+            if (state.isReadButtonEnabled) {
+                FloatingActionButton(
+                    onClick = {
+                        onIntent(BookDetailsViewModel.Intent.OpenBook)
+                    },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_book_read),
+                        contentDescription = null,
+                    )
+                }
             }
         }
         Text(
@@ -227,7 +229,8 @@ private fun MyBooksScreenPreview() {
                     10,
                     "Genre",
                     listOf("English, Russian, Spanish")
-                )
+                ),
+                true,
             ),
             onIntent = {},
             appNavController = rememberNavController(),

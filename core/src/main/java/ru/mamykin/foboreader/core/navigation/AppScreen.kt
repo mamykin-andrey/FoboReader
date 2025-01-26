@@ -6,8 +6,8 @@ sealed class AppScreen(val route: String) {
         fun createRoute(tabRoute: String) = "main/$tabRoute"
     }
 
-    data object BookDetails : AppScreen("details/{bookId}") {
-        fun createRoute(bookId: Long) = "details/$bookId"
+    data object BookDetails : AppScreen("details/{bookId}/{readAllowed}") {
+        fun createRoute(bookId: Long, readAllowed: Boolean) = "details/$bookId/$readAllowed"
     }
 
     data object ReadBook : AppScreen("book/{bookId}") {

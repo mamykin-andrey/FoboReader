@@ -57,7 +57,10 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
 
         composable(
             route = AppScreen.BookDetails.route,
-            arguments = listOf(navArgument("bookId") { type = NavType.LongType })
+            arguments = listOf(
+                navArgument("bookId") { type = NavType.LongType },
+                navArgument("readAllowed") { type = NavType.BoolType },
+            )
         ) {
             BookDetailsUI(navController)
         }

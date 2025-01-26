@@ -97,7 +97,7 @@ private suspend fun takeEffect(
         }
 
         is MyBooksViewModel.Effect.NavigateToBookDetails -> {
-            appNavController.navigate(AppScreen.BookDetails.createRoute(effect.bookId))
+            appNavController.navigate(AppScreen.BookDetails.createRoute(effect.bookId, true))
         }
 
         is MyBooksViewModel.Effect.NavigateToReadBook -> {

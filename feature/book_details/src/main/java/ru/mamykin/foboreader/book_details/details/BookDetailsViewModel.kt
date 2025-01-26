@@ -17,6 +17,7 @@ internal class BookDetailsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val bookId: Long = savedStateHandle.get<Long>("bookId")!!
+    private val isReadButtonEnabled: Boolean = savedStateHandle.get<Boolean>("readAllowed")!!
 
     var state: State by LoggingStateDelegate(State.Loading)
         private set
@@ -33,8 +34,9 @@ internal class BookDetailsViewModel @Inject constructor(
             is Intent.LoadBookInfo -> {
                 if (state is State.Content) return@launch
                 state = State.Content(
-                    getBookInfoUseCase.execute(bookId)
-                        .let(BookInfoUIModel::fromDomainModel)
+                    bookDetails = getBookInfoUseCase.execute(bookId)
+                        .let(BookInfoUIModel::fromDomainModel),
+                    isReadButtonEnabled = isReadButtonEnabled,
                 )
             }
         }
@@ -49,6 +51,7 @@ internal class BookDetailsViewModel @Inject constructor(
         data object Loading : State()
         data class Content(
             val bookDetails: BookInfoUIModel,
+            val isReadButtonEnabled: Boolean,
         ) : State()
     }
 
