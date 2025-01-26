@@ -61,6 +61,7 @@ internal class MockBooksStoreService @Inject constructor(
                     format = "fb2",
                     cover = "https://cdn1.ozone.ru/s3/multimedia-0/c650/6000372312.jpg",
                     link = DEAD_MANS_ISLAND_LINK,
+                    rating = 4.2f,
                 ),
             )
         )
@@ -76,6 +77,7 @@ internal class MockBooksStoreService @Inject constructor(
                     format = "fb2",
                     cover = "https://cdn1.ozone.ru/s3/multimedia-0/c650/6000372312.jpg",
                     link = DEAD_MANS_ISLAND_LINK,
+                    rating = 4.2f,
                 ),
             )
         )
@@ -91,6 +93,7 @@ internal class MockBooksStoreService @Inject constructor(
                     format = "fbwt",
                     cover = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg/400px-GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg",
                     link = DEAD_MANS_ISLAND_LINK,
+                    rating = 4.6f,
                 ),
             )
         )
@@ -106,6 +109,7 @@ internal class MockBooksStoreService @Inject constructor(
                     format = "fbwt",
                     cover = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg/400px-GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg",
                     link = THE_YOUNG_GIANT_LINK,
+                    rating = 4.6f,
                 ),
             )
         )

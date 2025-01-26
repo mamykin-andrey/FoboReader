@@ -15,7 +15,8 @@ internal class BookListResponse(
         val languages: List<String>,
         val format: String,
         val cover: String,
-        val link: String
+        val link: String,
+        val rating: Float,
     ) {
         fun toDomainModel(isOwned: Boolean) = StoreBookEntity(
             id = id,
@@ -27,6 +28,7 @@ internal class BookListResponse(
             coverUrl = cover,
             link = link,
             isOwned = isOwned,
+            rating = rating,
         )
     }
 }

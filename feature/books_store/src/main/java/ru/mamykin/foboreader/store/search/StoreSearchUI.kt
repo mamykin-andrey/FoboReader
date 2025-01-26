@@ -309,6 +309,7 @@ fun MyBooksScreenPreview() {
                             "",
                             "",
                             isOwned = true,
+                            rating = 0.5f,
                         )
                     )
                 )

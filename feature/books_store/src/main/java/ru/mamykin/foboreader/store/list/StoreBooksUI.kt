@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,6 +50,8 @@ import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles
+import java.text.DecimalFormat
+import java.util.Locale
 
 @Composable
 fun StoreBooksUI(
@@ -270,6 +273,28 @@ private fun BookInfoComposable(book: StoreBookUIModel, modifier: Modifier) {
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(top = 4.dp),
         )
+        BookRatingComposable(book.rating)
+    }
+}
+
+@Composable
+private fun BookRatingComposable(rating: Float) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(top = 4.dp),
+    ) {
+        Icon(
+            imageVector = Icons.Default.Star,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(16.dp),
+            contentDescription = null,
+        )
+        Text(
+            text = String.format(Locale.UK, "%.1f", rating),
+            style = TextStyles.Body2,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(start = 4.dp),
+        )
     }
 }
 
@@ -307,6 +332,7 @@ fun BooksListScreenPreview() {
                         cover = "https://m.media-amazon.com/images/I/81sG60wsNtL.jpg",
                         link = "https://www.amazon.co.uk/Wonderful-Life-Burgess-Nature-History/dp/0099273454",
                         isOwned = true,
+                        rating = 4.5f,
                     )
                 )
             ),
