@@ -2,11 +2,9 @@ package ru.mamykin.foboreader.store.list
 
 import android.content.Context
 import android.view.View
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,7 +15,6 @@ import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,8 +46,8 @@ import ru.mamykin.foboreader.core.navigation.MainTabScreenRoutes
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import ru.mamykin.foboreader.uikit.compose.TextStyles
-import java.text.DecimalFormat
 import java.util.Locale
 
 @Composable
@@ -147,23 +144,12 @@ private fun StoreBooksScreen(
         }, content = { innerPadding ->
             Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
                 when (state) {
-                    is StoreBooksViewModel.State.Loading -> LoadingComposable()
+                    is StoreBooksViewModel.State.Loading -> GenericLoadingIndicatorComposable()
                     is StoreBooksViewModel.State.Content -> ContentComposable(state, onIntent)
                     is StoreBooksViewModel.State.Error -> ErrorComposable(state, onIntent)
                 }
             }
         })
-}
-
-@Composable
-private fun LoadingComposable() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        CircularProgressIndicator(modifier = Modifier.size(48.dp))
-    }
 }
 
 @Composable

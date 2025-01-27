@@ -3,7 +3,6 @@ package ru.mamykin.foboreader.my_books.list
 import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +19,6 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -58,6 +56,7 @@ import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.my_books.R
 import ru.mamykin.foboreader.my_books.sort.SortOrder
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
@@ -140,7 +139,7 @@ private fun MyBooksScreenUI(
         }, content = { innerPadding ->
             Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
                 when (state) {
-                    is MyBooksViewModel.State.Loading -> LoadingComposable()
+                    is MyBooksViewModel.State.Loading -> GenericLoadingIndicatorComposable()
                     is MyBooksViewModel.State.Content -> ContentComposable(state, onIntent)
                 }
             }
@@ -230,17 +229,6 @@ private fun SortBooksComposable(onIntent: (MyBooksViewModel.Intent) -> Unit) {
                 }
             )
         }
-    }
-}
-
-@Composable
-private fun LoadingComposable() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        CircularProgressIndicator(modifier = Modifier.size(48.dp))
     }
 }
 

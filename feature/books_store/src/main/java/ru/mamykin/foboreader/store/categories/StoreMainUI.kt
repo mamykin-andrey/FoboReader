@@ -2,20 +2,16 @@ package ru.mamykin.foboreader.store.categories
 
 import android.view.View
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,6 +38,7 @@ import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
@@ -108,23 +105,12 @@ internal fun StoreMainScreen(
         }, content = { innerPadding ->
             Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
                 when (state) {
-                    is StoreMainViewModel.State.Loading -> LoadingComposable()
+                    is StoreMainViewModel.State.Loading -> GenericLoadingIndicatorComposable()
                     is StoreMainViewModel.State.Error -> ErrorComposable(state, onIntent)
                     is StoreMainViewModel.State.Content -> ContentComposable(state, onIntent)
                 }
             }
         })
-}
-
-@Composable
-private fun LoadingComposable() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        CircularProgressIndicator(modifier = Modifier.size(48.dp))
-    }
 }
 
 @Composable

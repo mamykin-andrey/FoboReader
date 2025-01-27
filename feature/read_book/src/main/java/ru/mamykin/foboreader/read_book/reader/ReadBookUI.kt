@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -69,6 +67,7 @@ import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 
 @Composable
 fun ReadBookUI(appNavController: NavHostController) {
@@ -167,13 +166,7 @@ private fun ReadBookScreen(
 
 @Composable
 private fun LoadingComposable(onIntent: (ReadBookViewModel.Intent) -> Unit) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        CircularProgressIndicator(modifier = Modifier.size(48.dp))
-    }
+    GenericLoadingIndicatorComposable()
     StubContentComposable(onIntent)
 }
 

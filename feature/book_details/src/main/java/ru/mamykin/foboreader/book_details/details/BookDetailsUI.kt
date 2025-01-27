@@ -2,11 +2,9 @@ package ru.mamykin.foboreader.book_details.details
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -48,6 +45,7 @@ import ru.mamykin.foboreader.book_details.R
 import ru.mamykin.foboreader.book_details.rate.RateBookBottomSheetUI
 import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 import java.util.Locale
 
@@ -102,7 +100,7 @@ private fun BookDetailsScreenComposable(
         }
         Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
             when (state) {
-                is BookDetailsViewModel.State.Loading -> LoadingComposable()
+                is BookDetailsViewModel.State.Loading -> GenericLoadingIndicatorComposable()
                 is BookDetailsViewModel.State.Content -> LoadedComposable(state, onIntent)
             }
         }
@@ -124,17 +122,6 @@ private fun RateBookBottomSheetComposable(
                 onIntent(BookDetailsViewModel.Intent.SaveBookRating(it))
             },
         )
-    }
-}
-
-@Composable
-private fun LoadingComposable() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        CircularProgressIndicator(modifier = Modifier.size(48.dp))
     }
 }
 

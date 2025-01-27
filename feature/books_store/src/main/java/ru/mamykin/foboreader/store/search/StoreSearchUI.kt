@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,6 +47,7 @@ import ru.mamykin.foboreader.store.list.StoreBookItemComposable
 import ru.mamykin.foboreader.store.list.StoreBookUIModel
 import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
@@ -119,7 +118,7 @@ private fun MyBooksScreenUI(
             ) {
                 when (state.searchState) {
                     is StoreSearchViewModel.SearchState.NotStarted -> TypeNudgeComposable()
-                    is StoreSearchViewModel.SearchState.Loading -> LoadingComposable()
+                    is StoreSearchViewModel.SearchState.Loading -> GenericLoadingIndicatorComposable()
                     is StoreSearchViewModel.SearchState.Failed -> LoadingFailedComposable(state.searchState, onIntent)
                     is StoreSearchViewModel.SearchState.Loaded -> ContentComposable(state.searchState, onIntent)
                 }
@@ -194,17 +193,6 @@ private fun LoadingFailedComposable(
                 }
             }
         })
-    }
-}
-
-@Composable
-private fun LoadingComposable() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        CircularProgressIndicator(modifier = Modifier.size(48.dp))
     }
 }
 

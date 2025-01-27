@@ -3,7 +3,6 @@ package ru.mamykin.foboreader.settings.all_settings
 import android.app.Activity
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,7 +17,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -45,6 +43,7 @@ import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.settings.custom_color.ChooseColorResult
 import ru.mamykin.foboreader.uikit.compose.ColoredCircleCompose
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
 @Composable
@@ -124,22 +123,11 @@ private fun SettingsScreen(
     }, content = { innerPadding ->
         Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
             when (state) {
-                is SettingsViewModel.State.Loading -> LoadingComposable()
+                is SettingsViewModel.State.Loading -> GenericLoadingIndicatorComposable()
                 is SettingsViewModel.State.Content -> ContentComposable(state, onIntent)
             }
         }
     })
-}
-
-@Composable
-private fun LoadingComposable() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        CircularProgressIndicator(modifier = Modifier.size(48.dp))
-    }
 }
 
 @Composable
