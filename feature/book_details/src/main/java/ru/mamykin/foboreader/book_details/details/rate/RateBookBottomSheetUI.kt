@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.book_details.details
+package ru.mamykin.foboreader.book_details.details.rate
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,16 +33,27 @@ import ru.mamykin.foboreader.uikit.compose.TextStyles
 @Composable
 fun RateBookBottomSheetUI(bookId: Long, onRated: (rating: Int) -> Unit) {
     val viewModel: RateBookViewModel = hiltViewModel()
+    LaunchedEffect(viewModel.effectFlow) {
+        viewModel.effectFlow.collect {
+            takeEffect(it, onRated)
+        }
+    }
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(RateBookViewModel.Intent.LoadBookInfo(bookId))
     }
-    RateBookBottomSheetScreen(viewModel.state, onRated)
+    RateBookBottomSheetScreen(viewModel.state, viewModel::sendIntent)
+}
+
+private fun takeEffect(effect: RateBookViewModel.Effect, onRated: (rating: Int) -> Unit) = when (effect) {
+    is RateBookViewModel.Effect.CloseScreen -> {
+        onRated(effect.rating)
+    }
 }
 
 @Composable
 private fun RateBookBottomSheetScreen(
     state: RateBookViewModel.State,
-    onRated: (rating: Int) -> Unit,
+    onIntent: (RateBookViewModel.Intent) -> Unit,
 ) {
     when (state) {
         is RateBookViewModel.State.Loading -> {
@@ -50,7 +61,7 @@ private fun RateBookBottomSheetScreen(
         }
 
         is RateBookViewModel.State.Content -> {
-            RateBookContentBottomSheetScreen(state, onRated)
+            RateBookContentBottomSheetScreen(state, onIntent)
         }
 
         is RateBookViewModel.State.Failed -> {
@@ -61,11 +72,13 @@ private fun RateBookBottomSheetScreen(
 @Composable
 private fun RateBookContentBottomSheetScreen(
     state: RateBookViewModel.State.Content,
-    onRated: (rating: Int) -> Unit,
+    onIntent: (RateBookViewModel.Intent) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
     ) {
         AsyncImage(
             model = state.bookDetails.coverUrl,
@@ -95,58 +108,36 @@ private fun RateBookContentBottomSheetScreen(
             "How would you rate it?",
             modifier = Modifier.padding(top = 24.dp)
         )
-        Row {
-            IconButton(onClick = {
-                onRated(1)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    modifier = Modifier,
-                    contentDescription = null,
-                )
-            }
-            IconButton(onClick = {
-                onRated(2)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    modifier = Modifier,
-                    contentDescription = null,
-                )
-            }
-            IconButton(onClick = {
-                onRated(3)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    modifier = Modifier,
-                    contentDescription = null,
-                )
-            }
-            IconButton(onClick = {
-                onRated(4)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    modifier = Modifier,
-                    contentDescription = null,
-                )
-            }
-            IconButton(onClick = {
-                onRated(5)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    modifier = Modifier,
-                    contentDescription = null,
-                )
-            }
-        }
+        StarsRowComposable(state, onIntent)
         Button(
-            onClick = { },
+            onClick = { onIntent(RateBookViewModel.Intent.SubmitRating) },
             modifier = Modifier.padding(top = 8.dp),
         ) {
             Text(text = "Submit")
+        }
+    }
+}
+
+@Composable
+private fun StarsRowComposable(
+    state: RateBookViewModel.State.Content,
+    onIntent: (RateBookViewModel.Intent) -> Unit,
+) {
+    Row {
+        for (i in 1..5) {
+            IconButton(onClick = {
+                onIntent(RateBookViewModel.Intent.SelectRating(i))
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    tint = if (state.selectedRating != null && i <= state.selectedRating)
+                        MaterialTheme.colorScheme.primary
+                    else
+                        MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier,
+                    contentDescription = null,
+                )
+            }
         }
     }
 }
@@ -158,7 +149,7 @@ fun RateBookBottomSheetUIPreview() {
         Scaffold {
             RateBookBottomSheetScreen(
                 state = RateBookViewModel.State.Loading,
-                onRated = {},
+                onIntent = {},
             )
         }
     }
