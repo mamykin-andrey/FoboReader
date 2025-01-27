@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.store.search
 
-import android.view.View
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,13 +29,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -45,8 +42,8 @@ import ru.mamykin.foboreader.store.categories.BookCategoryUIModel
 import ru.mamykin.foboreader.store.categories.StoreCategoryItemComposable
 import ru.mamykin.foboreader.store.list.StoreBookItemComposable
 import ru.mamykin.foboreader.store.list.StoreBookUIModel
-import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericErrorStubComposable
 import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
@@ -119,7 +116,10 @@ private fun MyBooksScreenUI(
                 when (state.searchState) {
                     is StoreSearchViewModel.SearchState.NotStarted -> TypeNudgeComposable()
                     is StoreSearchViewModel.SearchState.Loading -> GenericLoadingIndicatorComposable()
-                    is StoreSearchViewModel.SearchState.Failed -> LoadingFailedComposable(state.searchState, onIntent)
+                    is StoreSearchViewModel.SearchState.Failed -> GenericErrorStubComposable {
+                        onIntent(StoreSearchViewModel.Intent.RetrySearch)
+                    }
+
                     is StoreSearchViewModel.SearchState.Loaded -> ContentComposable(state.searchState, onIntent)
                 }
             }
@@ -170,29 +170,6 @@ private fun TypeNudgeComposable() {
         modifier = Modifier.fillMaxSize(),
     ) {
         Text(stringResource(R.string.bs_search_type_nudge))
-    }
-}
-
-@Composable
-private fun LoadingFailedComposable(
-    searchState: StoreSearchViewModel.SearchState.Failed,
-    onIntent: (StoreSearchViewModel.Intent) -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        val context = LocalContext.current
-        AndroidView(factory = {
-            ErrorStubWidget(it).apply {
-                setMessage(searchState.errorMessage.toString(context))
-                visibility = View.VISIBLE
-                setRetryClickListener {
-                    onIntent(StoreSearchViewModel.Intent.RetrySearch)
-                }
-            }
-        })
     }
 }
 

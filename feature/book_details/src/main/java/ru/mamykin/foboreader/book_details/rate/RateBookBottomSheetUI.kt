@@ -12,7 +12,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -146,11 +145,9 @@ private fun StarsRowComposable(
 @Preview
 fun RateBookBottomSheetUIPreview() {
     FoboReaderTheme {
-        Scaffold {
-            RateBookBottomSheetScreen(
-                state = RateBookViewModel.State.Loading,
-                onIntent = {},
-            )
-        }
+        RateBookBottomSheetScreen(
+            state = RateBookViewModel.State.Loading,
+            onIntent = {},
+        )
     }
 }

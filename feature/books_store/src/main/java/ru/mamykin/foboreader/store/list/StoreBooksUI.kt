@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.store.list
 
 import android.content.Context
-import android.view.View
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,7 +34,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -44,8 +42,8 @@ import ru.mamykin.foboreader.core.extension.showSnackbarWithData
 import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.core.navigation.MainTabScreenRoutes
 import ru.mamykin.foboreader.store.R
-import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericErrorStubComposable
 import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 import java.util.Locale
@@ -146,7 +144,9 @@ private fun StoreBooksScreen(
                 when (state) {
                     is StoreBooksViewModel.State.Loading -> GenericLoadingIndicatorComposable()
                     is StoreBooksViewModel.State.Content -> ContentComposable(state, onIntent)
-                    is StoreBooksViewModel.State.Error -> ErrorComposable(state, onIntent)
+                    is StoreBooksViewModel.State.Error -> GenericErrorStubComposable {
+                        onIntent(StoreBooksViewModel.Intent.LoadBooks)
+                    }
                 }
             }
         })
@@ -282,23 +282,6 @@ private fun BookRatingComposable(rating: Float) {
             modifier = Modifier.padding(start = 4.dp),
         )
     }
-}
-
-@Composable
-private fun ErrorComposable(
-    state: StoreBooksViewModel.State.Error,
-    onIntent: (StoreBooksViewModel.Intent) -> Unit
-) {
-    val context = LocalContext.current
-    AndroidView(factory = {
-        ErrorStubWidget(it).apply {
-            setMessage(state.message.toString(context))
-            visibility = View.VISIBLE
-            setRetryClickListener {
-                onIntent(StoreBooksViewModel.Intent.LoadBooks)
-            }
-        }
-    })
 }
 
 @Composable

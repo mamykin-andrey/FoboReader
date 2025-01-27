@@ -1,6 +1,5 @@
 package ru.mamykin.foboreader.store.categories
 
-import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,18 +25,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.store.R
-import ru.mamykin.foboreader.uikit.ErrorStubWidget
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericErrorStubComposable
 import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
@@ -106,7 +103,10 @@ internal fun StoreMainScreen(
             Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
                 when (state) {
                     is StoreMainViewModel.State.Loading -> GenericLoadingIndicatorComposable()
-                    is StoreMainViewModel.State.Error -> ErrorComposable(state, onIntent)
+                    is StoreMainViewModel.State.Error -> GenericErrorStubComposable {
+                        onIntent(StoreMainViewModel.Intent.LoadCategories)
+                    }
+
                     is StoreMainViewModel.State.Content -> ContentComposable(state, onIntent)
                 }
             }
@@ -173,23 +173,6 @@ internal fun StoreCategoryItemComposable(
             )
         }
     }
-}
-
-@Composable
-private fun ErrorComposable(
-    state: StoreMainViewModel.State.Error,
-    onIntent: (StoreMainViewModel.Intent) -> Unit
-) {
-    val context = LocalContext.current
-    AndroidView(factory = {
-        ErrorStubWidget(it).apply {
-            setMessage(state.message.toString(context))
-            visibility = View.VISIBLE
-            setRetryClickListener {
-                onIntent(StoreMainViewModel.Intent.LoadCategories)
-            }
-        }
-    })
 }
 
 @Preview
