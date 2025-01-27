@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.book_details.details.rate
+package ru.mamykin.foboreader.book_details.rate
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.mamykin.foboreader.book_details.details.BookDetailsViewModel

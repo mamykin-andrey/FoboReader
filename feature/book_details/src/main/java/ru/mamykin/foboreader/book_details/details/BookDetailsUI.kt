@@ -45,7 +45,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import ru.mamykin.foboreader.book_details.R
-import ru.mamykin.foboreader.book_details.details.rate.RateBookBottomSheetUI
+import ru.mamykin.foboreader.book_details.rate.RateBookBottomSheetUI
 import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.TextStyles

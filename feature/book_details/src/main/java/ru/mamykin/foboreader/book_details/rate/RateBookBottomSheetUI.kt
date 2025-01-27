@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.book_details.details.rate
+package ru.mamykin.foboreader.book_details.rate
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
