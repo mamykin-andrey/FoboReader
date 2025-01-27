@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.book_details.details
 import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
 
 internal data class BookInfoUIModel(
+    val id: Long,
     val author: String,
     val title: String,
     val coverUrl: String?,
@@ -18,6 +19,7 @@ internal data class BookInfoUIModel(
         fun fromDomainModel(entity: DownloadedBookEntity): BookInfoUIModel {
             val readPercent = entity.totalPages?.let { entity.currentPage + 1f / it } ?: 0f
             return BookInfoUIModel(
+                id = entity.id,
                 author = entity.author,
                 title = entity.title,
                 coverUrl = entity.coverUrl,

@@ -1,5 +1,7 @@
 package ru.mamykin.foboreader.book_details.details
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -21,11 +24,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -92,6 +97,9 @@ private fun BookDetailsScreenComposable(
             }
         })
     }, content = { innerPadding ->
+        if (state is BookDetailsViewModel.State.Content && state.isRateDialogShown) {
+            RateBookBottomSheetComposable(state, onIntent)
+        }
         Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
             when (state) {
                 is BookDetailsViewModel.State.Loading -> LoadingComposable()
@@ -99,6 +107,24 @@ private fun BookDetailsScreenComposable(
             }
         }
     })
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RateBookBottomSheetComposable(
+    state: BookDetailsViewModel.State.Content,
+    onIntent: (BookDetailsViewModel.Intent) -> Unit
+) {
+    ModalBottomSheet(onDismissRequest = {
+        onIntent(BookDetailsViewModel.Intent.SaveBookRating(null))
+    }) {
+        RateBookBottomSheetUI(
+            bookId = state.bookDetails.id,
+            onRated = {
+                onIntent(BookDetailsViewModel.Intent.SaveBookRating(it))
+            },
+        )
+    }
 }
 
 @Composable
@@ -148,7 +174,15 @@ private fun LoadedComposable(
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                .let {
+                    if (!state.bookDetails.isRatedByUser) {
+                        it.clickable(remember { MutableInteractionSource() }, indication = rememberRipple()) {
+                            onIntent(BookDetailsViewModel.Intent.RateBook)
+                        }
+                    } else it
+                }
         ) {
             Icon(
                 imageVector = Icons.Default.Star,
@@ -248,7 +282,8 @@ private fun MyBooksScreenPreview() {
     FoboReaderTheme {
         BookDetailsScreenComposable(
             state = BookDetailsViewModel.State.Content(
-                BookInfoUIModel(
+                bookDetails = BookInfoUIModel(
+                    0L,
                     "Author",
                     "Title",
                     "https://m.media-amazon.com/images/I/41urypNXYyL.jpg",
@@ -260,7 +295,8 @@ private fun MyBooksScreenPreview() {
                     rating = 4.5f,
                     isRatedByUser = false,
                 ),
-                true,
+                isReadButtonEnabled = true,
+                isRateDialogShown = true,
             ),
             onIntent = {},
             appNavController = rememberNavController(),

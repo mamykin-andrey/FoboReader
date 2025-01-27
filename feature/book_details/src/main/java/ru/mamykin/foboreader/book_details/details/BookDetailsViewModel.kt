@@ -1,11 +1,9 @@
 package ru.mamykin.foboreader.book_details.details
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.common_book_info.domain.GetBookInfoUseCase
+import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
@@ -14,7 +12,7 @@ import javax.inject.Inject
 internal class BookDetailsViewModel @Inject constructor(
     private val getBookInfoUseCase: GetBookInfoUseCase,
     savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+) : BaseViewModel<BookDetailsViewModel.Intent>() {
 
     private val bookId: Long = savedStateHandle.get<Long>("bookId")!!
     private val isReadButtonEnabled: Boolean = savedStateHandle.get<Boolean>("readAllowed")!!
@@ -25,7 +23,7 @@ internal class BookDetailsViewModel @Inject constructor(
     private val effectChannel = LoggingEffectChannel<Effect>()
     val effectFlow = effectChannel.receiveAsFlow()
 
-    fun sendIntent(intent: Intent) = viewModelScope.launch {
+    override suspend fun handleIntent(intent: Intent) {
         when (intent) {
             is Intent.OpenBook -> {
                 effectChannel.send(Effect.NavigateToReadBook(bookId))
@@ -38,12 +36,28 @@ internal class BookDetailsViewModel @Inject constructor(
                     isReadButtonEnabled = isReadButtonEnabled,
                 )
             }
+
+            is Intent.RateBook -> {
+                val contentState = (state as? State.Content) ?: return
+                state = contentState.copy(isRateDialogShown = true)
+            }
+
+            is Intent.SaveBookRating -> {
+                state = State.Content(
+                    bookDetails = getBookInfoUseCase.execute(bookId)
+                        .let(BookInfoUIModel::fromDomainModel),
+                    isReadButtonEnabled = isReadButtonEnabled,
+                    isRateDialogShown = false,
+                )
+            }
         }
     }
 
     sealed class Intent {
         data object LoadBookInfo : Intent()
         data object OpenBook : Intent()
+        data object RateBook : Intent()
+        data class SaveBookRating(val rating: Int?) : Intent()
     }
 
     sealed class State {
@@ -51,6 +65,7 @@ internal class BookDetailsViewModel @Inject constructor(
         data class Content(
             val bookDetails: BookInfoUIModel,
             val isReadButtonEnabled: Boolean,
+            val isRateDialogShown: Boolean = false,
         ) : State()
     }
 
