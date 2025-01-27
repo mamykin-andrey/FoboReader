@@ -23,6 +23,6 @@ class DownloadedBookEntity(
     }
 
     fun isStarted(): Boolean {
-        return lastOpen != null
+        return totalPages != null
     }
 }

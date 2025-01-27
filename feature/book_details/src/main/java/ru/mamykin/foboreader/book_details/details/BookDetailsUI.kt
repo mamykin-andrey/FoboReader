@@ -232,21 +232,6 @@ private fun LoadedComposable(
         )
 
         Text(
-            text = stringResource(R.string.my_books_bookmarks),
-            style = TextStyles.Subtitle1,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier
-                .padding(top = 12.dp, start = 16.dp, end = 16.dp),
-        )
-        Text(
-            text = stringResource(R.string.my_books_no_bookmarks),
-            style = TextStyles.Body2,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier
-                .padding(top = 8.dp, start = 16.dp, end = 16.dp)
-        )
-
-        Text(
             text = stringResource(R.string.bd_read_progress_title),
             style = TextStyles.Subtitle1,
             color = MaterialTheme.colorScheme.onBackground,
