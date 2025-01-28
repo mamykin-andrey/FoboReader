@@ -116,13 +116,16 @@ fun MainScreenPreview() {
             navController = rememberNavController(),
             navigationTabs = listOf(
                 MainTabScreenRoutes.MY_BOOKS to {
-                    Text("tab1")
+                    Text("My books")
+                },
+                MainTabScreenRoutes.MY_WORDS to {
+                    Text("My words")
                 },
                 MainTabScreenRoutes.BOOKS_STORE to {
-                    Text("tab2")
+                    Text("Books store")
                 },
                 MainTabScreenRoutes.SETTINGS to {
-                    Text("tab3")
+                    Text("Settings")
                 }
             ),
             selectedTabRoute = MainTabScreenRoutes.MY_BOOKS,

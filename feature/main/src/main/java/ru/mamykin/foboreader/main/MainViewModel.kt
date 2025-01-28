@@ -3,6 +3,7 @@ package ru.mamykin.foboreader.main
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.NoteAlt
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -24,6 +25,11 @@ internal class MainViewModel @Inject constructor() : ViewModel() {
                 route = MainTabScreenRoutes.MY_BOOKS,
                 tabNameId = R.string.app_my_books_tab,
                 icon = Icons.Filled.Book
+            ),
+            BottomNavigationTab(
+                route = MainTabScreenRoutes.MY_WORDS,
+                tabNameId = R.string.app_my_words_tab,
+                icon = Icons.Filled.NoteAlt
             ),
             BottomNavigationTab(
                 route = MainTabScreenRoutes.BOOKS_STORE,
