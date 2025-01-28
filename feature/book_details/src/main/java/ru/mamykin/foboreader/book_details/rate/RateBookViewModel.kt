@@ -27,10 +27,13 @@ internal class RateBookViewModel @Inject constructor(
             is Intent.LoadBookInfo -> {
                 this.bookId = intent.bookId
                 state = State.Content(
-                    bookDetails = getBookInfoUseCase.execute(intent.bookId)
-                        .let(BookInfoUIModel.Companion::fromDomainModel),
-                    selectedRating = null,
+                    getBookInfoUseCase.execute(intent.bookId)
+                        .let(BookInfoUIModel.Companion::fromDomainModel)
                 )
+            }
+
+            is Intent.ReloadBookInfo -> {
+                sendIntent(Intent.LoadBookInfo(requireNotNull(bookId)))
             }
 
             is Intent.SelectRating -> {
@@ -42,15 +45,24 @@ internal class RateBookViewModel @Inject constructor(
             }
 
             is Intent.SubmitRating -> {
-                val rating = (state as? State.Content)?.selectedRating ?: return
-                rateBookUseCase.execute(requireNotNull(bookId), rating)
-                effectChannel.send(Effect.CloseScreen(rating))
+                val contentState = (state as? State.Content) ?: return
+                val selectedRating = contentState.selectedRating ?: return
+                state = contentState.copy(isSubmitInProgress = true)
+                rateBookUseCase.execute(requireNotNull(bookId), selectedRating).fold(
+                    onSuccess = {
+                        effectChannel.send(Effect.CloseScreen(selectedRating))
+                    },
+                    onFailure = {
+                        state = contentState.copy(isSubmitInProgress = false)
+                    },
+                )
             }
         }
     }
 
     sealed class Intent {
         data class LoadBookInfo(val bookId: Long) : Intent()
+        data object ReloadBookInfo : Intent()
         data class SelectRating(val rating: Int) : Intent()
         data object SubmitRating : Intent()
     }
@@ -59,7 +71,8 @@ internal class RateBookViewModel @Inject constructor(
         data object Loading : State()
         data class Content(
             val bookDetails: BookInfoUIModel,
-            val selectedRating: Int?,
+            val selectedRating: Int? = null,
+            val isSubmitInProgress: Boolean = false,
         ) : State()
 
         data object Failed : State()

@@ -8,4 +8,6 @@
     <string name="bd_author_title">Автор:</string>
     <string name="bd_languages_title">Языки:</string>
     <string name="bd_book_rating_title">Оценка:</string>
+    <string name="rb_rate_nudge_title">Как вам книга?</string>
+    <string name="rb_submit_button_title">Отправить</string>
 </resources>

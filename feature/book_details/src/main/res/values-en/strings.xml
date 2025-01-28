@@ -8,4 +8,6 @@
     <string name="bd_author_title">Author:</string>
     <string name="bd_languages_title">Languages:</string>
     <string name="bd_book_rating_title">Rating:</string>
+    <string name="rb_rate_nudge_title">How would you rate it?</string>
+    <string name="rb_submit_button_title">Submit</string>
 </resources>

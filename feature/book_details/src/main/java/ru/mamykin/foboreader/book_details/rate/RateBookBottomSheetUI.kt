@@ -5,13 +5,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,13 +22,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import ru.mamykin.foboreader.book_details.R
+import ru.mamykin.foboreader.book_details.details.BookInfoUIModel
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
+import ru.mamykin.foboreader.uikit.compose.GenericErrorStubComposable
 import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import ru.mamykin.foboreader.uikit.compose.TextStyles
 
@@ -64,6 +70,9 @@ private fun RateBookBottomSheetScreen(
         }
 
         is RateBookViewModel.State.Failed -> {
+            GenericErrorStubComposable {
+                onIntent(RateBookViewModel.Intent.ReloadBookInfo)
+            }
         }
     }
 }
@@ -104,15 +113,19 @@ private fun RateBookContentBottomSheetScreen(
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp)
         )
         Text(
-            "How would you rate it?",
+            stringResource(id = R.string.rb_rate_nudge_title),
             modifier = Modifier.padding(top = 24.dp)
         )
         StarsRowComposable(state, onIntent)
-        Button(
+        OutlinedButton(
             onClick = { onIntent(RateBookViewModel.Intent.SubmitRating) },
             modifier = Modifier.padding(top = 8.dp),
         ) {
-            Text(text = "Submit")
+            if (state.isSubmitInProgress) {
+                CircularProgressIndicator(modifier = Modifier.size(24.dp))
+            } else {
+                Text(text = stringResource(id = R.string.rb_submit_button_title))
+            }
         }
     }
 }
@@ -146,7 +159,23 @@ private fun StarsRowComposable(
 fun RateBookBottomSheetUIPreview() {
     FoboReaderTheme {
         RateBookBottomSheetScreen(
-            state = RateBookViewModel.State.Loading,
+            state = RateBookViewModel.State.Content(
+                bookDetails = BookInfoUIModel(
+                    id = 0,
+                    author = "",
+                    title = "",
+                    coverUrl = "",
+                    filePath = "",
+                    currentPage = 0,
+                    genre = "",
+                    languages = listOf("Language1", "Language2", "Language3", "Language4"),
+                    readPercent = 0.5f,
+                    rating = 4.5f,
+                    isRatedByUser = false,
+                ),
+                selectedRating = null,
+                isSubmitInProgress = true,
+            ),
             onIntent = {},
         )
     }
