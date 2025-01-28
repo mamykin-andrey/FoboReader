@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.book_details.details
 
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ru.mamykin.foboreader.common_book_info.domain.GetBookInfoUseCase
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
 import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate

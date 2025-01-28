@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.book_details.rate
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ru.mamykin.foboreader.book_details.details.BookDetailsViewModel
 import ru.mamykin.foboreader.book_details.details.BookInfoUIModel
 import ru.mamykin.foboreader.common_book_info.domain.GetBookInfoUseCase
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
@@ -12,6 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class RateBookViewModel @Inject constructor(
     private val getBookInfoUseCase: GetBookInfoUseCase,
+    private val rateBookUseCase: RateBookUseCase,
 ) : BaseViewModel<RateBookViewModel.Intent>() {
 
     var state: State by LoggingStateDelegate(State.Loading)
@@ -43,6 +43,7 @@ internal class RateBookViewModel @Inject constructor(
 
             is Intent.SubmitRating -> {
                 val rating = (state as? State.Content)?.selectedRating ?: return
+                rateBookUseCase.execute(requireNotNull(bookId), rating)
                 effectChannel.send(Effect.CloseScreen(rating))
             }
         }
