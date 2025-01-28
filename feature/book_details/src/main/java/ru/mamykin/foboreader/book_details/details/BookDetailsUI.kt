@@ -23,11 +23,14 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -41,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.book_details.R
 import ru.mamykin.foboreader.book_details.rate.RateBookBottomSheetUI
 import ru.mamykin.foboreader.core.navigation.AppScreen
@@ -67,7 +71,10 @@ fun BookDetailsUI(appNavController: NavHostController) {
     )
 }
 
-private fun takeEffect(effect: BookDetailsViewModel.Effect, appNavController: NavHostController) = when (effect) {
+private fun takeEffect(
+    effect: BookDetailsViewModel.Effect,
+    appNavController: NavHostController,
+) = when (effect) {
     is BookDetailsViewModel.Effect.NavigateToReadBook -> {
         appNavController.navigate(AppScreen.ReadBook.createRoute(effect.bookId))
     }
@@ -95,8 +102,19 @@ private fun BookDetailsScreenComposable(
             }
         })
     }, content = { innerPadding ->
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        LaunchedEffect((state as? BookDetailsViewModel.State.Content)?.isRateDialogShown) {
+            val contentState = (state as? BookDetailsViewModel.State.Content) ?: return@LaunchedEffect
+            if (contentState.isRateDialogShown) {
+                sheetState.show()
+            }
+        }
         if (state is BookDetailsViewModel.State.Content && state.isRateDialogShown) {
-            RateBookBottomSheetComposable(state, onIntent)
+            RateBookBottomSheetComposable(
+                state = state,
+                onIntent = onIntent,
+                sheetState = sheetState,
+            )
         }
         Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
             when (state) {
@@ -111,15 +129,22 @@ private fun BookDetailsScreenComposable(
 @Composable
 private fun RateBookBottomSheetComposable(
     state: BookDetailsViewModel.State.Content,
-    onIntent: (BookDetailsViewModel.Intent) -> Unit
+    onIntent: (BookDetailsViewModel.Intent) -> Unit,
+    sheetState: SheetState
 ) {
-    ModalBottomSheet(onDismissRequest = {
-        onIntent(BookDetailsViewModel.Intent.SaveBookRating(null))
-    }) {
+    val scope = rememberCoroutineScope()
+    ModalBottomSheet(
+        sheetState = sheetState,
+        onDismissRequest = {
+            onIntent(BookDetailsViewModel.Intent.SaveBookRating(null))
+        }) {
         RateBookBottomSheetUI(
             bookId = state.bookDetails.id,
             onRated = {
-                onIntent(BookDetailsViewModel.Intent.SaveBookRating(it))
+                scope.launch {
+                    sheetState.hide()
+                    onIntent(BookDetailsViewModel.Intent.SaveBookRating(it))
+                }
             },
         )
     }
@@ -268,7 +293,6 @@ private fun MyBooksScreenPreview() {
                     isRatedByUser = false,
                 ),
                 isReadButtonEnabled = true,
-                isRateDialogShown = true,
             ),
             onIntent = {},
             appNavController = rememberNavController(),
