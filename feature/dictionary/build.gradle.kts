@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.mamykin.foboreader.my_words"
+    namespace = "ru.mamykin.foboreader.dictionary"
     compileSdk = ProjectInfo.compileSdkVersion
 
     defaultConfig {

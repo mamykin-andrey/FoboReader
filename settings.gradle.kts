@@ -8,6 +8,6 @@ include(
     ":feature:my_books",
     ":feature:book_details",
     ":feature:main",
-    ":feature:my_words",
+    ":feature:dictionary",
     ":uikit"
 )

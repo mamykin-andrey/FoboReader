@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.my_words
+package ru.mamykin.foboreader.dictionary
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

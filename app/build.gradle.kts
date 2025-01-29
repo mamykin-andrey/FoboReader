@@ -101,7 +101,7 @@ dependencies {
     implementation(project(":feature:my_books"))
     implementation(project(":feature:book_details"))
     implementation(project(":feature:main"))
-    implementation(project(":feature:my_words"))
+    implementation(project(":feature:dictionary"))
 
     implementation(Dependencies.multidex)
     implementation(Dependencies.coreKtx)
