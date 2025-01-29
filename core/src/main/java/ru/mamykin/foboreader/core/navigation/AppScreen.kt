@@ -30,4 +30,8 @@ sealed class AppScreen(val route: String) {
     }
 
     data object StoreSearch : AppScreen("store_search")
+
+    data object LearnNewWords : AppScreen("learn_new_words")
+
+    data object AllWords : AppScreen("all_words")
 }

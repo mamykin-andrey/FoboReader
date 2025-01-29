@@ -12,13 +12,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ShapeDefaults
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 
@@ -37,39 +35,19 @@ fun DictionaryUI(appNavController: NavController) {
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(DictionaryViewModel.Intent.LoadData)
     }
-    val snackbarHostState = remember { SnackbarHostState() }
-    LaunchedEffect(viewModel.effectFlow) {
-        viewModel.effectFlow.collect {
-            takeEffect(it, snackbarHostState)
-        }
-    }
     DictionaryScreenComposable(
         state = viewModel.state,
-        onIntent = viewModel::sendIntent,
-        snackbarHostState = snackbarHostState,
         appNavController = appNavController,
     )
-}
-
-private suspend fun takeEffect(
-    effect: DictionaryViewModel.Effect,
-    snackbarHostState: SnackbarHostState,
-) {
-    when (effect) {
-        is DictionaryViewModel.Effect.ShowSnackbar -> snackbarHostState.showSnackbar(effect.message)
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DictionaryScreenComposable(
     state: DictionaryViewModel.State,
-    onIntent: (DictionaryViewModel.Intent) -> Unit,
-    snackbarHostState: SnackbarHostState,
     appNavController: NavController,
 ) {
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {
@@ -81,7 +59,7 @@ internal fun DictionaryScreenComposable(
             Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
                 when (state) {
                     is DictionaryViewModel.State.Loading -> GenericLoadingIndicatorComposable()
-                    is DictionaryViewModel.State.Content -> ContentComposable(state, onIntent)
+                    is DictionaryViewModel.State.Content -> ContentComposable(state, appNavController)
                 }
             }
         })
@@ -90,11 +68,15 @@ internal fun DictionaryScreenComposable(
 @Composable
 private fun ContentComposable(
     state: DictionaryViewModel.State.Content,
-    onIntent: (DictionaryViewModel.Intent) -> Unit
+    appNavController: NavController
 ) {
     Column {
-        LearnNewWordsButtonComposable(state.learnedTodayCount)
-        AllWordsButtonComposable(state.allWordsCount)
+        LearnNewWordsButtonComposable(state.learnedTodayCount) {
+            appNavController.navigate(AppScreen.LearnNewWords.route)
+        }
+        AllWordsButtonComposable(state.allWordsCount) {
+            appNavController.navigate(AppScreen.AllWords.route)
+        }
         Row {
             StreakCardComposable(
                 stringResource(id = R.string.mw_current_streak_card_title),
@@ -115,14 +97,14 @@ private fun ContentComposable(
 }
 
 @Composable
-private fun LearnNewWordsButtonComposable(learnedTodayCount: Int) {
+private fun LearnNewWordsButtonComposable(learnedTodayCount: Int, onClick: () -> Unit) {
     OutlinedButton(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .padding(top = 16.dp),
         shape = ShapeDefaults.Small,
-        onClick = { /*TODO*/ },
+        onClick = { onClick() },
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
@@ -139,14 +121,14 @@ private fun LearnNewWordsButtonComposable(learnedTodayCount: Int) {
 }
 
 @Composable
-private fun AllWordsButtonComposable(allWordsCount: Int) {
+private fun AllWordsButtonComposable(allWordsCount: Int, onClick: () -> Unit) {
     OutlinedButton(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .padding(top = 8.dp),
         shape = ShapeDefaults.Small,
-        onClick = { /*TODO*/ },
+        onClick = { onClick() },
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
@@ -204,8 +186,6 @@ fun Preview() {
                 currentStreakDays = 5,
                 bestStreakDays = 120,
             ),
-            onIntent = {},
-            snackbarHostState = remember { SnackbarHostState() },
             appNavController = rememberNavController(),
         )
     }

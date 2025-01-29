@@ -12,9 +12,10 @@ import androidx.navigation.navArgument
 import ru.mamykin.foboreader.book_details.details.BookDetailsUI
 import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.core.navigation.MainTabScreenRoutes
+import ru.mamykin.foboreader.dictionary.DictionaryUI
+import ru.mamykin.foboreader.learn_new_words.LearnNewWordsUI
 import ru.mamykin.foboreader.main.MainScreenUI
 import ru.mamykin.foboreader.my_books.list.MyBooksScreen
-import ru.mamykin.foboreader.dictionary.DictionaryUI
 import ru.mamykin.foboreader.read_book.reader.ReadBookUI
 import ru.mamykin.foboreader.settings.all_settings.SettingsTabUI
 import ru.mamykin.foboreader.settings.app_language.ChooseAppLanguageDialogUI
@@ -89,6 +90,12 @@ fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
             route = AppScreen.StoreSearch.route
         ) {
             StoreSearchUI(navController)
+        }
+
+        composable(
+            route = AppScreen.LearnNewWords.route,
+        ) {
+            LearnNewWordsUI(navController)
         }
 
         dialog(

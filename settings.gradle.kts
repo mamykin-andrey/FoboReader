@@ -9,5 +9,6 @@ include(
     ":feature:book_details",
     ":feature:main",
     ":feature:dictionary",
+    ":feature:learn_new_words",
     ":uikit"
 )
