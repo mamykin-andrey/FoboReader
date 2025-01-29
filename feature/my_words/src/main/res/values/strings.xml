@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="mw_tab_screen_title">Словарь</string>
+    <string name="mw_current_streak_card_title">Дней подряд</string>
+    <string name="mw_best_streak_card_title">Максимум дней</string>
+    <string name="mw_learn_new_words_button_title">Учить слова</string>
+    <string name="mw_learn_new_words_button_subtitle_fmt">Выучено сегодня: %1$d</string>
+    <string name="mw_all_words_button_title">Все слова</string>
+    <string name="mw_all_words_button_subtitle_fmt">Всего добавлено слов: %1$d</string>
+    <string name="mw_streak_days_card_subtitle_fmt">%1$d дней</string>
 </resources>

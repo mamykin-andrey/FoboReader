@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="mw_tab_screen_title">Dictionary</string>
+    <string name="mw_current_streak_card_title">Current streak</string>
+    <string name="mw_best_streak_card_title">Best streak</string>
+    <string name="mw_learn_new_words_button_title">Learn new words</string>
+    <string name="mw_learn_new_words_button_subtitle_fmt">Learned today: %1$d</string>
+    <string name="mw_all_words_button_title">All words</string>
+    <string name="mw_all_words_button_subtitle_fmt">Total words added: %1$d</string>
+    <string name="mw_streak_days_card_subtitle_fmt">%1$d days</string>
 </resources>
