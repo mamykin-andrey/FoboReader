@@ -20,7 +20,9 @@ object Log {
 
     fun warning(message: String, tag: String? = DEFAULT_TAG) {
         if (isDebug) {
-            Log.w(tag, message)
+            throw IllegalStateException("Unhandled error: $message")
+        } else {
+            // log non-fatal
         }
     }
 

@@ -17,6 +17,7 @@ internal class StoreMainViewModel @Inject constructor(
         when (intent) {
             is Intent.LoadCategories -> {
                 if (state is State.Content) return
+
                 state = State.Loading
                 getBookCategories.execute().fold(
                     { state = State.Content(it.map(BookCategoryUIModel::fromDomainModel)) },

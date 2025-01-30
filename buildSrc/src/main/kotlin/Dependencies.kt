@@ -5,7 +5,7 @@ object Versions {
     const val coroutinesVersion = "1.3.2"
     const val retrofitVersion = "2.3.0"
     const val okHttpVersion = "4.9.0"
-    const val mockkVersion = "1.12.2"
+    const val mockkVersion = "1.13.16"
     const val junitVersion = "4.12"
     const val multidexVersion = "2.0.1"
     const val coreKtxVersion = "1.0.2"
