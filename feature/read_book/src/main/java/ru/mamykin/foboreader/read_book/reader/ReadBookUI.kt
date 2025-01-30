@@ -158,7 +158,7 @@ private fun ReadBookScreen(
             when (state) {
                 is ReadBookViewModel.State.Loading -> LoadingComposable(onIntent)
                 is ReadBookViewModel.State.Content -> ContentComposable(state, onIntent)
-                is ReadBookViewModel.State.Failed -> OpenBookErrorComposable(state = state, onIntent)
+                is ReadBookViewModel.State.Failed -> OpenBookErrorComposable(onIntent)
             }
         }
     })
@@ -399,10 +399,8 @@ private fun CombinedClickableText(
 
 @Composable
 private fun OpenBookErrorComposable(
-    state: ReadBookViewModel.State.Failed,
     onIntent: (ReadBookViewModel.Intent) -> Unit,
 ) {
-    val measurer = rememberTextMeasurer()
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

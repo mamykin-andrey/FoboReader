@@ -2,15 +2,13 @@ package ru.mamykin.foboreader.learn_new_words
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
 
 @HiltViewModel
 internal class LearnNewWordsViewModel @Inject constructor(
-) : BaseViewModel<LearnNewWordsViewModel.Intent>() {
-
-    var state: State by LoggingStateDelegate(State.Content)
-        private set
+) : BaseViewModel<LearnNewWordsViewModel.Intent, LearnNewWordsViewModel.State, Nothing>(
+    State.Loading
+) {
 
     override suspend fun handleIntent(intent: Intent) = when (intent) {
         is Intent.LoadData -> {

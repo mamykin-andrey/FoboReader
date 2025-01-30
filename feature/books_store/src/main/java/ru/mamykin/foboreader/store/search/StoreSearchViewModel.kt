@@ -1,46 +1,45 @@
 package ru.mamykin.foboreader.store.search
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.extension.launchInCoroutineScope
+import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.store.categories.BookCategoryUIModel
+import ru.mamykin.foboreader.store.categories.StoreMainViewModel
 import ru.mamykin.foboreader.store.list.StoreBookUIModel
 import javax.inject.Inject
 
 @HiltViewModel
 internal class StoreSearchViewModel @Inject constructor(
     private val searchInStoreUseCase: SearchInStoreUseCase,
-) : ViewModel() {
-
-    var state: State by LoggingStateDelegate(State("", SearchState.NotStarted))
-        private set
-
-    // private val effectChannel = LoggingEffectChannel<Effect>()
-    // val effectFlow = effectChannel.receiveAsFlow()
+) : BaseViewModel<StoreSearchViewModel.Intent, StoreSearchViewModel.State, StoreMainViewModel.Effect>(
+    State("", SearchState.NotStarted)
+) {
     private var curSearchJob: Job? = null
 
-    fun sendIntent(intent: Intent) {
-        viewModelScope.launch {
-            when (intent) {
-                is Intent.Search -> {
-                    curSearchJob?.cancel()
-                    if (intent.searchQuery.isEmpty()) {
-                        state = state.copy(
-                            searchQuery = intent.searchQuery,
-                            searchState = SearchState.NotStarted,
-                        )
-                        return@launch
-                    }
-                    curSearchJob = launch { searchInStore(intent.searchQuery) }
-                }
+    override suspend fun handleIntent(intent: Intent) {
+        when (intent) {
+            is Intent.Search -> {
+                runSearch(intent)
+            }
 
-                is Intent.RetrySearch -> {
-                    sendIntent(Intent.Search(state.searchQuery))
-                }
+            is Intent.RetrySearch -> {
+                sendIntent(Intent.Search(state.searchQuery))
+            }
+        }
+    }
+
+    private suspend fun runSearch(intent: Intent.Search) {
+        curSearchJob?.cancel()
+        if (intent.searchQuery.isEmpty()) {
+            state = state.copy(
+                searchQuery = intent.searchQuery,
+                searchState = SearchState.NotStarted,
+            )
+        } else {
+            curSearchJob = launchInCoroutineScope {
+                searchInStore(intent.searchQuery)
             }
         }
     }

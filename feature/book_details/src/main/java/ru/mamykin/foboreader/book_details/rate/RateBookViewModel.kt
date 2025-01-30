@@ -4,23 +4,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.mamykin.foboreader.book_details.details.BookInfoUIModel
 import ru.mamykin.foboreader.common_book_info.domain.GetBookInfoUseCase
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
-import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
 
 @HiltViewModel
 internal class RateBookViewModel @Inject constructor(
     private val getBookInfoUseCase: GetBookInfoUseCase,
     private val rateBookUseCase: RateBookUseCase,
-) : BaseViewModel<RateBookViewModel.Intent>() {
-
-    var state: State by LoggingStateDelegate(State.Loading)
-        private set
-
+) : BaseViewModel<RateBookViewModel.Intent, RateBookViewModel.State, RateBookViewModel.Effect>(
+    State.Loading
+) {
     private var bookId: Long? = null
-
-    private val effectChannel = LoggingEffectChannel<Effect>()
-    val effectFlow = effectChannel.receiveAsFlow()
 
     override suspend fun handleIntent(intent: Intent) {
         when (intent) {
@@ -44,20 +37,19 @@ internal class RateBookViewModel @Inject constructor(
                 )
             }
 
-            is Intent.SubmitRating -> {
-                val contentState = (state as? State.Content) ?: return
-                val selectedRating = contentState.selectedRating ?: return
-                state = contentState.copy(isSubmitInProgress = true)
-                rateBookUseCase.execute(requireNotNull(bookId), selectedRating).fold(
-                    onSuccess = {
-                        effectChannel.send(Effect.CloseScreen(selectedRating))
-                    },
-                    onFailure = {
-                        state = contentState.copy(isSubmitInProgress = false)
-                    },
-                )
-            }
+            is Intent.SubmitRating -> submitRating()
         }
+    }
+
+    private suspend fun submitRating() {
+        val contentState = (state as? State.Content) ?: return
+        val selectedRating = contentState.selectedRating ?: return
+
+        state = contentState.copy(isSubmitInProgress = true)
+        rateBookUseCase.execute(requireNotNull(bookId), selectedRating).fold(
+            onSuccess = { sendEffect(Effect.CloseScreen(selectedRating)) },
+            onFailure = { state = contentState.copy(isSubmitInProgress = false) },
+        )
     }
 
     sealed class Intent {

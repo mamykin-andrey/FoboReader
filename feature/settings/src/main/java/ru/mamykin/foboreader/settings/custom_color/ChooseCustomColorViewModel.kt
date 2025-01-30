@@ -1,51 +1,44 @@
 package ru.mamykin.foboreader.settings.custom_color
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.navigation.AppScreen
-import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.settings.all_settings.GetCurrentColorUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 internal class ChooseCustomColorViewModel @Inject constructor(
     private val getCustomColorsUseCase: GetCustomColorsUseCase,
-    getCurrentColorUseCase: GetCurrentColorUseCase,
+    private val getCurrentColorUseCase: GetCurrentColorUseCase,
     savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+) : BaseViewModel<ChooseCustomColorViewModel.Intent, ChooseCustomColorViewModel.State, ChooseCustomColorViewModel.Effect>(
+    State()
+) {
+    private val colorType = savedStateHandle.get<AppScreen.ChooseColor.CustomColorType>("type")!!
 
-    private val colorType: AppScreen.ChooseColor.CustomColorType =
-        savedStateHandle.get<AppScreen.ChooseColor.CustomColorType>("type")!!
-    private val colorCode: String = getCurrentColorUseCase.execute(colorType)
-    private val screenTitle: String = when (colorType) {
-        AppScreen.ChooseColor.CustomColorType.TRANSLATION -> "Choose translation color"
-        AppScreen.ChooseColor.CustomColorType.BACKGROUND -> "Choose background color"
+    override suspend fun handleIntent(intent: Intent) {
+        when (intent) {
+            is Intent.LoadColors -> loadColors()
+            is Intent.SelectColor -> sendEffect(Effect.Dismiss(ChooseColorResult(colorType, intent.color)))
+        }
     }
 
-    var state: State by LoggingStateDelegate(State(screenTitle = screenTitle))
-        private set
+    private fun loadColors() {
+        if (state.colors.isNotEmpty()) return
 
-    private val effectChannel = LoggingEffectChannel<Effect>()
-    val effectFlow = effectChannel.receiveAsFlow()
+        val currentColorCode = getCurrentColorUseCase.execute(colorType)
+        val colors = getCustomColorsUseCase.execute()
+        val stateColors = colors.map {
+            if (it.colorCode == currentColorCode) it.copy(selected = true) else it
+        }
+        state = state.copy(colors = stateColors, screenTitle = getScreenTitle())
+    }
 
-    fun sendIntent(intent: Intent) = viewModelScope.launch {
-        when (intent) {
-            is Intent.LoadColors -> {
-                if (state.colors.isNotEmpty()) return@launch
-                val colors = getCustomColorsUseCase.execute()
-                val stateColors = colors.map {
-                    if (it.colorCode == colorCode) it.copy(selected = true) else it
-                }
-                state = state.copy(colors = stateColors)
-            }
-
-            is Intent.SelectColor -> {
-                effectChannel.send(Effect.Dismiss(ChooseColorResult(colorType, intent.color)))
-            }
+    private fun getScreenTitle(): String {
+        return when (colorType) {
+            AppScreen.ChooseColor.CustomColorType.TRANSLATION -> "Choose translation color"
+            AppScreen.ChooseColor.CustomColorType.BACKGROUND -> "Choose background color"
         }
     }
 

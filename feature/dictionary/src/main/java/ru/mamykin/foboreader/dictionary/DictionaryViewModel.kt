@@ -2,16 +2,13 @@ package ru.mamykin.foboreader.dictionary
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
 
 @HiltViewModel
 internal class DictionaryViewModel @Inject constructor(
-) : BaseViewModel<DictionaryViewModel.Intent>() {
-
-    var state: State by LoggingStateDelegate(State.Loading)
-        private set
-
+) : BaseViewModel<DictionaryViewModel.Intent, DictionaryViewModel.State, Nothing>(
+    State.Loading
+) {
     override suspend fun handleIntent(intent: Intent) = when (intent) {
         is Intent.LoadData -> {
             state = State.Content(

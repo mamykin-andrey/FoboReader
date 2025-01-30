@@ -1,12 +1,8 @@
 package ru.mamykin.foboreader.settings.all_settings
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.navigation.AppScreen
-import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.settings.app_language.SetAppLanguageUseCase
 import javax.inject.Inject
 
@@ -19,18 +15,13 @@ internal class SettingsViewModel @Inject constructor(
     private val setUseVibrationUseCase: SetUseVibrationUseCase,
     private val changeColorUseCase: ChangeColorUseCase,
     private val setAppLanguageUseCase: SetAppLanguageUseCase,
-) : ViewModel() {
-
-    var state: State by LoggingStateDelegate(State.Loading)
-        private set
-
-    private val effectChannel = LoggingEffectChannel<Effect>()
-    val effectFlow = effectChannel.receiveAsFlow()
-
-    fun sendIntent(intent: Intent) = viewModelScope.launch {
+) : BaseViewModel<SettingsViewModel.Intent, SettingsViewModel.State, SettingsViewModel.Effect>(
+    State.Loading
+) {
+    override suspend fun handleIntent(intent: Intent) {
         when (intent) {
             Intent.LoadSettings -> {
-                if (state is State.Content) return@launch
+                if (state is State.Content) return
                 state = State.Content(getSettings.execute())
             }
 
@@ -42,7 +33,7 @@ internal class SettingsViewModel @Inject constructor(
             is Intent.SwitchTheme -> {
                 setNightThemeUseCase.execute(intent.isNightTheme)
                 state = State.Content(getSettings.execute())
-                effectChannel.send(Effect.SwitchTheme(intent.isNightTheme))
+                sendEffect(Effect.SwitchTheme(intent.isNightTheme))
             }
 
             is Intent.IncreaseTextSize -> {
@@ -56,26 +47,26 @@ internal class SettingsViewModel @Inject constructor(
             }
 
             is Intent.ChooseColor -> {
-                effectChannel.send(Effect.ChooseColor(intent.type))
+                sendEffect(Effect.ChooseColor(intent.type))
             }
 
             is Intent.ChangeColor -> {
-                val prevState = (state as? State.Content) ?: return@launch
-                val newColorCode = intent.newColorCode ?: return@launch
+                val prevState = (state as? State.Content) ?: return
+                val newColorCode = intent.newColorCode ?: return
                 changeColorUseCase.execute(intent.type, newColorCode)
                 val newSettings = getSettings.execute()
                 state = prevState.copy(settings = newSettings)
             }
 
             is Intent.SelectAppLanguage -> {
-                effectChannel.send(Effect.ChooseAppLanguage)
+                sendEffect(Effect.ChooseAppLanguage)
             }
 
             is Intent.ChangeAppLanguage -> {
-                val selectedLanguageCode = intent.selectedLanguageCode ?: return@launch
+                val selectedLanguageCode = intent.selectedLanguageCode ?: return
                 setAppLanguageUseCase.execute(selectedLanguageCode)
                 // no need to update the state since the screen will be re-created
-                effectChannel.send(Effect.SwitchLanguage(selectedLanguageCode))
+                sendEffect(Effect.SwitchLanguage(selectedLanguageCode))
             }
 
             is Intent.ChangeUseVibration -> {

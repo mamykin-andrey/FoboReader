@@ -1,6 +1,10 @@
 package ru.mamykin.foboreader.core.extension
 
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * Similar to [runCatching] but with a special handling of [CancellationException].
@@ -27,4 +31,15 @@ inline fun <R, T> Result<T>.foldCancellable(
                 onFailure(it)
         }
     )
+}
+
+/**
+ * Launches a coroutine with launch in the [coroutineScope] and returns its [Job].
+ */
+suspend fun <R> launchInCoroutineScope(block: suspend CoroutineScope.() -> R): Job {
+    return coroutineScope {
+        launch {
+            block()
+        }
+    }
 }

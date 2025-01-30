@@ -1,38 +1,24 @@
 package ru.mamykin.foboreader.settings.app_language
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 internal class ChangeLanguageViewModel @Inject constructor(
     private val getAppLanguagesUseCase: GetAppLanguagesUseCase,
-) : ViewModel() {
-
-    var state: State by LoggingStateDelegate(State())
-        private set
-
-    private val effectChannel = LoggingEffectChannel<Effect>()
-    val effectFlow = effectChannel.receiveAsFlow()
-
-    fun sendIntent(intent: Intent) = viewModelScope.launch {
+) : BaseViewModel<ChangeLanguageViewModel.Intent, ChangeLanguageViewModel.State, ChangeLanguageViewModel.Effect>(
+    State()
+) {
+    override suspend fun handleIntent(intent: Intent) {
         when (intent) {
             is Intent.LoadLanguages -> {
-                if (state.languages.isNotEmpty()) return@launch
+                if (state.languages.isNotEmpty()) return
                 state = State(languages = getAppLanguagesUseCase.execute())
             }
 
-            is Intent.SelectLanguage -> {
-                effectChannel.send(Effect.Dismiss(intent.languageCode))
-            }
-
-            is Intent.Dismiss -> {
-                effectChannel.send(Effect.Dismiss(null))
-            }
+            is Intent.SelectLanguage -> sendEffect(Effect.Dismiss(intent.languageCode))
+            is Intent.Dismiss -> sendEffect(Effect.Dismiss(null))
         }
     }
 

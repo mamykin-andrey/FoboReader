@@ -1,12 +1,8 @@
 package ru.mamykin.foboreader.store.categories
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
-import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import javax.inject.Inject
 
@@ -14,18 +10,13 @@ import javax.inject.Inject
 internal class StoreMainViewModel @Inject constructor(
     private val getBookCategories: GetBookCategoriesUseCase,
     private val errorMessageMapper: ErrorMessageMapper,
-) : ViewModel() {
-
-    var state: State by LoggingStateDelegate(State.Loading)
-        private set
-
-    private val effectChannel = LoggingEffectChannel<Effect>()
-    val effectFlow = effectChannel.receiveAsFlow()
-
-    fun sendIntent(intent: Intent) = viewModelScope.launch {
+) : BaseViewModel<StoreMainViewModel.Intent, StoreMainViewModel.State, StoreMainViewModel.Effect>(
+    State.Loading
+) {
+    override suspend fun handleIntent(intent: Intent) {
         when (intent) {
             is Intent.LoadCategories -> {
-                if (state is State.Content) return@launch
+                if (state is State.Content) return
                 state = State.Loading
                 getBookCategories.execute().fold(
                     { state = State.Content(it.map(BookCategoryUIModel::fromDomainModel)) },
@@ -34,7 +25,7 @@ internal class StoreMainViewModel @Inject constructor(
             }
 
             is Intent.OpenCategory -> {
-                effectChannel.send(Effect.OpenBooksListScreen(intent.categoryId))
+                sendEffect(Effect.OpenBooksListScreen(intent.categoryId))
             }
         }
     }

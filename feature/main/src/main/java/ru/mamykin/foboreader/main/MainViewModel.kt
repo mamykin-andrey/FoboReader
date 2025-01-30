@@ -7,18 +7,15 @@ import androidx.compose.material.icons.filled.NoteAlt
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.mamykin.foboreader.core.navigation.MainTabScreenRoutes
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-internal class MainViewModel @Inject constructor() : ViewModel() {
-
-    var state: State by LoggingStateDelegate(State())
-        private set
-
+internal class MainViewModel @Inject constructor() : BaseViewModel<Nothing, MainViewModel.State, Nothing>(
+    State()
+) {
     data class State(
         val tabs: List<BottomNavigationTab> = listOf(
             BottomNavigationTab(

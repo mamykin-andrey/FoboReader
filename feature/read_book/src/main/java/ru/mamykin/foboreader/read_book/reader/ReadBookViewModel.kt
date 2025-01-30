@@ -4,15 +4,12 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.extension.foldCancellable
-import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
+import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.core.presentation.SnackbarData
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.read_book.R
@@ -27,36 +24,33 @@ internal class ReadBookViewModel @Inject constructor(
     private val updateBookInfoUseCase: UpdateBookInfoUseCase,
     getVibrationEnabled: GetVibrationEnabledUseCase,
     savedStateHandle: SavedStateHandle,
-) : ViewModel() {
-
+) : BaseViewModel<ReadBookViewModel.Intent, ReadBookViewModel.State, ReadBookViewModel.Effect>(
+    State.Loading(
+        StringOrResource.Resource(R.string.rb_book_loading)
+    )
+) {
     private val bookId: Long = savedStateHandle.get<Long>("bookId")!!
     private var bookPages: List<Book.Page>? = null
     private var wordsDictionary: Map<String, String> = emptyMap()
 
-    var state: State by LoggingStateDelegate(State.Loading(StringOrResource.Resource(R.string.rb_book_loading)))
-        private set
-
-    private val effectChannel = LoggingEffectChannel<Effect>()
-    val effectFlow = effectChannel.receiveAsFlow()
-
     private val isVibrationEnabled = getVibrationEnabled.execute()
     private var loadBookJob: Job? = null
 
-    fun sendIntent(intent: Intent) = viewModelScope.launch {
+    override suspend fun handleIntent(intent: Intent) {
         when (intent) {
             is Intent.ReloadBook -> {
                 state = State.Loading(StringOrResource.Resource(R.string.rb_book_loading))
             }
 
             is Intent.LoadBook -> {
-                if (state is State.Content) return@launch
+                if (state is State.Content) return
                 loadBookJob?.cancel()
                 loadBookJob = null
                 loadBook(intent)
             }
 
             is Intent.TranslateSentence -> {
-                val prevState = (state as? State.Content) ?: return@launch
+                val prevState = (state as? State.Content) ?: return
                 val page = requireNotNull(bookPages)[prevState.currentPage]
                 val sentence = page.sentences[intent.index]
                 val translation = page.translations[intent.index]
@@ -70,7 +64,7 @@ internal class ReadBookViewModel @Inject constructor(
             }
 
             is Intent.TranslateWord -> {
-                val prevState = (state as? State.Content) ?: return@launch
+                val prevState = (state as? State.Content) ?: return
                 val translation = wordsDictionary[intent.word] ?: translateWordRemote(intent)
                 if (translation != null) {
                     state = prevState.copy(
@@ -81,7 +75,7 @@ internal class ReadBookViewModel @Inject constructor(
                     )
                     vibrateIfEnabled()
                 } else {
-                    effectChannel.send(
+                    sendEffect(
                         Effect.ShowSnackbar(
                             SnackbarData(StringOrResource.Resource(R.string.read_book_translation_download_error))
                         )
@@ -91,20 +85,20 @@ internal class ReadBookViewModel @Inject constructor(
             }
 
             is Intent.HideParagraphTranslation -> {
-                val prevState = (state as? State.Content) ?: return@launch
+                val prevState = (state as? State.Content) ?: return
                 state = prevState.copy(paragraphTranslation = null)
                 vibrateIfEnabled()
             }
 
             is Intent.HideWordTranslation -> {
-                val prevState = (state as? State.Content) ?: return@launch
+                val prevState = (state as? State.Content) ?: return
                 state = prevState.copy(wordTranslation = null)
                 vibrateIfEnabled()
             }
 
             is Intent.PageChanged -> {
-                val bookPages = bookPages ?: return@launch
-                val prevState = (state as? State.Content) ?: return@launch
+                val bookPages = bookPages ?: return
+                val prevState = (state as? State.Content) ?: return
                 updateBookInfoUseCase.execute(bookId, intent.pageIndex, bookPages.size)
                 state = prevState.copy(
                     currentPage = intent.pageIndex,
@@ -208,7 +202,7 @@ internal class ReadBookViewModel @Inject constructor(
 
     private suspend fun vibrateIfEnabled() {
         if (isVibrationEnabled) {
-            effectChannel.send(Effect.Vibrate)
+            sendEffect(Effect.Vibrate)
         }
     }
 

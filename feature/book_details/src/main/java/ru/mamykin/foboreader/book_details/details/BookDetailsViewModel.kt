@@ -3,29 +3,23 @@ package ru.mamykin.foboreader.book_details.details
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
-import ru.mamykin.foboreader.core.presentation.LoggingEffectChannel
-import ru.mamykin.foboreader.core.presentation.LoggingStateDelegate
 import javax.inject.Inject
 
 @HiltViewModel
 internal class BookDetailsViewModel @Inject constructor(
     private val getBookInfoUseCase: GetBookInfoUseCase,
     savedStateHandle: SavedStateHandle,
-) : BaseViewModel<BookDetailsViewModel.Intent>() {
+) : BaseViewModel<BookDetailsViewModel.Intent, BookDetailsViewModel.State, BookDetailsViewModel.Effect>(
+    State.Loading
+) {
 
     private val bookId: Long = savedStateHandle.get<Long>("bookId")!!
     private val isReadButtonEnabled: Boolean = savedStateHandle.get<Boolean>("readAllowed")!!
 
-    var state: State by LoggingStateDelegate(State.Loading)
-        private set
-
-    private val effectChannel = LoggingEffectChannel<Effect>()
-    val effectFlow = effectChannel.receiveAsFlow()
-
     override suspend fun handleIntent(intent: Intent) {
         when (intent) {
             is Intent.OpenBook -> {
-                effectChannel.send(Effect.NavigateToReadBook(bookId))
+                sendEffect(Effect.NavigateToReadBook(bookId))
             }
 
             is Intent.LoadBookInfo -> {
