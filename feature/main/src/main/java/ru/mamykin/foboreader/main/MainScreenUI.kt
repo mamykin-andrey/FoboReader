@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,8 +31,9 @@ fun MainScreenUI(
 ) {
     val viewModel: MainViewModel = hiltViewModel()
     val navController = rememberNavController()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     MainScreenComposable(
-        state = viewModel.state,
+        state = state,
         navigationTabs = navigationTabs,
         navController = navController,
         selectedTabRoute = selectedTabRoute,

@@ -20,13 +20,8 @@ internal class StoreSearchViewModel @Inject constructor(
 
     override suspend fun handleIntent(intent: Intent) {
         when (intent) {
-            is Intent.Search -> {
-                runSearch(intent)
-            }
-
-            is Intent.RetrySearch -> {
-                sendIntent(Intent.Search(state.searchQuery))
-            }
+            is Intent.Search -> runSearch(intent)
+            is Intent.RetrySearch -> handleIntent(Intent.Search(state.searchQuery))
         }
     }
 

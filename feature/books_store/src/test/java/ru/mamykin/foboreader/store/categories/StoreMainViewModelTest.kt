@@ -1,9 +1,5 @@
 package ru.mamykin.foboreader.store.categories
 
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -13,13 +9,17 @@ import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 
 class StoreMainViewModelTest {
 
-    private val getBookCategories: GetBookCategoriesUseCase = mockk()
-    private val errorMessageMapper: ErrorMessageMapper = mockk()
+    private val getBookCategories: GetBookCategoriesUseCase = mock()
+    private val errorMessageMapper: ErrorMessageMapper = mock()
     private val viewModel = StoreMainViewModel(getBookCategories, errorMessageMapper)
 
     @Before
@@ -37,7 +37,7 @@ class StoreMainViewModelTest {
     @Test
     fun `load categories when they're not loaded`() = runTest {
         val booksList = listOf(BookCategoryEntity("1", "name", "", 5))
-        coEvery { getBookCategories.execute() } returns Result.success(booksList)
+        whenever(getBookCategories.execute()).thenAnswer { booksList }
 
         viewModel.sendIntent(StoreMainViewModel.Intent.LoadCategories)
         advanceUntilIdle()
@@ -50,7 +50,7 @@ class StoreMainViewModelTest {
 
     @Test
     fun `don't load categories when they're loaded`() = runTest {
-        coEvery { getBookCategories.execute() } returns Result.success(emptyList())
+        whenever(getBookCategories.execute()).thenAnswer { emptyList<BookCategoryEntity>() }
 
         viewModel.sendIntent(StoreMainViewModel.Intent.LoadCategories)
         runCurrent()
@@ -58,15 +58,15 @@ class StoreMainViewModelTest {
         viewModel.sendIntent(StoreMainViewModel.Intent.LoadCategories)
         runCurrent()
 
-        coVerify(exactly = 1) { getBookCategories.execute() }
+        verify(getBookCategories, times(1)).execute()
     }
 
     @Test
     fun `show error when categories loading failed`() = runTest {
         val errorMessage = "test"
         val exception = IllegalStateException(errorMessage)
-        every { errorMessageMapper.getMessage(exception) } returns StringOrResource.String(errorMessage)
-        coEvery { getBookCategories.execute() } returns Result.failure(exception)
+        whenever(errorMessageMapper.getMessage(exception)).thenReturn(StringOrResource.String(errorMessage))
+        whenever(getBookCategories.execute()).thenReturn(Result.failure(exception))
 
         viewModel.sendIntent(StoreMainViewModel.Intent.LoadCategories)
         advanceUntilIdle()

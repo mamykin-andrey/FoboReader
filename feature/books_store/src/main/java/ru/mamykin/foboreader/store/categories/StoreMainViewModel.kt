@@ -16,13 +16,31 @@ internal class StoreMainViewModel @Inject constructor(
     override suspend fun handleIntent(intent: Intent) {
         when (intent) {
             is Intent.LoadCategories -> {
+                println("LoadCategories")
                 if (state is State.Content) return
 
+                println("Before loading")
                 state = State.Loading
-                getBookCategories.execute().fold(
-                    { state = State.Content(it.map(BookCategoryUIModel::fromDomainModel)) },
-                    { state = State.Error(errorMessageMapper.getMessage(it)) }
-                )
+                println("After loading")
+                val result = getBookCategories.execute()
+                if (result.isSuccess) {
+                    println("Success fold")
+                    runCatching {
+                        val list = result.getOrThrow()
+                        state = State.Content(list.map { BookCategoryUIModel.fromDomainModel(it) })
+                    }.getOrElse {
+                        println(it)
+                    }
+                    println("After success fold")
+                } else {
+                    println("Error fold")
+                    state = State.Error(errorMessageMapper.getMessage(result.exceptionOrNull()!!))
+                }
+            }
+
+            is Intent.ReloadCategories -> {
+                state = State.Loading
+                handleIntent(Intent.ReloadCategories)
             }
 
             is Intent.OpenCategory -> {
@@ -33,6 +51,7 @@ internal class StoreMainViewModel @Inject constructor(
 
     sealed class Intent {
         data object LoadCategories : Intent()
+        data object ReloadCategories : Intent()
         class OpenCategory(val categoryId: String) : Intent()
     }
 

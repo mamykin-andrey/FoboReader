@@ -11,11 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ru.mamykin.foboreader.settings.R
 import ru.mamykin.foboreader.uikit.compose.TextStyles
@@ -36,8 +38,9 @@ fun ChooseAppLanguageDialogUI(navController: NavHostController) {
             }
         }
     }
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     ChangeLanguageDialogComposable(
-        viewModel.state,
+        state,
         viewModel::sendIntent,
     )
 }

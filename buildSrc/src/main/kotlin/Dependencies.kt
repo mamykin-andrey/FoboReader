@@ -50,6 +50,7 @@ object Dependencies {
         "com.squareup.okhttp3:logging-interceptor:${Versions.retrofitLoggingInterceptorVersion}"
     const val junit = "junit:junit:${Versions.junitVersion}"
     const val mockk = "io.mockk:mockk:${Versions.mockkVersion}"
+    const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
     const val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espressoCoreVersion}"
     const val multidex = "androidx.multidex:multidex:${Versions.multidexVersion}"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanaryVersion}"

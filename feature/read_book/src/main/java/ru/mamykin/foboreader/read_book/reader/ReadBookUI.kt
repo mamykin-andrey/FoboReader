@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
@@ -58,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ru.mamykin.foboreader.core.extension.showSnackbarWithData
@@ -85,8 +87,9 @@ fun ReadBookUI(appNavController: NavHostController) {
             )
         }
     }
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     ReadBookScreen(
-        state = viewModel.state,
+        state = state,
         onIntent = viewModel::sendIntent,
         snackbarHostState = snackbarHostState,
         appNavController = appNavController,

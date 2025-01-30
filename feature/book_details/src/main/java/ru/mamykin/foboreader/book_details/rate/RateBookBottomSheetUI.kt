@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import ru.mamykin.foboreader.book_details.R
@@ -56,7 +57,8 @@ fun RateBookBottomSheetUI(bookId: Long, onRated: (rating: Int) -> Unit) {
     LaunchedEffect(viewModel) {
         viewModel.sendIntent(RateBookViewModel.Intent.LoadBookInfo(bookId))
     }
-    RateBookBottomSheetScreen(viewModel.state, viewModel::sendIntent)
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    RateBookBottomSheetScreen(state, viewModel::sendIntent)
 }
 
 private fun takeEffect(effect: RateBookViewModel.Effect, onRated: (rating: Int) -> Unit) = when (effect) {

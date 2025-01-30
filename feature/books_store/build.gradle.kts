@@ -91,7 +91,7 @@ dependencies {
     kapt(Dependencies.hiltCompiler)
 
     testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.mockk)
+    testImplementation(Dependencies.mockitoKotlin)
     testImplementation(Dependencies.coroutinesTest)
 
     androidTestImplementation(Dependencies.espressoCore)

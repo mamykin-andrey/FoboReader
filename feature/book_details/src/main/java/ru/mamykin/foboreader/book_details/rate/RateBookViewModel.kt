@@ -25,9 +25,7 @@ internal class RateBookViewModel @Inject constructor(
                 )
             }
 
-            is Intent.ReloadBookInfo -> {
-                sendIntent(Intent.LoadBookInfo(requireNotNull(bookId)))
-            }
+            is Intent.ReloadBookInfo -> handleIntent(Intent.LoadBookInfo(requireNotNull(bookId)))
 
             is Intent.SelectRating -> {
                 state = State.Content(

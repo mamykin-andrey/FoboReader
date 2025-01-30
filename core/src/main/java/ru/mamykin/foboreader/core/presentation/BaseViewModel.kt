@@ -1,13 +1,11 @@
 package ru.mamykin.foboreader.core.presentation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.platform.Log
@@ -16,14 +14,16 @@ abstract class BaseViewModel<I, S, E>(
     initialState: S,
 ) : ViewModel() {
 
-    var state by mutableStateOf(initialState).also {
-        viewModelScope.launch {
-            snapshotFlow { it.value }
-                .collect {
-                    Log.debug("State: $it")
-                }
+    var uiState = MutableStateFlow(initialState)
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    var state: S = initialState
+        set(value) {
+            Log.debug("State: $value")
+            field = value
+            uiState.value = value
         }
-    }
+
     private val effectChannel = Channel<E>(onBufferOverflow = BufferOverflow.SUSPEND, onUndeliveredElement = {
         Log.debug("Couldn't deliver the effect: $it!")
     })
@@ -31,6 +31,7 @@ abstract class BaseViewModel<I, S, E>(
 
     fun sendIntent(intent: I) {
         Log.debug("Intent: $intent")
+        // TODO: Exception handling
         viewModelScope.launch {
             handleIntent(intent)
         }

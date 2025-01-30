@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ru.mamykin.foboreader.core.extension.changeLocale
 import ru.mamykin.foboreader.core.extension.getActivity
@@ -69,7 +71,11 @@ fun SettingsTabUI(appNavController: NavHostController, onNightThemeSwitch: (Bool
             )
         }
     }
-    SettingsScreen(viewModel.state, viewModel::sendIntent)
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    SettingsScreen(
+        state = state,
+        onIntent = viewModel::sendIntent,
+    )
 }
 
 @Composable

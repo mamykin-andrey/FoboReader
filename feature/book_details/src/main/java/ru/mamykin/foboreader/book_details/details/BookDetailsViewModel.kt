@@ -12,7 +12,6 @@ internal class BookDetailsViewModel @Inject constructor(
 ) : BaseViewModel<BookDetailsViewModel.Intent, BookDetailsViewModel.State, BookDetailsViewModel.Effect>(
     State.Loading
 ) {
-
     private val bookId: Long = savedStateHandle.get<Long>("bookId")!!
     private val isReadButtonEnabled: Boolean = savedStateHandle.get<Boolean>("readAllowed")!!
 

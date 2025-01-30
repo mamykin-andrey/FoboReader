@@ -49,13 +49,13 @@ internal class StoreBooksViewModel @Inject constructor(
                         R.string.books_store_download_completed_fmt,
                         book.title,
                     ),
-                    action = "Show" to { sendIntent(Intent.OpenMyBooks) }
+                    action = "Show" to { handleIntent(Intent.OpenMyBooks) }
                 )
             },
             onFailure = {
                 showSnackbar(
                     StringOrResource.Resource(R.string.books_store_download_failed_fmt, book.title),
-                    "Retry" to { sendIntent(Intent.DownloadBook(intent.bookId)) }
+                    "Retry" to { handleIntent(Intent.DownloadBook(intent.bookId)) }
                 )
             }
         )
