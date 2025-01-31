@@ -4,10 +4,14 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,11 +19,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ThumbDown
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -32,6 +40,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
@@ -57,6 +66,7 @@ fun LearnNewWordsUI(appNavController: NavController) {
     LearnNewWordsScreenComposable(
         state = state,
         appNavController = appNavController,
+        onIntent = viewModel::sendIntent,
     )
 }
 
@@ -65,71 +75,109 @@ fun LearnNewWordsUI(appNavController: NavController) {
 internal fun LearnNewWordsScreenComposable(
     state: LearnNewWordsViewModel.State,
     appNavController: NavController,
+    onIntent: (LearnNewWordsViewModel.Intent) -> Unit,
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.mw_tab_screen_title))
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        appNavController.popBackStack()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            modifier = Modifier,
-                            contentDescription = null,
-                        )
-                    }
-                }
-            )
-        }, content = { innerPadding ->
-            Box(
-                modifier = Modifier.padding(
-                    top = innerPadding.calculateTopPadding(),
-                    bottom = innerPadding.calculateBottomPadding()
+    Scaffold(topBar = {
+        TopAppBar(title = {
+            Text(text = stringResource(id = R.string.mw_tab_screen_title))
+        }, navigationIcon = {
+            IconButton(onClick = {
+                appNavController.popBackStack()
+            }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    modifier = Modifier,
+                    contentDescription = null,
                 )
-            ) {
-                when (state) {
-                    is LearnNewWordsViewModel.State.Loading -> GenericLoadingIndicatorComposable()
-                    is LearnNewWordsViewModel.State.Content -> ContentComposable(state, appNavController)
-                }
             }
         })
+    }, content = { innerPadding ->
+        Box(
+            modifier = Modifier.padding(
+                top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding()
+            )
+        ) {
+            when (state) {
+                is LearnNewWordsViewModel.State.Loading -> GenericLoadingIndicatorComposable()
+                is LearnNewWordsViewModel.State.Content -> ContentComposable(state, appNavController, onIntent)
+            }
+        }
+    })
 }
 
 @Composable
 private fun ContentComposable(
     state: LearnNewWordsViewModel.State.Content,
-    appNavController: NavController
+    appNavController: NavController,
+    onIntent: (LearnNewWordsViewModel.Intent) -> Unit,
 ) {
-    val words = remember {
-        listOf(
-            WordCard("Hello", "Bonjour"),
-            WordCard("Goodbye", "Au revoir"),
-            WordCard("Thank you", "Merci")
-        )
+    Column {
+        WordsProgressComposable(state)
+        SwipeableWordCard(cards = state.words, onIntent)
+        Row(modifier = Modifier.padding(top = 24.dp)) {
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                Icon(
+                    imageVector = Icons.Default.ThumbDown,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .background(Color.Red, shape = ShapeDefaults.ExtraLarge)
+                        .padding(16.dp)
+                        .clickable {
+                            // onIntent(LearnNewWordsViewModel.Intent.ForgotClicked())
+                        }
+                )
+            }
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                Icon(
+                    imageVector = Icons.Default.ThumbUp,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .background(Color.Green, shape = ShapeDefaults.ExtraLarge)
+                        .padding(16.dp)
+                        .clickable {
+                            // onIntent(LearnNewWordsViewModel.Intent.RememberSwiped(cards[currentIndex]))
+                        }
+                )
+            }
+        }
     }
-
-    SwipeableWordCard(
-        cards = words,
-        onRemembered = { /* Handle remembered word */ },
-        onForgotten = { /* Handle forgotten word */ }
-    )
 }
 
-data class WordCard(
-    val word: String,
-    val translation: String
-)
+@Composable
+private fun WordsProgressComposable(state: LearnNewWordsViewModel.State.Content) {
+    Row(modifier = Modifier.padding(top = 16.dp)) {
+        repeat(state.words.size) { index ->
+            if (index < state.learnedWords) {
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            start = if (index == 0) 16.dp else 4.dp,
+                            end = if (index == state.words.lastIndex) 16.dp else 4.dp
+                        )
+                        .height(6.dp)
+                        .weight(1f)
+                        .background(MaterialTheme.colorScheme.primary, shape = ShapeDefaults.Small)
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            start = if (index == 0) 16.dp else 4.dp,
+                            end = if (index == state.words.lastIndex) 16.dp else 4.dp
+                        )
+                        .height(6.dp)
+                        .weight(1f)
+                        .border(1.dp, MaterialTheme.colorScheme.primary, shape = ShapeDefaults.Small)
+                )
+            }
+        }
+    }
+}
 
 @Composable
-fun SwipeableWordCard(
+private fun SwipeableWordCard(
     cards: List<WordCard>,
-    onRemembered: (WordCard) -> Unit,
-    onForgotten: (WordCard) -> Unit,
-    modifier: Modifier = Modifier
+    onIntent: (LearnNewWordsViewModel.Intent) -> Unit,
 ) {
     if (cards.isEmpty()) return
 
@@ -159,12 +207,14 @@ fun SwipeableWordCard(
     }
 
     Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier
+            .padding(top = 24.dp)
+            .fillMaxWidth(), contentAlignment = Alignment.Center
     ) {
         // Next card (if available)
         if (currentIndex + 1 < cards.size) {
             Card(
+                shape = ShapeDefaults.Medium,
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .height(400.dp)
@@ -172,15 +222,12 @@ fun SwipeableWordCard(
                         scaleX = 0.9f
                         scaleY = 0.9f
                         alpha = 0.5f
-                    }
-            ) {
+                    }) {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
                     ) {
                         Text(text = cards[currentIndex + 1].word)
                         Spacer(modifier = Modifier.height(16.dp))
@@ -193,6 +240,7 @@ fun SwipeableWordCard(
         // Current card
         if (currentIndex < cards.size) {
             Card(
+                shape = ShapeDefaults.Medium,
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .height(400.dp)
@@ -202,61 +250,54 @@ fun SwipeableWordCard(
                         rotationZ = if (isAnimating) animatedRotation.value else rotation
                     }
                     .pointerInput(currentIndex) {
-                        detectDragGestures(
-                            onDragEnd = {
-                                if (abs(offsetX) > swipeThreshold && !isAnimating) {
-                                    scope.launch {
-                                        isAnimating = true
+                        detectDragGestures(onDragEnd = {
+                            if (abs(offsetX) > swipeThreshold && !isAnimating) {
+                                scope.launch {
+                                    isAnimating = true
 
-                                        // Calculate target position based on current direction
-                                        val direction = sign(offsetX)
-                                        val targetX = direction * screenWidth
+                                    // Calculate target position based on current direction
+                                    val direction = sign(offsetX)
+                                    val targetX = direction * screenWidth
 
-                                        // Start with current position
-                                        animatedOffsetX.snapTo(offsetX)
-                                        animatedOffsetY.snapTo(offsetY)
-                                        animatedRotation.snapTo(rotation)
+                                    // Start with current position
+                                    animatedOffsetX.snapTo(offsetX)
+                                    animatedOffsetY.snapTo(offsetY)
+                                    animatedRotation.snapTo(rotation)
 
-                                        // Animate to final position
-                                        animatedOffsetX.animateTo(
-                                            targetValue = targetX,
-                                            animationSpec = tween(400, easing = LinearEasing)
-                                        )
+                                    // Animate to final position
+                                    animatedOffsetX.animateTo(
+                                        targetValue = targetX, animationSpec = tween(400, easing = LinearEasing)
+                                    )
 
-                                        if (offsetX > 0) {
-                                            onRemembered(cards[currentIndex])
-                                        } else {
-                                            onForgotten(cards[currentIndex])
-                                        }
-                                        currentIndex++
+                                    if (offsetX > 0) {
+                                        onIntent(LearnNewWordsViewModel.Intent.RememberSwiped(cards[currentIndex]))
+                                    } else {
+                                        onIntent(LearnNewWordsViewModel.Intent.ForgotSwiped(cards[currentIndex]))
                                     }
-                                } else {
-                                    // Reset position if not passed threshold
-                                    scope.launch {
-                                        animatedOffsetX.animateTo(0f, spring())
-                                        animatedOffsetY.animateTo(0f, spring())
-                                        offsetX = 0f
-                                        offsetY = 0f
-                                    }
+                                    currentIndex++
                                 }
-                            },
-                            onDrag = { change, dragAmount ->
-                                if (!isAnimating) {
-                                    change.consume()
-                                    offsetX += dragAmount.x
-                                    offsetY += dragAmount.y
+                            } else {
+                                // Reset position if not passed threshold
+                                scope.launch {
+                                    animatedOffsetX.animateTo(0f, spring())
+                                    animatedOffsetY.animateTo(0f, spring())
+                                    offsetX = 0f
+                                    offsetY = 0f
                                 }
                             }
-                        )
-                    }
-            ) {
+                        }, onDrag = { change, dragAmount ->
+                            if (!isAnimating) {
+                                change.consume()
+                                offsetX += dragAmount.x
+                                offsetY += dragAmount.y
+                            }
+                        })
+                    }) {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
                     ) {
                         Text(text = cards[currentIndex].word)
                         Spacer(modifier = Modifier.height(16.dp))
@@ -273,8 +314,16 @@ fun SwipeableWordCard(
 fun Preview() {
     FoboReaderTheme {
         LearnNewWordsScreenComposable(
-            state = LearnNewWordsViewModel.State.Content,
+            state = LearnNewWordsViewModel.State.Content(
+                listOf(
+                    WordCard("Hello", "Bonjour"),
+                    WordCard("Goodbye", "Au revoir"),
+                    WordCard("Thank you", "Merci")
+                ),
+                learnedWords = 2
+            ),
             appNavController = rememberNavController(),
+            onIntent = {},
         )
     }
 }
