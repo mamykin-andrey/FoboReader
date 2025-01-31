@@ -1,6 +1,8 @@
 package ru.mamykin.foboreader.store.categories
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
@@ -37,7 +39,7 @@ class StoreMainViewModelTest {
     @Test
     fun `load categories when they're not loaded`() = runTest {
         val booksList = listOf(BookCategoryEntity("1", "name", "", 5))
-        whenever(getBookCategories.execute()).thenAnswer { booksList }
+        whenever(getBookCategories.execute()).thenReturn(Result.success(booksList))
 
         viewModel.sendIntent(StoreMainViewModel.Intent.LoadCategories)
         advanceUntilIdle()
@@ -50,7 +52,7 @@ class StoreMainViewModelTest {
 
     @Test
     fun `don't load categories when they're loaded`() = runTest {
-        whenever(getBookCategories.execute()).thenAnswer { emptyList<BookCategoryEntity>() }
+        whenever(getBookCategories.execute()).thenReturn(Result.success(emptyList()))
 
         viewModel.sendIntent(StoreMainViewModel.Intent.LoadCategories)
         runCurrent()
@@ -74,6 +76,22 @@ class StoreMainViewModelTest {
         assertEquals(
             StoreMainViewModel.State.Error(StringOrResource.String(errorMessage)),
             viewModel.state
+        )
+    }
+
+    @Test
+    fun `send open books list effect`() = runTest {
+        val categoryId = "100"
+        val effects = mutableListOf<StoreMainViewModel.Effect>()
+        val effectsJob = launch { viewModel.effectFlow.toList(effects) }
+
+        viewModel.sendIntent(StoreMainViewModel.Intent.OpenCategory(categoryId))
+        runCurrent()
+        effectsJob.cancel()
+
+        assertEquals(
+            StoreMainViewModel.Effect.OpenBooksListScreen(categoryId),
+            effects.last(),
         )
     }
 }

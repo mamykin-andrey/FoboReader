@@ -92,6 +92,7 @@ dependencies {
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockitoKotlin)
+    testImplementation(Dependencies.mockitoInline)
     testImplementation(Dependencies.coroutinesTest)
 
     androidTestImplementation(Dependencies.espressoCore)
