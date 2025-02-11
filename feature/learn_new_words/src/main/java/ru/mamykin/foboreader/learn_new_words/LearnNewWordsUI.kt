@@ -1,7 +1,9 @@
 package ru.mamykin.foboreader.learn_new_words
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,6 +43,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -160,30 +164,43 @@ private fun ContentComposable(
 private fun WordsProgressComposable(state: LearnNewWordsViewModel.State.Content) {
     Row(modifier = Modifier.padding(top = 16.dp)) {
         repeat(state.words.size) { index ->
-            if (index < state.learnedWords) {
-                Box(
-                    modifier = Modifier
-                        .padding(
-                            start = if (index == 0) 16.dp else 4.dp,
-                            end = if (index == state.words.lastIndex) 16.dp else 4.dp
-                        )
-                        .height(6.dp)
-                        .weight(1f)
-                        .background(MaterialTheme.colorScheme.primary, shape = ShapeDefaults.Small)
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .padding(
-                            start = if (index == 0) 16.dp else 4.dp,
-                            end = if (index == state.words.lastIndex) 16.dp else 4.dp
-                        )
-                        .height(6.dp)
-                        .weight(1f)
-                        .border(1.dp, MaterialTheme.colorScheme.primary, shape = ShapeDefaults.Small)
-                )
-            }
+            ProgressIndicator(
+                modifier = Modifier.weight(1f),
+                isFilled = index < state.learnedWords,
+                isFirst = index == 0,
+                isLast = index == state.words.lastIndex
+            )
         }
+    }
+}
+
+@Composable
+private fun ProgressIndicator(modifier: Modifier, isFilled: Boolean, isFirst: Boolean, isLast: Boolean) {
+    var shouldAnimate by remember { mutableStateOf(false) }
+    val animatedWidth by animateFloatAsState(
+        targetValue = if (shouldAnimate) 1f else 0f,
+        animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing),
+        label = "progressIndicatorAnimation"
+    )
+    LaunchedEffect(isFilled) {
+        shouldAnimate = isFilled
+    }
+    Box(
+        modifier = modifier
+            .padding(
+                start = if (isFirst) 16.dp else 4.dp,
+                end = if (isLast) 16.dp else 4.dp
+            )
+            .height(6.dp)
+            .border(1.dp, MaterialTheme.colorScheme.primary, shape = ShapeDefaults.Small)
+    ) {
+        Box(
+            modifier = Modifier
+                .clip(ShapeDefaults.Small)
+                .fillMaxHeight()
+                .fillMaxWidth(animatedWidth)
+                .background(MaterialTheme.colorScheme.primary)
+        )
     }
 }
 
