@@ -97,12 +97,25 @@ internal fun LearnNewWordsScreenComposable(
                 top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding()
             )
         ) {
-            when (state) {
-                is LearnNewWordsViewModel.State.Loading -> GenericLoadingIndicatorComposable()
-                is LearnNewWordsViewModel.State.Content -> ContentComposable(state, appNavController, onIntent)
+            when {
+                state is LearnNewWordsViewModel.State.Loading -> GenericLoadingIndicatorComposable()
+                state is LearnNewWordsViewModel.State.Content && state.learnedWords < state.words.size -> ContentComposable(
+                    state,
+                    appNavController,
+                    onIntent
+                )
+
+                state is LearnNewWordsViewModel.State.Content -> LearningFinishedComposable()
             }
         }
     })
+}
+
+@Composable
+private fun LearningFinishedComposable() {
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+        Text(text = "All done for today!")
+    }
 }
 
 @Composable
