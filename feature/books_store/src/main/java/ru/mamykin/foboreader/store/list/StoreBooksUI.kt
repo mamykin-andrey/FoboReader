@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -186,12 +187,19 @@ internal fun StoreBookItemComposable(
                 contentScale = ContentScale.Crop,
             )
             BookInfoComposable(book, Modifier.weight(1f))
-            if (book.isOwned) {
-                OpenBookButtonComposable(onIntent)
-            } else {
-                DownloadBookButtonComposable(onIntent, book)
+            when (book.ownedState) {
+                is OwnedState.Downloading -> DownloadProgressComposable()
+                is OwnedState.NotOwned -> DownloadBookButtonComposable(onIntent, book)
+                is OwnedState.Owned -> OpenBookButtonComposable(onIntent)
             }
         }
+    }
+}
+
+@Composable
+private fun DownloadProgressComposable() {
+    IconButton(onClick = {}) {
+        CircularProgressIndicator(modifier = Modifier.size(36.dp))
     }
 }
 
@@ -303,7 +311,7 @@ fun BooksListScreenPreview() {
                         format = "fb",
                         cover = "https://m.media-amazon.com/images/I/81sG60wsNtL.jpg",
                         link = "https://www.amazon.co.uk/Wonderful-Life-Burgess-Nature-History/dp/0099273454",
-                        isOwned = true,
+                        ownedState = OwnedState.NotOwned,
                         rating = 4.5f,
                     )
                 )

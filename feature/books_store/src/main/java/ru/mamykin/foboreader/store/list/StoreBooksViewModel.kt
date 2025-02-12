@@ -41,23 +41,28 @@ internal class StoreBooksViewModel @Inject constructor(
     private suspend fun downloadBook(intent: Intent.DownloadBook) {
         val book = allBooks.find { it.id == intent.bookId } ?: return
 
-        showSnackbar(StringOrResource.Resource(R.string.books_store_download_progress_fmt, book.title))
+        updateBookOwnedState(book, OwnedState.Downloading)
         downloadStoreBookUseCase.execute(book).fold(
             onSuccess = {
-                showSnackbar(
-                    message = StringOrResource.Resource(
-                        R.string.books_store_download_completed_fmt,
-                        book.title,
-                    ),
-                    action = "Show" to { handleIntent(Intent.OpenMyBooks) }
-                )
+                updateBookOwnedState(book, OwnedState.Owned)
+                showSnackbar(StringOrResource.Resource(R.string.books_store_download_completed_fmt, book.title))
             },
             onFailure = {
+                updateBookOwnedState(book, OwnedState.NotOwned)
                 showSnackbar(
                     StringOrResource.Resource(R.string.books_store_download_failed_fmt, book.title),
                     "Retry" to { handleIntent(Intent.DownloadBook(intent.bookId)) }
                 )
             }
+        )
+    }
+
+    private fun updateBookOwnedState(book: StoreBookEntity, ownedState: OwnedState) {
+        this.state = State.Content(
+            allBooks.asSequence()
+                .map(StoreBookUIModel.Companion::fromDomainModel)
+                .map { if (it.id == book.id) it.copy(ownedState = ownedState) else it }
+                .toList()
         )
     }
 

@@ -42,6 +42,7 @@ import androidx.navigation.compose.rememberNavController
 import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.categories.BookCategoryUIModel
 import ru.mamykin.foboreader.store.categories.StoreCategoryItemComposable
+import ru.mamykin.foboreader.store.list.OwnedState
 import ru.mamykin.foboreader.store.list.StoreBookItemComposable
 import ru.mamykin.foboreader.store.list.StoreBookUIModel
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
@@ -276,7 +277,7 @@ fun MyBooksScreenPreview() {
                             "FBWT",
                             "",
                             "",
-                            isOwned = true,
+                            ownedState = OwnedState.NotOwned,
                             rating = 0.5f,
                         )
                     )

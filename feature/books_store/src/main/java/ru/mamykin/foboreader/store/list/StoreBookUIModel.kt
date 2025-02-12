@@ -9,7 +9,7 @@ internal data class StoreBookUIModel(
     val format: String,
     val cover: String,
     val link: String,
-    val isOwned: Boolean,
+    val ownedState: OwnedState,
     val rating: Float,
 ) {
     companion object {
@@ -22,8 +22,14 @@ internal data class StoreBookUIModel(
             format = entity.format,
             cover = entity.coverUrl,
             link = entity.link,
-            isOwned = entity.isOwned,
+            ownedState = if (entity.isOwned) OwnedState.Owned else OwnedState.NotOwned,
             rating = entity.rating,
         )
     }
+}
+
+internal sealed class OwnedState {
+    data object Owned : OwnedState()
+    data object Downloading : OwnedState()
+    data object NotOwned : OwnedState()
 }
