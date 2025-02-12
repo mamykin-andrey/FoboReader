@@ -2,6 +2,7 @@ package ru.mamykin.foboreader.read_book.reader
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -20,9 +21,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -33,6 +36,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,8 +55,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -249,11 +253,7 @@ private fun BookTextComposable(
     state: ReadBookViewModel.State.Content, modifier: Modifier, onIntent: (ReadBookViewModel.Intent) -> Unit
 ) {
     PaginatedTextComposable(state, modifier, onIntent)
-    if (state.wordTranslation != null) {
-        TranslationPopupBox(state.wordTranslation) {
-            onIntent(ReadBookViewModel.Intent.HideWordTranslation)
-        }
-    }
+    state.wordTranslation?.let { WordTranslationPopupComposable(it, onIntent) }
 }
 
 @Composable
@@ -308,32 +308,33 @@ private fun PaginatedTextComposable(
 }
 
 @Composable
-private fun TranslationPopupBox(
-    wordTranslation: TextTranslation,
-    onClickOutside: () -> Unit,
+private fun WordTranslationPopupComposable(
+    translation: TextTranslation,
+    onIntent: (ReadBookViewModel.Intent) -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
-        Popup(alignment = Alignment.Center, properties = PopupProperties(
-            excludeFromSystemGesture = true,
-        ), onDismissRequest = { onClickOutside() }) {
+        Popup(alignment = Alignment.Center,
+            properties = PopupProperties(excludeFromSystemGesture = true),
+            onDismissRequest = { onIntent(ReadBookViewModel.Intent.HideWordTranslation) }) {
             Box(
                 Modifier
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.inverseSurface)
                     .padding(20.dp)
                     .clip(RoundedCornerShape(4.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Column {
-                    PopupTitledText(
-                        title = "${stringResource(R.string.rb_translation_original)}: ",
-                        text = wordTranslation.sourceText,
+                    TextWithTitleComposable(
+                        R.string.rb_translation_original,
+                        translation.sourceText,
                     )
-                    PopupTitledText(
-                        title = "${stringResource(R.string.rb_translation_translated)}: ",
-                        text = wordTranslation.getMostPreciseTranslation().orEmpty()
+                    TextWithTitleComposable(
+                        R.string.rb_translation_translated,
+                        translation.getMostPreciseTranslation().orEmpty(),
                     )
+                    DictionaryCheckboxComposable()
                 }
             }
         }
@@ -341,21 +342,28 @@ private fun TranslationPopupBox(
 }
 
 @Composable
-private fun PopupTitledText(title: String, text: String) {
+private fun TextWithTitleComposable(@StringRes titleRes: Int, text: String) {
     Text(
-        text = AnnotatedString.Builder().apply {
-            append(
-                AnnotatedString(
-                    title, SpanStyle(color = Color.DarkGray, fontWeight = FontWeight.Medium)
-                )
-            )
-            append(
-                AnnotatedString(
-                    text, SpanStyle(color = Color.Black)
-                )
-            )
-        }.toAnnotatedString()
+        text = "${stringResource(titleRes)}: $text",
+        color = MaterialTheme.colorScheme.inverseOnSurface,
+        textAlign = TextAlign.Center,
     )
+}
+
+@Composable
+private fun DictionaryCheckboxComposable() {
+    var isChecked by remember { mutableStateOf(false) }
+
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+        Checkbox(
+            checked = isChecked,
+            onCheckedChange = { isChecked = it }
+        )
+        Text(
+            text = "Learning the word",
+            color = MaterialTheme.colorScheme.inverseOnSurface,
+        )
+    }
 }
 
 @Composable
