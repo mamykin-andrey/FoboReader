@@ -72,6 +72,7 @@ import ru.mamykin.foboreader.core.navigation.MainTabScreenRoutes
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
+import ru.mamykin.foboreader.read_book.translation.WordTranslationUIModel
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 
@@ -309,7 +310,7 @@ private fun PaginatedTextComposable(
 
 @Composable
 private fun WordTranslationPopupComposable(
-    translation: TextTranslation,
+    translation: WordTranslationUIModel,
     onIntent: (ReadBookViewModel.Intent) -> Unit,
 ) {
     Box(
@@ -328,13 +329,13 @@ private fun WordTranslationPopupComposable(
                 Column {
                     TextWithTitleComposable(
                         R.string.rb_translation_original,
-                        translation.sourceText,
+                        translation.word,
                     )
                     TextWithTitleComposable(
                         R.string.rb_translation_translated,
-                        translation.getMostPreciseTranslation().orEmpty(),
+                        translation.translation,
                     )
-                    DictionaryCheckboxComposable()
+                    DictionaryCheckboxComposable(translation, onIntent)
                 }
             }
         }
@@ -351,16 +352,22 @@ private fun TextWithTitleComposable(@StringRes titleRes: Int, text: String) {
 }
 
 @Composable
-private fun DictionaryCheckboxComposable() {
-    var isChecked by remember { mutableStateOf(false) }
+private fun DictionaryCheckboxComposable(
+    translation: WordTranslationUIModel,
+    onIntent: (ReadBookViewModel.Intent) -> Unit
+) {
+    var isChecked by remember { mutableStateOf(translation.isInDictionary) }
 
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
         Checkbox(
             checked = isChecked,
-            onCheckedChange = { isChecked = it }
+            onCheckedChange = {
+                isChecked = it
+                onIntent(ReadBookViewModel.Intent.AddWordToDictionary(translation.word))
+            }
         )
         Text(
-            text = "Learning the word",
+            text = stringResource(R.string.rb_word_translation_learn_check_title),
             color = MaterialTheme.colorScheme.inverseOnSurface,
         )
     }

@@ -15,6 +15,7 @@ import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.GetWordTranslation
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
+import ru.mamykin.foboreader.read_book.translation.WordTranslationUIModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,9 +69,10 @@ internal class ReadBookViewModel @Inject constructor(
                 val translation = wordsDictionary[intent.word] ?: translateWordRemote(intent)
                 if (translation != null) {
                     state = prevState.copy(
-                        wordTranslation = TextTranslation(
+                        wordTranslation = WordTranslationUIModel(
                             intent.word,
-                            listOf(translation),
+                            translation,
+                            false,
                         )
                     )
                     vibrateIfEnabled()
@@ -105,6 +107,10 @@ internal class ReadBookViewModel @Inject constructor(
                     totalPages = bookPages.size,
                     readPercent = calculateReadPercent(intent.pageIndex, bookPages.size),
                 )
+            }
+
+            is Intent.AddWordToDictionary -> {
+                TODO("Not implemented")
             }
         }
     }
@@ -214,11 +220,12 @@ internal class ReadBookViewModel @Inject constructor(
             val screenSize: Pair<Int, Int>,
         ) : Intent()
 
-        class TranslateSentence(val index: Int) : Intent()
+        data class TranslateSentence(val index: Int) : Intent()
         data class PageChanged(val pageIndex: Int) : Intent()
-        class TranslateWord(val word: String) : Intent()
+        data class TranslateWord(val word: String) : Intent()
         data object HideParagraphTranslation : Intent()
         data object HideWordTranslation : Intent()
+        data class AddWordToDictionary(val word: String) : Intent()
     }
 
     sealed class Effect {
@@ -243,7 +250,7 @@ internal class ReadBookViewModel @Inject constructor(
             val currentPage: Int,
             val totalPages: Int,
             val readPercent: Float,
-            val wordTranslation: TextTranslation? = null,
+            val wordTranslation: WordTranslationUIModel? = null,
             val paragraphTranslation: TextTranslation? = null,
         ) : State(title) {
             data class UserSettings(

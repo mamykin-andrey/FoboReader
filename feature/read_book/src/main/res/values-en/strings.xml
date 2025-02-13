@@ -7,4 +7,5 @@
     <string name="rb_translation_original">Original</string>
     <string name="rb_translation_translated">Translation</string>
     <string name="rb_book_loading">Loading…</string>
+    <string name="rb_word_translation_learn_check_title">Learn the word</string>
 </resources>
