@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.dictionary
+package ru.mamykin.foboreader.dictionary_impl
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.mamykin.foboreader.core.presentation.BaseViewModel

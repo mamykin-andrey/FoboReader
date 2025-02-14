@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.dictionary
+package ru.mamykin.foboreader.dictionary_impl
 
 import ru.mamykin.foboreader.dictionary_api.DictionaryRepository
 import ru.mamykin.foboreader.dictionary_api.DictionaryWord
