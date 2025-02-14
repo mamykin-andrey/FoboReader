@@ -56,6 +56,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":uikit"))
     implementation(project(":feature:common_book_info"))
+    implementation(project(":feature:dictionary-api"))
 
     implementation(Dependencies.lifecycleViewModelKtx)
     implementation(Dependencies.lifecycleRuntimeKtx)

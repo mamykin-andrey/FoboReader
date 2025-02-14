@@ -102,6 +102,7 @@ dependencies {
     implementation(project(":feature:book_details"))
     implementation(project(":feature:main"))
     implementation(project(":feature:dictionary"))
+    implementation(project(":feature:dictionary-api"))
     implementation(project(":feature:learn_new_words"))
 
     implementation(Dependencies.multidex)

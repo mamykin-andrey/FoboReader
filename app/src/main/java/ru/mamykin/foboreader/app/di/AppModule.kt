@@ -21,6 +21,8 @@ import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.PermissionManager
+import ru.mamykin.foboreader.dictionary.RoomDictionaryRepository
+import ru.mamykin.foboreader.dictionary_api.DictionaryRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -51,4 +53,7 @@ internal interface AppBindsModule {
 
     @Binds
     fun bindPermissionManager(impl: PermissionManagerImpl): PermissionManager
+
+    @Binds
+    fun bindDictionaryRepository(impl: RoomDictionaryRepository): DictionaryRepository
 }
