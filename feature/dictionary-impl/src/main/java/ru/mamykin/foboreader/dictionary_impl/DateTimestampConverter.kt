@@ -1,7 +1,7 @@
-package ru.mamykin.foboreader.common_book_info.data.database.converter
+package ru.mamykin.foboreader.dictionary_impl
 
 import androidx.room.TypeConverter
-import java.util.*
+import java.util.Date
 
 internal class DateTimestampConverter {
 

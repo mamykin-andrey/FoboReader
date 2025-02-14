@@ -14,7 +14,6 @@ android {
     defaultConfig {
         minSdk = ProjectInfo.minSdkVersion
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -71,8 +70,11 @@ dependencies {
     implementation(Dependencies.coil)
     implementation(Dependencies.hiltNavigation)
     implementation(Dependencies.retrofitGsonConverter)
+    implementation(Dependencies.roomRuntime)
+    implementation(Dependencies.roomKtx)
 
     kapt(Dependencies.hiltCompiler)
+    kapt(Dependencies.roomCompiler)
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockk)

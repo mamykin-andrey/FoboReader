@@ -52,6 +52,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":uikit"))
+    implementation(project(":feature:dictionary-api"))
 
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.coroutinesCore)

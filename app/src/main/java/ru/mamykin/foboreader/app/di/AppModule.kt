@@ -13,16 +13,18 @@ import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
 import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.app.platform.NotificationManagerImpl
 import ru.mamykin.foboreader.app.platform.PermissionManagerImpl
-import ru.mamykin.foboreader.common_book_info.data.database.DownloadedBooksDao
 import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDaoFactory
+import ru.mamykin.foboreader.common_book_info.data.database.DownloadedBooksDao
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.PermissionManager
-import ru.mamykin.foboreader.dictionary_impl.RoomDictionaryRepository
 import ru.mamykin.foboreader.dictionary_api.DictionaryRepository
+import ru.mamykin.foboreader.dictionary_impl.DictionaryDao
+import ru.mamykin.foboreader.dictionary_impl.DictionaryDaoFactory
+import ru.mamykin.foboreader.dictionary_impl.RoomDictionaryRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,7 +34,13 @@ internal object AppProvidesModule {
     fun provideOkHttpClient(): OkHttpClient = OkHttpFactory.create(true)
 
     @Provides
-    fun provideBookInfoDao(@ApplicationContext context: Context): DownloadedBooksDao = BookInfoDaoFactory.create(context)
+    fun provideBookInfoDao(
+        @ApplicationContext context: Context): DownloadedBooksDao = BookInfoDaoFactory.create(context)
+
+    @Provides
+    fun provideDictionaryDao(
+        @ApplicationContext context: Context
+    ): DictionaryDao = DictionaryDaoFactory.create(context)
 }
 
 @Module

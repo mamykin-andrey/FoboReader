@@ -2,29 +2,18 @@ package ru.mamykin.foboreader.learn_new_words
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
+import ru.mamykin.foboreader.dictionary_api.DictionaryRepository
 import javax.inject.Inject
 
 @HiltViewModel
 internal class LearnNewWordsViewModel @Inject constructor(
+    private val dictionaryRepository: DictionaryRepository,
 ) : BaseViewModel<LearnNewWordsViewModel.Intent, LearnNewWordsViewModel.State, Nothing>(
     State.Loading
 ) {
     override suspend fun handleIntent(intent: Intent) {
         when (intent) {
-            is Intent.LoadData -> {
-                state = State.Content(
-                    listOf(
-                        WordCard("Hello", "Bonjour"), WordCard("Goodbye", "Au revoir"), WordCard("Thank you", "Merci")
-                    )
-                )
-                // state = State.Content(
-                //     learnedTodayCount = 5,
-                //     allWordsCount = 55,
-                //     currentStreakDays = 5,
-                //     bestStreakDays = 132,
-                // )
-            }
-
+            is Intent.LoadData -> loadWordsToLearn()
             is Intent.RememberSwiped -> {
                 val contentState = (state as? State.Content) ?: return
                 state = contentState.copy(
@@ -41,6 +30,11 @@ internal class LearnNewWordsViewModel @Inject constructor(
             is Intent.ForgotClicked -> {
             }
         }
+    }
+
+    private suspend fun loadWordsToLearn() {
+        val allWords = dictionaryRepository.getAllWords()
+        state = State.Content(allWords.map { WordCard(it.word, it.translation) })
     }
 
     sealed class Intent {
