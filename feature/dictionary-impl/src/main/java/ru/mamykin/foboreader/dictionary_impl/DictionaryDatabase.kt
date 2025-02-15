@@ -8,5 +8,5 @@ import androidx.room.TypeConverters
 @TypeConverters(DateTimestampConverter::class)
 abstract class DictionaryDatabase : RoomDatabase() {
 
-    abstract fun getBookInfoDao(): DictionaryDao
+    abstract fun getBookInfoDao(): WordDictionaryDao
 }

@@ -6,14 +6,22 @@ import java.util.Date
 import javax.inject.Inject
 
 class RoomDictionaryRepository @Inject constructor(
-    private val dao: DictionaryDao,
+    private val dao: WordDictionaryDao,
 ) : DictionaryRepository {
 
     override suspend fun getAllWords(): List<DictionaryWord> {
-        return dao.getWords().map { it.toDomainModel() }
+        return dao.getAll().map { it.toDomainModel() }
     }
 
     override suspend fun addWord(word: String, translation: String) {
         dao.insert(DictionaryWordDBModel(0, Date(), word, translation))
+    }
+
+    override suspend fun removeWord(wordId: Long) {
+        dao.remove(wordId)
+    }
+
+    override suspend fun getWord(word: String): DictionaryWord? {
+        return dao.getByWord(word)?.toDomainModel()
     }
 }

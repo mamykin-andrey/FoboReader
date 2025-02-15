@@ -356,14 +356,18 @@ private fun DictionaryCheckboxComposable(
     translation: WordTranslationUIModel,
     onIntent: (ReadBookViewModel.Intent) -> Unit
 ) {
-    var isChecked by remember { mutableStateOf(translation.isInDictionary) }
+    var isChecked by remember { mutableStateOf(translation.dictionaryId != null) }
 
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
         Checkbox(
             checked = isChecked,
-            onCheckedChange = {
-                isChecked = it
-                onIntent(ReadBookViewModel.Intent.AddWordToDictionary(translation.word))
+            onCheckedChange = { isLearning ->
+                isChecked = isLearning
+                if (isLearning) {
+                    onIntent(ReadBookViewModel.Intent.SaveWordToDictionary(translation.word))
+                } else {
+                    onIntent(ReadBookViewModel.Intent.RemoveWordFromDictionary(translation.dictionaryId!!))
+                }
             }
         )
         Text(

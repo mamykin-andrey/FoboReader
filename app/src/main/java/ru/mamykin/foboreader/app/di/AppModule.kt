@@ -22,7 +22,7 @@ import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.PermissionManager
 import ru.mamykin.foboreader.dictionary_api.DictionaryRepository
-import ru.mamykin.foboreader.dictionary_impl.DictionaryDao
+import ru.mamykin.foboreader.dictionary_impl.WordDictionaryDao
 import ru.mamykin.foboreader.dictionary_impl.DictionaryDaoFactory
 import ru.mamykin.foboreader.dictionary_impl.RoomDictionaryRepository
 
@@ -40,7 +40,7 @@ internal object AppProvidesModule {
     @Provides
     fun provideDictionaryDao(
         @ApplicationContext context: Context
-    ): DictionaryDao = DictionaryDaoFactory.create(context)
+    ): WordDictionaryDao = DictionaryDaoFactory.create(context)
 }
 
 @Module

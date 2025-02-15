@@ -13,17 +13,17 @@ import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.core.presentation.SnackbarData
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.read_book.R
-import ru.mamykin.foboreader.read_book.translation.GetWordTranslation
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import ru.mamykin.foboreader.read_book.translation.WordTranslationUIModel
 import javax.inject.Inject
 
 @HiltViewModel
 internal class ReadBookViewModel @Inject constructor(
-    private val getWordTranslation: GetWordTranslation,
     private val getBookUseCase: GetBookUseCase,
     private val updateBookInfoUseCase: UpdateBookInfoUseCase,
     private val addToDictionaryUseCase: AddToDictionaryUseCase,
+    private val removeFromDictionaryUseCase: RemoveFromDictionaryUseCase,
+    private val getWordTranslationUseCase: GetWordTranslationUseCase,
     getVibrationEnabled: GetVibrationEnabledUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ReadBookViewModel.Intent, ReadBookViewModel.State, ReadBookViewModel.Effect>(
@@ -67,11 +67,12 @@ internal class ReadBookViewModel @Inject constructor(
             }
 
             is Intent.PageChanged -> updateBookProgress(intent)
-            is Intent.AddWordToDictionary -> addWordToDictionary(intent)
+            is Intent.SaveWordToDictionary -> saveWordToDictionary(intent)
+            is Intent.RemoveWordFromDictionary -> removeFromDictionaryUseCase.execute(intent.wordDictionaryId)
         }
     }
 
-    private suspend fun ReadBookViewModel.translateParagraph(intent: Intent.TranslateSentence) {
+    private suspend fun translateParagraph(intent: Intent.TranslateSentence) {
         val prevState = (state as? State.Content) ?: return
         val page = requireNotNull(bookPages)[prevState.currentPage]
         val sentence = page.sentences[intent.index]
@@ -96,17 +97,11 @@ internal class ReadBookViewModel @Inject constructor(
         )
     }
 
-    private suspend fun ReadBookViewModel.translateWord(intent: Intent.TranslateWord) {
+    private suspend fun translateWord(intent: Intent.TranslateWord) {
         val prevState = (state as? State.Content) ?: return
-        val translation = wordsDictionary[intent.word] ?: translateWordRemote(intent.word)
+        val translation = getWordTranslationUseCase.execute(wordsDictionary, intent.word)
         if (translation != null) {
-            state = prevState.copy(
-                wordTranslation = WordTranslationUIModel(
-                    intent.word,
-                    translation,
-                    false,
-                )
-            )
+            state = prevState.copy(wordTranslation = WordTranslationUIModel.fromDomainModel(translation))
             vibrateIfEnabled()
         } else {
             sendEffect(
@@ -114,21 +109,20 @@ internal class ReadBookViewModel @Inject constructor(
                     SnackbarData(StringOrResource.Resource(R.string.read_book_translation_download_error))
                 )
             )
-            vibrateIfEnabled()
         }
     }
 
-    private suspend fun ReadBookViewModel.addWordToDictionary(intent: Intent.AddWordToDictionary) {
-        val translation = wordsDictionary[intent.word] ?: translateWordRemote(intent.word)
-        translation ?: run {
+    private suspend fun saveWordToDictionary(intent: Intent.SaveWordToDictionary) {
+        val translation = getWordTranslationUseCase.execute(wordsDictionary, intent.word)
+        if (translation != null) {
+            addToDictionaryUseCase.execute(intent.word, translation.translation)
+        } else {
             sendEffect(
                 Effect.ShowSnackbar(
                     SnackbarData(StringOrResource.Resource(R.string.read_book_translation_download_error))
                 )
             )
-            return
         }
-        addToDictionaryUseCase.execute(intent.word, translation)
     }
 
     private suspend fun loadBook(intent: Intent.LoadBook) = coroutineScope {
@@ -170,10 +164,6 @@ internal class ReadBookViewModel @Inject constructor(
             textWidth = intent.screenSize.second,
             totalPages = book.pages.size,
         )
-    }
-
-    private suspend fun translateWordRemote(word: String): String? {
-        return getWordTranslation.execute(word).getOrNull()?.getMostPreciseTranslation()
     }
 
     private fun calculateReadPercent(currentPageIndex: Int, totalPages: Int): Float {
@@ -241,7 +231,8 @@ internal class ReadBookViewModel @Inject constructor(
         data class TranslateWord(val word: String) : Intent()
         data object HideParagraphTranslation : Intent()
         data object HideWordTranslation : Intent()
-        data class AddWordToDictionary(val word: String) : Intent()
+        data class SaveWordToDictionary(val word: String) : Intent()
+        data class RemoveWordFromDictionary(val wordDictionaryId: Long) : Intent()
     }
 
     sealed class Effect {
