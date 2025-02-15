@@ -51,10 +51,11 @@ internal class ReadBookViewModel @Inject constructor(
                 loadBook(intent)
             }
 
-            is Intent.TranslateSentence -> translateParagraph(intent)
+            is Intent.TranslateParagraph -> translateParagraph(intent)
             is Intent.TranslateWord -> translateWord(intent)
 
             is Intent.HideParagraphTranslation -> {
+                handleIntent(Intent.HideWordTranslation)
                 val prevState = (state as? State.Content) ?: return
                 state = prevState.copy(paragraphTranslation = null)
                 vibrateIfEnabled()
@@ -68,11 +69,19 @@ internal class ReadBookViewModel @Inject constructor(
 
             is Intent.PageChanged -> updateBookProgress(intent)
             is Intent.SaveWordToDictionary -> saveWordToDictionary(intent)
-            is Intent.RemoveWordFromDictionary -> removeFromDictionaryUseCase.execute(intent.wordDictionaryId)
+            is Intent.RemoveWordFromDictionary -> removeWordFromDictionary(intent)
         }
     }
 
-    private suspend fun translateParagraph(intent: Intent.TranslateSentence) {
+    private suspend fun removeWordFromDictionary(intent: Intent.RemoveWordFromDictionary) {
+        removeFromDictionaryUseCase.execute(intent.wordDictionaryId)
+        val contentState = state as? State.Content ?: return
+        val wordTranslation = contentState.wordTranslation ?: return
+        state = contentState.copy(wordTranslation = wordTranslation.copy(dictionaryId = null))
+    }
+
+    private suspend fun translateParagraph(intent: Intent.TranslateParagraph) {
+        handleIntent(Intent.HideWordTranslation)
         val prevState = (state as? State.Content) ?: return
         val page = requireNotNull(bookPages)[prevState.currentPage]
         val sentence = page.sentences[intent.index]
@@ -98,6 +107,7 @@ internal class ReadBookViewModel @Inject constructor(
     }
 
     private suspend fun translateWord(intent: Intent.TranslateWord) {
+        handleIntent(Intent.HideWordTranslation)
         val prevState = (state as? State.Content) ?: return
         val translation = getWordTranslationUseCase.execute(wordsDictionary, intent.word)
         if (translation != null) {
@@ -115,7 +125,10 @@ internal class ReadBookViewModel @Inject constructor(
     private suspend fun saveWordToDictionary(intent: Intent.SaveWordToDictionary) {
         val translation = getWordTranslationUseCase.execute(wordsDictionary, intent.word)
         if (translation != null) {
-            addToDictionaryUseCase.execute(intent.word, translation.translation)
+            val dictionaryId = addToDictionaryUseCase.execute(intent.word, translation.translation)
+            val contentState = state as? State.Content ?: return
+            val wordTranslation = contentState.wordTranslation ?: return
+            state = contentState.copy(wordTranslation = wordTranslation.copy(dictionaryId = dictionaryId))
         } else {
             sendEffect(
                 Effect.ShowSnackbar(
@@ -226,7 +239,7 @@ internal class ReadBookViewModel @Inject constructor(
             val screenSize: Pair<Int, Int>,
         ) : Intent()
 
-        data class TranslateSentence(val index: Int) : Intent()
+        data class TranslateParagraph(val index: Int) : Intent()
         data class PageChanged(val pageIndex: Int) : Intent()
         data class TranslateWord(val word: String) : Intent()
         data object HideParagraphTranslation : Intent()

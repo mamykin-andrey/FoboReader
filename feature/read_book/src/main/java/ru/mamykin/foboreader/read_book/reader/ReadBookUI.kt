@@ -314,6 +314,13 @@ private fun WordTranslationPopupComposable(
     onIntent: (ReadBookViewModel.Intent) -> Unit,
 ) {
     Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures { onIntent(ReadBookViewModel.Intent.HideWordTranslation) }
+            }.background(Color.Transparent)
+    )
+    Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
         Popup(alignment = Alignment.Center,
@@ -356,14 +363,11 @@ private fun DictionaryCheckboxComposable(
     translation: WordTranslationUIModel,
     onIntent: (ReadBookViewModel.Intent) -> Unit
 ) {
-    var isChecked by remember { mutableStateOf(translation.dictionaryId != null) }
-
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
         Checkbox(
-            checked = isChecked,
-            onCheckedChange = { isLearning ->
-                isChecked = isLearning
-                if (isLearning) {
+            checked = translation.dictionaryId != null,
+            onCheckedChange = { isChecked ->
+                if (isChecked) {
                     onIntent(ReadBookViewModel.Intent.SaveWordToDictionary(translation.word))
                 } else {
                     onIntent(ReadBookViewModel.Intent.RemoveWordFromDictionary(translation.dictionaryId!!))
@@ -391,7 +395,7 @@ private fun CombinedClickableText(
     val onClick = { pos: Int ->
         val sentenceNum =
             page.getStringAnnotations(TextAnnotations.SENTENCE_NUMBER, pos, pos).firstOrNull()?.item?.toInt()
-        sentenceNum?.let { onIntent(ReadBookViewModel.Intent.TranslateSentence(it)) }
+        sentenceNum?.let { onIntent(ReadBookViewModel.Intent.TranslateParagraph(it)) }
     }
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     val gesture = Modifier.pointerInput(onClick, onLongClick) {
@@ -452,6 +456,7 @@ fun ReadBookScreenPreview() {
                 1,
                 2,
                 50f,
+                // wordTranslation = WordTranslationUIModel("Hello", "Bonjour", 100L)
             ),
             // state = ReadBookViewModel.State.Failed(StringOrResource.String("Title")),
             onIntent = {},

@@ -13,8 +13,8 @@ class RoomDictionaryRepository @Inject constructor(
         return dao.getAll().map { it.toDomainModel() }
     }
 
-    override suspend fun addWord(word: String, translation: String) {
-        dao.insert(DictionaryWordDBModel(0, Date(), word, translation))
+    override suspend fun addWord(word: String, translation: String): Long {
+        return dao.insert(DictionaryWordDBModel(0, Date(), word, translation))
     }
 
     override suspend fun removeWord(wordId: Long) {

@@ -6,7 +6,7 @@ import javax.inject.Inject
 internal class AddToDictionaryUseCase @Inject constructor(
     private val dictionaryRepository: DictionaryRepository,
 ) {
-    suspend fun execute(word: String, translation: String) {
-        dictionaryRepository.addWord(word, translation)
+    suspend fun execute(word: String, translation: String): Long {
+        return dictionaryRepository.addWord(word, translation)
     }
 }

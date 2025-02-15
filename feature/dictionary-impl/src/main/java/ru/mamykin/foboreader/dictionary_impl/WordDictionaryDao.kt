@@ -8,7 +8,7 @@ import androidx.room.Query
 interface WordDictionaryDao {
 
     @Insert
-    suspend fun insert(book: DictionaryWordDBModel)
+    suspend fun insert(book: DictionaryWordDBModel): Long
 
     @Query("DELETE FROM dictionaryworddbmodel WHERE id = :wordId")
     suspend fun remove(wordId: Long)
