@@ -2,7 +2,6 @@ package ru.mamykin.foboreader.read_book.reader
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -16,17 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -37,12 +33,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -51,18 +45,14 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -71,9 +61,8 @@ import ru.mamykin.foboreader.core.extension.showSnackbarWithData
 import ru.mamykin.foboreader.core.navigation.AppScreen
 import ru.mamykin.foboreader.core.navigation.MainTabScreenRoutes
 import ru.mamykin.foboreader.core.presentation.StringOrResource
-import ru.mamykin.foboreader.read_book.R
 import ru.mamykin.foboreader.read_book.translation.TextTranslation
-import ru.mamykin.foboreader.read_book.translation.WordTranslationUIModel
+import ru.mamykin.foboreader.read_book.translation.WordTranslationPopupComposable
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 
@@ -148,6 +137,18 @@ private fun ReadBookScreen(
                 )
             }
         }, actions = {
+            IconButton(onClick = {
+                // appNavController.navigate(
+                //     AppScreen.BookDetails.createRoute(
+                //         bookId = bookId,
+                //         readAllowed = false,
+                //     )
+                // )
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Settings, contentDescription = "Settings"
+                )
+            }
             val bookId = (state as? ReadBookViewModel.State.Content)?.bookId ?: return@TopAppBar
             IconButton(onClick = {
                 appNavController.navigate(
@@ -255,7 +256,14 @@ private fun BookTextComposable(
     state: ReadBookViewModel.State.Content, modifier: Modifier, onIntent: (ReadBookViewModel.Intent) -> Unit
 ) {
     PaginatedTextComposable(state, modifier, onIntent)
-    state.wordTranslation?.let { WordTranslationPopupComposable(it, onIntent) }
+    state.wordTranslation?.let { translation ->
+        WordTranslationPopupComposable(
+            translation = translation,
+            onLearningChecked = { onIntent(ReadBookViewModel.Intent.SaveWordToDictionary(it)) },
+            onLearningUnchecked = { onIntent(ReadBookViewModel.Intent.RemoveWordFromDictionary(it)) },
+            onDismiss = { onIntent(ReadBookViewModel.Intent.HideWordTranslation) },
+        )
+    }
 }
 
 @Composable
@@ -305,79 +313,6 @@ private fun PaginatedTextComposable(
             modifier = modifier,
             onIntent,
             state,
-        )
-    }
-}
-
-@Composable
-private fun WordTranslationPopupComposable(
-    translation: WordTranslationUIModel,
-    onIntent: (ReadBookViewModel.Intent) -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures { onIntent(ReadBookViewModel.Intent.HideWordTranslation) }
-            }.background(Color.Transparent)
-    )
-    Box(
-        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-    ) {
-        Popup(alignment = Alignment.Center,
-            properties = PopupProperties(excludeFromSystemGesture = true),
-            onDismissRequest = { onIntent(ReadBookViewModel.Intent.HideWordTranslation) }) {
-            Box(
-                Modifier
-                    .background(MaterialTheme.colorScheme.inverseSurface)
-                    .padding(20.dp)
-                    .clip(RoundedCornerShape(4.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Column {
-                    TextWithTitleComposable(
-                        R.string.rb_translation_original,
-                        translation.word,
-                    )
-                    TextWithTitleComposable(
-                        R.string.rb_translation_translated,
-                        translation.translation,
-                    )
-                    DictionaryCheckboxComposable(translation, onIntent)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun TextWithTitleComposable(@StringRes titleRes: Int, text: String) {
-    Text(
-        text = "${stringResource(titleRes)}: $text",
-        color = MaterialTheme.colorScheme.inverseOnSurface,
-        textAlign = TextAlign.Center,
-    )
-}
-
-@Composable
-private fun DictionaryCheckboxComposable(
-    translation: WordTranslationUIModel,
-    onIntent: (ReadBookViewModel.Intent) -> Unit
-) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-        Checkbox(
-            checked = translation.dictionaryId != null,
-            onCheckedChange = { isChecked ->
-                if (isChecked) {
-                    onIntent(ReadBookViewModel.Intent.SaveWordToDictionary(translation.word))
-                } else {
-                    onIntent(ReadBookViewModel.Intent.RemoveWordFromDictionary(translation.dictionaryId!!))
-                }
-            }
-        )
-        Text(
-            text = stringResource(R.string.rb_word_translation_learn_check_title),
-            color = MaterialTheme.colorScheme.inverseOnSurface,
         )
     }
 }
