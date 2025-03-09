@@ -10,7 +10,6 @@ object Versions {
     const val multidexVersion = "2.0.1"
     const val coreKtxVersion = "1.0.2"
     const val androidxVersion = "1.1.0"
-    const val fragmentxVersion = "1.6.2"
     const val retrofitCoroutinesAdapterVersion = "0.9.2"
     const val retrofitLoggingInterceptorVersion = "4.3.0"
     const val espressoCoreVersion = "3.1.1"
@@ -31,7 +30,6 @@ object Versions {
 
 object Dependencies {
     const val activityX = "androidx.activity:activity:${Versions.androidxVersion}"
-    const val fragmentX = "androidx.fragment:fragment:${Versions.fragmentxVersion}"
     const val appCompatX = "androidx.appcompat:appcompat:${Versions.androidxVersion}"
     const val coreKtx = "androidx.core:core-ktx:${Versions.coreKtxVersion}"
     const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutinesVersion}"

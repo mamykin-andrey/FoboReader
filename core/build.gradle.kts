@@ -46,7 +46,6 @@ android {
 
 dependencies {
     implementation(Dependencies.appCompatX)
-    implementation(Dependencies.fragmentX)
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.coroutinesCore)
     implementation(Dependencies.coroutinesAndroid)
