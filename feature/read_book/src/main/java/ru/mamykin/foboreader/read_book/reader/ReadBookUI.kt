@@ -18,7 +18,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -137,18 +136,6 @@ private fun ReadBookScreen(
                 )
             }
         }, actions = {
-            IconButton(onClick = {
-                // appNavController.navigate(
-                //     AppScreen.BookDetails.createRoute(
-                //         bookId = bookId,
-                //         readAllowed = false,
-                //     )
-                // )
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.Settings, contentDescription = "Settings"
-                )
-            }
             val bookId = (state as? ReadBookViewModel.State.Content)?.bookId ?: return@TopAppBar
             IconButton(onClick = {
                 appNavController.navigate(

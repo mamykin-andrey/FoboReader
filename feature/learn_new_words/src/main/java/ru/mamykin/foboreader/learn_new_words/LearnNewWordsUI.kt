@@ -37,6 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -59,6 +60,9 @@ import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
 import kotlin.math.abs
 import kotlin.math.sign
+
+private const val CARD_SWIPE_THRESHOLD = 200f
+private const val CARDS_SCREEN_WIDTH = 2000f
 
 @Composable
 fun LearnNewWordsUI(appNavController: NavController) {
@@ -103,7 +107,7 @@ internal fun LearnNewWordsScreenComposable(
         ) {
             when {
                 state is LearnNewWordsViewModel.State.Loading -> GenericLoadingIndicatorComposable()
-                state is LearnNewWordsViewModel.State.Content && state.learnedWords < state.words.size -> ContentComposable(
+                state is LearnNewWordsViewModel.State.Content && state.wordsToLearn.isNotEmpty() -> ContentComposable(
                     state,
                     appNavController,
                     onIntent
@@ -130,7 +134,7 @@ private fun ContentComposable(
 ) {
     Column {
         WordsProgressComposable(state)
-        SwipeableWordCard(cards = state.words, onIntent)
+        WordCardsComposable(cards = state.wordsToLearn, onIntent)
         Row(modifier = Modifier.padding(top = 24.dp)) {
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                 Icon(
@@ -163,12 +167,13 @@ private fun ContentComposable(
 @Composable
 private fun WordsProgressComposable(state: LearnNewWordsViewModel.State.Content) {
     Row(modifier = Modifier.padding(top = 16.dp)) {
-        repeat(state.words.size) { index ->
+        val totalWords = state.learnedWords.size + state.wordsToLearn.size
+        repeat(totalWords) { index ->
             ProgressIndicator(
                 modifier = Modifier.weight(1f),
-                isFilled = index < state.learnedWords,
+                isFilled = index <= state.learnedWords.lastIndex,
                 isFirst = index == 0,
-                isLast = index == state.words.lastIndex
+                isLast = index == totalWords - 1,
             )
         }
     }
@@ -205,29 +210,36 @@ private fun ProgressIndicator(modifier: Modifier, isFilled: Boolean, isFirst: Bo
 }
 
 @Composable
-private fun SwipeableWordCard(
+private fun WordCardsComposable(
     cards: List<WordCard>,
     onIntent: (LearnNewWordsViewModel.Intent) -> Unit,
 ) {
-    if (cards.isEmpty()) return
+    if (cards.isEmpty()) throw IllegalArgumentException("Cards list cannot be empty")
+    Box(
+        modifier = Modifier
+            .padding(top = 24.dp)
+            .fillMaxWidth(), contentAlignment = Alignment.Center
+    ) {
+        if (cards.size > 1) {
+            NextCardComposable(cards)
+        }
+        CurrentCardComposable(cards, onIntent)
+    }
+}
 
-    val scope = rememberCoroutineScope()
-    var currentIndex by remember { mutableStateOf(0) }
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
-    val rotation by remember { derivedStateOf { offsetX * 0.1f } }
-
-    val swipeThreshold = 200f
-    val screenWidth = 2000f  // Approximate screen width for animation
-
-    // Animation values
+@Composable
+private fun CurrentCardComposable(
+    cards: List<WordCard>,
+    onIntent: (LearnNewWordsViewModel.Intent) -> Unit
+) {
+    var offsetX by remember { mutableFloatStateOf(0f) }
+    var offsetY by remember { mutableFloatStateOf(0f) }
     val animatedOffsetX = remember { Animatable(0f) }
     val animatedOffsetY = remember { Animatable(0f) }
     val animatedRotation = remember { Animatable(0f) }
     var isAnimating by remember { mutableStateOf(false) }
 
-    LaunchedEffect(currentIndex) {
-        // Reset values for new card
+    LaunchedEffect(cards) {
         offsetX = 0f
         offsetY = 0f
         animatedOffsetX.snapTo(0f)
@@ -235,105 +247,97 @@ private fun SwipeableWordCard(
         animatedRotation.snapTo(0f)
         isAnimating = false
     }
-
-    Box(
+    val scope = rememberCoroutineScope()
+    val rotation by remember { derivedStateOf { offsetX * 0.1f } }
+    Card(
+        shape = ShapeDefaults.Medium,
         modifier = Modifier
-            .padding(top = 24.dp)
-            .fillMaxWidth(), contentAlignment = Alignment.Center
-    ) {
-        // Next card (if available)
-        if (currentIndex + 1 < cards.size) {
-            Card(
-                shape = ShapeDefaults.Medium,
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .height(400.dp)
-                    .graphicsLayer {
-                        scaleX = 0.9f
-                        scaleY = 0.9f
-                        alpha = 0.5f
-                    }) {
-                Box(
-                    modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(text = cards[currentIndex + 1].word)
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = cards[currentIndex + 1].translation)
+            .fillMaxWidth(0.8f)
+            .height(400.dp)
+            .graphicsLayer {
+                translationX = if (isAnimating) animatedOffsetX.value else offsetX
+                translationY = if (isAnimating) animatedOffsetY.value else offsetY
+                rotationZ = if (isAnimating) animatedRotation.value else rotation
+            }
+            .pointerInput(cards) {
+                detectDragGestures(onDragEnd = {
+                    if (abs(offsetX) > CARD_SWIPE_THRESHOLD && !isAnimating) {
+                        scope.launch {
+                            isAnimating = true
+
+                            // Calculate target position based on current direction
+                            val direction = sign(offsetX)
+                            val targetX = direction * CARDS_SCREEN_WIDTH
+
+                            // Start with current position
+                            animatedOffsetX.snapTo(offsetX)
+                            animatedOffsetY.snapTo(offsetY)
+                            animatedRotation.snapTo(rotation)
+
+                            // Animate to final position
+                            animatedOffsetX.animateTo(
+                                targetValue = targetX, animationSpec = tween(400, easing = LinearEasing)
+                            )
+
+                            if (offsetX > 0) {
+                                onIntent(LearnNewWordsViewModel.Intent.RememberSwiped(cards.first()))
+                            } else {
+                                onIntent(LearnNewWordsViewModel.Intent.ForgotSwiped(cards.first()))
+                            }
+                        }
+                    } else {
+                        // Reset position if not passed threshold
+                        scope.launch {
+                            animatedOffsetX.animateTo(0f, spring())
+                            animatedOffsetY.animateTo(0f, spring())
+                            offsetX = 0f
+                            offsetY = 0f
+                        }
                     }
-                }
+                }, onDrag = { change, dragAmount ->
+                    if (!isAnimating) {
+                        change.consume()
+                        offsetX += dragAmount.x
+                        offsetY += dragAmount.y
+                    }
+                })
+            }) {
+        Box(
+            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+            ) {
+                Text(text = cards.first().word)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = cards.first().translation)
             }
         }
+    }
+}
 
-        // Current card
-        if (currentIndex < cards.size) {
-            Card(
-                shape = ShapeDefaults.Medium,
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .height(400.dp)
-                    .graphicsLayer {
-                        translationX = if (isAnimating) animatedOffsetX.value else offsetX
-                        translationY = if (isAnimating) animatedOffsetY.value else offsetY
-                        rotationZ = if (isAnimating) animatedRotation.value else rotation
-                    }
-                    .pointerInput(currentIndex) {
-                        detectDragGestures(onDragEnd = {
-                            if (abs(offsetX) > swipeThreshold && !isAnimating) {
-                                scope.launch {
-                                    isAnimating = true
-
-                                    // Calculate target position based on current direction
-                                    val direction = sign(offsetX)
-                                    val targetX = direction * screenWidth
-
-                                    // Start with current position
-                                    animatedOffsetX.snapTo(offsetX)
-                                    animatedOffsetY.snapTo(offsetY)
-                                    animatedRotation.snapTo(rotation)
-
-                                    // Animate to final position
-                                    animatedOffsetX.animateTo(
-                                        targetValue = targetX, animationSpec = tween(400, easing = LinearEasing)
-                                    )
-
-                                    if (offsetX > 0) {
-                                        onIntent(LearnNewWordsViewModel.Intent.RememberSwiped(cards[currentIndex]))
-                                    } else {
-                                        onIntent(LearnNewWordsViewModel.Intent.ForgotSwiped(cards[currentIndex]))
-                                    }
-                                    currentIndex++
-                                }
-                            } else {
-                                // Reset position if not passed threshold
-                                scope.launch {
-                                    animatedOffsetX.animateTo(0f, spring())
-                                    animatedOffsetY.animateTo(0f, spring())
-                                    offsetX = 0f
-                                    offsetY = 0f
-                                }
-                            }
-                        }, onDrag = { change, dragAmount ->
-                            if (!isAnimating) {
-                                change.consume()
-                                offsetX += dragAmount.x
-                                offsetY += dragAmount.y
-                            }
-                        })
-                    }) {
-                Box(
-                    modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(text = cards[currentIndex].word)
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = cards[currentIndex].translation)
-                    }
-                }
+@Composable
+private fun NextCardComposable(cards: List<WordCard>) {
+    val card = cards.getOrNull(1) ?: throw IllegalArgumentException("Cards list must have at least 2 items")
+    Card(
+        shape = ShapeDefaults.Medium,
+        modifier = Modifier
+            .fillMaxWidth(0.8f)
+            .height(400.dp)
+            .graphicsLayer {
+                scaleX = 0.9f
+                scaleY = 0.9f
+                alpha = 0.5f
+            }) {
+        Box(
+            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+            ) {
+                Text(text = card.word)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = card.translation)
             }
         }
     }
@@ -345,12 +349,12 @@ fun Preview() {
     FoboReaderTheme {
         LearnNewWordsScreenComposable(
             state = LearnNewWordsViewModel.State.Content(
-                listOf(
+                wordsToLearn = listOf(
                     WordCard("Hello", "Bonjour"),
                     WordCard("Goodbye", "Au revoir"),
                     WordCard("Thank you", "Merci")
                 ),
-                learnedWords = 2
+                learnedWords = emptyList(),
             ),
             appNavController = rememberNavController(),
             onIntent = {},

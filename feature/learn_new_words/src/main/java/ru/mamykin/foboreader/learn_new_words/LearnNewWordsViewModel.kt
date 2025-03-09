@@ -14,13 +14,7 @@ internal class LearnNewWordsViewModel @Inject constructor(
     override suspend fun handleIntent(intent: Intent) {
         when (intent) {
             is Intent.LoadData -> loadWordsToLearn()
-            is Intent.RememberSwiped -> {
-                val contentState = (state as? State.Content) ?: return
-                state = contentState.copy(
-                    learnedWords = contentState.learnedWords + 1
-                )
-            }
-
+            is Intent.RememberSwiped -> markCurrentWordAsRemembered()
             is Intent.ForgotSwiped -> {
             }
 
@@ -32,9 +26,20 @@ internal class LearnNewWordsViewModel @Inject constructor(
         }
     }
 
+    private fun markCurrentWordAsRemembered() {
+        val contentState = (state as? State.Content) ?: return
+        val currentWord = contentState.wordsToLearn.firstOrNull() ?: return
+        state = contentState.copy(
+            learnedWords = contentState.learnedWords + currentWord,
+            wordsToLearn = contentState.wordsToLearn.drop(1),
+        )
+    }
+
     private suspend fun loadWordsToLearn() {
         val allWords = dictionaryRepository.getAllWords()
-        state = State.Content(allWords.map { WordCard(it.word, it.translation) })
+        state = State.Content(
+            wordsToLearn = allWords.map { WordCard(it.word, it.translation) }
+        )
     }
 
     sealed class Intent {
@@ -49,8 +54,8 @@ internal class LearnNewWordsViewModel @Inject constructor(
         data object Loading : State()
 
         data class Content(
-            val words: List<WordCard>,
-            val learnedWords: Int = 0,
+            val learnedWords: List<WordCard> = emptyList(),
+            val wordsToLearn: List<WordCard>,
         ) : State()
     }
 }
