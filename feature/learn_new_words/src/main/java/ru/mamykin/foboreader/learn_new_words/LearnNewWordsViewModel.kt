@@ -18,8 +18,7 @@ internal class LearnNewWordsViewModel @Inject constructor(
             is Intent.ForgotSwiped -> {
             }
 
-            is Intent.RememberClicked -> {
-            }
+            is Intent.RememberClicked -> markCurrentWordAsRemembered()
 
             is Intent.ForgotClicked -> {
             }
@@ -44,7 +43,7 @@ internal class LearnNewWordsViewModel @Inject constructor(
 
     sealed class Intent {
         data object LoadData : Intent()
-        data class RememberClicked(val word: WordCard) : Intent()
+        data object RememberClicked : Intent()
         data class RememberSwiped(val word: WordCard) : Intent()
         data class ForgotClicked(val word: WordCard) : Intent()
         data class ForgotSwiped(val word: WordCard) : Intent()

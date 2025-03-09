@@ -156,7 +156,7 @@ private fun ContentComposable(
                         .background(Color.Green, shape = ShapeDefaults.ExtraLarge)
                         .padding(16.dp)
                         .clickable {
-                            // onIntent(LearnNewWordsViewModel.Intent.RememberSwiped(cards[currentIndex]))
+                            onIntent(LearnNewWordsViewModel.Intent.RememberClicked)
                         }
                 )
             }
