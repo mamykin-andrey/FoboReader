@@ -17,8 +17,8 @@ internal class MockBooksStoreService @Inject constructor(
     companion object {
 
         private const val RU_LOCALE = "ru"
-        private const val DEAD_MANS_ISLAND_LINK = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2" // TODO: Migrate to JSON
-        private const val THE_YOUNG_GIANT_LINK = "https://foboreader.pythonanywhere.com/static/the_young_giant.json"
+        private const val DEAD_MANS_ISLAND_LINK = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2"
+        private const val THE_YOUNG_GIANT_LINK = "https://foboreader.pythonanywhere.com/static/klimop_demo.json"
 
         private val ruCategories = listOf(
             BookCategoriesResponse.BookCategoryResponse(

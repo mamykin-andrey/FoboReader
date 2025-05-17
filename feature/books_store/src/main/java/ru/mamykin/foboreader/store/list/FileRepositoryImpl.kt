@@ -17,11 +17,8 @@ internal class FileRepositoryImpl @Inject constructor(
 ) : FileRepository {
 
     override fun createFile(fileName: String): Result<File> {
-        val downloadsDir = context.externalMediaDirs.first()
-            ?: return Result.failure(IllegalStateException("No external media dir is found!"))
-
         return Result.success(
-            File(downloadsDir, fileName).also {
+            File(context.filesDir, fileName).also {
                 it.takeIf { it.exists() }?.delete()
             }
         )

@@ -10,7 +10,10 @@ internal class DownloadBookUseCase @Inject constructor(
     suspend fun execute(book: StoreBookEntity): Result<Unit> = runCatching {
         val outputFileName = getStorageFileName(book)
         val file = fileRepository.createFile(outputFileName).getOrThrow()
-        fileRepository.downloadFile(book.link, file)
+        fileRepository.downloadFile(book.link, file).getOrElse {
+            file.delete()
+            return Result.failure(it)
+        }
         downloadedBooksRepository.saveBook(
             filePath = file.absolutePath,
             genre = book.genre,
@@ -25,7 +28,10 @@ internal class DownloadBookUseCase @Inject constructor(
     }
 
     private fun getStorageFileName(book: StoreBookEntity): String {
-        val transliteratedName = StringTransliterator.transliterate(book.title)
-        return "$transliteratedName.${book.format}"
+        val fileName = book.link.substringAfterLast('/')
+        if (fileName.isBlank()) {
+            throw IllegalArgumentException("Invalid URL format: ${book.link}")
+        }
+        return fileName
     }
 }

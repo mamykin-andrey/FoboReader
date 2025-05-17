@@ -46,7 +46,7 @@ internal class GetBookUseCase @Inject constructor(
         screenSize: Pair<Int, Int>,
         fontSize: Int,
         textMeasurer: TextMeasurer
-    ): MutableList<Book.Page> {
+    ): List<Book.Page> {
         val result = mutableListOf<Book.Page>()
         var remainingSentences = sentences
         var remainingTranslations = translations
