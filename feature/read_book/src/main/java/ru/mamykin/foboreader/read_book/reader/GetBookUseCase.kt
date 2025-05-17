@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.mamykin.foboreader.common_book_info.domain.GetBookInfoUseCase
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
+import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import javax.inject.Inject
 
 internal class GetBookUseCase @Inject constructor(
@@ -22,7 +23,6 @@ internal class GetBookUseCase @Inject constructor(
             val content = bookContentRepository.getBookContent(info.filePath)
             val pages = splitText(
                 sentences = content.sentences,
-                translations = content.translations,
                 screenSize = screenSize,
                 fontSize = fontSize,
                 textMeasurer = textMeasurer,
@@ -40,25 +40,28 @@ internal class GetBookUseCase @Inject constructor(
         }
     }
 
+    /**
+     * Splits text into pages. The book format was recently adjusted, maybe I should reconsider the final structure
+     * since now original paragraphs and their translations are stored in the same struct.
+     */
     private fun splitText(
-        sentences: List<String>,
-        translations: List<String>,
+        sentences: List<TextTranslation>,
         screenSize: Pair<Int, Int>,
         fontSize: Int,
         textMeasurer: TextMeasurer
     ): List<Book.Page> {
         val result = mutableListOf<Book.Page>()
         var remainingSentences = sentences
-        var remainingTranslations = translations
         while (remainingSentences.isNotEmpty()) {
             val resultSentences = mutableListOf<String>()
             val resultTranslations = mutableListOf<String>()
             var i = 1
             while (i <= remainingSentences.size) {
-                val newText = remainingSentences.subList(0, i).joinToString("\n")
+                val newText = remainingSentences.subList(0, i).joinToString("\n") { it.sourceText }
                 if (textMeasurer.isTextFit(newText, screenSize, fontSize)) {
-                    resultSentences.add(remainingSentences[i - 1])
-                    resultTranslations.add(remainingTranslations[i - 1])
+                    val sentence = remainingSentences[i - 1]
+                    resultSentences.add(sentence.sourceText)
+                    resultTranslations.add(sentence.getMostPreciseTranslation())
                 } else {
                     break
                 }
@@ -66,7 +69,6 @@ internal class GetBookUseCase @Inject constructor(
             }
             result.add(Book.Page(sentences = resultSentences, translations = resultTranslations))
             remainingSentences = remainingSentences.drop(i - 1)
-            remainingTranslations = remainingTranslations.drop(i - 1)
         }
         return result
     }

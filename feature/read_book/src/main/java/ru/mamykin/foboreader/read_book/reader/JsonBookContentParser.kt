@@ -2,6 +2,7 @@ package ru.mamykin.foboreader.read_book.reader
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import java.io.File
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -15,9 +16,14 @@ internal class JsonBookContentParser @Inject constructor() : BookContentParser {
             val gson = Gson()
             val parsed = gson.fromJson(File(filePath).reader(), BookContentResponse::class.java)
             cont.resume(
+                // TODO: Add metadata too
                 BookContent(
-                    sentences = parsed.content.sentences,
-                    translations = parsed.content.translations,
+                    sentences = parsed.content.sentences.map {
+                        TextTranslation(
+                            sourceText = it.source,
+                            textTranslations = listOf(it.translation)
+                        )
+                    },
                     dictionary = parsed.dictionary,
                 )
             )
@@ -48,8 +54,7 @@ internal class JsonBookContentParser @Inject constructor() : BookContentParser {
         )
 
         class Content(
-            val sentences: List<String>,
-            val translations: List<String>,
+            val sentences: List<TextTranslation>,
         )
     }
 

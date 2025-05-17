@@ -42,6 +42,7 @@ internal class JsonBookInfoParser @Inject constructor() : BookInfoParser {
         val metadata: Metadata,
         val content: Content,
         val dictionary: Map<String, String>,
+        val sentences: List<TextTranslation>,
     ) {
         class Metadata(
             val genre: String,
