@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -249,11 +250,17 @@ private fun ContentComposable(state: MyBooksViewModel.State.Content, onIntent: (
 
 @Composable
 private fun BookRowComposable(book: BookInfoUIModel, onIntent: (MyBooksViewModel.Intent) -> Unit) {
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(4.dp), onClick = {
-        onIntent(MyBooksViewModel.Intent.OpenBook(book.id))
-    }) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        colors = CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
+        onClick = {
+            onIntent(MyBooksViewModel.Intent.OpenBook(book.id))
+        }
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -414,7 +421,7 @@ private fun NoBooksComposable() {
 @Preview
 @Composable
 fun MyBooksScreenPreview() {
-    FoboReaderTheme {
+    FoboReaderTheme(darkTheme = false) {
         MyBooksScreenUI(
             state = MyBooksViewModel.State.Content(
                 books = listOf(

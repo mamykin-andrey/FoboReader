@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -172,6 +173,9 @@ internal fun StoreBookItemComposable(
     onIntent: (StoreBooksViewModel.Intent) -> Unit,
 ) {
     Card(
+        colors = CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)

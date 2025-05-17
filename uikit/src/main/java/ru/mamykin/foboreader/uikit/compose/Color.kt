@@ -20,12 +20,12 @@ internal object LightColors {
 
 internal object DarkColors {
 
-    val Primary = Color(0xFF3d80c2)
-    val PrimaryVariant = Color(0xFF4fa0e2)
+    val Primary = Color(0xFF002D5A)
+    val PrimaryVariant = Color(0xFF004F8E)
     val Secondary = Color(0xFFd65052)
     val SecondaryVariant = Color(0xFFce6f72)
     val Background = Color(0xFF121212)
-    val Surface = Color(0xFF121212)
+    val Surface = Color(0xFF343434)
     val Error = Color(0xFFB00020)
     val OnPrimary = Color.White
     val OnSecondary = Color.White
