@@ -20,7 +20,7 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
 
         private const val DEFAULT_NIGHT_THEME_ENABLED = false
         private const val DEFAULT_BRIGHTNESS = 100
-        private const val DEFAULT_READ_TEXT_SIZE = 16
+        private const val DEFAULT_READ_TEXT_SIZE = 18
         private const val DEFAULT_TRANSLATION_COLOR = "#000000"
         private const val DEFAULT_BACKGROUND_COLOR = "#ffffff"
         private const val DEFAULT_USE_VIBRATION = true
