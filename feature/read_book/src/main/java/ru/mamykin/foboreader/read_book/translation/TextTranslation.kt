@@ -1,11 +1,6 @@
 package ru.mamykin.foboreader.read_book.translation
 
-// TODO: Refactor
-internal class TextTranslation(
-    val sourceText: String,
-    private val textTranslations: List<String>
-) {
-    fun getMostPreciseTranslation(): String {
-        return textTranslations.first()
-    }
-}
+internal data class TextTranslation(
+    val source: String,
+    val translation: String,
+)

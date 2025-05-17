@@ -8,7 +8,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBook
 
 class GetMyBooksUseCaseTest {
 
@@ -16,8 +16,8 @@ class GetMyBooksUseCaseTest {
     private val booksScanner: BookFilesScanner = mockk()
     private val loadMyBooks = GetMyBooksUseCase(myBooksRepository, booksScanner)
     private val testBooks = listOf(
-        DownloadedBookEntity(0L, "", "", null, "", "", emptyList(), null, 0, null, 0L),
-        DownloadedBookEntity(1L, "", "", null, "", "", emptyList(), null, 0, null, 0L),
+        DownloadedBook(0L, "", "", null, "", "", emptyList(), null, 0, null, 0L),
+        DownloadedBook(1L, "", "", null, "", "", emptyList(), null, 0, null, 0L),
     )
 
     @Test

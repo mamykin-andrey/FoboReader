@@ -3,12 +3,12 @@ package ru.mamykin.foboreader.my_books.list
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
-import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBook
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.my_books.R
 import java.util.Date
 
-class BookInfoToDownloadedBookEntityUIModelMapperTest {
+class BookInfoToDownloadedBookUIModelMapperTest {
 
     private val mapper = BookInfoUIModelMapper()
 
@@ -53,8 +53,8 @@ class BookInfoToDownloadedBookEntityUIModelMapperTest {
         )
     }
 
-    private fun createDomainModel(totalPages: Int? = 10): DownloadedBookEntity {
-        return DownloadedBookEntity(
+    private fun createDomainModel(totalPages: Int? = 10): DownloadedBook {
+        return DownloadedBook(
             id = 100L,
             filePath = "",
             genre = "",

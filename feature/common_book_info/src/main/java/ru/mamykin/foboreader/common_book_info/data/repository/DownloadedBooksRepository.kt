@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.common_book_info.data.repository
 
 import ru.mamykin.foboreader.common_book_info.data.database.DownloadedBooksDao
 import ru.mamykin.foboreader.common_book_info.data.model.DownloadedBookDBModel
-import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBook
 import java.io.File
 import java.util.Date
 import javax.inject.Inject
@@ -11,11 +11,11 @@ import javax.inject.Inject
 class DownloadedBooksRepository @Inject constructor(
     private val downloadedBooksDao: DownloadedBooksDao,
 ) {
-    suspend fun getBooks(): List<DownloadedBookEntity> {
+    suspend fun getBooks(): List<DownloadedBook> {
         return downloadedBooksDao.getBooks().map { it.toDomainModel() }
     }
 
-    suspend fun getBookInfo(id: Long): DownloadedBookEntity {
+    suspend fun getBookInfo(id: Long): DownloadedBook {
         return downloadedBooksDao.getBook(id).toDomainModel()
     }
 

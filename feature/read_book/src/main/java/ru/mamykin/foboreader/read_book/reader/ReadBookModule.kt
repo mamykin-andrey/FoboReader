@@ -8,7 +8,7 @@ import dagger.hilt.android.components.ViewModelComponent
 import okhttp3.OkHttpClient
 import ru.mamykin.foboreader.core.data.RetrofitServiceFactory
 import ru.mamykin.foboreader.read_book.BuildConfig
-import ru.mamykin.foboreader.read_book.translation.GoogleTranslateService
+import ru.mamykin.foboreader.read_book.translation.google.GoogleTranslateService
 import javax.inject.Named
 
 @Module

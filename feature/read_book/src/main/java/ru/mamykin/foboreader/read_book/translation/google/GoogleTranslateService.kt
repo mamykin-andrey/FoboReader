@@ -1,4 +1,4 @@
-package ru.mamykin.foboreader.read_book.translation
+package ru.mamykin.foboreader.read_book.translation.google
 
 import androidx.annotation.Keep
 import kotlinx.coroutines.Deferred

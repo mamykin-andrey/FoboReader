@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.common_book_info.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBook
 import java.util.Date
 
 @Entity
@@ -23,7 +23,7 @@ class DownloadedBookDBModel(
     val rating: Float,
     val isRatedByUser: Boolean,
 ) {
-    fun toDomainModel() = DownloadedBookEntity(
+    fun toDomainModel() = DownloadedBook(
         id = id,
         filePath = filePath,
         genre = genre,
@@ -41,7 +41,7 @@ class DownloadedBookDBModel(
     )
 
     companion object {
-        fun fromDomainModel(entity: DownloadedBookEntity) = DownloadedBookDBModel(
+        fun fromDomainModel(entity: DownloadedBook) = DownloadedBookDBModel(
             id = entity.id,
             filePath = entity.filePath,
             genre = entity.genre,

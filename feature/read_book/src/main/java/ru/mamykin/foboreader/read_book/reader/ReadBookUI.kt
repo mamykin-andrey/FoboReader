@@ -270,11 +270,11 @@ private fun ParagraphTranslationComposable(
         },
         style = TextStyle(fontSize = state.userSettings.fontSize.sp),
         text = AnnotatedString.Builder().apply {
-            append(paragraphTranslation.sourceText)
+            append(paragraphTranslation.source)
             append("\n\n")
             append(
                 AnnotatedString(
-                    text = paragraphTranslation.getMostPreciseTranslation().orEmpty(),
+                    text = paragraphTranslation.translation,
                     SpanStyle(color = Color(android.graphics.Color.parseColor(state.userSettings.translationColorCode)))
                 )
             )

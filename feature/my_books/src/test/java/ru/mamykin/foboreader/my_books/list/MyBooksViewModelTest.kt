@@ -12,7 +12,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBook
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.SnackbarData
 import ru.mamykin.foboreader.core.presentation.StringOrResource
@@ -32,7 +32,7 @@ class MyBooksViewModelTest {
         errorMessageMapper = errorMessageMapper,
         myBookUIModelMapper = myBookUIModelMapper,
     )
-    private val testBook1 = DownloadedBookEntity(
+    private val testBook1 = DownloadedBook(
         id = 1L,
         filePath = "",
         genre = "",
@@ -45,7 +45,7 @@ class MyBooksViewModelTest {
         totalPages = null,
         lastOpen = 0L,
     )
-    private val testBook2 = DownloadedBookEntity(
+    private val testBook2 = DownloadedBook(
         id = 2L,
         filePath = "",
         genre = "",

@@ -1,6 +1,6 @@
 package ru.mamykin.foboreader.book_details.details
 
-import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBook
 
 internal data class BookInfoUIModel(
     val id: Long,
@@ -16,7 +16,7 @@ internal data class BookInfoUIModel(
     val isRatedByUser: Boolean,
 ) {
     companion object {
-        fun fromDomainModel(entity: DownloadedBookEntity): BookInfoUIModel {
+        fun fromDomainModel(entity: DownloadedBook): BookInfoUIModel {
             val readPercent = entity.totalPages?.let { entity.currentPage + 1f / it } ?: 0f
             return BookInfoUIModel(
                 id = entity.id,

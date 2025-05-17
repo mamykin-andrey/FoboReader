@@ -2,8 +2,7 @@ package ru.mamykin.foboreader.common_book_info.domain.model
 
 import java.util.Date
 
-// TODO: Rename to DownloadedBook
-data class DownloadedBookEntity(
+data class DownloadedBook(
     val id: Long,
     val filePath: String,
     val genre: String,

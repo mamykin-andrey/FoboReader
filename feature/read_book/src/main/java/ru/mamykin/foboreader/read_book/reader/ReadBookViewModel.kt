@@ -88,8 +88,8 @@ internal class ReadBookViewModel @Inject constructor(
         val translation = page.translations[intent.index]
         state = prevState.copy(
             paragraphTranslation = TextTranslation(
-                sourceText = sentence,
-                textTranslations = listOf(translation)
+                source = sentence,
+                translation = translation,
             )
         )
         vibrateIfEnabled()

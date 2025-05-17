@@ -1,13 +1,13 @@
 package ru.mamykin.foboreader.my_books.list
 
-import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBook
 import ru.mamykin.foboreader.core.presentation.StringOrResource
 import ru.mamykin.foboreader.my_books.R
 import javax.inject.Inject
 
 internal class BookInfoUIModelMapper @Inject constructor() {
 
-    fun map(entity: DownloadedBookEntity): BookInfoUIModel {
+    fun map(entity: DownloadedBook): BookInfoUIModel {
         val totalPages = entity.totalPages
         val readStatus = if (entity.isStarted()) {
             StringOrResource.Resource(R.string.book_pages_info, entity.currentPage + 1, totalPages!!)

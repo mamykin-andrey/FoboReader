@@ -2,7 +2,7 @@ package ru.mamykin.foboreader.my_books.list
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBook
 import java.io.File
 import java.util.Date
 import javax.inject.Inject
@@ -11,12 +11,12 @@ import kotlin.coroutines.suspendCoroutine
 
 internal class JsonBookInfoParser @Inject constructor() : BookInfoParser {
 
-    override suspend fun parse(filePath: String): DownloadedBookEntity? = suspendCoroutine { cont ->
+    override suspend fun parse(filePath: String): DownloadedBook? = suspendCoroutine { cont ->
         runCatching {
             val gson = Gson()
             val parsed = gson.fromJson(File(filePath).reader(), BookContentResponse::class.java)
             cont.resume(
-                DownloadedBookEntity(
+                DownloadedBook(
                     id = 0,
                     filePath = filePath,
                     genre = parsed.metadata.genre,
@@ -40,9 +40,6 @@ internal class JsonBookInfoParser @Inject constructor() : BookInfoParser {
 
     private class BookContentResponse(
         val metadata: Metadata,
-        val content: Content,
-        val dictionary: Map<String, String>,
-        val sentences: List<TextTranslation>,
     ) {
         class Metadata(
             val genre: String,
@@ -59,14 +56,11 @@ internal class JsonBookInfoParser @Inject constructor() : BookInfoParser {
             val lastName: TextTranslation,
         )
 
-        class Content(
-            val sentences: List<String>,
-            val translations: List<String>,
+        class TextTranslation(
+            val source: String,
+            // TODO: Add support for translatable meta info
+            @Suppress("unused")
+            val translation: String,
         )
     }
-
-    private class TextTranslation(
-        val source: String,
-        val translation: String,
-    )
 }

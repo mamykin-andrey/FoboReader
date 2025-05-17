@@ -1,7 +1,7 @@
 package ru.mamykin.foboreader.my_books.list
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBook
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.core.presentation.SnackbarData
@@ -18,7 +18,7 @@ internal class MyBooksViewModel @Inject constructor(
     private val myBookUIModelMapper: BookInfoUIModelMapper,
 ) : BaseViewModel<MyBooksViewModel.Intent, MyBooksViewModel.State, MyBooksViewModel.Effect>(State.Loading) {
 
-    private var allBooks: List<DownloadedBookEntity>? = null
+    private var allBooks: List<DownloadedBook>? = null
 
     override suspend fun handleIntent(intent: Intent) {
         when (intent) {

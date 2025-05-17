@@ -1,9 +1,9 @@
 package ru.mamykin.foboreader.read_book.reader
 
-import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBookEntity
+import ru.mamykin.foboreader.common_book_info.domain.model.DownloadedBook
 
 internal data class Book(
-    val info: DownloadedBookEntity,
+    val info: DownloadedBook,
     val pages: List<Page>,
     val dictionary: Map<String, String> = emptyMap(),
     val userSettings: UserSettings,

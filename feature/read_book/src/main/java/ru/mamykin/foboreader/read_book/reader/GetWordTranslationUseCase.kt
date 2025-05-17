@@ -1,7 +1,6 @@
 package ru.mamykin.foboreader.read_book.reader
 
 import ru.mamykin.foboreader.dictionary_api.DictionaryRepository
-import ru.mamykin.foboreader.read_book.translation.TextTranslation
 import ru.mamykin.foboreader.read_book.translation.TranslationRepository
 import ru.mamykin.foboreader.read_book.translation.WordTranslation
 import javax.inject.Inject
@@ -13,7 +12,7 @@ internal class GetWordTranslationUseCase @Inject constructor(
     suspend fun execute(dictionary: Map<String, String>, rawWord: String): WordTranslation? {
         val word = rawWord.trimSpecialCharacters()
         val translation = dictionary[word]
-            ?: translateRemote(word).getOrNull()?.getMostPreciseTranslation()
+            ?: translationRepository.getTranslation(word).getOrNull()?.translation
         return translation?.let {
             WordTranslation(
                 word,
@@ -22,9 +21,6 @@ internal class GetWordTranslationUseCase @Inject constructor(
             )
         }
     }
-
-    private suspend fun translateRemote(word: String): Result<TextTranslation> =
-        runCatching { translationRepository.getTranslation(word) }
 
     private fun String.trimSpecialCharacters(): String {
         // TODO: do not trim the whole text, trim only left and right sides
