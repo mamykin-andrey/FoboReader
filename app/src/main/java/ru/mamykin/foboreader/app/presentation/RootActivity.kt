@@ -1,11 +1,16 @@
 package ru.mamykin.foboreader.app.presentation
 
+import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -29,20 +34,21 @@ internal class RootActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initAppPreferences()
-        enableEdgeToEdge()
+        initPermissions()
         setContent {
-            val isDarkTheme = remember { mutableStateOf(appSettingsRepository.isNightThemeEnabled()) }
-            // val performanceStateHolder = rememberMetricsStateHolder()
-            // LaunchedEffect(performanceStateHolder) {
-            //     RecompositionTracker.startTracking(window, performanceStateHolder)
-            // }
-            FoboReaderTheme(darkTheme = isDarkTheme.value) {
+            var isDarkTheme by remember { mutableStateOf(appSettingsRepository.isNightThemeEnabled()) }
+            DisposableEffect(isDarkTheme) {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.auto(Color.BLACK, Color.WHITE) { isDarkTheme }
+                )
+                onDispose { }
+            }
+            FoboReaderTheme(darkTheme = isDarkTheme) {
                 AppNavigation {
-                    isDarkTheme.value = it
+                    isDarkTheme = it
                 }
             }
         }
-        initPermissions()
     }
 
     private fun initAppPreferences() {

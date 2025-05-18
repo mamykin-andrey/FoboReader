@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -30,9 +32,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,11 +45,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ru.mamykin.foboreader.store.R
-import ru.mamykin.foboreader.store.categories.BookCategoryUIModel
 import ru.mamykin.foboreader.store.categories.StoreCategoryItemComposable
-import ru.mamykin.foboreader.store.list.OwnedState
 import ru.mamykin.foboreader.store.list.StoreBookItemComposable
-import ru.mamykin.foboreader.store.list.StoreBookUIModel
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import ru.mamykin.foboreader.uikit.compose.GenericErrorStubComposable
 import ru.mamykin.foboreader.uikit.compose.GenericLoadingIndicatorComposable
@@ -115,7 +117,11 @@ private fun MyBooksScreenUI(
             Box(
                 modifier = Modifier
                     .imePadding()
-                    .padding(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding())
+                    .padding(
+                        top = innerPadding.calculateTopPadding(),
+                        start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
+                        end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
+                    )
             ) {
                 when (state.searchState) {
                     is StoreSearchViewModel.SearchState.NotStarted -> TypeNudgeComposable()
@@ -124,7 +130,11 @@ private fun MyBooksScreenUI(
                         onIntent(StoreSearchViewModel.Intent.RetrySearch)
                     }
 
-                    is StoreSearchViewModel.SearchState.Loaded -> ContentComposable(state.searchState, onIntent)
+                    is StoreSearchViewModel.SearchState.Loaded -> ContentComposable(
+                        state = state.searchState,
+                        onIntent = onIntent,
+                        bottomPadding = innerPadding.calculateBottomPadding()
+                    )
                 }
             }
         })
@@ -181,35 +191,35 @@ private fun TypeNudgeComposable() {
 private fun ContentComposable(
     state: StoreSearchViewModel.SearchState.Loaded,
     onIntent: (StoreSearchViewModel.Intent) -> Unit,
+    bottomPadding: Dp,
 ) {
-    if (state.categories.isNotEmpty() || state.books.isNotEmpty()) {
-        CategoriesAndBooksComposable(state)
+    if (state.results.isNotEmpty()) {
+        CategoriesAndBooksComposable(state, bottomPadding)
     } else {
         NoSearchResultsComposable()
     }
 }
 
 @Composable
-private fun CategoriesAndBooksComposable(state: StoreSearchViewModel.SearchState.Loaded) {
+private fun CategoriesAndBooksComposable(state: StoreSearchViewModel.SearchState.Loaded, bottomPadding: Dp) {
     LazyColumn {
-        if (state.categories.isNotEmpty()) {
-            items(1) {
-                SectionTitleComposable(stringResource(R.string.bs_search_categories_section_title))
-            }
-            items(state.categories.size) {
-                StoreCategoryItemComposable(state.categories[it]) {
+        items(state.results.size) {
+            val item = state.results[it]
+            val context = LocalContext.current
+            val isLast = it == state.results.lastIndex
+            val modifier = if (isLast) Modifier.padding(bottom = bottomPadding) else Modifier
+            when (item) {
+                is StoreSearchViewModel.SearchState.SearchResult.SectionTitle -> SectionTitleComposable(
+                    item.title.toString(context)
+                )
+
+                is StoreSearchViewModel.SearchState.SearchResult.Category -> StoreCategoryItemComposable(item.category) {
                     // TODO:
-                }
-            }
-        }
-        if (state.books.isNotEmpty()) {
-            items(1) {
-                SectionTitleComposable(stringResource(R.string.bs_search_books_section_title))
-            }
-            items(state.books.size) {
-                StoreBookItemComposable(state.books[it]) {
+                } // TODO: add last item padding modifier
+
+                is StoreSearchViewModel.SearchState.SearchResult.Book -> StoreBookItemComposable(item.book, {
                     // TODO:
-                }
+                }, modifier)
             }
         }
     }
@@ -253,34 +263,35 @@ fun MyBooksScreenPreview() {
             state = StoreSearchViewModel.State(
                 searchQuery = "",
                 searchState = StoreSearchViewModel.SearchState.Loaded(
-                    categories = listOf(
-                        BookCategoryUIModel(
-                            "0",
-                            "Classic",
-                            "Classic books for all time",
-                            2
-                        ),
-                        BookCategoryUIModel(
-                            "1",
-                            "Thriller",
-                            "Suspense books",
-                            1
-                        ),
-                    ),
-                    books = listOf(
-                        StoreBookUIModel(
-                            "0",
-                            "Classic",
-                            "Author",
-                            "Title",
-                            listOf("English", "Russian", "Spanish"),
-                            "FBWT",
-                            "",
-                            "",
-                            ownedState = OwnedState.NotOwned,
-                            rating = 0.5f,
-                        )
-                    )
+                    results = listOf(),
+                    // categories = listOf(
+                    //     BookCategoryUIModel(
+                    //         "0",
+                    //         "Classic",
+                    //         "Classic books for all time",
+                    //         2
+                    //     ),
+                    //     BookCategoryUIModel(
+                    //         "1",
+                    //         "Thriller",
+                    //         "Suspense books",
+                    //         1
+                    //     ),
+                    // ),
+                    // books = listOf(
+                    //     StoreBookUIModel(
+                    //         "0",
+                    //         "Classic",
+                    //         "Author",
+                    //         "Title",
+                    //         listOf("English", "Russian", "Spanish"),
+                    //         "FBWT",
+                    //         "",
+                    //         "",
+                    //         ownedState = OwnedState.NotOwned,
+                    //         rating = 0.5f,
+                    //     )
+                    // )
                 )
             ),
             onIntent = {},

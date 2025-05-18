@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
@@ -36,6 +38,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -145,10 +149,21 @@ private fun StoreBooksScreen(
                 }
             )
         }, content = { innerPadding ->
-            Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+            Box(
+                modifier = Modifier.padding(
+                    top = innerPadding.calculateTopPadding(),
+                    start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
+                    end = innerPadding.calculateStartPadding(LayoutDirection.Rtl),
+                )
+            ) {
                 when (state) {
                     is StoreBooksViewModel.State.Loading -> GenericLoadingIndicatorComposable()
-                    is StoreBooksViewModel.State.Content -> ContentComposable(state, onIntent)
+                    is StoreBooksViewModel.State.Content -> ContentComposable(
+                        state,
+                        onIntent,
+                        innerPadding.calculateBottomPadding()
+                    )
+
                     is StoreBooksViewModel.State.Error -> GenericErrorStubComposable {
                         onIntent(StoreBooksViewModel.Intent.LoadBooks)
                     }
@@ -160,10 +175,18 @@ private fun StoreBooksScreen(
 @Composable
 private fun ContentComposable(
     state: StoreBooksViewModel.State.Content,
-    onIntent: (StoreBooksViewModel.Intent) -> Unit
+    onIntent: (StoreBooksViewModel.Intent) -> Unit,
+    bottomPadding: Dp,
 ) {
-    Column {
-        state.books.forEach { StoreBookItemComposable(it, onIntent) }
+    val books = state.books
+    LazyColumn {
+        items(books.size) {
+            val paddingModifier = if (it == books.lastIndex)
+                Modifier.padding(bottom = bottomPadding)
+            else
+                Modifier
+            StoreBookItemComposable(books[it], onIntent, paddingModifier)
+        }
     }
 }
 
@@ -171,6 +194,7 @@ private fun ContentComposable(
 internal fun StoreBookItemComposable(
     book: StoreBookUIModel,
     onIntent: (StoreBooksViewModel.Intent) -> Unit,
+    paddingModifier: Modifier,
 ) {
     Card(
         colors = CardDefaults.cardColors().copy(
@@ -179,6 +203,7 @@ internal fun StoreBookItemComposable(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
+            .then(paddingModifier)
     ) {
         Row(
             modifier = Modifier.padding(12.dp),

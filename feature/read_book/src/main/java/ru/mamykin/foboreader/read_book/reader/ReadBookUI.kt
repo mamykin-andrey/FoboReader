@@ -151,7 +151,7 @@ private fun ReadBookScreen(
             }
         })
     }, content = { innerPadding ->
-        Box(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+        Box(modifier = Modifier.padding(innerPadding)) {
             when (state) {
                 is ReadBookViewModel.State.Loading -> LoadingComposable(onIntent)
                 is ReadBookViewModel.State.Content -> ContentComposable(state, onIntent)

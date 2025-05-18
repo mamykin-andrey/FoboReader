@@ -5,6 +5,7 @@ import kotlinx.coroutines.Job
 import ru.mamykin.foboreader.core.extension.launchInCoroutineScope
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.core.presentation.StringOrResource
+import ru.mamykin.foboreader.store.R
 import ru.mamykin.foboreader.store.categories.BookCategoryUIModel
 import ru.mamykin.foboreader.store.categories.StoreMainViewModel
 import ru.mamykin.foboreader.store.list.StoreBookUIModel
@@ -46,11 +47,31 @@ internal class StoreSearchViewModel @Inject constructor(
         )
         searchInStoreUseCase.execute(searchQuery).fold(
             onSuccess = {
-                state = state.copy(
-                    searchState = SearchState.Loaded(
-                        it.categories.map(BookCategoryUIModel::fromDomainModel),
-                        it.books.map(StoreBookUIModel::fromDomainModel)
+                val results = mutableListOf<SearchState.SearchResult>()
+                if (it.categories.isNotEmpty()) {
+                    results.add(
+                        SearchState.SearchResult.SectionTitle(
+                            StringOrResource.Resource(
+                                R.string.bs_search_categories_section_title
+                            )
+                        )
                     )
+                    results.addAll(
+                        it.categories.map(BookCategoryUIModel::fromDomainModel).map(SearchState.SearchResult::Category)
+                    )
+                }
+                if (it.books.isNotEmpty()) {
+                    results.add(
+                        SearchState.SearchResult.SectionTitle(
+                            StringOrResource.Resource(
+                                R.string.bs_search_books_section_title
+                            )
+                        )
+                    )
+                    results.addAll(it.books.map(StoreBookUIModel::fromDomainModel).map(SearchState.SearchResult::Book))
+                }
+                state = state.copy(
+                    searchState = SearchState.Loaded(results)
                 )
             },
             onFailure = {
@@ -74,8 +95,13 @@ internal class StoreSearchViewModel @Inject constructor(
         data object Loading : SearchState()
         data class Failed(val errorMessage: StringOrResource) : SearchState()
         data class Loaded(
-            val categories: List<BookCategoryUIModel>,
-            val books: List<StoreBookUIModel>
+            val results: List<SearchResult>,
         ) : SearchState()
+
+        sealed class SearchResult {
+            data class SectionTitle(val title: StringOrResource) : SearchResult()
+            data class Category(val category: BookCategoryUIModel) : SearchResult()
+            data class Book(val book: StoreBookUIModel) : SearchResult()
+        }
     }
 }

@@ -4,8 +4,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColorScheme(
     primary = DarkColors.Primary,
@@ -51,13 +49,6 @@ fun FoboReaderTheme(
         colorScheme = colors,
         shapes = Shapes,
         typography = Typography,
-        content = {
-            val systemUiController = rememberSystemUiController()
-            val color = MaterialTheme.colorScheme.primaryContainer
-            SideEffect {
-                systemUiController.setStatusBarColor(color = color)
-            }
-            content()
-        }
+        content = content
     )
 }
