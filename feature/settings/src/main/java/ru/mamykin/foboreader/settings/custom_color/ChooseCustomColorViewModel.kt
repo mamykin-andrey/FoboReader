@@ -28,7 +28,7 @@ internal class ChooseCustomColorViewModel @Inject constructor(
         if (state.colors.isNotEmpty()) return
 
         val currentColorCode = getCurrentColorUseCase.execute(colorType)
-        val colors = getCustomColorsUseCase.execute()
+        val colors = getCustomColorsUseCase.execute(colorType)
         val stateColors = colors.map {
             if (it.colorCode == currentColorCode) it.copy(selected = true) else it
         }

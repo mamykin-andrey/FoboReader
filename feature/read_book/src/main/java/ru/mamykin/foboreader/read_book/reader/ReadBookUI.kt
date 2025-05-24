@@ -151,7 +151,11 @@ private fun ReadBookScreen(
             }
         })
     }, content = { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .background(Color(android.graphics.Color.parseColor(state.backgroundColorCode))),
+        ) {
             when (state) {
                 is ReadBookViewModel.State.Loading -> LoadingComposable(onIntent)
                 is ReadBookViewModel.State.Content -> ContentComposable(state, onIntent)
@@ -174,7 +178,10 @@ private fun LoadingComposable(onIntent: (ReadBookViewModel.Intent) -> Unit) {
 @Composable
 private fun StubContentComposable(onIntent: (ReadBookViewModel.Intent) -> Unit) {
     val textMeasurer = rememberTextMeasurer()
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Box(
             modifier = Modifier
                 .alpha(0f)
@@ -201,7 +208,10 @@ private fun StubContentComposable(onIntent: (ReadBookViewModel.Intent) -> Unit) 
 
 @Composable
 private fun ContentComposable(state: ReadBookViewModel.State.Content, onIntent: (ReadBookViewModel.Intent) -> Unit) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -263,11 +273,12 @@ private fun ParagraphTranslationComposable(
         onIntent(ReadBookViewModel.Intent.HideParagraphTranslation)
     }
     Text(
-        modifier = Modifier.pointerInput(onClick) {
-            detectTapGestures(onTap = {
-                onClick()
-            })
-        },
+        modifier = Modifier
+            .pointerInput(onClick) {
+                detectTapGestures(onTap = {
+                    onClick()
+                })
+            },
         style = TextStyle(fontSize = state.userSettings.fontSize.sp),
         text = AnnotatedString.Builder().apply {
             append(paragraphTranslation.text)
@@ -351,7 +362,8 @@ private fun OpenBookErrorComposable(
     onIntent: (ReadBookViewModel.Intent) -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

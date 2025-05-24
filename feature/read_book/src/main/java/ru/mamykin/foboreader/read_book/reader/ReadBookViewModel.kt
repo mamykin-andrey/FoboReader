@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.extension.foldCancellable
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
 import ru.mamykin.foboreader.core.presentation.SnackbarData
@@ -25,10 +26,12 @@ internal class ReadBookViewModel @Inject constructor(
     private val removeFromDictionaryUseCase: RemoveFromDictionaryUseCase,
     private val getWordTranslationUseCase: GetWordTranslationUseCase,
     getVibrationEnabled: GetVibrationEnabledUseCase,
+    private val appSettingsRepository: AppSettingsRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ReadBookViewModel.Intent, ReadBookViewModel.State, ReadBookViewModel.Effect>(
     State.Loading(
-        StringOrResource.Resource(R.string.rb_book_loading)
+        StringOrResource.Resource(R.string.rb_book_loading),
+        appSettingsRepository.getBackgroundColor()
     )
 ) {
     private val bookId: Long = savedStateHandle.get<Long>("bookId")!!
@@ -41,7 +44,10 @@ internal class ReadBookViewModel @Inject constructor(
     override suspend fun handleIntent(intent: Intent) {
         when (intent) {
             is Intent.ReloadBook -> {
-                state = State.Loading(StringOrResource.Resource(R.string.rb_book_loading))
+                state = State.Loading(
+                    StringOrResource.Resource(R.string.rb_book_loading),
+                    appSettingsRepository.getBackgroundColor(),
+                )
             }
 
             is Intent.LoadBook -> {
@@ -152,7 +158,10 @@ internal class ReadBookViewModel @Inject constructor(
     }
 
     private fun showOpenBookError() {
-        state = State.Failed(StringOrResource.Resource(ru.mamykin.foboreader.core.R.string.cr_error_title))
+        state = State.Failed(
+            StringOrResource.Resource(ru.mamykin.foboreader.core.R.string.cr_error_title),
+            appSettingsRepository.getBackgroundColor()
+        )
     }
 
     private fun showBookContent(
@@ -254,11 +263,13 @@ internal class ReadBookViewModel @Inject constructor(
     }
 
     sealed class State(
-        open val title: StringOrResource
+        open val title: StringOrResource,
+        open val backgroundColorCode: String = "#ffffff"
     ) {
         data class Loading(
             override val title: StringOrResource,
-        ) : State(title)
+            override val backgroundColorCode: String
+        ) : State(title, backgroundColorCode)
 
         data class Content(
             override val title: StringOrResource,
@@ -272,7 +283,7 @@ internal class ReadBookViewModel @Inject constructor(
             val readPercent: Float,
             val wordTranslation: WordTranslationUIModel? = null,
             val paragraphTranslation: TextTranslation? = null,
-        ) : State(title) {
+        ) : State(title, userSettings.backgroundColorCode) {
             data class UserSettings(
                 val fontSize: Int,
                 val translationColorCode: String,
@@ -280,6 +291,9 @@ internal class ReadBookViewModel @Inject constructor(
             )
         }
 
-        data class Failed(override val title: StringOrResource) : State(title)
+        data class Failed(
+            override val title: StringOrResource,
+            override val backgroundColorCode: String
+        ) : State(title, backgroundColorCode)
     }
 }
