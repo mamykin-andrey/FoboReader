@@ -6,6 +6,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
@@ -25,6 +26,7 @@ internal class ReadBookViewModel @Inject constructor(
     private val addToDictionaryUseCase: AddToDictionaryUseCase,
     private val removeFromDictionaryUseCase: RemoveFromDictionaryUseCase,
     private val getWordTranslationUseCase: GetWordTranslationUseCase,
+    private val getDictionaryWordsUseCase: GetDictionaryWordsUseCase,
     getVibrationEnabled: GetVibrationEnabledUseCase,
     private val appSettingsRepository: AppSettingsRepository,
     savedStateHandle: SavedStateHandle,
@@ -37,6 +39,7 @@ internal class ReadBookViewModel @Inject constructor(
     private val bookId: Long = savedStateHandle.get<Long>("bookId")!!
     private var bookPages: List<Book.Page>? = null
     private var wordsDictionary: Map<String, String> = emptyMap()
+    private var dictionaryWords: Set<String> = emptySet()
 
     private val isVibrationEnabled = getVibrationEnabled.execute()
     private var loadBookJob: Job? = null
@@ -83,7 +86,15 @@ internal class ReadBookViewModel @Inject constructor(
         removeFromDictionaryUseCase.execute(intent.wordDictionaryId)
         val contentState = state as? State.Content ?: return
         val wordTranslation = contentState.wordTranslation ?: return
-        state = contentState.copy(wordTranslation = wordTranslation.copy(dictionaryId = null))
+
+        // Update dictionary words and refresh pages
+        dictionaryWords = dictionaryWords - wordTranslation.word.lowercase()
+        val updatedPages = bookPages?.map { it.toTranslatedAnnotatedString() } ?: contentState.pages
+
+        state = contentState.copy(
+            wordTranslation = wordTranslation.copy(dictionaryId = null),
+            pages = updatedPages
+        )
     }
 
     private suspend fun translateParagraph(intent: Intent.TranslateParagraph) {
@@ -134,7 +145,15 @@ internal class ReadBookViewModel @Inject constructor(
             val dictionaryId = addToDictionaryUseCase.execute(intent.word, translation.translation)
             val contentState = state as? State.Content ?: return
             val wordTranslation = contentState.wordTranslation ?: return
-            state = contentState.copy(wordTranslation = wordTranslation.copy(dictionaryId = dictionaryId))
+
+            // Update dictionary words and refresh pages
+            dictionaryWords = dictionaryWords + intent.word.lowercase()
+            val updatedPages = bookPages?.map { it.toTranslatedAnnotatedString() } ?: contentState.pages
+
+            state = contentState.copy(
+                wordTranslation = wordTranslation.copy(dictionaryId = dictionaryId),
+                pages = updatedPages
+            )
         } else {
             sendEffect(
                 Effect.ShowSnackbar(
@@ -146,11 +165,22 @@ internal class ReadBookViewModel @Inject constructor(
 
     private suspend fun loadBook(intent: Intent.LoadBook) = coroutineScope {
         loadBookJob = launch {
-            getBookUseCase.execute(
-                bookId,
-                ComposeTextMeasurer(intent.measurer),
-                intent.screenSize,
-            ).foldCancellable(
+            // Load book and dictionary words in parallel
+            val bookDeferred = async {
+                getBookUseCase.execute(
+                    bookId,
+                    ComposeTextMeasurer(intent.measurer),
+                    intent.screenSize,
+                )
+            }
+            val dictionaryWordsDeferred = async {
+                getDictionaryWordsUseCase.execute()
+            }
+
+            val bookResult = bookDeferred.await()
+            dictionaryWords = dictionaryWordsDeferred.await()
+
+            bookResult.foldCancellable(
                 onSuccess = { showBookContent(it, intent) },
                 onFailure = { showOpenBookError() },
             )
@@ -208,12 +238,26 @@ internal class ReadBookViewModel @Inject constructor(
                 )
                 val wordsPositions = getWordsPositions(sentence)
                 wordsPositions.forEach { (wordInSentenceStart, wordInSentenceEnd) ->
+                    val word = sentence.substring(wordInSentenceStart, wordInSentenceEnd)
+                    val wordStart = sentenceStartInText + wordInSentenceStart
+                    val wordEnd = sentenceStartInText + wordInSentenceEnd
+
                     addStringAnnotation(
                         tag = TextAnnotations.WORD,
-                        annotation = sentence.substring(wordInSentenceStart, wordInSentenceEnd),
-                        start = sentenceStartInText + wordInSentenceStart,
-                        end = sentenceStartInText + wordInSentenceEnd,
+                        annotation = word,
+                        start = wordStart,
+                        end = wordEnd,
                     )
+
+                    // Add dictionary word annotation if the word is in the dictionary
+                    if (dictionaryWords.contains(word.lowercase())) {
+                        addStringAnnotation(
+                            tag = TextAnnotations.DICTIONARY_WORD,
+                            annotation = word,
+                            start = wordStart,
+                            end = wordEnd,
+                        )
+                    }
                 }
             }
         }

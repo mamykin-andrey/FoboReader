@@ -48,7 +48,10 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -322,6 +325,30 @@ private fun PaginatedTextComposable(
 }
 
 @Composable
+private fun applyDictionaryWordHighlighting(page: AnnotatedString): AnnotatedString {
+    val dictionaryWordAnnotations = page.getStringAnnotations(TextAnnotations.DICTIONARY_WORD, 0, page.length)
+    
+    if (dictionaryWordAnnotations.isEmpty()) {
+        return page
+    }
+    
+    return buildAnnotatedString {
+        append(page)
+        
+        // Apply blue background to dictionary words
+        dictionaryWordAnnotations.forEach { annotation ->
+            addStyle(
+                style = SpanStyle(
+                    background = Color(0xFF87CEEB).copy(alpha = 0.3f) // Light blue background
+                ),
+                start = annotation.start,
+                end = annotation.end
+            )
+        }
+    }
+}
+
+@Composable
 private fun CombinedClickableText(
     page: AnnotatedString,
     modifier: Modifier,
@@ -352,6 +379,10 @@ private fun CombinedClickableText(
     val (heightDp, widthDp) = with(LocalDensity.current) {
         state.textHeight.toDp() to state.textWidth.toDp()
     }
+    
+    // Apply highlighting to dictionary words
+    val highlightedText = applyDictionaryWordHighlighting(page)
+    
     Text(modifier = modifier
         .then(gesture)
         .height(heightDp)
@@ -360,7 +391,7 @@ private fun CombinedClickableText(
             fontSize = state.userSettings.fontSize.sp,
             color = Color(android.graphics.Color.parseColor(state.userSettings.textColorCode))
         ),
-        text = page,
+        text = highlightedText,
         onTextLayout = {
             layoutResult.value = it
         })
