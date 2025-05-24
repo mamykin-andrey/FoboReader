@@ -15,13 +15,11 @@ internal class LearnNewWordsViewModel @Inject constructor(
         when (intent) {
             is Intent.LoadData -> loadWordsToLearn()
             is Intent.RememberSwiped -> markCurrentWordAsRemembered()
-            is Intent.ForgotSwiped -> {
-            }
+            is Intent.ForgotSwiped -> markCurrentWordAsForgotten()
 
             is Intent.RememberClicked -> markCurrentWordAsRemembered()
 
-            is Intent.ForgotClicked -> {
-            }
+            is Intent.ForgotClicked -> markCurrentWordAsForgotten()
         }
     }
 
@@ -31,6 +29,14 @@ internal class LearnNewWordsViewModel @Inject constructor(
         state = contentState.copy(
             learnedWords = contentState.learnedWords + currentWord,
             wordsToLearn = contentState.wordsToLearn.drop(1),
+        )
+    }
+
+    private fun markCurrentWordAsForgotten() {
+        val contentState = (state as? State.Content) ?: return
+        val currentWord = contentState.wordsToLearn.firstOrNull() ?: return
+        state = contentState.copy(
+            wordsToLearn = contentState.wordsToLearn.drop(1) + currentWord,
         )
     }
 
@@ -45,7 +51,7 @@ internal class LearnNewWordsViewModel @Inject constructor(
         data object LoadData : Intent()
         data object RememberClicked : Intent()
         data class RememberSwiped(val word: WordCard) : Intent()
-        data class ForgotClicked(val word: WordCard) : Intent()
+        data object ForgotClicked : Intent()
         data class ForgotSwiped(val word: WordCard) : Intent()
     }
 

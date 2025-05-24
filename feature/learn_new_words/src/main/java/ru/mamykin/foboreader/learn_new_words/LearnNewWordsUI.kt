@@ -144,7 +144,7 @@ private fun ContentComposable(
                         .background(Color.Red, shape = ShapeDefaults.ExtraLarge)
                         .padding(16.dp)
                         .clickable {
-                            // onIntent(LearnNewWordsViewModel.Intent.ForgotClicked())
+                            onIntent(LearnNewWordsViewModel.Intent.ForgotClicked)
                         }
                 )
             }
