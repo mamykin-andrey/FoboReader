@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -272,6 +273,9 @@ private fun CurrentCardComposable(
     val rotation by remember { derivedStateOf { offsetX * 0.1f } }
     Card(
         shape = ShapeDefaults.Medium,
+        colors = CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .height(400.dp)
@@ -324,14 +328,28 @@ private fun CurrentCardComposable(
                 })
             }) {
         Box(
-            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp), 
+            contentAlignment = Alignment.Center
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+                horizontalAlignment = Alignment.CenterHorizontally, 
+                verticalArrangement = Arrangement.Center
             ) {
-                Text(text = cards.first().word)
+                Text(
+                    text = cards.first().word,
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center
+                )
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = cards.first().translation)
+                Text(
+                    text = cards.first().translation,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
@@ -342,6 +360,9 @@ private fun NextCardComposable(cards: List<WordCard>) {
     val card = cards.getOrNull(1) ?: throw IllegalArgumentException("Cards list must have at least 2 items")
     Card(
         shape = ShapeDefaults.Medium,
+        colors = CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .height(400.dp)
@@ -351,14 +372,28 @@ private fun NextCardComposable(cards: List<WordCard>) {
                 alpha = 0.5f
             }) {
         Box(
-            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp), 
+            contentAlignment = Alignment.Center
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+                horizontalAlignment = Alignment.CenterHorizontally, 
+                verticalArrangement = Arrangement.Center
             ) {
-                Text(text = card.word)
+                Text(
+                    text = card.word,
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center
+                )
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = card.translation)
+                Text(
+                    text = card.translation,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
