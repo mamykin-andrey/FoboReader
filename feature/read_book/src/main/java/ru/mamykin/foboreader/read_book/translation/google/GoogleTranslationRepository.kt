@@ -28,7 +28,7 @@ internal class GoogleTranslationRepository @Inject constructor(
                 ""
             }
             TextTranslation(
-                source = text,
+                text = text,
                 translation = mostPreciseTranslation,
             )
         }

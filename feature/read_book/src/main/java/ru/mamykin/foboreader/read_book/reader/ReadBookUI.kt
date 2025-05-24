@@ -270,7 +270,7 @@ private fun ParagraphTranslationComposable(
         },
         style = TextStyle(fontSize = state.userSettings.fontSize.sp),
         text = AnnotatedString.Builder().apply {
-            append(paragraphTranslation.source)
+            append(paragraphTranslation.text)
             append("\n\n")
             append(
                 AnnotatedString(

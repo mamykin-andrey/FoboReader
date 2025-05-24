@@ -18,7 +18,7 @@ internal class MockBooksStoreService @Inject constructor(
 
         private const val RU_LOCALE = "ru"
         private const val DEAD_MANS_ISLAND_LINK = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2"
-        private const val THE_YOUNG_GIANT_LINK = "https://foboreader.pythonanywhere.com/static/klimop_demo.json"
+        private const val KLIMOP_DRIE_VERHALEN_LINK = "https://foboreader.pythonanywhere.com/static/klimop_drie_verhalen.json"
 
         private val ruCategories = listOf(
             BookCategoriesResponse.BookCategoryResponse(
@@ -87,12 +87,12 @@ internal class MockBooksStoreService @Inject constructor(
                 BookListResponse.BookResponse(
                     id = "2",
                     genre = "Сказки",
-                    author = "Братья Гримм",
-                    title = "Юный великан",
-                    languages = listOf("Английский", "Русский"),
+                    author = "Сюзи Андерсен",
+                    title = "Три сказки для мальчиков и девочек",
+                    languages = listOf("Голландский", "Английский"),
                     format = "fbwt",
-                    cover = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg/400px-GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg",
-                    link = DEAD_MANS_ISLAND_LINK,
+                    cover = "https://www.gutenberg.org/cache/epub/59353/pg59353.cover.medium.jpg",
+                    link = KLIMOP_DRIE_VERHALEN_LINK,
                     rating = 4.6f,
                 ),
             )
@@ -103,12 +103,12 @@ internal class MockBooksStoreService @Inject constructor(
                 BookListResponse.BookResponse(
                     id = "2",
                     genre = "Fairytale",
-                    author = "Brothers Grimm",
-                    title = "The young giant",
-                    languages = listOf("English", "Russian"),
+                    author = "Suze Andriessen",
+                    title = "Drie verhalen voor jongens en meisjes",
+                    languages = listOf("Dutch", "English"),
                     format = "fbwt",
-                    cover = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg/400px-GrimmsGoblins-171-TheYoungGiantAndTheTailor.jpg",
-                    link = THE_YOUNG_GIANT_LINK,
+                    cover = "https://www.gutenberg.org/cache/epub/59353/pg59353.cover.medium.jpg",
+                    link = KLIMOP_DRIE_VERHALEN_LINK,
                     rating = 4.6f,
                 ),
             )

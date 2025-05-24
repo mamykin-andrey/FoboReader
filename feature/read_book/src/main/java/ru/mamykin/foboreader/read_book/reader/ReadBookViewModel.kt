@@ -88,7 +88,7 @@ internal class ReadBookViewModel @Inject constructor(
         val translation = page.translations[intent.index]
         state = prevState.copy(
             paragraphTranslation = TextTranslation(
-                source = sentence,
+                text = sentence,
                 translation = translation,
             )
         )

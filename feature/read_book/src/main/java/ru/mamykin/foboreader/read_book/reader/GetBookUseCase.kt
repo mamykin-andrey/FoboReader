@@ -57,10 +57,10 @@ internal class GetBookUseCase @Inject constructor(
             val resultTranslations = mutableListOf<String>()
             var i = 1
             while (i <= remainingSentences.size) {
-                val newText = remainingSentences.subList(0, i).joinToString("\n") { it.source }
+                val newText = remainingSentences.subList(0, i).joinToString("\n") { it.text }
                 if (textMeasurer.isTextFit(newText, screenSize, fontSize)) {
                     val sentence = remainingSentences[i - 1]
-                    resultSentences.add(sentence.source)
+                    resultSentences.add(sentence.text)
                     resultTranslations.add(sentence.translation)
                 } else {
                     break

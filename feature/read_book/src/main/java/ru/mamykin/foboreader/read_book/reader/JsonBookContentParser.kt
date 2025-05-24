@@ -18,7 +18,7 @@ internal class JsonBookContentParser @Inject constructor() : BookContentParser {
                 BookContent(
                     sentences = parsed.content.sentences.map {
                         TextTranslation(
-                            source = it.source,
+                            text = it.text,
                             translation = it.translation,
                         )
                     },
@@ -40,7 +40,7 @@ internal class JsonBookContentParser @Inject constructor() : BookContentParser {
         )
 
         class TextTranslation(
-            val source: String,
+            val text: String,
             val translation: String,
         )
     }
