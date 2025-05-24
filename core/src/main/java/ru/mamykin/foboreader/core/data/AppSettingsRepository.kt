@@ -9,9 +9,11 @@ interface AppSettingsRepository {
     fun getReadTextSize(): Int
     fun setReadTextSize(size: Int)
     fun getTranslationColor(): String
-    fun getBackgroundColor(): String
     fun setTranslationColor(color: String)
+    fun getBackgroundColor(): String
     fun setBackgroundColor(color: String)
+    fun getTextColor(): String
+    fun setTextColor(color: String)
     fun getAppLanguageCode(): String
     fun setAppLanguageCode(code: String)
     fun isUseVibration(): Boolean

@@ -243,7 +243,10 @@ private fun ReadStatusComposable(
     ) {
         Row(modifier = Modifier.padding(4.dp)) {
             val percentStr = "%.2f".format(readPercent)
-            Text(text = "${currentPageIndex + 1} of $totalPages, $percentStr%")
+            Text(
+                text = "${currentPageIndex + 1} of $totalPages, $percentStr%",
+                color = Color.White
+            )
         }
     }
 }
@@ -279,7 +282,10 @@ private fun ParagraphTranslationComposable(
                     onClick()
                 })
             },
-        style = TextStyle(fontSize = state.userSettings.fontSize.sp),
+        style = TextStyle(
+            fontSize = state.userSettings.fontSize.sp,
+            color = Color(android.graphics.Color.parseColor(state.userSettings.textColorCode))
+        ),
         text = AnnotatedString.Builder().apply {
             append(paragraphTranslation.text)
             append("\n\n")
@@ -350,7 +356,10 @@ private fun CombinedClickableText(
         .then(gesture)
         .height(heightDp)
         .width(widthDp),
-        style = TextStyle(fontSize = state.userSettings.fontSize.sp),
+        style = TextStyle(
+            fontSize = state.userSettings.fontSize.sp,
+            color = Color(android.graphics.Color.parseColor(state.userSettings.textColorCode))
+        ),
         text = page,
         onTextLayout = {
             layoutResult.value = it
@@ -387,7 +396,7 @@ fun ReadBookScreenPreview() {
                 listOf(AnnotatedString("Page1"), AnnotatedString("Page2")),
                 300,
                 300,
-                ReadBookViewModel.State.Content.UserSettings(18, "222222", "444444"),
+                ReadBookViewModel.State.Content.UserSettings(18, "222222", "444444", "000000"),
                 1,
                 2,
                 50f,

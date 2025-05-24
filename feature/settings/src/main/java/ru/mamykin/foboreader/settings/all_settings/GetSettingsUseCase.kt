@@ -14,6 +14,7 @@ internal class GetSettingsUseCase @Inject constructor(
             AppSettings(
                 isNightThemeEnabled = isNightThemeEnabled(),
                 backgroundColor = getBackgroundColor(),
+                textColor = getTextColor(),
                 translationColor = getTranslationColor(),
                 textSize = getReadTextSize(),
                 languageName = selectedLanguageName,

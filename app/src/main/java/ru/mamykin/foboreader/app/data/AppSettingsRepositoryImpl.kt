@@ -15,6 +15,7 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
         private const val KEY_READ_TEXT_SIZE = "read_text_size"
         private const val KEY_TRANSLATION_COLOR = "translation_color"
         private const val KEY_BACKGROUND_COLOR = "background_color"
+        private const val KEY_TEXT_COLOR = "text_color"
         private const val KEY_APP_LANGUAGE_CODE = "app_language"
         private const val KEY_USE_VIBRATION = "use_vibration"
 
@@ -23,6 +24,7 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
         private const val DEFAULT_READ_TEXT_SIZE = 18
         private const val DEFAULT_TRANSLATION_COLOR = "#000000"
         private const val DEFAULT_BACKGROUND_COLOR = "#ffffff"
+        private const val DEFAULT_TEXT_COLOR = "#000000"
         private const val DEFAULT_USE_VIBRATION = true
     }
 
@@ -64,6 +66,14 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
 
     override fun setBackgroundColor(color: String) {
         prefManager.putString(KEY_BACKGROUND_COLOR, color)
+    }
+
+    override fun getTextColor(): String {
+        return prefManager.getString(KEY_TEXT_COLOR, DEFAULT_TEXT_COLOR)
+    }
+
+    override fun setTextColor(color: String) {
+        prefManager.putString(KEY_TEXT_COLOR, color)
     }
 
     override fun getAppLanguageCode(): String {

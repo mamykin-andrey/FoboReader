@@ -174,6 +174,7 @@ internal class ReadBookViewModel @Inject constructor(
             fontSize = book.userSettings.fontSize,
             translationColorCode = book.userSettings.translationColorCode,
             backgroundColorCode = book.userSettings.backgroundColorCode,
+            textColorCode = book.userSettings.textColorCode,
         )
         state = State.Content(
             bookId = book.info.id,
@@ -288,6 +289,7 @@ internal class ReadBookViewModel @Inject constructor(
                 val fontSize: Int,
                 val translationColorCode: String,
                 val backgroundColorCode: String,
+                val textColorCode: String,
             )
         }
 

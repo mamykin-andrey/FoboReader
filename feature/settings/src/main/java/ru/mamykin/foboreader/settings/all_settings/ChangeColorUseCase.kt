@@ -11,6 +11,7 @@ internal class ChangeColorUseCase @Inject constructor(
         when (colorType) {
             AppScreen.ChooseColor.CustomColorType.TRANSLATION -> appSettingsRepository.setTranslationColor(colorCode)
             AppScreen.ChooseColor.CustomColorType.BACKGROUND -> appSettingsRepository.setBackgroundColor(colorCode)
+            AppScreen.ChooseColor.CustomColorType.TEXT -> appSettingsRepository.setTextColor(colorCode)
         }
     }
 }

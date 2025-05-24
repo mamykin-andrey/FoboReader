@@ -146,6 +146,7 @@ private fun ContentComposable(
     ) {
         NightThemeComposable(state, onIntent)
         BackgroundColorComposable(state, onIntent)
+        TextColorComposable(state, onIntent)
         TranslationColorComposable(state, onIntent)
         TextSizeComposable(state, onIntent)
         AppLanguageComposable(state, onIntent)
@@ -177,6 +178,17 @@ private fun BackgroundColorComposable(
         colorHex = state.settings.backgroundColor, titleRes = R.string.settings_bg_color_title
     ) {
         onIntent(SettingsViewModel.Intent.ChooseColor(type = AppScreen.ChooseColor.CustomColorType.BACKGROUND))
+    }
+}
+
+@Composable
+private fun TextColorComposable(
+    state: SettingsViewModel.State.Content, onIntent: (SettingsViewModel.Intent) -> Unit
+) {
+    ColorRowComposable(
+        colorHex = state.settings.textColor, titleRes = R.string.settings_text_color_title
+    ) {
+        onIntent(SettingsViewModel.Intent.ChooseColor(type = AppScreen.ChooseColor.CustomColorType.TEXT))
     }
 }
 
@@ -306,6 +318,7 @@ fun SettingsScreenPreview() {
             state = SettingsViewModel.State.Content(
                 AppSettings(
                     true,
+                    "#ffffff",
                     "#ffffff",
                     "#ffffff",
                     20,

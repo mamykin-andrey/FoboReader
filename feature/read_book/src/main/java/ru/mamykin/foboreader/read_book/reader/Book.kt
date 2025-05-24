@@ -17,5 +17,6 @@ internal data class Book(
         val fontSize: Int,
         val translationColorCode: String,
         val backgroundColorCode: String,
+        val textColorCode: String,
     )
 }

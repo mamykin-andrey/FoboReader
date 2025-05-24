@@ -35,6 +35,7 @@ internal class GetBookUseCase @Inject constructor(
                     fontSize = fontSize,
                     translationColorCode = appSettingsRepository.getTranslationColor(),
                     backgroundColorCode = appSettingsRepository.getBackgroundColor(),
+                    textColorCode = appSettingsRepository.getTextColor(),
                 ),
             )
         }

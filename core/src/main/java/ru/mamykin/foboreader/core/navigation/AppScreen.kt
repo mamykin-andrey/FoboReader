@@ -18,8 +18,9 @@ sealed class AppScreen(val route: String) {
         fun createRoute(type: CustomColorType) = "choose_color/$type"
 
         enum class CustomColorType {
+            BACKGROUND,
+            TEXT,
             TRANSLATION,
-            BACKGROUND
         }
     }
 

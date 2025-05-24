@@ -10,5 +10,6 @@ internal class GetCurrentColorUseCase @Inject constructor(
     fun execute(colorType: AppScreen.ChooseColor.CustomColorType): String = when (colorType) {
         AppScreen.ChooseColor.CustomColorType.TRANSLATION -> appSettingsRepository.getTranslationColor()
         AppScreen.ChooseColor.CustomColorType.BACKGROUND -> appSettingsRepository.getBackgroundColor()
+        AppScreen.ChooseColor.CustomColorType.TEXT -> appSettingsRepository.getTextColor()
     }
 }

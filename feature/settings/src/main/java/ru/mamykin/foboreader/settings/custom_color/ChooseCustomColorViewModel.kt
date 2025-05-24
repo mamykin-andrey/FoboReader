@@ -39,6 +39,7 @@ internal class ChooseCustomColorViewModel @Inject constructor(
         return when (colorType) {
             AppScreen.ChooseColor.CustomColorType.TRANSLATION -> "Choose translation color"
             AppScreen.ChooseColor.CustomColorType.BACKGROUND -> "Choose background color"
+            AppScreen.ChooseColor.CustomColorType.TEXT -> "Choose text color"
         }
     }
 
