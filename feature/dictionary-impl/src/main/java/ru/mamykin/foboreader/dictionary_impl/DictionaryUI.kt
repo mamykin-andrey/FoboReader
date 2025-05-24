@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -101,23 +101,23 @@ private fun ContentComposable(
 
 @Composable
 private fun LearnNewWordsButtonComposable(learnedTodayCount: Int, onClick: () -> Unit) {
-    OutlinedButton(
+    Button(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .padding(top = 16.dp),
-        shape = ShapeDefaults.Small,
         onClick = { onClick() },
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 stringResource(id = R.string.mw_learn_new_words_button_title),
                 fontSize = 16.sp,
+                style = MaterialTheme.typography.titleMedium,
             )
             Text(
                 stringResource(id = R.string.mw_learn_new_words_button_subtitle_fmt, learnedTodayCount),
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.tertiary,
+                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f),
             )
         }
     }
@@ -125,23 +125,23 @@ private fun LearnNewWordsButtonComposable(learnedTodayCount: Int, onClick: () ->
 
 @Composable
 private fun AllWordsButtonComposable(allWordsCount: Int, onClick: () -> Unit) {
-    OutlinedButton(
+    Button(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .padding(top = 8.dp),
-        shape = ShapeDefaults.Small,
         onClick = { onClick() },
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 stringResource(id = R.string.mw_all_words_button_title),
                 fontSize = 16.sp,
+                style = MaterialTheme.typography.titleMedium,
             )
             Text(
                 stringResource(id = R.string.mw_all_words_button_subtitle_fmt, allWordsCount),
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.tertiary,
+                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f),
             )
         }
     }
@@ -154,10 +154,10 @@ private fun StreakCardComposable(
     modifier: Modifier,
 ) {
     Card(
-        modifier.then(
-            Modifier
-                .padding(top = 16.dp)
-        )
+        modifier = modifier.padding(top = 16.dp),
+        colors = CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -168,11 +168,13 @@ private fun StreakCardComposable(
             Text(
                 text = streakName,
                 fontSize = 16.sp,
+                style = MaterialTheme.typography.titleMedium,
             )
             Text(
                 text = stringResource(id = R.string.mw_streak_days_card_subtitle_fmt, streakDays),
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.tertiary,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
