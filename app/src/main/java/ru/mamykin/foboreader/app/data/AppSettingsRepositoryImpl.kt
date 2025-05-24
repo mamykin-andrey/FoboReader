@@ -18,6 +18,9 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
         private const val KEY_TEXT_COLOR = "text_color"
         private const val KEY_APP_LANGUAGE_CODE = "app_language"
         private const val KEY_USE_VIBRATION = "use_vibration"
+        private const val KEY_CURRENT_STREAK = "current_streak"
+        private const val KEY_BEST_STREAK = "best_streak"
+        private const val KEY_LAST_COMPLETION_DATE = "last_completion_date"
 
         private const val DEFAULT_NIGHT_THEME_ENABLED = false
         private const val DEFAULT_BRIGHTNESS = 100
@@ -26,6 +29,7 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
         private const val DEFAULT_BACKGROUND_COLOR = "#ffffff"
         private const val DEFAULT_TEXT_COLOR = "#000000"
         private const val DEFAULT_USE_VIBRATION = true
+        private const val DEFAULT_STREAK = 0
     }
 
     override fun isNightThemeEnabled(): Boolean {
@@ -90,5 +94,30 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
 
     override fun setUseVibration(use: Boolean) {
         prefManager.putBoolean(KEY_USE_VIBRATION, use)
+    }
+
+    override fun getCurrentStreak(): Int {
+        return prefManager.getInt(KEY_CURRENT_STREAK, DEFAULT_STREAK)
+    }
+
+    override fun setCurrentStreak(streak: Int) {
+        prefManager.putInt(KEY_CURRENT_STREAK, streak)
+    }
+
+    override fun getBestStreak(): Int {
+        return prefManager.getInt(KEY_BEST_STREAK, DEFAULT_STREAK)
+    }
+
+    override fun setBestStreak(streak: Int) {
+        prefManager.putInt(KEY_BEST_STREAK, streak)
+    }
+
+    override fun getLastCompletionDate(): String? {
+        return prefManager.getString(KEY_LAST_COMPLETION_DATE, "")
+            .takeIf { it.isNotEmpty() }
+    }
+
+    override fun setLastCompletionDate(date: String) {
+        prefManager.putString(KEY_LAST_COMPLETION_DATE, date)
     }
 }

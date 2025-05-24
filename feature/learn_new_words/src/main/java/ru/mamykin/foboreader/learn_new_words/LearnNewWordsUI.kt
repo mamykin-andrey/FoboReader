@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -113,16 +114,36 @@ internal fun LearnNewWordsScreenComposable(
                     onIntent
                 )
 
-                state is LearnNewWordsViewModel.State.Content -> LearningFinishedComposable()
+                state is LearnNewWordsViewModel.State.Content -> LearningFinishedComposable(state)
             }
         }
     })
 }
 
 @Composable
-private fun LearningFinishedComposable() {
-    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-        Text(text = "All done for today!")
+private fun LearningFinishedComposable(state: LearnNewWordsViewModel.State.Content) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Congratulations!",
+            style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center
+        )
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        Text(
+            text = "All done for today!",
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center
+        )
+        
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -343,6 +364,8 @@ private fun NextCardComposable(cards: List<WordCard>) {
     }
 }
 
+
+
 @Preview
 @Composable
 fun Preview() {
@@ -355,6 +378,8 @@ fun Preview() {
                     WordCard("Thank you", "Merci")
                 ),
                 learnedWords = emptyList(),
+                currentStreak = 5,
+                bestStreak = 15,
             ),
             appNavController = rememberNavController(),
             onIntent = {},

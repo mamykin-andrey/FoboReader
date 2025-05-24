@@ -22,8 +22,10 @@ import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.PermissionManager
 import ru.mamykin.foboreader.dictionary_api.DictionaryRepository
+import ru.mamykin.foboreader.dictionary_api.StreakManagerUseCase
 import ru.mamykin.foboreader.dictionary_impl.DictionaryDaoFactory
 import ru.mamykin.foboreader.dictionary_impl.RoomDictionaryRepository
+import ru.mamykin.foboreader.dictionary_impl.StreakManagerUseCaseImpl
 import ru.mamykin.foboreader.dictionary_impl.WordDictionaryDao
 
 @Module
@@ -35,7 +37,8 @@ internal object AppProvidesModule {
 
     @Provides
     fun provideBookInfoDao(
-        @ApplicationContext context: Context): DownloadedBooksDao = BookInfoDaoFactory.create(context)
+        @ApplicationContext context: Context
+    ): DownloadedBooksDao = BookInfoDaoFactory.create(context)
 
     @Provides
     fun provideDictionaryDao(
@@ -64,4 +67,7 @@ internal interface AppBindsModule {
 
     @Binds
     fun bindDictionaryRepository(impl: RoomDictionaryRepository): DictionaryRepository
+
+    @Binds
+    fun bindStreakManagerUseCase(impl: StreakManagerUseCaseImpl): StreakManagerUseCase
 }
