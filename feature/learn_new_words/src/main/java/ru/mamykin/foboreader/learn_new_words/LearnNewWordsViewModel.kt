@@ -48,8 +48,9 @@ internal class LearnNewWordsViewModel @Inject constructor(
     private fun markCurrentWordAsForgotten() {
         val contentState = (state as? State.Content) ?: return
         val currentWord = contentState.wordsToLearn.firstOrNull() ?: return
+        val wordToRepeat = currentWord.copy(word = currentWord.word, shownCount = currentWord.shownCount + 1)
         state = contentState.copy(
-            wordsToLearn = contentState.wordsToLearn.drop(1) + currentWord,
+            wordsToLearn = contentState.wordsToLearn.drop(1) + wordToRepeat,
         )
     }
 
@@ -76,6 +77,7 @@ internal class LearnNewWordsViewModel @Inject constructor(
         data class Content(
             val learnedWords: List<WordCard> = emptyList(),
             val wordsToLearn: List<WordCard>,
+            // TODO: REMOVE
             val currentStreak: Int = 0,
             val bestStreak: Int = 0,
         ) : State()

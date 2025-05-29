@@ -243,15 +243,16 @@ private fun WordCardsComposable(
             .fillMaxWidth(), contentAlignment = Alignment.Center
     ) {
         if (cards.size > 1) {
-            NextCardComposable(cards)
+            val nextCard = cards.getOrNull(1) ?: throw IllegalArgumentException("Cards list must have at least 2 items")
+            NextCardComposable(nextCard)
         }
-        CurrentCardComposable(cards, onIntent)
+        CurrentCardComposable(cards.first(), onIntent)
     }
 }
 
 @Composable
 private fun CurrentCardComposable(
-    cards: List<WordCard>,
+    card: WordCard,
     onIntent: (LearnNewWordsViewModel.Intent) -> Unit
 ) {
     var offsetX by remember { mutableFloatStateOf(0f) }
@@ -261,7 +262,7 @@ private fun CurrentCardComposable(
     val animatedRotation = remember { Animatable(0f) }
     var isAnimating by remember { mutableStateOf(false) }
 
-    LaunchedEffect(cards) {
+    LaunchedEffect(card) {
         offsetX = 0f
         offsetY = 0f
         animatedOffsetX.snapTo(0f)
@@ -284,7 +285,7 @@ private fun CurrentCardComposable(
                 translationY = if (isAnimating) animatedOffsetY.value else offsetY
                 rotationZ = if (isAnimating) animatedRotation.value else rotation
             }
-            .pointerInput(cards) {
+            .pointerInput(card) {
                 detectDragGestures(onDragEnd = {
                     if (abs(offsetX) > CARD_SWIPE_THRESHOLD && !isAnimating) {
                         scope.launch {
@@ -305,9 +306,9 @@ private fun CurrentCardComposable(
                             )
 
                             if (offsetX > 0) {
-                                onIntent(LearnNewWordsViewModel.Intent.RememberSwiped(cards.first()))
+                                onIntent(LearnNewWordsViewModel.Intent.RememberSwiped(card))
                             } else {
-                                onIntent(LearnNewWordsViewModel.Intent.ForgotSwiped(cards.first()))
+                                onIntent(LearnNewWordsViewModel.Intent.ForgotSwiped(card))
                             }
                         }
                     } else {
@@ -338,14 +339,14 @@ private fun CurrentCardComposable(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = cards.first().word,
+                    text = card.word,
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = cards.first().translation,
+                    text = card.translation,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -356,8 +357,7 @@ private fun CurrentCardComposable(
 }
 
 @Composable
-private fun NextCardComposable(cards: List<WordCard>) {
-    val card = cards.getOrNull(1) ?: throw IllegalArgumentException("Cards list must have at least 2 items")
+private fun NextCardComposable(card: WordCard) {
     Card(
         shape = ShapeDefaults.Medium,
         colors = CardDefaults.cardColors().copy(
