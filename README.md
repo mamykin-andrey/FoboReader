@@ -1,16 +1,14 @@
-Android application for reading English books with parallel translation.
+Android application for reading books with parallel translation with internal books store.
 
 Features:
-* Text (paragraphs, words) translation
-* Books store
-* Dark theme
-* Localization
+* Instant paragraphs and words translation
+* Learning words through flash cards
 
 Tech stack:
-* Kotlin
-* MVI
-* Jetpack Compose
 * Multi-module
+* Clean architecture + MVI
+* Pure Kotlin
+* Jetpack Compose
 * Coroutines + Flow
 * Dagger
 * Gradle Kotlin DSL
