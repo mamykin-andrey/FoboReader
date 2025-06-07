@@ -22,10 +22,14 @@ import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
 import ru.mamykin.foboreader.core.platform.PermissionManager
 import ru.mamykin.foboreader.dictionary_api.DictionaryRepository
-import ru.mamykin.foboreader.dictionary_api.StreakManagerUseCase
+import ru.mamykin.foboreader.dictionary_api.GetStreakInfoUseCase
+import ru.mamykin.foboreader.dictionary_api.GetWordsToLearnUseCase
+import ru.mamykin.foboreader.dictionary_api.UpdateStreakUseCase
 import ru.mamykin.foboreader.dictionary_impl.DictionaryDaoFactory
+import ru.mamykin.foboreader.dictionary_impl.GetStreakInfoUseCaseImpl
+import ru.mamykin.foboreader.dictionary_impl.GetWordsToLearnUseCaseImpl
 import ru.mamykin.foboreader.dictionary_impl.RoomDictionaryRepository
-import ru.mamykin.foboreader.dictionary_impl.StreakManagerUseCaseImpl
+import ru.mamykin.foboreader.dictionary_impl.UpdateStreakUseCaseImpl
 import ru.mamykin.foboreader.dictionary_impl.WordDictionaryDao
 
 @Module
@@ -69,5 +73,11 @@ internal interface AppBindsModule {
     fun bindDictionaryRepository(impl: RoomDictionaryRepository): DictionaryRepository
 
     @Binds
-    fun bindStreakManagerUseCase(impl: StreakManagerUseCaseImpl): StreakManagerUseCase
+    fun bindGetStreakInfoUseCase(impl: GetStreakInfoUseCaseImpl): GetStreakInfoUseCase
+
+    @Binds
+    fun bindUpdateStreakUseCase(impl: UpdateStreakUseCaseImpl): UpdateStreakUseCase
+
+    @Binds
+    fun bindGetWordsToLearnUseCase(impl: GetWordsToLearnUseCaseImpl): GetWordsToLearnUseCase
 }

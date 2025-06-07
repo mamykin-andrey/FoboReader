@@ -18,12 +18,4 @@ interface AppSettingsRepository {
     fun setAppLanguageCode(code: String)
     fun isUseVibration(): Boolean
     fun setUseVibration(use: Boolean)
-    
-    // Streak tracking
-    fun getCurrentStreak(): Int
-    fun setCurrentStreak(streak: Int)
-    fun getBestStreak(): Int
-    fun setBestStreak(streak: Int)
-    fun getLastCompletionDate(): String?
-    fun setLastCompletionDate(date: String)
 }

@@ -413,8 +413,6 @@ fun Preview() {
                     WordCard("Thank you", "Merci")
                 ),
                 learnedWords = emptyList(),
-                currentStreak = 5,
-                bestStreak = 15,
             ),
             appNavController = rememberNavController(),
             onIntent = {},

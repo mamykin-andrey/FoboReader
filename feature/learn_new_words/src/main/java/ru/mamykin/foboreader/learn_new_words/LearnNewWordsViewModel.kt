@@ -1,15 +1,16 @@
 package ru.mamykin.foboreader.learn_new_words
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.mamykin.foboreader.core.presentation.BaseViewModel
-import ru.mamykin.foboreader.dictionary_api.DictionaryRepository
-import ru.mamykin.foboreader.dictionary_api.StreakManagerUseCase
+import ru.mamykin.foboreader.dictionary_api.GetWordsToLearnUseCase
+import ru.mamykin.foboreader.dictionary_api.UpdateStreakUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 internal class LearnNewWordsViewModel @Inject constructor(
-    private val dictionaryRepository: DictionaryRepository,
-    private val streakManagerUseCase: StreakManagerUseCase,
+    private val updateStreakUseCase: UpdateStreakUseCase,
+    private val getWordsToLearnUseCase: GetWordsToLearnUseCase,
 ) : BaseViewModel<LearnNewWordsViewModel.Intent, LearnNewWordsViewModel.State, Nothing>(
     State.Loading
 ) {
@@ -36,12 +37,7 @@ internal class LearnNewWordsViewModel @Inject constructor(
 
         // Check if all words are learned and update streak
         if (newWordsToLearn.isEmpty()) {
-            streakManagerUseCase.updateStreakForCompletion()
-            // Update state with new streak information
-            state = (state as State.Content).copy(
-                currentStreak = streakManagerUseCase.getCurrentStreak(),
-                bestStreak = streakManagerUseCase.getBestStreak()
-            )
+            updateStreakUseCase.executeAsync(viewModelScope)
         }
     }
 
@@ -55,12 +51,8 @@ internal class LearnNewWordsViewModel @Inject constructor(
     }
 
     private suspend fun loadWordsToLearn() {
-        val allWords = dictionaryRepository.getAllWords()
-        state = State.Content(
-            wordsToLearn = allWords.map { WordCard(it.word, it.translation) },
-            currentStreak = streakManagerUseCase.getCurrentStreak(),
-            bestStreak = streakManagerUseCase.getBestStreak()
-        )
+        val allWords = getWordsToLearnUseCase.execute()
+        state = State.Content(wordsToLearn = allWords.map { WordCard(it.word, it.translation) })
     }
 
     sealed class Intent {
@@ -77,9 +69,6 @@ internal class LearnNewWordsViewModel @Inject constructor(
         data class Content(
             val learnedWords: List<WordCard> = emptyList(),
             val wordsToLearn: List<WordCard>,
-            // TODO: REMOVE
-            val currentStreak: Int = 0,
-            val bestStreak: Int = 0,
         ) : State()
     }
 }
