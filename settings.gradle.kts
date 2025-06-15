@@ -11,5 +11,6 @@ include(
     ":feature:dictionary-api",
     ":feature:dictionary-impl",
     ":feature:learn_new_words",
+    ":feature:onboarding",
     ":uikit"
 )

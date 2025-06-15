@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_title">Welcome to FoboReader!</string>
+    <string name="welcome_subtitle">Let\'s personalize your reading experience</string>
+    <string name="native_language_label">What\'s your native language?</string>
+    <string name="target_language_label">Which language do you want to learn?</string>
+    <string name="language_level_label">What\'s your current level?</string>
+    <string name="select_language">Select a language</string>
+    <string name="select_level">Select your level</string>
+    <string name="continue_button">Continue</string>
+</resources> 

@@ -23,16 +23,30 @@ import ru.mamykin.foboreader.settings.custom_color.ChooseCustomColorDialogUI
 import ru.mamykin.foboreader.store.categories.StoreMainUI
 import ru.mamykin.foboreader.store.list.StoreBooksUI
 import ru.mamykin.foboreader.store.search.StoreSearchUI
+import ru.mamykin.foboreader.onboarding.OnboardingScreen
 
 @Composable
-fun AppNavigation(onNightThemeSwitch: (Boolean) -> Unit) {
+fun AppNavigation(
+    onNightThemeSwitch: (Boolean) -> Unit,
+    isOnboardingCompleted: Boolean
+) {
     val navController = rememberNavController()
+    val startDestination = if (isOnboardingCompleted) {
+        AppScreen.Main.createRoute(MainTabScreenRoutes.MY_BOOKS)
+    } else {
+        AppScreen.Onboarding.route
+    }
+
     NavHost(
         navController = navController,
-        startDestination = AppScreen.Main.createRoute(MainTabScreenRoutes.MY_BOOKS),
+        startDestination = startDestination,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {
+        composable(route = AppScreen.Onboarding.route) {
+            OnboardingScreen(navController)
+        }
+
         composable(
             route = AppScreen.Main.route,
             arguments = listOf(navArgument("tabRoute") { type = NavType.StringType })

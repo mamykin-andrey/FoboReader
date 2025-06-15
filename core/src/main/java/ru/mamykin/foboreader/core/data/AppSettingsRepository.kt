@@ -18,4 +18,12 @@ interface AppSettingsRepository {
     fun setAppLanguageCode(code: String)
     fun isUseVibration(): Boolean
     fun setUseVibration(use: Boolean)
+    fun isOnboardingCompleted(): Boolean
+    fun setOnboardingCompleted(completed: Boolean)
+    fun getNativeLanguageCode(): String
+    fun setNativeLanguageCode(code: String)
+    fun getTargetLanguageCode(): String
+    fun setTargetLanguageCode(code: String)
+    fun getLanguageLevel(): String
+    fun setLanguageLevel(level: String)
 }

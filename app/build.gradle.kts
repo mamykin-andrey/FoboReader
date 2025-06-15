@@ -104,6 +104,7 @@ dependencies {
     implementation(project(":feature:dictionary-api"))
     implementation(project(":feature:dictionary-impl"))
     implementation(project(":feature:learn_new_words"))
+    implementation(project(":feature:onboarding"))
 
     implementation(Dependencies.multidex)
     implementation(Dependencies.coreKtx)

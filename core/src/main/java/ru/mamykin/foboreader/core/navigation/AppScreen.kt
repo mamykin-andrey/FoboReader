@@ -2,6 +2,8 @@ package ru.mamykin.foboreader.core.navigation
 
 sealed class AppScreen(val route: String) {
 
+    data object Onboarding : AppScreen("onboarding")
+
     data object Main : AppScreen("main/{tabRoute}") {
         fun createRoute(tabRoute: String) = "main/$tabRoute"
     }

@@ -44,9 +44,10 @@ internal class RootActivity : AppCompatActivity() {
                 onDispose { }
             }
             FoboReaderTheme(darkTheme = isDarkTheme) {
-                AppNavigation {
-                    isDarkTheme = it
-                }
+                AppNavigation(
+                    onNightThemeSwitch = { isDarkTheme = it },
+                    isOnboardingCompleted = appSettingsRepository.isOnboardingCompleted()
+                )
             }
         }
     }

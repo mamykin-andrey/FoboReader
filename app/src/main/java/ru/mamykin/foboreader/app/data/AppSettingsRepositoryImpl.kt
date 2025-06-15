@@ -18,6 +18,10 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
         private const val KEY_TEXT_COLOR = "text_color"
         private const val KEY_APP_LANGUAGE_CODE = "app_language"
         private const val KEY_USE_VIBRATION = "use_vibration"
+        private const val KEY_ONBOARDING_COMPLETED = "onboarding_completed"
+        private const val KEY_NATIVE_LANGUAGE_CODE = "native_language_code"
+        private const val KEY_TARGET_LANGUAGE_CODE = "target_language_code"
+        private const val KEY_LANGUAGE_LEVEL = "language_level"
         private const val DEFAULT_NIGHT_THEME_ENABLED = false
         private const val DEFAULT_BRIGHTNESS = 100
         private const val DEFAULT_READ_TEXT_SIZE = 18
@@ -25,6 +29,8 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
         private const val DEFAULT_BACKGROUND_COLOR = "#ffffff"
         private const val DEFAULT_TEXT_COLOR = "#000000"
         private const val DEFAULT_USE_VIBRATION = true
+        private const val DEFAULT_ONBOARDING_COMPLETED = false
+        private const val DEFAULT_LANGUAGE_LEVEL = "a1"
     }
 
     override fun isNightThemeEnabled(): Boolean {
@@ -89,5 +95,37 @@ internal class AppSettingsRepositoryImpl @Inject constructor(
 
     override fun setUseVibration(use: Boolean) {
         prefManager.putBoolean(KEY_USE_VIBRATION, use)
+    }
+
+    override fun isOnboardingCompleted(): Boolean {
+        return prefManager.getBoolean(KEY_ONBOARDING_COMPLETED, DEFAULT_ONBOARDING_COMPLETED)
+    }
+
+    override fun setOnboardingCompleted(completed: Boolean) {
+        prefManager.putBoolean(KEY_ONBOARDING_COMPLETED, completed)
+    }
+
+    override fun getNativeLanguageCode(): String {
+        return prefManager.getString(KEY_NATIVE_LANGUAGE_CODE, Locale.getDefault().language)
+    }
+
+    override fun setNativeLanguageCode(code: String) {
+        prefManager.putString(KEY_NATIVE_LANGUAGE_CODE, code)
+    }
+
+    override fun getTargetLanguageCode(): String {
+        return prefManager.getString(KEY_TARGET_LANGUAGE_CODE, "en")
+    }
+
+    override fun setTargetLanguageCode(code: String) {
+        prefManager.putString(KEY_TARGET_LANGUAGE_CODE, code)
+    }
+
+    override fun getLanguageLevel(): String {
+        return prefManager.getString(KEY_LANGUAGE_LEVEL, DEFAULT_LANGUAGE_LEVEL)
+    }
+
+    override fun setLanguageLevel(level: String) {
+        prefManager.putString(KEY_LANGUAGE_LEVEL, level)
     }
 }
