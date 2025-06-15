@@ -17,8 +17,8 @@ internal class MockBooksStoreService @Inject constructor(
     companion object {
 
         private const val RU_LOCALE = "ru"
-        private const val DEAD_MANS_ISLAND_LINK = "https://foboreader.pythonanywhere.com/static/dead_mans_island.fb2"
         private const val KLIMOP_DRIE_VERHALEN_LINK = "https://foboreader.pythonanywhere.com/static/klimop_drie_verhalen.json"
+        private const val GOOSE_GIRL_LINK = "https://foboreader.pythonanywhere.com/static/grimm_fairy_tales_goose_girl.json"
 
         private val ruCategories = listOf(
             BookCategoriesResponse.BookCategoryResponse(
@@ -50,50 +50,32 @@ internal class MockBooksStoreService @Inject constructor(
             ),
         )
 
-        private val ruThrillerBooks = BookListResponse(
-            books = listOf(
-                BookListResponse.BookResponse(
-                    id = "1",
-                    genre = "Триллеры",
-                    author = "Джон Эскотт",
-                    title = "Остров мертвеца",
-                    languages = listOf("Английский", "Русский"),
-                    format = "fb2",
-                    cover = "https://cdn1.ozone.ru/s3/multimedia-0/c650/6000372312.jpg",
-                    link = DEAD_MANS_ISLAND_LINK,
-                    rating = 4.2f,
-                ),
-            )
-        )
-
-        private val enThrillerBooks = BookListResponse(
-            books = listOf(
-                BookListResponse.BookResponse(
-                    id = "1",
-                    genre = "Thriller",
-                    author = "John Escot",
-                    title = "Dead island",
-                    languages = listOf("English", "Russian"),
-                    format = "fb2",
-                    cover = "https://cdn1.ozone.ru/s3/multimedia-0/c650/6000372312.jpg",
-                    link = DEAD_MANS_ISLAND_LINK,
-                    rating = 4.2f,
-                ),
-            )
-        )
+        private val ruThrillerBooks = BookListResponse(books = emptyList())
+        private val enThrillerBooks = BookListResponse(books = emptyList())
 
         private val ruFairytaleBooks = BookListResponse(
             books = listOf(
                 BookListResponse.BookResponse(
-                    id = "2",
+                    id = "1",
                     genre = "Сказки",
                     author = "Сюзи Андерсен",
                     title = "Три сказки для мальчиков и девочек",
-                    languages = listOf("Голландский", "Английский"),
+                    languages = listOf("Голландский", "Английский", "Русский"),
                     format = "fbwt",
                     cover = "https://www.gutenberg.org/cache/epub/59353/pg59353.cover.medium.jpg",
                     link = KLIMOP_DRIE_VERHALEN_LINK,
                     rating = 4.6f,
+                ),
+                BookListResponse.BookResponse(
+                    id = "2",
+                    genre = "Сказки",
+                    author = "Братья Гримм",
+                    title = "Принцесса-гусыня",
+                    languages = listOf("Голландский", "Английский", "Русский"),
+                    format = "fbwt",
+                    cover = "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1637098809i/547826.jpg",
+                    link = GOOSE_GIRL_LINK,
+                    rating = 4.8f,
                 ),
             )
         )
@@ -101,7 +83,7 @@ internal class MockBooksStoreService @Inject constructor(
         private val enFairytaleBooks = BookListResponse(
             books = listOf(
                 BookListResponse.BookResponse(
-                    id = "2",
+                    id = "1",
                     genre = "Fairytale",
                     author = "Suze Andriessen",
                     title = "Drie verhalen voor jongens en meisjes",
@@ -110,6 +92,17 @@ internal class MockBooksStoreService @Inject constructor(
                     cover = "https://www.gutenberg.org/cache/epub/59353/pg59353.cover.medium.jpg",
                     link = KLIMOP_DRIE_VERHALEN_LINK,
                     rating = 4.6f,
+                ),
+                BookListResponse.BookResponse(
+                    id = "2",
+                    genre = "Fairytale",
+                    author = "The Grimm brothers",
+                    title = "The goose girl",
+                    languages = listOf("Dutch", "English", "Russian"),
+                    format = "fbwt",
+                    cover = "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1637098809i/547826.jpg",
+                    link = GOOSE_GIRL_LINK,
+                    rating = 4.8f,
                 ),
             )
         )
