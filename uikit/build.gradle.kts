@@ -59,5 +59,4 @@ dependencies {
     implementation(Dependencies.composeMaterialIconsCore)
     implementation(Dependencies.composeMaterialIconsExt)
     implementation(Dependencies.composeToolingPreview)
-    implementation(Dependencies.accompanist)
 }

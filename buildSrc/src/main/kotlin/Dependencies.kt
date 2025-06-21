@@ -75,5 +75,4 @@ object Dependencies {
     const val navigationUi = "androidx.navigation:navigation-ui-ktx:${Versions.composeNavigationVersion}"
     const val kotlinSerialization =
         "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinSerializationVersion}"
-    const val accompanist = "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"
 }
