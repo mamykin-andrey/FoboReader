@@ -3,24 +3,23 @@ package ru.mamykin.foboreader.app.platform
 import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import ru.mamykin.foboreader.R
 import ru.mamykin.foboreader.core.platform.Log
 import ru.mamykin.foboreader.core.platform.NotificationChannelId
 import ru.mamykin.foboreader.core.platform.NotificationManager
-import ru.mamykin.foboreader.core.platform.PermissionManager
-import ru.mamykin.foboreader.core.platform.RequestedPermission
 import javax.inject.Inject
 
 internal class NotificationManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val permissionManager: PermissionManager,
 ) : NotificationManager {
 
     private val deviceNotificationManager by lazy { NotificationManagerCompat.from(context) }
@@ -55,7 +54,11 @@ internal class NotificationManagerImpl @Inject constructor(
         channelId: String,
         notificationId: Int,
     ) {
-        if (!permissionManager.checkPermission(RequestedPermission.NOTIFICATIONS)) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             Log.error("No permission for sending notifications!")
             return
         }

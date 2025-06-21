@@ -1,5 +1,10 @@
 package ru.mamykin.foboreader.onboarding
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +18,9 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -54,19 +62,60 @@ fun OnboardingScreen(appNavController: NavHostController) {
             }
         }
     }
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            viewModel.sendIntent(OnboardingViewModel.Intent.NotificationPermissionGranted)
+        } else {
+            viewModel.sendIntent(OnboardingViewModel.Intent.NotificationPermissionDenied)
+        }
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
     ) {
-        OnboardingScreenUI(
-            state = state, onIntent = viewModel::sendIntent
+        when (state.currentStep) {
+            OnboardingStep.LANGUAGE_SELECTION -> {
+                LanguageSelectionScreen(
+                    state = state,
+                    onIntent = viewModel::sendIntent
+                )
+            }
+
+            OnboardingStep.NOTIFICATION_PERMISSION -> {
+                NotificationPermissionScreen(
+                    state = state,
+                    onIntent = viewModel::sendIntent,
+                    launcher = launcher,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProgressIndicator(currentStep: Int, totalSteps: Int) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        LinearProgressIndicator(
+            progress = { currentStep.toFloat() / totalSteps.toFloat() },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.step_progress, currentStep, totalSteps),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
         )
     }
 }
 
 @Composable
-private fun OnboardingScreenUI(
-    state: OnboardingViewModel.State, onIntent: (OnboardingViewModel.Intent) -> Unit
+private fun LanguageSelectionScreen(
+    state: OnboardingViewModel.State,
+    onIntent: (OnboardingViewModel.Intent) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -96,6 +145,11 @@ private fun OnboardingScreenUI(
             modifier = Modifier.fillMaxWidth()
         )
 
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Progress Indicator
+        ProgressIndicator(state.currentStepNumber, state.totalSteps)
+
         Spacer(modifier = Modifier.height(40.dp))
 
         // Native Language Dropdown
@@ -124,7 +178,7 @@ private fun OnboardingScreenUI(
 
         // Continue Button
         Button(
-            onClick = { onIntent(OnboardingViewModel.Intent.ContinueOnboarding) },
+            onClick = { onIntent(OnboardingViewModel.Intent.ContinueToNextStep) },
             enabled = state.isContinueEnabled,
             modifier = Modifier
                 .fillMaxWidth()
@@ -132,6 +186,88 @@ private fun OnboardingScreenUI(
         ) {
             Text(
                 text = stringResource(R.string.continue_button), fontSize = 16.sp
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun NotificationPermissionScreen(
+    state: OnboardingViewModel.State,
+    onIntent: (OnboardingViewModel.Intent) -> Unit,
+    launcher: ActivityResultLauncher<String>,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(48.dp))
+
+        // Title
+        Text(
+            text = stringResource(R.string.notifications_title),
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(R.string.notifications_subtitle),
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Progress Indicator
+        ProgressIndicator(state.currentStepNumber, state.totalSteps)
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        Text(
+            text = stringResource(R.string.notifications_description),
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        val activity = LocalContext.current as AppCompatActivity
+        // Allow Button
+        Button(
+            onClick = { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.allow_notifications),
+                fontSize = 16.sp
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Skip Button
+        OutlinedButton(
+            onClick = { onIntent(OnboardingViewModel.Intent.SkipNotificationPermission) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(R.string.skip_notifications),
+                fontSize = 14.sp
             )
         }
 
@@ -219,7 +355,7 @@ fun OnboardingScreenPreview() {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-            OnboardingScreenUI(state = OnboardingViewModel.State(
+            LanguageSelectionScreen(state = OnboardingViewModel.State(
                 supportedLanguages = SupportedOnboardingLanguages.supportedLanguages,
                 levels = LanguageLevel.entries
             ), onIntent = {})

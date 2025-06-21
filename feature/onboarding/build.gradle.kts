@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":uikit"))
 
+    implementation(Dependencies.appCompatX)
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.coroutinesCore)
     implementation(Dependencies.coroutinesAndroid)

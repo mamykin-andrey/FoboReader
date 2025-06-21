@@ -12,7 +12,6 @@ import ru.mamykin.foboreader.app.data.AppSettingsRepositoryImpl
 import ru.mamykin.foboreader.app.data.storage.PreferencesManagerImpl
 import ru.mamykin.foboreader.app.platform.ErrorMessageMapperImpl
 import ru.mamykin.foboreader.app.platform.NotificationManagerImpl
-import ru.mamykin.foboreader.app.platform.PermissionManagerImpl
 import ru.mamykin.foboreader.common_book_info.data.database.BookInfoDaoFactory
 import ru.mamykin.foboreader.common_book_info.data.database.DownloadedBooksDao
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
@@ -20,7 +19,6 @@ import ru.mamykin.foboreader.core.data.OkHttpFactory
 import ru.mamykin.foboreader.core.data.storage.PreferencesManager
 import ru.mamykin.foboreader.core.platform.ErrorMessageMapper
 import ru.mamykin.foboreader.core.platform.NotificationManager
-import ru.mamykin.foboreader.core.platform.PermissionManager
 import ru.mamykin.foboreader.dictionary_api.DictionaryRepository
 import ru.mamykin.foboreader.dictionary_api.GetStreakInfoUseCase
 import ru.mamykin.foboreader.dictionary_api.GetWordsToLearnUseCase
@@ -65,9 +63,6 @@ internal interface AppBindsModule {
 
     @Binds
     fun bindErrorMapper(impl: ErrorMessageMapperImpl): ErrorMessageMapper
-
-    @Binds
-    fun bindPermissionManager(impl: PermissionManagerImpl): PermissionManager
 
     @Binds
     fun bindDictionaryRepository(impl: RoomDictionaryRepository): DictionaryRepository

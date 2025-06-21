@@ -11,14 +11,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import ru.mamykin.foboreader.core.data.AppSettingsRepository
 import ru.mamykin.foboreader.core.extension.changeLocale
-import ru.mamykin.foboreader.core.platform.Log
-import ru.mamykin.foboreader.core.platform.PermissionManager
-import ru.mamykin.foboreader.core.platform.RequestedPermission
 import ru.mamykin.foboreader.uikit.compose.FoboReaderTheme
 import javax.inject.Inject
 
@@ -28,13 +23,9 @@ internal class RootActivity : AppCompatActivity() {
     @Inject
     internal lateinit var appSettingsRepository: AppSettingsRepository
 
-    @Inject
-    internal lateinit var permissionManager: PermissionManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initAppPreferences()
-        initPermissions()
         setContent {
             var isDarkTheme by remember { mutableStateOf(appSettingsRepository.isNightThemeEnabled()) }
             DisposableEffect(isDarkTheme) {
@@ -54,11 +45,5 @@ internal class RootActivity : AppCompatActivity() {
 
     private fun initAppPreferences() {
         changeLocale(appSettingsRepository.getAppLanguageCode())
-    }
-
-    private fun initPermissions() = lifecycleScope.launch {
-        if (!permissionManager.requestPermission(this@RootActivity, RequestedPermission.NOTIFICATIONS)) {
-            Log.debug("Notifications permission isn't granted!")
-        }
     }
 }
